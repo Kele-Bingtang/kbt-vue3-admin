@@ -1,0 +1,52 @@
+// menu 开头代表是一级菜单的样式，sub 开头代表是二级菜单的样式，除了 menuText，menuText 是整个菜单的文字样式，即包含了 sub 的文字样式。
+$sideMenuWidth: 210px;
+// 暗色主题，默认
+$menuText-dark: #bdbdc0; // 所有菜单文字颜色
+$menuBg-dark: #191a20; // 一级菜单背景色
+$menuHoverBg-dark: #242526; // 一级菜单悬停背景色
+$menuActiveBg-dark: #060708; // 一级菜单激活背景色
+$subMenuBg-dark: #060708; // 二级菜单背景色
+$subMenuHoverBg-dark: #060708; // 二级菜单悬停背景色
+$subMenuActiveBg-dark: #060708; // 二级菜单激活背景色
+$icon-dark: #bdbdc0; // 图标颜色
+$logo-line-dark: #282a35; // logo 底部线条颜色
+$logo-title-dark: #dadada; // logo 右侧文字颜色
+
+// 白色主题
+$menuText-light: #303133;
+$menuBg-light: #fff;
+$menuHoverBg-light: #ecf5ff;
+$menuActiveBg-light: #ecf5ff;
+$subMenuBg-light: #fff;
+$subMenuHoverBg-light: #ecf5ff;
+$subMenuActiveBg-light: #409eff;
+$icon-light: #909399;
+$logo-line-light: #3c3c3c1f;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
+$logo-title-light: #423e3e;
+
+// The :export directive is the magic sauce for webpack
+// https://mattferderer.com/use-sass-variables-in-typescript-and-javascript
+:export {
+  // 默认，暗色主题
+  menuBgDark: $menuBg-dark;
+  menuTextDark: $menuText-dark;
+  menuHoverBgDark: $menuHoverBg-dark;
+  menuActiveBgDark: $menuActiveBg-dark;
+  subMenuBgDark: $subMenuBg-dark;
+  subMenuHoverBgDark: $subMenuHoverBg-dark;
+  subMenuActiveBgDark: $subMenuActiveBg-dark;
+  iconDark: $icon-dark;
+  logoLineDark: $logo-line-dark;
+  logoTitleDark: $logo-title-dark;
+  // 白色主题
+  menuBgLight: $menuBg-light;
+  menuTextLight: $menuText-light;
+  menuHoverBgLight: $menuHoverBg-light;
+  menuActiveBgLight: $menuActiveBg-light;
+  subMenuBgLight: $subMenuBg-light;
+  subMenuHoverBgLight: $subMenuHoverBg-light;
+  subMenuActiveBgLight: $subMenuActiveBg-light;
+  iconLight: $icon-light;
+  logoLineLight: $logo-line-light;
+  logoTitleLight: $logo-title-light;
+}
