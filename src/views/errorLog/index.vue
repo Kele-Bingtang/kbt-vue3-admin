@@ -7,10 +7,10 @@
       :closable="false"
       style="margin-bottom: 10px"
     ></el-alert>
-    <el-button type="primary" @click="addErrorLog">添加一条错误日志</el-button>
+    <el-button type="primary" @click="addErrorLog" style="margin-bottom: 10px">添加一条错误日志</el-button>
     <el-popconfirm placement="right" title="您确定删除全部日志吗？" @confirm="clearAll">
       <template #reference>
-        <el-button type="danger" :disabled="errorLogs.length === 0">删除全部</el-button>
+        <el-button type="danger" :disabled="errorLogs.length === 0" style="margin-bottom: 10px">删除全部</el-button>
       </template>
     </el-popconfirm>
     <el-table :data="errorLogs" border>

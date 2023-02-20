@@ -24,11 +24,6 @@ const HOME_URL = "/home";
 export const constantRoutes: RouterConfigRaw[] = [
   {
     path: "/",
-    redirect: HOME_URL,
-    meta: { hideInMenu: true },
-  },
-  {
-    path: "/layout",
     name: "Layout",
     component: () => import("@/layout/index.vue"),
     redirect: HOME_URL,
@@ -86,7 +81,6 @@ export const rolesRoutes: RouterConfigRaw[] = [
   {
     path: "/test3",
     name: "Test3",
-    component: "/home/index",
     meta: {
       title: "Test2",
       icon: "HomeFilled",
@@ -94,10 +88,13 @@ export const rolesRoutes: RouterConfigRaw[] = [
     },
     children: [
       {
-        path: "/error-log",
-        name: "ErrorLog",
-        component: () => import("@/views/errorLog/index.vue"),
-        meta: { title: "错误日志", icon: "Star", isKeepAlive: false },
+        path: "/test4",
+        name: "Test4",
+        component: "/home/index",
+        meta: {
+          title: "Test4",
+          icon: "HomeFilled",
+        },
       },
     ],
   },

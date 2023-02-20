@@ -23,15 +23,15 @@ export function resetRouter() {
 }
 
 const whiteList = ["*"];
-
 /**
  * @description 路由拦截 beforeEach
  **/
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   const permissionStore = usePermissionStore();
-  const { loadRouteList } = useRoutes();
   const token = userStore.token;
+  const { loadRouteList } = useRoutes();
+
   NProgress.start();
 
   // 判断是访问登陆页，有 Token 就在当前页面，没有 Token 重置路由并放行到登陆页
@@ -54,7 +54,7 @@ router.beforeEach(async (to, from, next) => {
   if (!token) return next({ path: "/login", replace: true });
 
   // 判断是否存在角色或加载过路由，如果不存在，则加载路由
-  if (userStore.roles.length === 0 && !permissionStore.isLoadedRoutes) {
+  if (!permissionStore.isLoadedRoutes) {
     try {
       const roles = await userStore.getUserInfo();
       loadRouteList(rolesRoutes, roles, router);

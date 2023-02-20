@@ -239,15 +239,7 @@ module.exports = {
       2,
       "always",
       {
-        markers: [
-          "global",
-          "globals",
-          "eslint",
-          "eslint-disable",
-          "*package",
-          "!",
-          ",",
-        ],
+        markers: ["global", "globals", "eslint", "eslint-disable", "*package", "!", ","],
       },
     ], // 强制在注释中 // 或 /* 使用一致的空格
     "template-curly-spacing": [2, "never"], // 要求或禁止模板字符串中的嵌入表达式周围空格的使用

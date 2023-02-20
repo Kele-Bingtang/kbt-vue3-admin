@@ -5,8 +5,8 @@ import { constantRoutes } from "@/router/routes-config";
 
 export const usePermissionStore = defineStore("permissionStore", () => {
   const loadedRouteList = ref<RouterConfig[]>([]);
-  const isLoadedRoutes = ref(false);
   const flatRouteList = ref<RouterConfig[]>([]);
+  const isLoadedRoutes = ref(false);
 
   const { getRouteFullPath, getHomeRoute, getFlatArray } = useRoutes();
 
@@ -29,3 +29,4 @@ export const usePermissionStore = defineStore("permissionStore", () => {
     loadRolesRoutes,
   };
 });
+

@@ -32,7 +32,7 @@ declare global {
     alwaysShowRoot?: boolean;
     isKeepAlive?: boolean;
     isAffix?: boolean | number;
-    isFull?: string;
+    isFull?: boolean;
     activeMenu?: string;
     beforeCloseName?: string;
   }

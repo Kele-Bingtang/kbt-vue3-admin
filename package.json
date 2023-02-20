@@ -21,6 +21,8 @@
     "path-to-regexp": "^6.2.1",
     "pinia": "^2.0.28",
     "pinia-plugin-persistedstate": "^3.0.2",
+    "qs": "^6.11.0",
+    "sortablejs": "^1.15.0",
     "vue": "^3.2.45",
     "vue-i18n": "^9.2.2",
     "vue-router": "^4.1.6",
@@ -28,7 +30,9 @@
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
+    "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.11.12",
+    "@types/sortablejs": "^1.15.0",
     "@vitejs/plugin-vue": "^4.0.0",
     "@vitejs/plugin-vue-jsx": "^3.0.0",
     "@vue/eslint-config-prettier": "^7.0.0",

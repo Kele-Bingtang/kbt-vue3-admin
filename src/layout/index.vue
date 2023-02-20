@@ -10,7 +10,6 @@ import LayoutClassic from "./LayoutClassic/index.vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useLayout } from "@/hooks/useLayout";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
-import "@/utils/errorHandler";
 
 const LayoutComponents: { [key: string]: Component } = {
   vertical: LayoutVertical,

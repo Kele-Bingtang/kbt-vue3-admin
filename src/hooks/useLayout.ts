@@ -9,6 +9,12 @@ import { useSettingsStore } from "@/stores/settings";
 import { useUserStore } from "@/stores/user";
 
 export const useLayout = () => {
+  const layoutStore = useLayoutStore();
+  const settingsStore = useSettingsStore();
+  const userStore = useUserStore();
+  const { homeRoute } = usePermissionStore();
+  const { t } = useI18n();
+
   /**
    * 是否为移动端
    * @returns boolean：true 是，false 不是
@@ -21,8 +27,6 @@ export const useLayout = () => {
    * 计算页面尺寸
    */
   const resizeHandler = () => {
-    const layoutStore = useLayoutStore();
-    const settingsStore = useSettingsStore();
     if (!document.hidden) {
       const result = isMobile();
       layoutStore.toggleDevice(result ? DeviceType.Mobile : DeviceType.Desktop);
@@ -37,8 +41,6 @@ export const useLayout = () => {
    * @param route 当前路由
    */
   const setTitle = (route: RouteConfig | RouterConfig) => {
-    const settingsStore = useSettingsStore();
-    const userStore = useUserStore();
     const { title } = settings;
     const pageTitle = getTitle(route);
     let resTitle = pageTitle ? `${title} - ${pageTitle}` : title; // 默认标题的模式
@@ -64,8 +66,6 @@ export const useLayout = () => {
     }
     window.document.title = resTitle;
   };
-
-  const { t } = useI18n();
 
   /**
    * 处理页面标题、侧边菜单、面包屑、tagsNav 展示的 title
@@ -134,7 +134,6 @@ export const useLayout = () => {
    * @returns 面包屑列表
    */
   const getBreadcrumbs = (route: RouteConfig) => {
-    const { homeRoute } = usePermissionStore();
     // 首页不存在
     if (!homeRoute.path || !homeRoute.name) {
       ElMessage({

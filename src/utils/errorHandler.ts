@@ -2,20 +2,19 @@ import type { ComponentPublicInstance } from "vue";
 import { isArray } from "@/utils/validate";
 import settings from "@/config/settings";
 import { useErrorLogStore } from "@/stores/errorLog";
-import app from "@/main";
 import { ElNotification } from "element-plus";
 
 const { errorLog } = settings;
 
 const { env } = errorLog;
 
-const errorStore = useErrorLogStore();
+// const errorStore = useErrorLogStore();
 
 /**
  * 检查当前环境是否符合错误日志的运行
  */
 const checkNeed = () => {
-  const node_env = import.meta.env.NODE_ENV;
+  const node_env = import.meta.env.MODE;
   if (isArray(env) && node_env) {
     return env.includes(node_env);
   }
@@ -26,13 +25,14 @@ const checkNeed = () => {
  * 捕获错误回调
  */
 const errorHandler = (error: any, vm: ComponentPublicInstance | null, info: string) => {
-  errorStore.addErrorLog({
-    error,
-    vm,
-    info,
-    url: window.location.href,
-    hasRead: false,
-  });
+  if (!checkNeed()) return;
+  // errorStore.addErrorLog({
+  //   error,
+  //   vm,
+  //   info,
+  //   url: window.location.href,
+  //   hasRead: false,
+  // });
   // 过滤 HTTP 请求错误
   if (error.status || error.status == 0) return false;
   let errorMap: { [key: string]: string } = {
@@ -52,14 +52,5 @@ const errorHandler = (error: any, vm: ComponentPublicInstance | null, info: stri
     duration: 3000,
   });
 };
-
-/**
- * 捕获日志
- */
-if (checkNeed()) {
-  app.config.errorHandler = errorHandler;
-}
-
-// app.config.globalProperties.$throw = (err: Error, vm: ComponentPublicInstance | null, info: string) => errorHandler(err, vm, info);
 
 export default errorHandler;

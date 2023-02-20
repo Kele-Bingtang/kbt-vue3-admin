@@ -52,6 +52,7 @@ import { usePermissionStore } from "@/stores/permission";
 import { useSettingsStore } from "@/stores/settings";
 import beforeClose from "@/router/before-close";
 import CommonIcon from "@/components/CommonIcon/index.vue";
+import Sortable from "sortablejs";
 
 const rightMenuVisible = ref(false); // 右键菜单显示
 const tabBodyLeft = ref(0); // tabsNav 滚动
@@ -83,9 +84,26 @@ const { getTitle } = useLayout();
 const tabNavList = computed(() => layoutStore.tabNavList);
 
 onMounted(() => {
+  tabsDrop();
   initTabs();
   addOneTab();
 });
+
+// 标签拖拽排序
+const tabsDrop = () => {
+  Sortable.create(document.querySelector(".scroll-body") as HTMLElement, {
+    draggable: ".tabs-link",
+    animation: 300,
+    onEnd({ newIndex, oldIndex }) {
+      const tabsList = [...tabNavList.value];
+      const currRow = tabsList.splice(oldIndex as number, 1)[0];
+      tabsList.splice(newIndex as number, 0, currRow);
+      layoutStore.$patch({
+        tabNavList: tabsList,
+      });
+    },
+  });
+};
 
 const getOneTab = (route: RouteConfig | RouterConfig) => {
   return {
@@ -103,7 +121,7 @@ const closeRightMenu = () => {
 };
 
 const isActive = (tab: TabProp) => {
-  return route.path === tab.path || route.path === tab.path + "/";
+  return route.fullPath === tab.path || route.fullPath === tab.path + "/";
 };
 
 const activeStyle = (tab: TabProp) => {
@@ -210,9 +228,7 @@ const refreshSelectedTab = (tab: TabProp) => {
 const closeOthersTabs = () => {
   layoutStore.removeOtherTabs(selectedTab);
   if (route.path !== selectedTab.path) {
-    router.push(selectedTab.path).catch(err => {
-      console.warn(err);
-    });
+    router.push(selectedTab.path).catch(err => console.warn(err));
   }
 };
 
@@ -226,9 +242,7 @@ const toLastTab = () => {
   // 获取最后一个 tab 数据
   const lastTab = layoutStore.tabNavList.slice(-1)[0];
   const path = lastTab ? lastTab.path : permissionStore.homeRoute.meta._fullPath;
-  router.push(path).catch(err => {
-    console.warn(err);
-  });
+  router.push(path).catch(err => console.warn(err));
 };
 
 const handleScrollOnDom = (e: MouseEvent & { wheelDelta: number }) => {

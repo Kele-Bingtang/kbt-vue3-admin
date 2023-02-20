@@ -25,13 +25,13 @@ export const useLayoutStore = defineStore(
       language.value = languageParam;
     };
 
-    const addTab = (tab: TabProp) => {
+    const addTab = async (tab: TabProp) => {
       tab.path = decodeURIComponent(tab.path); // 存储的 tag.path 是解码后的
       if (tabNavList.value.some(v => v.path === tab.path || v.path + "/" === tab.path)) return;
       tabNavList.value.push(tab);
     };
 
-    const removeTab = (tab: TabProp) => {
+    const removeTab = async (tab: TabProp) => {
       for (const [i, v] of tabNavList.value.entries()) {
         if (v.path === tab.path) {
           tabNavList.value.splice(i, 1);
@@ -40,13 +40,13 @@ export const useLayoutStore = defineStore(
       }
     };
 
-    const removeOtherTabs = (tab: TabProp) => {
+    const removeOtherTabs = async (tab: TabProp) => {
       tabNavList.value = tabNavList.value.filter(v => {
         return !v.close || v.path === tab.path;
       });
     };
 
-    const removeAllTabs = () => {
+    const removeAllTabs = async () => {
       const fixedTabs = tabNavList.value.filter(tab => !tab.close);
       tabNavList.value = fixedTabs;
     };

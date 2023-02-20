@@ -1,27 +1,36 @@
 import { usePermissionStore } from "@/stores/permission";
 import { isExternal, isType } from "@/utils/validate";
-import type { Router } from "vue-router";
+import type { Router, RouteRecordRaw } from "vue-router";
 
 export const useRoutes = () => {
+  const permissionStore = usePermissionStore();
+  const modules = import.meta.glob("@/views/**/*.vue");
+
   /**
    * 动态加载路由
    */
   const loadRouteList = (routers: RouterConfigRaw[], roles: string[], router: Router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
-    const permissionStore = usePermissionStore();
     permissionStore.loadRolesRoutes(onlyRolesRoutes);
-    // 引入 views 文件夹下所有 vue 文件
-    const modules = import.meta.glob("@/views/**/*.vue");
-    permissionStore.flatRouteList.forEach(item => {
-      item.children && delete item.children;
-      if (item.component && isType(item.component) == "string") {
+    let resolveRouters = resolveRouteComponent(onlyRolesRoutes);
+    resolveRouters.forEach(item => {
+      if (item.meta?.isFull) router.addRoute(item as RouteRecordRaw);
+      else router.addRoute("Layout", item as RouteRecordRaw);
+    });
+  };
+  /**
+   * 引入 views 文件夹下所有 vue 文件
+   * 支持 /home/index 格式，也支持 () => import() 格式
+   * @param routers 路由
+   * @returns
+   */
+  const resolveRouteComponent = (routers: RouterConfigRaw[]) => {
+    let r = routers;
+    return r.map(item => {
+      if (item.children && item.children.length > 0) item.children = resolveRouteComponent(item.children);
+      if (item.component && isType(item.component) == "string")
         item.component = modules["/src/views" + item.component + ".vue"];
-      }
-      if (item.meta.isFull) {
-        router.addRoute(item);
-      } else {
-        router.addRoute("Layout", item);
-      }
+      return item;
     });
   };
 
@@ -33,9 +42,7 @@ export const useRoutes = () => {
     routers.forEach(router => {
       const r = { ...router };
       if (hasPermission(r, roles)) {
-        if (r.children && r.children.length !== 0) {
-          r.children = filterOnlyRolesRoutes(r.children, roles);
-        }
+        if (r.children && r.children.length !== 0) r.children = filterOnlyRolesRoutes(r.children, roles);
         rolesRoutes.push(r);
       }
     });
@@ -47,14 +54,9 @@ export const useRoutes = () => {
    * roles 带有 * 的代表所有路由都能访问
    */
   const hasPermission = (router: RouterConfigRaw, roles: string[]) => {
-    if (roles.includes("*")) {
-      return true;
-    }
-    if (router.meta && router.meta.roles) {
-      return roles.some(role => router.meta && router.meta?.roles?.includes(role));
-    } else {
-      return true; // 没有添加权限验证
-    }
+    if (roles.includes("*")) return true;
+    if (router.meta && router.meta.roles) return roles.some(role => router.meta && router.meta?.roles?.includes(role));
+    else return true; // 没有添加权限验证
   };
 
   /**
@@ -67,25 +69,17 @@ export const useRoutes = () => {
     let r = routers;
     return r.map(router => {
       if (!router.meta?._fullPath) {
-        let { meta } = router;
-        meta = meta || {};
+        let tempMeta = router.meta || {};
         // 一级路由的 _fullPath 是自己的 path，如果 path 自带 /，则不需要路由拼接
-        if (router.path.startsWith("/")) {
-          meta._fullPath = router.path;
-        } else {
-          let fullPath = basePath + "/" + router.path;
-          // 去掉多余的 /，保证 path 是合法的地址，合法如 /home/index，不合法如：//home//index
-          meta._fullPath = fullPath.replace(/\/+/g, "/");
-        }
-        router.meta = meta;
+        if (router.path.startsWith("/")) tempMeta._fullPath = router.path;
+        // 去掉多余的 /，保证 path 是合法的地址，合法如 /home/index，不合法如：//home//index
+        else tempMeta._fullPath = (basePath + "/" + router.path).replace(/\/+/g, "/");
+        router.meta = tempMeta;
       }
       if (router.children && router.children.length > 0) {
         // 如果是 http 链接，不需要路由拼接
-        if (isExternal(router.meta._fullPath as string)) {
-          router.children = getRouteFullPath(router.children, "");
-        } else {
-          router.children = getRouteFullPath(router.children, router.meta._fullPath as string);
-        }
+        if (isExternal(router.meta._fullPath as string)) router.children = getRouteFullPath(router.children, "");
+        else router.children = getRouteFullPath(router.children, router.meta._fullPath as string);
       }
       return router;
     });
@@ -108,9 +102,7 @@ export const useRoutes = () => {
       if (route.children && route.children.length > 0) {
         let res = getHomeRoute(route.children, homeName);
         if (res && res.name) return res;
-      } else {
-        if (route.name === homeName) homeRoute = route;
-      }
+      } else if (route.name === homeName) homeRoute = route;
     }
     return homeRoute;
   };
@@ -121,8 +113,7 @@ export const useRoutes = () => {
    * @return array
    */
   const getFlatArray = (routeList: RouterConfigRaw[]) => {
-    let newRouteList: RouterConfigRaw[] = JSON.parse(JSON.stringify(routeList));
-    return newRouteList.reduce((pre: RouterConfigRaw[], current: RouterConfigRaw) => {
+    return routeList.reduce((pre: RouterConfigRaw[], current: RouterConfigRaw) => {
       let flatArr = [...pre, current];
       if (current.children) flatArr = [...flatArr, ...getFlatArray(current.children)];
       return flatArr;
