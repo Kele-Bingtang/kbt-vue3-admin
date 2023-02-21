@@ -6,10 +6,10 @@
 </template>
 
 <script setup lang="ts" name="CommonIcon">
-const { icon } = defineProps<{ icon: string }>();
+const { icon } = toRefs(defineProps<{ icon: string }>());
 
 const isElIcon = computed(() => {
-  if (icon.startsWith("svg-")) return false;
+  if (icon.value.startsWith("svg-")) return false;
   return true;
 });
 </script>

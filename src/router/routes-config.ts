@@ -27,7 +27,7 @@ export const constantRoutes: RouterConfigRaw[] = [
     name: "Layout",
     component: () => import("@/layout/index.vue"),
     redirect: HOME_URL,
-    meta: { hideInMenu: true, icon: "MessageBox" },
+    meta: { hideInMenu: true, hideInBread: true, icon: "MessageBox" },
     children: [
       {
         path: "/error-log",

@@ -11,7 +11,7 @@
         >
           <template #label>
             <CommonIcon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
-            <span @contextmenu.prevent.native="openRightMenu(tab, $event)">{{ tab.title }}</span>
+            <span @contextmenu.prevent="openRightMenu(tab, $event)">{{ tab.title }}</span>
           </template>
         </el-tab-pane>
       </el-tabs>
@@ -35,6 +35,7 @@ import { usePermissionStore } from "@/stores/permission";
 import { useSettingsStore } from "@/stores/settings";
 import type { TabPaneName, TabsPaneContext } from "element-plus";
 import Sortable from "sortablejs";
+import CommonIcon from "@/components/CommonIcon/index.vue";
 
 const route = useRoute();
 const router = useRouter();
@@ -52,7 +53,7 @@ const rightMenuVisible = ref(false); // 右键菜单显示
 const rightMenuLeft = ref(0);
 const rightMenuTop = ref(0);
 // 激活的 tab
-let selectedTab = reactive<TabProp>({
+const selectedTab = ref<TabProp>({
   path: "", // 路由的 path
   name: "", // 路由的 name
   title: "", // 展示的描述
@@ -85,7 +86,7 @@ const tabsDrop = () => {
 
 const getOneTab = (route: RouteConfig | RouterConfig) => {
   return {
-    path: route.meta._fullPath,
+    path: (route as RouteConfig).fullPath || route.meta._fullPath,
     name: (route.name as string) || route.path,
     title: getTitle(route),
     icon: route.meta.icon || "",
@@ -105,7 +106,7 @@ const initTabs = () => {
 
 const addOneTab = () => {
   if (route.name) {
-    let tab: TabProp = getOneTab(route as RouteConfig);
+    const tab: TabProp = getOneTab(route as RouteConfig);
     layoutStore.addTab(tab);
     route.meta.isKeepAlive && layoutStore.addKeepAliveName(route.name as string);
   }
@@ -140,7 +141,7 @@ const toLastTab = () => {
 
 // 删除一个 Tab
 const tabRemove = async (fullPath: TabPaneName) => {
-  const tab = tabNavList.value.filter(item => item.path == fullPath)[0];
+  const tab = tabNavList.value.filter(item => item.path === fullPath)[0];
   if (tab.meta && tab.meta.beforeCloseName && tab.meta.beforeCloseName in beforeClose) {
     const isClose = await new Promise(beforeClose[tab.meta.beforeCloseName]);
     if (isClose) closeSelectedTab(tab);
@@ -167,7 +168,7 @@ const openRightMenu = (tab: TabProp, e: MouseEvent) => {
   }
   rightMenuTop.value = e.offsetY + 12;
   rightMenuVisible.value = true;
-  selectedTab = tab;
+  selectedTab.value = tab;
 };
 
 const closeRightMenu = () => {
@@ -186,24 +187,24 @@ watchEffect(() => {
 <style lang="scss" scoped>
 @import "./index.scss";
 .contextmenu {
+  margin: 0;
+  background: #fff;
+  z-index: 4000;
+  position: absolute;
+  list-style-type: none;
+  padding: 5px 0;
+  border-radius: 4px;
+  font-size: 12px;
+  font-weight: 400;
+  color: #333;
+  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+  li {
     margin: 0;
-    background: #fff;
-    z-index: 4000;
-    position: absolute;
-    list-style-type: none;
-    padding: 5px 0;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #333;
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
-    li {
-      margin: 0;
-      padding: 0 16px;
-      cursor: pointer;
-      &:hover {
-        background: #eee;
-      }
+    padding: 0 16px;
+    cursor: pointer;
+    &:hover {
+      background: #eee;
     }
   }
+}
 </style>

@@ -34,19 +34,26 @@ export interface PermissionState {
 
 // SettingsState
 export type LayoutModeType = "vertical" | "classic";
-export type menuThemeType = "light" | "dark";
+export type TabsNavModeType = "classic" | "popular";
+export type MenuThemeType = "light" | "dark";
 
 export interface SettingsState {
   theme: string; // Element UI 主题色
   titleMode: string; // 标题在浏览器标签上的多种模式。0：title + 页面 title，1：用户名 + 页面 title，2：title，3：页面 title
   layoutMode: LayoutModeType; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
-  menuTheme: menuThemeType; // 侧边菜单栏主题色
+  tabsNavMode: TabsNavModeType; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
+  menuTheme: MenuThemeType; // 侧边菜单栏主题色
   isCollapse: boolean; // 侧边菜单
   showSettings: boolean; // 是否显示 settings 配置
   showTabsNav: boolean; // 是否显示标签页
   recordTabsNav: boolean; // 是否记录打开过（没关闭）的 tags，下次打开会加载在 tagsNav
   showLayoutLogo: boolean; // 是否显示侧边菜单栏的 Logo
   showBreadcrumb: boolean; // 是否使用面包屑
+  showBreadcrumbIcon: boolean; // 面包屑 Icon 是否显示
+  showTabsNavIcon: boolean; // 标签栏 Icon 是否显示
+  isDark: boolean; // 是否开启暗色主题
+  isWeak: boolean; // 是否开启灰色主题
+  isGrey: boolean; // 是否开启色弱主题
 }
 // UserState
 export interface UserInfo {

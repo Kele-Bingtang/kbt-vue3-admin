@@ -7,12 +7,11 @@
     },
     "types": ["element-plus/global"]
   },
-
   "references": [
     {
       "path": "./tsconfig.config.json"
     }
   ],
-  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts"],
+  "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.ts", "./src/utils/getEnv"],
   "exclude": ["node_modules", "dist", "**/*.js"]
 }

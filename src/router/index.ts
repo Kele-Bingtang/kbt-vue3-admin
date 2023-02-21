@@ -23,6 +23,7 @@ export function resetRouter() {
 }
 
 const whiteList = ["*"];
+
 /**
  * @description 路由拦截 beforeEach
  **/
@@ -70,7 +71,7 @@ router.beforeEach(async (to, from, next) => {
 /**
  * @description 路由跳转结束
  **/
-router.afterEach(to => {
+router.afterEach(() => {
   NProgress.done();
 });
 

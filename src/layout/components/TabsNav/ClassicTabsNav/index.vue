@@ -11,12 +11,12 @@
         <router-link
           v-for="tab in tabNavList"
           :key="tab.path"
-          :to="{ path: tab.path }"
+          :to="tab.path"
           :class="isActive(tab) ? 'active' : ''"
           :style="activeStyle(tab)"
           class="tabs-link"
           ref="tabsDom"
-          @contextmenu.prevent.native="openRightMenu(tab, $event)"
+          @contextmenu.prevent="openRightMenu(tab, $event)"
         >
           <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
           <CommonIcon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
@@ -66,7 +66,7 @@ let selectedTab = reactive<TabProp>({
   title: "", // 展示的描述
   icon: "", // 图标
   close: true, // 是否允许关闭
-  meta: {},
+  meta: {}, // 路由 meta
 });
 
 const tabsNavDom = ref<HTMLElement>(); // 根标签
@@ -105,9 +105,10 @@ const tabsDrop = () => {
   });
 };
 
+// 获取一个 tab 对象
 const getOneTab = (route: RouteConfig | RouterConfig) => {
   return {
-    path: route.meta._fullPath,
+    path: (route as RouteConfig).fullPath || route.meta._fullPath,
     name: (route.name as string) || route.path,
     title: getTitle(route),
     icon: route.meta.icon || "",
@@ -116,14 +117,12 @@ const getOneTab = (route: RouteConfig | RouterConfig) => {
   };
 };
 
-const closeRightMenu = () => {
-  rightMenuVisible.value = false;
-};
-
+// 判断当前激活的 tab
 const isActive = (tab: TabProp) => {
   return route.fullPath === tab.path || route.fullPath === tab.path + "/";
 };
 
+// 更换 tab 颜色为全局 theme
 const activeStyle = (tab: TabProp) => {
   if (!isActive(tab)) return {};
   return {
@@ -132,6 +131,7 @@ const activeStyle = (tab: TabProp) => {
   };
 };
 
+// 初始化固定在 TabsNav 的 tabs
 const initTabs = () => {
   permissionStore.flatRouteList.forEach(item => {
     if (item.meta.isAffix && !item.meta.isFull) {
@@ -142,15 +142,17 @@ const initTabs = () => {
   });
 };
 
+// 添加 tab
 const addOneTab = () => {
   if (route.name) {
-    let tab: TabProp = getOneTab(route as RouteConfig);
+    const tab: TabProp = getOneTab(route as RouteConfig);
     layoutStore.addTab(tab);
     route.meta.isKeepAlive && layoutStore.addKeepAliveName(route.name as string);
     findTargetTab();
   }
 };
 
+// 找出访问的目标 tab
 const findTargetTab = () => {
   nextTick(() => {
     if (tabsDom.value) {
@@ -168,23 +170,24 @@ const findTargetTab = () => {
   });
 };
 
+// 移动到目标 tab，如果目标 tab 在 TabsNav 可视区域外面，则有滚动的动画效果
 const moveToTargetTab = (tabElement: HTMLElement) => {
   const outerWidth = scrollContainerDom.value?.offsetWidth as number;
   const bodyWidth = scrollBodyDom.value?.offsetWidth as number;
   const outerPadding = 4;
   if (bodyWidth < outerWidth) tabBodyLeft.value = 0;
-  else if (tabElement.offsetLeft < -tabBodyLeft.value)
-    tabBodyLeft.value = -tabElement.offsetLeft + outerPadding; // 标签在可视区域左侧
-  else if (
+  else if (tabElement.offsetLeft < -tabBodyLeft.value) {
+    tabBodyLeft.value = -tabElement.offsetLeft + outerPadding;
+  } else if (
+    // 标签在可视区域左侧
     tabElement.offsetLeft > -tabBodyLeft.value &&
     tabElement.offsetLeft + tabElement.offsetWidth < -tabBodyLeft.value + outerWidth
-  )
+  ) {
     tabBodyLeft.value = Math.min(0, outerWidth - tabElement.offsetWidth - tabElement.offsetLeft - outerPadding);
-  // 标签在可视区域
-  // 标签在可视区域右侧
-  else tabBodyLeft.value = -(tabElement.offsetLeft - (outerWidth - outerPadding - tabElement.offsetWidth));
+  } else tabBodyLeft.value = -(tabElement.offsetLeft - (outerWidth - outerPadding - tabElement.offsetWidth)); // 标签在可视区域右侧
 };
 
+// 右键菜单回调
 const openRightMenu = (tab: TabProp, e: MouseEvent) => {
   const menuMinWidth = 0;
   const offsetLeft = tabsNavDom.value?.getBoundingClientRect().left as number; // margin-left 的数值
@@ -201,6 +204,7 @@ const openRightMenu = (tab: TabProp, e: MouseEvent) => {
   selectedTab = tab;
 };
 
+// 关闭一个 tab，并激活到上一个 tab
 const handleCloseTab = async (tab: TabProp) => {
   if (tab.meta && tab.meta.beforeCloseName && tab.meta.beforeCloseName in beforeClose) {
     const isClose = await new Promise(beforeClose[tab.meta.beforeCloseName]);
@@ -208,12 +212,14 @@ const handleCloseTab = async (tab: TabProp) => {
   } else closeSelectedTab(tab);
 };
 
+// 关闭选择的 tab
 const closeSelectedTab = (tab: TabProp) => {
   layoutStore.removeTab(tab);
   layoutStore.removeKeepAliveName(tab.name);
   if (isActive(tab)) toLastTab();
 };
 
+// 刷新选中的 tab
 const refreshSelectedTab = (tab: TabProp) => {
   const refreshCurrentPage = inject("refresh") as Function;
   layoutStore.removeTab(tab);
@@ -225,6 +231,7 @@ const refreshSelectedTab = (tab: TabProp) => {
   });
 };
 
+// 关闭除当前选中 tab 的其他 tab
 const closeOthersTabs = () => {
   layoutStore.removeOtherTabs(selectedTab);
   if (route.path !== selectedTab.path) {
@@ -232,12 +239,14 @@ const closeOthersTabs = () => {
   }
 };
 
+// 关闭除固定在 tabsNav 的所有其他 tabs
 const closeAllTabs = () => {
   layoutStore.removeAllTabs();
   layoutStore.setKeepAliveName();
   toLastTab();
 };
 
+// 跳转到上一个 tab
 const toLastTab = () => {
   // 获取最后一个 tab 数据
   const lastTab = layoutStore.tabNavList.slice(-1)[0];
@@ -245,6 +254,7 @@ const toLastTab = () => {
   router.push(path).catch(err => console.warn(err));
 };
 
+// 鼠标中键滚动回调
 const handleScrollOnDom = (e: MouseEvent & { wheelDelta: number }) => {
   const type = e.type;
   let delta = 0;
@@ -254,13 +264,15 @@ const handleScrollOnDom = (e: MouseEvent & { wheelDelta: number }) => {
   handleScroll(delta);
 };
 
+// TagsNav 滚动回调
 const handleScroll = (offset: number) => {
   const outerWidth = scrollContainerDom.value?.offsetWidth as number;
   const bodyWidth = scrollBodyDom.value?.offsetWidth as number;
   if (offset > 0) tabBodyLeft.value = Math.min(0, tabBodyLeft.value + offset);
   else if (outerWidth < bodyWidth) {
-    if (tabBodyLeft.value >= -(bodyWidth - outerWidth))
+    if (tabBodyLeft.value >= -(bodyWidth - outerWidth)) {
       tabBodyLeft.value = Math.max(tabBodyLeft.value + offset, outerWidth - bodyWidth);
+    }
   } else tabBodyLeft.value = 0;
 };
 
@@ -273,6 +285,11 @@ watch(
   }
 );
 
+// 关闭右键菜单
+const closeRightMenu = () => {
+  rightMenuVisible.value = false;
+};
+
 watchEffect(() => {
   if (rightMenuVisible.value) {
     document.body.addEventListener("click", closeRightMenu);
@@ -283,145 +300,5 @@ watchEffect(() => {
 </script>
 
 <style lang="scss" scoped>
-.tabs-nav {
-  width: 100%;
-  height: 38px;
-  position: relative;
-  line-height: 31px;
-  padding: 1px 4px 0;
-  border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
-  white-space: nowrap;
-  -webkit-transition: left 0.3s ease;
-  transition: left 0.3s ease;
-  .scroll-container {
-    position: absolute;
-    left: 28px;
-    right: 28px;
-    top: 0;
-    bottom: 0;
-    .scroll-body {
-      display: inline-block;
-      padding: 1px 4px 0;
-      overflow: visible;
-      white-space: nowrap;
-      -webkit-transition: left 0.3s ease;
-      transition: left 0.3s ease;
-      position: absolute;
-      .tabs-link {
-        height: 28px;
-        line-height: 27px;
-        border: 1px solid #e8eaec;
-        padding: 0 10px;
-        margin: 2px 4px 2px 0;
-        cursor: pointer;
-        font-size: 12px;
-        display: inline-block;
-        vertical-align: middle;
-        overflow: hidden;
-        border-radius: 3px;
-        &.active {
-          background-color: #4c9bd8;
-          color: #fff;
-          .dot {
-            background-color: #fff;
-          }
-        }
-        .dot {
-          display: inline-block;
-          width: 12px;
-          height: 12px;
-          margin-right: 7px;
-          border-radius: 50%;
-          background-color: #e8eaec;
-          position: relative;
-          top: 1px;
-          transition: background 0.2s ease;
-        }
-        .tab-icon {
-          font-size: 15px;
-          position: relative;
-          top: 2px;
-          margin-right: 4px;
-        }
-        .icon-close {
-          width: 16px;
-          height: 16px;
-          display: inline-block;
-          margin-left: 10px;
-          font-size: 12px;
-          cursor: pointer;
-          border-radius: 50%;
-          transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-          -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-          transform-origin: 100% 50%;
-          text-align: center;
-          vertical-align: 2px;
-          padding-right: 1px;
-          &:hover {
-            background-color: #b4bccc;
-            color: #fff;
-          }
-          svg {
-            vertical-align: -3px;
-          }
-        }
-      }
-    }
-  }
-  .btn-icon {
-    position: absolute;
-    top: 0px;
-    height: 100%;
-    z-index: 10;
-    &.left-btn {
-      left: 0px;
-    }
-    &.right-btn {
-      right: 0px;
-    }
-    .el-button {
-      width: 28px;
-      height: 100%;
-      padding: 6px 4px;
-      line-height: 14px;
-      text-align: center;
-      border-color: #dfe5f3;
-      border-top: none;
-      border-bottom: none;
-      &:hover {
-        border-left: 1px solid #cbd3e7;
-        border-right: 1px solid #cbd3e7;
-      }
-      &:active {
-        border-color: #a2d0ff !important;
-      }
-      .el-icon-arrow-left,
-      .el-icon-arrow-right {
-        font-weight: 600;
-      }
-    }
-  }
-  .contextmenu {
-    margin: 0;
-    background: #fff;
-    z-index: 4000;
-    position: absolute;
-    list-style-type: none;
-    padding: 5px 0;
-    border-radius: 4px;
-    font-size: 12px;
-    font-weight: 400;
-    color: #333;
-    box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
-    li {
-      margin: 0;
-      padding: 0 16px;
-      cursor: pointer;
-      &:hover {
-        background: #eee;
-      }
-    }
-  }
-}
+@import "./index.scss";
 </style>

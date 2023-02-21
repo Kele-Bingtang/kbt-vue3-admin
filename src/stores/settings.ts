@@ -1,13 +1,14 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { removeCacheTabNavList } from "@/utils/cache";
-import type { LayoutModeType, menuThemeType } from ".";
+import type { LayoutModeType, MenuThemeType, TabsNavModeType } from ".";
 import defaultSettings from "@/config/settings";
 
 const {
   theme: themeSetting,
   titleMode: titleModeSetting,
   layoutMode: layoutModeSetting,
+  tabsNavMode: tabsNavModeSetting,
   menuTheme: menuThemeSetting,
   showSettings: showSettingsSetting,
   showTabsNav: showTagsNavSetting,
@@ -28,7 +29,8 @@ export const useSettingsStore = defineStore(
     const theme = ref(themeSetting);
     const titleMode = ref(titleModeSetting);
     const layoutMode = ref<LayoutModeType>(layoutModeSetting);
-    const menuTheme = ref<menuThemeType>(menuThemeSetting);
+    const tabsNavMode = ref<TabsNavModeType>(tabsNavModeSetting);
+    const menuTheme = ref<MenuThemeType>(menuThemeSetting);
     const showSettings = ref(showSettingsSetting);
     const showTabsNav = ref(showTagsNavSetting);
     const recordTabsNav = ref(recordTagsNavSetting);
@@ -51,7 +53,7 @@ export const useSettingsStore = defineStore(
 
     const resetSettings = () => {
       localStorage.removeItem("kbt_settingsStore");
-      if (!recordTabsNav) {
+      if (!recordTabsNav.value) {
         removeCacheTabNavList();
       }
     };
@@ -60,6 +62,7 @@ export const useSettingsStore = defineStore(
       theme,
       titleMode,
       layoutMode,
+      tabsNavMode,
       menuTheme,
       showSettings,
       showTabsNav,

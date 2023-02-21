@@ -75,6 +75,47 @@
         </div>
       </el-tooltip>
     </div>
+    <br />
+
+    <el-divider class="divider" content-position="center">
+      <el-icon><Menu /></el-icon>
+      {{ $t("_settings.tabsNavSwitch") }}
+    </el-divider>
+
+    <div class="tab-box">
+      <div class="tab-item">
+        <el-tooltip effect="dark" content="经典" placement="left" :show-after="200">
+          <div class="tabs-nav-theme" @click="handleTabsNav('classic')">
+            <div class="tas-nav-classic-item">
+              <div class="dot"></div>
+              <span class="title">首页</span>
+              <el-icon><Close /></el-icon>
+            </div>
+            <div class="tas-nav-classic-item active">
+              <div class="dot"></div>
+              <span class="title">其他</span>
+              <el-icon><Close /></el-icon>
+            </div>
+          </div>
+        </el-tooltip>
+        <el-icon class="check-icon" v-if="settingsStore.tabsNavMode === 'classic'"><CircleCheckFilled /></el-icon>
+      </div>
+      <div class="tab-item">
+        <el-tooltip effect="dark" content="流行" placement="left" :show-after="200">
+          <div class="tabs-nav-theme" @click="handleTabsNav('popular')">
+            <div class="tas-nav-el-item active">
+              <el-icon><HomeFilled /></el-icon>
+              <span class="title">首页</span>
+            </div>
+            <div class="tas-nav-el-item">
+              <el-icon><Menu /></el-icon>
+              <span class="title">其他</span>
+            </div>
+          </div>
+        </el-tooltip>
+        <el-icon class="check-icon" v-if="settingsStore.tabsNavMode === 'popular'"><CircleCheckFilled /></el-icon>
+      </div>
+    </div>
 
     <br />
     <!-- 全局主题 -->
@@ -173,7 +214,7 @@ import { ref } from "vue";
 import { useTheme } from "@/hooks/useTheme";
 import settings from "@/config/settings";
 import { useSettingsStore } from "@/stores/settings";
-import type { LayoutModeType, menuThemeType } from "@/stores";
+import type { LayoutModeType, MenuThemeType, TabsNavModeType } from "@/stores";
 import mittBus from "@/utils/mittBus";
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
@@ -221,10 +262,25 @@ const route = useRoute();
 const settingsStore = useSettingsStore();
 const { setTitle } = useLayout();
 
-const handleMenuTheme = (value: menuThemeType) => {
+const handleMenuTheme = (value: MenuThemeType) => {
   settingsStore.$patch({
     menuTheme: value,
   });
+};
+
+const handleTabsNav = (value: TabsNavModeType) => {
+  settingsStore.$patch({
+    tabsNavMode: value,
+  });
+  if (value === "classic") {
+    settingsStore.$patch({
+      showTabsNavIcon: false,
+    });
+  } else if (value === "popular") {
+    settingsStore.$patch({
+      showTabsNavIcon: true,
+    });
+  }
 };
 
 // 切换布局方式
@@ -248,7 +304,7 @@ const changeRecordTagsNav = (value: boolean) => {
     removeCacheTabNavList();
   }
 };
-
+// 重置缓存
 const resetSettings = () => {
   let message = t("_settings.resetSettings");
   message = message === "_settings.resetSettings" ? "正在清除设置缓存并刷新，请稍候..." : message;
@@ -258,7 +314,7 @@ const resetSettings = () => {
     icon: "Loading",
   });
   settingsStore.resetSettings();
-  setTimeout("window.location.reload()", 1000);
+  setTimeout(() => window.location.reload(), 1000);
 };
 
 // 打开主题设置

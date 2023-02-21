@@ -8,8 +8,6 @@ const { errorLog } = settings;
 
 const { env } = errorLog;
 
-// const errorStore = useErrorLogStore();
-
 /**
  * 检查当前环境是否符合错误日志的运行
  */
@@ -26,16 +24,17 @@ const checkNeed = () => {
  */
 const errorHandler = (error: any, vm: ComponentPublicInstance | null, info: string) => {
   if (!checkNeed()) return;
-  // errorStore.addErrorLog({
-  //   error,
-  //   vm,
-  //   info,
-  //   url: window.location.href,
-  //   hasRead: false,
-  // });
+  const errorStore = useErrorLogStore();
+  errorStore.addErrorLog({
+    error,
+    vm,
+    info,
+    url: window.location.href,
+    hasRead: false,
+  });
   // 过滤 HTTP 请求错误
-  if (error.status || error.status == 0) return false;
-  let errorMap: { [key: string]: string } = {
+  if (error.status || error.status === 0) return false;
+  const errorMap: { [key: string]: string } = {
     InternalError: "Javascript引擎内部错误",
     ReferenceError: "未找到对象",
     TypeError: "使用了错误的类型或对象",
@@ -44,7 +43,7 @@ const errorHandler = (error: any, vm: ComponentPublicInstance | null, info: stri
     EvalError: "错误的使用了Eval",
     URIError: "URI错误",
   };
-  let errorName = errorMap[error.name] || "未知错误";
+  const errorName = errorMap[error.name] || "未知错误";
   ElNotification({
     title: errorName,
     message: error,

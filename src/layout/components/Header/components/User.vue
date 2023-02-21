@@ -3,9 +3,9 @@
     <div class="avatar-wrapper">
       <template v-if="prop.showAvatar">
         <el-image :src="defaultAvatar" class="user-avatar" alt="头像">
-          <div slot="error" class="image-slot">
+          <template #error>
             <el-image :src="defaultAvatar" alt="头像" />
-          </div>
+          </template>
         </el-image>
         <span class="username">{{ user.username }}</span>
       </template>
@@ -58,7 +58,7 @@ const userStore = useUserStore();
 const settingsStore = useSettingsStore();
 
 const user = computed(() => userStore.userInfo);
-const showSettings = computed(set => settingsStore.showSettings);
+const showSettings = computed(() => settingsStore.showSettings);
 const profileLabel = computed(() => {
   const profile = t("_headerBar.profile");
   return profile === "_headerBar.profile" ? "我的主页" : profile;
@@ -113,16 +113,6 @@ const logout = async () => {
   .el-icon-caret-bottom {
     cursor: pointer;
     font-size: 12px;
-  }
-}
-</style>
-<style lang="scss">
-.user-dropdown {
-  .message-badge {
-    .is-dot {
-      top: 7px;
-      right: 17px !important;
-    }
   }
 }
 </style>

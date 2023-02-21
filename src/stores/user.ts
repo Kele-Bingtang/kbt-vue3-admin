@@ -24,7 +24,7 @@ export const useUserStore = defineStore(
     const roles = ref<string[]>([]);
 
     const login = () => {
-      let token = "admin-token";
+      const token = "admin-token";
       setCacheToken(token);
       setToken(token);
     };
@@ -43,7 +43,7 @@ export const useUserStore = defineStore(
     };
 
     const getUserInfo = async () => {
-      let userInfo: UserInfo = {
+      const userInfo: UserInfo = {
         userId: "v10001",
         username: "Visitor",
         sex: "男",
@@ -53,7 +53,7 @@ export const useUserStore = defineStore(
         roles: ["visitor"],
         registerTime: "2022-10-01 19:07:27",
       };
-      let roles = userInfo.roles || ["admin"];
+      const roles = userInfo.roles || ["admin"];
       setRoles(roles);
       setUserInfo(userInfo);
       return roles;

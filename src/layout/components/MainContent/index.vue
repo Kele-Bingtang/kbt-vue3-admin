@@ -1,5 +1,5 @@
 <template>
-  <TabsNav v-if="showTabsNav" />
+  <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
   <el-main>
     <router-view v-slot="{ Component, route }">
       <transition appear name="fade-transform" mode="out-in">
@@ -14,11 +14,18 @@
 <script setup lang="ts" name="MainContent">
 import { useLayoutStore } from "@/stores/layout";
 import { useSettingsStore } from "@/stores/settings";
-import TabsNav from "@/layout/components/TabsNav/index.vue";
+import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";
+import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
+const tabsNavMode = computed(() => settingsStore.tabsNavMode);
 const showTabsNav = computed(() => settingsStore.showTabsNav);
+
+const TabsNavComponents: { [key: string]: Component } = {
+  classic: ClassicTabsNav,
+  popular: ElTabsNav,
+};
 
 // 刷新当前页面
 const isRouterShow = ref(true);

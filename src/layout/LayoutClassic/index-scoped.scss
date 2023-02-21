@@ -1,0 +1,64 @@
+@import "@/styles/variables.module.scss";
+
+.el-container {
+  width: 100%;
+  height: 100%;
+  .el-header {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 55px;
+    padding: 0 15px;
+    border-bottom: 1px solid #3c3c3c1f;
+    .header-left {
+      display: flex;
+      align-items: center;
+      overflow: hidden;
+      white-space: nowrap;
+      .logo {
+        box-sizing: border-box;
+        height: 55px;
+        border-bottom: 1px solid var(--vertical-logo-line-color);
+        margin-right: 16px;
+        span {
+          font-size: 21.5px;
+          font-weight: bold;
+          white-space: nowrap;
+          color: var(--vertical-logo-title-color);
+        }
+        img {
+          width: 28px;
+          object-fit: contain;
+          margin-right: 6px;
+        }
+      }
+    }
+  }
+
+  .el-aside {
+    height: 100%;
+    transition: width 0.28s;
+    z-index: 1000;
+    box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
+    overflow: inherit;
+    background: var(--vertical-menu-bg-color);
+  }
+  &.menu-expand .el-aside {
+    width: $sideMenuWidth !important;
+  }
+  &.menu-collapse .el-aside {
+    transition-duration: 0.3s;
+    width: 54px !important;
+  }
+
+  .classic-container {
+    height: calc(100% - 55px); // 减去头部高度
+    .classic-main-content {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
+  }
+}

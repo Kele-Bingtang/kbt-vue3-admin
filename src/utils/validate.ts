@@ -47,6 +47,7 @@ export const isDef = <T = unknown>(val?: T): val is T => {
 export const isUnDef = <T = unknown>(val?: T): val is T => {
   return !isDef(val);
 };
+
 /**
  * @description: 是否为对象
  */
@@ -65,8 +66,8 @@ export function isDate(val: unknown): val is Date {
  * 是否是有效的数字（包含正负整数，0以及正负浮点数）
  */
 export const isNumber = (val: string) => {
-  var regPos = /^\d+(\.\d+)?$/; //非负浮点数
-  var regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; //负浮点数
+  const regPos = /^\d+(\.\d+)?$/; // 非负浮点数
+  const regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; // 负浮点数
   if (regPos.test(val) || regNeg.test(val)) {
     return true;
   } else {
@@ -111,6 +112,7 @@ export const isArray = (arg: any) => {
   }
   return Array.isArray(arg);
 };
+
 /**
  * @description: 是否客户端
  */

@@ -12,7 +12,7 @@ export const useRoutes = () => {
   const loadRouteList = (routers: RouterConfigRaw[], roles: string[], router: Router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
     permissionStore.loadRolesRoutes(onlyRolesRoutes);
-    let resolveRouters = resolveRouteComponent(onlyRolesRoutes);
+    const resolveRouters = resolveRouteComponent(onlyRolesRoutes);
     resolveRouters.forEach(item => {
       if (item.meta?.isFull) router.addRoute(item as RouteRecordRaw);
       else router.addRoute("Layout", item as RouteRecordRaw);
@@ -25,11 +25,12 @@ export const useRoutes = () => {
    * @returns
    */
   const resolveRouteComponent = (routers: RouterConfigRaw[]) => {
-    let r = routers;
+    const r = routers;
     return r.map(item => {
       if (item.children && item.children.length > 0) item.children = resolveRouteComponent(item.children);
-      if (item.component && isType(item.component) == "string")
+      if (item.component && isType(item.component) === "string") {
         item.component = modules["/src/views" + item.component + ".vue"];
+      }
       return item;
     });
   };
@@ -66,10 +67,10 @@ export const useRoutes = () => {
    * 因为目前菜单的跳转是基于 path，如果你觉得下面函数计算完整的 path 比较麻烦，可以直接以 name 跳转：在 @/layout/components/SideMenu/SideMenuItemLink 里修改为 name 即可
    */
   const getRouteFullPath = (routers: RouterConfigRaw[], basePath = "/") => {
-    let r = routers;
+    const r = routers;
     return r.map(router => {
       if (!router.meta?._fullPath) {
-        let tempMeta = router.meta || {};
+        const tempMeta = router.meta || {};
         // 一级路由的 _fullPath 是自己的 path，如果 path 自带 /，则不需要路由拼接
         if (router.path.startsWith("/")) tempMeta._fullPath = router.path;
         // 去掉多余的 /，保证 path 是合法的地址，合法如 /home/index，不合法如：//home//index
@@ -100,7 +101,7 @@ export const useRoutes = () => {
     };
     for (const route of routers) {
       if (route.children && route.children.length > 0) {
-        let res = getHomeRoute(route.children, homeName);
+        const res = getHomeRoute(route.children, homeName);
         if (res && res.name) return res;
       } else if (route.name === homeName) homeRoute = route;
     }

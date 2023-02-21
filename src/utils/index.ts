@@ -49,7 +49,7 @@ export function removeDuplicateObj<T>(arr: Array<T>, removeKeys: string[], keyIs
  * @return string
  */
 export function getBrowserLang() {
-  let browserLang = navigator.language ? navigator.language : navigator.browserLanguage;
+  const browserLang = navigator.language ? navigator.language : navigator.browserLanguage;
   let defaultBrowserLang = "";
   if (
     browserLang.toLowerCase() === "cn" ||
@@ -67,17 +67,17 @@ export function getBrowserLang() {
  * @description 获取当前时间对应的提示语
  * @return string
  */
- export function getTimeState() {
-	// 获取当前时间
-	let timeNow = new Date();
-	// 获取当前小时
-	let hours = timeNow.getHours();
-	// 判断当前时间段
-	if (hours >= 6 && hours <= 10) return `早上好 ⛅`;
-	if (hours >= 10 && hours <= 14) return `中午好 🌞`;
-	if (hours >= 14 && hours <= 18) return `下午好 🌞`;
-	if (hours >= 18 && hours <= 24) return `晚上好 🌛`;
-	if (hours >= 0 && hours <= 6) return `凌晨好 🌛`;
+export function getTimeState() {
+  // 获取当前时间
+  const timeNow = new Date();
+  // 获取当前小时
+  const hours = timeNow.getHours();
+  // 判断当前时间段
+  if (hours >= 6 && hours <= 10) return `早上好 ⛅`;
+  if (hours >= 10 && hours <= 14) return `中午好 🌞`;
+  if (hours >= 14 && hours <= 18) return `下午好 🌞`;
+  if (hours >= 18 && hours <= 24) return `晚上好 🌛`;
+  if (hours >= 0 && hours <= 6) return `凌晨好 🌛`;
 }
 
 /**
@@ -86,21 +86,21 @@ export function getBrowserLang() {
  * @param b 要比较的对象二
  * @returns 相同返回 true，反之则反
  */
- export function isObjectValueEqual(a: { [key: string]: any }, b: { [key: string]: any }) {
-	if (!a || !b) return false;
-	let aProps = Object.getOwnPropertyNames(a);
-	let bProps = Object.getOwnPropertyNames(b);
-	if (aProps.length != bProps.length) return false;
-	for (let i = 0; i < aProps.length; i++) {
-		let propName = aProps[i];
-		let propA = a[propName];
-		let propB = b[propName];
-		if (!b.hasOwnProperty(propName)) return false;
-		if (propA instanceof Object) {
-			if (!isObjectValueEqual(propA, propB)) return false;
-		} else if (propA !== propB) {
-			return false;
-		}
-	}
-	return true;
+export function isObjectValueEqual(a: { [key: string]: any }, b: { [key: string]: any }) {
+  if (!a || !b) return false;
+  const aProps = Object.getOwnPropertyNames(a);
+  const bProps = Object.getOwnPropertyNames(b);
+  if (aProps.length !== bProps.length) return false;
+  for (let i = 0; i < aProps.length; i++) {
+    const propName = aProps[i];
+    const propA = a[propName];
+    const propB = b[propName];
+    if (!b.hasOwnProperty(propName)) return false;
+    if (propA instanceof Object) {
+      if (!isObjectValueEqual(propA, propB)) return false;
+    } else if (propA !== propB) {
+      return false;
+    }
+  }
+  return true;
 }

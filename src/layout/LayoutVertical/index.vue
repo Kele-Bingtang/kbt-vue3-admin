@@ -39,7 +39,7 @@ const { resizeHandler, isMobile } = useLayout();
 const isCollapse = computed(() => settingsStore.isCollapse);
 const device = computed(() => layoutStore.device);
 
-// 监听路由的变化
+// 监听路由的变化，判断是移动端还是桌面端
 watch(
   () => route.fullPath,
   () => {
@@ -62,58 +62,9 @@ const handleClickOutSide = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "./index.scss";
+@import "./index-scoped.scss";
 </style>
 
 <style lang="scss">
-.vertical {
-  .el-menu,
-  .el-menu--popup {
-    .el-menu-item {
-      &.is-active {
-        background: var(--vertical-menu-active-bg-color);
-        &::before {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          width: 4px;
-          content: "";
-          background: var(--el-color-primary);
-        }
-      }
-      &:hover {
-        background: var(--vertical-menu-hover-bg-color);
-      }
-      &:not(.is-active) {
-        .el-icon,
-        .svg-icon {
-          color: var(--vertical-icon-color);
-        }
-      }
-    }
-    // 二级菜单
-    .el-sub-menu:not(.is-active) {
-      .el-icon,
-      .svg-icon {
-        color: var(--vertical-icon-color);
-      }
-    }
-  }
-  // 菜单折叠的样式
-  .el-popper {
-    .el-menu,
-    .el-menu--popup {
-      background: var(--vertical-sub-menu-bg-color);
-      .el-menu-item {
-        &.is-active {
-          background: var(--vertical-sub-menu-active-bg-color);
-        }
-        &:hover {
-          background: var(--vertical-sub-menu-hover-bg-color);
-        }
-      }
-    }
-  }
-}
+@import "./index-unlimited.scss";
 </style>

@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts" name="ErrorLog">
-
 const route = useRoute();
 const router = useRouter();
 const props = defineProps<{ errorCount: number }>();

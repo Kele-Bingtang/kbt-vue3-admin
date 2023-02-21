@@ -29,4 +29,3 @@ export const usePermissionStore = defineStore("permissionStore", () => {
     loadRolesRoutes,
   };
 });
-

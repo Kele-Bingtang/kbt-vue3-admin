@@ -72,7 +72,7 @@ export const useLayoutStore = defineStore(
       keepAliveName.value = keepAliveNameList;
     };
 
-    let settingsStore = useSettingsStore();
+    const settingsStore = useSettingsStore();
 
     watchEffect(() => {
       if (settingsStore.recordTabsNav) {

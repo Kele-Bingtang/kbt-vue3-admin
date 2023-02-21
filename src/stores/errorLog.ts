@@ -7,9 +7,9 @@ export const useErrorLogStore = defineStore("errorLogStore", () => {
   const errorLogs = ref<ErrorLog[]>([]);
 
   const addErrorLog = (errorLog: ErrorLog) => {
-    let userStore = useUserStore();
-    let { userInfo, token, roles } = userStore;
-    let log: ErrorLog = {
+    const userStore = useUserStore();
+    const { userInfo, token, roles } = userStore;
+    const log: ErrorLog = {
       ...errorLog,
       userId: userInfo.userId,
       username: userInfo.username,

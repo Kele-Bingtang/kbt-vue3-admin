@@ -31,7 +31,6 @@ const activeMenu = computed(
 );
 const isCollapse = computed(() => settingsStore.isCollapse);
 const theme = computed(() => settingsStore.theme);
-const menuTheme = computed(() => settingsStore.menuTheme);
 
 const menuList = computed(() => {
   /**

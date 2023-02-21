@@ -76,7 +76,7 @@ export const useTheme = () => {
     if (!value) return body.setAttribute("style", "");
     if (type === "grey") body.setAttribute("style", "filter: grayscale(1) ");
     if (type === "weak") body.setAttribute("style", "filter: invert(80%)");
-    let propName = type == "grey" ? "isWeak" : "isGrey";
+    const propName = type === "grey" ? "isWeak" : "isGrey";
     settingsStore.$patch({
       [propName]: false,
     });

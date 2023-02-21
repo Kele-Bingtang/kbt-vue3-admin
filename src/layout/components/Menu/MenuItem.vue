@@ -12,7 +12,7 @@
   <el-sub-menu v-else :index="menuItem.path">
     <template #title>
       <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
-      <span slot="title">{{ getTitle(menuItem) }}</span>
+      <span>{{ getTitle(menuItem) }}</span>
     </template>
     <template v-if="menuItem.children">
       <MenuItem v-for="child in menuItem.children" :key="child.path" :menu-item="child" :is-collapse="isCollapse" />
@@ -25,6 +25,7 @@ import { useLayout } from "@/hooks/useLayout";
 import { isExternal } from "@/utils/validate";
 import CommonIcon from "@/components/CommonIcon/index.vue";
 
+// eslint-disable-next-line vue/no-setup-props-destructure
 const { menuItem, isCollapse } = defineProps<{
   menuItem: RouterConfig;
   isCollapse: boolean;
