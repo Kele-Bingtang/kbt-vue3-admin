@@ -1,17 +1,32 @@
 <template>
-  <el-scrollbar>
+  <el-scrollbar v-if="props.mode === 'vertical'">
     <el-menu
       :default-active="activeMenu"
       :collapse="isCollapse"
-      background-color="var(--vertical-menu-bg-color)"
-      text-color="var(--vertical-menu-text-color)"
-      :active-text-color="theme"
+      background-color="var(--menu-bg-color)"
+      text-color="var(--menu-text-color)"
+      :active-text-color="primaryTheme"
       unique-opened
       :collapse-transition="false"
+      :mode="props.mode"
     >
       <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" :is-collapse="isCollapse" />
     </el-menu>
   </el-scrollbar>
+  <template v-else>
+    <el-menu
+      :default-active="activeMenu"
+      :collapse="isCollapse"
+      background-color="var(--menu-bg-color)"
+      text-color="var(--menu-text-color)"
+      :active-text-color="primaryTheme"
+      unique-opened
+      :collapse-transition="false"
+      :mode="props.mode"
+    >
+      <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" :is-collapse="isCollapse" />
+    </el-menu>
+  </template>
 </template>
 
 <script setup lang="ts" name="Menu">
@@ -21,6 +36,9 @@ import { useSettingsStore } from "@/stores/settings";
 import settings from "@/config/settings";
 import MenuItem from "@/layout/components/Menu/MenuItem.vue";
 
+const props = withDefaults(defineProps<{ mode?: "vertical" | "horizontal" }>(), {
+  mode: "vertical",
+});
 const route = useRoute();
 const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
@@ -30,7 +48,7 @@ const activeMenu = computed(
   () => (route.meta.activeMenu as string) || (route.meta._fullPath as string) || (route.path as string)
 );
 const isCollapse = computed(() => settingsStore.isCollapse);
-const theme = computed(() => settingsStore.theme);
+const primaryTheme = computed(() => settingsStore.primaryTheme);
 
 const menuList = computed(() => {
   /**
@@ -52,12 +70,4 @@ const menuList = computed(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-.el-scrollbar {
-  height: calc(100% - 55px);
-  .el-menu {
-    overflow-x: hidden;
-    border-right: none;
-  }
-}
-</style>
+<style lang="scss" scoped></style>

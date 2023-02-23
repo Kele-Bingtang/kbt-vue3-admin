@@ -19,16 +19,23 @@
     z-index: 1000;
     box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
     overflow: inherit;
-    background: var(--vertical-menu-bg-color);
+    background: var(--menu-bg-color);
+    :deep(.el-scrollbar) {
+      height: calc(100% - 55px);
+      .el-menu {
+        overflow-x: hidden;
+        border-right: none;
+      }
+    }
     .logo {
       box-sizing: border-box;
       height: 55px;
-      border-bottom: 1px solid var(--vertical-logo-line-color);
+      border-bottom: 1px solid var(--menu-logo-line-color);
       span {
         font-size: 21.5px;
         font-weight: bold;
         white-space: nowrap;
-        color: var(--vertical-logo-title-color);
+        color: var(--menu-logo-title-color);
       }
       img {
         width: 28px;
@@ -42,7 +49,7 @@
   }
   &.menu-collapse .el-aside {
     transition-duration: 0.3s;
-    width: 54px !important;
+    width: 64px !important;
   }
   .el-header {
     box-sizing: border-box;
@@ -52,21 +59,5 @@
     height: 55px;
     padding: 0 15px;
     border-bottom: 1px solid #3c3c3c1f;
-  }
-}
-/* 适配移动端 */
-.mobile {
-  .layout-container {
-    .el-aside {
-      position: fixed;
-      top: 0;
-      transition: transform 0.28s;
-    }
-    &.menu-collapse .el-aside {
-      width: $sideMenuWidth !important;
-      pointer-events: none;
-      transition-duration: 0.3s;
-      transform: translate3d(-$sideMenuWidth, 0, 0);
-    }
   }
 }

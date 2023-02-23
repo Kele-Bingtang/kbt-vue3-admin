@@ -3,6 +3,7 @@ import { defineStore } from "pinia";
 import { setCacheTabNavList } from "@/utils/cache";
 import { DeviceType, type LayoutSizeType, type TabProp } from "./index.d";
 import { useSettingsStore } from "./settings";
+import defaultSettings from "@/config/settings";
 
 export const useLayoutStore = defineStore(
   "layoutStore",
@@ -102,7 +103,7 @@ export const useLayoutStore = defineStore(
   },
   {
     persist: {
-      key: "kbt_layoutStore",
+      key: defaultSettings.layoutCacheKey,
       storage: localStorage,
       paths: ["layoutSize", "language"],
     },

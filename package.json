@@ -3,9 +3,10 @@
   "version": "0.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite",
-    "serve": "vite",
-    "build": "run-p type-check build-only",
+    "dev": "vite --mode development",
+    "serve": "vite --mode development",
+    "build:prod": "run-p type-check build-only --mode production",
+    "build:test": "run-p type-check build-only --mode test",
     "preview": "vite preview",
     "build-only": "vite build",
     "type-check": "vue-tsc --noEmit",
@@ -25,12 +26,10 @@
     "sortablejs": "^1.15.0",
     "vue": "^3.2.45",
     "vue-i18n": "^9.2.2",
-    "vue-router": "^4.1.6",
-    "vue-svgicon": "^3.3.0"
+    "vue-router": "^4.1.6"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.1.4",
-    "@types/js-cookie": "^3.0.3",
     "@types/node": "^18.11.12",
     "@types/sortablejs": "^1.15.0",
     "@vitejs/plugin-vue": "^4.0.0",

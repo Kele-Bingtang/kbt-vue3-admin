@@ -1,13 +1,7 @@
 <template>
   <el-dropdown trigger="click" @command="handleSetSize">
     <div class="svg-container">
-      <svg-icon
-        name="size"
-        color="var(--el-text-color-primary)"
-        width="20px"
-        height="20px"
-        :icon-style="{ cursor: 'pointer' }"
-      />
+      <svg-icon name="size" width="20px" height="20px" :icon-style="{ cursor: 'pointer' }" />
     </div>
     <template #dropdown>
       <el-dropdown-menu>

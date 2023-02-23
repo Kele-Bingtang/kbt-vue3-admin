@@ -9,10 +9,10 @@
         <template #left>
           <div class="header-left">
             <div class="logo flx-center">
-              <img src="@/assets/img/logo.png" alt="logo" />
+              <img src="@/assets/img/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
               <span>{{ settings.title }}</span>
             </div>
-            <ToolBarLeft />
+            <HeaderLeft />
           </div>
         </template>
       </Header>
@@ -38,7 +38,7 @@ import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
 import settings from "@/config/settings";
-import ToolBarLeft from "@/layout/components/Header/HeaderLeft.vue";
+import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
 
 const route = useRoute();
 const settingsStore = useSettingsStore();

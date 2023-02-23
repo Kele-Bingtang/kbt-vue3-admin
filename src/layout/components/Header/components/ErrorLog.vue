@@ -1,12 +1,6 @@
 <template>
   <el-badge :value="props.errorCount" :max="99" :hidden="props.errorCount === 0">
-    <svg-icon
-      name="bug"
-      color="var(--el-text-color-primary)"
-      width="20px"
-      height="20px"
-      @click.stop="openErrorLogger"
-    />
+    <svg-icon name="bug" width="20px" height="20px" @click.stop="openErrorLogger" />
   </el-badge>
 </template>
 

@@ -9,7 +9,7 @@ const { errorLog } = settings;
 const { env } = errorLog;
 
 /**
- * 检查当前环境是否符合错误日志的运行
+ * @description 检查当前环境是否符合错误日志的运行
  */
 const checkNeed = () => {
   const node_env = import.meta.env.MODE;
@@ -20,7 +20,7 @@ const checkNeed = () => {
 };
 
 /**
- * 捕获错误回调
+ * @description 捕获错误回调
  */
 const errorHandler = (error: any, vm: ComponentPublicInstance | null, info: string) => {
   if (!checkNeed()) return;

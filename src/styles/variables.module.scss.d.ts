@@ -11,6 +11,7 @@ export interface ScssVariables {
   iconDark: string; // 图标颜色
   logoLineDark: string; // logo 底部线条颜色
   logoTitleDark: string; // logo 右侧文字颜色
+  splitMenuActiveBgDark: string;
 
   // 亮色主题
   menuBgLight: string;
@@ -23,6 +24,7 @@ export interface ScssVariables {
   iconLight: string;
   logoLineLight: string;
   logoTitleLight: string;
+  splitMenuActiveBgLight: string;
 }
 
 export const variables: ScssVariables;

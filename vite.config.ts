@@ -14,9 +14,11 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd());
   const viteEnv = wrapperEnv(env);
   return {
+    base: env.VITE_BASE_URL,
     plugins: [
       vue(),
       vueJsx(),
+      // * EsLint 报错信息显示在浏览器界面上
       eslintPlugin(),
       AutoImport({
         imports: ["vue", "vue-router"], // 自动引入 vue 的 ref、toRefs、onmounted 等，无需在页面中再次引入
@@ -58,6 +60,5 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
         },
       },
     },
-    // * EsLint 报错信息显示在浏览器界面上
   };
 });

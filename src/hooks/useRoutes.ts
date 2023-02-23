@@ -7,7 +7,7 @@ export const useRoutes = () => {
   const modules = import.meta.glob("@/views/**/*.vue");
 
   /**
-   * 动态加载路由
+   * @description 动态加载路由
    */
   const loadRouteList = (routers: RouterConfigRaw[], roles: string[], router: Router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
@@ -19,6 +19,7 @@ export const useRoutes = () => {
     });
   };
   /**
+   * @description
    * 引入 views 文件夹下所有 vue 文件
    * 支持 /home/index 格式，也支持 () => import() 格式
    * @param routers 路由
@@ -36,7 +37,7 @@ export const useRoutes = () => {
   };
 
   /**
-   * 过滤出当前系统角色的路由权限
+   * @description 过滤出当前系统角色的路由权限
    */
   const filterOnlyRolesRoutes = (routers: RouterConfigRaw[], roles: string[]) => {
     const rolesRoutes: RouterConfigRaw[] = [];
@@ -51,7 +52,7 @@ export const useRoutes = () => {
   };
 
   /**
-   * 该系统角色是否有权限访问当前路由
+   * @description 该系统角色是否有权限访问当前路由
    * roles 带有 * 的代表所有路由都能访问
    */
   const hasPermission = (router: RouterConfigRaw, roles: string[]) => {
@@ -61,6 +62,7 @@ export const useRoutes = () => {
   };
 
   /**
+   * @description
    * 父路由的完整 path（_fullPath）是本身的 path
    * 子路由的完整 path（_fullPath）是父路由的 path 加子路由的 path
    * _fullPath 放在 meta 里，因为避免开发人员需要用到 fullPath，所以加个 _ 代表关键字
@@ -87,6 +89,7 @@ export const useRoutes = () => {
   };
 
   /**
+   * @description
    * 用于找到路由列表中 name 为 home 的对象
    * 如果你的首页 name 不为 home，请更改
    */

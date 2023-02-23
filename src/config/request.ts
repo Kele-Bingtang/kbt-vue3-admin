@@ -39,16 +39,14 @@ class RequestHttp {
         }
         if ((config.method as string).toLocaleLowerCase() === "post" && config.headers) {
           if (config.params && config.params._type) {
-            if (config.params._type === "api") {
+            if (config.params._type === "form") {
               config.headers["Content-Type"] = ContentTypeEnum.FORM_URLENCODED;
               config.data = qs.stringify(config.data);
             } else if (config.params._type === "file") config.headers["Content-Type"] = ContentTypeEnum.FILE_FORM_DATA;
             else if (config.params._type === "json") config.headers["Content-Type"] = ContentTypeEnum.JSON;
-            else if (config.params._type === "info")
+            else if (config.params._type === "info") {
               config.headers["Content-Type"] = ContentTypeEnum.Multi_FILE_FORM_DATA; // 传输数据为二进制类型，如：图片、MP3、文件
-          } else {
-            config.headers["Content-Type"] = ContentTypeEnum.FORM_URLENCODED;
-            config.data = qs.stringify(config.data);
+            }
           }
         }
         // 多选

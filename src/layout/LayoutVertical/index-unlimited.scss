@@ -3,7 +3,7 @@
   .el-menu--popup {
     .el-menu-item {
       &.is-active {
-        background: var(--vertical-menu-active-bg-color);
+        background: var(--menu-active-bg-color);
         &::before {
           position: absolute;
           top: 0;
@@ -15,36 +15,47 @@
         }
       }
       &:hover {
-        background: var(--vertical-menu-hover-bg-color);
+        background: var(--menu-hover-bg-color);
       }
+    }
+    .el-sub-menu,
+    .el-menu-item {
       &:not(.is-active) {
         .el-icon,
         .svg-icon {
-          color: var(--vertical-icon-color);
+          color: var(--menu-icon-color);
         }
       }
     }
-    // 二级菜单
-    .el-sub-menu:not(.is-active) {
-      .el-icon,
-      .svg-icon {
-        color: var(--vertical-icon-color);
+    .el-sub-menu {
+      .el-menu {
+        background-color: var(--sub-menu-bg-color) !important;
+        .el-menu-item {
+          &.is-active {
+            background-color: var(--sub-menu-active-bg-color) !important;
+          }
+          &:hover {
+            background-color: var(--sub-menu-hover-bg-color) !important;
+          }
+        }
       }
     }
   }
   // 菜单折叠的样式
   .el-popper {
-    .el-menu,
     .el-menu--popup {
-      background: var(--vertical-sub-menu-bg-color);
+      background: var(--sub-menu-bg-color);
       .el-menu-item {
         &.is-active {
-          background: var(--vertical-sub-menu-active-bg-color);
+          background: var(--sub-menu-active-bg-color);
         }
         &:hover {
-          background: var(--vertical-sub-menu-hover-bg-color);
+          background: var(--sub-menu-hover-bg-color);
         }
       }
     }
+  }
+  .header-icon .el-dropdown {
+    color: var(--el-text-color-primary);
   }
 }

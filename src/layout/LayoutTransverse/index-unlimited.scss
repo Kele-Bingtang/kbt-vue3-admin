@@ -1,0 +1,68 @@
+.transverse {
+  .el-header {
+    .el-menu {
+      flex: 1;
+      overflow: hidden;
+      border-bottom: 1px solid var(--header-line-color);
+    }
+  }
+  .el-menu {
+    .el-menu-item {
+      &.is-active {
+        background: var(--split-menu-active-bg-color);
+        color: var(--menu-text-color) !important;
+        &:hover {
+          color: var(--el-color-primary);
+        }
+      }
+      &:hover {
+        background: var(--split-menu-active-bg-color);
+      }
+    }
+  }
+  .el-sub-menu,
+  .el-menu-item {
+    &:not(.is-active) {
+      .el-icon,
+      .svg-icon {
+        color: var(--menu-icon-color);
+      }
+    }
+  }
+  // 下拉菜单
+  .el-menu--popup .el-menu-item {
+    &.is-active {
+      background: var(--menu-active-bg-color);
+      &::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 4px;
+        content: "";
+        background: var(--el-color-primary);
+      }
+    }
+    &:hover {
+      background: var(--menu-hover-bg-color);
+    }
+  }
+  // 横向菜单
+  .el-menu--horizontal {
+    // 菜单高度
+    .el-sub-menu,
+    .el-menu-item {
+      height: 54px !important;
+      .el-sub-menu__title {
+        height: 100%;
+      }
+    }
+    .el-sub-menu__hide-arrow {
+      width: 54px !important;
+    }
+  }
+  // 右侧图标
+  .header-icon .el-dropdown {
+    color: var(--header-text-color);
+  }
+}

@@ -88,11 +88,20 @@ export const rolesRoutes: RouterConfigRaw[] = [
     },
     children: [
       {
-        path: "/test4",
+        path: "test4",
         name: "Test4",
         component: "/home/index",
         meta: {
           title: "Test4",
+          icon: "HomeFilled",
+        },
+      },
+      {
+        path: "test5",
+        name: "Test5",
+        component: "/home/index",
+        meta: {
+          title: "Test5",
           icon: "HomeFilled",
         },
       },

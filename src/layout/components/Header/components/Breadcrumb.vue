@@ -2,7 +2,7 @@
   <el-breadcrumb class="breadcrumb" :separator-icon="ArrowRight">
     <transition-group name="breadcrumb" mode="out-in" tag="div">
       <el-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbList" :key="breadcrumb.path">
-        <span v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1" class="hide-bread">
+        <span v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1" class="no-click-bread">
           <CommonIcon
             v-if="breadcrumb.meta.icon && settingsStore.showBreadcrumbIcon"
             :icon="breadcrumb.meta.icon"
@@ -92,7 +92,7 @@ const handleBreadcrumbClick = (item: RouteConfig) => {
     margin-right: 6px;
     font-size: 16px;
   }
-  .hide-bread {
+  .no-click-bread {
     display: inline-flex;
     align-items: center;
     color: #97a8be;

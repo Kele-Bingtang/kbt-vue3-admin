@@ -1,4 +1,4 @@
-import type { LayoutModeType, MenuThemeType, TabsNavModeType } from "@/stores";
+import type { LayoutModeType, LayoutThemeType, TabsNavModeType } from "@/stores";
 
 interface Settings {
   title: string; // 项目 title
@@ -18,8 +18,8 @@ interface Settings {
   routeUseI18n: boolean; // 「路由」布局是否使用国际化，默认为 false，如果不使用，则需要在路由中给需要在菜单中展示的路由设置 meta: {title: 'xxx'} 用来在菜单中显示文字
   recordTabsNav: boolean; // 是否记录打开过（没关闭）的 tags，下次打开会加载在 tagsNav
   menuTextTheme: boolean; // 如果是 true，则菜单的激活色跟随系统颜色
-  theme: string; // 主题色
-  menuTheme: MenuThemeType; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
+  primaryTheme: string; // 主题色
+  layoutTheme: LayoutThemeType; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
   errorLog: {
     showInHeader: boolean; // 设为 false 后不会在顶部显示错误日志徽标
     env: string[]; // 日志收集的环境，默认是 production 生成环境
@@ -39,6 +39,9 @@ interface Settings {
    * 如果看不懂这个配置没关系，当您配置路由时遇到为 true 的场景时，自然懂得
    */
   moreRouteChildrenHideInMenuThenOnlyOne: boolean;
+  settingCacheKey: string;
+  layoutCacheKey: string;
+  tabsNavCacheKey: string;
 }
 
 const settings: Settings = {
@@ -59,14 +62,17 @@ const settings: Settings = {
   routeUseI18n: true,
   recordTabsNav: true,
   menuTextTheme: true,
-  theme: "#168BF7", // 蓝色偏暗：#168BF7，官方：#409EFF
-  menuTheme: "dark",
+  primaryTheme: "#168BF7", // 蓝色偏暗：#168BF7，官方：#409EFF
+  layoutTheme: "dark",
   errorLog: {
     showInHeader: true,
     env: ["production"],
   },
   whiteList: ["*"],
   moreRouteChildrenHideInMenuThenOnlyOne: false,
+  settingCacheKey: "kbt_settingsStore",
+  layoutCacheKey: "kbt_layoutStore",
+  tabsNavCacheKey: "kbt_tabsNav",
 };
 
 export default settings;

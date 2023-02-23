@@ -1,12 +1,11 @@
 <template>
-  <!-- 布局：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧 -->
   <el-container
     class="layout-container"
     :class="{ mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }"
   >
     <el-aside>
       <div class="logo flx-center">
-        <img src="@/assets/img/logo.png" alt="logo" />
+        <img src="@/assets/img/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ settings.title }}</span>
       </div>
       <Menu />

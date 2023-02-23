@@ -1,6 +1,6 @@
 <template>
   <el-menu-item
-    :index="menuItem.path"
+    :index="menuItem.meta._fullPath"
     @click="handleMenuClick(menuItem)"
     v-if="!menuItem.children || menuItem.children.length == 0"
   >
@@ -9,7 +9,7 @@
       <span>{{ getTitle(menuItem) }}</span>
     </template>
   </el-menu-item>
-  <el-sub-menu v-else :index="menuItem.path">
+  <el-sub-menu v-else :index="menuItem.meta._fullPath">
     <template #title>
       <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
       <span>{{ getTitle(menuItem) }}</span>

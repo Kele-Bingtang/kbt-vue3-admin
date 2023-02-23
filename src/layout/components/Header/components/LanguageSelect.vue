@@ -1,12 +1,6 @@
 <template>
   <el-dropdown trigger="click" @command="handleSelectLanguage">
-    <svg-icon
-      name="language"
-      color="var(--el-text-color-primary)"
-      width="1.5rem"
-      height="1.5rem"
-      :icon-style="{ cursor: 'pointer' }"
-    />
+    <svg-icon name="language" width="1.5rem" height="1.5rem" :icon-style="{ cursor: 'pointer' }" />
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item

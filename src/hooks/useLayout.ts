@@ -15,7 +15,7 @@ export const useLayout = () => {
   const { t } = useI18n();
 
   /**
-   * 是否为移动端
+   * @description 是否为移动端
    * @returns boolean：true 是，false 不是
    */
   const isMobile = () => {
@@ -23,7 +23,7 @@ export const useLayout = () => {
     return rect.width - 1 < 767; // 这里以 ipad Mini 的宽度为移动端的阈值
   };
   /**
-   * 计算页面尺寸
+   * @description 计算页面尺寸
    */
   const resizeHandler = () => {
     if (!document.hidden) {
@@ -34,7 +34,7 @@ export const useLayout = () => {
   };
 
   /**
-   * 根据当前跳转的路由设置显示在浏览器标签的 title
+   * @description 根据当前跳转的路由设置显示在浏览器标签的 title
    * @param route 当前路由
    */
   const setTitle = (route: RouteConfig | RouterConfig) => {
@@ -55,7 +55,7 @@ export const useLayout = () => {
   };
 
   /**
-   * 处理页面标题、侧边菜单、面包屑、tagsNav 展示的 title
+   * @description 处理页面标题、侧边菜单、面包屑、tabsNav 展示的 title
    * @param route 当前路由
    * @returns 路由的 title
    */
@@ -89,7 +89,7 @@ export const useLayout = () => {
   };
 
   /**
-   * 处理路由的 title，因为 title 支持函数格式，所以这里解析出函数的返回值
+   * @description 处理路由的 title，因为 title 支持函数格式，所以这里解析出函数的返回值
    * @param route 当前路由
    * @returns
    */
@@ -110,7 +110,7 @@ export const useLayout = () => {
   };
 
   /**
-   * 获取面包屑列表
+   * @description 获取面包屑列表
    * @returns 面包屑列表
    */
   const getBreadcrumbs = (route: RouteConfig) => {
@@ -135,7 +135,7 @@ export const useLayout = () => {
   };
 
   /**
-   * 通过路由表获取菜单列表
+   * @description 通过路由表获取菜单列表
    * @param loadRolesRoutes 权限路由
    * @returns 菜单列表
    */

@@ -16,6 +16,7 @@ import { useLayoutStore } from "@/stores/layout";
 import { useSettingsStore } from "@/stores/settings";
 import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";
 import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
+export type RefreshFunction = (value?: boolean) => boolean;
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
@@ -29,7 +30,17 @@ const TabsNavComponents: { [key: string]: Component } = {
 
 // 刷新当前页面
 const isRouterShow = ref(true);
-const refreshCurrentPage = (val: boolean) => (isRouterShow.value = val);
+const refreshCurrentPage: RefreshFunction = (value?: boolean) => {
+  if (value) {
+    isRouterShow.value = value;
+    return true;
+  }
+  isRouterShow.value = false;
+  nextTick(() => {
+    isRouterShow.value = true;
+  });
+  return true;
+};
 provide("refresh", refreshCurrentPage);
 </script>
 

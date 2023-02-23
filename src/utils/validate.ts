@@ -1,10 +1,10 @@
 /**
- * 是否为合法的前缀
+ * @description 是否为合法的前缀
  */
 export const isExternal = (path: string) => /^(https?:|mailto:|tel:)/.test(path);
 
 /**
- * 是否是有效的 URL
+ * @description 是否是有效的 URL
  */
 export const isValidURL = (url: string) => {
   const reg =

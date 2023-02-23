@@ -65,6 +65,8 @@ export default {
   _settings: {
     layoutSwitch: "Layout Switch",
     menuSwitch: "Menu Switch",
+    headerSwitch: "Header Switch",
+    tabsNavSwitch: "TabsNav Switch",
     interfaceSettings: "Interface Settings",
     globalTheme: "Global Theme",
     titleSwitch: "Title Switch",

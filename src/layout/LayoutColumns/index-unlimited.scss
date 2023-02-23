@@ -1,0 +1,53 @@
+.columns {
+  .el-menu,
+  .el-menu--popup {
+    .el-menu-item {
+      &.is-active {
+        background: var(--el-color-primary-light-9);
+        &::before {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          right: 0;
+          width: 4px;
+          content: "";
+          background: var(--el-color-primary);
+        }
+      }
+      &:hover {
+        background: var(--el-color-primary-light-9);
+      }
+    }
+    .el-sub-menu,
+    .el-menu-item {
+      &:not(.is-active) {
+        .el-icon,
+        .svg-icon {
+          color: #303133;
+        }
+      }
+    }
+  }
+  // 菜单折叠的样式
+  .el-popper {
+    .el-menu,
+    .el-menu--popup {
+      background: #fff;
+      .el-menu-item {
+        &.is-active {
+          background: #ecf5ff;
+        }
+        &:hover {
+          background: #ecf5ff;
+        }
+      }
+    }
+  }
+  // 折叠时确保 border-right 不能多出 1px
+  .el-container .el-aside.not-aside {
+    border: 0;
+  }
+  .header-icon .el-dropdown {
+    color: var(--el-text-color-primary);
+  }
+}

@@ -15,7 +15,7 @@ module.exports = {
   },
   rules: {
     // typeScript (https://typescript-eslint.io/rules)
-    "@typescript-eslint/no-unused-vars": "error", // 禁止定义未使用的变量
+    "@typescript-eslint/no-unused-vars": process.env.NODE_ENV === "production" ? "error" : "warn", // 禁止定义未使用的变量
     "@typescript-eslint/prefer-ts-expect-error": "error", // 禁止使用 @ts-ignore
     "@typescript-eslint/no-inferrable-types": "off", // 可以轻松推断的显式类型可能会增加不必要的冗长
     "@typescript-eslint/no-namespace": "off", // 禁止使用自定义 TypeScript 模块和命名空间。
@@ -137,7 +137,7 @@ module.exports = {
     "no-this-before-super": 2, // 禁止在构造函数中，在调用 super() 之前使用 this 或 super
     "no-throw-literal": 2, // 禁止抛出异常字面量
     "no-trailing-spaces": 2, // 禁用行尾空格
-    "no-undef": 2, // 禁用未声明的变量，除非它们在 /*global */ 注释中被提到
+    "no-undef": process.env.NODE_ENV === "production" ? 2 : 1, // 禁用未声明的变量，除非它们在 /*global */ 注释中被提到
     "no-undef-init": 2, // 禁止将变量初始化为 undefined
     "no-unexpected-multiline": 2, // 不允许混淆多行表达式
     "no-unmodified-loop-condition": 2, // 该规则查找循环条件内的引用，然后检查这些引用的变量是否在循环中被修改

@@ -1,0 +1,107 @@
+@import "@/styles/variables.module.scss";
+
+.el-container {
+  width: 100%;
+  height: 100%;
+  .aside-split {
+    display: flex;
+    flex-direction: column;
+    flex-shrink: 0;
+    width: 70px;
+    height: 100%;
+    background-color: var(--menu-bg-color);
+    border-right: 1px solid var(--menu-logo-line-color);
+    .logo {
+      box-sizing: border-box;
+      height: 55px;
+      border-bottom: 1px solid var(--menu-logo-line-color);
+      img {
+        width: 32px;
+        object-fit: contain;
+      }
+    }
+    .el-scrollbar {
+      height: calc(100% - 55px);
+      .split-list {
+        flex: 1;
+        .split-item {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          height: 70px;
+          cursor: pointer;
+          transition: all 0.3s ease;
+          &:hover {
+            background-color: var(--split-menu-active-bg-color);
+          }
+          .el-icon,
+          .svg-icon {
+            font-size: 21px;
+            color: var(--menu-icon-color);
+          }
+          .title {
+            margin-top: 6px;
+            font-size: 12px;
+            transform: scale(0.96);
+            color: var(--menu-text-color);
+          }
+        }
+      }
+      .split-active {
+        background-color: var(--split-menu-active-bg-color);
+        .el-icon,
+        .svg-icon {
+          color: var(--menu-icon-color) !important;
+        }
+      }
+    }
+  }
+  .el-aside {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    background-color: #ffffff;
+    border-right: 1px solid #f0eded;
+    transition: all 0.3s ease;
+    .el-scrollbar {
+      height: calc(100% - 55px);
+      .el-menu {
+        overflow-x: hidden;
+        border-right: none;
+      }
+    }
+    .logo {
+      box-sizing: border-box;
+      height: 55px;
+      border-bottom: 1px solid #f0eded;
+      span {
+        font-size: 24px;
+        font-weight: bold;
+        color: var(--el-menu-text-color);
+        white-space: nowrap;
+      }
+    }
+  }
+  &.menu-expand .el-aside {
+    width: $sideMenuWidth;
+  }
+  &.menu-collapse .el-aside {
+    transition-duration: 0.3s;
+    width: 64px;
+  }
+  .not-aside {
+    width: 0 !important;
+  }
+  .el-header {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 55px;
+    padding: 0 15px;
+    background-color: #ffffff;
+    border-bottom: 1px solid #f1f1f1;
+  }
+}

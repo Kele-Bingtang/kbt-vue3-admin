@@ -1,8 +1,8 @@
 // 请求枚举配置
 /**
- * @description：请求配置
+ * @description 请求配置
  */
- export enum ResultEnum {
+export enum ResultEnum {
   SUCCESS = 200,
   ERROR = 500,
   OVERDUE = 401,
@@ -11,7 +11,7 @@
 }
 
 /**
- * @description：请求方法
+ * @description 请求方法
  */
 export enum RequestEnum {
   GET = "GET",
@@ -22,7 +22,7 @@ export enum RequestEnum {
 }
 
 /**
- * @description：常用的 contentTyp 类型
+ * @description 常用的 contentTyp 类型
  */
 export enum ContentTypeEnum {
   // json

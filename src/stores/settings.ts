@@ -1,15 +1,15 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { removeCacheTabNavList } from "@/utils/cache";
-import type { LayoutModeType, MenuThemeType, TabsNavModeType } from ".";
+import type { LayoutModeType, LayoutThemeType, TabsNavModeType } from ".";
 import defaultSettings from "@/config/settings";
 
 const {
-  theme: themeSetting,
+  primaryTheme: primaryThemeSetting,
   titleMode: titleModeSetting,
   layoutMode: layoutModeSetting,
   tabsNavMode: tabsNavModeSetting,
-  menuTheme: menuThemeSetting,
+  layoutTheme: layoutThemeSetting,
   showSettings: showSettingsSetting,
   showTabsNav: showTagsNavSetting,
   recordTabsNav: recordTagsNavSetting,
@@ -26,11 +26,11 @@ const {
 export const useSettingsStore = defineStore(
   "settingsStore",
   () => {
-    const theme = ref(themeSetting);
+    const primaryTheme = ref(primaryThemeSetting);
     const titleMode = ref(titleModeSetting);
     const layoutMode = ref<LayoutModeType>(layoutModeSetting);
     const tabsNavMode = ref<TabsNavModeType>(tabsNavModeSetting);
-    const menuTheme = ref<MenuThemeType>(menuThemeSetting);
+    const menuTheme = ref<LayoutThemeType>(layoutThemeSetting);
     const showSettings = ref(showSettingsSetting);
     const showTabsNav = ref(showTagsNavSetting);
     const recordTabsNav = ref(recordTagsNavSetting);
@@ -42,6 +42,7 @@ export const useSettingsStore = defineStore(
     const isDark = ref(isDarkSetting);
     const isWeak = ref(isWeakSetting);
     const isGrey = ref(isGreySetting);
+    const headerTheme = ref<LayoutThemeType>(layoutThemeSetting);
 
     const closeSideMenu = () => {
       isCollapse.value = true;
@@ -59,7 +60,7 @@ export const useSettingsStore = defineStore(
     };
 
     return {
-      theme,
+      primaryTheme,
       titleMode,
       layoutMode,
       tabsNavMode,
@@ -75,6 +76,7 @@ export const useSettingsStore = defineStore(
       isDark,
       isWeak,
       isGrey,
+      headerTheme,
 
       closeSideMenu,
       toggleSideMenu,
@@ -83,7 +85,7 @@ export const useSettingsStore = defineStore(
   },
   {
     persist: {
-      key: "kbt_settingsStore",
+      key: defaultSettings.settingCacheKey,
       storage: localStorage,
     },
   }

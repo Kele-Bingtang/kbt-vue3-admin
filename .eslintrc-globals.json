@@ -67,6 +67,7 @@
     "RouteConfig": true,
     "RouterConfig": true,
     "RouterConfigRaw": true,
-    "process": true
+    "process": true,
+    "BlobPart": true
   }
 }

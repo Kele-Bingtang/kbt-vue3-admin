@@ -33,16 +33,16 @@ export interface PermissionState {
 }
 
 // SettingsState
-export type LayoutModeType = "vertical" | "classic";
+export type LayoutModeType = "vertical" | "classic" | "transverse" | "columns";
 export type TabsNavModeType = "classic" | "popular";
-export type MenuThemeType = "light" | "dark";
+export type LayoutThemeType = "light" | "dark";
 
 export interface SettingsState {
   theme: string; // Element UI 主题色
   titleMode: string; // 标题在浏览器标签上的多种模式。0：title + 页面 title，1：用户名 + 页面 title，2：title，3：页面 title
   layoutMode: LayoutModeType; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
   tabsNavMode: TabsNavModeType; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
-  menuTheme: MenuThemeType; // 侧边菜单栏主题色
+  menuTheme: LayoutThemeType; // 侧边菜单栏主题色
   isCollapse: boolean; // 侧边菜单
   showSettings: boolean; // 是否显示 settings 配置
   showTabsNav: boolean; // 是否显示标签页

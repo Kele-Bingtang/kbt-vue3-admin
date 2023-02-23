@@ -1,5 +1,5 @@
 /**
- * 数据解耦后，再返回
+ * @description 数据解耦后，再返回
  */
 export function copyObj(obj: unknown) {
   return obj && JSON.parse(JSON.stringify(obj));
@@ -10,7 +10,7 @@ export function copyObj(obj: unknown) {
  * @param arr 多个对象的数组
  * @param removeKeys 去重的 keys，数组形式
  * @param keyIsAndOr and：所有 key 都重复才去重；or：所有 key 中，任意一个 key 重复就去重
- * @returns
+ * @returns 去重后的数组
  */
 export function removeDuplicateObj<T>(arr: Array<T>, removeKeys: string[], keyIsAndOr: "and" | "or" = "and") {
   try {
