@@ -1,9 +1,11 @@
 <template>
   <div class="hedaer-right-container">
     <div class="header-icon">
+      <MenuSearch id="menuSearch" />
       <Fullscreen id="fullscreen" />
       <LayoutSizeSelect id="layoutSizeSelect" />
       <LanguageSelect id="languageSelect" />
+      <Message id="message" />
       <ErrorLog id="errorLog" :errorCount="errorCount" v-if="settings.errorLog.showInHeader && errorCount > 0" />
       <User id="user" />
     </div>
@@ -14,6 +16,8 @@
 import Fullscreen from "./components/Fullscreen.vue";
 import LanguageSelect from "./components/LanguageSelect.vue";
 import LayoutSizeSelect from "./components/LayoutSizeSelect.vue";
+import MenuSearch from "./components/MenuSearch.vue";
+import Message from "./components/Message.vue";
 import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
 import settings from "@/config/settings";

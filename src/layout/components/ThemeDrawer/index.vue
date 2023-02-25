@@ -240,12 +240,12 @@ import { useTheme } from "@/hooks/useTheme";
 import settings from "@/config/settings";
 import { useSettingsStore } from "@/stores/settings";
 import type { LayoutModeType, LayoutThemeType, TabsNavModeType } from "@/stores";
-import mittBus from "@/utils/mittBus";
+import mittBus from "@/utils/layout/mittBus";
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
 import { useLayout } from "@/hooks/useLayout";
 import { ElMessage } from "element-plus";
-import { removeCacheTabNavList } from "@/utils/cache";
+import { removeCacheTabNavList } from "@/utils/layout/cache";
 import variables from "@/styles/variables.module.scss";
 
 const { changePrimary, changeGreyOrWeak, switchDark } = useTheme();

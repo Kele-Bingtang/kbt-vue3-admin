@@ -1,4 +1,4 @@
-import { getLightColor, getDarkColor } from "@/utils/themeTool";
+import { getLightColor, getDarkColor } from "@/utils/layout/themeTool";
 import settings from "@/config/settings";
 import { ElMessage } from "element-plus";
 import { useSettingsStore } from "@/stores/settings";

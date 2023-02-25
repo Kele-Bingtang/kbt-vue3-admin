@@ -35,17 +35,19 @@ export const constantRoutes: RouterConfigRaw[] = [
         component: () => import("@/views/errorLog/index.vue"),
         meta: { title: "错误日志", isKeepAlive: false, hideInMenu: true },
       },
+      {
+        path: "/profile",
+        name: "Profile",
+        component: () => import("@/views/profile/index.vue"),
+        meta: { hideInMenu: true, title: "我的主页" },
+      },
+      {
+        path: "/message-center",
+        name: "MessageCenter",
+        component: () => import("@/views/messageCenter/index.vue"),
+        meta: { hideInMenu: true, title: "我的消息" },
+      },
     ],
-  },
-  {
-    path: "/profile",
-    redirect: HOME_URL,
-    meta: { hideInMenu: true },
-  },
-  {
-    path: "/message",
-    redirect: HOME_URL,
-    meta: { hideInMenu: true },
   },
 ];
 
@@ -82,26 +84,46 @@ export const rolesRoutes: RouterConfigRaw[] = [
     path: "/test3",
     name: "Test3",
     meta: {
-      title: "Test2",
+      title: "Test3",
       icon: "HomeFilled",
       alwaysShowRoot: true,
     },
     children: [
       {
-        path: "test4",
-        name: "Test4",
+        path: "test3-1",
+        name: "Test3-1",
         component: "/home/index",
         meta: {
-          title: "Test4",
+          title: "Test3-1",
           icon: "HomeFilled",
         },
+        children: [
+          {
+            path: "test3-1-1",
+            name: "Test3-1-1",
+            component: "/home/index",
+            meta: {
+              title: "Test3-1-1",
+              icon: "HomeFilled",
+            },
+          },
+          {
+            path: "test3-1-2",
+            name: "Test3-1-2",
+            component: "/home/index",
+            meta: {
+              title: "Test3-1-2",
+              icon: "HomeFilled",
+            },
+          },
+        ],
       },
       {
-        path: "test5",
-        name: "Test5",
+        path: "test3-2",
+        name: "Test3-2",
         component: "/home/index",
         meta: {
-          title: "Test5",
+          title: "Test3-2",
           icon: "HomeFilled",
         },
       },

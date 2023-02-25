@@ -1,7 +1,7 @@
 import axios, { type AxiosInstance, AxiosError, type AxiosRequestConfig } from "axios";
 import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/serviceLoading";
 import qs from "qs";
-import { isArray } from "@/utils/validate";
+import { isArray } from "@/utils/layout/validate";
 import { ElNotification } from "element-plus";
 import { ContentTypeEnum } from "./enums/httpEnum";
 

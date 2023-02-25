@@ -3,6 +3,7 @@
     :index="menuItem.meta._fullPath"
     @click="handleMenuClick(menuItem)"
     v-if="!menuItem.children || menuItem.children.length == 0"
+    class="menu-item"
   >
     <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
     <template #title>
@@ -22,7 +23,7 @@
 
 <script setup lang="ts" name="MenuItem">
 import { useLayout } from "@/hooks/useLayout";
-import { isExternal } from "@/utils/validate";
+import { isExternal } from "@/utils/layout/validate";
 import CommonIcon from "@/components/CommonIcon/index.vue";
 
 // eslint-disable-next-line vue/no-setup-props-destructure

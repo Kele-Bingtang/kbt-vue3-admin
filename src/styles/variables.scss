@@ -1,10 +1,18 @@
+// 自定义全局变量，这里填写的变量在编译的时候内置到系统，直接使用就行
+
+/**
+  如何使用？在任意组件调用变量名即可，如：
+	.class {
+		color: $blue;
+	}
+*/
+
 // Base color
 $blue: #324157;
-$light-blue: #3A71A8;
-$red: #C03639;
-$pink: #E65D6E;
-$green: #30B08F;
-$tiffany: #4AB7BD;
-$yellow: #FEC171;
-$panGreen: #30B08F;
-
+$light-blue: #3a71a8;
+$red: #c03639;
+$pink: #e65d6e;
+$green: #30b08f;
+$tiffany: #4ab7bd;
+$yellow: #fec171;
+$panGreen: #30b08f;

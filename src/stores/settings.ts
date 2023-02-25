@@ -1,6 +1,5 @@
-import { ref } from "vue";
 import { defineStore } from "pinia";
-import { removeCacheTabNavList } from "@/utils/cache";
+import { removeCacheTabNavList } from "@/utils/layout/cache";
 import type { LayoutModeType, LayoutThemeType, TabsNavModeType } from ".";
 import defaultSettings from "@/config/settings";
 

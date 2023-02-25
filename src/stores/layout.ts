@@ -1,6 +1,5 @@
-import { ref } from "vue";
 import { defineStore } from "pinia";
-import { setCacheTabNavList } from "@/utils/cache";
+import { setCacheTabNavList } from "@/utils/layout/cache";
 import { DeviceType, type LayoutSizeType, type TabProp } from "./index.d";
 import { useSettingsStore } from "./settings";
 import defaultSettings from "@/config/settings";

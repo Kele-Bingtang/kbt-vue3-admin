@@ -1,5 +1,5 @@
 import type { ComponentPublicInstance } from "vue";
-import { isArray } from "@/utils/validate";
+import { isArray } from "@/utils/layout/validate";
 import settings from "@/config/settings";
 import { useErrorLogStore } from "@/stores/errorLog";
 import { ElNotification } from "element-plus";

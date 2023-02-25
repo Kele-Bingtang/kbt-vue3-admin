@@ -3,11 +3,12 @@ import { fileURLToPath, URL } from "node:url";
 import { defineConfig, loadEnv, type ConfigEnv, type UserConfig } from "vite";
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
-import { wrapperEnv } from "./src/utils/getEnv";
+import { wrapperEnv } from "./src/utils/layout/getEnv";
 import AutoImport from "unplugin-auto-import/vite";
 import { resolve } from "path";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import eslintPlugin from "vite-plugin-eslint";
+import VueSetupExtend from "vite-plugin-vue-setup-extend";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
@@ -18,8 +19,8 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
     plugins: [
       vue(),
       vueJsx(),
-      // * EsLint 报错信息显示在浏览器界面上
-      eslintPlugin(),
+      eslintPlugin(), // EsLint 报错信息显示在浏览器界面上
+      VueSetupExtend(), // script setup 标签支持 name 命名组件
       AutoImport({
         imports: ["vue", "vue-router"], // 自动引入 vue 的 ref、toRefs、onmounted 等，无需在页面中再次引入
         dts: "src/auto-import.d.ts", // 生成在 src 路径下名为 auto-import.d.ts 的声明文件

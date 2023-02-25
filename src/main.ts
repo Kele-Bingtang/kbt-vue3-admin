@@ -14,7 +14,7 @@ import I18n from "@/languages/index";
 // svg icons
 import "virtual:svg-icons-register";
 import SvgIcon from "@/components/SvgIcon/index.vue";
-import errorHandler from "@/utils/errorHandler";
+import errorHandler from "@/utils/layout/errorHandler";
 
 const pinia = createPinia();
 const app = createApp(App);

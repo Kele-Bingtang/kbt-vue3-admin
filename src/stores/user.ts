@@ -1,7 +1,6 @@
-import { ref, reactive } from "vue";
 import { defineStore } from "pinia";
 import type { UserInfo } from ".";
-import { removeCacheToken, setCacheToken } from "@/utils/cache";
+import { removeCacheToken, setCacheToken } from "@/utils/layout/cache";
 import { useRoutes } from "@/hooks/useRoutes";
 import { rolesRoutes } from "@/router/routes-config";
 import router, { resetRouter } from "@/router";
@@ -11,7 +10,7 @@ export const useUserStore = defineStore(
   "userStore",
   () => {
     const token = ref("admin-token");
-    let userInfo = reactive<UserInfo>({
+    const userInfo = ref<UserInfo>({
       userId: "v10001",
       username: "Visitor",
       sex: "男",
@@ -80,7 +79,7 @@ export const useUserStore = defineStore(
     };
 
     const setUserInfo = (userInfoParam: UserInfo) => {
-      userInfo = userInfoParam;
+      userInfo.value = userInfoParam;
     };
 
     const setToken = (tokenParam: string) => {

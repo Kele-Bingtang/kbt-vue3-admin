@@ -1,0 +1,237 @@
+<template>
+  <div class="cropper-component" :style="{ height: cropContainerHeight + 'px' }">
+    <div class="cropper-img">
+      <VueCropper
+        ref="cropper"
+        :img="options.img"
+        :output-size="options.outputSize"
+        :output-type="options.outputType"
+        :info="options.info"
+        :full="options.full"
+        :auto-crop="options.autoCrop"
+        :auto-crop-width="options.autoCropWidth"
+        :auto-crop-height="options.autoCropHeight"
+        :fixed-box="options.fixedBox"
+        :can-move="options.canMove"
+        :can-move-nox="options.canMoveBox"
+        :original="options.original"
+        :enlarge="options.enlarge"
+        @real-time="realTime"
+        @img-load="imgLoad"
+        @img-moving="emit('img-moving')"
+        @crop-moving="emit('crop-moving')"
+      />
+    </div>
+    <div class="cropper-img show-previews" v-if="previews.url">
+      <div class="previews-img" :style="previews.div">
+        <img :src="previews.url" :style="previews.img" class="img" alt="头像" />
+      </div>
+    </div>
+  </div>
+
+  <div class="btn-container">
+    <div class="scope-btn">
+      <el-upload
+        action="#"
+        :http-request="handleHttpRequest"
+        :show-file-list="false"
+        :before-upload="beforeUpload"
+        class="upload-img"
+      >
+        <el-button type="primary" plain icon="Upload">选择</el-button>
+      </el-upload>
+      <el-button type="primary" plain icon="ZoomIn" @click="changeScale(1)">放大</el-button>
+      <el-button type="primary" plain icon="ZoomOut" @click="changeScale(-1)">缩小</el-button>
+      <el-button type="primary" plain @click="rotateLeft">↺ 左旋转</el-button>
+      <el-button type="primary" plain @click="rotateRight">↻ 右旋转</el-button>
+      <el-button type="primary" plain icon="Download" @click="downloadImg('blob')">下载</el-button>
+      <el-button type="primary" icon="Upload2" @click="uploadImage" class="upload-btn">提交</el-button>
+    </div>
+  </div>
+</template>
+
+<script setup lang="ts" name="Cropper">
+import { ElMessage, type UploadRequestOptions } from "element-plus";
+import { VueCropper } from "vue-cropper";
+import "vue-cropper/dist/index.css";
+
+interface CropperProps {
+  imgLink?: string;
+  imageType?: "blob" | "base64"; // 图片类型
+  cropWidth?: number; // 截图框宽度
+  cropHeight?: number; // 截图框高度
+  cropContainerHeight?: number; // 截图容器高度
+}
+
+const props = withDefaults(defineProps<CropperProps>(), {
+  imgLink: "",
+  imageType: "blob",
+  cropWidth: 200,
+  cropHeight: 200,
+  cropContainerHeight: 350,
+});
+const emit = defineEmits(["upload-image", "img-moving", "crop-moving"]);
+
+const { imgLink, imageType, cropWidth, cropHeight, cropContainerHeight } = toRefs(props);
+
+// 缩略图对象
+const previews = ref({
+  div: {
+    height: "",
+    width: "",
+  },
+  html: "",
+  img: {
+    height: "",
+    transform: "",
+    width: "",
+  },
+  url: "",
+  w: 0,
+  h: 0,
+});
+const options = reactive({
+  img: "", // 图片地址
+  outputSize: 1, // 裁剪生成图片的质量
+  outputType: "png", // 裁剪生成图片的格式（下载）
+  info: true, // 裁剪框的大小信息
+  canScale: false, // 图片是否允许滚轮缩放
+  autoCrop: true, // 是否默认生成截图框
+  autoCropWidth: 200, // 默认生成截图框宽度
+  autoCropHeight: 200, // 默认生成截图框高度
+  fixedNumber: [1, 1], // 截图框的宽高比例
+  fixedBox: false, // 固定截图框大小 不允许改变
+  fixed: false, // 是否开启截图框宽高固定比例
+  canMove: true, // 上传图片是否可以移动
+  canMoveBox: true, // 截图框能否拖动
+  original: false, // 上传图片按照原始比例渲染
+  centerBox: true, // 截图框是否被限制在图片里面
+  infoTrue: false, // true 为展示真实输出图片宽高 false 展示看到的截图框宽高
+  full: true, // 是否输出原图比例的截图
+  enlarge: "1", // 图片根据截图框输出比例倍数
+  mode: "contain", // 图片默认渲染方式
+});
+
+const cropper = ref();
+
+onMounted(() => {
+  options.autoCropWidth = cropWidth.value || 200;
+  options.autoCropHeight = cropHeight.value || 200;
+  options.img = imgLink.value || "";
+});
+
+// 实时缩略图的回调
+const realTime = (image: any) => {
+  previews.value = image;
+};
+// 上传图片前的校验
+const beforeUpload = (file: File) => {
+  if (file.type.indexOf("image/") === -1) {
+    ElMessage.error("文件格式错误，请上传图片类型,如：JPG，PNG后缀的文件");
+  } else {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      options.img = reader.result as string; // Base64
+    };
+  }
+};
+
+const imgLoad = (res: "success" | "error") => {
+  if (res === "error") ElMessage.error("图片上传失败");
+};
+
+const uploadImage = () => {
+  const formData = new FormData();
+  if (imageType.value === "blob") {
+    cropper.value.getCropBlob((data: Blob) => {
+      const timer = new Date().getTime();
+      formData.append("file", data, timer + ".png");
+      emit("upload-image", formData);
+    });
+  } else if (imageType.value === "base64") {
+    cropper.value.getCropData((data: string) => {
+      formData.append("images", data);
+      emit("upload-image", formData);
+    });
+  } else {
+    ElMessage.error("图片类型错误！请传入 blob 或者 base64");
+  }
+};
+
+const downloadImg = (type?: string) => {
+  const aLink = document.createElement("a");
+  const timer = new Date().getTime();
+  aLink.download = timer + ""; // 文件名
+  if (type === "blob") {
+    // 获取截图的 blob 数据
+    cropper.value.getCropBlob((data: Blob) => {
+      aLink.href = window.URL.createObjectURL(data); // 生成 blob 格式图片路径
+      aLink.click();
+    });
+  } else {
+    // 获取截图的 base64 数据
+    cropper.value.getCropData((data: string) => {
+      aLink.href = data;
+    });
+  }
+};
+
+const rotateLeft = () => {
+  cropper.value.rotateLeft();
+};
+
+const rotateRight = () => {
+  cropper.value.rotateRight();
+};
+
+const changeScale = (num: number) => {
+  cropper.value.changeScale(num);
+};
+
+// 手动上传的回调，目前为了取消自动上传
+const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
+  return new Promise(resolve => {
+    resolve(options);
+  });
+};
+</script>
+
+<style lang="scss" scoped>
+.cropper-component {
+  display: flex;
+  .cropper-img {
+    width: 50%;
+    height: 100%;
+    position: relative;
+  }
+  .show-previews {
+    display: flex;
+    display: --webkit-flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    padding-left: 10px;
+    .previews-img {
+      border-radius: 50%;
+      overflow: hidden;
+      -webkit-box-shadow: 0 0 4px #ccc;
+      box-shadow: 0 0 4px #ccc;
+    }
+  }
+}
+
+.btn-container {
+  .scope-btn {
+    margin-top: 50px;
+    display: flex;
+    .upload-img {
+      display: inline-block;
+      margin-right: 30px;
+    }
+  }
+  .upload-btn {
+    margin-left: 30px;
+  }
+}
+</style>

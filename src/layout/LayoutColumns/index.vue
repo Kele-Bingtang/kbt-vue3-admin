@@ -2,7 +2,7 @@
   <el-container class="layout-container" :class="{ 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }">
     <div class="aside-split">
       <div class="logo flx-center">
-        <img src="@/assets/img/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
       </div>
       <el-scrollbar>
         <div class="split-list">

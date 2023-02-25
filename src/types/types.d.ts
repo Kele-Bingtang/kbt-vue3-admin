@@ -34,6 +34,6 @@ declare type RequiredKey<T, U extends keyof T> = Pick<T, Exclude<keyof T, U>> & 
 declare type RequiredKeyPartialOther<T, U extends keyof T> = Partial<Pick<T, Exclude<keyof T, U>>> & Required<Pick<T, U>>;
 
 /**
- * 指定属性变为可选
+ * 指定属性变为只读
  */
 declare type ReadOnlyKey<T, U extends keyof T> = Pick<T, Exclude<keyof T, U>> & Readonly<Pick<T, U>>;

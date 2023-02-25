@@ -1,7 +1,7 @@
 .columns {
   .el-menu,
   .el-menu--popup {
-    .el-menu-item {
+    .menu-item {
       &.is-active {
         background: var(--el-color-primary-light-9);
         &::before {
@@ -19,7 +19,7 @@
       }
     }
     .el-sub-menu,
-    .el-menu-item {
+    .menu-item {
       &:not(.is-active) {
         .el-icon,
         .svg-icon {
@@ -33,7 +33,7 @@
     .el-menu,
     .el-menu--popup {
       background: #fff;
-      .el-menu-item {
+      .menu-item {
         &.is-active {
           background: #ecf5ff;
         }

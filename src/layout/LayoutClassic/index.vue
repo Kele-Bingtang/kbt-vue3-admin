@@ -9,7 +9,7 @@
         <template #left>
           <div class="header-left">
             <div class="logo flx-center">
-              <img src="@/assets/img/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+              <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
               <span>{{ settings.title }}</span>
             </div>
             <HeaderLeft />

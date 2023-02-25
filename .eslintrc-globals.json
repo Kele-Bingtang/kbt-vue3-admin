@@ -68,6 +68,11 @@
     "RouterConfig": true,
     "RouterConfigRaw": true,
     "process": true,
-    "BlobPart": true
+    "BlobPart": true,
+    "ReadOnlyKey": true,
+    "PartialKey": true,
+    "RequiredKey": true,
+    "RequiredKeyPartialOther": true,
+    "NodeJS": true
   }
 }

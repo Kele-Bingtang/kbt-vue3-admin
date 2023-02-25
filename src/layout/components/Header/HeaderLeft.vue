@@ -1,5 +1,5 @@
 <template>
-  <div class="hedaer-left-container">
+  <div class="header-left-container">
     <CollapseTrigger />
     <Breadcrumb v-if="showBreadcrumb" />
   </div>
@@ -15,7 +15,7 @@ const showBreadcrumb = computed(() => settingsStore.showBreadcrumb);
 </script>
 
 <style lang="scss" scoped>
-.hedaer-left-container {
+.header-left-container {
   display: flex;
   align-items: center;
   justify-content: center;

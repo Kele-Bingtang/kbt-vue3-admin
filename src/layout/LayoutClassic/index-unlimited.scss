@@ -1,7 +1,7 @@
 .classic {
   .el-menu,
   .el-menu--popup {
-    .el-menu-item {
+    .menu-item {
       &.is-active {
         background: var(--menu-active-bg-color);
         &::before {
@@ -19,7 +19,7 @@
       }
     }
     .el-sub-menu,
-    .el-menu-item {
+    .menu-item {
       &:not(.is-active) {
         .el-icon,
         .svg-icon {
@@ -31,7 +31,7 @@
   .el-sub-menu {
     .el-menu {
       background-color: var(--sub-menu-bg-color) !important;
-      .el-menu-item {
+      .menu-item {
         &.is-active {
           background-color: var(--sub-menu-active-bg-color) !important;
         }
@@ -46,7 +46,7 @@
     .el-menu,
     .el-menu--popup {
       background: var(--sub-menu-bg-color);
-      .el-menu-item {
+      .menu-item {
         &.is-active {
           background: var(--sub-menu-active-bg-color);
         }

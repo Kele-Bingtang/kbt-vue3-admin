@@ -2,7 +2,7 @@
   <el-container class="layout-container">
     <el-header>
       <div class="logo flx-center">
-        <img src="@/assets/img/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span>{{ settings.title }}</span>
       </div>
       <Menu mode="horizontal" />

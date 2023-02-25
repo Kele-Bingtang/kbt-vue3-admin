@@ -20,7 +20,7 @@
           </el-dropdown-item>
         </router-link>
 
-        <router-link to="/message">
+        <router-link to="/message-center">
           <el-dropdown-item icon="Bell">
             {{ messageCenterLabel }}
           </el-dropdown-item>
@@ -45,9 +45,9 @@
 import { useSettingsStore } from "@/stores/settings";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
-import defaultAvatar from "@/assets/img/default.png";
+import defaultAvatar from "@/assets/images/default.png";
 import { ArrowDownBold } from "@element-plus/icons-vue";
-import mittBus from "@/utils/mittBus";
+import mittBus from "@/utils/layout/mittBus";
 
 const prop = withDefaults(defineProps<{ showAvatar?: boolean }>(), {
   showAvatar: true,

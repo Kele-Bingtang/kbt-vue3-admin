@@ -5,7 +5,7 @@
   >
     <el-aside>
       <div class="logo flx-center">
-        <img src="@/assets/img/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ settings.title }}</span>
       </div>
       <Menu />

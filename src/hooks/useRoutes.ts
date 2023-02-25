@@ -1,5 +1,5 @@
 import { usePermissionStore } from "@/stores/permission";
-import { isExternal, isType } from "@/utils/validate";
+import { isExternal, isType } from "@/utils/layout/validate";
 import type { Router, RouteRecordRaw } from "vue-router";
 
 export const useRoutes = () => {

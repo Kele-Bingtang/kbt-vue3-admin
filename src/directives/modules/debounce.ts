@@ -12,7 +12,7 @@ const debounce: Directive = {
     if (typeof binding.value !== "function") {
       throw Error("callback must be a function");
     }
-    let timer: any = null;
+    let timer: NodeJS.Timeout | null = null;
     el.__handleClick__ = function () {
       if (timer) {
         clearInterval(timer);

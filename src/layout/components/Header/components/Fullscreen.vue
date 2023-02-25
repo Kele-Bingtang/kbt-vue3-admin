@@ -2,7 +2,7 @@
   <div class="fullscreen-container">
     <svg-icon
       :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
-      @click="toggle"
+      @click.stop="toggle"
       width="1.8rem"
       height="1.8rem"
       :icon-style="{ cursor: 'pointer' }"

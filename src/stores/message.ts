@@ -1,17 +1,14 @@
-import { ref, reactive } from "vue";
 import { defineStore } from "pinia";
-import type { MessageItem, MessageStore } from ".";
+import type { MessageItem } from ".";
 import { hasReadList, recycleList, unreadList } from "@/test/message";
 
 export const useMessageStore = defineStore("messageStore", () => {
-  const message = reactive<MessageStore>({
-    unreadList: [],
-    hasReadList: [],
-    recycleList: [],
-  });
+  const unreadMessageList = ref<MessageItem[]>([]);
+  const hasReadMessageList = ref<MessageItem[]>([]);
+  const recycleMessageList = ref<MessageItem[]>([]);
 
   const getMessageList = () => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       // 模拟请求消息
       setMessageUnReadList(unreadList);
       setMessageHasReadList(hasReadList);
@@ -21,10 +18,10 @@ export const useMessageStore = defineStore("messageStore", () => {
   };
 
   const messageHasRead = ({ id }: { id: string }) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       moveMessage({
-        to: "hasReadList",
-        from: "unreadList",
+        to: "hasReadMessageList",
+        from: "unreadMessageList",
         id,
       });
       resolve("");
@@ -32,10 +29,10 @@ export const useMessageStore = defineStore("messageStore", () => {
   };
 
   const removeReadMessage = ({ id }: { id: string }) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       moveMessage({
-        to: "recycleList",
-        from: "hasReadList",
+        to: "recycleMessageList",
+        from: "hasReadMessageList",
         id,
       });
       resolve("");
@@ -43,10 +40,10 @@ export const useMessageStore = defineStore("messageStore", () => {
   };
 
   const restoreRecycleMessage = ({ id }: { id: string }) => {
-    return new Promise((resolve, reject) => {
+    return new Promise(resolve => {
       moveMessage({
-        to: "hasReadList",
-        from: "recycleList",
+        to: "hasReadMessageList",
+        from: "recycleMessageList",
         id,
       });
       resolve("");
@@ -55,7 +52,7 @@ export const useMessageStore = defineStore("messageStore", () => {
 
   const setMessageUnReadList = (unreadList: MessageItem[]) => {
     unreadList = unreadList.sort((a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime());
-    message.unreadList = unreadList;
+    unreadMessageList.value = unreadList;
   };
 
   const setMessageHasReadList = (hasReadList: MessageItem[]) => {
@@ -65,7 +62,7 @@ export const useMessageStore = defineStore("messageStore", () => {
         return item;
       })
       .sort((a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime());
-    message.hasReadList = hasReadList;
+    hasReadMessageList.value = hasReadList;
   };
 
   const setMessageRecycleList = (recycleList: MessageItem[]) => {
@@ -75,24 +72,27 @@ export const useMessageStore = defineStore("messageStore", () => {
         return item;
       })
       .sort((a, b) => new Date(b.createTime).getTime() - new Date(a.createTime).getTime());
-    message.recycleList = recycleList;
+    recycleMessageList.value = recycleList;
   };
 
   const moveMessage = (messageRoute: {
-    to: "hasReadList" | "recycleList";
-    from: "unreadList" | "hasReadList" | "recycleList";
+    to: "hasReadMessageList" | "recycleMessageList";
+    from: "unreadMessageList" | "hasReadMessageList" | "recycleMessageList";
     id: string;
   }) => {
-    let { from, to, id } = messageRoute;
-    const index = message[from].findIndex((item: MessageItem) => item.id === id);
-    const messageItem = message[from].splice(index, 1)[0];
+    const messageStore = useMessageStore();
+    const { from, to, id } = messageRoute;
+    const index = messageStore[from].findIndex((item: MessageItem) => item.id === id);
+    const messageItem = messageStore[from].splice(index, 1)[0];
     messageItem.loading = false;
-    message[to].unshift(messageItem);
+    messageStore[to].unshift(messageItem);
   };
 
   return {
-    message,
-    
+    unreadMessageList,
+    hasReadMessageList,
+    recycleMessageList,
+
     getMessageList,
     messageHasRead,
     removeReadMessage,

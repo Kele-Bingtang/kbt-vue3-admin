@@ -1,3 +1,5 @@
+/* eslint-disable indent */
+/* eslint-disable prettier/prettier */
 interface Email {
   name?: string;
   subject?: string;
@@ -80,7 +82,7 @@ export const myHtml = (data: Email) => {
                           This is a WebSite
                           <br>
                           ${new Date().getFullYear()}-${
-    new Date().getMonth() + 1 == 13 ? 12 : new Date().getMonth() + 1
+    new Date().getMonth() + 1 === 13 ? 12 : new Date().getMonth() + 1
   }-${new Date().getDate() > 10 ? new Date().getDate() : "0" + new Date().getDate()}
                             ${new Date().getHours() > 10 ? new Date().getHours() : "0" + new Date().getHours()}:${
     new Date().getMinutes() > 10 ? new Date().getMinutes() : "0" + new Date().getMinutes()
@@ -183,7 +185,7 @@ export const otherHtml = (data: Email) => {
                       <br>
                       This is a WebSite
                       <br>
-                      ${new Date().getFullYear()}-${new Date().getMonth() + 1 == 13 ? 12 : new Date().getMonth() + 1}-${
+                      ${new Date().getFullYear()}-${new Date().getMonth() + 1 === 13 ? 12 : new Date().getMonth() + 1}-${
     new Date().getDate() > 10 ? new Date().getDate() : "0" + new Date().getDate()
   }
                       ${new Date().getHours() > 10 ? new Date().getHours() : "0" + new Date().getHours()}:${
