@@ -1418,6 +1418,11 @@ cors@^2.8.5:
     object-assign "^4"
     vary "^1"
 
+countup@^1.8.2:
+  version "1.8.2"
+  resolved "https://registry.npmmirror.com/countup/-/countup-1.8.2.tgz#021ccc6a6f964540c6b27ed64681af27fb55f010"
+  integrity sha512-1qOuy+h+dgLY4TroLb4ZC2hK7HYS2Z7mnSUvdzoYAU7EZbqOse1mKZta/KYPhDPfd9lPDyP3Tb4pH6a10RkoCw==
+
 create-require@^1.1.1:
   version "1.1.1"
   resolved "https://registry.npmmirror.com/create-require/-/create-require-1.1.1.tgz#c1d7e8f1e5f6cfc9ff65f9cd352d37348756c333"

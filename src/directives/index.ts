@@ -5,6 +5,7 @@ import draggable from "./modules/draggable";
 import debounce from "./modules/debounce";
 import throttle from "./modules/throttle";
 import longpress from "./modules/longpress";
+import waves from "./modules/waves";
 
 const directivesList: any = {
   // Custom directives
@@ -14,6 +15,7 @@ const directivesList: any = {
   debounce,
   throttle,
   longpress,
+  waves,
 };
 
 const directives = {
