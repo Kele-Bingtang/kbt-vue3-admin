@@ -15,6 +15,8 @@ import I18n from "@/languages/index";
 import "virtual:svg-icons-register";
 import SvgIcon from "@/components/SvgIcon/index.vue";
 import errorHandler from "@/utils/layout/errorHandler";
+import vue3TreeOrg from "vue3-tree-org";
+import "vue3-tree-org/lib/vue3-tree-org.css";
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -28,4 +30,4 @@ for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
 
 app.component("svg-icon", SvgIcon);
 
-app.use(I18n).use(pinia).use(router).use(directives).use(ElementPlus).mount("#app");
+app.use(I18n).use(pinia).use(router).use(directives).use(ElementPlus).use(vue3TreeOrg).mount("#app");

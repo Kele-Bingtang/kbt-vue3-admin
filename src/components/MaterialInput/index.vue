@@ -158,7 +158,7 @@ const props = withDefaults(defineProps<MaterialInputProps>(), {
   activeColor: "#2196f3",
   theme: "",
 });
-const emits = defineEmits(["input", "focus", "blur"]);
+const emits = defineEmits(["update:value", "focus", "blur"]);
 
 const focus = ref(false);
 const valueCopy = ref("");
@@ -207,7 +207,7 @@ onMounted(() => {
 
 const handleInput = (event: Event) => {
   const value = (event.target as HTMLInputElement).value;
-  emits("input", value);
+  emits("update:value", value);
   const instance = getCurrentInstance();
   if ((instance?.parent as any).type.name === "ElFormItem") {
     if (props.validateEvent) {

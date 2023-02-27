@@ -1,46 +1,52 @@
 <template>
   <div class="tabs-nav" ref="tabsNavDom">
-    <div class="scroll-container" ref="scrollContainerDom">
-      <div
-        class="scroll-body"
-        ref="scrollBodyDom"
-        :style="{ left: tabBodyLeft + 'px' }"
-        @DOMMouseScroll="handleScrollOnDom"
-        @mousewheel="handleScrollOnDom"
-      >
-        <router-link
-          v-for="tab in tabNavList"
-          :key="tab.path"
-          :to="tab.path"
-          :class="isActive(tab) ? 'active' : ''"
-          :style="activeStyle(tab)"
-          class="tabs-link"
-          ref="tabsDom"
-          @contextmenu.prevent="openRightMenu(tab, $event)"
+    <div style="height: 39px">
+      <div class="scroll-container" ref="scrollContainerDom">
+        <div
+          class="scroll-body"
+          ref="scrollBodyDom"
+          :style="{ left: tabBodyLeft + 'px' }"
+          @DOMMouseScroll="handleScrollOnDom"
+          @mousewheel="handleScrollOnDom"
         >
-          <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
-          <CommonIcon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
-          <span>{{ tab.meta.title }}</span>
-          <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="handleCloseTab(tab)"><Close /></el-icon>
-        </router-link>
+          <router-link
+            v-for="tab in tabNavList"
+            :key="tab.path"
+            :to="tab.path"
+            :class="isActive(tab) ? 'active' : ''"
+            :style="activeStyle(tab)"
+            class="tabs-link"
+            ref="tabsDom"
+            @contextmenu.prevent="openRightMenu(tab, $event)"
+          >
+            <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
+            <CommonIcon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
+            <span>{{ tab.meta.title }}</span>
+            <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="handleCloseTab(tab)"><Close /></el-icon>
+          </router-link>
+        </div>
       </div>
+      <div class="btn-icon left-btn">
+        <el-button plain @click="handleScroll(240)">
+          <el-icon><ArrowLeft /></el-icon>
+        </el-button>
+      </div>
+      <div class="btn-icon right-btn">
+        <el-button plain @click="handleScroll(-240)">
+          <el-icon><ArrowRight /></el-icon>
+        </el-button>
+      </div>
+      <ul
+        v-show="rightMenuVisible"
+        :style="{ left: rightMenuLeft + 'px', top: rightMenuTop + 'px' }"
+        class="contextmenu"
+      >
+        <li @click="refreshSelectedTab(selectedTab)">{{ $t("_tabsNav.refresh") }}</li>
+        <li v-if="selectedTab.close" @click="handleCloseTab(selectedTab)">{{ $t("_tabsNav.close") }}</li>
+        <li @click="closeOthersTabs">{{ $t("_tabsNav.closeOthers") }}</li>
+        <li @click="closeAllTabs()">{{ $t("_tabsNav.closeAll") }}</li>
+      </ul>
     </div>
-    <div class="btn-icon left-btn">
-      <el-button plain @click="handleScroll(240)">
-        <el-icon><ArrowLeft /></el-icon>
-      </el-button>
-    </div>
-    <div class="btn-icon right-btn">
-      <el-button plain @click="handleScroll(-240)">
-        <el-icon><ArrowRight /></el-icon>
-      </el-button>
-    </div>
-    <ul v-show="rightMenuVisible" :style="{ left: rightMenuLeft + 'px', top: rightMenuTop + 'px' }" class="contextmenu">
-      <li @click="refreshSelectedTab(selectedTab)">{{ $t("_tabsNav.refresh") }}</li>
-      <li v-if="selectedTab.close" @click="handleCloseTab(selectedTab)">{{ $t("_tabsNav.close") }}</li>
-      <li @click="closeOthersTabs">{{ $t("_tabsNav.closeOthers") }}</li>
-      <li @click="closeAllTabs()">{{ $t("_tabsNav.closeAll") }}</li>
-    </ul>
   </div>
 </template>
 
