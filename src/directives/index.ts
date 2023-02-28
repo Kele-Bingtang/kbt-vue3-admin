@@ -6,8 +6,6 @@ import debounce from "./modules/debounce";
 import throttle from "./modules/throttle";
 import longpress from "./modules/longpress";
 import waves from "./modules/waves";
-import draggableDialog from "./modules/draggableDialog";
-import draggableDialogNoBounds from "./modules/draggableDialogNoBounds";
 
 const directivesList: any = {
   // Custom directives
@@ -18,8 +16,6 @@ const directivesList: any = {
   throttle,
   longpress,
   waves,
-  draggableDialog,
-  draggableDialogNoBounds,
 };
 
 const directives = {

@@ -43,7 +43,7 @@
       </el-table-column>
     </el-table>
 
-    <el-dialog :visible.sync="dialogErrorStackVisible" title="错误信息" width="50%" append-to-body>
+    <el-dialog v-model="dialogErrorStackVisible" title="错误信息" width="50%" append-to-body>
       <el-table :data="[clickCurrentRow]" border>
         <el-table-column label="name" width="160px">
           <template #default="{ row }">

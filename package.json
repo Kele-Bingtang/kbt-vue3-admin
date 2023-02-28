@@ -5,11 +5,10 @@
   "scripts": {
     "dev": "vite --mode development",
     "serve": "vite --mode development",
-    "build:prod": "run-p type-check build-only --mode production",
-    "build:test": "run-p type-check build-only --mode test",
+    "build": "vue-tsc --noEmit && vite build --mode production",
+    "build:prod": "vue-tsc --noEmit && vite build --mode production",
+    "build:test": "vue-tsc --noEmit && vite build --mode test",
     "preview": "vite preview",
-    "build-only": "vite build",
-    "type-check": "vue-tsc --noEmit",
     "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore"
   },
   "dependencies": {
