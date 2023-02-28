@@ -6,48 +6,48 @@ export interface DragList {
 export const list1: Array<DragList> = [
   {
     id: "list1_0",
-    name: "回去",
+    name: "前端技术",
   },
   {
     id: "list1_1",
-    name: "祈祷",
+    name: "后端技术",
   },
   {
     id: "list1_2",
-    name: "忘记",
+    name: "运维技术",
   },
 ];
 
 export const list2: Array<DragList> = [
   {
-    id: "list1_0",
-    name: "挣钱",
+    id: "list2_0",
+    name: "上班摸鱼",
   },
   {
-    id: "list1_1",
-    name: "技能提升",
+    id: "list2_1",
+    name: "下班游戏",
   },
   {
-    id: "list1_2",
-    name: "好好生活",
+    id: "list2_2",
+    name: "熬夜睡觉",
   },
 ];
 
 export const list3: Array<DragList> = [
   {
     id: "list3_0",
-    name: "中考",
+    name: "学生毕业",
   },
   {
     id: "list3_1",
-    name: "高考",
+    name: "青春毕业",
   },
   {
     id: "list3_2",
-    name: "某天晚上很遗憾",
+    name: "努力工作",
   },
   {
     id: "list3_2",
-    name: "学生时代落幕",
+    name: "佛系生活",
   },
 ];

@@ -4,15 +4,18 @@
       <slot name="leftTitle">{{ leftTitle }}</slot>
       <draggable
         :list="leftList"
+        itemKey="id"
         class="drag-left-list"
         :class="dragClass.left"
         :group="group"
         v-bind="$attrs"
         @end="handleEnd($event, 'left')"
       >
-        <template #item="{ item }">
-          <slot name="left" :item="item">{{ item }}</slot>
-          <div class="left-icon icon" @click="pushList(item, 'left')"><slot name="leftIcon"></slot></div>
+        <template #item="{ element }">
+          <div class="drag-list-item" @click="handleClick(element.id, 'left')">
+            <slot name="left" :item="element">{{ element }}</slot>
+            <div class="left-icon icon" @click="pushList(element, 'left')"><slot name="leftIcon"></slot></div>
+          </div>
         </template>
       </draggable>
     </div>
@@ -20,15 +23,18 @@
       <slot name="rightTitle">{{ rightTitle }}</slot>
       <draggable
         :list="rightList"
+        itemKey="id"
         class="drag-right-list"
         :class="dragClass.right"
         :group="group"
         v-bind="$attrs"
         @end="handleEnd($event, 'right')"
       >
-        <template #item="{ item }">
-          <slot name="right" :item="item">{{ item }}</slot>
-          <div class="right-icon icon" @click="pushList(item, 'right')"><slot name="rightIcon"></slot></div>
+        <template #item="{ element }">
+          <div class="drag-list-item" @click="handleClick(element.id, 'right')">
+            <slot name="right" :item="element">{{ element }}</slot>
+            <div class="right-icon icon" @click="pushList(element, 'right')"><slot name="rightIcon"></slot></div>
+          </div>
         </template>
       </draggable>
     </div>
@@ -49,13 +55,13 @@ export interface DragList {
 }
 
 interface DraggableListProps {
-  leftList: DragList[];
-  rightList: DragList[];
-  leftTitle: string;
-  rightTitle: string;
-  leftWidth: string;
-  rightWidth: string;
-  dragClass: {
+  leftList?: DragList[];
+  rightList?: DragList[];
+  leftTitle?: string;
+  rightTitle?: string;
+  leftWidth?: string;
+  rightWidth?: string;
+  dragClass?: {
     left: string[];
     right: string[];
   };
@@ -71,7 +77,7 @@ const props = withDefaults(defineProps<DraggableListProps>(), {
   dragClass: () => ({ left: [], right: [] }),
 });
 
-const emits = defineEmits(["on-change"]);
+const emits = defineEmits(["on-change", "item-click"]);
 
 const group = ref("drag_list");
 
@@ -105,6 +111,10 @@ const handleEnd = (e: Event, type: string) => {
   });
 };
 
+const handleClick = (id: string, type: string) => {
+  emits("item-click", id, type);
+};
+
 const pushList = (list: DragList, type: string) => {
   const t1 = type === "left" ? "leftList" : "rightList"; // 点击的列表
   const t2 = type === "left" ? "rightList" : "leftList"; // 移入的列表
@@ -121,50 +131,22 @@ const pushList = (list: DragList, type: string) => {
 </script>
 
 <style lang="scss" scoped>
-.draggable-list-container {
-  width: 100%;
+.drag-list-component {
   height: 100%;
-  padding: 20;
-  .draggable-list-card {
-    width: 100%;
+  .drag-list {
     height: 100%;
-    .drag-card {
-      width: 40%;
-      height: 100%;
-      display: inline-block;
-    }
-  }
-  .handle-card {
-    display: inline-block;
-    width: 220px;
-    height: 100%;
-    .handle-inner-card {
-      p {
-        padding: 7px 0;
-        margin: 0 7px;
-        border-bottom: 1px dashed #eeeeee;
+    float: left;
+    .drag-list-item {
+      position: relative;
+      line-height: inherit;
+      .icon {
+        position: absolute;
+        line-height: inherit;
+        top: 50%;
+        transform: translateY(-50%);
+        right: 7px;
       }
     }
-  }
-  .res-show-card {
-    display: inline-block;
-    margin-left: 20px;
-    width: 370px;
-    height: 100%;
-  }
-}
-</style>
-<style lang="scss">
-.draggable-list-container {
-  .draggable-list-card {
-    .el-card__body {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .drag-box {
-    margin-right: 10px;
-    height: calc(100% - 60px);
   }
 }
 </style>
