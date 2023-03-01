@@ -113,24 +113,24 @@ export const rolesRoutes: RouterConfigRaw[] = [
         component: () => import("@/views/components/draggableItem/index.vue"),
         meta: { title: "面板拖拽", icon: "StarFilled" },
       },
-      {
-        path: "/draggable-dialog",
-        name: "DraggableDialogDemo",
-        component: () => import("@/views/components/draggableDialog/index.vue"),
-        meta: { title: "模态框拖拽", icon: "StarFilled" },
-      },
+      // {
+      //   path: "/draggable-dialog",
+      //   name: "DraggableDialogDemo",
+      //   component: () => import("@/views/components/draggableDialog/index.vue"),
+      //   meta: { title: "模态框拖拽", icon: "StarFilled" },
+      // },
       {
         path: "/drag-drawer",
         name: "DragDrawerDemo",
         component: () => import("@/views/components/dragDrawer/index.vue"),
         meta: { title: "抽屉拖拽", icon: "StarFilled" },
       },
-      // {
-      //   path: "/tinymce-demo",
-      //   name: "TinymceDemo",
-      //   component: () => import("@/views/components/tinymce/index.vue"),
-      //   meta: { title: "Tinymce 富文本", icon: "StarFilled" },
-      // },
+      {
+        path: "/tinymce-demo",
+        name: "TinymceDemo",
+        component: () => import("@/views/components/tinymce/index.vue"),
+        meta: { title: "Tinymce 富文本", icon: "StarFilled" },
+      },
       // {
       //   path: "/wang-editor-demo",
       //   name: "WangEditorDemo",

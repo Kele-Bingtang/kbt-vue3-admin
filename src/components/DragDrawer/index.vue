@@ -1,15 +1,14 @@
 <template>
   <div class="drag-drawer-component">
     <el-drawer
+      ref="drawerWrapperRef"
       :title="title"
       v-model="drawerVisible"
       :size="width"
       :direction="direction"
       :before-close="handleBeforeClose"
-      :class-name="outerClasses"
       v-bind="$attrs"
-      :append-to-body="!inner"
-      :class="{ 'drag-drawer-inner': inner }"
+      :class="outerClasses"
     >
       <template #header>
         <slot name="header"></slot>
@@ -58,6 +57,7 @@ const props = withDefaults(defineProps<DragDrawerProps>(), {
 
 const emits = defineEmits(["update:visible", "on-resize-start", "update:width", "on-resize", "on-resize-end"]);
 
+const drawerWrapperRef = ref();
 const canMove = ref(false);
 const wrapperWidth = ref(0);
 const wrapperLeft = ref(0);
@@ -72,7 +72,11 @@ watch(
 );
 
 const outerClasses = computed(() => {
-  const classesArray = [`drag-drawer-wrapper`, canMove.value ? "no-select pointer-events-none" : ""];
+  const classesArray = [
+    props.inner ? "drag-drawer-inner" : "",
+    `drag-drawer-wrapper`,
+    canMove.value ? "no-select" : "",
+  ];
   return classesArray.join(" ");
 });
 
@@ -158,8 +162,7 @@ const handleMouseup = () => {
 };
 
 const setWrapperWidth = () => {
-  const drawerWrapperRef = document.getElementsByClassName("el-drawer")[0];
-  const { width, left } = drawerWrapperRef && drawerWrapperRef.getBoundingClientRect();
+  const { width, left } = drawerWrapperRef && drawerWrapperRef.value.$el.nextElementSibling.getBoundingClientRect();
   wrapperWidth.value = width;
   wrapperLeft.value = left;
 };
@@ -167,21 +170,14 @@ const setWrapperWidth = () => {
 
 <style lang="scss" scoped>
 .drag-drawer-component {
-  &.no-select {
+  .no-select {
     user-select: none;
-  }
-  &.pointer-events-none {
     pointer-events: none;
-    & .drag-drawer-trigger-wrapper {
+    .drag-drawer-trigger-wrapper {
       pointer-events: all;
     }
   }
-  .drag-drawer-body-wrapper {
-    width: 100%;
-    height: 100%;
-    padding: 16px;
-    overflow: auto;
-  }
+
   .drag-drawer-trigger-wrapper {
     top: 0;
     height: 100%;
@@ -200,13 +196,23 @@ const setWrapperWidth = () => {
 </style>
 <style lang="scss">
 .drag-drawer-component {
+  .no-select.el-drawer {
+    transition: none;
+  }
+  .drag-drawer-footer {
+    flex-grow: 1;
+    width: 100%;
+    bottom: 0;
+    left: 0;
+    border-top: 1px solid #e8e8e8;
+    padding: 10px 16px;
+    background: #fff;
+  }
   .drag-drawer-inner {
+    overflow: visible;
     position: absolute;
     & + .v-modal {
       position: absolute;
-    }
-    .el-drawer {
-      overflow: visible;
     }
   }
 }
