@@ -58,7 +58,7 @@ module.exports = {
       {
         arrays: "ignore", // 数组后面加逗号
         objects: "ignore", // 对象
-        imports: "never", // import { a,b, }
+        imports: "ignore", // import { a,b, }
         exports: "ignore",
         functions: "ignore",
       },

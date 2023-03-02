@@ -12,6 +12,9 @@ import { useSettingsStore } from "@/stores/settings";
 import { useLayout } from "@/hooks/useLayout";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import LayoutColumns from "./LayoutColumns/index.vue";
+import { getTimeState } from "@/utils";
+import { ElNotification } from "element-plus";
+import { useUserStore } from "@/stores/user";
 
 const LayoutComponents: { [key: string]: Component } = {
   vertical: LayoutVertical,
@@ -21,10 +24,16 @@ const LayoutComponents: { [key: string]: Component } = {
 };
 
 const settingsStore = useSettingsStore();
+const userStore = useUserStore();
 const layoutMode = computed(() => settingsStore.layoutMode);
 
 const route = useRoute();
 const { setTitle } = useLayout();
+
+onMounted(() => {
+  const timeMessage = getTimeState();
+  ElNotification.success(`亲爱的 ${userStore.userInfo.username}，${timeMessage}`);
+});
 watch(
   () => route.fullPath,
   () => setTitle(route as RouteConfig), // 修改页面的 title

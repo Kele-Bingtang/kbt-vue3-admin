@@ -1,5 +1,6 @@
 <template>
   <div class="timymce-container">
+    <el-alert title="官网地址：https://www.tiny.cloud/" type="success" style="margin-bottom: 10px" />
     <el-button type="primary" @click="handleDisabled" style="margin-bottom: 20px">
       {{ disabled ? "启动编辑器" : "禁用编辑器" }}
     </el-button>
@@ -23,7 +24,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="tinymce">
+<script setup lang="ts" name="TinymceDemo">
 import Tinymce, { type UITheme } from "@/components/Tinymce/index.vue";
 import { useLayoutStore } from "@/stores/layout";
 import { tinymceHtml } from "@/test/tinymce";
@@ -60,8 +61,13 @@ const handleTheme = () => {
     tinymceActive.value = true;
   });
 };
-
-const handleImgUpload = async (blobInfo: any, success: Function, failure: Function, progress: Function) => {
+/**
+ * 上传图片，复制图片回调
+ * @param blobInfo 文件信息
+ * @param success 成功回调，返回链接
+ * @param failure 失败回调，返回提示信息
+ */
+const handleImgUpload = async (blobInfo: any, success: Function, failure: Function) => {
   const blobFile = blobInfo.blob(); // blob 图片
   // let base64File = blobInfo.base64(); // base64 图片
   // fileName 为 Tinymce 内部处理的文件名（官网说 fileName 一定唯一），而 blobFile.name 是文件上传前自带的文件名
@@ -77,6 +83,7 @@ const handleImgUpload = async (blobInfo: any, success: Function, failure: Functi
     failure("上传失败，图片不可超过 10M!");
     return false;
   }
+
   /**
    * 模拟本地批量上传图片，实际应该上传到云端，则下面的 if 需要去掉（单个图片上传时，length 大于 2，只有批量上传，才等于 2）
    * 批量上传只是类似于 for 循环调用该 handleImgUpload 函数，所以实际的云端批量上传，直接把下面的 if 去掉即可
@@ -109,18 +116,18 @@ const handleImgUpload = async (blobInfo: any, success: Function, failure: Functi
 /**
  *
  * @param file 上传的文件
- * @param filetype 在哪个工具上传文件类型："image" | "media" | "file"，并不是上传的文件类型
+ * @param filetype 在哪个工具上传文件类型："image" | "media" | "file"，并不是上传的文件类型（文件上传就是插入/编辑链接的那个按钮，传入一个链接）
  * @param callback callback 是个回调，参数 1 是一个有效的 http 链接，如果是图片，执行 callback 后就会执行 @img-upload 回调
  */
 const handleFileUpload = async (file: File, filetype: "image" | "media" | "file", callback: Function) => {
   if (filetype === "image") {
     if (file.type && !file.type.startsWith("image")) {
-      ElMessage.error("无法上传视频，您应该上传图片！");
+      ElMessage.error("请上传图片！");
       return;
     }
     /**
      * 这里不应该上传图片到云端，因为执行完 callback，就会执行 @img-upload 回调，所以请在 @img-upload 的回调函数上传到云端
-     * 因此这里仅仅是上传到本地浏览器即可
+     * 为了演示 Demo，这里仅仅是上传到本地浏览器，如果上传云端，则在 @img-upload 回调执行逻辑，这里就不进行 if 判断逻辑处理
      */
     const { blobInfo, file: f } = await uploadLocal(file);
     callback(blobInfo.blobUri(), { text: f.name, title: f.name });
@@ -146,7 +153,7 @@ const handleFileUpload = async (file: File, filetype: "image" | "media" | "file"
 const uploadLocal = (file: File): Promise<{ blobInfo: any; file: File }> => {
   return new Promise(resolve => {
     const reader = new FileReader();
-    reader.onload = function (e) {
+    reader.onload = function () {
       const id = "id" + new Date().getTime(); // 本地图片的文件名
       const tinymce = (window as any).tinymce;
       const blobCache = tinymce.activeEditor.editorUpload.blobCache;
@@ -229,6 +236,7 @@ const getVideoDuration = (file: File): Promise<number> => {
 
 <style lang="scss" scoped>
 .timymce-container {
+  width: 100%;
   padding: 20px;
   background-color: #fff;
 }

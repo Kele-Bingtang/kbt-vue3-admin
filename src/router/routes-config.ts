@@ -131,82 +131,24 @@ export const rolesRoutes: RouterConfigRaw[] = [
         component: () => import("@/views/components/tinymce/index.vue"),
         meta: { title: "Tinymce 富文本", icon: "StarFilled" },
       },
-      // {
-      //   path: "/wang-editor-demo",
-      //   name: "WangEditorDemo",
-      //   component: () => import("@/views/components/wangEditor/index.vue"),
-      //   meta: { title: "Wang 富文本", icon: "StarFilled" },
-      // },
-      // {
-      //   path: "/code-mirror",
-      //   name: "CodeMirrorDemo",
-      //   component: () => import("@/views/components/codeMirror/index.vue"),
-      //   meta: { title: "代码编辑器", icon: "StarFilled" },
-      // },
+      {
+        path: "/wang-editor-demo",
+        name: "WangEditorDemo",
+        component: () => import("@/views/components/wangEditor/index.vue"),
+        meta: { title: "Wang 富文本", icon: "StarFilled" },
+      },
+      {
+        path: "/code-mirror",
+        name: "CodeMirrorDemo",
+        component: () => import("@/views/components/codeMirror/index.vue"),
+        meta: { title: "代码编辑器", icon: "StarFilled" },
+      },
       // {
       //   path: "/info-selection",
       //   name: "InfoSelectionDemo",
       //   component: () => import("@/views/components/infoSelection/index.vue"),
       //   meta: { title: "信息选择器", icon: "StarFilled" },
       // },
-    ],
-  },
-  {
-    path: "/test2",
-    name: "Test2",
-    component: "/home/index",
-    meta: {
-      title: "Test2",
-      icon: "HomeFilled",
-    },
-  },
-  {
-    path: "/test3",
-    name: "Test3",
-    meta: {
-      title: "Test3",
-      icon: "HomeFilled",
-      alwaysShowRoot: true,
-    },
-    children: [
-      {
-        path: "test3-1",
-        name: "Test3-1",
-        component: "/home/index",
-        meta: {
-          title: "Test3-1",
-          icon: "HomeFilled",
-        },
-        children: [
-          {
-            path: "test3-1-1",
-            name: "Test3-1-1",
-            component: "/home/index",
-            meta: {
-              title: "Test3-1-1",
-              icon: "HomeFilled",
-            },
-          },
-          {
-            path: "test3-1-2",
-            name: "Test3-1-2",
-            component: "/home/index",
-            meta: {
-              title: "Test3-1-2",
-              icon: "HomeFilled",
-            },
-          },
-        ],
-      },
-      {
-        path: "test3-2",
-        name: "Test3-2",
-        component: "/home/index",
-        meta: {
-          title: "Test3-2",
-          icon: "HomeFilled",
-        },
-      },
     ],
   },
 ];

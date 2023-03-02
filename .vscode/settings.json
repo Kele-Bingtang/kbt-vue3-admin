@@ -37,5 +37,16 @@
   "[less]": {
     "editor.defaultFormatter": "esbenp.prettier-vscode"
   },
-  "cSpell.words": ["nprogress", "Pinia", "unplugin", "unref", "vite", "vueuse", "Vuex", "wangeditor", "Tinymce"]
+  "cSpell.words": [
+    "nprogress",
+    "Pinia",
+    "unplugin",
+    "unref",
+    "vite",
+    "vueuse",
+    "Vuex",
+    "wangeditor",
+    "Tinymce",
+    "timymce"
+  ]
 }
