@@ -14,7 +14,7 @@
   </div>
 </template>
 
-<script>
+<script lang="ts">
 import { scrollTo } from "@/utils/layout/scrollTo";
 
 export const paging = {
@@ -47,27 +47,32 @@ const props = withDefaults(defineProps<PaginationProps>(), {
   autoScroll: true,
   hidden: false,
 });
-const emit = defineEmits(["pagination"]);
+
+type PaginationEmitProps = {
+  (e: "pagination", value: Paging): void;
+};
+
+const emits = defineEmits<PaginationEmitProps>();
 const pageObj = toRef(props, "paging");
 
 const handleSizeChange = (value: number) => {
   pageObj.value.pageSize = value;
-  emit("pagination", props.paging);
+  emits("pagination", props.paging);
   nextTick(() => {
     if (props.autoScroll) {
       scrollTo("el-table__body-wrapper", 0, 700);
-      scrollTo("main-content", 0, 700);
+      scrollTo("el-main", 0, 700);
     }
   });
 };
 
 const handleCurrentChange = (value: number) => {
   pageObj.value.currentPage = value;
-  emit("pagination", props.paging);
+  emits("pagination", props.paging);
   nextTick(() => {
     if (props.autoScroll) {
       scrollTo("el-table__body-wrapper", 0, 700);
-      scrollTo("main-content", 0, 700);
+      scrollTo("el-main", 0, 700);
     }
   });
 };

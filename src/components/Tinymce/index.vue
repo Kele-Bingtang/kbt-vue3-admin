@@ -74,7 +74,13 @@ const props = withDefaults(defineProps<TinymceProps>(), {
   move: true,
 });
 
-const emits = defineEmits(["update:value", "img-upload", "file-upload"]);
+type TinymceEmitProps = {
+  (e: "update:value", value: string): void;
+  (e: "img-upload", blobInfo: Function, resolve: Function, reject: Function, progress: Function): void;
+  (e: "file-upload", file: File, filetype: string, callback: Function): void;
+};
+
+const emits = defineEmits<TinymceEmitProps>();
 
 const fullscreen = ref(false);
 

@@ -41,7 +41,7 @@ interface WangEditorProp {
   hideToolBar?: boolean; // 是否隐藏工具栏 ==> 非必传（默认为false）
 }
 type EmitProps = {
-  (e: "update:value", val: string): void;
+  (e: "update:value", value: string): void;
   (e: "image-upload", file: File, insertFn: ImageInsertFnType): void;
   (e: "image-before-upload", file: File): void;
   (e: "image-progress", progress: number): void;

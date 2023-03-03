@@ -2,7 +2,7 @@
   <div class="cropper-component" :style="{ height: cropContainerHeight + 'px' }">
     <div class="cropper-img">
       <VueCropper
-        ref="cropper"
+        ref="cropperRef"
         :img="options.img"
         :output-size="options.outputSize"
         :output-type="options.outputType"
@@ -18,8 +18,8 @@
         :enlarge="options.enlarge"
         @real-time="realTime"
         @img-load="imgLoad"
-        @img-moving="emit('img-moving')"
-        @crop-moving="emit('crop-moving')"
+        @img-moving="emits('img-moving')"
+        @crop-moving="emits('crop-moving')"
       />
     </div>
     <div class="cropper-img show-previews" v-if="previews.url">
@@ -70,7 +70,14 @@ const props = withDefaults(defineProps<CropperProps>(), {
   cropHeight: 200,
   cropContainerHeight: 350,
 });
-const emit = defineEmits(["upload-image", "img-moving", "crop-moving"]);
+
+type CropperEmitProps = {
+  (e: "upload-image", formData: FormData): void;
+  (e: "img-moving"): void;
+  (e: "crop-moving"): void;
+};
+
+const emits = defineEmits<CropperEmitProps>();
 
 const { imgLink, imageType, cropWidth, cropHeight, cropContainerHeight } = toRefs(props);
 
@@ -112,7 +119,7 @@ const options = reactive({
   mode: "contain", // 图片默认渲染方式
 });
 
-const cropper = ref();
+const cropperRef = shallowRef();
 
 onMounted(() => {
   options.autoCropWidth = cropWidth.value || 200;
@@ -144,15 +151,15 @@ const imgLoad = (res: "success" | "error") => {
 const uploadImage = () => {
   const formData = new FormData();
   if (imageType.value === "blob") {
-    cropper.value.getCropBlob((data: Blob) => {
+    cropperRef.value.getCropBlob((data: Blob) => {
       const timer = new Date().getTime();
       formData.append("file", data, timer + ".png");
-      emit("upload-image", formData);
+      emits("upload-image", formData);
     });
   } else if (imageType.value === "base64") {
-    cropper.value.getCropData((data: string) => {
+    cropperRef.value.getCropData((data: string) => {
       formData.append("images", data);
-      emit("upload-image", formData);
+      emits("upload-image", formData);
     });
   } else {
     ElMessage.error("图片类型错误！请传入 blob 或者 base64");
@@ -165,28 +172,28 @@ const downloadImg = (type?: string) => {
   aLink.download = timer + ""; // 文件名
   if (type === "blob") {
     // 获取截图的 blob 数据
-    cropper.value.getCropBlob((data: Blob) => {
+    cropperRef.value.getCropBlob((data: Blob) => {
       aLink.href = window.URL.createObjectURL(data); // 生成 blob 格式图片路径
       aLink.click();
     });
   } else {
     // 获取截图的 base64 数据
-    cropper.value.getCropData((data: string) => {
+    cropperRef.value.getCropData((data: string) => {
       aLink.href = data;
     });
   }
 };
 
 const rotateLeft = () => {
-  cropper.value.rotateLeft();
+  cropperRef.value.rotateLeft();
 };
 
 const rotateRight = () => {
-  cropper.value.rotateRight();
+  cropperRef.value.rotateRight();
 };
 
 const changeScale = (num: number) => {
-  cropper.value.changeScale(num);
+  cropperRef.value.changeScale(num);
 };
 
 // 手动上传的回调，目前为了取消自动上传

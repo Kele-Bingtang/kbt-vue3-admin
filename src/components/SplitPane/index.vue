@@ -42,7 +42,7 @@ const props = withDefaults(defineProps<SplitPaneProps>(), {
 
 const emits = defineEmits(["update:value", "on-moving", "on-move-end", "on-move-start"]);
 
-const splitPaneRef = ref();
+const splitPaneRef = shallowRef();
 const offset = ref(0);
 const initOffset = ref(0);
 const oldOffset = ref<unknown>(0);

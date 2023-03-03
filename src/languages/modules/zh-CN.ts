@@ -25,7 +25,7 @@ export default {
     DynamicTable: "动态表格添加",
     InlineTable: "内联表格编辑",
     SearchTable: "表格查询",
-    PageTable: "分页表格",
+    PageTable: "表格分页",
     IntegrationTable: "集成表格",
     Excel: "Excel",
     ExportExcel: "Excel 导出",

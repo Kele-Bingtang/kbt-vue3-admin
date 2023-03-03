@@ -63,7 +63,7 @@ const settings: Settings = {
   recordTabsNav: true,
   menuTextTheme: true,
   primaryTheme: "#168BF7", // 蓝色偏暗：#168BF7，官方：#409EFF
-  layoutTheme: "dark",
+  layoutTheme: "light",
   errorLog: {
     showInHeader: true,
     env: ["production"],

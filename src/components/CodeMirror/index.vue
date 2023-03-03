@@ -36,9 +36,9 @@ const props = withDefaults(defineProps<CodeMirrorProps>(), {
   readonly: false,
 });
 type CodeMirrorEmitProps = {
-  (e: "update:value", val: string): void;
-  (e: "on-blur", val: string): void;
-  (e: "on-paste", val: string, oldVal: string): void;
+  (e: "update:value", value: string): void;
+  (e: "on-blur", value: string): void;
+  (e: "on-paste", currentValue: string, oldVal: string): void;
 };
 const emits = defineEmits<CodeMirrorEmitProps>();
 
