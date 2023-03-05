@@ -44,6 +44,7 @@
 <script setup lang="ts" name="DragTable">
 import Sortable from "sortablejs";
 import { simpleData } from "@/test/table";
+import { tableStatusFilter } from "@/config/constant";
 
 interface ColItem {
   label: string;
@@ -139,15 +140,6 @@ const rowDrop2 = () => {
       }
     },
   });
-};
-
-const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
-  const statusMap: { [key: string]: "success" | "info" | "danger" } = {
-    Enable: "success",
-    Disable: "info",
-    Deleted: "danger",
-  };
-  return statusMap[status];
 };
 </script>
 

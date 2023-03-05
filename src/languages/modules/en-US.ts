@@ -26,6 +26,7 @@ export default {
     InlineTable: "Inline Table",
     SearchTable: "Search Table",
     PageTable: "Page Table",
+    OperateTable: "Operate Table",
     IntegrationTable: "Integration Table",
     Excel: "Excel",
     ExportExcel: "Export Excel",

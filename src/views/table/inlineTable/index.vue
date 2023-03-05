@@ -48,6 +48,7 @@
 <script setup lang="ts" name="InlineTable">
 import { simpleData } from "@/test/table";
 import { ElMessage } from "element-plus";
+import { tableStatusFilter } from "@/config/constant";
 
 const tableData = ref(simpleData);
 
@@ -76,15 +77,6 @@ const confirmEdit = (row: any) => {
   row.edit = false;
   row.originalTitle = row.title;
   ElMessage.success("标题已编辑！");
-};
-
-const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
-  const statusMap: { [key: string]: "success" | "info" | "danger" } = {
-    Enable: "success",
-    Disable: "info",
-    Deleted: "danger",
-  };
-  return statusMap[status];
 };
 </script>
 

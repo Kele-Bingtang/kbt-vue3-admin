@@ -60,6 +60,7 @@
 <script setup lang="ts" name="SearchTable">
 import { middleData } from "@/test/table";
 import { ElMessageBox, ElNotification } from "element-plus";
+import { tableStatusFilter } from "@/config/constant";
 
 const searchOptions = [
   {
@@ -148,19 +149,19 @@ const handleSearch = (type: "single" | "multiple") => {
       }, 500);
       return;
     }
-    let tableDataTemp = [...tableData.value];
+    let tableDataTemp = tableData.value;
     if (multipleSearchParams.name) {
-      tableDataTemp = tableData.value.filter(item => {
+      tableDataTemp = tableDataTemp.filter(item => {
         return item.name.indexOf(multipleSearchParams.name) !== -1;
       });
     }
     if (multipleSearchParams.status) {
-      tableDataTemp = tableData.value.filter(item => {
+      tableDataTemp = tableDataTemp.filter(item => {
         return item.status === multipleSearchParams.status;
       });
     }
     if (multipleSearchParams.priority) {
-      tableDataTemp = tableData.value.filter(item => {
+      tableDataTemp = tableDataTemp.filter(item => {
         return item.priority === parseInt(multipleSearchParams.priority);
       });
     }
@@ -189,15 +190,6 @@ const handleDelete = (row: any, index: number) => {
       });
     })
     .catch(() => {});
-};
-
-const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
-  const statusMap: { [key: string]: "success" | "info" | "danger" } = {
-    Enable: "success",
-    Disable: "info",
-    Deleted: "danger",
-  };
-  return statusMap[status];
 };
 </script>
 

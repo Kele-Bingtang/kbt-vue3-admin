@@ -77,7 +77,7 @@ const props = withDefaults(defineProps<TinymceProps>(), {
 type TinymceEmitProps = {
   (e: "update:value", value: string): void;
   (e: "img-upload", blobInfo: Function, resolve: Function, reject: Function, progress: Function): void;
-  (e: "file-upload", file: File, filetype: string, callback: Function): void;
+  (e: "file-upload", file: File, filetype: "image" | "media" | "file", callback: Function): void;
 };
 
 const emits = defineEmits<TinymceEmitProps>();

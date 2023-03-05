@@ -29,27 +29,20 @@
 </template>
 
 <script setup lang="ts" name="pageTable">
-import Pagination, { paging, type Paging } from "@/components/Pagination/index.vue";
+import Pagination, { pageSetting, type Paging } from "@/components/Pagination/index.vue";
 import { largeData } from "@/test/table";
+import { tableStatusFilter } from "@/config/constant";
+
 const tableData = ref(largeData);
-const pageProps = reactive(paging);
+const paging = reactive(pageSetting);
 
 const tablePageData = computed(() =>
-  tableData.value.slice((pageProps.currentPage - 1) * pageProps.pageSize, pageProps.currentPage * pageProps.pageSize)
+  tableData.value.slice((paging.currentPage - 1) * paging.pageSize, paging.currentPage * paging.pageSize)
 );
 
-const handleSizeChange = (paging: Paging) => {
-  pageProps.currentPage = paging.currentPage;
-  pageProps.pageSize = paging.pageSize;
-};
-
-const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
-  const statusMap: { [key: string]: "success" | "info" | "danger" } = {
-    Enable: "success",
-    Disable: "info",
-    Deleted: "danger",
-  };
-  return statusMap[status];
+const handleSizeChange = (pagingParam: Paging) => {
+  paging.currentPage = pagingParam.currentPage;
+  paging.pageSize = pagingParam.pageSize;
 };
 </script>
 
