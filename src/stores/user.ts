@@ -12,7 +12,7 @@ export const useUserStore = defineStore(
     const token = ref("admin-token");
     const userInfo = ref<UserInfo>({
       userId: "v10001",
-      username: "Visitor",
+      username: "visitor",
       sex: "男",
       email: "2456019588@qq.com",
       phone: "13377492843",
@@ -44,7 +44,7 @@ export const useUserStore = defineStore(
     const getUserInfo = async () => {
       const userInfo: UserInfo = {
         userId: "v10001",
-        username: "Visitor",
+        username: "visitor",
         sex: "男",
         email: "2456019588@qq.com",
         phone: "13377492843",
@@ -64,7 +64,7 @@ export const useUserStore = defineStore(
       setRoles([]);
     };
 
-    const changeRoles = (rolesParam: string[]) => {
+    const changeRoles = async (rolesParam: string[]) => {
       // 模拟新的 token
       const token = rolesParam[0] + "-token";
       setToken(token);
@@ -72,10 +72,7 @@ export const useUserStore = defineStore(
       setRoles(rolesParam); // 正常不是直接赋予角色，而是调用 this.getUserInfo(token)，根据 token 重新获取对应的角色
       // await this.getUserInfo(token);
       resetRouter();
-      const { loadRouteList } = useRoutes();
-      loadRouteList(rolesRoutes, rolesParam, router);
-      const layoutStore = useLayoutStore();
-      layoutStore.removeAllTabs();
+      useRoutes().loadRouteList(rolesRoutes, rolesParam, router);
     };
 
     const setUserInfo = (userInfoParam: UserInfo) => {

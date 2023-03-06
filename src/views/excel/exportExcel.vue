@@ -1,17 +1,17 @@
 <template>
   <div class="export-excel-container">
-    <div>
-      <div style="display: inline-block">
+    <div style="display: flex">
+      <div>
         <label class="radio-label" style="padding-left: 0">文件名：</label>
         <el-input
           v-model="filename"
           placeholder="请输入导出的文件名，默认为 excel-table"
           style="width: 345px"
-          prefix-icon="el-icon-document"
+          prefix-icon="Document"
         />
       </div>
 
-      <div style="display: inline-block">
+      <div>
         <label class="radio-label">Cell Auto-Width：</label>
         <el-radio-group v-model="autoWidth">
           <el-radio :label="true" border>True</el-radio>
@@ -19,7 +19,7 @@
         </el-radio-group>
       </div>
 
-      <div style="display: inline-block">
+      <div>
         <label class="radio-label">文件类型：</label>
         <el-select v-model="bookType" style="width: 120px">
           <el-option v-for="item in options" :key="item" :label="item" :value="item" />
@@ -27,10 +27,12 @@
       </div>
 
       <el-button
+        v-waves
+        plain
         :loading="downloadLoading"
         style="margin: 0 0 20px 20px"
         type="success"
-        icon="el-icon-document"
+        icon="Top"
         @click="handleDownload"
       >
         Excel Export

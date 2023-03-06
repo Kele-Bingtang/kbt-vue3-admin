@@ -16,6 +16,7 @@ import { useLayoutStore } from "@/stores/layout";
 import { useSettingsStore } from "@/stores/settings";
 import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";
 import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
+
 export type RefreshFunction = (value?: boolean) => boolean;
 
 const layoutStore = useLayoutStore();
@@ -42,6 +43,11 @@ const refreshCurrentPage: RefreshFunction = (value?: boolean) => {
   return true;
 };
 provide("refresh", refreshCurrentPage);
+
+watch(
+  () => isRouterShow.value,
+  () => {}
+);
 </script>
 
 <style lang="scss" scoped>

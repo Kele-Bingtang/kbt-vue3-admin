@@ -1,4 +1,5 @@
 import NProgress from "@/config/nprogress";
+import settings from "@/config/settings";
 import { useRoutes } from "@/hooks/useRoutes";
 import { usePermissionStore } from "@/stores/permission";
 import { useUserStore } from "@/stores/user";
@@ -22,7 +23,7 @@ export function resetRouter() {
   });
 }
 
-const whiteList = ["*"];
+const whiteList = settings.whiteList;
 
 /**
  * @description 路由拦截 beforeEach

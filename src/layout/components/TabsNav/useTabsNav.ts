@@ -4,6 +4,7 @@ import type { TabProp } from "@/stores";
 import { useLayoutStore } from "@/stores/layout";
 import { usePermissionStore } from "@/stores/permission";
 import Sortable from "sortablejs";
+import type { RefreshFunction } from "../MainContent/index.vue";
 
 export const useTabsNav = () => {
   const route = useRoute();
@@ -11,7 +12,7 @@ export const useTabsNav = () => {
   const layoutStore = useLayoutStore();
   const permissionStore = usePermissionStore();
   const { getTitle } = useLayout();
-  const refreshCurrentPage = inject("refresh") as Function;
+  const refreshCurrentPage = inject("refresh") as RefreshFunction;
 
   const rightMenuVisible = ref(false); // 右键菜单显示
   // 激活的 tab

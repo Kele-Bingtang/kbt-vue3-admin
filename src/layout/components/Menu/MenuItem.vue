@@ -26,8 +26,7 @@ import { useLayout } from "@/hooks/useLayout";
 import { isExternal } from "@/utils/layout/validate";
 import CommonIcon from "@/components/CommonIcon/index.vue";
 
-// eslint-disable-next-line vue/no-setup-props-destructure
-const { menuItem, isCollapse } = defineProps<{
+defineProps<{
   menuItem: RouterConfig;
   isCollapse: boolean;
 }>();
@@ -41,4 +40,11 @@ const handleMenuClick = (menuItem: RouterConfig) => {
 };
 </script>
 
-<style lang="scss" scoped></style>
+<style lang="scss" scoped>
+.el-sub-menu {
+  :deep(.svg-icon) {
+    margin-right: 5px;
+    width: 1.5rem !important;
+  }
+}
+</style>

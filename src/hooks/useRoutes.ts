@@ -116,10 +116,10 @@ export const useRoutes = () => {
    * @param {Array} routeList 所有路由表
    * @return array
    */
-  const getFlatArray = (routeList: RouterConfigRaw[]) => {
+  const filterFlatRoutes = (routeList: RouterConfigRaw[]) => {
     return routeList.reduce((pre: RouterConfigRaw[], current: RouterConfigRaw) => {
       let flatArr = [...pre, current];
-      if (current.children) flatArr = [...flatArr, ...getFlatArray(current.children)];
+      if (current.children) flatArr = [...flatArr, ...filterFlatRoutes(current.children)];
       return flatArr;
     }, []);
   };
@@ -130,6 +130,6 @@ export const useRoutes = () => {
     hasPermission,
     getRouteFullPath,
     getHomeRoute,
-    getFlatArray,
+    filterFlatRoutes,
   };
 };

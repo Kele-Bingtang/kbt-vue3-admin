@@ -68,7 +68,7 @@ const settings: Settings = {
     showInHeader: true,
     env: ["production"],
   },
-  whiteList: ["*"],
+  whiteList: [""],
   moreRouteChildrenHideInMenuThenOnlyOne: false,
   settingCacheKey: "kbt_settingsStore",
   layoutCacheKey: "kbt_layoutStore",

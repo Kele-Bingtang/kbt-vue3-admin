@@ -198,7 +198,7 @@ export const rolesRoutes: RouterConfigRaw[] = [
         meta: { title: "表格操作", icon: "StarFilled" },
       },
       {
-        path: "Integration-table",
+        path: "integration-table",
         name: "IntegrationTable",
         component: () => import("@/views/table/integrationTable/index.vue"),
         meta: { title: "表格集成", icon: "StarFilled" },
@@ -237,6 +237,38 @@ export const rolesRoutes: RouterConfigRaw[] = [
         component: () => import("@/views/excel/uploadExcel.vue"),
         name: "UploadExcel",
         meta: { title: "Excel 导入", icon: "StarFilled" },
+      },
+    ],
+  },
+  {
+    path: "/permission",
+    redirect: "/permission/switch",
+    name: "Permission",
+    meta: {
+      title: "权限",
+      icon: "svg-lock",
+      roles: ["admin", "visitor"],
+      alwaysShowRoot: true,
+    },
+    children: [
+      {
+        path: "switch",
+        component: () => import("@/views/permission/switchPermission.vue"),
+        name: "SwitchPermission",
+        meta: {
+          title: "权限切换",
+          icon: "StarFilled",
+        },
+      },
+      {
+        path: "role",
+        component: () => import("@/views/permission/rolePermission.vue"),
+        name: "RolePermission",
+        meta: {
+          title: "权限编辑",
+          roles: ["admin"],
+          icon: "StarFilled",
+        },
       },
     ],
   },
