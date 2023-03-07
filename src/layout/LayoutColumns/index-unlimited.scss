@@ -47,7 +47,8 @@
   .el-container .el-aside.not-aside {
     border: 0;
   }
+  .header-icon,
   .header-icon .el-dropdown {
-    color: var(--el-text-color-primary);
+    color: var(--header-text-color);
   }
 }

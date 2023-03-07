@@ -33,7 +33,7 @@ export interface PermissionState {
 }
 
 // SettingsState
-export type LayoutModeType = "vertical" | "classic" | "transverse" | "columns";
+export type LayoutModeType = "vertical" | "classic" | "transverse" | "columns" | "portal";
 export type TabsNavModeType = "classic" | "popular";
 export type LayoutThemeType = "light" | "dark";
 

@@ -49,13 +49,20 @@ export const useTabsNav = () => {
   // 判断当前激活的 tab
   const getOneTab = (route: RouteConfig | RouterConfig) => {
     return {
-      path: (route as RouteConfig).fullPath || route.meta._fullPath,
+      path: resolveFullPath(route),
       name: (route.name as string) || route.path,
       title: getTitle(route),
       icon: route.meta.icon || "",
       close: !route.meta.isAffix,
       meta: route.meta,
     };
+  };
+
+  // 判断 tab 的地址，因为携带不同的参数可以引起多个重复的标签，这里可以设置当同一个 path 携带参数不一样，只渲染一个 tab
+  const resolveFullPath = (route: RouteConfig | RouterConfig) => {
+    const url = window.location.href;
+    if (url.includes("layoutMode")) return route.meta._fullPath;
+    else return (route as RouteConfig).fullPath || route.meta._fullPath;
   };
   // 初始化固定在标签栏的 tabs
   const initTabs = () => {

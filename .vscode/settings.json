@@ -47,6 +47,7 @@
     "Vuex",
     "wangeditor",
     "Tinymce",
-    "timymce"
+    "timymce",
+    "echarts"
   ]
 }

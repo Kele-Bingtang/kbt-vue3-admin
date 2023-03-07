@@ -29,7 +29,7 @@ Admin 项目用到的 key 暂时只有缓存功能，如个性化配置、布局
 Clone code：拉取代码
 
 ```sh
-git clone git@172.16.49.8:Common/vue3-ts-Admin.git
+git clone https://github.com/Kele-Bingtang/kbt-vue3-admin
 ```
 
 Project setup：安装依赖

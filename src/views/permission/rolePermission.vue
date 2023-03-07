@@ -10,8 +10,8 @@
       <el-table-column prop="description" align="header-center" label="角色描述"></el-table-column>
       <el-table-column align="center" label="操作">
         <template #default="{ row, $index }">
-          <el-button type="primary" size="small" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="danger" size="small" @click="handleDelete(row, $index)">删除</el-button>
+          <el-button type="primary" @click="handleEdit(row)">编辑</el-button>
+          <el-button type="danger" @click="handleDelete(row, $index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -56,6 +56,7 @@ import { useLayout } from "@/hooks/useLayout";
 import { ElMessage, ElMessageBox, ElNotification, ElTree } from "element-plus";
 import { useRoutes } from "@/hooks/useRoutes";
 import type { TreeKey } from "element-plus/es/components/tree/src/tree.type";
+import router, { resetRouter } from "@/router";
 
 interface Role {
   key: number; // 角色 id
@@ -85,7 +86,7 @@ const dialogTitle: { [key: string]: string } = {
 const permissionStore = usePermissionStore();
 const userStore = useUserStore();
 const { getTitle, getMenuListByRouter } = useLayout();
-const { filterFlatRoutes } = useRoutes();
+const { filterFlatRoutes, loadRouteList } = useRoutes();
 const role = ref(defaultRole);
 const serviceRoutes = ref<RouterConfig[]>([]); // 所有的路由，以供选择
 const reshapedRoutes = ref<RouterConfig[]>([]); // 重组后的路由，重组过程去掉一些路由，如 alwaysShowRoot，hideInMenu 的路由
@@ -196,11 +197,11 @@ const confirmRole = () => {
     rolesList.value.push(role.value);
   }
 
-  // // 更新路由
-  // if (userStore.roles.includes(role.value.name)) {
-  //   resetRouter();
-  //   loadRouteList(role.value.routes as RouterConfigRaw[], [role.value.name], router);
-  // }
+  // 更新路由
+  if (userStore.roles.includes(role.value.name)) {
+    resetRouter();
+    loadRouteList(role.value.routes as RouterConfigRaw[], [role.value.name], router);
+  }
 
   const { description, key, name } = role.value;
   dialogVisible.value = false;
@@ -220,10 +221,11 @@ const confirmRole = () => {
 const generateTree = (routes: RouterConfig[], checkedKeys: TreeKey[]) => {
   const res: RouterConfig[] = [];
   for (const route of routes) {
+    const r = { ...route };
     // 递归子路由
-    if (route.children) route.children = generateTree(route.children, checkedKeys);
-    if (checkedKeys.includes(route.meta._fullPath) || (route.children && route.children.length >= 1)) {
-      res.push(route);
+    if (r.children) r.children = generateTree(r.children, checkedKeys);
+    if (checkedKeys.includes(r.meta._fullPath) || (r.children && r.children.length >= 1)) {
+      res.push(r);
     }
   }
   return res;

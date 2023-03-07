@@ -19,9 +19,18 @@
  * @param meta.beforeCloseName ==> 关闭路由前的回调，如果设置该字段，则在关闭当前 tab 页时会去 @/router/before-close.js 里寻找该字段名「对应」的方法，作为关闭前的钩子函数，无默认值
  */
 
-const HOME_URL = "/home";
+export const HOME_URL = "/home";
+export const LOGIN_URL = "/login";
 
 export const constantRoutes: RouterConfigRaw[] = [
+  {
+    path: LOGIN_URL,
+    name: "Login",
+    component: () => import("@/views/login/index.vue"),
+    meta: {
+      title: "登录",
+    },
+  },
   {
     path: "/",
     name: "Layout",
@@ -269,6 +278,83 @@ export const rolesRoutes: RouterConfigRaw[] = [
           roles: ["admin"],
           icon: "StarFilled",
         },
+      },
+    ],
+  },
+  {
+    path: "/plugins",
+    redirect: "/plugins/clipboard",
+    name: "Plugins",
+    meta: {
+      title: "插件",
+      icon: "Ticket",
+      alwaysShowRoot: true,
+    },
+    children: [
+      {
+        path: "clipboard",
+        name: "Clipboard",
+        component: () => import("@/views/plugins/clipboard/index.vue"),
+        meta: { title: "文本复制", icon: "DocumentCopy" },
+      },
+    ],
+  },
+  {
+    path: "/nested",
+    redirect: "/nested/menu1",
+    name: "Nested",
+    meta: {
+      title: "嵌套菜单",
+      icon: "Operation",
+    },
+    children: [
+      {
+        path: "menu1",
+        component: () => import("@/views/nested/menu1/index.vue"),
+        redirect: "/nested/menu1/menu1-1",
+        name: "Menu1",
+        meta: { title: "菜单 1", icon: "Menu" },
+        children: [
+          {
+            path: "menu1-1",
+            component: () => import("@/views/nested/menu1/menu1-1/index.vue"),
+            name: "Menu1-1",
+            meta: { title: "菜单 1-1", icon: "StarFilled" },
+          },
+          {
+            path: "menu1-2",
+            component: () => import("@/views/nested/menu1/menu1-2/index.vue"),
+            name: "Menu1-2",
+            meta: { title: "菜单 1-2", icon: "StarFilled" },
+          },
+          {
+            path: "menu1-3",
+            component: () => import("@/views/nested/menu1/menu1-3/index.vue"),
+            redirect: "/nested/menu1/menu1-3/menu1-3-1",
+            name: "Menu1-3",
+            meta: { title: "菜单 1-3", icon: "StarFilled" },
+            children: [
+              {
+                path: "menu1-3-1",
+                component: () => import("@/views/nested/menu1/menu1-3/menu1-3-1/index.vue"),
+                name: "Menu1-3-1",
+                meta: { title: "菜单 1-3-1", icon: "StarFilled" },
+              },
+              {
+                path: "menu1-3-2",
+                component: () => import("@/views/nested/menu1/menu1-3/menu1-3-2/index.vue"),
+                name: "Menu1-3-2",
+                meta: { title: "菜单 1-3-2", icon: "StarFilled" },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        path: "menu2",
+        component: () => import("@/views/nested/menu2/index.vue"),
+        name: "Menu2",
+        meta: { title: "菜单 2", icon: "StarFilled" },
       },
     ],
   },

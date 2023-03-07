@@ -154,7 +154,7 @@ onUnmounted(() => {
   }
   &.show {
     :deep(.el-autocomplete, ) {
-      width: 205px;
+      width: 220px;
       transition: width 0.2s;
     }
   }

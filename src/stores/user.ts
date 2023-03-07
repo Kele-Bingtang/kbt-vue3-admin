@@ -9,7 +9,7 @@ import { useLayoutStore } from "./layout";
 export const useUserStore = defineStore(
   "userStore",
   () => {
-    const token = ref("admin-token");
+    const token = ref();
     const userInfo = ref<UserInfo>({
       userId: "v10001",
       username: "visitor",
@@ -22,23 +22,25 @@ export const useUserStore = defineStore(
     });
     const roles = ref<string[]>([]);
 
-    const login = () => {
+    const login = async ({ username, password }: { username: string; password: string }) => {
+      // 调用登录接口，拿到 token，这里直接模拟 token
+      console.log(username, password);
       const token = "admin-token";
       setCacheToken(token);
       setToken(token);
+      return true;
     };
 
-    const Logout = async () => {
+    const logout = async () => {
       if (token.value === "") {
         throw Error("LogOut: token is undefined!");
       }
       removeCacheToken();
       resetRouter();
-
-      const layoutStore = useLayoutStore();
-      layoutStore.removeAllTabs();
       setToken("");
       setRoles([]);
+      const layoutStore = useLayoutStore();
+      layoutStore.removeAllTabs();
     };
 
     const getUserInfo = async () => {
@@ -93,7 +95,7 @@ export const useUserStore = defineStore(
       roles,
 
       login,
-      Logout,
+      logout,
       getUserInfo,
       resetToken,
       changeRoles,

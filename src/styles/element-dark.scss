@@ -6,20 +6,19 @@ html.dark {
   --kbt-border-light: 1px solid #4c4c4d;
 
   // 以下为自定义暗黑模式内容
-  // login
-  // .login-container {
-  //   background-color: var(--el-fill-color-extra-light) !important;
-  //   .login-box {
-  //     background-color: var(--el-mask-color) !important;
-  //     .login-form {
-  //       background-color: var(--el-bg-color) !important;
-  //       box-shadow: 5px 5px 15px rgb(161 161 161 / 20%) !important;
-  //       .logo-text {
-  //         color: var(--el-text-color-primary) !important;
-  //       }
-  //     }
-  //   }
-  // }
+  .login-container {
+    background-color: var(--el-fill-color-extra-light) !important;
+    .login-box {
+      background-color: var(--el-mask-color) !important;
+      .login-form {
+        background-color: var(--el-bg-color) !important;
+        box-shadow: 5px 5px 15px rgb(161 161 161 / 20%) !important;
+        .logo-text {
+          color: var(--el-text-color-primary) !important;
+        }
+      }
+    }
+  }
 
   // scroll-bar
   ::-webkit-scrollbar {

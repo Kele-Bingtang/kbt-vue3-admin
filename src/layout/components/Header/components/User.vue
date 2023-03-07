@@ -48,6 +48,8 @@ import { useI18n } from "vue-i18n";
 import defaultAvatar from "@/assets/images/default.png";
 import { ArrowDownBold } from "@element-plus/icons-vue";
 import mittBus from "@/utils/layout/mittBus";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { LOGIN_URL } from "@/router/routes-config";
 
 const prop = withDefaults(defineProps<{ showAvatar?: boolean }>(), {
   showAvatar: true,
@@ -56,6 +58,8 @@ const prop = withDefaults(defineProps<{ showAvatar?: boolean }>(), {
 const { t } = useI18n();
 const userStore = useUserStore();
 const settingsStore = useSettingsStore();
+const route = useRoute();
+const router = useRouter();
 
 const user = computed(() => userStore.userInfo);
 const showSettings = computed(() => settingsStore.showSettings);
@@ -81,10 +85,20 @@ const openSettingsDrawer = () => {
 };
 
 const logout = async () => {
-  await userStore.Logout();
   // router.push(`/login?redirect=${this.$route.fullPath}`).catch(err => {
   //   console.warn(err)
   // })
+  ElMessageBox.confirm("您是否确认退出登录?", "温馨提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  }).then(async () => {
+    // 调用退出登录接口
+    await userStore.logout();
+    // 3.重定向到登陆页
+    router.push(`${LOGIN_URL}?redirect=${route.fullPath}`);
+    ElMessage.success("退出登录成功！");
+  });
 };
 </script>
 

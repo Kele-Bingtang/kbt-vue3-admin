@@ -122,6 +122,16 @@
       width: 55%;
     }
   }
+  .layout-portal {
+    display: flex;
+    justify-content: space-between;
+    .layout-dark {
+      width: 22%;
+    }
+    .layout-content {
+      width: 70%;
+    }
+  }
 }
 
 .menu-box {

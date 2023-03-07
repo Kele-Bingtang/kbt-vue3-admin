@@ -53,6 +53,16 @@
           <el-icon v-if="settingsStore.layoutMode === 'columns'"><CircleCheckFilled /></el-icon>
         </div>
       </el-tooltip>
+      <el-tooltip effect="dark" content="Portal" placement="top" :show-after="200">
+        <div
+          :class="['layout-item layout-portal', settingsStore.layoutMode === 'portal' ? 'is-active' : '']"
+          @click="changeLayout('portal')"
+        >
+          <div class="layout-dark"></div>
+          <div class="layout-content"></div>
+          <el-icon v-if="settingsStore.layoutMode === 'portal'"><CircleCheckFilled /></el-icon>
+        </div>
+      </el-tooltip>
     </div>
     <br />
 
