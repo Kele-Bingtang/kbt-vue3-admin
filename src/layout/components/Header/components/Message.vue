@@ -20,7 +20,7 @@
             </div>
           </template>
           <div class="message-empty" v-else>
-            <img src="@/assets/images/notData.png" alt="notData" />
+            <img src="@/assets/images/msg/notData.png" alt="notData" />
             <div>暂无消息</div>
           </div>
         </el-tab-pane>
@@ -28,7 +28,7 @@
           <template v-if="messageList.length > 0">
             <div class="message-list">
               <div class="message-item" v-for="message in messageList" :key="message.id">
-                <img src="@/assets/images/msg02.png" alt="" class="message-icon" />
+                <img src="@/assets/images/msg/msg02.png" alt="" class="message-icon" />
                 <div class="message-content">
                   <span class="message-title">{{ message.title }}</span>
                   <span class="message-date">{{ message.createTime }}</span>
@@ -37,13 +37,13 @@
             </div>
           </template>
           <div class="message-empty" v-else>
-            <img src="@/assets/images/notData.png" alt="notData" />
+            <img src="@/assets/images/msg/notData.png" alt="notData" />
             <div>暂无消息</div>
           </div>
         </el-tab-pane>
         <el-tab-pane label="代办(0)" name="third">
           <div class="message-empty">
-            <img src="@/assets/images/notData.png" alt="notData" />
+            <img src="@/assets/images/msg/notData.png" alt="notData" />
             <div>暂无代办</div>
           </div>
         </el-tab-pane>
@@ -59,31 +59,31 @@ import { ref } from "vue";
 const noticeList = [
   {
     id: "1",
-    image: "/src/assets/images/msg01.png",
+    image: "/src/assets/images/msg/msg01.png",
     title: "7 点起床",
     createTime: "一分钟前",
   },
   {
     id: "2",
-    image: "/src/assets/images/msg02.png",
+    image: "/src/assets/images/msg/msg02.png",
     title: "12 点吃午餐",
     createTime: "一小时前",
   },
   {
     id: "3",
-    image: "/src/assets/images/msg03.png",
+    image: "/src/assets/images/msg/msg03.png",
     title: "18 点下班",
     createTime: "半天前",
   },
   {
     id: "4",
-    image: "/src/assets/images/msg04.png",
+    image: "/src/assets/images/msg/msg04.png",
     title: "19 点学习",
     createTime: "一星期前",
   },
   {
     id: "5",
-    image: "/src/assets/images/msg05.png",
+    image: "/src/assets/images/msg/msg05.png",
     title: "24 点睡觉",
     createTime: "一个月前",
   },

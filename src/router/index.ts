@@ -4,7 +4,7 @@ import { useRoutes } from "@/hooks/useRoutes";
 import { usePermissionStore } from "@/stores/permission";
 import { useUserStore } from "@/stores/user";
 import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
-import { constantRoutes, rolesRoutes } from "./routes-config";
+import { constantRoutes, rolesRoutes } from "./routesConfig";
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),

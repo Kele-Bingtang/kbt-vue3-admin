@@ -73,6 +73,7 @@
     "PartialKey": true,
     "RequiredKey": true,
     "RequiredKeyPartialOther": true,
-    "NodeJS": true
+    "NodeJS": true,
+    "module": true
   }
 }

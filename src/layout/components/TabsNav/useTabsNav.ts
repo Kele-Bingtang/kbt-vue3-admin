@@ -1,5 +1,5 @@
 import { useLayout } from "@/hooks/useLayout";
-import beforeClose from "@/router/before-close";
+import beforeClose from "@/router/beforeClose";
 import type { TabProp } from "@/stores";
 import { useLayoutStore } from "@/stores/layout";
 import { usePermissionStore } from "@/stores/permission";

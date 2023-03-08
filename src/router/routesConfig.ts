@@ -20,6 +20,7 @@
  */
 
 export const HOME_URL = "/home";
+export const HOME_NAME = "Home";
 export const LOGIN_URL = "/login";
 
 export const constantRoutes: RouterConfigRaw[] = [
@@ -29,6 +30,7 @@ export const constantRoutes: RouterConfigRaw[] = [
     component: () => import("@/views/login/index.vue"),
     meta: {
       title: "登录",
+      hideInMenu: true,
     },
   },
   {
@@ -59,6 +61,15 @@ export const constantRoutes: RouterConfigRaw[] = [
     ],
   },
 ];
+
+/**
+ * notFoundRouter(找不到路由)
+ */
+export const notFoundRouter = {
+  path: "/:pathMatch(.*)*",
+  name: "notFound",
+  redirect: { name: "404" },
+};
 
 export const rolesRoutes: RouterConfigRaw[] = [
   {
@@ -355,6 +366,45 @@ export const rolesRoutes: RouterConfigRaw[] = [
         component: () => import("@/views/nested/menu2/index.vue"),
         name: "Menu2",
         meta: { title: "菜单 2", icon: "StarFilled" },
+      },
+    ],
+  },
+  {
+    path: "/error",
+    name: "Error",
+    redirect: "/error/403",
+    meta: {
+      title: "错误页面",
+      icon: "WarningFilled",
+      rank: 100,
+    },
+    children: [
+      {
+        path: "403",
+        name: "403",
+        component: () => import("@/views/error/403.vue"),
+        meta: {
+          title: "403 页面",
+          icon: "StarFilled",
+        },
+      },
+      {
+        path: "404",
+        name: "404",
+        component: () => import("@/views/error/404.vue"),
+        meta: {
+          title: "404 页面",
+          icon: "StarFilled",
+        },
+      },
+      {
+        path: "500",
+        name: "500",
+        component: () => import("@/views/error/500.vue"),
+        meta: {
+          title: "500 页面",
+          icon: "StarFilled",
+        },
       },
     ],
   },

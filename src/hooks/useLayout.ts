@@ -117,7 +117,7 @@ export const useLayout = () => {
     // 首页不存在
     if (!homeRoute.path || !homeRoute.name) {
       ElMessage({
-        message: "您的首页无法获取，请前往 store/permission.ts 下的 23 行，修改为您首页路由的 name 值",
+        message: "您的首页无法获取，请前往 router/routesConfig 下的 24 行，修改为您首页路由的 name 值",
         type: "error",
         duration: 10000,
       });

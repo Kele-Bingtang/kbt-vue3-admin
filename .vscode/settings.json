@@ -48,6 +48,14 @@
     "wangeditor",
     "Tinymce",
     "timymce",
-    "echarts"
+    "echarts",
+    "codemirror",
+    "countup",
+    "persistedstate",
+    "sortablejs",
+    "vuedraggable",
+    "rushstack",
+    "cssnano",
+    "cloc"
   ]
 }

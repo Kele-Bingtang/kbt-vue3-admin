@@ -58,7 +58,7 @@ import { ElNotification, type FormInstance } from "element-plus";
 import { useUserStore } from "@/stores/user";
 import { getTimeState } from "@/utils";
 import { useLayoutStore } from "@/stores/layout";
-import { HOME_URL } from "@/router/routes-config";
+import { HOME_URL } from "@/router/routesConfig";
 import settings from "@/config/settings";
 import ReImageVerify from "@/components/ReImageVerify/index.vue";
 

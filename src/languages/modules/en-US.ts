@@ -48,6 +48,10 @@ export default {
     Menu2: "menu 2",
     params: "params",
     query: "query",
+    Error: "Error",
+    403: "403",
+    404: "404",
+    500: "500",
   },
   _tabsNav: {
     refresh: "Refresh Page",

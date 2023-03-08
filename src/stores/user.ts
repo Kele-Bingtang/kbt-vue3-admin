@@ -2,7 +2,7 @@ import { defineStore } from "pinia";
 import type { UserInfo } from ".";
 import { removeCacheToken, setCacheToken } from "@/utils/layout/cache";
 import { useRoutes } from "@/hooks/useRoutes";
-import { rolesRoutes } from "@/router/routes-config";
+import { rolesRoutes } from "@/router/routesConfig";
 import router, { resetRouter } from "@/router";
 import { useLayoutStore } from "./layout";
 

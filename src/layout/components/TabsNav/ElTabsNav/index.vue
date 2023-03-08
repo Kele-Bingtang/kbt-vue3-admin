@@ -33,7 +33,7 @@
 </template>
 
 <script setup lang="ts" name="ElTabsNav">
-import beforeClose from "@/router/before-close";
+import beforeClose from "@/router/beforeClose";
 import type { TabProp } from "@/stores";
 import { useSettingsStore } from "@/stores/settings";
 import type { TabPaneName, TabsPaneContext } from "element-plus";

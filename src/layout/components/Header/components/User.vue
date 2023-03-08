@@ -49,7 +49,7 @@ import defaultAvatar from "@/assets/images/default.png";
 import { ArrowDownBold } from "@element-plus/icons-vue";
 import mittBus from "@/utils/layout/mittBus";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { LOGIN_URL } from "@/router/routes-config";
+import { LOGIN_URL } from "@/router/routesConfig";
 
 const prop = withDefaults(defineProps<{ showAvatar?: boolean }>(), {
   showAvatar: true,

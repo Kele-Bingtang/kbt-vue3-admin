@@ -48,7 +48,10 @@ export default {
     Menu2: "菜单 2",
     params: "动态路由",
     query: "带参路由",
-    Github: "Github",
+    Error: "错误页面",
+    403: "403 页面",
+    404: "404 页面",
+    500: "500 页面",
   },
   _tabsNav: {
     refresh: "刷新页面",

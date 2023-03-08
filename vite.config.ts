@@ -1,43 +1,26 @@
 import { fileURLToPath, URL } from "node:url";
-
 import { defineConfig, loadEnv, type ConfigEnv, type UserConfig } from "vite";
-import vue from "@vitejs/plugin-vue";
-import vueJsx from "@vitejs/plugin-vue-jsx";
-import { wrapperEnv } from "./src/utils/layout/getEnv";
-import AutoImport from "unplugin-auto-import/vite";
+import { wrapperEnv } from "./build/getEnv";
 import { resolve } from "path";
-import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
-import eslintPlugin from "vite-plugin-eslint";
-import VueSetupExtend from "vite-plugin-vue-setup-extend";
+import { getPluginsList } from "./build/plugins";
+import { include, exclude } from "./build/optimize";
 
 // https://vitejs.dev/config/
-export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
+export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd());
   const viteEnv = wrapperEnv(env);
   return {
     base: env.VITE_BASE_URL,
-    plugins: [
-      vue(),
-      vueJsx(),
-      eslintPlugin(), // EsLint 报错信息显示在浏览器界面上
-      VueSetupExtend(), // script setup 标签支持 name 命名组件
-      AutoImport({
-        imports: ["vue", "vue-router"], // 自动引入 vue 的 ref、toRefs、onmounted 等，无需在页面中再次引入
-        dts: "src/auto-import.d.ts", // 生成在 src 路径下名为 auto-import.d.ts 的声明文件
-        eslintrc: {
-          enabled: false, // 改为true 用于生成 eslint 配置。生成后改回 false，避免重复生成消耗
-        },
-      }),
-      // * 使用 svg 图标
-      createSvgIconsPlugin({
-        iconDirs: [resolve(process.cwd(), "src/assets/icons")],
-        symbolId: "icon-[dir]-[name]",
-      }),
-    ],
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
       },
+    },
+    plugins: getPluginsList(command, viteEnv),
+    // https://cn.vitejs.dev/config/dep-optimization-options.html#dep-optimization-options
+    optimizeDeps: {
+      include,
+      exclude,
     },
     server: {
       // 服务器主机名，如果允许外部访问，可设置为 "0.0.0.0"
@@ -58,6 +41,22 @@ export default defineConfig(({ mode }: ConfigEnv): UserConfig => {
       preprocessorOptions: {
         scss: {
           additionalData: `@import "@/styles/index.scss";`,
+        },
+      },
+    },
+    build: {
+      sourcemap: false,
+      // 消除打包大小超过500kb警告
+      chunkSizeWarningLimit: 4000,
+      rollupOptions: {
+        input: {
+          index: resolve(__dirname, ".", "index.html"),
+        },
+        // 静态资源分类打包
+        output: {
+          chunkFileNames: "static/js/[name]-[hash].js",
+          entryFileNames: "static/js/[name]-[hash].js",
+          assetFileNames: "static/[ext]/[name]-[hash].[ext]",
         },
       },
     },

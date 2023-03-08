@@ -1,6 +1,8 @@
+import router from "@/router";
+import { HOME_NAME, notFoundRouter } from "@/router/routesConfig";
 import { usePermissionStore } from "@/stores/permission";
 import { isExternal, isType } from "@/utils/layout/validate";
-import type { Router, RouteRecordRaw } from "vue-router";
+import type { RouteRecordRaw } from "vue-router";
 
 export const useRoutes = () => {
   const permissionStore = usePermissionStore();
@@ -9,14 +11,18 @@ export const useRoutes = () => {
   /**
    * @description 动态加载路由
    */
-  const loadRouteList = (routers: RouterConfigRaw[], roles: string[], router: Router) => {
+  const loadRouteList = (routers: RouterConfigRaw[], roles: string[], r = router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
     permissionStore.loadRolesRoutes(onlyRolesRoutes);
     const resolveRouters = resolveRouteComponent(onlyRolesRoutes);
     resolveRouters.forEach(item => {
-      if (item.meta?.isFull) router.addRoute(item as RouteRecordRaw);
-      else router.addRoute("Layout", item as RouteRecordRaw);
+      if (!item.name || !r.hasRoute(item.name)) {
+        if (item.meta?.isFull) r.addRoute(item as RouteRecordRaw);
+        else r.addRoute("Layout", item as RouteRecordRaw);
+      }
     });
+    // 最后添加 notFoundRouter
+    router.addRoute(notFoundRouter);
   };
   /**
    * @description
@@ -124,6 +130,28 @@ export const useRoutes = () => {
     }, []);
   };
 
+  /**
+   * 按照路由中 meta 下的 rank 等级升序来排序路由（仅处理以及一级路由）
+   * @param routeList 路由表
+   * @returns
+   */
+  const ascending = (routeList: any[]) => {
+    routeList.forEach((v, index) => {
+      // 当 rank 不存在时，根据顺序自动创建，首页路由永远在第一位
+      if (v.name === HOME_NAME && !v.meta?.rank) v.meta.rank = 0;
+      else if (handRank(v)) v.meta.rank = index + 2;
+    });
+    return routeList.sort((a: { meta: { rank: number } }, b: { meta: { rank: number } }) => {
+      return a?.meta.rank - b?.meta.rank;
+    });
+  };
+
+  const handRank = (routeList: RouterConfigRaw) => {
+    const { name, path, meta } = routeList;
+    if (!meta?.rank || (meta?.rank === 0 && name !== HOME_NAME && path !== "/")) return true;
+    return false;
+  };
+
   return {
     loadRouteList,
     filterOnlyRolesRoutes,
@@ -131,5 +159,6 @@ export const useRoutes = () => {
     getRouteFullPath,
     getHomeRoute,
     filterFlatRoutes,
+    ascending,
   };
 };
