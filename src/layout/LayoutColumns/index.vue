@@ -1,7 +1,7 @@
 <template>
   <el-container class="layout-container" :class="{ 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }">
     <div class="aside-split">
-      <div class="logo flx-center">
+      <div class="logo flx-center" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
       </div>
       <el-scrollbar>
@@ -55,6 +55,7 @@ import { useLayout } from "@/hooks/useLayout";
 import settings from "@/config/settings";
 import CommonIcon from "@/components/CommonIcon/index.vue";
 import MenuItem from "@/layout/components/Menu/MenuItem.vue";
+import { HOME_URL } from "@/router/routesConfig";
 
 const route = useRoute();
 const router = useRouter();

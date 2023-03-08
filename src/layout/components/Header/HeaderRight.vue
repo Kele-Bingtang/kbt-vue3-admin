@@ -1,5 +1,5 @@
 <template>
-  <div class="hedaer-right-container">
+  <div class="header-right-container">
     <div class="header-icon">
       <MenuSearch id="menuSearch" />
       <Fullscreen id="fullscreen" />
@@ -33,7 +33,7 @@ const errorCount = computed(() => {
 </script>
 
 <style lang="scss" scoped>
-.hedaer-right-container {
+.header-right-container {
   display: flex;
   align-items: center;
   justify-content: center;

@@ -52,6 +52,10 @@ export default {
     403: "403 页面",
     404: "404 页面",
     500: "500 页面",
+    OuterChain: "外部链接",
+    Github: "Github",
+    Vue2Admin: "Vue2 Admin",
+    Notes: "我的博客",
   },
   _tabsNav: {
     refresh: "刷新页面",

@@ -17,6 +17,7 @@
  * @param meta.isFull ==> 是否全屏，不渲染 Layout 布局，只渲染当前路由组件
  * @param meta.activeMenu ==> Restful 路由搭配使用，当前路由为详情页时，需要高亮的菜单
  * @param meta.beforeCloseName ==> 关闭路由前的回调，如果设置该字段，则在关闭当前 tab 页时会去 @/router/before-close.js 里寻找该字段名「对应」的方法，作为关闭前的钩子函数，无默认值
+ * @param meta.rank ==> 路由在左侧菜单的排序，rank 值越高越靠后，当 rank 不存在时，根据顺序自动创建，首页路由永远在第一位，当 rank 存在时，可以插入指定的菜单位置，默认不存在
  */
 
 export const HOME_URL = "/home";
@@ -376,7 +377,6 @@ export const rolesRoutes: RouterConfigRaw[] = [
     meta: {
       title: "错误页面",
       icon: "WarningFilled",
-      rank: 100,
     },
     children: [
       {
@@ -403,6 +403,41 @@ export const rolesRoutes: RouterConfigRaw[] = [
         component: () => import("@/views/error/500.vue"),
         meta: {
           title: "500 页面",
+          icon: "StarFilled",
+        },
+      },
+    ],
+  },
+  {
+    path: "/outer-chain",
+    name: "OuterChain",
+    meta: {
+      title: "外部链接",
+      icon: "Link",
+      rank: 100,
+    },
+    children: [
+      {
+        path: "https://github.com/Kele-Bingtang/kbt-vue3-admin",
+        name: "Github",
+        meta: {
+          title: "Github",
+          icon: "svg-github",
+        },
+      },
+      {
+        path: "https://vue2-admin.youngkbt.cn/",
+        name: "Vue2Admin",
+        meta: {
+          title: "Vue2 Admin",
+          icon: "StarFilled",
+        },
+      },
+      {
+        path: "https://notes.youngkbt.cn/",
+        name: "Notes",
+        meta: {
+          title: "我的博客",
           icon: "StarFilled",
         },
       },

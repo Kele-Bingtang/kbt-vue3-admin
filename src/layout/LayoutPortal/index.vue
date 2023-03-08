@@ -4,7 +4,7 @@
     :class="{ mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }"
   >
     <el-aside>
-      <div class="logo flx-center">
+      <div class="logo flx-center" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ settings.title }}</span>
       </div>
@@ -44,8 +44,10 @@ import ErrorLog from "@/layout/components/Header/components/ErrorLog.vue";
 import User from "@/layout/components/Header/components/User.vue";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import { useErrorLogStore } from "@/stores/errorLog";
+import { HOME_URL } from "@/router/routesConfig";
 
 const route = useRoute();
+const router = useRouter();
 const settingsStore = useSettingsStore();
 const layoutStore = useLayoutStore();
 const { resizeHandler, isMobile } = useLayout();

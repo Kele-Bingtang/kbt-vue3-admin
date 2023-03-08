@@ -35,6 +35,7 @@ declare global {
     isFull?: boolean;
     activeMenu?: string;
     beforeCloseName?: string;
+    rank?: number;
   }
 }
 

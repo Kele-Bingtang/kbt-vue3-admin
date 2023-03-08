@@ -31,6 +31,7 @@
       box-sizing: border-box;
       height: 55px;
       border-bottom: 1px solid var(--menu-logo-line-color);
+      cursor: pointer;
       span {
         font-size: 21.5px;
         font-weight: bold;
@@ -50,8 +51,12 @@
       align-items: center;
       overflow: hidden;
       margin: 10px 0;
+      color: var(--menu-text-color);
       :deep(.collapse-icon) {
         margin: 0;
+      }
+      :deep(.el-dropdown) {
+        color: var(--menu-text-color);
       }
     }
   }
@@ -61,14 +66,5 @@
   &.menu-collapse .el-aside {
     transition-duration: 0.3s;
     width: 64px !important;
-  }
-  .el-header {
-    box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    height: 55px;
-    padding: 0 15px;
-    border-bottom: 1px solid #3c3c3c1f;
   }
 }

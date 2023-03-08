@@ -19,7 +19,7 @@ const LayoutComponents: { [key: string]: Component } = {
   classic: LayoutClassic,
   transverse: LayoutTransverse,
   columns: LayoutColumns,
-  protal: LayoutPortal,
+  portal: LayoutPortal,
 };
 
 const settingsStore = useSettingsStore();

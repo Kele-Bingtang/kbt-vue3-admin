@@ -66,7 +66,13 @@
     </div>
     <br />
 
-    <template v-if="settingsStore.layoutMode === 'vertical' || settingsStore.layoutMode === 'columns'">
+    <template
+      v-if="
+        settingsStore.layoutMode === 'vertical' ||
+        settingsStore.layoutMode === 'columns' ||
+        settingsStore.layoutMode === 'portal'
+      "
+    >
       <el-divider class="divider" content-position="center">
         <el-icon><Menu /></el-icon>
         {{ $t("_settings.menuSwitch") }}

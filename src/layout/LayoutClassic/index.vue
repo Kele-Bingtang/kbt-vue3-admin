@@ -8,7 +8,7 @@
       <Header>
         <template #left>
           <div class="header-left">
-            <div class="logo flx-center">
+            <div class="logo flx-center" @click="router.push(HOME_URL)">
               <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
               <span>{{ settings.title }}</span>
             </div>
@@ -39,8 +39,10 @@ import Header from "@/layout/components/Header/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
 import settings from "@/config/settings";
 import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
+import { HOME_URL } from "@/router/routesConfig";
 
 const route = useRoute();
+const router = useRouter();
 const settingsStore = useSettingsStore();
 const layoutStore = useLayoutStore();
 const { resizeHandler, isMobile } = useLayout();

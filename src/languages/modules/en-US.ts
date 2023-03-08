@@ -52,6 +52,10 @@ export default {
     403: "403",
     404: "404",
     500: "500",
+    OuterChain: "OuterChain",
+    Github: "Github",
+    Vue2Admin: "Vue2 Admin",
+    Notes: "My Blog",
   },
   _tabsNav: {
     refresh: "Refresh Page",
