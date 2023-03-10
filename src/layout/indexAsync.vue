@@ -1,25 +1,28 @@
 <template>
-  <component :is="LayoutComponents[layoutMode]" />
+  <suspense>
+    <template #default>
+      <component :is="LayoutComponents[layoutMode]" />
+    </template>
+    <template #fallback>
+      <Loading />
+    </template>
+  </suspense>
   <ThemeDrawer />
 </template>
 
 <script setup lang="ts" name="Layout">
-import type { Component } from "vue";
-import LayoutVertical from "./LayoutVertical/index.vue";
-import LayoutClassic from "./LayoutClassic/index.vue";
-import LayoutTransverse from "./LayoutTransverse/index.vue";
-import LayoutColumns from "./LayoutColumns/index.vue";
-import LayoutPortal from "./LayoutPortal/index.vue";
-import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
+import { defineAsyncComponent, type Component } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useLayout } from "@/hooks/useLayout";
+import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
+import Loading from "./components/Loading/index.vue";
 
 const LayoutComponents: { [key: string]: Component } = {
-  vertical: LayoutVertical,
-  classic: LayoutClassic,
-  transverse: LayoutTransverse,
-  columns: LayoutColumns,
-  portal: LayoutPortal,
+  vertical: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),
+  classic: defineAsyncComponent(() => import("./LayoutClassic/index.vue")),
+  transverse: defineAsyncComponent(() => import("./LayoutTransverse/index.vue")),
+  columns: defineAsyncComponent(() => import("./LayoutColumns/index.vue")),
+  portal: defineAsyncComponent(() => import("./LayoutPortal/index.vue")),
 };
 
 const settingsStore = useSettingsStore();

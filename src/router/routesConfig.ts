@@ -35,11 +35,22 @@ export const constantRoutes: RouterConfigRaw[] = [
     },
   },
   {
+    path: "/redirect",
+    meta: { hideInMenu: true },
+    children: [
+      {
+        path: "/redirect/:path(.*)",
+        name: "Redirect",
+        component: () => import("@/layout/redirect.vue"),
+      },
+    ],
+  },
+  {
     path: "/",
     name: "Layout",
-    component: () => import("@/layout/index.vue"),
+    component: () => import("@/layout/indexAsync.vue"),
     redirect: HOME_URL,
-    meta: { hideInMenu: true, hideInBread: true, icon: "MessageBox" },
+    meta: { hideInMenu: true, hideInBread: true },
     children: [
       {
         path: "/error-log",

@@ -5319,11 +5319,6 @@ vite-plugin-eslint@^1.8.1:
     "@types/eslint" "^8.4.5"
     rollup "^2.77.2"
 
-vite-plugin-remove-console@^2.1.0:
-  version "2.1.0"
-  resolved "https://registry.npmmirror.com/vite-plugin-remove-console/-/vite-plugin-remove-console-2.1.0.tgz#47f19fff9096f459f2cfc55a149a25024b691d73"
-  integrity sha512-cil+h4rX3fDnnKMt73fexMGkwRSOV08+lTAzLGTRjGyxs9Ync3fqPWxnGrngJY7LyMMt3kEKf0hNOi+1DQ0j2g==
-
 vite-plugin-svg-icons@^2.0.1:
   version "2.0.1"
   resolved "https://registry.npmmirror.com/vite-plugin-svg-icons/-/vite-plugin-svg-icons-2.0.1.tgz#7269a0962593509f371b9e2bb344d469db2c6df9"

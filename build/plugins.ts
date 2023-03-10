@@ -5,7 +5,6 @@ import { resolve } from "path";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import eslintPlugin from "vite-plugin-eslint";
 import VueSetupExtend from "vite-plugin-vue-setup-extend";
-import removeConsole from "vite-plugin-remove-console";
 import { configCompressPlugin } from "./compress";
 import type { ViteEnv } from "./getEnv";
 import { visualizer } from "rollup-plugin-visualizer";
@@ -29,10 +28,9 @@ export function getPluginsList(command: string, viteEnv: ViteEnv) {
       iconDirs: [resolve(process.cwd(), "src/assets/icons")],
       symbolId: "icon-[dir]-[name]",
     }),
-    // 线上环境删除console
-    removeConsole({ external: [] }),
-    configCompressPlugin(viteEnv.VITE_COMPRESSION),
+    viteEnv.VITE_BUILD_GZIP && configCompressPlugin(viteEnv.VITE_COMPRESSION),
     // 打包分析
-    lifecycle === "report" ? visualizer({ open: true, brotliSize: true, filename: "report.html" }) : null,
+    (lifecycle === "report" || viteEnv.VITE_REPORT) &&
+      visualizer({ open: true, brotliSize: true, filename: "report.html" }),
   ];
 }

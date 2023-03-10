@@ -4,16 +4,12 @@ import dotenv from "dotenv";
 
 export type Recordable<T = any> = Record<string, T>;
 
-export interface ViteEnv {
-  VITE_API_URL: string;
+export interface ViteEnv extends ImportMetaEnv {
   VITE_PORT: number;
   VITE_OPEN: boolean;
-  VITE_GLOB_APP_TITLE: string;
-  VITE_DROP_CONSOLE: boolean;
-  VITE_PROXY_URL: string;
-  VITE_BUILD_GZIP: boolean;
   VITE_REPORT: boolean;
-  VITE_COMPRESSION: "gzip" | "brotli" | "both" | "gzip-clear" | "brotli-clear" | "both-clear";
+  VITE_BUILD_GZIP: boolean;
+  VITE_DROP_CONSOLE: boolean;
 }
 
 export function isDevFn(mode: string): boolean {

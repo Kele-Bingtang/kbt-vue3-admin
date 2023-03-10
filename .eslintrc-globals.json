@@ -74,6 +74,8 @@
     "RequiredKey": true,
     "RequiredKeyPartialOther": true,
     "NodeJS": true,
-    "module": true
+    "module": true,
+    "ImportMetaEnv": true,
+    "__dirname": true
   }
 }
