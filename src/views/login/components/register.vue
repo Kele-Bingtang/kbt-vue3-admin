@@ -1,5 +1,18 @@
 <template>
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="updateRules" size="large">
+    <el-form-item
+      :rules="[
+        {
+          required: true,
+          message: '请输入用户名',
+          trigger: 'blur',
+        },
+      ]"
+      prop="username"
+    >
+      <el-input clearable v-model="ruleForm.username" placeholder="用户名" prefix-icon="User" />
+    </el-form-item>
+
     <el-form-item prop="phone">
       <el-input clearable v-model="ruleForm.phone" placeholder="手机号码" prefix-icon="Phone" />
     </el-form-item>
@@ -14,7 +27,7 @@
     </el-form-item>
 
     <el-form-item prop="password">
-      <el-input clearable show-password v-model="ruleForm.password" placeholder="新密码" prefix-icon="Lock" />
+      <el-input clearable show-password v-model="ruleForm.password" placeholder="密码" prefix-icon="Lock" />
     </el-form-item>
 
     <el-form-item :rules="repeatPasswordRule" prop="repeatPassword">
@@ -22,11 +35,16 @@
     </el-form-item>
 
     <el-form-item>
+      <el-checkbox v-model="checked">我已仔细阅读并接受</el-checkbox>
+      <el-button link type="primary">《隐私政策》</el-button>
+    </el-form-item>
+
+    <el-form-item>
       <div class="login-btn">
         <el-button
           icon="UserFilled"
           round
-          @click="onUpdate(ruleFormRef)"
+          @click="onRegister(ruleFormRef)"
           size="large"
           type="primary"
           :loading="loading"
@@ -45,8 +63,10 @@ import { ElMessage, type FormInstance } from "element-plus";
 import { useVerifyCode } from "../verifyCode";
 import { updateRules } from "../rules";
 
+const checked = ref(false);
 const loading = ref(false);
 const ruleForm = reactive({
+  username: "",
   phone: "",
   verifyCode: "",
   password: "",
@@ -70,16 +90,21 @@ const repeatPasswordRule = [
   },
 ];
 
-const onUpdate = async (formEl: FormInstance | undefined) => {
+const onRegister = async (formEl: FormInstance | undefined) => {
   loading.value = true;
   if (!formEl) return;
   await formEl.validate((valid, fields) => {
     if (valid) {
-      // 模拟请求，需根据实际开发进行修改
-      setTimeout(() => {
-        ElMessage.success("修改密码成功");
+      if (checked.value) {
+        // 模拟请求，需根据实际开发进行修改
+        setTimeout(() => {
+          ElMessage.success("修改密码成功");
+          loading.value = false;
+        }, 2000);
+      } else {
         loading.value = false;
-      }, 2000);
+        ElMessage.warning("请勾选隐私政策");
+      }
     } else {
       loading.value = false;
       return fields;

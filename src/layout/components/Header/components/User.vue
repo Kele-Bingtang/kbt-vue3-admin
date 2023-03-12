@@ -96,7 +96,7 @@ const logout = async () => {
     // 调用退出登录接口
     await userStore.logout();
     // 3.重定向到登陆页
-    router.push(`${LOGIN_URL}?redirect=${route.fullPath}`);
+    router.push(`${LOGIN_URL}?redirectTarget=${route.name as string}`);
     ElMessage.success("退出登录成功！");
   });
 };

@@ -145,17 +145,23 @@ export const rolesRoutes: RouterConfigRaw[] = [
         component: () => import("@/views/components/draggableItem/index.vue"),
         meta: { title: "面板拖拽", icon: "StarFilled" },
       },
-      // {
-      //   path: "draggable-dialog",
-      //   name: "DraggableDialogDemo",
-      //   component: () => import("@/views/components/draggableDialog/index.vue"),
-      //   meta: { title: "模态框拖拽", icon: "StarFilled" },
-      // },
       {
         path: "drag-drawer",
         name: "DragDrawerDemo",
         component: () => import("@/views/components/dragDrawer/index.vue"),
         meta: { title: "抽屉拖拽", icon: "StarFilled" },
+      },
+      {
+        path: "tree-filter",
+        name: "TreeFilterDemo",
+        component: () => import("@/views/components/treeFilter/index.vue"),
+        meta: { title: "树形筛选", icon: "StarFilled" },
+      },
+      {
+        path: "upload-images",
+        name: "UploadImagesDemo",
+        component: () => import("@/views/components/uploadImages/index.vue"),
+        meta: { title: "文件上传", icon: "StarFilled" },
       },
       {
         path: "tinymce-demo",
@@ -378,6 +384,71 @@ export const rolesRoutes: RouterConfigRaw[] = [
         component: () => import("@/views/nested/menu2/index.vue"),
         name: "Menu2",
         meta: { title: "菜单 2", icon: "StarFilled" },
+      },
+    ],
+  },
+  {
+    path: "/directives",
+    name: "Directives",
+    redirect: "/directives/copy",
+    meta: {
+      title: "自定义指令",
+      icon: "Stamp",
+    },
+    children: [
+      {
+        path: "copy",
+        name: "Copy",
+        component: "/directives/copy/index",
+        meta: {
+          title: "复制指令",
+          icon: "DocumentCopy",
+        },
+      },
+      {
+        path: "watermark",
+        name: "Watermark",
+        component: "/directives/watermark/index",
+        meta: {
+          title: "水印指令",
+          icon: "StarFilled",
+        },
+      },
+      {
+        path: "drag",
+        name: "Drag",
+        component: "/directives/drag/index",
+        meta: {
+          title: "拖拽指令",
+          icon: "StarFilled",
+        },
+      },
+      {
+        path: "debounce",
+        name: "Debounce",
+        component: "/directives/debounce/index",
+        meta: {
+          title: "防抖指令",
+          icon: "StarFilled",
+        },
+      },
+      {
+        path: "throttle",
+        name: "Throttle",
+        component: "/directives/throttle/index",
+        meta: {
+          title: "节流指令",
+          icon: "StarFilled",
+        },
+      },
+      {
+        path: "longPress",
+        name: "LongPress",
+        component: "/directives/longPress/index",
+        meta: {
+          title: "长按指令",
+          icon: "StarFilled",
+        },
       },
     ],
   },

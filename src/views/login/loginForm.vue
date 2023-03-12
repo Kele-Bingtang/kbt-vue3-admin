@@ -10,7 +10,7 @@
         placeholder="密码（任意）"
         show-password
         autocomplete="new-password"
-        prefix-icon="lock"
+        prefix-icon="Lock"
       ></el-input>
     </el-form-item>
     <el-form-item prop="verifyCode">
@@ -36,7 +36,7 @@
     </el-form-item>
     <el-form-item>
       <div class="custom-item">
-        <el-button v-for="(item, index) in operates" :key="index" size="default">
+        <el-button v-for="(item, index) in operates" :key="index" @click="switchFormMode(item.mode)" size="default">
           {{ item.title }}
         </el-button>
       </div>
@@ -72,6 +72,7 @@ const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
 const layoutStore = useLayoutStore();
+const switchFormMode = inject("switchFormMode") as (mode: string) => {};
 
 const loginRules = {
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
@@ -94,12 +95,15 @@ const loginRules = {
 const operates = [
   {
     title: "手机登录",
+    mode: "phone",
   },
   {
     title: "二维码登录登录",
+    mode: "qrCode",
   },
   {
     title: "注册登录",
+    mode: "register",
   },
 ];
 const thirdParty = [
@@ -139,7 +143,9 @@ onMounted(() => {
   };
 });
 
-const handleForgetPwd = () => {};
+const handleForgetPwd = () => {
+  switchFormMode("forget");
+};
 
 const startLogin = () => {
   loginFormRef.value?.validate(async valid => {
@@ -163,14 +169,15 @@ const startLogin = () => {
       layoutStore.setKeepAliveName();
 
       // 跳转到首页或者 URL 携带的 redirect 页（优先级高）
-      let path = HOME_URL;
+      let name = "";
       const query = route.query;
-      if (query?.redirect) path = query.redirect as string;
-      const otherQuery = getOtherQuery(query);
-      router.push({ path: path, query: otherQuery });
+      if (query?.redirect) name = query.redirect as string;
+      const otherQuery = getOtherQuery(route.query);
+      if (name) router.push({ name, query: otherQuery });
+      router.push({ path: HOME_URL, query: otherQuery });
       ElNotification({
-        title: getTimeState(),
-        message: `欢迎登录 ${settings.title}`,
+        title: `欢迎登录 ${settings.title}`,
+        message: getTimeState(),
         type: "success",
         duration: 3000,
       });
@@ -182,7 +189,7 @@ const startLogin = () => {
 
 const getOtherQuery = (query: any) => {
   return Object.keys(query).reduce((acc: any, cur) => {
-    if (cur !== "redirect") {
+    if (cur !== "redirectTarget") {
       acc[cur] = query[cur];
     }
     return acc;
@@ -196,5 +203,5 @@ const resetForm = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "../index.scss";
+@import "./index.scss";
 </style>

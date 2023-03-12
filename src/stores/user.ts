@@ -9,7 +9,7 @@ import { useLayoutStore } from "./layout";
 export const useUserStore = defineStore(
   "userStore",
   () => {
-    const token = ref();
+    const token = ref("");
     const userInfo = ref<UserInfo>({
       userId: "v10001",
       username: "visitor",

@@ -4,7 +4,7 @@ import waterMarker from "./modules/waterMarker";
 import draggable from "./modules/draggable";
 import debounce from "./modules/debounce";
 import throttle from "./modules/throttle";
-import longpress from "./modules/longpress";
+import longPress from "./modules/longPress";
 import waves from "./modules/waves";
 import permission from "./modules/permission";
 
@@ -15,7 +15,7 @@ const directivesList: any = {
   draggable,
   debounce,
   throttle,
-  longpress,
+  longPress,
   waves,
   permission,
 };

@@ -5,7 +5,7 @@
     1、使用 canvas 特性生成 base64 格式的图片文件，设置其字体大小，颜色等。
     2、将其设置为背景图片，从而实现页面或组件水印效果
   使用：设置水印文案，颜色，字体大小即可
-  <div v-waterMarker="{text:'版权所有',textColor:'rgba(180, 180, 180, 0.4)'}"></div>
+  <div v-waterMarker="{text:'版权所有', font:'16px Microsoft JhengHei',textColor:'rgba(180, 180, 180, 0.4)'}"></div>
 */
 
 import type { Directive, DirectiveBinding } from "vue";
@@ -18,6 +18,7 @@ const addWaterMarker: Directive = (str: string, parentNode: any, font: any, text
   can.style.display = "none";
   const cans = can.getContext("2d") as CanvasRenderingContext2D;
   cans.rotate((-20 * Math.PI) / 180);
+  if (!font.includes(" ")) font = font + " Microsoft JhengHei";
   cans.font = font || "16px Microsoft JhengHei";
   cans.fillStyle = textColor || "rgba(180, 180, 180, 0.3)";
   cans.textAlign = "left";

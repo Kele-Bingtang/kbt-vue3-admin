@@ -71,16 +71,20 @@
             color: var(--el-color-primary);
           }
         }
-      }
-      .login-btn {
-        display: flex;
-        justify-content: space-between;
-        width: 100%;
-        white-space: nowrap;
-        .el-button {
-          width: 185px;
+        :deep(.el-input-group__append) {
+          padding: 0;
         }
       }
+    }
+  }
+  // 多个登录表单需要，所以放到外面
+  .login-btn {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    white-space: nowrap;
+    .el-button {
+      width: 185px;
     }
   }
 }

@@ -24,6 +24,7 @@ import WangEditor, {
   type ImageInsertFnType,
   type VideoInsertFnType,
 } from "@/components/WangEditor/index.vue";
+import { uploadLocal } from "@/utils";
 
 const content = ref("");
 const disabled = ref(false);
@@ -93,21 +94,6 @@ const fileUpload = async (file: File, insertFn: FileInsertFnType) => {
   //   .catch(() => {
   //     this.$message.error("上传出错，服务器开小差了呢");
   //   });
-};
-/**
- * 上传到本地浏览器
- */
-const uploadLocal = (file: File): Promise<{ blobInfo: any; file: File }> => {
-  return new Promise(resolve => {
-    const reader = new FileReader();
-    reader.onload = function () {
-      const id = "id" + new Date().getTime(); // 本地图片的文件名
-      const base64 = (reader as any).result.split(",")[1];
-      const blobInfo = { id, file, base64 };
-      resolve({ blobInfo, file });
-    };
-    reader.readAsDataURL(file);
-  });
 };
 </script>
 
