@@ -1,9 +1,11 @@
 <template>
   <div style="padding: 30px">
     <el-alert :closable="false" title="menu 1-3" type="success">
-      <transition name="fade-transform" mode="out-in">
-        <router-view />
-      </transition>
+      <router-view v-slot="{ Component }">
+        <transition name="fade-transform">
+          <component :is="Component" />
+        </transition>
+      </router-view>
     </el-alert>
   </div>
 </template>

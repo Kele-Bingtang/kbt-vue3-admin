@@ -4,17 +4,20 @@ import { usePermissionStore } from "@/stores/permission";
 import { isExternal, isType } from "@/utils/layout/validate";
 import type { RouteRecordRaw } from "vue-router";
 
+const modules = import.meta.glob("@/views/**/*.vue");
+const IFrame = () => import("@/layout/frameView.vue");
+
 export const useRoutes = () => {
   const permissionStore = usePermissionStore();
-  const modules = import.meta.glob("@/views/**/*.vue");
 
   /**
    * @description 动态加载路由
    */
   const loadRouteList = (routers: RouterConfigRaw[], roles: string[], r = router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
-    permissionStore.loadRolesRoutes(onlyRolesRoutes);
-    const resolveRouters = resolveRouteComponent(onlyRolesRoutes);
+    const resolveRouters = processAsyncRoutes(onlyRolesRoutes);
+    // 传到 permissionStore 持久化
+    permissionStore.loadRolesRoutes(resolveRouters);
     resolveRouters.forEach(item => {
       if (!item.name || !r.hasRoute(item.name)) {
         if (item.meta?.isFull) r.addRoute(item as RouteRecordRaw);
@@ -24,23 +27,34 @@ export const useRoutes = () => {
     // 最后添加 notFoundRouter
     router.addRoute(notFoundRouter);
   };
+
   /**
-   * @description
-   * 引入 views 文件夹下所有 vue 文件
-   * 支持 /home/index 格式，也支持 () => import() 格式
+   * @description 过滤动态路由 重新生成规范路由
    * @param routers 路由
-   * @returns
+   * @returns routers
    */
-  const resolveRouteComponent = (routers: RouterConfigRaw[]) => {
+  function processAsyncRoutes(routers: RouterConfigRaw[]) {
+    if (!routers || !routers.length) return [];
     const r = routers;
-    return r.map(item => {
-      if (item.children && item.children.length > 0) item.children = resolveRouteComponent(item.children);
-      if (item.component && isType(item.component) === "string") {
-        item.component = modules["/src/views" + item.component + ".vue"];
+    r.forEach(v => {
+      // 将 backstage 属性加入 meta，标识此路由为后端返回路由
+      v.meta && (v.meta.backstage = true);
+      // 父级的 redirect 属性取值：如果子级存在且父级的 redirect 属性不存在，默认取第一个子级的 path；如果子级存在且父级的 redirect 属性存在，取存在的 redirect 属性，会覆盖默认值
+      if (v?.children && v.children.length && !v.redirect) v.redirect = v.children[0].path;
+      // 父级的 name 属性取值：如果子级存在且父级的 name 属性不存在，默认取第一个子级的 name；如果子级存在且父级的 name 属性存在，取存在的 name 属性，会覆盖默认值（注意：测试中发现父级的 name 不能和子级 name 重复，如果重复会造成重定向无效（跳转 404），所以这里给父级的name起名的时候后面会自动加上 `Parent`，避免重复）
+      if (v?.children && v.children.length && !v.name) v.name = (v.children[0].name as string) + "Parent";
+      if (v.meta?.frameSrc) v.component = IFrame;
+      else {
+        if (v.component && isType(v.component) === "string") v.component = modules["/src/views" + v.component + ".vue"];
+        // 如果动态路由的 component 存在且为 string，则必须是 views 下的目录，以 / 分割，如果/home/index，则是 views/home/index.vue 组件，如果不存在 component，则读取 path 来获取 component
+        if (v.component) {
+          if (isType(v.component) === "string") v.component = modules["/src/views" + v.component + ".vue"];
+        } else v.component = modules["/src/views" + v.path + ".vue"];
       }
-      return item;
+      if (v?.children && v.children.length) processAsyncRoutes(v.children);
     });
-  };
+    return r;
+  }
 
   /**
    * @description 过滤出当前系统角色的路由权限
@@ -50,7 +64,7 @@ export const useRoutes = () => {
     routers.forEach(router => {
       const r = { ...router };
       if (hasPermission(r, roles)) {
-        if (r.children && r.children.length !== 0) r.children = filterOnlyRolesRoutes(r.children, roles);
+        if (r.children && r.children.length) r.children = filterOnlyRolesRoutes(r.children, roles);
         rolesRoutes.push(r);
       }
     });
@@ -85,7 +99,7 @@ export const useRoutes = () => {
         else tempMeta._fullPath = (basePath + "/" + router.path).replace(/\/+/g, "/");
         router.meta = tempMeta;
       }
-      if (router.children && router.children.length > 0) {
+      if (router.children && router.children.length) {
         // 如果是 http 链接，不需要路由拼接
         if (isExternal(router.meta._fullPath as string)) router.children = getRouteFullPath(router.children, "");
         else router.children = getRouteFullPath(router.children, router.meta._fullPath as string);
@@ -105,11 +119,12 @@ export const useRoutes = () => {
       meta: {
         _fullPath: "",
         __titleIsFunction__: false,
+        backstage: false,
       },
       component: () => {},
     };
     for (const route of routers) {
-      if (route.children && route.children.length > 0) {
+      if (route.children && route.children.length) {
         const res = getHomeRoute(route.children, homeName);
         if (res && res.name) return res;
       } else if (route.name === homeName) homeRoute = route;

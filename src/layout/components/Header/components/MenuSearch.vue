@@ -118,7 +118,7 @@ const createNestMenuSearchList = (menuList: RouterConfig[]) => {
   menuList.forEach(menu => {
     if (menu.meta.hideInMenu) return res;
     const item = { ...menu, title: [getTitle(menu)] };
-    if (item.children && item.children.length > 0) {
+    if (item.children && item.children.length) {
       const menuListChild = createNestMenuSearchList(item.children);
       menuListChild.forEach(child => {
         const c = { ...child };

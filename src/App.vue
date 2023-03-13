@@ -1,6 +1,8 @@
 <template>
   <el-config-provider :locale="i18nLocale" :button="config" :size="layoutSize">
-    <router-view></router-view>
+    <router-view v-slot="{ Component }">
+      <component :is="Component" />
+    </router-view>
   </el-config-provider>
 </template>
 

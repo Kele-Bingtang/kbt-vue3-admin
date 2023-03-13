@@ -22,7 +22,9 @@
             <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
             <CommonIcon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
             <span>{{ tab.meta.title }}</span>
-            <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="handleCloseTab(tab)"><Close /></el-icon>
+            <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
+              <Close />
+            </el-icon>
           </router-link>
         </div>
       </div>
@@ -36,16 +38,38 @@
           <el-icon><ArrowRight /></el-icon>
         </el-button>
       </div>
-      <ul
-        v-show="rightMenuVisible"
-        :style="{ left: rightMenuLeft + 'px', top: rightMenuTop + 'px' }"
-        class="contextmenu"
-      >
-        <li @click="refreshSelectedTab(selectedTab)">{{ $t("_tabsNav.refresh") }}</li>
-        <li v-if="selectedTab.close" @click="handleCloseTab(selectedTab)">{{ $t("_tabsNav.close") }}</li>
-        <li @click="closeOthersTabs">{{ $t("_tabsNav.closeOthers") }}</li>
-        <li @click="closeAllTabs()">{{ $t("_tabsNav.closeAll") }}</li>
-      </ul>
+      <transition name="el-zoom-in-top">
+        <ul
+          v-show="rightMenuVisible"
+          :style="{ left: rightMenuLeft + 'px', top: rightMenuTop + 'px' }"
+          class="context-menu"
+        >
+          <li v-if="contextMenuCondition.refresh" @click="refreshSelectedTab(selectedTab)">
+            <el-icon><Refresh /></el-icon>
+            {{ $t("_tabsNav.refresh") }}
+          </li>
+          <li v-if="contextMenuCondition.current" @click="closeCurrentTab(selectedTab)">
+            <el-icon><Close /></el-icon>
+            {{ $t("_tabsNav.closeCurrent") }}
+          </li>
+          <li v-if="contextMenuCondition.left" @click="closeLeftTab(selectedTab)">
+            <el-icon><ArrowLeft /></el-icon>
+            {{ $t("_tabsNav.closeLeft") }}
+          </li>
+          <li v-if="contextMenuCondition.right" @click="closeRightTab(selectedTab)">
+            <el-icon><ArrowRight /></el-icon>
+            {{ $t("_tabsNav.closeRight") }}
+          </li>
+          <li v-if="contextMenuCondition.other" @click="closeOthersTabs">
+            <el-icon><DCaret /></el-icon>
+            {{ $t("_tabsNav.closeOthers") }}
+          </li>
+          <li v-if="contextMenuCondition.all" @click="closeAllTabs()">
+            <el-icon><SemiSelect /></el-icon>
+            {{ $t("_tabsNav.closeAll") }}
+          </li>
+        </ul>
+      </transition>
     </div>
   </div>
 </template>
@@ -77,10 +101,14 @@ const {
   tabNavList,
   selectedTab,
   rightMenuVisible,
+  contextMenuCondition,
   tabsDrop,
   initTabs,
   addOneTab,
-  handleCloseTab,
+  initContextMenu,
+  closeCurrentTab,
+  closeLeftTab,
+  closeRightTab,
   refreshSelectedTab,
   closeOthersTabs,
   closeAllTabs,
@@ -155,16 +183,14 @@ const moveToTargetTab = (tabElement: HTMLElement) => {
 
 // 右键菜单回调
 const openRightMenu = (tab: TabProp, e: MouseEvent) => {
+  initContextMenu(tab);
   const menuMinWidth = 0;
   const offsetLeft = tabsNavDom.value?.getBoundingClientRect().left as number; // margin-left 的数值
   const offsetWidth = tabsNavDom.value?.offsetWidth as number; //  width 数值
   const maxLeft = offsetWidth - menuMinWidth;
   const left = e.clientX - offsetLeft + 14;
-  if (left > maxLeft) {
-    rightMenuLeft.value = maxLeft;
-  } else {
-    rightMenuLeft.value = left;
-  }
+  if (left > maxLeft) rightMenuLeft.value = maxLeft;
+  else rightMenuLeft.value = left;
   rightMenuTop.value = e.offsetY + 12;
   rightMenuVisible.value = true;
   selectedTab.value = tab;
@@ -218,4 +244,5 @@ watchEffect(() => {
 
 <style lang="scss" scoped>
 @import "./index.scss";
+@import "../index.scss";
 </style>

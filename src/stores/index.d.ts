@@ -92,6 +92,7 @@ export interface MessageItem {
   id: string;
   title: string;
   content: string;
+  description?: string;
   createTime: string;
   loading?: boolean;
 }

@@ -11,11 +11,11 @@ export const usePermissionStore = defineStore("permissionStore", () => {
 
   const homeRoute = computed(() => getHomeRoute(loadedRouteList.value, HOME_NAME)); // 路由里首页的 name 值，必须填且正确，默认为 Home
 
-  const loadRolesRoutes = (routes: RouterConfigRaw[]) => {
+  const loadRolesRoutes = (routers: RouterConfigRaw[]) => {
     loadedRouteList.value = ascending(
-      getRouteFullPath(constantRoutes).concat(getRouteFullPath(routes))
+      getRouteFullPath(constantRoutes).concat(getRouteFullPath(routers))
     ) as unknown as RouterConfig[];
-    flatRouteList.value = filterFlatRoutes(routes) as unknown as RouterConfig[];
+    flatRouteList.value = filterFlatRoutes(routers) as unknown as RouterConfig[];
     isLoadedRoutes.value = true;
   };
 

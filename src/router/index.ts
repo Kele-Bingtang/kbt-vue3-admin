@@ -18,8 +18,8 @@ const router = createRouter({
 export function resetRouter() {
   const permissionStore = usePermissionStore();
   permissionStore.flatRouteList.forEach(route => {
-    const { name } = route;
-    if (name && router.hasRoute(name)) router.removeRoute(name);
+    const { name, meta } = route;
+    if (name && router.hasRoute(name) && meta?.backstage) router.removeRoute(name);
   });
 }
 

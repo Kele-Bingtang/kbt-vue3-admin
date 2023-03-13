@@ -13,9 +13,7 @@ const { env } = errorLog;
  */
 const checkNeed = () => {
   const node_env = import.meta.env.MODE;
-  if (isArray(env) && node_env) {
-    return env.includes(node_env);
-  }
+  if (isArray(env) && node_env) return env.includes(node_env);
   return false;
 };
 

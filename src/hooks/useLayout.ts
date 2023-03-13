@@ -146,7 +146,7 @@ export const useLayout = () => {
       // 如果配置了 hideInMenu: true，则隐藏菜单，如果配置了 alwaysShowRoot: false | undefined 且子路由只有一个，则子路由成为一级菜单
       if (!r.meta || !r.meta.hideInMenu) {
         // 如果存在 children
-        if (r.children && r.children.length !== 0) {
+        if (r.children && r.children.length) {
           // 如果 children 长度为 1 且 alwaysShowRoot 为 false | undefined，则子路由成为一级菜单
           if (r.children.length === 1) {
             if (!r.meta || !r.meta.alwaysShowRoot) r = getMenuListByRouter(r.children)[0];

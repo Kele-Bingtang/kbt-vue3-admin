@@ -182,7 +182,6 @@ const handleOperate = (message: MessageItem) => {
 <style lang="scss" scoped>
 .message-center-container {
   height: 100%;
-  padding: 20px;
   .message-center-card {
     height: 100%;
     .message-page {
@@ -303,7 +302,6 @@ const handleOperate = (message: MessageItem) => {
 <style lang="scss">
 .message-center-container {
   height: 100%;
-  padding: 20px;
   .message-center-card {
     .el-card__body {
       height: 100%;

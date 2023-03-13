@@ -45,7 +45,7 @@
       <el-button type="primary" plain @click="rotateLeft">↺ 左旋转</el-button>
       <el-button type="primary" plain @click="rotateRight">↻ 右旋转</el-button>
       <el-button type="primary" plain icon="Download" @click="downloadImg('blob')">下载</el-button>
-      <el-button type="primary" icon="Upload2" @click="uploadImage" class="upload-btn">提交</el-button>
+      <el-button type="primary" icon="Upload" @click="uploadImage" class="upload-btn">提交</el-button>
     </div>
   </div>
 </template>

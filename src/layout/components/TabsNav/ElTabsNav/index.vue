@@ -23,12 +23,38 @@
       </el-tabs>
       <!-- <MoreButton /> -->
     </div>
-    <ul v-show="rightMenuVisible" :style="{ left: rightMenuLeft + 'px', top: rightMenuTop + 'px' }" class="contextmenu">
-      <li @click="refreshSelectedTab(selectedTab)">{{ $t("_tabsNav.refresh") }}</li>
-      <li v-if="selectedTab.close" @click="handleCloseTab(selectedTab)">{{ $t("_tabsNav.close") }}</li>
-      <li @click="closeOthersTabs">{{ $t("_tabsNav.closeOthers") }}</li>
-      <li @click="closeAllTabs()">{{ $t("_tabsNav.closeAll") }}</li>
-    </ul>
+    <transition name="el-zoom-in-top">
+      <ul
+        v-show="rightMenuVisible"
+        :style="{ left: rightMenuLeft + 'px', top: rightMenuTop + 'px' }"
+        class="context-menu"
+      >
+        <li v-if="contextMenuCondition.refresh" @click="refreshSelectedTab(selectedTab)">
+          <el-icon><Refresh /></el-icon>
+          {{ $t("_tabsNav.refresh") }}
+        </li>
+        <li v-if="contextMenuCondition.current" @click="closeCurrentTab(selectedTab)">
+          <el-icon><Close /></el-icon>
+          {{ $t("_tabsNav.closeCurrent") }}
+        </li>
+        <li v-if="contextMenuCondition.left" @click="closeLeftTab(selectedTab)">
+          <el-icon><ArrowLeft /></el-icon>
+          {{ $t("_tabsNav.closeLeft") }}
+        </li>
+        <li v-if="contextMenuCondition.right" @click="closeRightTab(selectedTab)">
+          <el-icon><ArrowRight /></el-icon>
+          {{ $t("_tabsNav.closeRight") }}
+        </li>
+        <li v-if="contextMenuCondition.other" @click="closeOthersTabs">
+          <el-icon><DCaret /></el-icon>
+          {{ $t("_tabsNav.closeOthers") }}
+        </li>
+        <li v-if="contextMenuCondition.all" @click="closeAllTabs()">
+          <el-icon><SemiSelect /></el-icon>
+          {{ $t("_tabsNav.closeAll") }}
+        </li>
+      </ul>
+    </transition>
   </div>
 </template>
 
@@ -55,12 +81,16 @@ const {
   tabNavList,
   selectedTab,
   rightMenuVisible,
+  contextMenuCondition,
   tabsDrop,
   initTabs,
   addOneTab,
-  handleCloseTab,
+  initContextMenu,
+  closeCurrentTab,
   closeSelectedTab,
   refreshSelectedTab,
+  closeLeftTab,
+  closeRightTab,
   closeOthersTabs,
   closeAllTabs,
 } = useTabsNav();
@@ -96,6 +126,7 @@ const tabRemove = async (fullPath: TabPaneName) => {
   } else closeSelectedTab(tab);
 };
 const openRightMenu = (tab: TabProp, e: MouseEvent) => {
+  initContextMenu(tab);
   const menuMinWidth = 0;
   const offsetWidth = tabsNavDom.value?.offsetWidth as number; //  width 数值
   const maxLeft = offsetWidth - menuMinWidth;
@@ -113,26 +144,5 @@ const openRightMenu = (tab: TabProp, e: MouseEvent) => {
 
 <style lang="scss" scoped>
 @import "./index.scss";
-.contextmenu {
-  margin: 0;
-  background: #fff;
-  z-index: 4000;
-  position: absolute;
-  list-style-type: none;
-  padding: 5px 0;
-  border-radius: 4px;
-  font-size: 12px;
-  font-weight: 400;
-  color: #333;
-  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
-  li {
-    margin: 0;
-    padding: 0 16px;
-    cursor: pointer;
-    line-height: 31px;
-    &:hover {
-      background: #eee;
-    }
-  }
-}
+@import "../index.scss";
 </style>

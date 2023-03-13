@@ -31,13 +31,33 @@ export const useLayoutStore = defineStore(
       tabNavList.value.push(tab);
     };
 
-    const removeTab = async (tab: TabProp) => {
+    const removeCurrentTab = async (tab: TabProp) => {
       for (const [i, v] of tabNavList.value.entries()) {
         if (v.path === tab.path) {
           tabNavList.value.splice(i, 1);
           break;
         }
       }
+    };
+
+    const removeLeftTab = async (tab: TabProp) => {
+      const index = tabNavList.value.findIndex(v => v.path === tab.path);
+      if (index === -1) return;
+      tabNavList.value = tabNavList.value.filter((item, i) => {
+        if (i >= index || (item.meta && item.meta.isAffix)) return true;
+        if (tab.meta.isKeepAlive) removeKeepAliveName(tab.name);
+        return false;
+      });
+    };
+
+    const removeRightTab = async (tab: TabProp) => {
+      const index = tabNavList.value.findIndex(v => v.path === tab.path);
+      if (index === -1) return;
+      tabNavList.value = tabNavList.value.filter((item, i) => {
+        if (i <= index || (item.meta && item.meta.isAffix)) return true;
+        if (tab.meta.isKeepAlive) removeKeepAliveName(tab.name);
+        return false;
+      });
     };
 
     const removeOtherTabs = async (tab: TabProp) => {
@@ -91,7 +111,9 @@ export const useLayoutStore = defineStore(
       setLayoutSize,
       setLanguage,
       addTab,
-      removeTab,
+      removeCurrentTab,
+      removeLeftTab,
+      removeRightTab,
       removeOtherTabs,
       removeAllTabs,
       updateTab,
