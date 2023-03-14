@@ -22,7 +22,9 @@ Admin 项目用到的 key 暂时只有缓存功能，如个性化配置、布局
 
 注意：tokenKey 不需要修改，因为 token 是所有 Admin 的访问凭证。如果您修改了 tokenKey，则无法利用该 token 访问其他项目。
 
-## Demo 效果地址
+## 效果预览
+
+[kbt-vue3-admin](https://vue3-admin.youngkbt.cn/)
 
 ## 使用流程
 
@@ -147,6 +149,8 @@ Admin 的布局组件有顶栏、面包屑、侧边菜单栏、标签栏、内�
 
 ### API
 
+#### params/_type
+
 Admin 的 API 文件位于 `src/api` 下，采用 Axios 进行请求，该配置文件位于 `src/config/request.ts` 文件里。
 
 Axios 对 Generic API 需要的数据进行封装，请求后端的时候，**会自动添加认证信息**，所以不需要手动添加。
@@ -162,6 +166,75 @@ Admin 对 axios 进行了一些处理，可以在 params 下添加了一个关�
 如果你不填写 `_type`，则默认是 json。
 
 可以看 `src/api` 下的例子。
+
+#### header/loading（boolean）
+
+如果发送请求时，需要显示全局 loading 加载，在 api 服务中通过指定: { headers: { loading: true } } 来控制显示 loading
+
+```typescript
+import http from "@/config/request";
+
+export const api = () => {
+  http.request({
+    url: "/generic/api",
+    // ...
+    headers: {
+      loading: true,
+    },
+  });
+};
+```
+
+#### header/mapping（boolean）
+
+当项目变得复杂时，那么获取资源的 `https://ip:port` 必然有很多个，可以在接口的 header 使用 mapping 来开启多个 baseURL 功能：
+
+```typescript
+import http from "@/config/request";
+
+export const api = () => {
+  http.request({
+    url: "/generic/api",
+    // ...
+    headers: {
+      mapping: true,
+    },
+  });
+};
+```
+
+当开启 mapping 后，打开 `src/config/request.ts` 文件，然后在 mappingUrl 变量里添加一个键值对：
+
+```typescript
+const mappingUrl: { [key: string]: string } = {
+  default: import.meta.env.VITE_API_URL,
+   test: "https://youngkbt.cn",
+};
+```
+
+default 是默认的 baseURL，**请不要删除或者更改**，当不开启 mapping 或者开启后无法匹配键值对，则走 default 对应的 URL。
+
+当配置了一个键值对，如上面的 test，则在请求的时候，url 前缀携带 test，如（第五行）：
+
+```typescript
+import http from "@/config/request";
+
+export const api = () => {
+  http.request({
+    url: "/test/generic/api",
+    // ...
+    headers: {
+      mapping: true,
+    },
+  });
+};
+```
+
+当触发该接口到后台时，`/test` 将会被替换成 `https://youngkbt.cn`，变成 `https://youngkbt.cn/generic/api`。
+
+如果在 headers 开启了 mapping，但是 URL 没有在 mappingUrl 里配置，则依然走 default 的 URL。
+
+在不使用该功能时，不建议打开 mapping，因为这将进行一轮 mapping 匹配扫描，耗费些许时间。
 
 ### 路由
 
@@ -316,6 +389,8 @@ Admin 内置错误日志，当项目抛出 1 个 Error 的时候，Admin 会将�
 
 ### 页面刷新
 
+#### 方法一
+
 如果您想在执行完某些操作（增删改）之后刷新页面，Admin 已经通过 provide 往 views 目录下的组件注入一个函数，您只需要通过 inject 接收，然后调用即可。
 
 相关代码：`layout/components/MainContent/index.vue`
@@ -359,6 +434,74 @@ refreshCurrentPage();
 ```
 
 传入参数的方式适用于您想在刷新前做些事情，在您没有第二次传入 true 时，页面是不会刷新的。
+
+#### 方法二
+
+Template 内置重定向组件 `redirect.vue`，位于 `/src/layout/redirect.vue` 下，并且该组件已经在 constantRoutes 进行加载注入，所以你只需要了解如何使用该组件跳转即可。
+
+方法非常简单，利用编程式路由跳转：
+
+```typescript
+const router = useRouter();
+
+router.push("/redirect/home");
+// or
+router.replace("/redirect/home");
+```
+
+这样将会跳转到 `/home` 的路由，因此您要了解的是，`/redirect` 是必须的前缀，后面携带的地址就是路由对应的 path。
+
+所以实现页面刷新，只需要在重定向到自己的 path。
+
+```typescript
+const router = useRouter();
+const route = useRoute();
+
+router.push("/redirect" + route.path);
+// or
+router.replace("/redirect" + route.path);
+```
+
+具体是 `route.path` 还是 `route.fullPath`，根据你的需求来实现，最终都会刷新当前页面。
+
+### IFrame 嵌入
+
+除了项目的组件，你可能需要打开外部的链接，那么就有 IFrame 嵌入功能。
+
+你只需要在写路由的时候在 meta 传入 frameSrc 即可。
+
+```typescript
+{
+  path: "vue2-template-iframe",
+  name: "IFrameVue2Template",
+  meta: {
+  title: "Vue2 Template IFrame",
+  icon: "HotWater",
+    frameSrc: "http://172.16.49.41/vue2-template",
+  },
+}
+```
+
+此时点击左侧菜单的该菜单，则会打开这个嵌入的 frameSrc 网页。
+
+### 新窗口打开
+
+除了 IFrame 嵌入来打开外部链接，还可以打开新的窗口来跳转该链接。
+
+您只需要在路由的配置中，给 path 填写带有 `http` 或者 `https` 的链接，就可以跳转。
+
+```typescript
+{
+  path: "https://portal.pxwsemi.com/wui/index.html",
+  name: "Portal",
+  meta: {
+  title: "Portal",
+    icon: "StarFilled",
+  },
+},
+```
+
+点击即可打开新窗口跳转。
 
 ## 配置流程
 

@@ -215,7 +215,7 @@
     </div>
     <div class="drawer-item">
       <span>{{ $t("_settings.recordTagsNav") }}</span>
-      <el-switch v-model="settingsStore.recordTabsNav" @change="changeRecordTagsNav($event as boolean)" />
+      <el-switch v-model="settingsStore.recordTabsNav" />
     </div>
     <div class="drawer-item">
       <span>{{ $t("_settings.showLayoutLogo") }}</span>
@@ -261,7 +261,6 @@ import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
 import { useLayout } from "@/hooks/useLayout";
 import { ElMessage } from "element-plus";
-import { removeCacheTabNavList } from "@/utils/layout/cache";
 import variables from "@/styles/variables.module.scss";
 
 const { changePrimary, changeGreyOrWeak, switchDark } = useTheme();
@@ -347,11 +346,6 @@ const handleTitleModeSelect = () => {
   setTitle(route as RouteConfig);
 };
 
-const changeRecordTagsNav = (value: boolean) => {
-  if (!value) {
-    removeCacheTabNavList();
-  }
-};
 // 重置缓存
 const resetSettings = () => {
   let message = t("_settings.resetSettings");
@@ -385,6 +379,7 @@ watch(
   { immediate: true }
 );
 
+// 监听布局的切换
 watch(
   () => settingsStore.headerTheme,
   () => {
@@ -407,7 +402,7 @@ watch(
     immediate: true,
   }
 );
-
+// 监听亮、暗色主题的切换
 watchEffect(() => {
   if (settingsStore.menuTheme === "dark") {
     document.documentElement.style.setProperty("--menu-bg-color", variables.menuBgDark);

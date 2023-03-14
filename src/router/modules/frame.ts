@@ -7,7 +7,7 @@ const frameRoutes = {
   },
   children: [
     {
-      path: "/iframe/vue2-admin",
+      path: "vue2-admin",
       name: "Vue2Admin",
       meta: {
         title: "Kbt Vue2 Admin",
@@ -16,7 +16,7 @@ const frameRoutes = {
       },
     },
     {
-      path: "/iframe/element-plus",
+      path: "element-plus",
       name: "FrameEp",
       meta: {
         title: "Element Plus 文档",
@@ -25,7 +25,7 @@ const frameRoutes = {
       },
     },
     {
-      path: "/iframe/vue3",
+      path: "vue3",
       name: "FrameVue",
       meta: {
         title: "Vue3 文档",
@@ -34,7 +34,7 @@ const frameRoutes = {
       },
     },
     {
-      path: "/iframe/vite",
+      path: "vite",
       name: "FrameVite",
       meta: {
         title: "Vite 文档",
@@ -43,7 +43,7 @@ const frameRoutes = {
       },
     },
     {
-      path: "/iframe/pinia",
+      path: "pinia",
       name: "FramePinia",
       meta: {
         title: "Pinia 文档",
@@ -52,7 +52,7 @@ const frameRoutes = {
       },
     },
     {
-      path: "/iframe/vue-router",
+      path: "vue-router",
       name: "FrameRouter",
       meta: {
         title: "Vue Router 文档",

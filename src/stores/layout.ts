@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { setCacheTabNavList } from "@/utils/layout/cache";
+import { setCacheTabNavList, getCacheTabNavList, removeCacheTabNavList } from "@/utils/layout/cache";
 import { DeviceType, type LayoutSizeType, type TabProp } from "./index.d";
 import { useSettingsStore } from "./settings";
 import defaultSettings from "@/config/settings";
@@ -7,7 +7,7 @@ import defaultSettings from "@/config/settings";
 export const useLayoutStore = defineStore(
   "layoutStore",
   () => {
-    const tabNavList = ref<TabProp[]>([]);
+    const tabNavList = ref<TabProp[]>(getCacheTabNavList() && []);
     const keepAliveName = ref<string[]>([]);
     const device = ref(DeviceType.Desktop);
     const layoutSize = ref<LayoutSizeType>("default");
@@ -94,11 +94,24 @@ export const useLayoutStore = defineStore(
 
     const settingsStore = useSettingsStore();
 
-    watchEffect(() => {
-      if (settingsStore.recordTabsNav) {
-        setCacheTabNavList(tabNavList.value);
+    watch(
+      () => settingsStore.recordTabsNav,
+      () => {
+        handleRecordTabsNav(settingsStore.recordTabsNav);
       }
-    });
+    );
+    watch(
+      () => tabNavList.value,
+      () => {
+        handleRecordTabsNav(settingsStore.recordTabsNav);
+      },
+      { deep: true }
+    );
+
+    const handleRecordTabsNav = (value: boolean) => {
+      if (value) setCacheTabNavList(tabNavList.value);
+      else removeCacheTabNavList();
+    };
 
     return {
       tabNavList,

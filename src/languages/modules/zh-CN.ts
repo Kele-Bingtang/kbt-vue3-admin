@@ -106,7 +106,7 @@ export default {
     showBreadcrumbIcon: "显示面包屑图标",
     showTagsNav: "显示标签栏",
     showTabsNavIcon: "显示标签栏图标",
-    recordTagsNav: "缓存标签页的选项卡",
+    recordTagsNav: "持久化标签页",
     showLayoutLogo: "显示侧边菜单 Logo",
     titleModeOne: "项目 Title + 页面 Title",
     titleModeTwo: "用户名 + 页面 Title",

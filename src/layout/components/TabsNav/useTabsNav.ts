@@ -3,8 +3,10 @@ import beforeClose from "@/router/beforeClose";
 import type { TabProp } from "@/stores";
 import { useLayoutStore } from "@/stores/layout";
 import { usePermissionStore } from "@/stores/permission";
+import { getUrlParams } from "@/utils";
 import Sortable from "sortablejs";
 import type { RefreshFunction } from "../MainContent/index.vue";
+import settings from "@/config/settings";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";
 
@@ -38,7 +40,8 @@ export const useTabsNav = () => {
   const tabNavList = computed(() => layoutStore.tabNavList);
 
   const isActive = (tab: TabProp) => {
-    return route.fullPath === tab.path || route.fullPath === tab.path + "/";
+    const fullPath = resolveFullPath(route as RouteConfig);
+    return fullPath === tab.path || fullPath === tab.path + "/";
   };
   // 标签拖拽排序
   const tabsDrop = (className: string, draggable: string) => {
@@ -71,8 +74,19 @@ export const useTabsNav = () => {
   // 判断 tab 的地址，因为携带不同的参数可以引起多个重复的标签，这里可以设置当同一个 path 携带参数不一样，只渲染一个 tab
   const resolveFullPath = (route: RouteConfig | RouterConfig) => {
     const url = window.location.href;
-    if (url.includes("layoutMode")) return route.meta._fullPath;
-    else return (route as RouteConfig).fullPath || route.meta._fullPath;
+    const urlKey = Object.keys(getUrlParams(url));
+    // 存在 ? 才进入判断
+    const index = url.indexOf("?");
+    if (index !== -1) {
+      if (urlKey.length) {
+        // 如果存在 key=value，则判断是否完全匹配 key
+        for (const item of urlKey) if (settings.tabActiveExcludes.includes(item)) return route.meta._fullPath;
+      } else {
+        // 如果不存在 key=value ，则模糊匹配 ? 后的参数
+        for (const item of settings.tabActiveExcludes) if (url.slice(index).includes(item)) return route.meta._fullPath;
+      }
+    }
+    return (route as RouteConfig).fullPath || route.meta._fullPath;
   };
   // 初始化固定在标签栏的 tabs
   const initTabs = () => {
@@ -218,6 +232,7 @@ export const useTabsNav = () => {
     rightMenuVisible,
     contextMenuCondition,
 
+    isActive,
     tabsDrop,
     initTabs,
     addOneTab,

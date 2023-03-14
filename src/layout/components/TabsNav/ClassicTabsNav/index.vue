@@ -102,6 +102,7 @@ const {
   selectedTab,
   rightMenuVisible,
   contextMenuCondition,
+  isActive,
   tabsDrop,
   initTabs,
   addOneTab,
@@ -130,11 +131,6 @@ const getOneTab = (route: RouteConfig | RouterConfig) => {
     close: !route.meta.isAffix,
     meta: route.meta,
   };
-};
-
-// 判断当前激活的 tab
-const isActive = (tab: TabProp) => {
-  return route.fullPath === tab.path || route.fullPath === tab.path + "/";
 };
 
 // 更换 tab 颜色为全局 primaryTheme
