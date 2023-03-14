@@ -153,8 +153,6 @@ Admin 的布局组件有顶栏、面包屑、侧边菜单栏、标签栏、内�
 
 Admin 的 API 文件位于 `src/api` 下，采用 Axios 进行请求，该配置文件位于 `src/config/request.ts` 文件里。
 
-Axios 对 Generic API 需要的数据进行封装，请求后端的时候，**会自动添加认证信息**，所以不需要手动添加。
-
 Admin 对 axios 进行了一些处理，可以在 params 下添加了一个关键词 `_type`（仅支持 `post` 请求），该关键词目前接收 5 个参数：
 
 - `form`：请求头为 `application/x-www-form-urlencoded`
@@ -238,6 +236,8 @@ export const api = () => {
 
 ### 路由
 
+#### 参数
+
 路由的所有相关文件位于 `src/router` 下：
 
 - 路由和组件的配置文件为 `routes-config.ts`
@@ -270,9 +270,9 @@ Admin 模板需要的可配置参数:
  */
 ```
 
-动态加载路由 `rolesRoutes` 的 **懒加载** 配置支持两种形式：
+动态加载路由 `rolesRoutes` 的 **懒加载** 配置支持三种形式：
 
-字符串形式
+#### 字符串形式
 
 ```typescript
 export const rolesRoutes: RouterConfigRaw[] = [
@@ -289,7 +289,25 @@ export const rolesRoutes: RouterConfigRaw[] = [
 ];
 ```
 
-官方形式：
+#### Path 形式
+
+```typescript
+export const rolesRoutes: RouterConfigRaw[] = [
+  {
+    path: "/home/index",
+    name: "Home",
+    meta: {
+      isAffix: true,
+      title: "首页",
+      icon: "HomeFilled",
+    },
+  },
+];
+```
+
+前面两种只需要对应上组件所在的 views 下的目录即可，如 `@/views/home/index.vue`，在加载前自带加上 `@/views` 和 `.vue`。
+
+#### 官方形式：
 
 ```typescript
 export const rolesRoutes: RouterConfigRaw[] = [

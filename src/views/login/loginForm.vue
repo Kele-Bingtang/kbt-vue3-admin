@@ -57,10 +57,10 @@ import { useRouter } from "vue-router";
 import { ElNotification, type FormInstance } from "element-plus";
 import { useUserStore } from "@/stores/user";
 import { getTimeState } from "@/utils";
-import { useLayoutStore } from "@/stores/layout";
-import { HOME_URL } from "@/router/routesConfig";
 import settings from "@/config/settings";
 import ReImageVerify from "@/components/ReImageVerify/index.vue";
+import { HOME_URL } from "@/router/routesConfig";
+import { useRoutes } from "@/hooks/useRoutes";
 
 interface LoginForm {
   username: string;
@@ -71,7 +71,7 @@ interface LoginForm {
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
-const layoutStore = useLayoutStore();
+const { beforeInitDynamicRouter } = useRoutes();
 const switchFormMode = inject("switchFormMode") as (mode: string) => {};
 
 const loginRules = {
@@ -163,18 +163,17 @@ const startLogin = () => {
         });
         return;
       }
-
-      // 清空 tabs、keepAlive 保留的数据
-      layoutStore.removeAllTabs();
-      layoutStore.setKeepAliveName();
+      // 加载动态路由
+      await beforeInitDynamicRouter();
 
       // 跳转到首页或者 URL 携带的 redirect 页（优先级高）
-      let name = "";
-      const query = route.query;
-      if (query?.redirect) name = query.redirect as string;
-      const otherQuery = getOtherQuery(route.query);
-      if (name) router.push({ name, query: otherQuery });
-      router.push({ path: HOME_URL, query: otherQuery });
+      let path = HOME_URL;
+      const { query } = route;
+      if (query.redirect) path = query.redirect as string;
+      const otherQuery = getOtherQuery(query);
+      // otherQuery 不能是 {}，否则无法跳转
+      if (Object.keys(otherQuery).length === 0) router.push(path);
+      else router.push({ path, query: otherQuery });
       ElNotification({
         title: `欢迎登录 ${settings.title}`,
         message: getTimeState(),
@@ -189,7 +188,7 @@ const startLogin = () => {
 
 const getOtherQuery = (query: any) => {
   return Object.keys(query).reduce((acc: any, cur) => {
-    if (cur !== "redirectTarget") {
+    if (cur !== "redirect") {
       acc[cur] = query[cur];
     }
     return acc;

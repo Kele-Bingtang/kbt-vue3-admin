@@ -1,19 +1,43 @@
 import router from "@/router";
-import { HOME_NAME, notFoundRouter } from "@/router/routesConfig";
+import { HOME_NAME, LOGIN_URL, notFoundRouter, rolesRoutes } from "@/router/routesConfig";
 import { usePermissionStore } from "@/stores/permission";
 import { isExternal, isType } from "@/utils/layout/validate";
+import { ElNotification } from "element-plus";
 import type { RouteRecordRaw } from "vue-router";
+import { useUserStore } from "@/stores/user";
 
 const modules = import.meta.glob("@/views/**/*.vue");
 const IFrame = () => import("@/layout/frameView.vue");
 
 export const useRoutes = () => {
   const permissionStore = usePermissionStore();
+  const userStore = useUserStore();
 
   /**
-   * @description 动态加载路由
+   * @description 手动处理动态路由，不需要传参
    */
-  const loadRouteList = (routers: RouterConfigRaw[], roles: string[], r = router) => {
+  const beforeInitDynamicRouter = async (roles?: string[]) => {
+    if (!rolesRoutes.length) {
+      ElNotification({
+        title: "无权限访问",
+        message: "当前账号无任何菜单权限，请联系系统管理员！",
+        type: "warning",
+        duration: 3000,
+      });
+      userStore.resetToken();
+      router.replace(LOGIN_URL);
+      return Promise.reject("No permission");
+    }
+    if (!roles || !roles.length) {
+      roles = await userStore.getUserInfo();
+    }
+    loadDynamicRouter(rolesRoutes, roles);
+  };
+
+  /**
+   * @description 动态加载路由，需要传参
+   */
+  const loadDynamicRouter = (routers: RouterConfigRaw[], roles: string[], r = router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
     const resolveRouters = processAsyncRoutes(onlyRolesRoutes);
     // 传到 permissionStore 持久化
@@ -168,7 +192,8 @@ export const useRoutes = () => {
   };
 
   return {
-    loadRouteList,
+    beforeInitDynamicRouter,
+    loadDynamicRouter,
     filterOnlyRolesRoutes,
     hasPermission,
     getRouteFullPath,

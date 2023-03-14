@@ -182,8 +182,8 @@ const noticeList: Notice[] = [
 const arList: Ar[] = [
   {
     id: "1",
-    title: "Kbt-Admin 版本发布",
-    description: "Kbt-Admin 版本发布",
+    title: "Kbt Vue3 Admin 版本发布",
+    description: "Kbt Vue3 Admin 版本发布",
     status: {
       name: "进行中",
       type: "",

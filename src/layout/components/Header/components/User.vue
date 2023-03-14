@@ -85,9 +85,6 @@ const openSettingsDrawer = () => {
 };
 
 const logout = async () => {
-  // router.push(`/login?redirect=${this.$route.fullPath}`).catch(err => {
-  //   console.warn(err)
-  // })
   ElMessageBox.confirm("您是否确认退出登录?", "温馨提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
@@ -95,8 +92,8 @@ const logout = async () => {
   }).then(async () => {
     // 调用退出登录接口
     await userStore.logout();
-    // 3.重定向到登陆页
-    router.push(`${LOGIN_URL}?redirectTarget=${route.name as string}`);
+    // 重定向到登陆页
+    router.push(`${LOGIN_URL}?redirect=${route.path}`);
     ElMessage.success("退出登录成功！");
   });
 };

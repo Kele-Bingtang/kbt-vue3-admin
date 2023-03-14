@@ -86,7 +86,7 @@ const dialogTitle: { [key: string]: string } = {
 const permissionStore = usePermissionStore();
 const userStore = useUserStore();
 const { getTitle, getMenuListByRouter } = useLayout();
-const { filterFlatRoutes, loadRouteList } = useRoutes();
+const { filterFlatRoutes, loadDynamicRouter } = useRoutes();
 const role = ref(defaultRole);
 const serviceRoutes = ref<RouterConfig[]>([]); // 所有的路由，以供选择
 const reshapedRoutes = ref<RouterConfig[]>([]); // 重组后的路由，重组过程去掉一些路由，如 alwaysShowRoot，hideInMenu 的路由
@@ -200,7 +200,7 @@ const confirmRole = () => {
   // 更新路由
   if (userStore.roles.includes(role.value.name)) {
     resetRouter();
-    loadRouteList(role.value.routes as RouterConfigRaw[], [role.value.name], router);
+    loadDynamicRouter(role.value.routes as RouterConfigRaw[], [role.value.name], router);
   }
 
   const { description, key, name } = role.value;

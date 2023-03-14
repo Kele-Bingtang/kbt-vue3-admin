@@ -2,8 +2,7 @@ import { defineStore } from "pinia";
 import type { UserInfo } from ".";
 import { removeCacheToken, setCacheToken } from "@/utils/layout/cache";
 import { useRoutes } from "@/hooks/useRoutes";
-import { rolesRoutes } from "@/router/routesConfig";
-import router, { resetRouter } from "@/router";
+import { resetRouter } from "@/router";
 import { useLayoutStore } from "./layout";
 
 export const useUserStore = defineStore(
@@ -32,15 +31,14 @@ export const useUserStore = defineStore(
     };
 
     const logout = async () => {
-      if (token.value === "") {
-        throw Error("LogOut: token is undefined!");
-      }
+      if (token.value === "") throw Error("LogOut: token is undefined!");
       removeCacheToken();
       resetRouter();
       setToken("");
       setRoles([]);
       const layoutStore = useLayoutStore();
       layoutStore.removeAllTabs();
+      layoutStore.setKeepAliveName();
     };
 
     const getUserInfo = async () => {
@@ -74,7 +72,7 @@ export const useUserStore = defineStore(
       setRoles(rolesParam); // 正常不是直接赋予角色，而是调用 this.getUserInfo(token)，根据 token 重新获取对应的角色
       // await this.getUserInfo(token);
       resetRouter();
-      useRoutes().loadRouteList(rolesRoutes, rolesParam, router);
+      useRoutes().beforeInitDynamicRouter(rolesParam);
     };
 
     const setUserInfo = (userInfoParam: UserInfo) => {

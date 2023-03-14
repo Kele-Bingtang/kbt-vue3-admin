@@ -59,7 +59,7 @@ const menuList = computed(() => {
    *    如果一个路由有两个子路由，其中一个子路由为 hideInMenu 为 true，那么菜单只渲染出另一个子路由
    * 如果一个路由有两个子路由，且都不是 hideInMenu，那么两个子路由为二级菜单
    *
-   * 如果您确保您的路由不会出现：多个子路由且只有一个 hideInMenu 不为 true，可以只过滤一次提升性能，即直接 return this.getMenuListByRouter(PermissionModule.loadRouteList);
+   * 如果您确保您的路由不会出现：多个子路由且只有一个 hideInMenu 不为 true，可以只过滤一次提升性能，即直接 return this.getMenuListByRouter(PermissionModule.loadedRouteList);
    */
   if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {
     const menu = getMenuListByRouter(permissionStore.loadedRouteList);
