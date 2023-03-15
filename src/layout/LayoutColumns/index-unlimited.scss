@@ -23,7 +23,7 @@
       &:not(.is-active) {
         .el-icon,
         .svg-icon {
-          color: #303133;
+          color: var(--menu-icon-color);
         }
       }
     }

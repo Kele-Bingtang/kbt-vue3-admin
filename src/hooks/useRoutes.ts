@@ -5,6 +5,7 @@ import { isExternal, isType } from "@/utils/layout/validate";
 import { ElNotification } from "element-plus";
 import type { RouteRecordRaw } from "vue-router";
 import { useUserStore } from "@/stores/user";
+import settings from "@/config/settings";
 
 const modules = import.meta.glob("@/views/**/*.vue");
 const IFrame = () => import("@/layout/frameView.vue");
@@ -31,7 +32,7 @@ export const useRoutes = () => {
     if (!roles || !roles.length) {
       roles = await userStore.getUserInfo();
     }
-    loadDynamicRouter(rolesRoutes, roles);
+    loadDynamicRouter(rolesRoutes, roles || settings.whiteList);
   };
 
   /**
@@ -61,8 +62,8 @@ export const useRoutes = () => {
     if (!routers || !routers.length) return [];
     const r = routers;
     r.forEach(v => {
-      // 将 backstage 属性加入 meta，标识此路由为后端返回路由
-      v.meta && (v.meta.backstage = true);
+      // 将 dynamic 属性加入 meta，标识此路由为后端返回路由
+      v.meta && (v.meta.dynamic = true);
       // 父级的 redirect 属性取值：如果子级存在且父级的 redirect 属性不存在，默认取第一个子级的 path；如果子级存在且父级的 redirect 属性存在，取存在的 redirect 属性，会覆盖默认值
       if (v?.children && v.children.length && !v.redirect) v.redirect = v.children[0].path;
       // 父级的 name 属性取值：如果子级存在且父级的 name 属性不存在，默认取第一个子级的 name；如果子级存在且父级的 name 属性存在，取存在的 name 属性，会覆盖默认值（注意：测试中发现父级的 name 不能和子级 name 重复，如果重复会造成重定向无效（跳转 404），所以这里给父级的name起名的时候后面会自动加上 `Parent`，避免重复）
@@ -143,7 +144,7 @@ export const useRoutes = () => {
       meta: {
         _fullPath: "",
         __titleIsFunction__: false,
-        backstage: false,
+        dynamic: false,
       },
       component: () => {},
     };

@@ -2,7 +2,7 @@
   <canvas ref="domRef" width="120" height="40" class="cursor-pointer" @click="getImgCode" />
 </template>
 
-<script setup lang="ts" name="ReImageVerify">
+<script setup lang="ts" name="ImageVerify">
 import { useImageVerify } from "./hooks";
 
 interface Props {

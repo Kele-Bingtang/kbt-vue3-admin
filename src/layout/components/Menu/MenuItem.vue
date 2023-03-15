@@ -41,7 +41,7 @@ const handleMenuClick = (menuItem: RouterConfig) => {
 </script>
 
 <style lang="scss" scoped>
-.el-sub-menu {
+.el-menu-item {
   :deep(.svg-icon) {
     margin-right: 5px;
     width: 1.5rem !important;

@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="login">
+<script setup lang="ts" name="Login">
 import SwitchDark from "@/components/SwitchDark/index.vue";
 import LoginForm from "./loginForm.vue";
 import settings from "@/config/settings";
