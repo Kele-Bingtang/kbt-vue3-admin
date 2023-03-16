@@ -44,7 +44,6 @@
 </template>
 
 <script setup lang="ts" name="UploadImgs">
-import { ref, computed, inject } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import type { UploadProps, UploadFile, UploadUserFile, UploadRequestOptions } from "element-plus";
 import { ElNotification, formContextKey, formItemContextKey } from "element-plus";

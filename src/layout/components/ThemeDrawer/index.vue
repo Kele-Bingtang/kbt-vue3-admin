@@ -251,7 +251,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import { useTheme } from "@/hooks/useTheme";
 import settings from "@/config/settings";
 import { useSettingsStore } from "@/stores/settings";

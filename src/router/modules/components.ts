@@ -8,16 +8,23 @@ const componentRoutes = {
   },
   children: [
     {
+      path: "message",
+      name: "MessageDemo",
+      component: () => import("@/views/components/message/index.vue"),
+      meta: { title: "消息组件", icon: "StarFilled" },
+    },
+    {
       path: "count-to",
       name: "CountToDemo",
       component: () => import("@/views/components/countTo/index.vue"),
       meta: { title: "数字渐变", icon: "StarFilled" },
     },
+
     {
       path: "images-clipper",
       name: "ClipperDemo",
       component: () => import("@/views/components/cropper/index.vue"),
-      meta: { title: "数字渐变", icon: "StarFilled" },
+      meta: { title: "图片裁剪", icon: "StarFilled" },
     },
     {
       path: "split-pane",

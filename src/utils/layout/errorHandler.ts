@@ -1,4 +1,3 @@
-import type { ComponentPublicInstance } from "vue";
 import { isArray } from "@/utils/layout/validate";
 import settings from "@/config/settings";
 import { useErrorLogStore } from "@/stores/errorLog";

@@ -21,7 +21,7 @@
           >
             <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
             <CommonIcon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
-            <span>{{ tab.meta.title }}</span>
+            <span>{{ tab.title }}</span>
             <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
               <Close />
             </el-icon>

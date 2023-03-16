@@ -4,7 +4,7 @@
       <el-col :xs="12" :sm="12" :md="8" :lg="6" v-for="(info, i) in cardInfo" :key="`info-${i}`" class="card-col">
         <CardItem shadow="hover" :icon="info.icon" :color="info.color" :icon-size="48">
           <div class="card-title">{{ info.title }}</div>
-          <countTo :start-val="0" :end-val="info.count" :duration="2.7" class="count-style" />
+          <CountTo :start-val="0" :end-val="info.count" :duration="2.7" class="count-style" />
         </CardItem>
       </el-col>
     </el-row>

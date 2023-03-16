@@ -11,7 +11,6 @@
 </template>
 
 <script setup lang="ts" name="Layout">
-import { defineAsyncComponent, type Component } from "vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useLayout } from "@/hooks/useLayout";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";

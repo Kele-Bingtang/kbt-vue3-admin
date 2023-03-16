@@ -4,7 +4,6 @@
 </template>
 
 <script setup lang="ts" name="Layout">
-import type { Component } from "vue";
 import LayoutVertical from "./LayoutVertical/index.vue";
 import LayoutClassic from "./LayoutClassic/index.vue";
 import LayoutTransverse from "./LayoutTransverse/index.vue";

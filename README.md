@@ -267,6 +267,8 @@ Admin 模板需要的可配置参数:
  * meta.isFull ==> 是否全屏，不渲染 Layout 布局，只渲染当前路由组件
  * meta.activeMenu ==> Restful 路由搭配使用，当前路由为详情页时，需要高亮的菜单
  * meta.beforeCloseName ==> 关闭路由前的回调，如果设置该字段，则在关闭当前 tab 页时会去 @/router/before-close.js 里寻找该字段名「对应」的方法，作为关闭前的钩子函数，无默认值
+ * meta.rank ==> 路由在左侧菜单的排序，rank 值越高越靠后，当 rank 不存在时，根据顺序自动创建，首页路由永远在第一位，当 rank 存在时，可以插入指定的菜单位置，默认不存在
+ * meta.frameSrc ==> IFrame 链接，填写后该路由将打开 IFrame 指定的链接
  */
 ```
 

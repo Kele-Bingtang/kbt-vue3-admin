@@ -45,6 +45,12 @@ const tableRoutes = {
       meta: { title: "表格操作", icon: "StarFilled" },
     },
     {
+      path: "sort-table",
+      name: "SortTable",
+      component: () => import("@/views/table/SortTable/index.vue"),
+      meta: { title: "表格排序", icon: "StarFilled" },
+    },
+    {
       path: "integration-table",
       name: "IntegrationTable",
       component: () => import("@/views/table/integrationTable/index.vue"),

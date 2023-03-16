@@ -34,7 +34,7 @@
       </div>
     </div>
 
-    <el-table
+    <TableSort
       :data="tableData.slice((paging.currentPage - 1) * paging.pageSize, paging.currentPage * paging.pageSize)"
       border
       highlight-current-row
@@ -45,9 +45,9 @@
       @row-dblclick="handleInlineEdit"
       ref="tableRef"
     >
-      <el-table-column prop="id" label="ID" width="70" align="center" sortable></el-table-column>
-      <el-table-column prop="date" label="日期" width="180px"></el-table-column>
-      <el-table-column prop="name" label="姓名" width="150px"></el-table-column>
+      <el-table-column prop="id" label="ID" width="70" align="center" sortable="custom"></el-table-column>
+      <el-table-column prop="date" label="日期" width="180px" sortable="custom"></el-table-column>
+      <el-table-column prop="name" label="姓名" width="150px" sortable="custom"></el-table-column>
       <el-table-column min-width="100" label="标题">
         <template #default="{ row }">
           <template v-if="row.edit">
@@ -82,7 +82,7 @@
           </el-tag>
         </template>
       </el-table-column>
-      <el-table-column prop="priority" label="优先级" width="140">
+      <el-table-column prop="priority" label="优先级" width="140" sortable="custom">
         <template #default="{ row }">
           <svg-icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
         </template>
@@ -95,7 +95,7 @@
           <el-button link type="danger" icon="Delete" @click="handleDelete(row, $index)">删除</el-button>
         </template>
       </el-table-column>
-    </el-table>
+    </TableSort>
 
     <Pagination
       v-show="tableData.length > 0"
@@ -178,6 +178,7 @@ import { largeData } from "@/test/table";
 import Sortable from "sortablejs";
 import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
+import TableSort from "@/components/TableSort/index.vue";
 
 const defaultTableData = {
   id: "",
@@ -391,6 +392,7 @@ const cancelEdit = (row: any) => {
   row.title = row.originalTitle;
   row.edit = false;
   ElMessage.warning("标题已恢复为原始值！");
+  ElMessage({});
 };
 
 const confirmEdit = (row: any) => {

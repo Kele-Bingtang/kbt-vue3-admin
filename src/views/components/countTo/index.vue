@@ -200,7 +200,6 @@
 
 <script setup lang="ts" name="CountToDemo">
 import CountTo from "@/components/CountTo/index.vue";
-import { onActivated, onDeactivated } from "vue";
 
 const customUnit = [
   { value: 3, label: "千多" },

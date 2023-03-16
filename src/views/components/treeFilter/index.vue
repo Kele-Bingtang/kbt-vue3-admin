@@ -31,7 +31,6 @@
 </template>
 
 <script setup lang="ts" name="TreeFilterDemo">
-import { reactive } from "vue";
 import { ElMessage } from "element-plus";
 import TreeFilter from "@/components/TreeFilter/index.vue";
 

@@ -33,7 +33,6 @@
 </template>
 
 <script setup lang="ts" name="TreeFilter">
-import { ref, watch, onBeforeMount } from "vue";
 import { ElTree } from "element-plus";
 
 // 接收父组件参数并设置默认值
