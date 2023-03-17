@@ -24,6 +24,9 @@
           <button class="animation-btn yellow-btn">Theme</button>
         </el-col>
       </el-row>
+      <el-row>
+        <Button />
+      </el-row>
     </el-card>
 
     <el-row :gutter="20" style="margin-top: 20px">
@@ -87,6 +90,7 @@
 import MaterialInput from "@/components/MaterialInput/index.vue";
 import TextHoverEffect from "@/components/TextHoverEffect/index.vue";
 import DropdownMenu from "@/components/DropdownMenu/index.vue";
+import Button from "./button.vue";
 
 const demo = reactive({
   title: "",

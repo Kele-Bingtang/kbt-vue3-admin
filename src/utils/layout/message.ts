@@ -45,28 +45,48 @@ function message(params: MessageProps | MessageParams, extra?: Omit<MessageParam
   return messageType(params, extra, "info");
 }
 
-// 等价于 ElMessage.info({})
+/**
+ * 等价于 ElMessage.info({})
+ * 支持两种形式：
+ * 1. message.info({})
+ * 2 message.info("", {})
+ */
 message.info = (params: MessageProps | Omit<MessageParams, "type">, extra?: Omit<MessageParams, "message">) => {
   return messageType(params, extra, "info");
 };
 
-// 等价于 ElMessage.success({})
+/**
+ * 等价于 ElMessage.success({})
+ * 支持两种形式：
+ * 1. message.success({})
+ * 2 message.success("", {})
+ */
 message.success = (params: MessageProps | Omit<MessageParams, "type">, extra?: Omit<MessageParams, "message">) => {
   return messageType(params, extra, "success");
 };
 
-// 等价于 ElMessage.warning({})
+/**
+ * 等价于 ElMessage.warning({})
+ * 支持两种形式：
+ * 1. message.warning({})
+ * 2 message.warning("", {})
+ */
 message.warning = (params: MessageProps | Omit<MessageParams, "type">, extra?: Omit<MessageParams, "message">) => {
   return messageType(params, extra, "warning");
 };
 
-// 等价于 ElMessage.error({})
+/**
+ * 等价于 ElMessage.error({})
+ * 支持两种形式：
+ * 1. message.error({})
+ * 2 message.error("", {})
+ */
 message.error = (params: MessageProps | Omit<MessageParams, "type">, extra?: Omit<MessageParams, "message">) => {
   return messageType(params, extra, "error");
 };
 
 function messageType(
-  params: MessageProps | Omit<MessageParams, "type">,
+  params: MessageProps | MessageParams | Omit<MessageParams, "type">,
   extra?: Omit<MessageParams, "message">,
   t: MessageTypes = "info" // t 就是传参的 type
 ) {
@@ -118,9 +138,13 @@ function messageType(
       grouping = false,
       onClose,
     } = params;
+
+    let type = t;
+    if (isMessageParams(params)) type = params.type || t;
+
     return ElMessage({
       message,
-      type: t,
+      type,
       icon,
       dangerouslyUseHTMLString,
       duration,
@@ -129,7 +153,7 @@ function messageType(
       offset,
       appendTo,
       grouping,
-      // 全局搜 antd-message 即可知道该类的样式位置
+      // antd-message 在 style 的 index.scss 和 element-dark.scss 下
       customClass: customClass === "antd" ? "antd-message" : customClass,
       onClose: () => (isFunction(onClose) ? onClose() : null),
     });
@@ -137,7 +161,11 @@ function messageType(
 }
 
 function isMessageProps(value: MessageProps | MessageParams): value is MessageProps {
-  return isString(value) || !(value as any).message;
+  return isString(value) || !(value as MessageParams).message;
+}
+
+function isMessageParams(params: MessageParams | Omit<MessageParams, "type">): params is MessageParams {
+  return !!(params as MessageParams).type;
 }
 /**
  * 关闭所有 `Message` 消息提示函数

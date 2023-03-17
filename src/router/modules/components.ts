@@ -92,6 +92,12 @@ const componentRoutes = {
       component: () => import("@/views/components/codeMirror/index.vue"),
       meta: { title: "代码编辑器", icon: "StarFilled" },
     },
+    {
+      path: "seamless-scroll",
+      name: "SeamlessScrollDemo",
+      component: () => import("@/views/components/seamlessScroll/index.vue"),
+      meta: { title: "无限滚动", icon: "StarFilled" },
+    },
     // {
     //   path: "info-selection",
     //   name: "InfoSelectionDemo",

@@ -142,9 +142,13 @@ import { h } from "vue";
 import { message, closeAllMessage } from "@/utils/layout/message";
 
 onMounted(() => {
-  message.success("欢迎回来！");
-  message("有三种使用方式", {
+  message.success("欢迎回来：message.success('欢迎回来')");
+  message("欢迎回来: message('欢迎回来', { type: 'info' })", {
     type: "info",
+  });
+  message({
+    message: "欢迎回来：message({ message: '欢迎回来', type: 'warning'});",
+    type: "warning",
   });
 });
 </script>

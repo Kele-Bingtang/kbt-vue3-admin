@@ -4,6 +4,16 @@ declare global {
   interface Navigator {
     browserLanguage: string;
   }
+  interface Window {
+    webkitCancelAnimationFrame;
+    mozCancelAnimationFrame;
+    oCancelAnimationFrame;
+    msCancelAnimationFrame;
+    webkitRequestAnimationFrame;
+    mozRequestAnimationFrame;
+    oRequestAnimationFrame;
+    msRequestAnimationFrame;
+  }
 
   type MetaNeedKey = "_fullPath" | "__titleIsFunction__" | "dynamic";
 
