@@ -59,7 +59,7 @@ export const useLayout = () => {
    * @param route 当前路由
    * @returns 路由的 title
    */
-  const getTitle = (route: RouteConfig | RouterConfig, a?: string) => {
+  const getTitle = (route: RouteConfig | RouterConfig) => {
     const { routeUseI18n: useI18nSetting } = settings;
     const name = route.name as string | undefined;
     let title = "";

@@ -63,7 +63,7 @@ let startPos = { x: 0, y: 0 };
 let startPosY = -1;
 // 记录 touchStart 时候的 posX
 let startPosX = -1;
-// mouseenter mouseleave 控制scrollMove()的开关
+// mouseenter mouseleave 控制 scrollMove() 的开关
 let isHover = false;
 let ease = "ease-in";
 
@@ -116,8 +116,7 @@ const defaultOption = computed(() => {
 });
 
 const options = computed(() => {
-  // @ts-expect-error
-  return copyObj({}, unref(defaultOption), classOption);
+  return Object.assign({}, unref(defaultOption), classOption);
 });
 
 const leftSwitchClass = computed(() => {

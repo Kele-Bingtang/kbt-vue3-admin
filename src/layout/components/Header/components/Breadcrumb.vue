@@ -8,7 +8,7 @@
             :icon="breadcrumb.meta.icon"
             class="breadcrumb-icon"
           />
-          <span>{{ getTitle(breadcrumb, "1") }}</span>
+          <span>{{ getTitle(breadcrumb) }}</span>
         </span>
         <a v-else @click.prevent="handleBreadcrumbClick(breadcrumb)" class="breadcrumb-link">
           <template v-if="breadcrumb.meta && breadcrumb.meta.icon">
