@@ -2,11 +2,11 @@
   <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
   <el-main>
     <router-view v-slot="{ Component, route }">
-      <transition appear name="fade-transform" mode="out-in">
+      <CustomTransition appear name="fade-transform" mode="out-in">
         <keep-alive :include="layoutStore.keepAliveName">
           <component :is="Component" :key="route.path" v-if="isRouterShow" />
         </keep-alive>
-      </transition>
+      </CustomTransition>
     </router-view>
   </el-main>
 </template>
@@ -16,6 +16,7 @@ import { useLayoutStore } from "@/stores/layout";
 import { useSettingsStore } from "@/stores/settings";
 import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";
 import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
+import CustomTransition from "./customTransition.vue";
 
 export type RefreshFunction = (value?: boolean) => boolean;
 

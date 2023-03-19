@@ -3,12 +3,16 @@ import { ElMessageBox } from "element-plus";
 type BeforeCloseType = (value: unknown) => void;
 
 interface BeforeClose {
-  [key: string]: (resolve: BeforeCloseType) => void;
-  before_close_normal: (resolve: BeforeCloseType) => void;
+  [key: string]: (resolve: BeforeCloseType, route: RouteConfig) => void;
+  before_close_normal: (resolve: BeforeCloseType, route: RouteConfig) => void;
 }
 
 const beforeClose: BeforeClose = {
-  before_close_normal: (resolve: any) => {
+  before_close_normal: (resolve: any, route: RouteConfig) => {
+    if (route.query.noBeforeClose) {
+      resolve(true);
+      return;
+    }
     ElMessageBox.confirm("确定要关闭这一页吗", "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",

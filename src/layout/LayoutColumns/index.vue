@@ -89,7 +89,7 @@ watch(
     if (!menuList.value.length) return;
     splitActive.value = route.path;
     const item = menuList.value.filter(
-      (item: RouterConfig) => route.path === item.path || `/${route.path.split("/")[1]}` === item.path
+      item => route.path === item.path || `/${route.path.split("/")[1]}` === item.path
     );
     if (item[0].children?.length) return (menuItem.value = item[0].children);
     menuItem.value = [];

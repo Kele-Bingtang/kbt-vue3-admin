@@ -17,6 +17,8 @@ import SvgIcon from "@/components/SvgIcon/index.vue";
 import errorHandler from "@/utils/layout/errorHandler";
 import vue3TreeOrg from "vue3-tree-org";
 import "vue3-tree-org/lib/vue3-tree-org.css";
+import Auth from "@/components/Permission/auth";
+import Role from "@/components/Permission/role.vue";
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -27,6 +29,12 @@ app.config.errorHandler = errorHandler;
 for (const [key, component] of Object.entries(ElementPlusIconsVue)) {
   app.component(key, component);
 }
+
+// 全局注册按钮级别权限组件
+app.component("Auth", Auth);
+
+// 全局注册页面级别权限组件
+app.component("Role", Role);
 
 app.component("svg-icon", SvgIcon);
 

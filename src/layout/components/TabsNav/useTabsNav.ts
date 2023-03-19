@@ -41,7 +41,7 @@ export const useTabsNav = () => {
   const tabNavList = computed(() => layoutStore.tabNavList);
 
   const isActive = (tab: TabProp) => {
-    const fullPath = resolveFullPath(route as RouteConfig);
+    const fullPath = resolveFullPath(route);
     return fullPath === tab.path || fullPath === tab.path + "/";
   };
   // 标签拖拽排序
@@ -103,7 +103,7 @@ export const useTabsNav = () => {
   // 添加一个 tab
   const addOneTab = () => {
     if (route.name) {
-      const tab: TabProp = getOneTab(route as RouteConfig);
+      const tab: TabProp = getOneTab(route);
       layoutStore.addTab(tab);
       route.meta.isKeepAlive && layoutStore.addKeepAliveName(route.name as string);
     }
@@ -158,7 +158,9 @@ export const useTabsNav = () => {
   // 关闭一个 tab，并激活到上一个 tab
   const closeCurrentTab = async (tab: TabProp) => {
     if (tab.meta && tab.meta.beforeCloseName && tab.meta.beforeCloseName in beforeClose) {
-      const isClose = await new Promise(beforeClose[tab.meta.beforeCloseName]);
+      const isClose = await new Promise(resolve => {
+        beforeClose[tab.meta.beforeCloseName as string](resolve, route);
+      });
       if (isClose) closeSelectedTab(tab);
     } else closeSelectedTab(tab);
   };
@@ -237,6 +239,7 @@ export const useTabsNav = () => {
     isActive,
     tabsDrop,
     initTabs,
+    getOneTab,
     addOneTab,
     initContextMenu,
     closeCurrentTab,

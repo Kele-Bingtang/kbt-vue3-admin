@@ -1,4 +1,4 @@
-const errorRoutes = {
+const errorRoutes: RouterConfigRaw = {
   path: "/error",
   name: "Error",
   redirect: "/error/403",

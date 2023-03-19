@@ -5488,6 +5488,11 @@ vue-i18n@^9.2.2:
     "@intlify/vue-devtools" "9.2.2"
     "@vue/devtools-api" "^6.2.1"
 
+vue-pdf-embed@^1.1.5:
+  version "1.1.5"
+  resolved "https://registry.npmmirror.com/vue-pdf-embed/-/vue-pdf-embed-1.1.5.tgz#e9a2ff6a027ce4afce9ec558aa5d683fb775ae34"
+  integrity sha512-aOUKlPFML9abOmFJgCuDujzcXmjN1Ck3X3vt0h2N/EGZYASS9TRXu96s+NzwZDr13iTZ8LGskLOzzXvf7FIpwQ==
+
 vue-router@^4.1.6:
   version "4.1.6"
   resolved "https://registry.npmmirror.com/vue-router/-/vue-router-4.1.6.tgz#b70303737e12b4814578d21d68d21618469375a1"

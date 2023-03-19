@@ -1,4 +1,4 @@
-const excelRoutes = {
+const excelRoutes: RouterConfigRaw = {
   path: "/excel",
   redirect: "/excel/export-excel",
   name: "Excel",

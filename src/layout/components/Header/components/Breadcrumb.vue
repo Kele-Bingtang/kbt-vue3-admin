@@ -1,6 +1,6 @@
 <template>
   <el-breadcrumb class="breadcrumb" :separator-icon="ArrowRight">
-    <transition-group name="breadcrumb" mode="out-in" tag="div">
+    <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbList" :key="breadcrumb.path">
         <span v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1" class="no-click-bread">
           <CommonIcon
@@ -8,7 +8,7 @@
             :icon="breadcrumb.meta.icon"
             class="breadcrumb-icon"
           />
-          <span>{{ getTitle(breadcrumb) }}</span>
+          <span>{{ getTitle(breadcrumb, "1") }}</span>
         </span>
         <a v-else @click.prevent="handleBreadcrumbClick(breadcrumb)" class="breadcrumb-link">
           <template v-if="breadcrumb.meta && breadcrumb.meta.icon">
@@ -40,7 +40,7 @@ const { getBreadcrumbs, getTitle } = useLayout();
 const breadcrumbList = ref<RouteConfig[]>([]);
 watch(
   () => route.fullPath,
-  () => (breadcrumbList.value = getBreadcrumbs(route as RouteConfig)),
+  () => (breadcrumbList.value = getBreadcrumbs(route)),
   { immediate: true }
 );
 
@@ -91,6 +91,9 @@ const handleBreadcrumbClick = (item: RouteConfig) => {
   .breadcrumb-icon {
     margin-right: 6px;
     font-size: 16px;
+    &.svg-icon {
+      font-size: 12px;
+    }
   }
   .no-click-bread {
     display: inline-flex;

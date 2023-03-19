@@ -26,8 +26,16 @@ export const useLayoutStore = defineStore(
     };
 
     const addTab = async (tab: TabProp) => {
-      tab.path = decodeURIComponent(tab.path); // 存储的 tag.path 是解码后的
-      if (tabNavList.value.some(v => v.path === tab.path || v.path + "/" === tab.path)) return;
+      const path = tab.path;
+      if (tab.meta.hideInTab) return;
+      if (tabNavList.value.some(v => v.path === path || v.path + "/" === path)) return;
+      // 判断动态路由的可打开最大数量
+      const dynamicLevel = tab.meta.dynamicLevel ?? -1;
+      if (dynamicLevel > 0 && tabNavList.value.filter(t => t.name === tab.name).length >= dynamicLevel) {
+        // 如果当前已打开的动态路由数大于 dynamicLevel，替换第一个动态路由标签
+        const index = tabNavList.value.findIndex(item => item?.path === path);
+        index !== -1 && tabNavList.value.splice(index, 1);
+      }
       tabNavList.value.push(tab);
     };
 

@@ -15,6 +15,7 @@ const permissionRoutes = {
       name: "SwitchPermission",
       meta: {
         title: "权限切换",
+        auths: ["btn_add", "btn_edit", "btn_delete"],
         icon: "StarFilled",
       },
     },

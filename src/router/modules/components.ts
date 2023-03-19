@@ -1,4 +1,4 @@
-const componentRoutes = {
+const componentRoutes: RouterConfigRaw = {
   path: "/components",
   name: "Components",
   meta: {
@@ -69,6 +69,12 @@ const componentRoutes = {
       meta: { title: "树形筛选", icon: "StarFilled" },
     },
     {
+      path: "qrCode-demo",
+      name: "QrCodeDemo",
+      component: () => import("@/views/components/qrCode/index.vue"),
+      meta: { title: "二维码", icon: "StarFilled" },
+    },
+    {
       path: "upload-images",
       name: "UploadImagesDemo",
       component: () => import("@/views/components/uploadImages/index.vue"),
@@ -98,12 +104,6 @@ const componentRoutes = {
       component: () => import("@/views/components/seamlessScroll/index.vue"),
       meta: { title: "无限滚动", icon: "StarFilled" },
     },
-    // {
-    //   path: "info-selection",
-    //   name: "InfoSelectionDemo",
-    //   component: () => import("@/views/components/infoSelection/index.vue"),
-    //   meta: { title: "信息选择器", icon: "StarFilled" },
-    // },
   ],
 };
 

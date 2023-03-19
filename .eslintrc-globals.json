@@ -76,6 +76,9 @@
     "NodeJS": true,
     "module": true,
     "ImportMetaEnv": true,
-    "__dirname": true
+    "__dirname": true,
+    "NodeListOf": true,
+    "AppInfo": true,
+    "__APP_INFO__": true
   }
 }

@@ -1,4 +1,4 @@
-const outerChainRoutes = {
+const outerChainRoutes: RouterConfigRaw = {
   path: "/outer-chain",
   name: "OuterChain",
   meta: {

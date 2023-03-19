@@ -3,7 +3,6 @@ declare module "vue" {
   interface ComponentCustomProperties {
     // element ui 的变量
     scope: any;
-    // row: any;
     $index: number;
   }
 }

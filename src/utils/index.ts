@@ -168,3 +168,44 @@ export function getUrlParams(url: string) {
   });
   return result;
 }
+
+/**
+ * 获取当前时间：yyyy-mm-dd HH:mm:ss
+ */
+export const getNowDate = () => {
+  const date = new Date();
+  const year = date.getFullYear(); // 年
+  let month: string | number = date.getMonth() + 1; // 月
+  let day: string | number = date.getDate(); // 日
+  let hour: string | number = date.getHours(); // 时
+  let minutes: string | number = date.getMinutes(); // 分
+  let seconds: string | number = date.getSeconds(); // 秒
+  // 给一位数的数据前面加 0
+  if (month >= 1 && month <= 9) month = "0" + month;
+  if (day >= 0 && day <= 9) day = "0" + day;
+  if (hour >= 0 && hour <= 9) hour = "0" + hour;
+  if (minutes >= 0 && minutes <= 9) minutes = "0" + minutes;
+  if (seconds >= 0 && seconds <= 9) seconds = "0" + seconds;
+  return year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+};
+
+/**
+ * 源数组是否包含目标数组的所有内容
+ * @param arr 源数组
+ * @param value 目标数组
+ * @returns 包含：true，不包含：false
+ */
+export const isIncludeAll = (arr: string[], value: string[]) => {
+  return value.every(v => arr.some(a => a === v));
+  // return arr.some(a => value.includes(a));
+};
+
+/**
+ * 源数组是否包含目标数组的某个内容
+ * @param arr 源数组
+ * @param value 目标数组
+ * @returns 包含：true，不包含：false
+ */
+export const isIncludeSome = (arr: string[], value: string[]) => {
+  return arr.some(a => value.includes(a));
+};

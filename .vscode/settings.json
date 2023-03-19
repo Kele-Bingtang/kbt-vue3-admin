@@ -57,6 +57,7 @@
     "rushstack",
     "cssnano",
     "cloc",
-    "antd"
+    "antd",
+    "framename"
   ]
 }

@@ -19,7 +19,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Timeline">
+<script setup lang="ts" name="ProfileTimeline">
 const timeline = [
   {
     timestamp: "2022/10/01",

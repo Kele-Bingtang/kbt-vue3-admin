@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts" name="QrCode">
-import QRCode, { QRCodeRenderersOptions } from "qrcode";
+import QRCode, { type QRCodeRenderersOptions } from "qrcode";
 import { isString } from "@/utils/layout/validate";
 
 interface QrCodeLogo {

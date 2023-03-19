@@ -8,6 +8,11 @@ declare module "*.vue" {
   export default component;
 }
 
+declare module "*.scss" {
+  const scss: Record<string, string>;
+  export default scss;
+}
+
 // import.meta.env 环境变量
 interface ImportMetaEnv {
   readonly VITE_NODE_ENV: string;

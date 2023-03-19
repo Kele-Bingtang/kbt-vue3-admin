@@ -39,7 +39,7 @@ const handleSelectLanguage = (lang: string) => {
   i18n.locale.value = lang;
   layoutStore.setLanguage(lang);
   document.documentElement.lang = lang;
-  setTitle(route as RouteConfig);
+  setTitle(route);
   let message = i18n.t("_headerBar.changeLanguage");
   message = message === "_headerBar.changeLanguage" ? "修改语言成功！" : message;
   ElMessage({

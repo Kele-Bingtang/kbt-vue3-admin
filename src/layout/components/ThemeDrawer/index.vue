@@ -342,7 +342,7 @@ const handleSwitchDark = () => {
 
 const handleTitleModeSelect = () => {
   // 根据选择的标题模式，重新渲染浏览器标题
-  setTitle(route as RouteConfig);
+  setTitle(route);
 };
 
 // 重置缓存

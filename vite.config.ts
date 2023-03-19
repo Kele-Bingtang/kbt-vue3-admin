@@ -4,6 +4,15 @@ import { wrapperEnv } from "./build/getEnv";
 import { resolve } from "path";
 import { getPluginsList } from "./build/plugins";
 import { include, exclude } from "./build/optimize";
+import { getNowDate } from "./src/utils";
+import pkg from "./package.json";
+
+const { dependencies, devDependencies, name, version } = pkg;
+
+const __APP_INFO__ = {
+  pkg: { dependencies, devDependencies, name, version },
+  lastBuildTime: getNowDate(),
+};
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
@@ -72,6 +81,9 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
           assetFileNames: "static/[ext]/[name]-[hash].[ext]",
         },
       },
+    },
+    define: {
+      __APP_INFO__: JSON.stringify(__APP_INFO__),
     },
   };
 });

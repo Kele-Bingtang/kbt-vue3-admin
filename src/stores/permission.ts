@@ -14,8 +14,8 @@ export const usePermissionStore = defineStore("permissionStore", () => {
   const loadRolesRoutes = (routers: RouterConfigRaw[]) => {
     loadedRouteList.value = ascending(
       getRouteFullPath(constantRoutes).concat(getRouteFullPath(routers))
-    ) as unknown as RouterConfig[];
-    flatRouteList.value = filterFlatRoutes(routers) as unknown as RouterConfig[];
+    ) as RouterConfig[];
+    flatRouteList.value = filterFlatRoutes(routers) as RouterConfig[];
     isLoadedRoutes.value = true;
   };
 

@@ -28,7 +28,7 @@
 import type { CSSProperties } from "vue";
 import { tryOnMounted, tryOnUnmounted, templateRef, useDebounceFn } from "@vueuse/core";
 import * as utilsMethods from "./utils";
-const { animationFrame, copyObj } = utilsMethods;
+const { animationFrame } = utilsMethods;
 animationFrame();
 
 interface SeamlessScrollProps {

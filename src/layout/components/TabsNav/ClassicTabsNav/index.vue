@@ -75,7 +75,6 @@
 </template>
 
 <script setup lang="ts" name="TabsNav">
-import { useLayout } from "@/hooks/useLayout";
 import type { TabProp } from "@/stores/index.d";
 import { useLayoutStore } from "@/stores/layout";
 import { useSettingsStore } from "@/stores/settings";
@@ -95,16 +94,17 @@ const tabsDom = ref(); // tab 标签
 const route = useRoute();
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
-const { getTitle } = useLayout();
 
 const {
   tabNavList,
   selectedTab,
   rightMenuVisible,
   contextMenuCondition,
+
   isActive,
   tabsDrop,
   initTabs,
+  getOneTab,
   addOneTab,
   initContextMenu,
   closeCurrentTab,
@@ -121,18 +121,6 @@ onMounted(() => {
   addOneTab();
 });
 
-// 获取一个 tab 对象
-const getOneTab = (route: RouteConfig | RouterConfig) => {
-  return {
-    path: (route as RouteConfig).fullPath || route.meta._fullPath,
-    name: (route.name as string) || route.path,
-    title: getTitle(route),
-    icon: route.meta.icon || "",
-    close: !route.meta.isAffix,
-    meta: route.meta,
-  };
-};
-
 // 更换 tab 颜色为全局 primaryTheme
 const activeStyle = (tab: TabProp) => {
   if (!isActive(tab)) return {};
@@ -147,11 +135,11 @@ const findTargetTab = () => {
   nextTick(() => {
     if (tabsDom.value) {
       for (const tab of tabsDom.value) {
-        if (route.path === tab.to.path) {
+        if (route.path === tab.to) {
           moveToTargetTab(tab.$el);
           // 当 query 不一样
           if (tab.to.path !== route.fullPath) {
-            const tabParam = getOneTab(route as RouteConfig);
+            const tabParam = getOneTab(route);
             layoutStore.updateTab(tabParam);
           }
         }

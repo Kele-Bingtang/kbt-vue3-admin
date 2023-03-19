@@ -1,4 +1,4 @@
-const directiveRoutes = {
+const directiveRoutes: RouterConfigRaw = {
   path: "/directives",
   name: "Directives",
   redirect: "/directives/copy",

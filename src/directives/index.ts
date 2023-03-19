@@ -6,7 +6,8 @@ import debounce from "./modules/debounce";
 import throttle from "./modules/throttle";
 import longPress from "./modules/longPress";
 import waves from "./modules/waves";
-import permission from "./modules/permission";
+import role from "./modules/permission/role";
+import auth from "./modules/permission/auth";
 
 const directivesList: any = {
   // Custom directives
@@ -17,7 +18,8 @@ const directivesList: any = {
   throttle,
   longPress,
   waves,
-  permission,
+  role,
+  auth,
 };
 
 const directives = {

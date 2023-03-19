@@ -1,4 +1,4 @@
-const nestedRoutes = {
+const nestedRoutes: RouterConfigRaw = {
   path: "/nested",
   redirect: "/nested/menu1",
   name: "Nested",

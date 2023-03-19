@@ -1,4 +1,4 @@
-const frameRoutes = {
+const frameRoutes: RouterConfigRaw = {
   path: "/iframe",
   name: "IFrame",
   meta: {

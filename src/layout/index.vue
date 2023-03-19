@@ -29,7 +29,7 @@ const { setTitle } = useLayout();
 
 watch(
   () => route.fullPath,
-  () => setTitle(route as RouteConfig), // 修改页面的 title
+  () => setTitle(route), // 修改页面的 title
   {
     immediate: true,
   }

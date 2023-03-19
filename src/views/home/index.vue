@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="home-container">
     <el-row :gutter="20">
       <el-col :xs="12" :sm="12" :md="8" :lg="6" v-for="(info, i) in cardInfo" :key="`info-${i}`" class="card-col">
         <CardItem shadow="hover" :icon="info.icon" :color="info.color" :icon-size="48">
@@ -80,7 +80,10 @@ const lineBarData = [
 </script>
 
 <style lang="scss" scoped>
-.home {
+.home-container {
+  .el-card {
+    width: 100%;
+  }
   .card-col {
     margin-bottom: 20px;
     .card-title {
@@ -96,13 +99,6 @@ const lineBarData = [
   }
   .chart-col {
     margin-bottom: 20px;
-  }
-}
-</style>
-<style lang="scss" scoped>
-.home {
-  .el-card {
-    width: 100%;
   }
 }
 </style>

@@ -1,4 +1,4 @@
-const tableRoutes = {
+const tableRoutes: RouterConfigRaw = {
   path: "/table",
   name: "Table",
   redirect: "/excel/drag-table",
