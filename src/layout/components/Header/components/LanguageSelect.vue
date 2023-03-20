@@ -31,7 +31,7 @@ const localList = [
 const i18n = useI18n();
 const route = useRoute();
 const layoutStore = useLayoutStore();
-const { setTitle } = useLayout();
+const { setBrowserTitle } = useLayout();
 
 const language = computed(() => layoutStore.language);
 
@@ -39,7 +39,7 @@ const handleSelectLanguage = (lang: string) => {
   i18n.locale.value = lang;
   layoutStore.setLanguage(lang);
   document.documentElement.lang = lang;
-  setTitle(route);
+  setBrowserTitle(route);
   let message = i18n.t("_headerBar.changeLanguage");
   message = message === "_headerBar.changeLanguage" ? "修改语言成功！" : message;
   ElMessage({
@@ -47,10 +47,6 @@ const handleSelectLanguage = (lang: string) => {
     type: "success",
   });
 };
-
-// onMounted(() => {
-//   handleSelectLanguage(language.value || getBrowserLang());
-// });
 </script>
 
 <style lang="scss" scoped></style>

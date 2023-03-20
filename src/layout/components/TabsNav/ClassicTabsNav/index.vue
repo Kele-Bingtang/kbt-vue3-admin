@@ -1,5 +1,5 @@
 <template>
-  <div class="tabs-nav" ref="tabsNavDom">
+  <div class="tabs-nav" ref="tabsNavRef">
     <div style="height: 39px">
       <div class="scroll-container" ref="scrollContainerDom">
         <div
@@ -17,7 +17,7 @@
             :style="activeStyle(tab)"
             class="tabs-link"
             ref="tabsDom"
-            @contextmenu.prevent="openRightMenu(tab, $event)"
+            @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
           >
             <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
             <CommonIcon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
@@ -38,37 +38,14 @@
           <el-icon><ArrowRight /></el-icon>
         </el-button>
       </div>
+
       <transition name="el-zoom-in-top">
-        <ul
-          v-show="rightMenuVisible"
-          :style="{ left: rightMenuLeft + 'px', top: rightMenuTop + 'px' }"
-          class="context-menu"
-        >
-          <li v-if="contextMenuCondition.refresh" @click="refreshSelectedTab(selectedTab)">
-            <el-icon><Refresh /></el-icon>
-            {{ $t("_tabsNav.refresh") }}
-          </li>
-          <li v-if="contextMenuCondition.current" @click="closeCurrentTab(selectedTab)">
-            <el-icon><Close /></el-icon>
-            {{ $t("_tabsNav.closeCurrent") }}
-          </li>
-          <li v-if="contextMenuCondition.left" @click="closeLeftTab(selectedTab)">
-            <el-icon><ArrowLeft /></el-icon>
-            {{ $t("_tabsNav.closeLeft") }}
-          </li>
-          <li v-if="contextMenuCondition.right" @click="closeRightTab(selectedTab)">
-            <el-icon><ArrowRight /></el-icon>
-            {{ $t("_tabsNav.closeRight") }}
-          </li>
-          <li v-if="contextMenuCondition.other" @click="closeOthersTabs">
-            <el-icon><DCaret /></el-icon>
-            {{ $t("_tabsNav.closeOthers") }}
-          </li>
-          <li v-if="contextMenuCondition.all" @click="closeAllTabs()">
-            <el-icon><SemiSelect /></el-icon>
-            {{ $t("_tabsNav.closeAll") }}
-          </li>
-        </ul>
+        <RightMenu
+          :visible="rightMenuVisible"
+          :left="rightMenuLeft"
+          :top="rightMenuTop"
+          :condition="contextMenuCondition"
+        />
       </transition>
     </div>
   </div>
@@ -80,39 +57,31 @@ import { useLayoutStore } from "@/stores/layout";
 import { useSettingsStore } from "@/stores/settings";
 import CommonIcon from "@/components/CommonIcon/index.vue";
 import { useTabsNav } from "../useTabsNav";
-
-const tabBodyLeft = ref(0); // tabsNav 滚动
-// 右键菜单位置
-const rightMenuLeft = ref(0);
-const rightMenuTop = ref(0);
-
-const tabsNavDom = ref<HTMLElement>(); // 根标签
-const scrollContainerDom = ref<HTMLElement>(); // 滚动栏标签
-const scrollBodyDom = ref<HTMLElement>();
-const tabsDom = ref(); // tab 标签
+import RightMenu from "../components/rightMenu.vue";
 
 const route = useRoute();
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 
+const tabBodyLeft = ref(0); // tabsNav 滚动
+const tabsNavRef = ref<HTMLElement>(); // 根标签
+const scrollContainerDom = ref<HTMLElement>(); // 滚动栏标签
+const scrollBodyDom = ref<HTMLElement>();
+const tabsDom = ref(); // tab 标签
+
 const {
   tabNavList,
-  selectedTab,
   rightMenuVisible,
   contextMenuCondition,
-
+  rightMenuLeft,
+  rightMenuTop,
   isActive,
   tabsDrop,
   initTabs,
   getOneTab,
   addOneTab,
-  initContextMenu,
+  openRightMenu,
   closeCurrentTab,
-  closeLeftTab,
-  closeRightTab,
-  refreshSelectedTab,
-  closeOthersTabs,
-  closeAllTabs,
 } = useTabsNav();
 
 onMounted(() => {
@@ -165,21 +134,6 @@ const moveToTargetTab = (tabElement: HTMLElement) => {
   } else tabBodyLeft.value = -(tabElement.offsetLeft - (outerWidth - outerPadding - tabElement.offsetWidth)); // 标签在可视区域右侧
 };
 
-// 右键菜单回调
-const openRightMenu = (tab: TabProp, e: MouseEvent) => {
-  initContextMenu(tab);
-  const menuMinWidth = 0;
-  const offsetLeft = tabsNavDom.value?.getBoundingClientRect().left as number; // margin-left 的数值
-  const offsetWidth = tabsNavDom.value?.offsetWidth as number; //  width 数值
-  const maxLeft = offsetWidth - menuMinWidth;
-  const left = e.clientX - offsetLeft + 14;
-  if (left > maxLeft) rightMenuLeft.value = maxLeft;
-  else rightMenuLeft.value = left;
-  rightMenuTop.value = e.offsetY + 12;
-  rightMenuVisible.value = true;
-  selectedTab.value = tab;
-};
-
 // 鼠标中键滚动回调
 const handleScrollOnDom = (e: MouseEvent & { wheelDelta: number }) => {
   const type = e.type;
@@ -211,22 +165,8 @@ watch(
     findTargetTab();
   }
 );
-
-// 关闭右键菜单
-const closeRightMenu = () => {
-  rightMenuVisible.value = false;
-};
-
-watchEffect(() => {
-  if (rightMenuVisible.value) {
-    document.body.addEventListener("click", closeRightMenu);
-  } else {
-    document.body.removeEventListener("click", closeRightMenu);
-  }
-});
 </script>
 
 <style lang="scss" scoped>
 @import "./index.scss";
-@import "../index.scss";
 </style>

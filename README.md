@@ -1,6 +1,6 @@
 # kbt-vue3-admin
 
-基于 Vue3.2、TypeScript、Vite3、Pinia、Element-Plus 搭建的 Admin 模板。
+基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 搭建的 Admin 模板。
 
 克隆项目下来后，记得切换 GitLab 地址，修改为您真正的项目地址。
 

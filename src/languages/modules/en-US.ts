@@ -64,6 +64,7 @@ export default {
     Debounce: "Debounce Directive",
     Throttle: "Throttle Directive",
     LongPress: "LongPress Directive",
+    Arg: "Arg",
     Params: "Params",
     Query: "Query",
     Error: "Error",

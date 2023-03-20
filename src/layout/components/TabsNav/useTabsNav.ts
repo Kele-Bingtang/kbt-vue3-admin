@@ -8,8 +8,18 @@ import Sortable from "sortablejs";
 import type { RefreshFunction } from "../MainContent/index.vue";
 import settings from "@/config/settings";
 import { HOME_URL } from "@/router/routesConfig";
+import { useBoolean } from "@/hooks/useBoolean";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";
+
+export interface ContextMenuCondition {
+  refresh: boolean;
+  current: boolean;
+  left: boolean;
+  right: boolean;
+  other: boolean;
+  all: boolean;
+}
 
 export const useTabsNav = () => {
   const route = useRoute();
@@ -19,7 +29,8 @@ export const useTabsNav = () => {
   const { getTitle } = useLayout();
   const refreshCurrentPage = inject("refresh") as RefreshFunction;
 
-  const rightMenuVisible = ref(false); // 右键菜单显示
+  const { bool: rightMenuVisible, setFalse } = useBoolean(); // 右键菜单显示
+
   // 激活的 tab
   const selectedTab = ref<TabProp>({
     path: "", // 路由的 path
@@ -29,7 +40,7 @@ export const useTabsNav = () => {
     close: true, // 是否允许关闭
     meta: {},
   });
-  const contextMenuCondition = reactive({
+  const contextMenuCondition = reactive<ContextMenuCondition>({
     refresh: false, // 刷新当前标签页
     current: false, // 关闭当前标签页
     left: false, // 关闭当左侧标签页
@@ -37,6 +48,10 @@ export const useTabsNav = () => {
     other: false, // 关闭其他标签页
     all: false, // 关闭全部标签页
   });
+
+  // 右键菜单位置
+  const rightMenuLeft = ref(0);
+  const rightMenuTop = ref(0);
 
   const tabNavList = computed(() => layoutStore.tabNavList);
 
@@ -155,6 +170,21 @@ export const useTabsNav = () => {
     });
   };
 
+  // 打开右键菜单，并初始化菜单布局、内容
+  const openRightMenu = (e: MouseEvent, tab: TabProp, tabsNavRef?: HTMLElement) => {
+    initContextMenu(tab);
+    const menuMinWidth = 0;
+    const offsetLeft = tabsNavRef?.getBoundingClientRect().left as number; // margin-left 的数值
+    const offsetWidth = tabsNavRef?.offsetWidth as number; //  width 数值
+    const maxLeft = offsetWidth - menuMinWidth;
+    const left = e.clientX - offsetLeft + 14;
+    if (left > maxLeft) rightMenuLeft.value = maxLeft;
+    else rightMenuLeft.value = left;
+    rightMenuTop.value = e.offsetY + 12;
+    rightMenuVisible.value = true;
+    selectedTab.value = tab;
+  };
+
   // 关闭一个 tab，并激活到上一个 tab
   const closeCurrentTab = async (tab: TabProp) => {
     if (tab.meta && tab.meta.beforeCloseName && tab.meta.beforeCloseName in beforeClose) {
@@ -217,16 +247,12 @@ export const useTabsNav = () => {
     router.push(path).catch(err => console.warn(err));
   };
 
-  // 关闭右侧菜单
-  const closeRightMenu = () => {
-    rightMenuVisible.value = false;
-  };
-
   watchEffect(() => {
+    // 关闭右侧菜单
     if (rightMenuVisible.value) {
-      document.body.addEventListener("click", closeRightMenu);
+      document.body.addEventListener("click", setFalse);
     } else {
-      document.body.removeEventListener("click", closeRightMenu);
+      document.body.removeEventListener("click", setFalse);
     }
   });
 
@@ -235,12 +261,15 @@ export const useTabsNav = () => {
     selectedTab,
     rightMenuVisible,
     contextMenuCondition,
+    rightMenuLeft,
+    rightMenuTop,
 
     isActive,
     tabsDrop,
     initTabs,
     getOneTab,
     addOneTab,
+    openRightMenu,
     initContextMenu,
     closeCurrentTab,
     closeSelectedTab,

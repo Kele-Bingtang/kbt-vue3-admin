@@ -144,7 +144,7 @@ module.exports = {
     "no-unneeded-ternary": [2, { defaultAssignment: false }], // 当存在更简单的选择时，此规则不允许三元运算符
     "no-unreachable": 2, // 禁止在 return、throw、continue 和 break 语句后出现不可达代码
     "no-unsafe-finally": 2, // 禁止在 finally 语句块中出现控制流语句
-    "no-unused-vars": [2, { vars: "all", args: "none" }], // 禁止出现未使用的变量，函数和函数的参数
+    "no-unused-vars": [process.env.NODE_ENV === "production" ? "error" : "warn", { vars: "all", args: "none" }], // 禁止出现未使用的变量，函数和函数的参数
     "no-useless-call": 2, // 禁止不必要的 .call() 和 .apply()
     "no-useless-computed-key": 2, // 禁止在对象中使用不必要的计算属性键
     "no-useless-constructor": 2, // 禁用不必要的构造函数

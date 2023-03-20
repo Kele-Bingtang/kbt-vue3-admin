@@ -300,7 +300,7 @@ const titleModeOptions = [
 
 const route = useRoute();
 const settingsStore = useSettingsStore();
-const { setTitle } = useLayout();
+const { setBrowserTitle } = useLayout();
 
 const handleMenuTheme = (value: LayoutThemeType) => {
   settingsStore.$patch({
@@ -342,7 +342,7 @@ const handleSwitchDark = () => {
 
 const handleTitleModeSelect = () => {
   // 根据选择的标题模式，重新渲染浏览器标题
-  setTitle(route);
+  setBrowserTitle(route);
 };
 
 // 重置缓存

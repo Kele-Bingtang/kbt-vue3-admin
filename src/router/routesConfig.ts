@@ -37,7 +37,7 @@ import excelRoutes from "./modules/excel";
 import frameRoutes from "./modules/frame";
 import nestedRoutes from "./modules/nested";
 import outerChainRoutes from "./modules/outerChain";
-import permissionRoutes from "./modules/permision";
+import permissionRoutes from "./modules/permission";
 import tableRoutes from "./modules/table";
 import toolsRoutes from "./modules/tool";
 

@@ -1,0 +1,8 @@
+public
+dist
+*.d.ts
+/src/assets
+package.json
+.eslintrc.js
+.prettierrc.js
+postcss.config.js

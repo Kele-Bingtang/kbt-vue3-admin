@@ -1,5 +1,5 @@
 <template>
-  <div class="login-container flx-center">
+  <div class="login-container">
     <SwitchDark class="dark" />
     <div class="login-box">
       <div class="login-left">

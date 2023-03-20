@@ -10,7 +10,7 @@
       :collapse-transition="false"
       :mode="props.mode"
     >
-      <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" :is-collapse="isCollapse" />
+      <MenuItem v-for="menu in menuList" :key="menu.name" :menu-item="menu" :is-collapse="isCollapse" />
     </el-menu>
   </el-scrollbar>
   <template v-else>
@@ -44,9 +44,7 @@ const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
 const { getMenuListByRouter } = useLayout();
 
-const activeMenu = computed(
-  () => (route.meta.activeMenu as string) || (route.meta._fullPath as string) || (route.path as string)
-);
+const activeMenu = computed(() => (route.meta.activeMenu || route.meta._fullPath || route.path) as string);
 const isCollapse = computed(() => settingsStore.isCollapse);
 const primaryTheme = computed(() => settingsStore.primaryTheme);
 

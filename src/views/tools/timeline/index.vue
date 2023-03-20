@@ -30,7 +30,7 @@
           :type="activity.type as any"
         >
           <div class="message">
-            kbt-vue3-admin 是基于 Vue3.2、TypeScript、Vite3、Pinia、Element-Plus 编写的一套后台管理系统
+            kbt-vue3-admin 是基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 编写的一套后台管理系统
           </div>
         </el-timeline-item>
       </el-timeline>

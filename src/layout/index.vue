@@ -25,11 +25,11 @@ const settingsStore = useSettingsStore();
 const layoutMode = computed(() => settingsStore.layoutMode);
 
 const route = useRoute();
-const { setTitle } = useLayout();
+const { setBrowserTitle } = useLayout();
 
 watch(
   () => route.fullPath,
-  () => setTitle(route), // 修改页面的 title
+  () => setBrowserTitle(route), // 修改页面的 title
   {
     immediate: true,
   }

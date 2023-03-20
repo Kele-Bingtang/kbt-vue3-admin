@@ -88,11 +88,12 @@ import { useDetail } from "./hooks";
 import { usePermissionStore } from "@/stores/permission";
 import { useLayoutStore } from "@/stores/layout";
 import { useLayout } from "@/hooks/useLayout";
+import { copyObj } from "@/utils";
 
 const layoutStore = useLayoutStore();
 const { getTitle, getMenuListByRouter } = useLayout();
 const { toDetail, router } = useDetail();
-const routesTreeData = getMenuListByRouter(usePermissionStore().loadedRouteList);
+const routesTreeData = copyObj(getMenuListByRouter(usePermissionStore().loadedRouteList));
 
 const treeData = computed(() => {
   return appendFieldById(deleteChildren(routesTreeData), 0, {

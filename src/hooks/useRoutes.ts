@@ -6,6 +6,7 @@ import { ElNotification } from "element-plus";
 import type { RouteRecordRaw } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import settings from "@/config/settings";
+import { useLayoutNoSetup } from "./useLayout";
 
 const modules = import.meta.glob("@/views/**/*.vue");
 const IFrame = () => import("@/layout/frameView.vue");
@@ -13,6 +14,7 @@ const IFrame = () => import("@/layout/frameView.vue");
 export const useRoutes = () => {
   const permissionStore = usePermissionStore();
   const userStore = useUserStore();
+  const { getLayoutTitle } = useLayoutNoSetup();
 
   /**
    * @description 手动处理动态路由，不需要传参
@@ -40,7 +42,7 @@ export const useRoutes = () => {
    */
   const loadDynamicRouter = (routers: RouterConfigRaw[], roles: string[], r = router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
-    const resolveRouters = processAsyncRoutes(onlyRolesRoutes);
+    const resolveRouters = processAsyncRoutes(getFullPathAndTitle(onlyRolesRoutes));
     // 传到 permissionStore 持久化
     permissionStore.loadRolesRoutes(resolveRouters);
     resolveRouters.forEach(item => {
@@ -104,14 +106,23 @@ export const useRoutes = () => {
     if (router.meta && router.meta.roles) return roles.some(role => router.meta && router.meta?.roles?.includes(role));
     else return true; // 没有添加权限验证
   };
-
-  const getRouteFullPath = (routers: RouterConfigRaw[], basePath = "/") => {
+  /**
+   * 拼接每个路由的完整路径 fullPath，处理国际化 title 显示
+   * @param routers
+   * @param basePath
+   * @returns
+   */
+  const getFullPathAndTitle = (routers: RouterConfigRaw[], basePath = "/") => {
     routers.forEach(router => {
       const fullPath = router.path.startsWith("/") ? router.path : (basePath + "/" + router.path).replace(/\/+/g, "/");
-      router.meta = { ...router.meta, _fullPath: fullPath };
+      // 处理成后面布局要用到的 title。title 如果为函数，则涉及到当前路由，所以无法这里处理
+      if (router.meta) {
+        router.meta.title = getLayoutTitle(router as RouterConfig);
+        router.meta._fullPath = fullPath;
+      }
       if (router.children && router.children.length) {
-        if (isExternal(fullPath)) router.children = getRouteFullPath(router.children, "");
-        else router.children = getRouteFullPath(router.children, fullPath);
+        if (isExternal(fullPath)) router.children = getFullPathAndTitle(router.children, "");
+        else router.children = getFullPathAndTitle(router.children, fullPath);
       }
     });
     return routers;
@@ -172,7 +183,7 @@ export const useRoutes = () => {
     loadDynamicRouter,
     filterOnlyRolesRoutes,
     hasPermission,
-    getRouteFullPath,
+    getFullPathAndTitle,
     getHomeRoute,
     filterFlatRoutes,
     ascending,

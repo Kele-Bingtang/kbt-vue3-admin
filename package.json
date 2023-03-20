@@ -9,7 +9,7 @@
     "build:prod": "rimraf dist && vite build --mode production",
     "build:test": "rimraf dist && vite build --mode test",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .gitignore",
+    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .eslintignore",
     "report": "rimraf dist && vite build",
     "cloc": "NODE_OPTIONS=--max-old-space-size=4096 cloc . --exclude-dir=node_modules",
     "clean:cache": "rm -rf node_modules && rm -rf .eslintcache && yarn install"

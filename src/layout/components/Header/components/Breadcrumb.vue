@@ -18,7 +18,7 @@
               class="breadcrumb-icon"
             />
           </template>
-          <span>{{ getTitle(breadcrumb) }}</span>
+          <span>{{ breadcrumb.meta.title }}</span>
         </a>
       </el-breadcrumb-item>
     </transition-group>
