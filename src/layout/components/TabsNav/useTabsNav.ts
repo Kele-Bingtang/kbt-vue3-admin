@@ -78,7 +78,7 @@ export const useTabsNav = () => {
   // 判断当前激活的 tab
   const getOneTab = (route: RouteConfig | RouterConfig) => {
     return {
-      path: resolveFullPath(route),
+      path: resolveFullPath(route as RouteConfig),
       name: (route.name as string) || route.path,
       title: getTitle(route),
       icon: route.meta.icon || "",
@@ -88,7 +88,7 @@ export const useTabsNav = () => {
   };
 
   // 判断 tab 的地址，因为携带不同的参数可以引起多个重复的标签，这里可以设置当同一个 path 携带参数不一样，只渲染一个 tab，原理就是去掉 ? 后面的参数
-  const resolveFullPath = (r: RouteConfig | RouterConfig) => {
+  const resolveFullPath = (r: RouteConfig) => {
     if (r.path !== route.path || r.path === HOME_URL) return r.meta._fullPath;
     const url = window.location.href;
     const urlKey = Object.keys(getUrlParams(url));
@@ -103,7 +103,7 @@ export const useTabsNav = () => {
         for (const item of settings.tabActiveExcludes) if (url.slice(index).includes(item)) return r.meta._fullPath;
       }
     }
-    return (r as RouteConfig).fullPath || r.meta._fullPath;
+    return r.fullPath || r.meta._fullPath;
   };
   // 初始化固定在标签栏的 tabs
   const initTabs = () => {
@@ -269,6 +269,7 @@ export const useTabsNav = () => {
     initTabs,
     getOneTab,
     addOneTab,
+    resolveFullPath,
     openRightMenu,
     initContextMenu,
     closeCurrentTab,

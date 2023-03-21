@@ -1,5 +1,7 @@
 import type { RouteRecordRaw, RouteLocationNormalizedLoaded, RouteComponent } from "vue-router";
 
+export {}; // 扩展 global 而不是覆盖
+
 declare global {
   interface Navigator {
     browserLanguage: string;
@@ -15,7 +17,7 @@ declare global {
     msRequestAnimationFrame;
   }
 
-  type MetaNeedKey = "_fullPath" | "__titleIsFunction__" | "dynamic";
+  type MetaNeedKey = "_fullPath" | "_dynamic";
   // 自定义 useRoute 类型
   type RouteConfig = RouteLocationNormalizedLoaded & {
     redirect?: string;
@@ -35,8 +37,7 @@ declare global {
 
   interface MetaProp {
     readonly _fullPath?: string; // 路由的完整路径，在编译阶段自动生成
-    readonly __titleIsFunction__?: boolean; // 判断 title 是否是数组，在编译阶段自动生成
-    readonly dynamic?: boolean; // 是否是动态路由，在编译阶段自动生成
+    readonly _dynamic?: boolean; // 是否是动态路由，在编译阶段自动生成
     roles?: string[]; // 可访问该页面的权限数组，当前路由设置的权限会影响子路由
     auths?: string[]; // 路由内的按钮权限
     title?: string | number | ((route: RouteConfig) => string); // 显示在侧边栏、面包屑和标签栏的文字，使用 '{{ 多语言字段 }}' 形式结合「多语言」使用，可以传入一个回调函数，参数是当前路由对象 to
@@ -64,8 +65,11 @@ declare global {
     };
     hideInTab?: boolean; // 是否不添加到标签页，默认 false
     dynamicLevel?: number; // 动态路由可打开的最大数量
+    useI18n?: boolean; // 是否开启 i18n，默认读取全局的 routeUseI18n（src/config/settings.ts）
   }
+}
 
+declare global {
   /**
    * 平台的名称、版本、依赖、最后构建时间的类型提示
    */
@@ -78,7 +82,4 @@ declare global {
     };
     lastBuildTime: string;
   };
-  declare const useRoute: () => RouteConfig;
 }
-
-export {}; // 扩展 global 而不是覆盖

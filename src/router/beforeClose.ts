@@ -9,10 +9,7 @@ interface BeforeClose {
 
 const beforeClose: BeforeClose = {
   before_close_normal: (resolve: any, route: RouteConfig) => {
-    if (route.query.noBeforeClose) {
-      resolve(true);
-      return;
-    }
+    if (route.query.noBeforeClose) return resolve(true);
     ElMessageBox.confirm("确定要关闭这一页吗", "提示", {
       confirmButtonText: "确定",
       cancelButtonText: "取消",

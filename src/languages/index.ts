@@ -51,7 +51,7 @@ function siphonI18n(prefix = "zh-CN") {
  * @param message message
  * @returns 转化后的 message
  */
-export function transformI18n(message: any = "") {
+export function transformI18n(message: any = ""): string {
   if (!message) return "";
 
   // 处理存储动态路由的 title，格式 { zh: "", en: "" }

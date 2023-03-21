@@ -27,6 +27,7 @@
  * @param meta.transition.leaveTransition ==> 离场动画
  * @param meta.hideInTab ==> 是否不添加到标签页，默认 false
  * @param meta.dynamicLevel ==> 动态路由可打开的最大数量，默认为空
+ * @param meta.useI18n ==>  是否开启 i18n，默认读取全局的 routeUseI18n（src/config/settings.ts）
  */
 
 import componentRoutes from "./modules/components";
@@ -117,13 +118,14 @@ export const rolesRoutes: RouterConfigRaw[] = [
   },
   {
     path: "/home-full",
-    name: "_noUseI18n_HomeFull",
+    name: "HomeFull",
     component: "/home/indexFull",
     meta: {
       isAffix: true,
       title: "全屏首页",
       icon: "HomeFilled",
       isFull: true,
+      useI18n: false,
     },
   },
   { ...componentRoutes },

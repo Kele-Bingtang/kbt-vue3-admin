@@ -7,6 +7,7 @@ import type { RouteRecordRaw } from "vue-router";
 import { useUserStore } from "@/stores/user";
 import settings from "@/config/settings";
 import { useLayoutNoSetup } from "./useLayout";
+import type { BackstageMenuList } from "@/api/menu";
 
 const modules = import.meta.glob("@/views/**/*.vue");
 const IFrame = () => import("@/layout/frameView.vue");
@@ -42,7 +43,7 @@ export const useRoutes = () => {
    */
   const loadDynamicRouter = (routers: RouterConfigRaw[], roles: string[], r = router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
-    const resolveRouters = processAsyncRoutes(getFullPathAndTitle(onlyRolesRoutes));
+    const resolveRouters = processAsyncRoutes(processRouteMeta(onlyRolesRoutes));
     // 传到 permissionStore 持久化
     permissionStore.loadRolesRoutes(resolveRouters);
     resolveRouters.forEach(item => {
@@ -63,8 +64,8 @@ export const useRoutes = () => {
   const processAsyncRoutes = (routers: RouterConfigRaw[]) => {
     if (!routers || !routers.length) return [];
     routers.forEach(r => {
-      // 将 dynamic 属性加入 meta，标识此路由为后端返回路由
-      r.meta && (r.meta.dynamic = true);
+      // 将 _dynamic 属性加入 meta，标识此路由为后端返回路由
+      r.meta && (r.meta._dynamic = true);
       // 父级的 redirect 属性取值：如果子级存在且父级的 redirect 属性不存在，默认取第一个子级的 path；如果子级存在且父级的 redirect 属性存在，取存在的 redirect 属性，会覆盖默认值
       if (r?.children && r.children.length && !r.redirect) r.redirect = r.children[0].path;
       // 父级的 name 属性取值：如果子级存在且父级的 name 属性不存在，默认取第一个子级的 name；如果子级存在且父级的 name 属性存在，取存在的 name 属性，会覆盖默认值（注意：测试中发现父级的 name 不能和子级 name 重复，如果重复会造成重定向无效（跳转 404），所以这里给父级的name起名的时候后面会自动加上 `Parent`，避免重复）
@@ -107,26 +108,29 @@ export const useRoutes = () => {
     else return true; // 没有添加权限验证
   };
   /**
-   * 拼接每个路由的完整路径 fullPath，处理国际化 title 显示
-   * @param routers
-   * @param basePath
-   * @returns
+   * @description 处理路由的 meta：拼接每个路由的完整路径 fullPath，处理国际化 title 显示，判断是否使用国际化
+   * @param routers 路由表
+   * @param basePath 路由 fullPath
+   * @returns 处理后的路由表
    */
-  const getFullPathAndTitle = (routers: RouterConfigRaw[], basePath = "/") => {
+  const processRouteMeta = (routers: RouterConfigRaw[], basePath = "/") => {
     routers.forEach(router => {
       const fullPath = router.path.startsWith("/") ? router.path : (basePath + "/" + router.path).replace(/\/+/g, "/");
-      // 处理成后面布局要用到的 title。title 如果为函数，则涉及到当前路由，所以无法这里处理
+      // 处理成后面布局要用到的 title。title 如果为函数，则涉及到当前路由，所以这里无法处理
       if (router.meta) {
-        router.meta.title = getLayoutTitle(router as RouterConfig);
         router.meta._fullPath = fullPath;
+        // 这两个顺序不能互换，因为 getLayoutTitle 函数需要 useI18n
+        router.meta.useI18n = router.meta.useI18n === undefined ? settings.routeUseI18n : router.meta.useI18n;
+        router.meta.title = getLayoutTitle(router as RouteConfig);
       }
       if (router.children && router.children.length) {
-        if (isExternal(fullPath)) router.children = getFullPathAndTitle(router.children, "");
-        else router.children = getFullPathAndTitle(router.children, fullPath);
+        if (isExternal(fullPath)) router.children = processRouteMeta(router.children, "");
+        else router.children = processRouteMeta(router.children, fullPath);
       }
     });
     return routers;
   };
+
   /**
    * @description
    * 用于找到路由列表中 name 为 home 的对象
@@ -178,12 +182,80 @@ export const useRoutes = () => {
     return false;
   };
 
+  /**
+   * 后台获取菜单，然后转成路由需要的信息
+   *
+   * 这里搭配后台返回菜单进行处理，从后台获取的是扁平化的菜单，通过 MenuCode 和 parentMenuCode 进行多级关联，如后台返回：
+		[
+			{
+				menuUrl: "/components",
+				menuCode: "Components",
+				menuName: "组件",
+				parentMenuCode: "", // 代表一级菜单
+				imageIcon: "Opportunity",
+				sel: 1
+			},
+			{
+				menuUrl: "message",
+				menuCode: "MessageDemo",
+				pagePath: "/components/message/index",
+				menuName: "消息组件",
+				parentMenuCode: "Components", // 和上面的 menuCode 关联
+				imageIcon: "StarFilled",
+				sel: 2
+			},
+		]
+
+   * 该函数处理后返回：
+		{
+			path: "/components",
+			name: "Components",
+			meta: { title: "组件", icon: "Opportunity", rank: 1 },
+			children: [
+				{
+					path: "message",
+					name: "MessageDemo",
+					component: "/components/message/index",
+					meta: { title: "消息组件", icon: "StarFilled", rank: 2 },
+				},
+			]
+		}
+   * @param menuList 后台返回的菜单
+   * @param menuCode 菜单 code，等价于路由的 name
+   * @returns 路由表信息
+   */
+  const getDynamicRouterList = (menuList: BackstageMenuList[], menuCode: string) => {
+    const dynamicRouterList: RouterConfigRaw[] = [];
+    menuList.forEach(item => {
+      if (item.parentMenuCode === menuCode) {
+        const children = getDynamicRouterList(
+          menuList.filter(v => v.menuCode !== menuCode),
+          item.menuCode
+        );
+        const menu = {
+          path: item.menuUrl,
+          name: item.menuUrl,
+          component: item.pagePath,
+          meta: {
+            title: item.menuName,
+            icon: item.imageIcon,
+            rank: item.seq,
+          },
+        };
+        if (children.length) dynamicRouterList.push({ ...menu, children });
+        else dynamicRouterList.push({ ...menu });
+      }
+    });
+    return dynamicRouterList;
+  };
+
   return {
+    getDynamicRouterList,
     beforeInitDynamicRouter,
     loadDynamicRouter,
     filterOnlyRolesRoutes,
     hasPermission,
-    getFullPathAndTitle,
+    processRouteMeta,
     getHomeRoute,
     filterFlatRoutes,
     ascending,

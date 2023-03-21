@@ -33,7 +33,7 @@ export const useLayoutStore = defineStore(
       const dynamicLevel = tab.meta.dynamicLevel ?? -1;
       if (dynamicLevel > 0 && tabNavList.value.filter(t => t.name === tab.name).length >= dynamicLevel) {
         // 如果当前已打开的动态路由数大于 dynamicLevel，替换第一个动态路由标签
-        const index = tabNavList.value.findIndex(item => item?.path === path);
+        const index = tabNavList.value.findIndex(t => t.name === tab.name);
         index !== -1 && tabNavList.value.splice(index, 1);
       }
       tabNavList.value.push(tab);

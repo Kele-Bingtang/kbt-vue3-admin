@@ -22,8 +22,10 @@
         </el-tooltip>
       </template>
       <template #default="{ item }">
-        <CommonIcon :icon="item.meta.icon" />
-        <span>{{ nestMode ? item.title.join(" > ") : item.meta.title }}</span>
+        <template v-if="!isFunction(item.meta.title)">
+          <CommonIcon :icon="item.meta.icon" />
+          <span>{{ nestMode ? item.title.join(" > ") : item.meta.title }}</span>
+        </template>
       </template>
     </el-autocomplete>
   </div>
@@ -33,11 +35,13 @@
 import { useLayout } from "@/hooks/useLayout";
 import { usePermissionStore } from "@/stores/permission";
 import CommonIcon from "@/components/CommonIcon/index.vue";
+import { useDebounceFn } from "@vueuse/core";
+import { isFunction } from "@/utils/layout/validate";
 
 const router = useRouter();
 const permissionStore = usePermissionStore();
 const { getTitle } = useLayout();
-const nestMode = ref(false);
+const nestMode = ref(true);
 const menuList = computed(() =>
   nestMode.value
     ? createNestMenuSearchList(permissionStore.loadedRouteList)
@@ -52,8 +56,8 @@ const handleSearchMenuList = (queryString: string, callback: (result: any) => vo
 const isShowSearch = ref(false);
 const autocompleteRef = ref();
 const searchMenu = ref("");
-// 防抖
-let timer: NodeJS.Timeout | null = null;
+// 手动实现防抖
+// let timer: NodeJS.Timeout | null = null;
 
 // 关闭搜索菜单
 const handleCloseSearch = () => {
@@ -66,17 +70,22 @@ const handleCloseSearch = () => {
 const handleStartSearch = () => {
   isShowSearch.value = true;
   searchMenu.value = "";
-  // 防抖
-  if (timer) {
-    document.body.removeEventListener("click", handleCloseSearch);
-    clearInterval(timer);
-  }
-  nextTick(() => {
-    timer = setTimeout(() => {
-      autocompleteRef.value && (autocompleteRef.value as HTMLElement).focus();
-      document.body.addEventListener("click", handleCloseSearch);
-    }, 250);
-  });
+  // 手动实现防抖
+  // if (timer) {
+  //   document.body.removeEventListener("click", handleCloseSearch);
+  //   clearInterval(timer);
+  // }
+  // nextTick(() => {
+  //   timer = setTimeout(() => {
+  //     autocompleteRef.value && (autocompleteRef.value as HTMLElement).focus();
+  //     document.body.addEventListener("click", handleCloseSearch);
+  //   }, 250);
+  // });
+  // 工具实现防抖
+  useDebounceFn(() => {
+    autocompleteRef.value && (autocompleteRef.value as HTMLElement).focus();
+    document.body.addEventListener("click", handleCloseSearch);
+  }, 250)();
 };
 
 const handleSwitchMode = () => {
@@ -86,7 +95,7 @@ const handleSwitchMode = () => {
     nextTick(() => {
       setTimeout(() => {
         (autocompleteRef.value as HTMLElement).focus();
-      }, 500);
+      }, 800);
     });
   }
 };

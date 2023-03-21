@@ -26,10 +26,10 @@ export interface LayoutState {
 
 // PermissionState
 export interface PermissionState {
-  loadedRouteList: RouteRecordRaw[]; // 当前用户所有的权限路由表（包含基础路由）
-  homeRoute: RouteRecordRaw; // 首页的路由
+  loadedRouteList: RouterConfig[]; // 当前用户所有的权限路由表（包含基础路由）
+  homeRoute: RouterConfig; // 首页的路由
   isLoadedRoutes: boolean; // 是否已经加载完路由
-  flatRouteList: RouteRecordRaw[]; // 扁平化路由
+  flatRouteList: RouterConfig[]; // 扁平化路由
 }
 
 // SettingsState

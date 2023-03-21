@@ -103,8 +103,8 @@ class RequestHttp {
   }
 
   // 全写请求封装
-  request<T, R = any>(config: AxiosRequestConfigProp<T>): Promise<R> {
-    return this.service(config) as unknown as Promise<R>;
+  request<T, R = any>(config: AxiosRequestConfigProp<R>): Promise<T> {
+    return this.service(config) as unknown as Promise<T>;
   }
 }
 

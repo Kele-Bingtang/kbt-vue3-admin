@@ -10,8 +10,8 @@ import pkg from "./package.json";
 const { dependencies, devDependencies, name, version } = pkg;
 
 const __APP_INFO__ = {
-  pkg: { dependencies, devDependencies, name, version },
-  lastBuildTime: getNowDate(),
+  pkg: { dependencies, devDependencies, name, version }, // package.json 相关信息
+  lastBuildTime: getNowDate(), // 打包时间
 };
 
 // https://vitejs.dev/config/

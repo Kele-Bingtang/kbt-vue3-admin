@@ -35,7 +35,6 @@
 </template>
 
 <script setup lang="ts" name="ElTabsNav">
-import beforeClose from "@/router/beforeClose";
 import { useSettingsStore } from "@/stores/settings";
 import type { TabPaneName, TabsPaneContext } from "element-plus";
 import CommonIcon from "@/components/CommonIcon/index.vue";
@@ -46,9 +45,6 @@ const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
 
-const tabsNavValue = ref(route.fullPath);
-const tabsNavRef = ref<HTMLElement>(); // 根标签
-
 const {
   tabNavList,
   rightMenuVisible,
@@ -58,9 +54,13 @@ const {
   tabsDrop,
   initTabs,
   addOneTab,
-  closeSelectedTab,
+  resolveFullPath,
+  closeCurrentTab,
   openRightMenu,
 } = useTabsNav();
+
+const tabsNavValue = ref(resolveFullPath(route));
+const tabsNavRef = ref<HTMLElement>(); // 根标签
 
 onMounted(() => {
   tabsDrop(".el-tabs__nav", ".el-tabs__item");
@@ -73,7 +73,7 @@ watch(
   () => route.fullPath,
   () => {
     if (route.meta.isFull) return;
-    tabsNavValue.value = route.fullPath;
+    tabsNavValue.value = resolveFullPath(route);
     addOneTab();
   }
 );
@@ -87,12 +87,7 @@ const tabClick = (tabItem: TabsPaneContext) => {
 // 删除一个 Tab
 const tabRemove = async (fullPath: TabPaneName) => {
   const tab = tabNavList.value.filter(item => item.path === fullPath)[0];
-  if (tab.meta && tab.meta.beforeCloseName && tab.meta.beforeCloseName in beforeClose) {
-    const isClose = await new Promise(resolve => {
-      beforeClose[tab.meta.beforeCloseName as string](resolve, route);
-    });
-    if (isClose) closeSelectedTab(tab);
-  } else closeSelectedTab(tab);
+  closeCurrentTab(tab);
 };
 </script>
 
