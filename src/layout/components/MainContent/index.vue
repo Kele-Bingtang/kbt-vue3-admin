@@ -1,4 +1,5 @@
 <template>
+  <Maximize v-if="settingsStore.maximize" />
   <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
   <el-main>
     <router-view v-slot="{ Component, route }">
@@ -16,7 +17,8 @@ import { useLayoutStore } from "@/stores/layout";
 import { useSettingsStore } from "@/stores/settings";
 import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";
 import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
-import CustomTransition from "./customTransition.vue";
+import CustomTransition from "./components/CustomTransition.vue";
+import Maximize from "./components/Maximize.vue";
 
 export type RefreshFunction = (value?: boolean) => boolean;
 
@@ -45,10 +47,12 @@ const refreshCurrentPage: RefreshFunction = (value?: boolean) => {
 };
 provide("refresh", refreshCurrentPage);
 
-watch(
-  () => isRouterShow.value,
-  () => {}
-);
+// 监听当前页是否最大化，动态添加 class
+watchEffect(() => {
+  const app = document.getElementById("app") as HTMLElement;
+  if (settingsStore.maximize) app?.classList.add("main-maximize");
+  else app?.classList.remove("main-maximize");
+});
 </script>
 
 <style lang="scss" scoped>

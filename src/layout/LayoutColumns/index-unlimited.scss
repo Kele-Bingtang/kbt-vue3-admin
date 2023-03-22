@@ -18,7 +18,7 @@
         background: var(--el-color-primary-light-9);
       }
     }
-    .el-sub-menu,
+    .sub-menu,
     .menu-item {
       &:not(.is-active) {
         .el-icon,
@@ -42,10 +42,6 @@
         }
       }
     }
-  }
-  // 折叠时确保 border-right 不能多出 1px
-  .el-container .el-aside.not-aside {
-    border: 0;
   }
   .header-icon,
   .header-icon .el-dropdown {

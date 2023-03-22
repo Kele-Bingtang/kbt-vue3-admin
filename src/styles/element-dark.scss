@@ -1,6 +1,6 @@
 /* 自定义 element 暗黑模式样式 */
 html.dark {
-  // * kbt-admin
+  // kbt-admin
   --kbt-bg-color: #141414;
   --kbt-main-bg-color: #0d0d0d;
   --kbt-border-light: 1px solid #4c4c4d;
@@ -28,22 +28,59 @@ html.dark {
     background-color: var(--el-border-color-darker) !important;
   }
 
+  .columns {
+    .el-aside {
+      .el-menu-item:not(.is-active) > * {
+        color: var(--menu-text-color) !important;
+      }
+    }
+  }
+
   // layout
   .el-container {
+    .el-aside {
+      background-color: var(--kbt-bg-color) !important;
+      border-right: var(--kbt-border-light) !important;
+      .logo {
+        border-bottom: var(--kbt-border-light) !important;
+      }
+    }
+    .aside-split {
+      border-right: var(--kbt-border-light) !important;
+      .logo {
+        background-color: var(--kbt-bg-color) !important;
+      }
+    }
+    .not-aside {
+      border-right: none !important;
+    }
     .el-header {
       background-color: var(--kbt-bg-color) !important;
       border-bottom-color: var(--el-border-color-light) !important;
+      color: var(--el-text-color-regular) !important;
+      .header-left {
+        .el-breadcrumb__inner {
+          color: var(--el-text-color-regular) !important;
+        }
+      }
     }
-    .el-main {
+    .el-main,
+    .el-main > div {
       background-color: var(--kbt-main-bg-color) !important;
     }
-    .el-tabs,
     .tabs-nav {
-      background-color: var(--kbt-bg-color) !important;
       border-bottom: 1px solid var(--el-border-color-light);
-      .btn-icon .el-button {
-        border-color: var(--el-border-color-light) !important;
+      .el-tabs {
+        background-color: var(--kbt-bg-color) !important;
+        border-bottom: 1px solid var(--el-border-color-light);
+        .btn-icon .el-button {
+          border-color: var(--el-border-color-light) !important;
+        }
       }
+    }
+
+    .el-dropdown {
+      color: var(--el-text-color-regular) !important;
     }
     .el-footer {
       .footer {
@@ -55,19 +92,22 @@ html.dark {
       }
     }
   }
-  /* 克隆并自定义 ElMessage 样式，不会影响 ElMessage 原本样式，在 src/utils/message.ts 中调用自定义样式 ElMessage 方法即可，非暗黑模式在 src/style/element-plus.scss 文件进行了适配 */
+  .el-menu-item,
+  .el-sub-menu__title {
+    background-color: var(--kbt-bg-color) !important;
+  }
+
+  // 克隆并自定义 ElMessage 样式，不会影响 ElMessage 原本样式，在 src/utils/message.ts 中调用自定义样式 ElMessage 方法即可，非暗黑模式在 src/style/element-plus.scss 文件进行了适配
   .antd-message {
     background-image: initial !important;
     background-color: rgb(36, 37, 37) !important;
     box-shadow: rgb(13 13 13 / 12%) 0px 3px 6px -4px, rgb(13 13 13 / 8%) 0px 6px 16px 0px,
       rgb(13 13 13 / 5%) 0px 9px 28px 8px !important;
-
     & .el-message__content {
       color: #fff !important;
       pointer-events: all !important;
       background-image: initial !important;
     }
-
     & .el-message__closeBtn {
       &:hover {
         color: rgba(255, 255, 255, 0.85);

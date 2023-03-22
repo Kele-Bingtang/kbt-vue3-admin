@@ -53,7 +53,7 @@
         background-color: var(--split-menu-active-bg-color);
         .el-icon,
         .svg-icon {
-          color: var(--menu-icon-color) !important;
+          color: var(--menu-icon-color);
         }
       }
     }
@@ -94,6 +94,7 @@
   }
   .not-aside {
     width: 0 !important;
+    border: 0; // 折叠时确保 border-right 不能多出 1px
   }
   .el-header {
     box-sizing: border-box;

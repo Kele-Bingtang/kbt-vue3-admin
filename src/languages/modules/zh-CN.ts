@@ -90,6 +90,8 @@ export default {
     closeRight: "关闭右侧标签页",
     closeOthers: "关闭其他标签页",
     closeAll: "关闭全部标签页",
+    more: "更多",
+    maximize: "内容区域最大化",
   },
   _headerBar: {
     changeLanguage: "修改语言成功！",

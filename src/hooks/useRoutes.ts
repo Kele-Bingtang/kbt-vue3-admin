@@ -20,7 +20,7 @@ export const useRoutes = () => {
   /**
    * @description 手动处理动态路由，不需要传参
    */
-  const beforeInitDynamicRouter = async (roles?: string[]) => {
+  const beforeLoadDynamicRouter = async (roles?: string[]) => {
     if (!rolesRoutes.length) {
       ElNotification({
         title: "无权限访问",
@@ -43,10 +43,13 @@ export const useRoutes = () => {
    */
   const loadDynamicRouter = (routers: RouterConfigRaw[], roles: string[], r = router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
-    const resolveRouters = processAsyncRoutes(processRouteMeta(onlyRolesRoutes));
-    // 传到 permissionStore 持久化
-    permissionStore.loadRolesRoutes(resolveRouters);
-    resolveRouters.forEach(item => {
+    const resolveRouters = processDynamicRoutes(processRouteMeta(onlyRolesRoutes));
+    // 传到 permissionStore 持久化，并拿到扁平化的路由数组（所有二级以上的路由拍成一级，keep-alive 只支持到二级缓存（Layout 默认是一级，加起来就是二级））
+    const flatRouteList = permissionStore.loadPermissionRoutes(resolveRouters);
+    flatRouteList.forEach(flatRoute => {
+      const item = { ...flatRoute }; // 解除响应式
+      item.children ? (item.children = []) : ""; // 防止加载 children 而不加载提取出来变成的一级路由
+      item.path = (item.meta._fullPath as string) || item.path; // 加载动态路由时，子路由的 path 可能不带 /，这样会依赖父路由来拼接（vue-route 规则），但是 template 实现多级路由缓存，所以都拍成二级路由，则 path 加载时要求是完整的，不再放到父路由的 children 里
       if (!item.name || !r.hasRoute(item.name)) {
         if (item.meta?.isFull) r.addRoute(item as RouteRecordRaw);
         else r.addRoute("Layout", item as RouteRecordRaw);
@@ -55,16 +58,15 @@ export const useRoutes = () => {
     // 最后添加 notFoundRouter
     router.addRoute(notFoundRouter);
   };
-
   /**
-   * @description 过滤动态路由 重新生成规范路由
+   * @description 过滤动态路由，重新生成规范路由
    * @param routers 路由
    * @returns routers
    */
-  const processAsyncRoutes = (routers: RouterConfigRaw[]) => {
+  const processDynamicRoutes = (routers: RouterConfigRaw[]) => {
     if (!routers || !routers.length) return [];
     routers.forEach(r => {
-      // 将 _dynamic 属性加入 meta，标识此路由为后端返回路由
+      // 将 dynamic 属性加入 meta，标识此路由为后端返回路由
       r.meta && (r.meta._dynamic = true);
       // 父级的 redirect 属性取值：如果子级存在且父级的 redirect 属性不存在，默认取第一个子级的 path；如果子级存在且父级的 redirect 属性存在，取存在的 redirect 属性，会覆盖默认值
       if (r?.children && r.children.length && !r.redirect) r.redirect = r.children[0].path;
@@ -78,11 +80,10 @@ export const useRoutes = () => {
           if (isType(r.component) === "string") r.component = modules["/src/views" + r.component + ".vue"];
         } else r.component = modules["/src/views" + r.path + ".vue"];
       }
-      if (r?.children && r.children.length) processAsyncRoutes(r.children);
+      if (r?.children && r.children.length) processDynamicRoutes(r.children);
     });
     return routers;
   };
-
   /**
    * @description 过滤出当前系统角色的路由权限
    */
@@ -97,7 +98,6 @@ export const useRoutes = () => {
     });
     return rolesRoutes;
   };
-
   /**
    * @description 该系统角色是否有权限访问当前路由
    * roles 带有 * 的代表所有路由都能访问
@@ -119,6 +119,7 @@ export const useRoutes = () => {
       // 处理成后面布局要用到的 title。title 如果为函数，则涉及到当前路由，所以这里无法处理
       if (router.meta) {
         router.meta._fullPath = fullPath;
+        // router.path = fullPath;
         // 这两个顺序不能互换，因为 getLayoutTitle 函数需要 useI18n
         router.meta.useI18n = router.meta.useI18n === undefined ? settings.routeUseI18n : router.meta.useI18n;
         router.meta.title = getLayoutTitle(router as RouteConfig);
@@ -130,7 +131,6 @@ export const useRoutes = () => {
     });
     return routers;
   };
-
   /**
    * @description
    * 用于找到路由列表中 name 为 home 的对象
@@ -146,9 +146,8 @@ export const useRoutes = () => {
     }
     return {} as RouterConfig;
   };
-
   /**
-   * @description 扁平化数组对象（主要用来处理路由菜单）
+   * @description 扁平化数组对象，将多级嵌套路由处理成一维数组（主要用来处理路由菜单）
    * @param {Array} routeList 所有路由表
    * @return array
    */
@@ -159,9 +158,8 @@ export const useRoutes = () => {
       return flatArr;
     }, []);
   };
-
   /**
-   * 按照路由中 meta 下的 rank 等级升序来排序路由（仅处理以及一级路由）
+   * @description 按照路由中 meta 下的 rank 等级升序来排序路由（仅处理以及一级路由）
    * @param routeList 路由表
    * @returns
    */
@@ -175,12 +173,66 @@ export const useRoutes = () => {
       return a?.meta.rank - b?.meta.rank;
     });
   };
-
+  /**
+   * @description 过滤不需要的排序的路由
+   */
   const handRank = (routeList: RouterConfigRaw) => {
     const { name, path, meta } = routeList;
     if (!meta?.rank || (meta?.rank === 0 && name !== HOME_NAME && path !== "/")) return true;
     return false;
   };
+  /**
+   * @description 查找 path 对应的路由信息
+   * @param path 查找的 path
+   * @param routes 路由表
+   */
+  const findCurrentRouteByPath = (path: string, routes: RouterConfigRaw[]): RouterConfigRaw | null => {
+    let res = routes.find((item: { path: string }) => item.path === path) || null;
+    if (res) return isProxy(res) ? toRaw(res) : res;
+    else {
+      for (let i = 0; i < routes.length; i++) {
+        if (routes[i].children instanceof Array && routes[i].children?.length) {
+          res = findCurrentRouteByPath(path, routes[i].children || []);
+          if (res) return isProxy(res) ? toRaw(res) : res;
+        }
+      }
+      return null;
+    }
+  };
+  /**
+   * @description 通过 path 获取父级路由信息
+   * @param path 查找的 path，传入完整的 path，如 route.meta._fullPath
+   * @param routes 路由表
+   * @param target 返回的数组类型，all 表示饭返回父级路由，path 表示返回父级路由的 path，name 表示返回父级的 name
+   */
+  function findParentRoutesByPath(path: string, routes: RouterConfig[], target: "all" | "path" | "name" = "all") {
+    // 深度遍历查找
+    function dfs(routes: RouterConfig[], path: string, parents: RouterConfig[] | string[]) {
+      for (let i = 0; i < routes.length; i++) {
+        const item = routes[i];
+        // 找到 path 则返回父级 path
+        if (item.path === path || item.meta?._fullPath === path) {
+          if (target === "all") return parents as RouterConfig[];
+          else return parents as string[];
+        }
+        // children 不存在或为空则不递归
+        if (!item.children || !item.children.length) continue;
+        // 往下查找时将当前 target 入栈
+        if (target === "all") (parents as RouterConfig[]).push(item);
+        if (target === "path") (parents as string[]).push(item.path);
+        if (target === "name") (parents as string[]).push((item.name as string) || "");
+        if (dfs(item.children, path, parents).length) {
+          if (target === "all") return parents as RouterConfig[];
+          else return parents as string[];
+        }
+        // 深度遍历查找未找到时当前 path 出栈
+        parents.pop();
+      }
+      // 未找到时返回空数组
+      return [];
+    }
+    return dfs(routes, path, []);
+  }
 
   /**
    * 后台获取菜单，然后转成路由需要的信息
@@ -251,7 +303,7 @@ export const useRoutes = () => {
 
   return {
     getDynamicRouterList,
-    beforeInitDynamicRouter,
+    beforeLoadDynamicRouter,
     loadDynamicRouter,
     filterOnlyRolesRoutes,
     hasPermission,
@@ -259,5 +311,7 @@ export const useRoutes = () => {
     getHomeRoute,
     filterFlatRoutes,
     ascending,
+    findCurrentRouteByPath,
+    findParentRoutesByPath,
   };
 };

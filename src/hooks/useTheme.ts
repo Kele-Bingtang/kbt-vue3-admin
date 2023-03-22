@@ -11,10 +11,11 @@ export const useTheme = () => {
 
   // 切换暗黑模式
   const switchDark = () => {
-    const body = document.documentElement as HTMLElement;
+    const body = document.documentElement;
     if (settingsStore.isDark) body.setAttribute("class", "dark");
     else body.setAttribute("class", "");
     changePrimary(settingsStore.primaryTheme);
+    return toRaw(settingsStore.isDark);
   };
 
   // 修改主题颜色

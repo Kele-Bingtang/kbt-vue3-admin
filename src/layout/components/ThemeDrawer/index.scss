@@ -140,6 +140,12 @@
   align-items: center;
   margin-top: 10px;
 
+  .is-dark {
+    cursor: no-drop;
+    .menu-box-item {
+      pointer-events: none;
+    }
+  }
   .menu-box-item {
     height: 100%;
     position: relative;

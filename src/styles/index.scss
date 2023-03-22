@@ -123,6 +123,17 @@ div:focus {
   box-shadow: 0 0 10px var(--el-color-primary), 0 0 5px var(--el-color-primary) !important;
 }
 
+// 当前页面最大化 css
+.main-maximize {
+  .aside-split,
+  .el-aside,
+  .el-header,
+  .el-footer,
+  .tabs-nav {
+    display: none !important;
+  }
+}
+
 /* 克隆并自定义 ElMessage 样式，不会影响 ElMessage 原本样式，在 src/utils/message.ts 中调用自定义样式 ElMessage 方法即可，暗黑模式在 src/style/dark.scss 文件进行了适配 */
 .antd-message {
   border-width: 0 !important;

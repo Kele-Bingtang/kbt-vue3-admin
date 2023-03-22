@@ -30,5 +30,10 @@
         margin-right: 6px;
       }
     }
+    :deep(.el-menu) {
+      flex: 1;
+      overflow: hidden;
+      border-bottom: 1px solid var(--header-line-color);
+    }
   }
 }

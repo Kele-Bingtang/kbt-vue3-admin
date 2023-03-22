@@ -36,19 +36,4 @@ watch(
 );
 </script>
 
-<style lang="scss">
-// 暗色模式布局恢复默认颜色，如果暗黑模式的某些样式被自定义样式覆盖，则在这里让它生效
-.dark {
-  .header-left {
-    .el-breadcrumb__inner {
-      color: var(--el-text-color-regular) !important;
-    }
-  }
-  .el-header {
-    color: var(--el-text-color-regular) !important;
-  }
-  .el-dropdown {
-    color: var(--el-text-color-regular) !important;
-  }
-}
-</style>
+<style lang="scss"></style>

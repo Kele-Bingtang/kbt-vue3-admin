@@ -7,13 +7,13 @@
   >
     <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
     <template #title>
-      <span>{{ getTitle(menuItem) }}</span>
+      <span class="sle">{{ getTitle(menuItem) }}</span>
     </template>
   </el-menu-item>
-  <el-sub-menu v-else :index="menuItem.meta._fullPath">
+  <el-sub-menu v-else :index="menuItem.meta._fullPath" class="sub-menu">
     <template #title>
       <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
-      <span>{{ getTitle(menuItem) }}</span>
+      <span class="sle">{{ getTitle(menuItem) }}</span>
     </template>
     <template v-if="menuItem.children">
       <MenuItem v-for="child in menuItem.children" :key="child.path" :menu-item="child" :is-collapse="isCollapse" />
@@ -41,8 +41,8 @@ const handleMenuClick = (menuItem: RouterConfig) => {
 </script>
 
 <style lang="scss" scoped>
-.el-menu-item,
-.el-sub-menu {
+.menu-item,
+.sub-menu {
   :deep(.svg-icon) {
     margin-right: 5px;
     width: 1.5rem !important;

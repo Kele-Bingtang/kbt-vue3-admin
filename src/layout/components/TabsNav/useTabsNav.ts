@@ -218,17 +218,17 @@ export const useTabsNav = () => {
 
   const closeRightTab = async (tab: TabProp) => {
     layoutStore.removeRightTab(tab);
-    if (route.path !== selectedTab.value.path) {
-      router.push(selectedTab.value.path).catch(err => console.warn(err));
+    if (route.path !== tab.path) {
+      router.push(tab.path).catch(err => console.warn(err));
     }
   };
 
   // 关闭除当前选中 tab 的其他 tab
-  const closeOthersTabs = () => {
-    layoutStore.removeOtherTabs(selectedTab.value);
+  const closeOthersTabs = (tab: TabProp) => {
+    layoutStore.removeOtherTabs(tab);
     if (route.meta.isKeepAlive) layoutStore.setKeepAliveName([route.name] as string[]);
-    if (route.path !== selectedTab.value.path) {
-      router.push(selectedTab.value.path).catch(err => console.warn(err));
+    if (route.path !== tab.path) {
+      router.push(tab.path).catch(err => console.warn(err));
     }
   };
 

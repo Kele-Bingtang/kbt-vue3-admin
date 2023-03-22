@@ -64,7 +64,6 @@
         </div>
       </el-tooltip>
     </div>
-    <br />
 
     <template
       v-if="
@@ -80,19 +79,22 @@
 
       <div class="menu-box">
         <el-tooltip effect="dark" content="亮色" placement="top" :show-after="200">
-          <div class="menu-box-item" @click="handleMenuTheme('light')">
-            <img src="@/assets/icons/menu-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.menuTheme === 'light'"><CircleCheckFilled /></el-icon>
+          <div :class="{ 'is-dark': settingsStore.isDark }">
+            <div class="menu-box-item" @click="handleMenuTheme('light')">
+              <img src="@/assets/icons/menu-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
+              <el-icon v-if="settingsStore.menuTheme === 'light'"><CircleCheckFilled /></el-icon>
+            </div>
           </div>
         </el-tooltip>
         <el-tooltip effect="dark" content="暗色" placement="top" :show-after="200">
-          <div class="menu-box-item" @click="handleMenuTheme('dark')">
-            <img src="@/assets/icons/menu-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.menuTheme === 'dark'"><CircleCheckFilled /></el-icon>
+          <div :class="{ 'is-dark': settingsStore.isDark }">
+            <div class="menu-box-item" @click="handleMenuTheme('dark')">
+              <img src="@/assets/icons/menu-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
+              <el-icon v-if="settingsStore.menuTheme === 'dark'"><CircleCheckFilled /></el-icon>
+            </div>
           </div>
         </el-tooltip>
       </div>
-      <br />
     </template>
 
     <template v-if="settingsStore.layoutMode === 'classic' || settingsStore.layoutMode === 'transverse'">
@@ -103,19 +105,22 @@
 
       <div class="menu-box">
         <el-tooltip effect="dark" content="亮色" placement="top" :show-after="200">
-          <div class="menu-box-item" @click="handleHeaderTheme('light')">
-            <img src="@/assets/icons/header-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.headerTheme === 'light'"><CircleCheckFilled /></el-icon>
+          <div :class="{ 'is-dark': settingsStore.isDark }">
+            <div class="menu-box-item" @click="handleHeaderTheme('light')">
+              <img src="@/assets/icons/header-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
+              <el-icon v-if="settingsStore.headerTheme === 'light'"><CircleCheckFilled /></el-icon>
+            </div>
           </div>
         </el-tooltip>
         <el-tooltip effect="dark" content="暗色" placement="top" :show-after="200">
-          <div class="menu-box-item" @click="handleHeaderTheme('dark')">
-            <img src="@/assets/icons/header-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.headerTheme === 'dark'"><CircleCheckFilled /></el-icon>
+          <div :class="{ 'is-dark': settingsStore.isDark }">
+            <div class="menu-box-item" @click="handleHeaderTheme('dark')">
+              <img src="@/assets/icons/header-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
+              <el-icon v-if="settingsStore.headerTheme === 'dark'"><CircleCheckFilled /></el-icon>
+            </div>
           </div>
         </el-tooltip>
       </div>
-      <br />
     </template>
 
     <el-divider class="divider" content-position="center">
@@ -158,7 +163,6 @@
       </div>
     </div>
 
-    <br />
     <!-- 全局主题 -->
     <el-divider class="divider" content-position="center">
       <el-icon><ColdDrink /></el-icon>
@@ -186,7 +190,6 @@
       <span>{{ $t("_settings.weakMode") }}</span>
       <el-switch v-model="settingsStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />
     </div>
-    <br />
 
     <!-- 界面设置 -->
     <el-divider class="divider" content-position="center">
@@ -221,7 +224,11 @@
       <span>{{ $t("_settings.showLayoutLogo") }}</span>
       <el-switch v-model="settingsStore.showLayoutLogo" />
     </div>
-    <br />
+
+    <div class="drawer-item">
+      <span>{{ $t("_tabsNav.maximize") }}</span>
+      <el-switch v-model="settingsStore.maximize" />
+    </div>
 
     <el-divider class="divider" content-position="center">
       <el-icon><Box /></el-icon>
@@ -250,7 +257,7 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts">
+<script setup lang="ts" name="ThemeDrawer">
 import { useTheme } from "@/hooks/useTheme";
 import settings from "@/config/settings";
 import { useSettingsStore } from "@/stores/settings";
@@ -336,8 +343,10 @@ const changeLayout = (value: LayoutModeType) => {
   });
 };
 const handleSwitchDark = () => {
-  switchDark();
-  handleMenuTheme("dark");
+  const isDark = switchDark();
+  const theme = isDark ? "dark" : "light";
+  handleMenuTheme(theme);
+  handleHeaderTheme(theme);
 };
 
 const handleTitleModeSelect = () => {

@@ -88,6 +88,8 @@ export default {
     close: "Close Current",
     closeOthers: "Close Others",
     closeAll: "Close All",
+    more: "More",
+    maximize: "Maximize",
   },
   _headerBar: {
     changeLanguage: "Successfully modified the language！",

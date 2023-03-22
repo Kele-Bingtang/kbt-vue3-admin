@@ -18,7 +18,7 @@
         background: var(--menu-hover-bg-color);
       }
     }
-    .el-sub-menu,
+    .sub-menu,
     .menu-item {
       &:not(.is-active) {
         .el-icon,
@@ -28,7 +28,10 @@
       }
     }
   }
-  .el-sub-menu {
+  .sub-menu {
+    &.is-active .el-sub-menu__title {
+      color: var(--el-color-primary) !important;
+    }
     .el-menu {
       background-color: var(--sub-menu-bg-color) !important;
       .menu-item {
@@ -40,6 +43,9 @@
         }
       }
     }
+  }
+  .menu-collapse .sub-menu.is-active .el-sub-menu__title {
+    background-color: var(--sub-menu-active-bg-color) !important;
   }
   // 菜单折叠的样式
   .el-popper {

@@ -5,24 +5,22 @@ import { constantRoutes, HOME_NAME } from "@/router/routesConfig";
 export const usePermissionStore = defineStore("permissionStore", () => {
   const loadedRouteList = ref<RouterConfig[]>([]);
   const flatRouteList = ref<RouterConfig[]>([]);
-  const isLoadedRoutes = ref(false);
 
   const { processRouteMeta, getHomeRoute, filterFlatRoutes, ascending } = useRoutes();
 
   const homeRoute = computed(() => getHomeRoute(loadedRouteList.value, HOME_NAME)); // 路由里首页的 name 值，必须填且正确，默认为 Home
 
-  const loadRolesRoutes = (routers: RouterConfigRaw[]) => {
+  const loadPermissionRoutes = (routers: RouterConfigRaw[]) => {
     loadedRouteList.value = ascending(processRouteMeta(constantRoutes).concat(routers)) as RouterConfig[];
     flatRouteList.value = filterFlatRoutes(routers) as RouterConfig[];
-    isLoadedRoutes.value = true;
+    return flatRouteList.value;
   };
 
   return {
     loadedRouteList,
     homeRoute,
-    isLoadedRoutes,
     flatRouteList,
 
-    loadRolesRoutes,
+    loadPermissionRoutes,
   };
 });

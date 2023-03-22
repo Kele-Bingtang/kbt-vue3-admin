@@ -45,7 +45,7 @@ router.beforeEach(async (to, from, next) => {
 
   // 判断访问页面是否在路由白名单地址中，如果存在直接放行
   if (whiteList.includes("*")) {
-    if (!permissionStore.isLoadedRoutes) {
+    if (!permissionStore.loadedRouteList.length) {
       loadDynamicRouter(rolesRoutes, ["*"], router);
       return next({ ...to, replace: true });
     }
@@ -67,7 +67,7 @@ router.beforeEach(async (to, from, next) => {
     return Promise.reject("No permission");
   }
   // 判断是否存在角色或加载过路由，如果不存在，则加载路由
-  if (!permissionStore.isLoadedRoutes) {
+  if (!permissionStore.loadedRouteList.length) {
     try {
       const roles = await userStore.getUserInfo();
       loadDynamicRouter(rolesRoutes, roles, router);

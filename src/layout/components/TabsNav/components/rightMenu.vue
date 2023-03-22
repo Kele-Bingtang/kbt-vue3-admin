@@ -16,24 +16,26 @@
       <el-icon><ArrowRight /></el-icon>
       {{ $t("_tabsNav.closeRight") }}
     </li>
-    <li v-if="condition.other" @click="closeOthersTabs">
-      <el-icon><DCaret /></el-icon>
+    <li v-if="condition.other" @click="closeOthersTabs(selectedTab)">
+      <el-icon><SemiSelect /></el-icon>
       {{ $t("_tabsNav.closeOthers") }}
     </li>
     <li v-if="condition.all" @click="closeAllTabs()">
-      <el-icon><SemiSelect /></el-icon>
+      <el-icon><FolderDelete /></el-icon>
       {{ $t("_tabsNav.closeAll") }}
     </li>
   </ul>
 </template>
 
 <script setup lang="ts" name="RightMenu">
+import type { TabProp } from "@/stores";
 import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
 
-const { selectedTab, closeCurrentTab, refreshSelectedTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } =
+const { refreshSelectedTab, closeCurrentTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } =
   useTabsNav();
 
 interface RightMenuProps {
+  selectedTab: TabProp;
   visible?: boolean;
   left?: number;
   top?: number;

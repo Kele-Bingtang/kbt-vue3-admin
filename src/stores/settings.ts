@@ -20,6 +20,7 @@ const {
   isDark: isDarkSetting,
   isWeak: isWeakSetting,
   isGrey: isGreySetting,
+  maximize: maximizeSetting,
 } = defaultSettings;
 
 export const useSettingsStore = defineStore(
@@ -42,6 +43,7 @@ export const useSettingsStore = defineStore(
     const isWeak = ref(isWeakSetting);
     const isGrey = ref(isGreySetting);
     const headerTheme = ref<LayoutThemeType>(layoutThemeSetting);
+    const maximize = ref(maximizeSetting);
 
     const closeSideMenu = () => {
       isCollapse.value = true;
@@ -76,6 +78,7 @@ export const useSettingsStore = defineStore(
       isWeak,
       isGrey,
       headerTheme,
+      maximize,
 
       closeSideMenu,
       toggleSideMenu,
