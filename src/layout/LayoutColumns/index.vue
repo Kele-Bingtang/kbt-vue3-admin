@@ -27,9 +27,9 @@
         <el-menu
           :default-active="activeMenu"
           :collapse="isCollapse"
-          background-color="#ffffff"
-          text-color="#303133"
-          :active-text-color="theme"
+          background-color="var(--menu-bg-color)"
+          text-color="var(--menu-text-color)"
+          :active-text-color="primaryTheme"
           unique-opened
           :collapse-transition="false"
         >
@@ -67,19 +67,15 @@ const { getMenuListByRouter } = useLayout();
 const menuItem = ref<RouterConfig[]>([]);
 const splitActive = ref<string>(""); // 菜单是否激活
 
-const activeMenu = computed(
-  () => (route.meta.activeMenu as string) || (route.meta._fullPath as string) || (route.path as string)
-);
+const activeMenu = computed(() => (route.meta.activeMenu || route.meta._fullPath || route.path) as string);
 const isCollapse = computed(() => settingsStore.isCollapse);
-const theme = computed(() => settingsStore.primaryTheme);
+const primaryTheme = computed(() => settingsStore.primaryTheme);
 
 const menuList = computed(() => {
   if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {
     const menu = getMenuListByRouter(permissionStore.loadedRouteList);
     return getMenuListByRouter(menu);
-  } else {
-    return getMenuListByRouter(permissionStore.loadedRouteList);
-  }
+  } else return getMenuListByRouter(permissionStore.loadedRouteList);
 });
 
 watch(

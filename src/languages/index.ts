@@ -11,7 +11,8 @@ const messages = {
 };
 
 export const getLocale = () => {
-  const layoutStore = JSON.parse(localStorage.getItem(settings.layoutCacheKey) || "");
+  const layoutCache = localStorage.getItem(settings.layoutCacheKey);
+  const layoutStore = layoutCache ? JSON.parse(layoutCache) : "";
   const cookieLanguage = layoutStore ? layoutStore.language : layoutStore;
   if (cookieLanguage) {
     document.documentElement.lang = cookieLanguage;

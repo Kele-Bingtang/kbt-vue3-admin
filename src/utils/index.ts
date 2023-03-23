@@ -156,7 +156,7 @@ export const uploadLocal = (file: File): Promise<{ blobInfo: any; file: File }> 
 };
 
 /**
- * 从 URL 去除 ? 后面的参数
+ * 获取 URL ? 后面的参数
  */
 export function getUrlParams(url: string) {
   // \w+ 表示匹配至少一个(数字、字母及下划线), [\u4e00-\u9fa5]+ 表示匹配至少一个中文字符

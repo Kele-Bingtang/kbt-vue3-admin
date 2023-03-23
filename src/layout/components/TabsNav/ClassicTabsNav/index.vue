@@ -38,17 +38,17 @@
           <el-icon><ArrowRight /></el-icon>
         </el-button>
       </div>
-
-      <transition name="el-zoom-in-top">
-        <RightMenu
-          :selected-tab="selectedTab"
-          :visible="rightMenuVisible"
-          :left="rightMenuLeft"
-          :top="rightMenuTop"
-          :condition="contextMenuCondition"
-        />
-      </transition>
+      <MenuDropdown class="menu-dropdown"></MenuDropdown>
     </div>
+    <transition name="el-zoom-in-top">
+      <RightMenu
+        :selected-tab="selectedTab"
+        :visible="rightMenuVisible"
+        :left="rightMenuLeft"
+        :top="rightMenuTop"
+        :condition="contextMenuCondition"
+      />
+    </transition>
   </div>
 </template>
 
@@ -59,6 +59,7 @@ import { useSettingsStore } from "@/stores/settings";
 import CommonIcon from "@/components/CommonIcon/index.vue";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
+import MenuDropdown from "../components/MenuDropdown.vue";
 
 const route = useRoute();
 const layoutStore = useLayoutStore();

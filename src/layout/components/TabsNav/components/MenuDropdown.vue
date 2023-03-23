@@ -1,9 +1,11 @@
 <template>
   <el-dropdown trigger="click" :teleported="false">
-    <el-button size="small" type="primary" @click="expandDropdown">
-      <span>{{ $t("_tabsNav.more") }}</span>
-      <el-icon class="el-icon--right"><arrow-down /></el-icon>
-    </el-button>
+    <slot>
+      <el-button text size="small" type="primary" @click="expandDropdown">
+        <span>{{ $t("_tabsNav.more") }}</span>
+        <el-icon class="el-icon--right"><arrow-down /></el-icon>
+      </el-button>
+    </slot>
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item @click="refreshSelectedTab(selectedTab)" :disabled="!contextMenuCondition.refresh">

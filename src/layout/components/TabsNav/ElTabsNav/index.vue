@@ -41,7 +41,7 @@ import type { TabPaneName, TabsPaneContext } from "element-plus";
 import CommonIcon from "@/components/CommonIcon/index.vue";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
-import MenuButton from "../components/MenuButton.vue";
+import MenuButton from "../components/MenuDropdown.vue";
 
 const route = useRoute();
 const router = useRouter();

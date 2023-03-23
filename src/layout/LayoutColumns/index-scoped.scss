@@ -1,6 +1,6 @@
 @import "@/styles/variables.module.scss";
 
-.el-container {
+.layout-container {
   width: 100%;
   height: 100%;
   .aside-split {
@@ -62,9 +62,9 @@
     display: flex;
     flex-direction: column;
     height: 100%;
+		box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
     overflow: hidden;
-    background-color: #ffffff;
-    border-right: 1px solid #f0eded;
+    background: var(--menu-bg-color);
     transition: all 0.3s ease;
     .el-scrollbar {
       height: calc(100% - 55px);

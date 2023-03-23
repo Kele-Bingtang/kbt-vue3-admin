@@ -276,17 +276,17 @@ export const useRoutes = () => {
    * @param menuCode 菜单 code，等价于路由的 name
    * @returns 路由表信息
    */
-  const getDynamicRouterList = (menuList: BackstageMenuList[], menuCode: string) => {
+  const getDynamicRouters = (menuList: BackstageMenuList[], menuCode: string) => {
     const dynamicRouterList: RouterConfigRaw[] = [];
     menuList.forEach(item => {
       if (item.parentMenuCode === menuCode) {
-        const children = getDynamicRouterList(
+        const children = getDynamicRouters(
           menuList.filter(v => v.menuCode !== menuCode),
           item.menuCode
         );
         const menu = {
           path: item.menuUrl,
-          name: item.menuUrl,
+          name: item.menuName,
           component: item.pagePath,
           meta: {
             title: item.menuName,
@@ -302,7 +302,7 @@ export const useRoutes = () => {
   };
 
   return {
-    getDynamicRouterList,
+    getDynamicRouters,
     beforeLoadDynamicRouter,
     loadDynamicRouter,
     filterOnlyRolesRoutes,

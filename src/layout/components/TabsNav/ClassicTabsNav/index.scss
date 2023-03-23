@@ -12,13 +12,13 @@
   .scroll-container {
     position: absolute;
     left: 28px;
-    right: 28px;
+    right: 88px;
     top: 0;
     bottom: 0;
+    overflow: hidden;
     .scroll-body {
       display: inline-block;
       padding: 2px 4px 0;
-      overflow: visible;
       white-space: nowrap;
       -webkit-transition: left 0.3s ease;
       transition: left 0.3s ease;
@@ -93,7 +93,7 @@
       left: 0px;
     }
     &.right-btn {
-      right: 0px;
+      right: 60px;
     }
     .el-button {
       width: 28px;
@@ -116,5 +116,10 @@
         font-weight: 600;
       }
     }
+  }
+  .menu-dropdown {
+    position: absolute;
+    top: 7px;
+    right: 0;
   }
 }

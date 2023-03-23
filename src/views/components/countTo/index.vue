@@ -1,12 +1,12 @@
 <template>
-  <div class="CountTo-container">
+  <div class="count-to-container">
     <el-row :gutter="20">
       <el-col :span="4">
         <el-card shadow="hover">
           <template #header>
             <span>基础用法</span>
           </template>
-          <div class="countTo-content">
+          <div class="count-to-content">
             <CountTo :start-val="0" :end-val="2727" count-class="count-text" />
           </div>
         </el-card>
@@ -17,7 +17,7 @@
           <template #header>
             <span>添加前缀和后缀</span>
           </template>
-          <div class="countTo-content">
+          <div class="count-to-content">
             <CountTo :start-val="0" :end-val="2727" prefix="Lucky " suffix=" Num" count-class="count-text" />
           </div>
         </el-card>
@@ -28,7 +28,7 @@
           <template #header>
             <span>保留 2 位小数点 & 循环三次</span>
           </template>
-          <div class="countTo-content">
+          <div class="count-to-content">
             <CountTo :start-val="0" :end-val="2727" :decimals="2" :loop="3" count-class="count-text" />
           </div>
         </el-card>
@@ -39,7 +39,7 @@
           <template #header>
             <span>动画持续 10 秒</span>
           </template>
-          <div class="countTo-content">
+          <div class="count-to-content">
             <CountTo
               :start-val="0"
               :end-val="2727"
@@ -53,13 +53,13 @@
       </el-col>
     </el-row>
 
-    <el-row :gutter="20" class="CountTo-row">
+    <el-row :gutter="20" class="count-to-row">
       <el-col :span="8">
         <el-card shadow="hover" style="height: 270px">
           <template #header>
             <span>单位转换（自带）</span>
           </template>
-          <div class="countTo-content">
+          <div class="count-to-content">
             <CountTo
               :simplify="true"
               :end-val="27272"
@@ -90,7 +90,7 @@
           <template #header>
             <span>自定义单位</span>
           </template>
-          <div class="countTo-content">
+          <div class="count-to-content">
             <CountTo
               :simplify="true"
               :end-val="2727"
@@ -129,14 +129,14 @@
           <template #header>
             <span>异步更新数据</span>
           </template>
-          <div class="countTo-content" style="line-height: 149px">
+          <div class="count-to-content" style="line-height: 149px">
             <CountTo :end-val="asyncEndVal" count-class="count-text" />
           </div>
         </el-card>
       </el-col>
     </el-row>
 
-    <el-row class="CountTo-row">
+    <el-row class="count-to-row">
       <el-card shadow="hover">
         <template #header>
           <span>
@@ -147,7 +147,7 @@
             :loop=&#x27;{{ loop }}&#x27; /&gt;
           </span>
         </template>
-        <div class="countTo-content">
+        <div class="count-to-content">
           <CountTo
             ref="countRef"
             :start-val="startVal"
@@ -295,11 +295,11 @@ const reset = () => {
 </script>
 
 <style lang="scss" scoped>
-.CountTo-container {
-  .CountTo-row {
+.count-to-container {
+  .count-to-row {
     margin-top: 20px;
   }
-  .countTo-content {
+  .count-to-content {
     text-align: center;
   }
   .count-demo {
@@ -314,7 +314,7 @@ const reset = () => {
 }
 </style>
 <style lang="scss">
-.CountTo-container {
+.count-to-container {
   .count-text {
     font-size: 50px;
     color: var(--el-color-primary);

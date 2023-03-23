@@ -32,9 +32,24 @@ export interface PermissionState {
 }
 
 // SettingsState
-export type LayoutModeType = "vertical" | "classic" | "transverse" | "columns" | "portal";
-export type TabsNavModeType = "classic" | "popular";
-export type LayoutThemeType = "light" | "dark";
+export enum LayoutModeType {
+  Vertical = "vertical",
+  Classic = "classic",
+  Transverse = "transverse",
+  Columns = "columns",
+  Portal = "portal",
+  Mixins = "mixins",
+}
+
+export enum TabsNavModeType {
+  Classic = "classic",
+  Popular = "popular",
+}
+
+export enum LayoutThemeType {
+  Light = "light",
+  Dark = "dark",
+}
 
 export interface SettingsState {
   theme: string; // Element UI 主题色

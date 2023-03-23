@@ -8,6 +8,7 @@ import LayoutVertical from "./LayoutVertical/index.vue";
 import LayoutClassic from "./LayoutClassic/index.vue";
 import LayoutTransverse from "./LayoutTransverse/index.vue";
 import LayoutColumns from "./LayoutColumns/index.vue";
+import LayoutMixins from "./LayoutMixins/index.vue";
 import LayoutPortal from "./LayoutPortal/index.vue";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import { useSettingsStore } from "@/stores/settings";
@@ -18,6 +19,7 @@ const LayoutComponents: { [key: string]: Component } = {
   classic: LayoutClassic,
   transverse: LayoutTransverse,
   columns: LayoutColumns,
+  mixins: LayoutMixins,
   portal: LayoutPortal,
 };
 

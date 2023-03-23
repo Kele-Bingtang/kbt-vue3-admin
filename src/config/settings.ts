@@ -1,4 +1,4 @@
-import type { LayoutModeType, LayoutThemeType, TabsNavModeType } from "@/stores";
+import { LayoutModeType, LayoutThemeType, TabsNavModeType } from "@/stores/index.d";
 
 interface Settings {
   title: string; // 项目 title
@@ -49,8 +49,8 @@ interface Settings {
 const settings: Settings = {
   title: "kbt-vue3-admin",
   titleMode: "0",
-  layoutMode: "vertical",
-  tabsNavMode: "classic",
+  layoutMode: LayoutModeType.Vertical,
+  tabsNavMode: TabsNavModeType.Classic,
   showSettings: true,
   showBreadcrumb: true,
   showTabsNav: true,
@@ -66,7 +66,7 @@ const settings: Settings = {
   menuTextTheme: true,
   maximize: false,
   primaryTheme: "#168BF7", // 蓝色偏暗：#168BF7，官方：#409EFF
-  layoutTheme: "light",
+  layoutTheme: LayoutThemeType.Light,
   errorLog: {
     showInHeader: true,
     env: ["production"],

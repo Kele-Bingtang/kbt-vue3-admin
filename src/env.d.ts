@@ -21,4 +21,5 @@ interface ImportMetaEnv {
   readonly VITE_COMPRESSION: "none" | "gzip" | "brotli" | "both" | "gzip-clear" | "brotli-clear" | "both-clear";
 }
 
+// 覆盖全局的 useRoute 类型
 declare const useRoute: () => RouteConfig;

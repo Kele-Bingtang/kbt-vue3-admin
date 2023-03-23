@@ -1,19 +1,5 @@
 <template>
-  <el-scrollbar v-if="props.mode === 'vertical'">
-    <el-menu
-      :default-active="activeMenu"
-      :collapse="isCollapse"
-      background-color="var(--menu-bg-color)"
-      text-color="var(--menu-text-color)"
-      :active-text-color="primaryTheme"
-      unique-opened
-      :collapse-transition="false"
-      :mode="props.mode"
-    >
-      <MenuItem v-for="menu in menuList" :key="menu.name" :menu-item="menu" :is-collapse="isCollapse" />
-    </el-menu>
-  </el-scrollbar>
-  <template v-else>
+  <el-scrollbar>
     <el-menu
       :default-active="activeMenu"
       :collapse="isCollapse"
@@ -26,7 +12,7 @@
     >
       <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" :is-collapse="isCollapse" />
     </el-menu>
-  </template>
+  </el-scrollbar>
 </template>
 
 <script setup lang="ts" name="Menu">
@@ -36,7 +22,14 @@ import { useSettingsStore } from "@/stores/settings";
 import settings from "@/config/settings";
 import MenuItem from "@/layout/components/Menu/MenuItem.vue";
 
-const props = withDefaults(defineProps<{ mode?: "vertical" | "horizontal" }>(), {
+interface MenuProps {
+  menuList?: RouterConfig[];
+  activeMenu?: string;
+  mode?: "vertical" | "horizontal";
+  isCollapse?: boolean;
+}
+
+const props = withDefaults(defineProps<MenuProps>(), {
   mode: "vertical",
 });
 const route = useRoute();
@@ -44,11 +37,14 @@ const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
 const { getMenuListByRouter } = useLayout();
 
-const activeMenu = computed(() => (route.meta.activeMenu || route.meta._fullPath || route.path) as string);
-const isCollapse = computed(() => settingsStore.isCollapse);
+const activeMenu = computed(() =>
+  props.activeMenu ? props.activeMenu : ((route.meta.activeMenu || route.meta._fullPath || route.path) as string)
+);
+const isCollapse = computed(() => (props.isCollapse === undefined ? settingsStore.isCollapse : props.isCollapse));
 const primaryTheme = computed(() => settingsStore.primaryTheme);
 
 const menuList = computed(() => {
+  if (props.menuList) return props.menuList;
   /**
    * 第一次是将 hideInMenu 和 Children 为 1 的过滤掉，第二次是将最终 Children 为 1 的过滤掉（可能第一次 Children 有多个，只有一个 hideInMenu 不为 true）
    *
