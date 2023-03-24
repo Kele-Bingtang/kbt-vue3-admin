@@ -32,8 +32,8 @@ const whiteList = settings.whiteList;
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   const permissionStore = usePermissionStore();
-  const token = userStore.token;
   const { loadDynamicRouter } = useRoutes();
+  const token = userStore.token;
 
   NProgress.start();
   // 判断是访问登陆页，有 Token 就在当前页面，没有 Token 重置路由并放行到登陆页

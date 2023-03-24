@@ -1,5 +1,4 @@
 @import "@/styles/variables.module.scss";
-
 .layout-container {
   width: 100%;
   height: 100%;
@@ -30,7 +29,6 @@
       }
     }
   }
-
   .el-aside {
     height: 100%;
     transition: width 0.28s;
@@ -50,10 +48,11 @@
     transition-duration: 0.3s;
     width: 64px;
   }
+
   :deep(.el-scrollbar) {
     flex: 1;
+    overflow: hidden;
   }
-
   .mixins-container {
     height: calc(100% - 55px); // 减去头部高度
     .mixins-main-content {

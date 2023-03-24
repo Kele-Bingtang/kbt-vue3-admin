@@ -28,7 +28,8 @@
       }
     }
     .sub-menu {
-      &.is-active .el-sub-menu__title {
+      // 子级高亮，父级也高亮
+      &.is-active > .el-sub-menu__title {
         color: var(--el-color-primary) !important;
       }
       .el-menu {

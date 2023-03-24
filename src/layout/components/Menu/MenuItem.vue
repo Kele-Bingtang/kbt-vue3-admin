@@ -16,7 +16,7 @@
       <span class="sle">{{ getTitle(menuItem) }}</span>
     </template>
     <template v-if="menuItem.children">
-      <MenuItem v-for="child in menuItem.children" :key="child.path" :menu-item="child" :is-collapse="isCollapse" />
+      <MenuItem v-for="child in menuItem.children" :key="child.path" :menu-item="child" />
     </template>
   </el-sub-menu>
 </template>
@@ -28,7 +28,6 @@ import CommonIcon from "@/components/CommonIcon/index.vue";
 
 defineProps<{
   menuItem: RouterConfig;
-  isCollapse: boolean;
 }>();
 
 const { getTitle } = useLayout();

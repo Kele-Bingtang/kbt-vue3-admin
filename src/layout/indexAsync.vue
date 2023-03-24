@@ -21,7 +21,8 @@ const LayoutComponents: { [key: string]: Component } = {
   classic: defineAsyncComponent(() => import("./LayoutClassic/index.vue")),
   transverse: defineAsyncComponent(() => import("./LayoutTransverse/index.vue")),
   columns: defineAsyncComponent(() => import("./LayoutColumns/index.vue")),
-  portal: defineAsyncComponent(() => import("./LayoutPortal/index.vue")),
+  mixins: defineAsyncComponent(() => import("./LayoutMixins/index.vue")),
+  subsystem: defineAsyncComponent(() => import("./LayoutSubsystem/index.vue")),
 };
 
 const settingsStore = useSettingsStore();

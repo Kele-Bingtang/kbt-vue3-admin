@@ -30,6 +30,7 @@
     }
     :deep(.el-scrollbar) {
       flex: 1;
+      overflow: hidden;
     }
   }
 }

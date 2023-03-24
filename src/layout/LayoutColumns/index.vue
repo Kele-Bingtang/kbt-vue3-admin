@@ -24,17 +24,7 @@
         <span v-show="menuItem.length">{{ isCollapse ? "K" : settings.title }}</span>
       </div>
       <el-scrollbar>
-        <el-menu
-          :default-active="activeMenu"
-          :collapse="isCollapse"
-          background-color="var(--menu-bg-color)"
-          text-color="var(--menu-text-color)"
-          :active-text-color="primaryTheme"
-          unique-opened
-          :collapse-transition="false"
-        >
-          <MenuItem v-for="menu in menuItem" :key="menu.path" :menu-item="menu" :is-collapse="isCollapse" />
-        </el-menu>
+        <Menu :menu-list="menuItem" />
       </el-scrollbar>
     </el-aside>
     <el-container>
@@ -54,7 +44,7 @@ import { usePermissionStore } from "@/stores/permission";
 import { useLayout } from "@/hooks/useLayout";
 import settings from "@/config/settings";
 import CommonIcon from "@/components/CommonIcon/index.vue";
-import MenuItem from "@/layout/components/Menu/MenuItem.vue";
+import Menu from "@/layout/components/Menu/index.vue";
 import { HOME_URL } from "@/router/routesConfig";
 
 const route = useRoute();
@@ -67,9 +57,7 @@ const { getMenuListByRouter } = useLayout();
 const menuItem = ref<RouterConfig[]>([]);
 const splitActive = ref<string>(""); // 菜单是否激活
 
-const activeMenu = computed(() => (route.meta.activeMenu || route.meta._fullPath || route.path) as string);
 const isCollapse = computed(() => settingsStore.isCollapse);
-const primaryTheme = computed(() => settingsStore.primaryTheme);
 
 const menuList = computed(() => {
   if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {

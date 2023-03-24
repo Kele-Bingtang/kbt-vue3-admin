@@ -10,7 +10,7 @@
       :collapse-transition="false"
       :mode="props.mode"
     >
-      <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" :is-collapse="isCollapse" />
+      <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" />
     </el-menu>
   </el-scrollbar>
 </template>
@@ -31,6 +31,7 @@ interface MenuProps {
 
 const props = withDefaults(defineProps<MenuProps>(), {
   mode: "vertical",
+  isCollapse: undefined,
 });
 const route = useRoute();
 const settingsStore = useSettingsStore();

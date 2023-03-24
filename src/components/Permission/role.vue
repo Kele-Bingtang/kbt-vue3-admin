@@ -5,6 +5,7 @@
 </template>
 
 <script setup lang="ts" name="Role">
+import { Fragment } from "vue";
 import { usePermission } from "@/hooks/usePermission";
 
 interface RoleProps {

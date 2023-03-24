@@ -6,7 +6,13 @@
         <span>{{ settings.title }}</span>
       </div>
       <CollapseTrigger />
-      <Menu :menu-list="parentMenu" :active-menu="activeMenu" mode="horizontal" :is-collapse="false" />
+      <Menu
+        :menu-list="parentMenu"
+        :active-menu="activeMenu"
+        mode="horizontal"
+        :is-collapse="false"
+        class="mixins-header-menu"
+      />
       <HeaderRight />
     </el-header>
     <el-container class="mixins-container">
@@ -19,7 +25,6 @@
     </el-container>
   </el-container>
 </template>
-
 <script setup lang="ts" name="LayoutMixins">
 import { useSettingsStore } from "@/stores/settings";
 import MainContent from "@/layout/components/MainContent/index.vue";
@@ -30,17 +35,14 @@ import Menu from "@/layout/components/Menu/index.vue";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 import { HOME_URL } from "@/router/routesConfig";
-
 const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();
 const { getMenuListByRouter } = useLayout();
-
 // 子菜单
 const activeMenu = ref("");
 const childrenMenu = ref<RouterConfig[]>([]);
-
 const isCollapse = computed(() => settingsStore.isCollapse);
 const menuList = computed(() => {
   if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {
@@ -48,7 +50,6 @@ const menuList = computed(() => {
     return getMenuListByRouter(menu);
   } else return getMenuListByRouter(permissionStore.loadedRouteList);
 });
-
 const parentMenu = computed(() => {
   const parentMenu: RouterConfig[] = [];
   menuList.value.forEach(menuItem => {
@@ -58,13 +59,12 @@ const parentMenu = computed(() => {
   });
   return parentMenu;
 });
-
 watch(
   () => [menuList, route],
   () => {
     // 当前菜单没有数据直接 return
     if (!menuList.value.length) return;
-    activeMenu.value = `/${route.path.split("/")[1]}`;
+    activeMenu.value = `/${route.path.split("/")[1]}` || route.path;
     const item = menuList.value.filter(
       item => route.path === item.path || `/${route.path.split("/")[1]}` === item.path
     );
@@ -77,11 +77,9 @@ watch(
   }
 );
 </script>
-
 <style lang="scss" scoped>
 @import "./index-scoped.scss";
 </style>
-
 <style lang="scss">
 @import "./index-unlimited.scss";
 </style>

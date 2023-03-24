@@ -67,31 +67,37 @@
       </el-tooltip>
       <el-tooltip effect="dark" content="混合" placement="top" :show-after="200">
         <div
-          :class="['layout-item layout-portal', settingsStore.layoutMode === LayoutModeType.Mixins ? 'is-active' : '']"
+          :class="['layout-item layout-mixins', settingsStore.layoutMode == LayoutModeType.Mixins ? 'is-active' : '']"
           @click="changeLayout(LayoutModeType.Mixins)"
         >
           <div class="layout-dark"></div>
-          <div class="layout-content"></div>
-          <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Mixins"><CircleCheckFilled /></el-icon>
+          <div class="layout-container">
+            <div class="layout-dark"></div>
+            <div class="layout-content"></div>
+          </div>
+          <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Mixins"><CircleCheckFilled /></el-icon>
         </div>
       </el-tooltip>
-      <el-tooltip effect="dark" content="Portal" placement="top" :show-after="200">
+      <el-tooltip effect="dark" content="子系统" placement="top" :show-after="200">
         <div
-          :class="['layout-item layout-portal', settingsStore.layoutMode === LayoutModeType.Portal ? 'is-active' : '']"
-          @click="changeLayout(LayoutModeType.Portal)"
+          :class="[
+            'layout-item layout-subsystem',
+            settingsStore.layoutMode === LayoutModeType.Subsystem ? 'is-active' : '',
+          ]"
+          @click="changeLayout(LayoutModeType.Subsystem)"
         >
           <div class="layout-dark"></div>
           <div class="layout-content"></div>
-          <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Portal"><CircleCheckFilled /></el-icon>
+          <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Subsystem"><CircleCheckFilled /></el-icon>
         </div>
       </el-tooltip>
     </div>
-
     <template
       v-if="
         settingsStore.layoutMode === LayoutModeType.Vertical ||
         settingsStore.layoutMode === LayoutModeType.Columns ||
-        settingsStore.layoutMode === LayoutModeType.Portal
+        settingsStore.layoutMode === LayoutModeType.Mixins ||
+        settingsStore.layoutMode === LayoutModeType.Subsystem
       "
     >
       <el-divider class="divider" content-position="center">
@@ -383,19 +389,21 @@ watch(
   () => settingsStore.layoutMode,
   () => {
     const body = document.body as HTMLElement;
-    body.setAttribute("class", settingsStore.layoutMode);
-    if (
-      settingsStore.layoutMode === LayoutModeType.Vertical ||
-      settingsStore.layoutMode === LayoutModeType.Columns ||
-      settingsStore.layoutMode === LayoutModeType.Portal
-    ) {
-      settingsStore.$patch({ headerTheme: LayoutThemeType.Light });
-    }
-    if (settingsStore.layoutMode === LayoutModeType.Classic) {
-      settingsStore.$patch({ menuTheme: LayoutThemeType.Light });
-    }
-    if (settingsStore.layoutMode === LayoutModeType.Transverse) {
-      settingsStore.$patch({ menuTheme: LayoutThemeType.Light, isCollapse: false });
+    const { layoutMode, headerTheme, isDark } = settingsStore;
+    const { Vertical, Columns, Subsystem, Classic, Transverse, Mixins } = LayoutModeType;
+    const { Light, Dark } = LayoutThemeType;
+    body.setAttribute("class", layoutMode);
+    if (!isDark) {
+      if (layoutMode === Vertical || layoutMode === Columns || layoutMode === Subsystem) {
+        settingsStore.$patch({ headerTheme: Light });
+      }
+      if (layoutMode === Classic) settingsStore.$patch({ menuTheme: Light });
+      if (layoutMode === Transverse) {
+        if (headerTheme === Light) settingsStore.$patch({ menuTheme: Light, isCollapse: false });
+        else settingsStore.$patch({ menuTheme: Dark, isCollapse: false });
+      }
+      // 进入 Mixins 布局，则默认全改成暗色主题
+      if (layoutMode === Mixins) settingsStore.$patch({ headerTheme: Light, menuTheme: Light });
     }
   },
   { immediate: true }

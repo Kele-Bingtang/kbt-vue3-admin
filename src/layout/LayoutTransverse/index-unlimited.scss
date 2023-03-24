@@ -1,7 +1,6 @@
 .transverse {
   .el-menu {
-    overflow: hidden;
-    border-bottom: 1px solid var(--header-line-color);
+    border: none;
     .menu-item {
       &.is-active {
         background: var(--split-menu-active-bg-color);
@@ -42,13 +41,12 @@
       background: var(--menu-hover-bg-color);
     }
   }
-
   // 横向菜单
   .el-menu--horizontal {
     // 菜单高度
     .sub-menu,
     .menu-item {
-      height: 53px !important;
+      height: 54px !important;
       .el-sub-menu__title {
         height: 100%;
       }

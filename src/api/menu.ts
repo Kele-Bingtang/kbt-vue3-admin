@@ -8,6 +8,7 @@ export interface BackstageMenuList {
   menuUrl: string;
   parentMenuCode: string;
   seq: number;
+  children?: BackstageMenuList[];
 }
 
 export const getMenuList = () => {

@@ -122,7 +122,27 @@
       width: 55%;
     }
   }
-  .layout-portal {
+  .layout-mixins {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    .layout-dark {
+      height: 22%;
+    }
+    .layout-container {
+      display: flex;
+      justify-content: space-between;
+      height: 70%;
+      .layout-dark {
+        width: 20%;
+        height: 100%;
+      }
+      .layout-content {
+        width: 70%;
+      }
+    }
+  }
+  .layout-subsystem {
     display: flex;
     justify-content: space-between;
     .layout-dark {
@@ -133,13 +153,11 @@
     }
   }
 }
-
 .menu-box {
   display: flex;
   justify-content: flex-start;
   align-items: center;
   margin-top: 10px;
-
   .is-dark {
     cursor: no-drop;
     .menu-box-item {
@@ -152,7 +170,6 @@
     margin-right: 16px;
     border-radius: 2px;
     cursor: pointer;
-
     .el-icon {
       position: absolute;
       right: 15px;
@@ -162,7 +179,6 @@
     }
   }
 }
-
 .tab-box {
   text-align: center;
   .tabs-nav-theme:first-child {
@@ -217,7 +233,6 @@
         }
       }
     }
-
     .tas-nav-el-item {
       width: 100px;
       height: 100%;

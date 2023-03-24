@@ -1,5 +1,6 @@
 .mixins {
-  .el-menu {
+  .el-menu--horizontal {
+    border-bottom: none;
     .menu-item {
       &.is-active {
         background: var(--split-menu-active-bg-color);
@@ -12,6 +13,78 @@
         background: var(--split-menu-active-bg-color);
       }
     }
+    // 菜单高度
+    .sub-menu,
+    .menu-item {
+      height: 54px !important;
+      .el-sub-menu__title {
+        height: 100%;
+      }
+    }
+    .el-sub-menu__hide-arrow {
+      width: 54px !important;
+    }
+  }
+  .el-menu--vertical,
+  .el-menu--popup {
+    .menu-item {
+      &.is-active {
+        background: var(--menu-active-bg-color);
+        &::before {
+          position: absolute;
+          top: 0;
+          bottom: 0;
+          left: 0;
+          width: 4px;
+          content: "";
+          background: var(--el-color-primary);
+        }
+      }
+      &:hover {
+        background: var(--menu-hover-bg-color);
+      }
+    }
+    .sub-menu,
+    .menu-item {
+      &:not(.is-active) {
+        .el-icon,
+        .svg-icon {
+          color: var(--menu-icon-color);
+        }
+      }
+    }
+  }
+  .menu-collapse .sub-menu.is-active .el-sub-menu__title {
+    background-color: var(--sub-menu-active-bg-color) !important;
+  }
+  // 菜单折叠的样式
+  .el-menu--vertical .el-menu--popup {
+    background: var(--sub-menu-bg-color);
+    .menu-item {
+      &.is-active {
+        background: var(--sub-menu-active-bg-color);
+      }
+      &:hover {
+        background: var(--sub-menu-hover-bg-color);
+      }
+    }
+  }
+  .sub-menu {
+    // 子级高亮，父级也高亮
+    &.is-active > .el-sub-menu__title {
+      color: var(--el-color-primary) !important;
+    }
+    .el-menu {
+      background-color: var(--sub-menu-bg-color) !important;
+      .menu-item {
+        &.is-active {
+          background-color: var(--sub-menu-active-bg-color) !important;
+        }
+        &:hover {
+          background-color: var(--sub-menu-hover-bg-color) !important;
+        }
+      }
+    }
   }
   .sub-menu,
   .menu-item {
@@ -20,39 +93,6 @@
       .svg-icon {
         color: var(--menu-icon-color);
       }
-    }
-  }
-  // 下拉菜单
-  .el-menu--popup .menu-item {
-    &.is-active {
-      background: var(--menu-active-bg-color);
-      &::before {
-        position: absolute;
-        top: 0;
-        bottom: 0;
-        left: 0;
-        width: 4px;
-        content: "";
-        background: var(--el-color-primary);
-      }
-    }
-    &:hover {
-      background: var(--menu-hover-bg-color);
-    }
-  }
-
-  // 横向菜单
-  .el-menu--horizontal {
-    // 菜单高度
-    .sub-menu,
-    .menu-item {
-      height: 53px !important;
-      .el-sub-menu__title {
-        height: 100%;
-      }
-    }
-    .el-sub-menu__hide-arrow {
-      width: 54px !important;
     }
   }
   // 右侧图标

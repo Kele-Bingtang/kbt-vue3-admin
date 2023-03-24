@@ -9,7 +9,7 @@ import LayoutClassic from "./LayoutClassic/index.vue";
 import LayoutTransverse from "./LayoutTransverse/index.vue";
 import LayoutColumns from "./LayoutColumns/index.vue";
 import LayoutMixins from "./LayoutMixins/index.vue";
-import LayoutPortal from "./LayoutPortal/index.vue";
+import LayoutSubsystem from "./LayoutSubsystem/index.vue";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import { useSettingsStore } from "@/stores/settings";
 import { useLayout } from "@/hooks/useLayout";
@@ -20,7 +20,7 @@ const LayoutComponents: { [key: string]: Component } = {
   transverse: LayoutTransverse,
   columns: LayoutColumns,
   mixins: LayoutMixins,
-  portal: LayoutPortal,
+  subsystem: LayoutSubsystem,
 };
 
 const settingsStore = useSettingsStore();

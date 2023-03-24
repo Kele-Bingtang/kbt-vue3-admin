@@ -1,5 +1,4 @@
 @import "@/styles/variables.module.scss";
-
 .layout-container {
   width: 100%;
   height: 100%;
@@ -62,7 +61,7 @@
     display: flex;
     flex-direction: column;
     height: 100%;
-		box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
+    box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
     overflow: hidden;
     background: var(--menu-bg-color);
     transition: all 0.3s ease;
@@ -76,11 +75,11 @@
     .logo {
       box-sizing: border-box;
       height: 55px;
-      border-bottom: 1px solid #f0eded;
+      border-bottom: 1px solid var(--menu-logo-line-color);
       span {
         font-size: 24px;
         font-weight: bold;
-        color: var(--el-menu-text-color);
+        color: var(--menu-logo-title-color);
         white-space: nowrap;
       }
     }

@@ -26,7 +26,7 @@
       .tabs-link {
         height: 28px;
         line-height: 27px;
-        border: 1px solid #e8eaec;
+        border: 1px solid var(--el-border-color-light);
         padding: 0 10px;
         margin: 2px 4px 2px 0;
         cursor: pointer;
@@ -48,7 +48,7 @@
           height: 12px;
           margin-right: 7px;
           border-radius: 50%;
-          background-color: #e8eaec;
+          background-color: var(--el-border-color-light);
           position: relative;
           top: 1px;
           transition: background 0.2s ease;
@@ -101,13 +101,9 @@
       padding: 6px 4px;
       line-height: 14px;
       text-align: center;
-      border-color: #dfe5f3;
+      border-color: var(--el-border-color-light);
       border-top: none;
       border-bottom: none;
-      &:hover {
-        border-left: 1px solid #cbd3e7;
-        border-right: 1px solid #cbd3e7;
-      }
       &:active {
         border-color: #a2d0ff !important;
       }

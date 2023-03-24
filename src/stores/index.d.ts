@@ -37,7 +37,7 @@ export enum LayoutModeType {
   Classic = "classic",
   Transverse = "transverse",
   Columns = "columns",
-  Portal = "portal",
+  Subsystem = "subsystem",
   Mixins = "mixins",
 }
 

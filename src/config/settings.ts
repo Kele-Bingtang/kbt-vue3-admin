@@ -17,7 +17,6 @@ interface Settings {
   isGrey: boolean; // 是否开启色弱主题
   routeUseI18n: boolean; // 「路由」布局是否使用国际化，默认为 false，如果不使用，则需要在路由中给需要在菜单中展示的路由设置 meta: {title: 'xxx'} 用来在菜单中显示文字
   recordTabsNav: boolean; // 是否记录打开过（没关闭）的 tags，下次打开会加载在 tagsNav
-  menuTextTheme: boolean; // 如果是 true，则菜单的激活色跟随系统颜色
   maximize: boolean; // MainContent 是否开启最大化，默认不开启（false）
   primaryTheme: string; // 主题色
   layoutTheme: LayoutThemeType; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
@@ -44,39 +43,62 @@ interface Settings {
   layoutCacheKey: string; // 缓存布局的 key
   tabsNavCacheKey: string; // 缓存标签页的 key
   tabActiveExcludes: string[]; // 当 URL 携带 ? 的参数时，标签页的 path 也会携带参数，当 recordTabsNav 为 true 时，会造成多个重复的只是 ? 参数不一样的标签页，该选项指定当出现指定参数不会加载到 path，即该标签的 path 只保留 ? 前面的链接。当存在多个条件，满足任意一个即可
+  isKeepAlive: boolean; // 路由是否开启缓存
+  isFull: boolean; // 是否全屏，不渲染 Layout 布局，只渲染当前路由组件
+  cacheDynamicRoutes: boolean;
+  TooltipEffect: "light" | "dark";
 }
 
-const settings: Settings = {
+const themeSettings: Partial<Settings> = {
   title: "kbt-vue3-admin",
   titleMode: "0",
   layoutMode: LayoutModeType.Vertical,
   tabsNavMode: TabsNavModeType.Classic,
-  showSettings: true,
   showBreadcrumb: true,
   showTabsNav: true,
   showLayoutLogo: true,
   showBreadcrumbIcon: true,
   showTabsNavIcon: false,
+  recordTabsNav: true,
   isCollapse: false,
   isDark: false,
   isWeak: false,
   isGrey: false,
-  routeUseI18n: true,
-  recordTabsNav: true,
-  menuTextTheme: true,
   maximize: false,
   primaryTheme: "#168BF7", // 蓝色偏暗：#168BF7，官方：#409EFF
   layoutTheme: LayoutThemeType.Light,
+};
+
+const layoutSettings: Partial<Settings> = {
+  showSettings: true,
   errorLog: {
     showInHeader: true,
     env: ["production"],
   },
-  whiteList: [""],
   moreRouteChildrenHideInMenuThenOnlyOne: false,
+  TooltipEffect: "light",
+};
+
+const routerSettings: Partial<Settings> = {
+  routeUseI18n: true,
+  whiteList: [""],
+  isKeepAlive: false,
+  isFull: false,
+  cacheDynamicRoutes: false,
+};
+
+const keySetting: Partial<Settings> = {
   settingCacheKey: "kbt_settingsStore",
   layoutCacheKey: "kbt_layoutStore",
   tabsNavCacheKey: "kbt_tabsNav",
   tabActiveExcludes: ["layoutMode"],
+};
+
+const settings: Settings = {
+  ...(themeSettings as Settings),
+  ...(layoutSettings as Settings),
+  ...(routerSettings as Settings),
+  ...(keySetting as Settings),
 };
 
 export default settings;

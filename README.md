@@ -149,7 +149,7 @@ Admin 的布局组件有顶栏、面包屑、侧边菜单栏、标签栏、内�
 
 ### API
 
-#### params/_type
+#### params/\_type
 
 Admin 的 API 文件位于 `src/api` 下，采用 Axios 进行请求，该配置文件位于 `src/config/request.ts` 文件里。
 
@@ -206,7 +206,7 @@ export const api = () => {
 ```typescript
 const mappingUrl: { [key: string]: string } = {
   default: import.meta.env.VITE_API_URL,
-   test: "https://youngkbt.cn",
+  test: "https://youngkbt.cn",
 };
 ```
 
@@ -512,12 +512,12 @@ router.replace("/redirect" + route.path);
 
 ```typescript
 {
-  path: "https://portal.pxwsemi.com/wui/index.html",
-  name: "Portal",
-  meta: {
-  title: "Portal",
-    icon: "StarFilled",
-  },
+	path: "https://github.com/Kele-Bingtang/kbt-vue3-admin",
+	name: "Github",
+	meta: {
+		title: "Github",
+		icon: "svg-github",
+	},
 },
 ```
 
