@@ -71,7 +71,7 @@ interface LoginForm {
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
-const { beforeLoadDynamicRouter } = useRoutes();
+const { initDynamicRouters } = useRoutes();
 const switchFormMode = inject("switchFormMode") as (mode: string) => {};
 
 const loginRules = {
@@ -164,7 +164,7 @@ const startLogin = () => {
         return;
       }
       // 加载动态路由
-      await beforeLoadDynamicRouter();
+      await initDynamicRouters();
 
       // 跳转到首页或者 URL 携带的 redirect 页（优先级高）
       let path = HOME_URL;

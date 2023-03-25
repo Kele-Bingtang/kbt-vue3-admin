@@ -137,7 +137,7 @@
   </el-card>
 </template>
 
-<script setup lang="ts" name="Message">
+<script setup lang="ts" name="MessageDemo">
 import { h } from "vue";
 import { message, closeAllMessage } from "@/utils/layout/message";
 

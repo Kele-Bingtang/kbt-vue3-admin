@@ -72,7 +72,7 @@ export const useUserStore = defineStore(
       setRoles(rolesParam); // 正常不是直接赋予角色，而是调用 this.getUserInfo(token)，根据 token 重新获取对应的角色
       // await this.getUserInfo(token);
       resetRouter();
-      useRoutes().beforeLoadDynamicRouter(rolesParam);
+      useRoutes().initDynamicRouters(rolesParam);
     };
 
     const setUserInfo = (userInfoParam: UserInfo) => {

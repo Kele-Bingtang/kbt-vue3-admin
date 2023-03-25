@@ -1,4 +1,10 @@
-import { LayoutModeType, LayoutThemeType, TabsNavModeType } from "@/stores/index.d";
+import {
+  LayoutModeType,
+  LayoutThemeType,
+  TabsNavModeType,
+  type LanguageType,
+  type LayoutSizeType,
+} from "@/stores/index.d";
 
 interface Settings {
   title: string; // 项目 title
@@ -39,14 +45,18 @@ interface Settings {
    * 如果看不懂这个配置没关系，当您配置路由时遇到为 true 的场景时，自然懂得
    */
   moreRouteChildrenHideInMenuThenOnlyOne: boolean;
+  layoutSize: LayoutSizeType;
+  language: LanguageType;
   settingCacheKey: string; // 缓存配置的 key
   layoutCacheKey: string; // 缓存布局的 key
   tabsNavCacheKey: string; // 缓存标签页的 key
   tabActiveExcludes: string[]; // 当 URL 携带 ? 的参数时，标签页的 path 也会携带参数，当 recordTabsNav 为 true 时，会造成多个重复的只是 ? 参数不一样的标签页，该选项指定当出现指定参数不会加载到 path，即该标签的 path 只保留 ? 前面的链接。当存在多个条件，满足任意一个即可
   isKeepAlive: boolean; // 路由是否开启缓存
   isFull: boolean; // 是否全屏，不渲染 Layout 布局，只渲染当前路由组件
-  cacheDynamicRoutes: boolean;
-  TooltipEffect: "light" | "dark";
+  cacheDynamicRoutes: boolean; // 是否缓存路由，默认不开启（false）
+  cacheDynamicRoutesKey: string; // 缓存路由的 key
+  tooltipEffect: "light" | "dark"; // 布局的 el-toolTip 风格
+  routeUseTooltip: boolean; // 菜单的文字超出后，是否使用 el-toolTip 提示，仅针二级路由及以上生效
 }
 
 const themeSettings: Partial<Settings> = {
@@ -76,7 +86,9 @@ const layoutSettings: Partial<Settings> = {
     env: ["production"],
   },
   moreRouteChildrenHideInMenuThenOnlyOne: false,
-  TooltipEffect: "light",
+  tooltipEffect: "light",
+  layoutSize: "default",
+  language: "zh-CN",
 };
 
 const routerSettings: Partial<Settings> = {
@@ -85,12 +97,14 @@ const routerSettings: Partial<Settings> = {
   isKeepAlive: false,
   isFull: false,
   cacheDynamicRoutes: false,
+  routeUseTooltip: false,
 };
 
 const keySetting: Partial<Settings> = {
   settingCacheKey: "kbt_settingsStore",
   layoutCacheKey: "kbt_layoutStore",
   tabsNavCacheKey: "kbt_tabsNav",
+  cacheDynamicRoutesKey: "kbt_dynamic_routes",
   tabActiveExcludes: ["layoutMode"],
 };
 

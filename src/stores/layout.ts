@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import { setCacheTabNavList, getCacheTabNavList, removeCacheTabNavList } from "@/utils/layout/cache";
-import { DeviceType, type LayoutSizeType, type TabProp } from "./index.d";
+import { DeviceType, type LanguageType, type LayoutSizeType, type TabProp } from "./index.d";
 import { useSettingsStore } from "./settings";
 import defaultSettings from "@/config/settings";
 
@@ -10,8 +10,8 @@ export const useLayoutStore = defineStore(
     const tabNavList = ref<TabProp[]>(getCacheTabNavList() && []);
     const keepAliveName = ref<string[]>([]);
     const device = ref(DeviceType.Desktop);
-    const layoutSize = ref<LayoutSizeType>("default");
-    const language = ref("zh-CN");
+    const layoutSize = ref<LayoutSizeType>(defaultSettings.layoutSize);
+    const language = ref(defaultSettings.language);
 
     const toggleDevice = (deviceParam: DeviceType) => {
       device.value = deviceParam;
@@ -21,7 +21,7 @@ export const useLayoutStore = defineStore(
       layoutSize.value = layoutSizeParam;
     };
 
-    const setLanguage = (languageParam: string) => {
+    const setLanguage = (languageParam: LanguageType) => {
       language.value = languageParam;
     };
 

@@ -1,7 +1,6 @@
 const tableRoutes: RouterConfigRaw = {
   path: "/table",
   name: "Table",
-  redirect: "/excel/drag-table",
   meta: {
     notClickBread: true,
     title: "表格",

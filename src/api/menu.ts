@@ -12,14 +12,16 @@ export interface BackstageMenuList {
 }
 
 export const getMenuList = () => {
-  http.request<BackstageMenuList>({
-    url: "/getMenuList",
-    method: "get",
-  });
+  // 模拟请求菜单
+  return Promise.resolve([] as BackstageMenuList[]);
+  // return http.request<BackstageMenuList[]>({
+  //   url: "/getMenuList",
+  //   method: "get",
+  // });
 };
 
 export const test = () => {
-  http.request({
+  return http.request({
     url: "/test",
     method: "post",
     headers: {

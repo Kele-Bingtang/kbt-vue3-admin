@@ -18,10 +18,34 @@ export const useRoutes = () => {
   const { getLayoutTitle } = useLayoutNoSetup();
 
   /**
-   * @description 手动处理动态路由，不需要传参
+   * @description 从后台拿到菜单，并转换成路由进行动态加载
+   * @param roles 权限角色
+   * @param api 接口
    */
-  const beforeLoadDynamicRouter = async (roles?: string[]) => {
-    if (!rolesRoutes.length) {
+  const initDynamicRouters = async (roles?: string[], api?: () => Promise<BackstageMenuList[]>) => {
+    const { cacheDynamicRoutes, cacheDynamicRoutesKey } = settings;
+    let routeList: RouterConfigRaw[] = [];
+    let isCacheDynamicRoutes = false;
+    // 先从缓存拿后台路由
+    let cacheRoutes = localStorage.getItem(cacheDynamicRoutesKey);
+    // 如果不开启缓存，但缓存路由存在，则清掉缓存里的路由和拿到的缓存路由
+    if (!cacheDynamicRoutes && cacheRoutes) {
+      localStorage.removeItem(cacheDynamicRoutesKey);
+      cacheRoutes = "";
+    }
+    if (cacheRoutes) {
+      routeList = JSON.parse(cacheRoutes);
+      isCacheDynamicRoutes = true;
+    } else if (api) routeList = getDynamicRouters(await api());
+    else routeList = rolesRoutes;
+    // else routeList = getDynamicRouters(await getMenuList()); // 请求后台拿到菜单，并处理成路由
+
+    // 缓存后台路由
+    if (cacheDynamicRoutes && !isCacheDynamicRoutes) {
+      localStorage.setItem(cacheDynamicRoutesKey, JSON.stringify(routeList));
+    }
+
+    if (!routeList.length) {
       ElNotification({
         title: "无权限访问",
         message: "当前账号无任何菜单权限，请联系系统管理员！",
@@ -32,16 +56,18 @@ export const useRoutes = () => {
       router.replace(LOGIN_URL);
       return Promise.reject("No permission");
     }
-    if (!roles || !roles.length) {
-      roles = await userStore.getUserInfo();
-    }
-    loadDynamicRouter(rolesRoutes, roles || settings.whiteList);
+
+    if (!roles || !roles.length) roles = await userStore.getUserInfo();
+    loadDynamicRouters(routeList, roles || settings.whiteList);
   };
 
   /**
-   * @description 动态加载路由，需要传参
+   * @description 动态加载路由
+   * @param routers 路由表信息
+   * @param roles 权限角色
+   * @param r 路由对象
    */
-  const loadDynamicRouter = (routers: RouterConfigRaw[], roles: string[], r = router) => {
+  const loadDynamicRouters = (routers: RouterConfigRaw[], roles: string[], r = router) => {
     const onlyRolesRoutes = filterOnlyRolesRoutes(routers, roles);
     const resolveRouters = processDynamicRoutes(processRouteMeta(onlyRolesRoutes));
     // 传到 permissionStore 持久化，并拿到扁平化的路由数组（所有二级以上的路由拍成一级，keep-alive 只支持到二级缓存（Layout 默认是一级，加起来就是二级））
@@ -67,11 +93,14 @@ export const useRoutes = () => {
     if (!routers || !routers.length) return [];
     routers.forEach(r => {
       // 将 dynamic 属性加入 meta，标识此路由为后端返回路由
-      r.meta && (r.meta._dynamic = true);
-      // 父级的 redirect 属性取值：如果子级存在且父级的 redirect 属性不存在，默认取第一个子级的 path；如果子级存在且父级的 redirect 属性存在，取存在的 redirect 属性，会覆盖默认值
-      if (r?.children && r.children.length && !r.redirect) r.redirect = r.children[0].path;
-      // 父级的 name 属性取值：如果子级存在且父级的 name 属性不存在，默认取第一个子级的 name；如果子级存在且父级的 name 属性存在，取存在的 name 属性，会覆盖默认值（注意：测试中发现父级的 name 不能和子级 name 重复，如果重复会造成重定向无效（跳转 404），所以这里给父级的name起名的时候后面会自动加上 `Parent`，避免重复）
-      if (r?.children && r.children.length && !r.name) r.name = (r.children[0].name as string) + "Parent";
+      r.meta && ((r.meta._dynamic as boolean) = true);
+      if (r?.children && r.children.length) {
+        // 父级的 redirect 属性取值：如果子级存在且父级的 redirect 属性不存在，默认取第一个子级的 path；如果子级存在且父级的 redirect 属性存在，取存在的 redirect 属性，会覆盖默认值
+        if (!r.redirect) r.redirect = (r.children[0].meta?._fullPath as string) || r.children[0].path;
+        // 父级的 name 属性取值：如果子级存在且父级的 name 属性不存在，默认取第一个子级的 name；如果子级存在且父级的 name 属性存在，取存在的 name 属性，会覆盖默认值（注意：测试中发现父级的 name 不能和子级 name 重复，如果重复会造成重定向无效（跳转 404），所以这里给父级的name起名的时候后面会自动加上 `Parent`，避免重复）
+        if (!r.name) r.name = (r.children[0].name as string) + "Parent";
+      }
+
       if (r.meta?.frameSrc) r.component = IFrame;
       else {
         if (r.component && isType(r.component) === "string") r.component = modules["/src/views" + r.component + ".vue"];
@@ -118,11 +147,15 @@ export const useRoutes = () => {
       const fullPath = router.path.startsWith("/") ? router.path : (basePath + "/" + router.path).replace(/\/+/g, "/");
       // 处理成后面布局要用到的 title。title 如果为函数，则涉及到当前路由，所以这里无法处理
       if (router.meta) {
+        const { useI18n, isKeepAlive, isFull, useTooltip } = router.meta;
+        const { routeUseI18n, isKeepAlive: keepAlive, isFull: full, routeUseTooltip } = settings;
         router.meta._fullPath = fullPath;
-        // router.path = fullPath;
         // 这两个顺序不能互换，因为 getLayoutTitle 函数需要 useI18n
-        router.meta.useI18n = router.meta.useI18n === undefined ? settings.routeUseI18n : router.meta.useI18n;
+        if (useI18n === undefined && routeUseI18n !== undefined) router.meta.useI18n = routeUseI18n;
         router.meta.title = getLayoutTitle(router as RouteConfig);
+        if (isKeepAlive === undefined && keepAlive !== undefined) router.meta.isKeepAlive = keepAlive;
+        if (isFull === undefined && full !== undefined) router.meta.isFull = full;
+        if (useTooltip === undefined && routeUseTooltip !== undefined) router.meta.useTooltip = routeUseTooltip;
       }
       if (router.children && router.children.length) {
         if (isExternal(fullPath)) router.children = processRouteMeta(router.children, "");
@@ -276,7 +309,7 @@ export const useRoutes = () => {
    * @param menuCode 菜单 code，等价于路由的 name
    * @returns 路由表信息
    */
-  const getDynamicRouters = (menuList: BackstageMenuList[], menuCode: string) => {
+  const getDynamicRouters = (menuList: BackstageMenuList[], menuCode = "") => {
     const dynamicRouterList: RouterConfigRaw[] = [];
     menuList.forEach(item => {
       if (item.parentMenuCode === menuCode) {
@@ -303,8 +336,8 @@ export const useRoutes = () => {
 
   return {
     getDynamicRouters,
-    beforeLoadDynamicRouter,
-    loadDynamicRouter,
+    initDynamicRouters,
+    loadDynamicRouters,
     filterOnlyRolesRoutes,
     hasPermission,
     processRouteMeta,

@@ -15,13 +15,14 @@ export enum DeviceType {
 }
 
 export type LayoutSizeType = "default" | "small" | "large";
+export type LanguageType = "zh-CN" | "en-US";
 
 export interface LayoutState {
   device: DeviceType; // 设备类型
   tabNavList: TabProp[]; // 标签栏列表
   keepAliveName: string[]; // 缓存的路由组件名
-  layoutSize: string; // 布局大小
-  language: string; // 语言
+  layoutSize: LayoutSizeType; // 布局大小
+  language: LanguageType; // 语言
 }
 
 // PermissionState

@@ -7,13 +7,17 @@
   >
     <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
     <template #title>
-      <span class="sle">{{ getTitle(menuItem) }}</span>
+      <Tooltip :effect="settings.tooltipEffect" :offset="-10" :real-time="menuItem.meta.useTooltip">
+        <span>{{ getTitle(menuItem) }}</span>
+      </Tooltip>
     </template>
   </el-menu-item>
   <el-sub-menu v-else :index="menuItem.meta._fullPath" class="sub-menu">
     <template #title>
       <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
-      <span class="sle">{{ getTitle(menuItem) }}</span>
+      <Tooltip :effect="settings.tooltipEffect" :offset="-10" :real-time="menuItem.meta.useTooltip">
+        <span>{{ getTitle(menuItem) }}</span>
+      </Tooltip>
     </template>
     <template v-if="menuItem.children">
       <MenuItem v-for="child in menuItem.children" :key="child.path" :menu-item="child" />
@@ -25,6 +29,8 @@
 import { useLayout } from "@/hooks/useLayout";
 import { isExternal } from "@/utils/layout/validate";
 import CommonIcon from "@/components/CommonIcon/index.vue";
+import Tooltip from "@/components/Tooltip/index.vue";
+import settings from "@/config/settings";
 
 defineProps<{
   menuItem: RouterConfig;
@@ -42,6 +48,9 @@ const handleMenuClick = (menuItem: RouterConfig) => {
 <style lang="scss" scoped>
 .menu-item,
 .sub-menu {
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  user-select: none;
   :deep(.svg-icon) {
     margin-right: 5px;
     width: 1.5rem !important;
