@@ -80,8 +80,8 @@ const handleCurrentChange = (value: number) => {
 
 <style lang="scss" scoped>
 .pagination-component {
-  background: #fff;
   padding: 32px 16px;
+  background: #ffffff;
 }
 
 .pagination-component.hidden {

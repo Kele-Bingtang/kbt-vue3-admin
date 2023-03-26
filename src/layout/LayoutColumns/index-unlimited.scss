@@ -8,8 +8,8 @@
         &::before {
           position: absolute;
           top: 0;
-          bottom: 0;
           right: 0;
+          bottom: 0;
           width: 4px;
           content: "";
           background: var(--el-color-primary);
@@ -36,7 +36,7 @@
   .el-popper {
     .el-menu,
     .el-menu--popup {
-      background: #fff;
+      background: #ffffff;
 
       .menu-item {
         &.is-active {

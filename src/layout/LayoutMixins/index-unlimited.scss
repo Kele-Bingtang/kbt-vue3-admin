@@ -4,8 +4,8 @@
 
     .menu-item {
       &.is-active {
-        background: var(--split-menu-active-bg-color);
         color: var(--menu-text-color) !important;
+        background: var(--split-menu-active-bg-color);
 
         &:hover {
           color: var(--el-color-primary);

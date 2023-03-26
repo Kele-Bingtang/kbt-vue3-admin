@@ -42,6 +42,6 @@ const clipboardFailed = () => {
 <style lang="scss" scoped>
 .clipboard-container {
   padding: 20px;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 </style>

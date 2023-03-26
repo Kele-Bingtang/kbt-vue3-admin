@@ -117,8 +117,8 @@
     }
 
     100% {
-      background-size: 2em 2em, 1em 1em;
       background-position: -1.5em -1.5em, -1em -1em;
+      background-size: 2em 2em, 1em 1em;
     }
   }
 
@@ -146,30 +146,30 @@
   }
 
   .btn {
-    vertical-align: top;
-    margin: 15px;
-    text-align: center;
     width: 122px;
     height: 44px;
+    margin: 15px;
     line-height: 44px;
-    border-radius: 4px;
-    color: #fff;
+    color: #ffffff;
+    text-align: center;
+    vertical-align: top;
     cursor: pointer;
+    border-radius: 4px;
   }
 
   .java {
-    color: #eb9e05;
+    width: 120px;
     height: 42px;
     line-height: 42px;
-    width: 120px;
+    color: #eb9e05;
     border: 1px solid #eb9e05;
     opacity: 1;
     transition: all 0.6s;
   }
 
   .java:hover {
+    color: #ffffff;
     background: #eb9e05;
-    color: #fff;
   }
 
   .java:active {
@@ -180,8 +180,8 @@
     height: 44px;
     line-height: 44px;
     background: #55acee;
-    transition: all 0.5s;
     box-shadow: 0 5px 0 0 #3486d5;
+    transition: all 0.5s;
   }
 
   .c:hover {
@@ -189,44 +189,44 @@
   }
 
   .c:active {
-    transform: translate(0, 4px);
     box-shadow: 0 1px 0 0 #3486d5;
+    transform: translate(0, 4px);
   }
 
   .golang {
-    vertical-align: top;
-    height: 42px;
-    line-height: 42px;
-    width: 120px;
-    color: #2194e0;
-    border: 1px solid #2194e0;
-    transition: all 0.2s ease-in-out;
     position: relative;
-    opacity: 1;
+    width: 120px;
+    height: 42px;
     overflow: hidden;
+    line-height: 42px;
+    color: #2194e0;
+    vertical-align: top;
+    border: 1px solid #2194e0;
+    opacity: 1;
+    transition: all 0.2s ease-in-out;
   }
 
   .golang::before {
-    content: "";
-    background-color: rgb(255 255 255 / 50%);
-    height: 100%;
-    width: 3em;
-    display: block;
     position: absolute;
     top: 0;
     left: -4.5em;
-    transform: skewX(-45deg) translateX(0);
+    display: block;
+    width: 3em;
+    height: 100%;
+    content: "";
+    background-color: rgb(255 255 255 / 50%);
     transition: none;
+    transform: skewX(-45deg) translateX(0);
   }
 
   .golang:hover {
+    color: #ffffff;
     background-color: #2194e0;
-    color: #fff;
   }
 
   .golang:hover::before {
-    transform: skewX(-45deg) translateX(260px);
     transition: all 0.5s ease-in-out;
+    transform: skewX(-45deg) translateX(260px);
   }
 
   .golang:active {
@@ -234,22 +234,22 @@
   }
 
   .js {
-    height: 42px;
-    line-height: 42px;
-    background: #0d6;
     width: 120px;
-    border: 1px solid #0d6;
+    height: 42px;
     overflow: hidden;
-    transition: all 0.5s;
+    line-height: 42px;
+    background: #00dd66;
+    border: 1px solid #00dd66;
     opacity: 1;
+    transition: all 0.5s;
   }
 
   .js:hover,
   .js:active {
+    color: #00cc55;
     text-decoration: none;
-    color: #0c5;
-    border-color: #0c5;
-    background: #fff;
+    background: #ffffff;
+    border-color: #00cc55;
   }
 
   .js:active {
@@ -257,25 +257,25 @@
   }
 
   .js span {
-    display: inline-block;
     position: relative;
+    display: inline-block;
     padding-right: 0;
     transition: padding-right 0.5s;
   }
 
   .js span::after {
-    content: " ";
     position: absolute;
     top: 0;
     right: -18px;
-    opacity: 0;
     width: 10px;
     height: 10px;
     margin-top: -10px;
+    content: " ";
     background: rgb(0 0 0 / 0%);
-    border: 2px solid #fff;
+    border: 2px solid #ffffff;
     border-top: none;
     border-right: none;
+    opacity: 0;
     transition: opacity 0.5s, top 0.5s, right 0.5s;
     transform: rotate(-140deg);
   }
@@ -287,31 +287,31 @@
 
   .js:hover span::after,
   .js:active span::after {
-    transition: opacity 0.5s, top 0.5s, right 0.5s;
-    opacity: 1;
-    border-color: #0c5;
-    right: 0;
     top: calc(50% + 2.5px);
+    right: 0;
+    border-color: #00cc55;
+    opacity: 1;
+    transition: opacity 0.5s, top 0.5s, right 0.5s;
     transform: rotate(-140deg);
   }
 
   .nodd-ruby {
-    background: #c147e6;
     position: relative;
-    overflow: hidden;
     z-index: 0;
+    overflow: hidden;
     cursor: pointer;
+    background: #c147e6;
     opacity: 1;
     transition: all 0.3s;
   }
 
   input[type="checkbox"].toggle {
     position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     margin: 0;
-    left: 0;
-    top: 0;
     cursor: pointer;
   }
 
@@ -320,24 +320,24 @@
   }
 
   .anim {
-    transform: translate(-50%, -50%);
     position: absolute;
     top: 50%;
     left: 50%;
     z-index: -1;
+    transform: translate(-50%, -50%);
   }
 
   .anim::before {
     position: relative;
-    content: "";
     display: block;
     margin-top: 100%;
+    content: "";
   }
 
   .anim::after {
-    content: "";
     position: absolute;
     inset: 0;
+    content: "";
     border-radius: 50%;
   }
 
@@ -378,8 +378,8 @@
   }
 
   .python {
-    transition: 0.5s;
     background-size: 200% auto;
+    transition: 0.5s;
   }
 
   .python:hover {
@@ -412,34 +412,34 @@
   }
 
   .php {
-    border: 1px solid #c147e6;
-    color: #c147e6;
+    position: relative;
+    z-index: 1;
     width: 120px;
     height: 42px;
     line-height: 42px;
-    position: relative;
-    z-index: 1;
+    color: #c147e6;
     text-transform: uppercase;
+    border: 1px solid #c147e6;
   }
 
   .php:hover {
-    color: #fff;
+    color: #ffffff;
   }
 
   .php::before,
   .php::after {
-    background: #c147e6;
-    content: "";
     position: absolute;
     z-index: -2;
+    content: "";
+    background: #c147e6;
     border-radius: 3px;
   }
 
   .php-1::after {
-    height: 0;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
+    height: 0;
   }
 
   .php-1:hover::after {
@@ -447,10 +447,10 @@
   }
 
   .php-2::after {
-    height: 100%;
-    left: 0;
     top: 0;
+    left: 0;
     width: 0;
+    height: 100%;
   }
 
   .php-2:hover::after {
@@ -458,39 +458,39 @@
   }
 
   .php-3::after {
-    height: 0;
-    left: 50%;
     top: 50%;
+    left: 50%;
     width: 0;
+    height: 0;
   }
 
   .php-3:hover::after {
-    height: 100%;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
   }
 
   .php-4::before {
-    height: 100%;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
   }
 
   .php-4::after {
-    background: #fff;
-    height: 100%;
-    left: 0;
     top: 0;
+    left: 0;
     width: 100%;
+    height: 100%;
+    background: #ffffff;
   }
 
   .php-4:hover::after {
-    height: 0;
-    left: 50%;
     top: 50%;
+    left: 50%;
     width: 0;
+    height: 0;
   }
 
   .php-5 {
@@ -498,28 +498,28 @@
   }
 
   .php-5::after {
-    height: 100%;
-    left: -35%;
     top: 0;
-    transform: skew(50deg);
-    transition-duration: 0.6s;
-    transform-origin: top left;
+    left: -35%;
     width: 0;
+    height: 100%;
+    transition-duration: 0.6s;
+    transform: skew(50deg);
+    transform-origin: top left;
   }
 
   .php-5:hover::after {
-    height: 100%;
     width: 135%;
+    height: 100%;
   }
 
   .kotlin {
-    background: none;
-    border: 1px solid;
     width: 120px;
     height: 42px;
     line-height: 42px;
-    letter-spacing: inherit;
     text-transform: inherit;
+    letter-spacing: inherit;
+    background: none;
+    border: 1px solid;
     transition: color 1s;
   }
 
@@ -528,10 +528,10 @@
   }
 
   .kotlin-1:hover {
-    animation: halftone 1s forwards;
+    color: #e4f789;
     background: radial-gradient(circle, #9c89f7 0.2em, transparent 0.25em) 0 0/1.25em 1.25em,
       radial-gradient(circle, #9c89f7 0.2em, transparent 0.25em) 6.25em 6.25em/1.25em 1.25em;
-    color: #e4f789;
+    animation: halftone 1s forwards;
   }
 
   .kotlin-2 {
@@ -539,9 +539,9 @@
   }
 
   .kotlin-2:hover {
-    animation: stripes-move 0.75s infinite linear;
-    background: repeating-linear-gradient(45deg, #82f6d8 0, #82f6d8 0.25em, transparent 0.25em, transparent 0.5em);
     color: #f682a0;
+    background: repeating-linear-gradient(45deg, #82f6d8 0, #82f6d8 0.25em, transparent 0.25em, transparent 0.5em);
+    animation: stripes-move 0.75s infinite linear;
   }
 
   .kotlin-3 {
@@ -549,10 +549,10 @@
   }
 
   .kotlin-3:hover {
-    animation: sawtooth 0.35s infinite linear;
+    color: #8769f1;
     background: linear-gradient(45deg, #d3f169 0.5em, transparent 0.5em) 0 0/1em 1em,
       linear-gradient(-45deg, #d3f169 0.5em, transparent 0.5em) 0 0/1em 1em;
-    color: #8769f1;
+    animation: sawtooth 0.35s infinite linear;
   }
 
   .kotlin-4 {
@@ -560,13 +560,13 @@
   }
 
   .kotlin-4:hover {
-    animation: zigzag 1s linear infinite;
+    color: #63b0ee;
     background: linear-gradient(135deg, rgb(238 161 99 / 25%) 0.25em, transparent 0.25em) -0.5em 0,
       linear-gradient(225deg, rgb(238 161 99 / 25%) 0.25em, transparent 0.25em) -0.5em 0,
       linear-gradient(315deg, rgb(238 161 99 / 25%) 0.25em, transparent 0.25em) 0 0,
       linear-gradient(45deg, rgb(238 161 99 / 25%) 0.25em, transparent 0.25em) 0 0;
     background-size: 0.75em 0.75em;
-    color: #63b0ee;
+    animation: zigzag 1s linear infinite;
   }
 
   .kotlin-5 {
@@ -574,10 +574,10 @@
   }
 
   .kotlin-5:hover {
-    animation: pulse 1s ease-in infinite;
+    color: #0bdcb7;
     background: radial-gradient(circle, rgb(249 135 155 / 25%) 43%, transparent 50%) 0 0/1em 1em,
       radial-gradient(circle, rgb(249 135 155 / 25%) 43%, transparent 50%) 0.5em 0.5em/2em 2em;
-    color: #0bdcb7;
+    animation: pulse 1s ease-in infinite;
   }
 
   .vb::before,
@@ -588,42 +588,42 @@
   .vb {
     position: relative;
     width: 120px;
-    color: #fa5555;
     height: 44px;
     line-height: 42px;
+    color: #fa5555;
+    text-transform: uppercase;
     border: 2px solid #fa5555;
     border-radius: 14px;
-    text-transform: uppercase;
   }
 
   .dot {
-    content: "";
     position: absolute;
     top: 0;
     left: 2px;
+    display: none;
     width: 32px;
     height: 100%;
+    content: "";
     border-radius: 50%;
     transition: all 300ms ease;
-    display: none;
   }
 
   .dot::after {
-    content: "";
     position: absolute;
     top: -6px;
-    height: 5px;
     width: 5px;
+    height: 5px;
+    content: "";
     background: #fa5555;
-    border-radius: 50%;
     border: 4px solid #fa5555;
-    box-shadow: 0 0 0.7em #fff, 0 0 2em #fa5555;
+    border-radius: 50%;
+    box-shadow: 0 0 0.7em #ffffff, 0 0 2em #fa5555;
   }
 
   .vb:hover .dot,
   .vb:focus .dot {
-    animation: atom 2s infinite linear;
     display: block;
+    animation: atom 2s infinite linear;
   }
 }
 </style>

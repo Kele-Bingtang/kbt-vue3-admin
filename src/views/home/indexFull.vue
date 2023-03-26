@@ -83,9 +83,9 @@ const lineBarData = [
 
 <style lang="scss" scoped>
 .home-full {
+  width: 100%;
   padding: 20px;
   background-color: #f0f2f5;
-  width: 100%;
 
   .el-card {
     width: 100%;
@@ -95,10 +95,10 @@ const lineBarData = [
     margin-bottom: 20px;
 
     .card-title {
-      color: rgb(0 0 0 / 45%);
+      margin-bottom: 12px;
       font-size: 16px;
       font-weight: bold;
-      margin-bottom: 12px;
+      color: rgb(0 0 0 / 45%);
     }
 
     .count-style {

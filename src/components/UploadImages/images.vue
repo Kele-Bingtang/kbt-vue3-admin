@@ -236,7 +236,7 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
       padding: 0;
       overflow: hidden;
       border: 1px dashed var(--el-border-color-darker);
-      border-radius: v-bind(borderradius);
+      border-radius: v-bind(borderRadius);
 
       &:hover {
         border: 1px dashed var(--el-color-primary);
@@ -253,7 +253,7 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
       width: v-bind(width);
       height: v-bind(height);
       background-color: transparent;
-      border-radius: v-bind(borderradius);
+      border-radius: v-bind(borderRadius);
     }
 
     .upload-image {

@@ -133,12 +133,12 @@ defineExpose({ treeData, treeAllData });
 
   .title {
     margin: 0 0 15px;
+    overflow: hidden;
     font-size: 18px;
     font-weight: bold;
     color: var(--el-color-info-dark-2);
-    letter-spacing: 0.5px;
-    overflow: hidden;
     text-overflow: ellipsis;
+    letter-spacing: 0.5px;
     white-space: nowrap;
   }
 

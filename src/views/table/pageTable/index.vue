@@ -49,6 +49,6 @@ const handleSizeChange = (pagingParam: Paging) => {
 <style lang="scss" scoped>
 .page-table-container {
   padding: 20px;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 </style>

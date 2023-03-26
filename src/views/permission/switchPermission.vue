@@ -158,19 +158,19 @@ const authList = ref(getAuthList());
 .switch-permission-container {
   .left-container,
   .right-container {
-    width: 50%;
     display: inline-flex;
     flex-direction: column;
+    width: 50%;
   }
 
   .permission-alert {
-    width: 320px;
-    margin-top: 15px;
-    background-color: var(--el-color-primary);
-    color: #ecf5ff;
-    padding: 8px 16px;
-    border-radius: 4px;
     display: inline-block;
+    width: 320px;
+    padding: 8px 16px;
+    margin-top: 15px;
+    color: #ecf5ff;
+    background-color: var(--el-color-primary);
+    border-radius: 4px;
   }
 
   .permission-sourceCode {

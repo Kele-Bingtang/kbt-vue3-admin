@@ -3,7 +3,7 @@
   min-width: 520px;
   height: 100%;
   min-height: 520px;
-  background-color: #eee;
+  background-color: #eeeeee;
   background-image: url("@/assets/images/login/login_bg.svg");
   background-size: 100% 100%;
   background-size: cover;
@@ -37,7 +37,7 @@
     .login-form {
       width: 450px;
       padding: 50px 40px 45px;
-      background-color: #fff;
+      background-color: #ffffff;
       border-radius: 10px;
       box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
 
@@ -67,15 +67,15 @@
 
         .custom-item {
           display: flex;
-          justify-content: space-between;
           align-items: center;
+          justify-content: space-between;
           width: 100%;
         }
 
         .third-item {
           display: flex;
-          justify-content: space-evenly;
           align-items: center;
+          justify-content: space-evenly;
           width: 100%;
           cursor: pointer;
 

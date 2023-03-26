@@ -268,17 +268,17 @@ $color-black: black;
 
 // Base clases:
 %base-bar-pseudo {
-  content: "";
-  height: 1px;
-  width: 0;
-  bottom: 0;
   position: absolute;
+  bottom: 0;
+  width: 0;
+  height: 1px;
+  content: "";
   transition: $transition;
 }
 
 .material-input-component {
-  margin-top: 15px;
   position: relative;
+  margin-top: 15px;
   background: $color-white;
 
   &.material--active {
@@ -303,14 +303,14 @@ $color-black: black;
   .iconClass {
     .material-input__icon {
       position: absolute;
-      left: 0;
-      line-height: $font-size-base;
-      color: $color-blue;
       top: $spacer;
+      left: 0;
       width: $index-has-icon;
       height: $font-size-base;
       font-size: $font-size-base;
       font-weight: $font-weight-normal;
+      line-height: $font-size-base;
+      color: $color-blue;
       pointer-events: none;
     }
 
@@ -324,32 +324,32 @@ $color-black: black;
   }
 
   .material-input {
-    font-size: $font-size-base;
-    padding: $spacer $spacer $spacer calc($spacer / 2);
     display: block;
     width: 100%;
-    border: none;
-    border-radius: 0;
-    background: none;
+    padding: $spacer $spacer $spacer calc($spacer / 2);
+    font-size: $font-size-base;
     color: $color-black;
+    background: none;
+    border: none;
     border-bottom: 1px solid $color-grey-light;
+    border-radius: 0;
 
     &:focus {
-      outline: none;
       border: none;
       border-bottom: 1px solid transparent; // fixes the height issue
+      outline: none;
     }
   }
 
   .material-label {
+    position: absolute;
+    top: 0;
+    left: 0;
     font-size: $font-size-small;
     font-weight: $font-weight-normal;
-    position: absolute;
-    pointer-events: none;
-    left: 0;
-    top: 0;
-    transition: $transition;
     color: $color-grey;
+    pointer-events: none;
+    transition: $transition;
   }
 
   .material-input-bar {
@@ -360,15 +360,15 @@ $color-black: black;
     &::before {
       @extend %base-bar-pseudo;
 
-      background: $color-blue;
       left: 50%;
+      background: $color-blue;
     }
 
     &::after {
       @extend %base-bar-pseudo;
 
-      background: $color-blue;
       right: 50%;
+      background: $color-blue;
     }
   }
 
@@ -392,13 +392,13 @@ $color-black: black;
     overflow: hidden;
 
     .material-error {
-      font-size: $font-size-smallest;
-      line-height: $font-size-smallest + 2px;
-      overflow: hidden;
-      margin-top: 0;
       padding-top: calc($spacer / 2);
       padding-right: calc($spacer / 2);
       padding-left: 0;
+      margin-top: 0;
+      overflow: hidden;
+      font-size: $font-size-smallest;
+      line-height: $font-size-smallest + 2px;
     }
   }
 }

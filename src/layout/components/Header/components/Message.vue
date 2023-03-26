@@ -314,8 +314,8 @@ const hoverDescription = (event: any, description: string | undefined) => {
 
     .message-content {
       display: flex;
-      flex-direction: column;
       flex: 1;
+      flex-direction: column;
 
       .message-title {
         display: flex;
@@ -334,13 +334,13 @@ const hoverDescription = (event: any, description: string | undefined) => {
 
       .message-desc {
         display: -webkit-box;
+        margin-bottom: 5px;
+        overflow: hidden;
+        font-size: 12px;
+        color: #000000;
+        text-overflow: ellipsis;
         -webkit-line-clamp: 2; // 2 行溢出后隐藏文字
         -webkit-box-orient: vertical;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        margin-bottom: 5px;
-        color: #000;
-        font-size: 12px;
       }
 
       .message-date {

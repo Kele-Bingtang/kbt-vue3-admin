@@ -5,4 +5,4 @@
 
 [ -n "$CI" ] && exit 0
 
-npm run lint-staged
+npm run lint:lint-staged

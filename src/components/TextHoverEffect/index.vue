@@ -31,20 +31,20 @@ onMounted(() => {
 <style lang="scss" scoped>
 /* hover */
 .link--hover {
-  font-weight: 800;
-  color: #4dd9d5;
-  font-family: Dosis, sans-serif;
-  transition: color 0.5s 0.25s;
-  overflow: hidden;
   position: relative;
   display: inline-block;
+  overflow: hidden;
+  font-family: Dosis, sans-serif;
+  font-weight: 800;
   line-height: 1;
-  outline: none;
+  color: #4dd9d5;
   text-decoration: none;
+  outline: none;
+  transition: color 0.5s 0.25s;
 
   &:hover {
-    transition: none;
     color: transparent !important;
+    transition: none;
 
     &::before {
       transform: translate3d(100%, 0, 0);
@@ -52,34 +52,34 @@ onMounted(() => {
   }
 
   &::before {
-    content: "";
+    position: absolute;
+    top: 50%;
+    left: 0;
     width: 100%;
     height: 6px;
     margin: -3px 0 0;
+    content: "";
     background: var(--theme-color);
-    position: absolute;
-    left: 0;
-    top: 50%;
-    transform: translate3d(-100%, 0, 0);
     transition: -webkit-transform 0.4s;
     transition: transform 0.4s;
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
+    transform: translate3d(-100%, 0, 0);
   }
 
   span {
     position: absolute;
-    height: 50%;
-    width: 100%;
-    left: 0;
     top: 0;
+    left: 0;
+    width: 100%;
+    height: 50%;
     overflow: hidden;
 
     &::before {
-      content: attr(data-letters);
       position: absolute;
       left: 0;
       width: 100%;
       color: var(--theme-color);
+      content: attr(data-letters);
       transition: -webkit-transform 0.5s;
       transition: transform 0.5s;
     }
@@ -102,7 +102,7 @@ onMounted(() => {
 
 .link--hover:hover span::before {
   transition-delay: 0.3s;
-  transform: translate3d(0, 0, 0);
   transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+  transform: translate3d(0, 0, 0);
 }
 </style>

@@ -458,8 +458,8 @@ const handleSizeChange = (pagingParam: Paging) => {
 
 <style lang="scss" scoped>
 .integrationTable-table-container {
-  background-color: #fff;
   padding: 20px;
+  background-color: #ffffff;
 
   .search-container {
     margin-bottom: 20px;
@@ -479,22 +479,22 @@ const handleSizeChange = (pagingParam: Paging) => {
 
   .cancel-btn {
     position: absolute;
-    right: 55px;
     top: 10px;
+    right: 55px;
   }
 
   .confirm-btn {
     position: absolute;
-    right: 15px;
     top: 10px;
+    right: 15px;
   }
 }
 </style>
 
 <style lang="scss">
 .sortable-ghost {
-  opacity: 0.8;
-  color: #fff !important;
+  color: #ffffff !important;
   background: #42b983 !important;
+  opacity: 0.8;
 }
 </style>

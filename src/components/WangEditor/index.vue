@@ -220,10 +220,10 @@ defineExpose({
   /* 防止富文本编辑器全屏时 tabs组件 在其层级之上 */
   z-index: 2;
   width: 100%;
-  border: 1px solid #ccc;
+  border: 1px solid #cccccc;
 
   .editor-toolbar {
-    border-bottom: 1px solid #ccc;
+    border-bottom: 1px solid #cccccc;
   }
 
   .editor-content {

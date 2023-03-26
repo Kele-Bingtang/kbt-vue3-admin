@@ -146,14 +146,14 @@ const rowDrop2 = () => {
 <style lang="scss" scoped>
 .drag-table-container {
   padding: 20px;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 </style>
 
 <style lang="scss">
 .sortable-ghost {
-  opacity: 0.8;
-  color: #fff !important;
+  color: #ffffff !important;
   background: #42b983 !important;
+  opacity: 0.8;
 }
 </style>

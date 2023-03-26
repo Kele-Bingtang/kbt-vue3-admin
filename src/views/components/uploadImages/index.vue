@@ -262,8 +262,8 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
     flex-direction: column;
     align-items: center;
     width: 100%;
-    background-color: #fff;
     padding: 20px;
+    background-color: #ffffff;
 
     .upload-list {
       display: flex;

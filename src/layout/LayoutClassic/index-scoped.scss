@@ -11,9 +11,9 @@
     justify-content: space-between;
     height: 55px;
     padding: 0;
-    border-bottom: 1px solid var(--header-line-color);
-    background-color: var(--header-bg-color);
     color: var(--header-text-color);
+    background-color: var(--header-bg-color);
+    border-bottom: 1px solid var(--header-line-color);
 
     .header-left {
       display: flex;
@@ -31,8 +31,8 @@
         span {
           font-size: 21.5px;
           font-weight: bold;
-          white-space: nowrap;
           color: var(--header-logo-title-color);
+          white-space: nowrap;
         }
 
         img {
@@ -45,12 +45,12 @@
   }
 
   .el-aside {
-    height: 100%;
-    transition: width 0.28s;
     z-index: 1000;
-    box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
+    height: 100%;
     overflow: inherit;
     background: var(--menu-bg-color);
+    box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
+    transition: width 0.28s;
 
     :deep(.el-menu) {
       overflow-x: hidden;
@@ -63,17 +63,17 @@
   }
 
   &.menu-collapse .el-aside {
-    transition-duration: 0.3s;
     width: 64px !important;
+    transition-duration: 0.3s;
   }
 
   .classic-container {
     height: calc(100% - 55px); /* 减去头部高度 */
     .classic-main-content {
-      width: 100%;
-      height: 100%;
       display: flex;
       flex-direction: column;
+      width: 100%;
+      height: 100%;
     }
   }
 }

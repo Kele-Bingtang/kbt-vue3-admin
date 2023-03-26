@@ -179,8 +179,8 @@ const setWrapperWidth = () => {
 <style lang="scss" scoped>
 .drag-drawer-component {
   .no-select {
-    user-select: none;
     pointer-events: none;
+    user-select: none;
 
     .drag-drawer-trigger-wrapper {
       pointer-events: all;
@@ -189,18 +189,18 @@ const setWrapperWidth = () => {
 
   .drag-drawer-trigger-wrapper {
     top: 0;
-    height: 100%;
     width: 0;
+    height: 100%;
   }
 
   .drag-drawer-footer {
-    flex-grow: 1;
-    width: 100%;
     bottom: 0;
     left: 0;
-    border-top: 1px solid #e8e8e8;
+    flex-grow: 1;
+    width: 100%;
     padding: 10px 16px;
-    background: #fff;
+    background: #ffffff;
+    border-top: 1px solid #e8e8e8;
   }
 }
 </style>
@@ -211,18 +211,18 @@ const setWrapperWidth = () => {
   }
 
   .drag-drawer-footer {
-    flex-grow: 1;
-    width: 100%;
     bottom: 0;
     left: 0;
-    border-top: 1px solid #e8e8e8;
+    flex-grow: 1;
+    width: 100%;
     padding: 10px 16px;
-    background: #fff;
+    background: #ffffff;
+    border-top: 1px solid #e8e8e8;
   }
 
   .drag-drawer-inner {
-    overflow: visible;
     position: absolute;
+    overflow: visible;
 
     & + .v-modal {
       position: absolute;

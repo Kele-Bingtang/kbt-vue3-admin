@@ -60,8 +60,8 @@ const handleResize = (event: any) => {
 .drag-drawer-container {
   width: 100%;
   height: 100%;
-  background-color: #fff;
   padding: 20px;
+  background-color: #ffffff;
 
   .drag-drawer-header {
     margin-bottom: 30px;

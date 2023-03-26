@@ -31,6 +31,6 @@ const handleSuccess = ({ results, header }: ExcelData) => {
 <style lang="scss" scoped>
 .upload-excel-container {
   padding: 20px;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 </style>

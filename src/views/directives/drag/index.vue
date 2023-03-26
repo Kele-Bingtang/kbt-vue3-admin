@@ -10,18 +10,18 @@
 
 <style lang="scss" scoped>
 .drag-container {
+  position: relative;
   width: 100%;
   height: 100%;
-  background-color: #fff;
-  position: relative;
   padding: 20px;
+  background-color: #ffffff;
 
   .drag-box {
+    position: absolute;
+    top: 110px;
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
-    top: 110px;
     width: 300px;
     height: 300px;
     font-size: 23px;

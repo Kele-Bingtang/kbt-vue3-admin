@@ -82,8 +82,8 @@ const confirmEdit = (row: any) => {
 
 <style lang="scss" scoped>
 .inline-table-container {
-  background-color: #fff;
   padding: 20px;
+  background-color: #ffffff;
 
   .edit-input {
     padding-right: 100px;

@@ -80,8 +80,8 @@ const tableData = ref(simpleData);
 .print-container {
   .card-header {
     display: flex;
-    justify-content: space-between;
     align-items: center;
+    justify-content: space-between;
   }
 
   .img {

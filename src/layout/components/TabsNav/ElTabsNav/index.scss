@@ -1,6 +1,6 @@
 .tabs-nav {
   position: relative;
-  background-color: #fff;
+  background-color: #ffffff;
 
   :deep(.tabs-content) {
     position: relative;
@@ -14,8 +14,8 @@
 
     .tab-icon {
       top: 2px;
-      font-size: 15px;
       margin-right: 5px;
+      font-size: 15px;
     }
 
     .el-tabs__nav-wrap {
@@ -35,7 +35,7 @@
     }
 
     .el-tabs--card > .el-tabs__header .el-tabs__item {
-      color: #ccc;
+      color: #cccccc;
       border: none;
     }
 

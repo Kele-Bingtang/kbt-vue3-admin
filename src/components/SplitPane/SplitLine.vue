@@ -31,28 +31,28 @@ $trigger-background: #f8f8f9;
   &.split-trigger-vertical {
     width: 5px;
     height: 100%;
-    background: $trigger-background;
     cursor: col-resize;
+    background: $trigger-background;
 
     .split-trigger-bar {
-      width: 1px;
-      height: 100%;
-      box-sizing: border-box;
-      background: #000;
       position: absolute;
       left: 3px;
-      opacity: 0.3;
       z-index: 1;
+      box-sizing: border-box;
+      width: 1px;
+      height: 100%;
+      background: #000000;
       background-clip: padding-box;
+      opacity: 0.3;
     }
   }
 
   &.split-trigger-horizontal {
     width: 100%;
     height: 3px;
+    cursor: row-resize;
     background: $trigger-background;
     box-shadow: 0 0 4px 0 rgb(28 36 56 / 40%);
-    cursor: row-resize;
   }
 }
 </style>

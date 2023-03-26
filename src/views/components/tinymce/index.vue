@@ -238,6 +238,6 @@ const getVideoDuration = (file: File): Promise<number> => {
 .timymce-container {
   width: 100%;
   padding: 20px;
-  background-color: #fff;
+  background-color: #ffffff;
 }
 </style>

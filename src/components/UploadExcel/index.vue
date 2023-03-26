@@ -136,21 +136,21 @@ const isExcel = (file: File) => {
 <style lang="scss" scoped>
 .upload-excel-component {
   .excel-upload-input {
-    display: none;
     z-index: -9999;
+    display: none;
   }
 
   .drop {
-    border: 2px dashed #bbb;
+    position: relative;
     width: 600px;
     height: 160px;
-    line-height: 160px;
     margin: 0 auto;
     font-size: 24px;
-    border-radius: 5px;
+    line-height: 160px;
+    color: #bbbbbb;
     text-align: center;
-    color: #bbb;
-    position: relative;
+    border: 2px dashed #bbbbbb;
+    border-radius: 5px;
   }
 }
 </style>

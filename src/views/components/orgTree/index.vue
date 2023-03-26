@@ -185,11 +185,11 @@ const onNodeClick = (e: MouseEvent, data: any) => {
 .org-tree-container {
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  background-color: #ffffff;
 
   .tree-org-node__text {
-    text-align: left;
     font-size: 14px;
+    text-align: left;
 
     .custom-content {
       padding-bottom: 8px;

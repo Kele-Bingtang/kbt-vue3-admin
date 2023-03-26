@@ -102,29 +102,29 @@ const logout = async () => {
 <style lang="scss" scoped>
 .avatar-wrapper {
   position: relative;
-  height: 100%;
   display: flex;
   align-items: center;
+  height: 100%;
 
   .user-avatar {
-    cursor: pointer;
     width: 35px;
     height: 35px;
+    cursor: pointer;
     border-radius: 50%;
   }
 
   .username {
-    line-height: 0px;
     display: inline-block;
     margin: 0 7px 0 9px;
     font-size: 14px;
+    line-height: 0px;
     cursor: pointer;
     user-select: none;
   }
 
   .el-icon-caret-bottom {
-    cursor: pointer;
     font-size: 12px;
+    cursor: pointer;
   }
 }
 </style>

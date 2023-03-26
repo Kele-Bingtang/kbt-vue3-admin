@@ -204,8 +204,8 @@ const disabledClick = () => {
 
 <style lang="scss" scoped>
 .qrcode {
-  display: inline-block;
   position: relative;
+  display: inline-block;
 }
 
 .qrcode--disabled {

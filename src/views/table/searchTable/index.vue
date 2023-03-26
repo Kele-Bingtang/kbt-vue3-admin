@@ -195,8 +195,8 @@ const handleDelete = (row: any, index: number) => {
 
 <style lang="scss" scoped>
 .single-search-table-container {
-  background-color: #fff;
   padding: 20px;
+  background-color: #ffffff;
 
   .search-container {
     margin-bottom: 20px;

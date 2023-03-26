@@ -79,9 +79,9 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
     height: 100%;
 
     .drag-card {
+      display: inline-block;
       width: 40%;
       height: 100%;
-      display: inline-block;
     }
   }
 
@@ -94,16 +94,16 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
       p {
         padding: 7px 0;
         margin: 0 7px;
-        border-bottom: 1px dashed #eee;
+        border-bottom: 1px dashed #eeeeee;
       }
     }
   }
 
   .res-show-card {
     display: inline-block;
-    margin-left: 10px;
     width: 370px;
     height: 100%;
+    margin-left: 10px;
   }
 }
 </style>
@@ -117,8 +117,8 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
   }
 
   .drag-box {
-    margin-right: 10px;
     height: calc(100% - 60px);
+    margin-right: 10px;
   }
 }
 </style>

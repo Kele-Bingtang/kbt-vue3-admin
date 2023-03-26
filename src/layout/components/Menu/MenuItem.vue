@@ -51,11 +51,11 @@ const handleMenuClick = (menuItem: RouterConfig) => {
   user-select: none;
 
   :deep(.svg-icon) {
-    margin-right: 5px;
     width: 1.5rem !important;
     width: var(--el-menu-icon-width) !important;
-    text-align: center;
+    margin-right: 5px;
     overflow: visible;
+    text-align: center;
   }
 }
 </style>

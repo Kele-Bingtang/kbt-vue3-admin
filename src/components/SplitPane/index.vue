@@ -167,8 +167,8 @@ const handleMousedown = (e: MouseEvent) => {
 
     &.top-pane,
     &.bottom-pane {
-      left: 0;
       right: 0;
+      left: 0;
     }
 
     &.top-pane {
@@ -186,28 +186,28 @@ const handleMousedown = (e: MouseEvent) => {
     .split-line-container {
       top: 50%;
       left: 50%;
-      height: 100%;
       width: 0;
+      height: 100%;
     }
   }
 
   .split-line-container {
     position: absolute;
-    transform: translate(-50%, -50%);
     z-index: 10;
+    transform: translate(-50%, -50%);
   }
 
   .split-horizontal {
     width: 100%;
 
     .split-line-container {
+      position: absolute;
       top: 50%;
       left: 50%;
-      height: 0;
-      width: 100%;
-      position: absolute;
-      transform: translate(-50%, -50%);
       z-index: 10;
+      width: 100%;
+      height: 0;
+      transform: translate(-50%, -50%);
     }
   }
 

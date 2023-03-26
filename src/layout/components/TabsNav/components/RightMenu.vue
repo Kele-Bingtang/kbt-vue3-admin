@@ -52,25 +52,25 @@ withDefaults(defineProps<RightMenuProps>(), {
 
 <style lang="scss" scoped>
 .context-menu {
-  margin: 0;
-  background: #fff;
-  z-index: 4000;
   position: absolute;
-  list-style-type: none;
+  z-index: 4000;
   padding: 5px 0;
-  border-radius: 4px;
+  margin: 0;
   font-size: 12px;
   font-weight: 400;
-  color: #333;
+  color: #333333;
+  list-style-type: none;
+  background: #ffffff;
+  border-radius: 4px;
   box-shadow: 2px 2px 3px 0 rgb(0 0 0 / 30%);
 
   li {
     display: flex;
     align-items: center;
-    margin: 0;
     padding: 0 12px;
-    cursor: pointer;
+    margin: 0;
     line-height: 31px;
+    cursor: pointer;
 
     &:hover {
       color: var(--el-color-primary);

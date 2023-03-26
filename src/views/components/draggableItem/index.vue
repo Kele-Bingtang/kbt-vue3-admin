@@ -32,13 +32,13 @@ const listData3 = ref(list3);
 
 <style lang="scss" scoped>
 .draggable-item-container {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  justify-content: space-around;
   width: 1000px;
   height: 100%;
   padding: 20px;
   margin-left: 20px;
-  display: flex;
-  justify-content: space-around;
-  flex-direction: row;
-  align-items: flex-start;
 }
 </style>

@@ -6,7 +6,7 @@
         <el-link
           href="https://github.com/hrynko/vue-pdf-embed"
           target="_blank"
-          style="font-size: 16px; margin: 0 5px 4px 0"
+          style="margin: 0 5px 4px 0; font-size: 16px"
         >
           Github 地址
         </el-link>
@@ -86,14 +86,14 @@ const onPrint = () => {
 
     .pdf-header {
       display: flex;
-      justify-content: space-between;
       align-items: center;
+      justify-content: space-between;
 
       .header-content {
-        width: 170px;
         display: flex;
         align-items: center;
         justify-content: space-between;
+        width: 170px;
       }
     }
   }

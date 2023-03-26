@@ -53,20 +53,20 @@ const shadowClass = computed(() => {
 }
 
 .card-info {
-  height: 120px;
-  font-size: 12px;
   position: relative;
+  height: 120px;
   overflow: hidden;
-  color: #666;
-  background: #fff;
+  font-size: 12px;
+  color: #666666;
+  background: #ffffff;
   border: 1px solid rgb(0 0 0 / 5%);
 
   .card-content {
+    position: relative;
     display: flex;
     align-items: center;
     width: 100%;
     height: 100%;
-    position: relative;
 
     .left-area {
       float: left;

@@ -64,9 +64,9 @@ html.dark {
     }
 
     .el-header {
+      color: var(--el-text-color-regular) !important;
       background-color: var(--kbt-bg-color) !important;
       border-bottom-color: var(--el-border-color-light) !important;
-      color: var(--el-text-color-regular) !important;
 
       .header-left {
         .el-breadcrumb__inner {
@@ -117,12 +117,12 @@ html.dark {
 
   /* 克隆并自定义 ElMessage 样式，不会影响 ElMessage 原本样式，在 src/utils/message.ts 中调用自定义样式 ElMessage 方法即可，非暗黑模式在 src/style/element-plus.scss 文件进行了适配 */
   .antd-message {
-    background-image: initial !important;
     background-color: rgb(36 37 37) !important;
+    background-image: initial !important;
     box-shadow: rgb(13 13 13 / 12%) 0 3px 6px -4px, rgb(13 13 13 / 8%) 0 6px 16px 0, rgb(13 13 13 / 5%) 0 9px 28px 8px !important;
 
     & .el-message__content {
-      color: #fff !important;
+      color: #ffffff !important;
       pointer-events: all !important;
       background-image: initial !important;
     }

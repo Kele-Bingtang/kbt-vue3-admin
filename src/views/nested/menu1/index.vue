@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 30px; background-color: #fff">
+  <div style="padding: 30px; background-color: #ffffff">
     <el-alert :closable="false" title="menu 1">
       <router-view v-slot="{ Component }">
         <transition name="fade-transform">

@@ -1,7 +1,7 @@
 .layout-container {
   position: relative;
-  height: 100%;
   width: 100%;
+  height: 100%;
 
   .el-header {
     box-sizing: border-box;
@@ -10,9 +10,9 @@
     justify-content: space-between;
     height: 55px;
     padding: 0;
-    border-bottom: 1px solid var(--header-line-color);
-    background-color: var(--header-bg-color);
     color: var(--header-text-color);
+    background-color: var(--header-bg-color);
+    border-bottom: 1px solid var(--header-line-color);
 
     .logo {
       width: 210px;
@@ -22,8 +22,8 @@
       span {
         font-size: 21.5px;
         font-weight: bold;
-        white-space: nowrap;
         color: var(--header-logo-title-color);
+        white-space: nowrap;
       }
 
       img {

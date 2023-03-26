@@ -89,10 +89,10 @@ const lineBarData = [
     margin-bottom: 20px;
 
     .card-title {
-      color: rgb(0 0 0 / 45%);
+      margin-bottom: 12px;
       font-size: 16px;
       font-weight: bold;
-      margin-bottom: 12px;
+      color: rgb(0 0 0 / 45%);
     }
 
     .count-style {

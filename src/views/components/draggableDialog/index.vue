@@ -80,7 +80,7 @@ const gridData = [
 .draggable-dialog-container {
   width: 100%;
   height: 100%;
-  background: #fff;
+  background: #ffffff;
 
   .el-button--text {
     margin-right: 15px;

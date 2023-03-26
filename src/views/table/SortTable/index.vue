@@ -168,7 +168,7 @@ const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
 <style lang="scss" scoped>
 .table-sort-container {
   padding: 20px;
-  background: #fff;
+  background: #ffffff;
 
   .search-container {
     margin-bottom: 20px;

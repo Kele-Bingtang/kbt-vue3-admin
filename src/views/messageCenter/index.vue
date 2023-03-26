@@ -187,10 +187,10 @@ const handleOperate = (message: MessageItem) => {
     height: 100%;
 
     .message-page {
-      height: 100%;
-      display: inline-block;
-      vertical-align: top;
       position: relative;
+      display: inline-block;
+      height: 100%;
+      vertical-align: top;
       border-right: 1px solid #e6e6e6;
 
       .el-menu {
@@ -199,13 +199,13 @@ const handleOperate = (message: MessageItem) => {
         .el-menu-item.is-active {
           // background-color: #f0faff;
           &::after {
-            content: "";
-            display: block;
-            width: 2px;
             position: absolute;
             top: 0;
-            bottom: 0;
             right: -1px;
+            bottom: 0;
+            display: block;
+            width: 2px;
+            content: "";
             background: var(--el-color-primary);
           }
 
@@ -234,47 +234,47 @@ const handleOperate = (message: MessageItem) => {
         .el-menu-item {
           display: block;
           height: auto;
-          line-height: 21px;
           padding: 14px 20px;
+          line-height: 21px;
           white-space: normal;
 
           .list-title {
-            margin: 0;
             padding: 0;
+            margin: 0;
           }
 
           .list-time {
             display: inline-block;
 
             .list-dot {
-              width: 6px;
-              height: 6px;
-              display: inline-block;
-              border-radius: 50%;
-              vertical-align: middle;
               position: relative;
               top: -1px;
+              display: inline-block;
+              width: 6px;
+              height: 6px;
+              vertical-align: middle;
               background-color: #e6e8f1;
+              border-radius: 50%;
             }
 
             .list-text {
               display: inline-block;
-              color: #515a6e;
-              font-size: 12px;
               margin-left: 6px;
+              font-size: 12px;
+              color: #515a6e;
             }
           }
 
           .list-operate {
-            float: right;
-            margin-right: 17px;
-            padding-top: 3px;
             align-items: normal;
+            float: right;
+            padding-top: 3px;
+            margin-right: 17px;
           }
 
           :deep(.el-icon) {
-            font-size: 13px;
             display: none;
+            font-size: 13px;
             color: #909399;
 
             &:hover {
@@ -306,9 +306,9 @@ const handleOperate = (message: MessageItem) => {
 
           .message-content-title {
             display: inline-block;
-            color: #515a6e;
-            margin: 0;
             padding: 0;
+            margin: 0;
+            color: #515a6e;
           }
 
           .message-content-time {
@@ -327,8 +327,8 @@ const handleOperate = (message: MessageItem) => {
   .message-center-card {
     .el-card__body {
       height: 100%;
-      white-space: nowrap;
       overflow: auto;
+      white-space: nowrap;
     }
   }
 }

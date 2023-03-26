@@ -95,12 +95,12 @@ const handleDownload = () => {
 <style lang="scss" scoped>
 .export-excel-container {
   padding: 20px;
-  background-color: #fff;
+  background-color: #ffffff;
 
   .radio-label {
+    padding: 0 12px 0 30px;
     font-size: 14px;
     color: #606266;
-    padding: 0 12px 0 30px;
   }
 }
 </style>

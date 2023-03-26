@@ -305,12 +305,12 @@ const reset = () => {
   }
 
   .count-demo {
-    color: var(--el-color-primary);
     display: block;
     margin-bottom: 20px;
-    text-align: center;
     font-size: 80px;
     font-weight: 500;
+    color: var(--el-color-primary);
+    text-align: center;
   }
 }
 </style>

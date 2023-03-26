@@ -66,8 +66,8 @@ const handleMoving = (e: any) => {
 
 <style lang="scss" scoped>
 .split-pane-container {
-  padding: 20px;
   height: 100%;
+  padding: 20px;
 
   .pane {
     width: 100%;

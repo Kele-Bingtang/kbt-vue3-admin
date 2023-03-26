@@ -303,8 +303,8 @@ const handleSizeChange = (pagingParam: Paging) => {
 
 <style lang="scss" scoped>
 .operate-table-container {
-  background-color: #fff;
   padding: 20px;
+  background-color: #ffffff;
 
   .edit-input {
     padding-right: 90px;
@@ -312,14 +312,14 @@ const handleSizeChange = (pagingParam: Paging) => {
 
   .cancel-btn {
     position: absolute;
-    right: 55px;
     top: 10px;
+    right: 55px;
   }
 
   .confirm-btn {
     position: absolute;
-    right: 15px;
     top: 10px;
+    right: 15px;
   }
 }
 </style>

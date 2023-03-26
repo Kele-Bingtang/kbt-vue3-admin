@@ -209,31 +209,31 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
   display: flex;
 
   .cropper-img {
+    position: relative;
     width: 50%;
     height: 100%;
-    position: relative;
   }
 
   .show-previews {
     display: flex;
     display: --webkit-flex;
-    justify-content: center;
     align-items: center;
-    overflow: hidden;
+    justify-content: center;
     padding-left: 10px;
+    overflow: hidden;
 
     .previews-img {
-      border-radius: 50%;
       overflow: hidden;
-      box-shadow: 0 0 4px #ccc;
+      border-radius: 50%;
+      box-shadow: 0 0 4px #cccccc;
     }
   }
 }
 
 .btn-container {
   .scope-btn {
-    margin-top: 50px;
     display: flex;
+    margin-top: 50px;
 
     .upload-img {
       display: inline-block;

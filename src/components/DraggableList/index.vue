@@ -135,8 +135,8 @@ const pushList = (list: DragList, type: string) => {
   height: 100%;
 
   .drag-list {
-    height: 100%;
     float: left;
+    height: 100%;
 
     .drag-list-item {
       position: relative;
@@ -144,10 +144,10 @@ const pushList = (list: DragList, type: string) => {
 
       .icon {
         position: absolute;
-        line-height: inherit;
         top: 50%;
-        transform: translateY(-50%);
         right: 7px;
+        line-height: inherit;
+        transform: translateY(-50%);
       }
     }
   }

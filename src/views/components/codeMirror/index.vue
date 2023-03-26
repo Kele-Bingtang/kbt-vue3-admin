@@ -40,10 +40,10 @@ const modeOptions = ref(cmModeOptions);
 </script>
 <style lang="scss" scoped>
 .code-mirror-container {
-  padding: 20px;
   width: 100%;
   height: 100%;
-  background-color: #fff;
+  padding: 20px;
+  background-color: #ffffff;
 
   .select-header {
     margin-bottom: 30px;

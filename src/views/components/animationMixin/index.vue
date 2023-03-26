@@ -167,18 +167,18 @@ const articleList = [
   }
 
   .animation-btn {
-    font-size: 14px;
-    color: #fff;
-    padding: 14px 36px;
-    border-radius: 8px;
-    border: none;
-    outline: none;
-    transition: 600ms ease all;
     position: relative;
     display: inline-block;
+    padding: 14px 36px;
+    font-size: 14px;
+    color: #ffffff;
+    border: none;
+    border-radius: 8px;
+    outline: none;
+    transition: 600ms ease all;
 
     &:hover {
-      background: #fff;
+      background: #ffffff;
 
       &::before,
       &::after {
@@ -189,20 +189,20 @@ const articleList = [
 
     &::before,
     &::after {
-      content: "";
       position: absolute;
       top: 0;
       right: 0;
-      height: 2px;
       width: 0;
+      height: 2px;
+      content: "";
       transition: 400ms ease all;
     }
 
     &::after {
-      right: inherit;
       top: inherit;
-      left: 0;
+      right: inherit;
       bottom: 0;
+      left: 0;
     }
   }
 

@@ -136,16 +136,16 @@ const getUserRoles = (userRoles: string[]) => {
 
       .user-role {
         padding-top: 10px;
-        font-weight: 400;
         font-size: 14px;
-        color: #666;
+        font-weight: 400;
+        color: #666666;
       }
     }
   }
 
   .user-card-info {
     margin-top: 20px;
-    color: #000;
+    color: #000000;
 
     span {
       padding-left: 4px;
@@ -156,31 +156,31 @@ const getUserRoles = (userRoles: string[]) => {
     }
 
     .user-card-info-section {
-      font-size: 14px;
       padding: 15px 0;
+      font-size: 14px;
 
       .user-card-info-section-header {
-        border-bottom: 1px solid #dcdfe6;
         padding-bottom: 10px;
         margin-bottom: 10px;
         font-weight: bold;
+        border-bottom: 1px solid #dcdfe6;
       }
 
       .user-card-info-section-body {
         .basic-info {
-          border-left: 0;
-          border-right: 0;
-          border-radius: 0;
-          padding-left: 0;
           padding-right: 0;
+          padding-left: 0;
+          border-right: 0;
+          border-left: 0;
+          border-radius: 0;
         }
 
         .basic-info-item {
+          padding: 11px 0;
+          margin-bottom: -1px;
+          font-size: 13px;
           border-top: 1px solid #e7eaec;
           border-bottom: 1px solid #e7eaec;
-          margin-bottom: -1px;
-          padding: 11px 0;
-          font-size: 13px;
 
           .basic-info-content {
             float: right;
@@ -188,8 +188,8 @@ const getUserRoles = (userRoles: string[]) => {
         }
 
         .basic-info-item:first-child {
-          border-top: none;
           padding-top: 5px;
+          border-top: none;
         }
 
         .progress-item {
