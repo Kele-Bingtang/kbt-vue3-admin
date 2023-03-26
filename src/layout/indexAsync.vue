@@ -48,9 +48,11 @@ watch(
       color: var(--el-text-color-regular) !important;
     }
   }
+
   .el-header {
     color: var(--el-text-color-regular) !important;
   }
+
   .el-dropdown {
     color: var(--el-text-color-regular) !important;
   }

@@ -62,7 +62,8 @@ withDefaults(defineProps<RightMenuProps>(), {
   font-size: 12px;
   font-weight: 400;
   color: #333;
-  box-shadow: 2px 2px 3px 0 rgba(0, 0, 0, 0.3);
+  box-shadow: 2px 2px 3px 0 rgb(0 0 0 / 30%);
+
   li {
     display: flex;
     align-items: center;
@@ -70,9 +71,11 @@ withDefaults(defineProps<RightMenuProps>(), {
     padding: 0 12px;
     cursor: pointer;
     line-height: 31px;
+
     &:hover {
       color: var(--el-color-primary);
     }
+
     .el-icon {
       margin-right: 8px;
     }

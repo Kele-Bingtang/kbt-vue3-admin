@@ -207,11 +207,13 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
 <style lang="scss" scoped>
 .cropper-component {
   display: flex;
+
   .cropper-img {
     width: 50%;
     height: 100%;
     position: relative;
   }
+
   .show-previews {
     display: flex;
     display: --webkit-flex;
@@ -219,10 +221,10 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
     align-items: center;
     overflow: hidden;
     padding-left: 10px;
+
     .previews-img {
       border-radius: 50%;
       overflow: hidden;
-      -webkit-box-shadow: 0 0 4px #ccc;
       box-shadow: 0 0 4px #ccc;
     }
   }
@@ -232,11 +234,13 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
   .scope-btn {
     margin-top: 50px;
     display: flex;
+
     .upload-img {
       display: inline-block;
       margin-right: 30px;
     }
   }
+
   .upload-btn {
     margin-left: 30px;
   }

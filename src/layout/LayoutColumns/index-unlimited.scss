@@ -4,6 +4,7 @@
     .menu-item {
       &.is-active {
         background: var(--el-color-primary-light-9);
+
         &::before {
           position: absolute;
           top: 0;
@@ -14,10 +15,12 @@
           background: var(--el-color-primary);
         }
       }
+
       &:hover {
         background: var(--el-color-primary-light-9);
       }
     }
+
     .sub-menu,
     .menu-item {
       &:not(.is-active) {
@@ -28,21 +31,25 @@
       }
     }
   }
-  // 菜单折叠的样式
+
+  /* 菜单折叠的样式 */
   .el-popper {
     .el-menu,
     .el-menu--popup {
       background: #fff;
+
       .menu-item {
         &.is-active {
           background: #ecf5ff;
         }
+
         &:hover {
           background: #ecf5ff;
         }
       }
     }
   }
+
   .header-icon,
   .header-icon .el-dropdown {
     color: var(--header-text-color);

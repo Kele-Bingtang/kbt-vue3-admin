@@ -84,6 +84,7 @@ const confirmEdit = (row: any) => {
 .inline-table-container {
   background-color: #fff;
   padding: 20px;
+
   .edit-input {
     padding-right: 100px;
   }

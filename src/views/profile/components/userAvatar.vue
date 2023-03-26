@@ -56,15 +56,13 @@ const uploadImage = (imgData: FormData) => {
   position: relative;
   display: inline-block;
   height: 100%;
-  .user-avatar-header:hover:after {
+
+  .user-avatar-header:hover::after {
     content: "+";
     position: absolute;
-    left: 0;
-    right: 0;
-    top: 0;
-    bottom: 0;
+    inset: 0;
     color: #eee;
-    background: rgba(0, 0, 0, 0.5);
+    background: rgb(0 0 0 / 50%);
     font-size: 24px;
     font-style: normal;
     -webkit-font-smoothing: antialiased;
@@ -73,6 +71,7 @@ const uploadImage = (imgData: FormData) => {
     line-height: 110px;
     border-radius: 50%;
   }
+
   .user-avatar {
     width: 100px;
     height: 100px;

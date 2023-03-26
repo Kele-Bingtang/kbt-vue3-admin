@@ -1,5 +1,5 @@
 <template>
-  <div :class="computedClasses" class="material-input__component">
+  <div :class="computedClasses" class="material-input-component">
     <div :class="{ iconClass: icon }">
       <CommonIcon v-if="icon" :icon="icon" class="material-input__icon" />
       <input
@@ -200,7 +200,7 @@ onMounted(() => {
   valueCopy.value = props.value;
   const activeColor = themeColor.value ? themeColor.value : props.activeColor;
   document.styleSheets[0].insertRule(
-    `.material-input__component.material--active .material-label { color: ${activeColor} !important}`,
+    `.material-input-component.material--active .material-label { color: ${activeColor} !important}`,
     0
   );
 });
@@ -238,7 +238,6 @@ const handleBlur = (event: FocusEvent) => {
 </script>
 
 <style lang="scss" scoped>
-// Fonts:
 $font-size-base: 16px;
 $font-size-small: 14px;
 $font-size-smallest: 12px;
@@ -258,6 +257,15 @@ $color-blue: #2196f3;
 $color-red: #f44336;
 $color-black: black;
 
+// Mixins:
+@mixin slided-top() {
+  /* stylelint-disable-next-line function-no-unknown */
+  top: -($font-size-base + $spacer);
+  left: 0;
+  font-size: $font-size-base;
+  font-weight: $font-weight-bold;
+}
+
 // Base clases:
 %base-bar-pseudo {
   content: "";
@@ -268,24 +276,26 @@ $color-black: black;
   transition: $transition;
 }
 
-// Mixins:
-@mixin slided-top() {
-  top: -($font-size-base + $spacer);
-  left: 0;
-  font-size: $font-size-base;
-  font-weight: $font-weight-bold;
-}
-
-// Component:
-.material-input__component {
-  margin-top: 45px;
+.material-input-component {
+  margin-top: 15px;
   position: relative;
-  // Active state:
+  background: $color-white;
+
   &.material--active {
     .material-label {
+      @include slided-top();
+
       color: $color-blue;
     }
+
+    .material-input-bar {
+      &::before,
+      &::after {
+        width: 50%;
+      }
+    }
   }
+
   * {
     box-sizing: border-box;
   }
@@ -320,6 +330,9 @@ $color-black: black;
     width: 100%;
     border: none;
     border-radius: 0;
+    background: none;
+    color: $color-black;
+    border-bottom: 1px solid $color-grey-light;
 
     &:focus {
       outline: none;
@@ -336,6 +349,7 @@ $color-black: black;
     left: 0;
     top: 0;
     transition: $transition;
+    color: $color-grey;
   }
 
   .material-input-bar {
@@ -343,13 +357,17 @@ $color-black: black;
     display: block;
     width: 100%;
 
-    &:before {
+    &::before {
       @extend %base-bar-pseudo;
+
+      background: $color-blue;
       left: 50%;
     }
 
-    &:after {
+    &::after {
       @extend %base-bar-pseudo;
+
+      background: $color-blue;
       right: 50%;
     }
   }
@@ -368,16 +386,6 @@ $color-black: black;
     }
   }
 
-  // Active state:
-  &.material--active {
-    .material-input-bar {
-      &:before,
-      &:after {
-        width: 50%;
-      }
-    }
-  }
-
   // Errors:
   .material-errors {
     position: relative;
@@ -391,27 +399,6 @@ $color-black: black;
       padding-top: calc($spacer / 2);
       padding-right: calc($spacer / 2);
       padding-left: 0;
-    }
-  }
-}
-
-.material-input__component {
-  background: $color-white;
-
-  .material-input {
-    background: none;
-    color: $color-black;
-    border-bottom: 1px solid $color-grey-light;
-  }
-
-  .material-label {
-    color: $color-grey;
-  }
-
-  .material-input-bar {
-    &:before,
-    &:after {
-      background: $color-blue;
     }
   }
 }

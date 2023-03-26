@@ -38,12 +38,15 @@ const errorCount = computed(() => {
   align-items: center;
   justify-content: center;
   margin: 0 30px 0 0;
+
   .header-icon {
     display: flex;
     align-items: center;
+
     & > * {
       margin-left: 21px;
     }
+
     :deep(.svg-icon:hover use) {
       fill: var(--el-color-primary) !important;
     }

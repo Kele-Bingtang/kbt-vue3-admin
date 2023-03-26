@@ -48,9 +48,8 @@ const handleMenuClick = (menuItem: RouterConfig) => {
 <style lang="scss" scoped>
 .menu-item,
 .sub-menu {
-  -moz-user-select: none;
-  -khtml-user-select: none;
   user-select: none;
+
   :deep(.svg-icon) {
     margin-right: 5px;
     width: 1.5rem !important;

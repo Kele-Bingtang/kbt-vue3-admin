@@ -6,12 +6,12 @@
   border-radius: var(--point-border-radius);
 }
 
-.point-flicker:after {
+.point-flicker::after {
   background: var(--point-background);
 }
 
-.point-flicker:before,
-.point-flicker:after {
+.point-flicker::before,
+.point-flicker::after {
   content: "";
   width: 100%;
   height: 100%;

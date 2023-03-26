@@ -79,7 +79,7 @@ const activities = [
   border-color: var(--el-color-primary);
   color: #fff;
   line-height: 18px;
-  padding: 5px 12px 5px 12px;
+  padding: 5px 12px;
   box-sizing: border-box;
   border-radius: 6px;
   position: relative;

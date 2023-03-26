@@ -62,18 +62,22 @@ const handleResize = (event: any) => {
   height: 100%;
   background-color: #fff;
   padding: 20px;
+
   .drag-drawer-header {
     margin-bottom: 30px;
+
     .drag-drawer-switch {
       margin-right: 30px;
     }
   }
+
   .drag-drawer-inner-box {
     position: relative;
     width: 500px;
     height: 400px;
     background: var(--el-color-primary);
     border: 1px solid var(--el-color-primary);
+
     :deep(.el-overlay) {
       position: absolute;
     }

@@ -1,19 +1,20 @@
-// menu 开头代表是一级菜单的样式，sub 开头代表是二级菜单的样式，除了 menuText，menuText 是整个菜单的文字样式，即包含了 sub 的文字样式。
+/* menu 开头代表是一级菜单的样式，sub 开头代表是二级菜单的样式，除了 menuText，menuText 是整个菜单的文字样式，即包含了 sub 的文字样式 */
 $sideMenuWidth: 210px;
-// 暗色主题，默认
-$menuText-dark: #dadada; // 所有菜单文字颜色
-$menuBg-dark: #191a20; // 一级菜单背景色
-$menuHoverBg-dark: #242526; // 一级菜单悬停背景色
-$menuActiveBg-dark: #060708; // 一级菜单激活背景色
-$subMenuBg-dark: $menuBg-dark; // 二级菜单背景色
-$subMenuHoverBg-dark: $menuHoverBg-dark; // 二级菜单悬停背景色
-$subMenuActiveBg-dark: $menuActiveBg-dark; // 二级菜单激活背景色
-$icon-dark: $menuText-dark; // 图标颜色
-$logo-line-dark: #282a35; // logo 底部线条颜色
-$logo-title-dark: $menuText-dark; // logo 右侧文字颜色
-$splitMenuActiveBg-dark: var(--el-color-primary); // Column 布局的菜单那文字颜色
 
-// 白色主题
+/* 暗色主题，默认 */
+$menuText-dark: #dadada; /* 所有菜单文字颜色 */
+$menuBg-dark: #191a20; /* 一级菜单背景色 */
+$menuHoverBg-dark: #242526; /* 一级菜单悬停背景色 */
+$menuActiveBg-dark: #060708; /* 一级菜单激活背景色 */
+$subMenuBg-dark: $menuBg-dark; /* 二级菜单背景色 */
+$subMenuHoverBg-dark: $menuHoverBg-dark; /* 二级菜单悬停背景色 */
+$subMenuActiveBg-dark: $menuActiveBg-dark; /* 二级菜单激活背景色 */
+$icon-dark: $menuText-dark; /* 图标颜色 */
+$logo-line-dark: #282a35; /* logo 底部线条颜色 */
+$logo-title-dark: $menuText-dark; /* logo 右侧文字颜色 */
+$splitMenuActiveBg-dark: var(--el-color-primary); /* Column 布局的菜单那文字颜色 */
+
+/* 白色主题 */
 $menuText-light: #303133;
 $menuBg-light: #fff;
 $menuHoverBg-light: var(--el-color-primary-light-9);
@@ -26,10 +27,11 @@ $logo-line-light: #3c3c3c1f;
 $logo-title-light: $menuText-light;
 $splitMenuActiveBg-light: var(--el-color-primary-light-9);
 
-// The :export directive is the magic sauce for webpack
-// https://mattferderer.com/use-sass-variables-in-typescript-and-javascript
+/* The :export directive is the magic sauce for webpack */
+
+/* https://mattferderer.com/use-sass-variables-in-typescript-and-javascript */
 :export {
-  // 默认，暗色主题
+  /* 默认，暗色主题 */
   menuBgDark: $menuBg-dark;
   menuTextDark: $menuText-dark;
   menuHoverBgDark: $menuHoverBg-dark;
@@ -41,7 +43,8 @@ $splitMenuActiveBg-light: var(--el-color-primary-light-9);
   logoLineDark: $logo-line-dark;
   logoTitleDark: $logo-title-dark;
   splitMenuActiveBgDark: $splitMenuActiveBg-dark;
-  // 白色主题
+
+  /* 白色主题 */
   menuBgLight: $menuBg-light;
   menuTextLight: $menuText-light;
   menuHoverBgLight: $menuHoverBg-light;

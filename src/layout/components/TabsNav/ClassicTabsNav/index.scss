@@ -7,22 +7,20 @@
   border-bottom: 1px solid #d8dce5;
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
   white-space: nowrap;
-  -webkit-transition: left 0.3s ease;
   transition: left 0.3s ease;
+
   .scroll-container {
     position: absolute;
-    left: 28px;
-    right: 88px;
-    top: 0;
-    bottom: 0;
+    inset: 0 88px 0 28px;
     overflow: hidden;
+
     .scroll-body {
       display: inline-block;
       padding: 2px 4px 0;
       white-space: nowrap;
-      -webkit-transition: left 0.3s ease;
       transition: left 0.3s ease;
       position: absolute;
+
       .tabs-link {
         height: 28px;
         line-height: 27px;
@@ -35,13 +33,16 @@
         vertical-align: middle;
         overflow: hidden;
         border-radius: 3px;
+
         &.active {
           background-color: #4c9bd8;
           color: #fff;
+
           .dot {
             background-color: #fff;
           }
         }
+
         .dot {
           display: inline-block;
           width: 12px;
@@ -53,12 +54,14 @@
           top: 1px;
           transition: background 0.2s ease;
         }
+
         .tab-icon {
           font-size: 15px;
           position: relative;
           top: 2px;
           margin-right: 4px;
         }
+
         .icon-close {
           width: 16px;
           height: 16px;
@@ -68,15 +71,16 @@
           cursor: pointer;
           border-radius: 50%;
           transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-          -webkit-transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
           transform-origin: 100% 50%;
           text-align: center;
           vertical-align: 2px;
           padding-right: 1px;
+
           &:hover {
             background-color: #b4bccc;
             color: #fff;
           }
+
           svg {
             vertical-align: -3px;
           }
@@ -84,17 +88,21 @@
       }
     }
   }
+
   .btn-icon {
     position: absolute;
-    top: 0px;
+    top: 0;
     height: 100%;
     z-index: 10;
+
     &.left-btn {
-      left: 0px;
+      left: 0;
     }
+
     &.right-btn {
       right: 60px;
     }
+
     .el-button {
       width: 28px;
       height: 100%;
@@ -104,15 +112,18 @@
       border-color: var(--el-border-color-light);
       border-top: none;
       border-bottom: none;
+
       &:active {
         border-color: #a2d0ff !important;
       }
+
       .el-icon-arrow-left,
       .el-icon-arrow-right {
         font-weight: 600;
       }
     }
   }
+
   .menu-dropdown {
     position: absolute;
     top: 7px;

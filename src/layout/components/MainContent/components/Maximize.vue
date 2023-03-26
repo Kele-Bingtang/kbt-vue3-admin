@@ -26,16 +26,18 @@ const exitMaximize = () => {
   background-color: var(--el-color-info);
   border-radius: 50%;
   opacity: 0.7;
+
   &:hover {
     // background-color: var(--el-color-info-dark-2);
     background-color: var(--el-color-primary);
   }
+
   .el-icon {
     position: relative;
     top: 68%;
     left: 32%;
     font-size: 16px;
-    color: #ffffff;
+    color: #fff;
     transform: translate(-50%, -50%);
   }
 }

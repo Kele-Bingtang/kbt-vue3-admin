@@ -256,6 +256,7 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
 <style lang="scss" scoped>
 .upload-images-container {
   height: auto;
+
   .upload-card {
     display: flex;
     flex-direction: column;
@@ -263,6 +264,7 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
     width: 100%;
     background-color: #fff;
     padding: 20px;
+
     .upload-list {
       display: flex;
       flex-wrap: wrap;
@@ -270,23 +272,29 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
       width: 90%;
       margin: 10px 0;
     }
+
     :deep(.el-descriptions) {
       width: 100%;
       padding: 40px 0 0;
     }
   }
+
   .upload-box {
     margin-bottom: 10px;
   }
+
   .upload-form-box {
     display: flex;
     justify-content: space-around;
     width: 100%;
+
     .upload-card {
       margin-right: 10px;
+
       &:last-child {
         margin-right: 0;
       }
+
       .el-form {
         width: 100%;
       }

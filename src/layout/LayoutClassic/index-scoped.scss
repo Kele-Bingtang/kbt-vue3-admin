@@ -3,6 +3,7 @@
 .layout-container {
   width: 100%;
   height: 100%;
+
   .el-header {
     box-sizing: border-box;
     display: flex;
@@ -13,23 +14,27 @@
     border-bottom: 1px solid var(--header-line-color);
     background-color: var(--header-bg-color);
     color: var(--header-text-color);
+
     .header-left {
       display: flex;
       align-items: center;
       overflow: hidden;
       white-space: nowrap;
+
       .logo {
         box-sizing: border-box;
         flex-shrink: 0;
         width: 210px;
         margin-right: 16px;
         cursor: pointer;
+
         span {
           font-size: 21.5px;
           font-weight: bold;
           white-space: nowrap;
           color: var(--header-logo-title-color);
         }
+
         img {
           width: 28px;
           object-fit: contain;
@@ -46,21 +51,24 @@
     box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
     overflow: inherit;
     background: var(--menu-bg-color);
+
     :deep(.el-menu) {
       overflow-x: hidden;
       border-right: none;
     }
   }
+
   &.menu-expand .el-aside {
     width: $sideMenuWidth !important;
   }
+
   &.menu-collapse .el-aside {
     transition-duration: 0.3s;
     width: 64px !important;
   }
 
   .classic-container {
-    height: calc(100% - 55px); // 减去头部高度
+    height: calc(100% - 55px); /* 减去头部高度 */
     .classic-main-content {
       width: 100%;
       height: 100%;

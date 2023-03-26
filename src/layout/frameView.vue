@@ -47,6 +47,7 @@ onMounted(() => {
 .frame-container {
   height: calc(100vh - 88px);
   z-index: 998;
+
   .frame-iframe {
     width: 100%;
     height: 100%;
@@ -60,6 +61,7 @@ onMounted(() => {
 .el-main {
   padding: 0 !important;
 }
+
 ::-webkit-scrollbar {
   display: none;
 }

@@ -9,12 +9,5 @@
   "proseWrap": "preserve",
   "endOfLine": "auto",
   "jsxSingleQuote": false,
-  "jsxBracketSameLine": false,
-  "stylelintIntegration": false,
-  "eslintIntegration": false,
-  "tslintIntegration": false,
-  "disableLanguages": ["vue"],
-  "htmlWhitespaceSensitivity": "ignore",
-  "ignorePath": ".prettierignore",
-  "requireConfig": false
+  "htmlWhitespaceSensitivity": "ignore"
 }

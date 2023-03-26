@@ -147,33 +147,42 @@ const handleMousedown = (e: MouseEvent) => {
   position: relative;
   width: 100%;
   height: 100%;
+
   .split-pane {
     position: absolute;
+
     &.left-pane,
     &.right-pane {
-      top: 0px;
-      bottom: 0px;
+      top: 0;
+      bottom: 0;
     }
+
     &.left-pane {
-      left: 0px;
+      left: 0;
     }
+
     &.right-pane {
-      right: 0px;
+      right: 0;
     }
+
     &.top-pane,
     &.bottom-pane {
-      left: 0px;
-      right: 0px;
+      left: 0;
+      right: 0;
     }
+
     &.top-pane {
-      top: 0px;
+      top: 0;
     }
+
     &.bottom-pane {
-      bottom: 0px;
+      bottom: 0;
     }
   }
+
   .split-vertical {
     height: 100%;
+
     .split-line-container {
       top: 50%;
       left: 50%;
@@ -181,13 +190,16 @@ const handleMousedown = (e: MouseEvent) => {
       width: 0;
     }
   }
+
   .split-line-container {
     position: absolute;
     transform: translate(-50%, -50%);
     z-index: 10;
   }
+
   .split-horizontal {
     width: 100%;
+
     .split-line-container {
       top: 50%;
       left: 50%;
@@ -198,12 +210,9 @@ const handleMousedown = (e: MouseEvent) => {
       z-index: 10;
     }
   }
+
   &.no-select {
     -webkit-touch-callout: none;
-    -webkit-user-select: none;
-    -khtml-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
   }
 }

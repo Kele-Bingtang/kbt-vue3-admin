@@ -299,11 +299,12 @@ const reset = () => {
   .count-to-row {
     margin-top: 20px;
   }
+
   .count-to-content {
     text-align: center;
   }
+
   .count-demo {
-    font-size: 50px;
     color: var(--el-color-primary);
     display: block;
     margin-bottom: 20px;
@@ -319,6 +320,7 @@ const reset = () => {
     font-size: 50px;
     color: var(--el-color-primary);
   }
+
   .unit-class {
     font-size: 30px;
     color: var(--el-color-primary);

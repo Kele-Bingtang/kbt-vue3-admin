@@ -31,7 +31,8 @@ declare type RequiredKey<T, U extends keyof T> = Pick<T, Exclude<keyof T, U>> & 
  * 如 RequiredKey<User, "name">
  * 则只有 name 是必填，age 和 gender 变为可选
  */
-declare type RequiredKeyPartialOther<T, U extends keyof T> = Partial<Pick<T, Exclude<keyof T, U>>> & Required<Pick<T, U>>;
+declare type RequiredKeyPartialOther<T, U extends keyof T> = Partial<Pick<T, Exclude<keyof T, U>>> &
+  Required<Pick<T, U>>;
 
 /**
  * 指定属性变为只读

@@ -1,19 +1,23 @@
 .transverse {
   .el-menu {
     border: none;
+
     .menu-item {
       &.is-active {
         background: var(--split-menu-active-bg-color);
         color: var(--menu-text-color) !important;
+
         &:hover {
           color: var(--el-color-primary);
         }
       }
+
       &:hover {
         background: var(--split-menu-active-bg-color);
       }
     }
   }
+
   .sub-menu,
   .menu-item {
     &:not(.is-active) {
@@ -23,10 +27,12 @@
       }
     }
   }
-  // 下拉菜单
+
+  /* 下拉菜单 */
   .el-menu--popup .menu-item {
     &.is-active {
       background: var(--menu-active-bg-color);
+
       &::before {
         position: absolute;
         top: 0;
@@ -37,25 +43,30 @@
         background: var(--el-color-primary);
       }
     }
+
     &:hover {
       background: var(--menu-hover-bg-color);
     }
   }
-  // 横向菜单
+
+  /* 横向菜单 */
   .el-menu--horizontal {
-    // 菜单高度
+    /* 菜单高度 */
     .sub-menu,
     .menu-item {
       height: 54px !important;
+
       .el-sub-menu__title {
         height: 100%;
       }
     }
+
     .el-sub-menu__hide-arrow {
       width: 54px !important;
     }
   }
-  // 右侧图标
+
+  /* 右侧图标 */
   .header-icon,
   .header-icon .el-dropdown {
     color: var(--header-text-color);

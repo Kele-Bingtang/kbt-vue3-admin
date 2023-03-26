@@ -169,6 +169,7 @@ const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
 .table-sort-container {
   padding: 20px;
   background: #fff;
+
   .search-container {
     margin-bottom: 20px;
   }

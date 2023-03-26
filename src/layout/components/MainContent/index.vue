@@ -61,6 +61,7 @@ watchEffect(() => {
   padding: 10px 12px;
   overflow-x: hidden;
   background-color: #f0f2f5;
+
   &::-webkit-scrollbar {
     background-color: #f0f2f5;
   }

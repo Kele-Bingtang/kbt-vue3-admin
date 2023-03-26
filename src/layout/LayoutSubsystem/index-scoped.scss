@@ -1,8 +1,10 @@
 @import "@/styles/variables.module.scss";
+
 .layout-container {
   position: relative;
   height: 100%;
   width: 100%;
+
   .drawer-bg {
     background: #000;
     opacity: 0.3;
@@ -12,6 +14,7 @@
     position: absolute;
     z-index: 999;
   }
+
   .el-aside {
     height: 100%;
     transition: width 0.28s;
@@ -19,30 +22,36 @@
     box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
     overflow: inherit;
     background: var(--menu-bg-color);
+
     :deep(.el-scrollbar) {
       height: calc(100% - 55px);
+
       .el-menu {
         overflow-x: hidden;
         border-right: none;
       }
     }
+
     .logo {
       box-sizing: border-box;
       height: 55px;
       border-bottom: 1px solid var(--menu-logo-line-color);
       cursor: pointer;
+
       span {
         font-size: 21.5px;
         font-weight: bold;
         white-space: nowrap;
         color: var(--menu-logo-title-color);
       }
+
       img {
         width: 28px;
         object-fit: contain;
         margin-right: 6px;
       }
     }
+
     .menu-header {
       height: 32px;
       display: flex;
@@ -51,17 +60,21 @@
       overflow: hidden;
       margin: 10px 0;
       color: var(--menu-text-color);
+
       :deep(.collapse-icon) {
         margin: 0;
       }
+
       :deep(.el-dropdown) {
         color: var(--menu-text-color);
       }
     }
   }
+
   &.menu-expand .el-aside {
     width: $sideMenuWidth !important;
   }
+
   &.menu-collapse .el-aside {
     transition-duration: 0.3s;
     width: 64px !important;

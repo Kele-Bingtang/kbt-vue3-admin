@@ -15,6 +15,7 @@
   background-color: #fff;
   position: relative;
   padding: 20px;
+
   .drag-box {
     display: flex;
     align-items: center;

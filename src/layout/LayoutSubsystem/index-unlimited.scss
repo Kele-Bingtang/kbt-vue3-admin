@@ -4,6 +4,7 @@
     .menu-item {
       &.is-active {
         background: var(--menu-active-bg-color);
+
         &::before {
           position: absolute;
           top: 0;
@@ -14,10 +15,12 @@
           background: var(--el-color-primary);
         }
       }
+
       &:hover {
         background: var(--menu-hover-bg-color);
       }
     }
+
     .sub-menu,
     .menu-item {
       &:not(.is-active) {
@@ -27,17 +30,21 @@
         }
       }
     }
+
     .sub-menu {
-      // 子级高亮，父级也高亮
+      /* 子级高亮，父级也高亮 */
       &.is-active > .el-sub-menu__title {
         color: var(--el-color-primary) !important;
       }
+
       .el-menu {
         background-color: var(--sub-menu-bg-color) !important;
+
         .menu-item {
           &.is-active {
             background-color: var(--sub-menu-active-bg-color) !important;
           }
+
           &:hover {
             background-color: var(--sub-menu-hover-bg-color) !important;
           }
@@ -45,24 +52,29 @@
       }
     }
   }
-  // 菜单折叠的样式
+
+  /* 菜单折叠的样式 */
   .el-menu--popup {
     background: var(--sub-menu-bg-color);
-    // 不用 .el-menu-item 为防止全局菜单样式污染
+
+    /* 不用 .el-menu-item 为防止全局菜单样式污染 */
     .menu-item {
       &.is-active {
         background: var(--sub-menu-active-bg-color);
       }
+
       &:hover {
         background: var(--sub-menu-hover-bg-color);
       }
     }
   }
+
   .menu-header,
   .menu-header .el-dropdown {
     color: var(--el-text-color-primary);
   }
-  // Header 不存在，需要重新设置 flex-direction
+
+  /* Header 不存在，需要重新设置 flex-direction */
   .layout-container > .el-container {
     flex-direction: column;
   }

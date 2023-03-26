@@ -1,7 +1,8 @@
 /* Global transition */
-// See https://vuejs.org/v2/guide/transitions.html for detail
 
-// fade
+/* See https://vuejs.org/v2/guide/transitions.html for detail */
+
+/* fade */
 .fade-enter-active,
 .fade-leave-active {
   transition: opacity 0.28s;
@@ -12,7 +13,7 @@
   opacity: 0;
 }
 
-// fade-transform
+/* fade-transform */
 .fade-transform-leave-active,
 .fade-transform-enter-active {
   transition: all 0.5s;
@@ -28,7 +29,7 @@
   transform: translateX(30px);
 }
 
-// breadcrumb
+/* breadcrumb */
 .breadcrumb-enter-active,
 .breadcrumb-leave-active {
   transition: all 0.5s;
@@ -47,7 +48,8 @@
 .breadcrumb-leave-active {
   position: absolute;
 }
-// layoutLogoFade
+
+/* layoutLogoFade */
 .layoutLogoFade-enter-active {
   transition: opacity 1.5s;
 }

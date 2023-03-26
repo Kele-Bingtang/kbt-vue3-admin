@@ -44,6 +44,7 @@ const modeOptions = ref(cmModeOptions);
   width: 100%;
   height: 100%;
   background-color: #fff;
+
   .select-header {
     margin-bottom: 30px;
   }

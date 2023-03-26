@@ -186,13 +186,15 @@ const onNodeClick = (e: MouseEvent, data: any) => {
   width: 100%;
   height: 100%;
   background-color: #fff;
+
   .tree-org-node__text {
     text-align: left;
     font-size: 14px;
+
     .custom-content {
       padding-bottom: 8px;
       margin-bottom: 8px;
-      border-bottom: 1px solid currentColor;
+      border-bottom: 1px solid currentcolor;
     }
   }
 }

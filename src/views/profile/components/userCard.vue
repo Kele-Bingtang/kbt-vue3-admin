@@ -129,9 +129,11 @@ const getUserRoles = (userRoles: string[]) => {
         height: 100px;
         border-radius: 50%;
       }
+
       .user-name {
         font-weight: bold;
       }
+
       .user-role {
         padding-top: 10px;
         font-weight: 400;
@@ -148,9 +150,11 @@ const getUserRoles = (userRoles: string[]) => {
     span {
       padding-left: 4px;
     }
+
     .user-card-info-section:first-child {
       padding-top: 0;
     }
+
     .user-card-info-section {
       font-size: 14px;
       padding: 15px 0;
@@ -161,6 +165,7 @@ const getUserRoles = (userRoles: string[]) => {
         margin-bottom: 10px;
         font-weight: bold;
       }
+
       .user-card-info-section-body {
         .basic-info {
           border-left: 0;
@@ -169,22 +174,27 @@ const getUserRoles = (userRoles: string[]) => {
           padding-left: 0;
           padding-right: 0;
         }
+
         .basic-info-item {
           border-top: 1px solid #e7eaec;
           border-bottom: 1px solid #e7eaec;
           margin-bottom: -1px;
-          padding: 11px 0px;
+          padding: 11px 0;
           font-size: 13px;
+
           .basic-info-content {
             float: right;
           }
         }
+
         .basic-info-item:first-child {
           border-top: none;
           padding-top: 5px;
         }
+
         .progress-item {
           padding-bottom: 11px;
+
           .progress-content {
             float: right;
             width: 65%;

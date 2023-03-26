@@ -181,6 +181,7 @@ const setWrapperWidth = () => {
   .no-select {
     user-select: none;
     pointer-events: none;
+
     .drag-drawer-trigger-wrapper {
       pointer-events: all;
     }
@@ -191,6 +192,7 @@ const setWrapperWidth = () => {
     height: 100%;
     width: 0;
   }
+
   .drag-drawer-footer {
     flex-grow: 1;
     width: 100%;
@@ -207,6 +209,7 @@ const setWrapperWidth = () => {
   .no-select.el-drawer {
     transition: none;
   }
+
   .drag-drawer-footer {
     flex-grow: 1;
     width: 100%;
@@ -216,9 +219,11 @@ const setWrapperWidth = () => {
     padding: 10px 16px;
     background: #fff;
   }
+
   .drag-drawer-inner {
     overflow: visible;
     position: absolute;
+
     & + .v-modal {
       position: absolute;
     }

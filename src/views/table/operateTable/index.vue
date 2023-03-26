@@ -305,6 +305,7 @@ const handleSizeChange = (pagingParam: Paging) => {
 .operate-table-container {
   background-color: #fff;
   padding: 20px;
+
   .edit-input {
     padding-right: 90px;
   }
@@ -314,6 +315,7 @@ const handleSizeChange = (pagingParam: Paging) => {
     right: 55px;
     top: 10px;
   }
+
   .confirm-btn {
     position: absolute;
     right: 15px;

@@ -182,19 +182,23 @@ const handleOperate = (message: MessageItem) => {
 <style lang="scss" scoped>
 .message-center-container {
   height: 100%;
+
   .message-center-card {
     height: 100%;
+
     .message-page {
       height: 100%;
       display: inline-block;
       vertical-align: top;
       position: relative;
       border-right: 1px solid #e6e6e6;
+
       .el-menu {
         width: auto;
+
         .el-menu-item.is-active {
           // background-color: #f0faff;
-          &:after {
+          &::after {
             content: "";
             display: block;
             width: 2px;
@@ -204,36 +208,44 @@ const handleOperate = (message: MessageItem) => {
             right: -1px;
             background: var(--el-color-primary);
           }
+
           .list-dot {
             background-color: var(--el-color-primary) !important;
           }
         }
+
         .el-badge {
           margin-left: 10px;
           vertical-align: middle;
+
           :deep(.el-badge__content) {
             vertical-align: middle;
           }
         }
       }
+
       &.message-category {
         width: 200px;
       }
 
       &.message-list {
         width: 230px;
+
         .el-menu-item {
           display: block;
           height: auto;
           line-height: 21px;
           padding: 14px 20px;
           white-space: normal;
+
           .list-title {
             margin: 0;
             padding: 0;
           }
+
           .list-time {
             display: inline-block;
+
             .list-dot {
               width: 6px;
               height: 6px;
@@ -244,6 +256,7 @@ const handleOperate = (message: MessageItem) => {
               top: -1px;
               background-color: #e6e8f1;
             }
+
             .list-text {
               display: inline-block;
               color: #515a6e;
@@ -251,26 +264,31 @@ const handleOperate = (message: MessageItem) => {
               margin-left: 6px;
             }
           }
+
           .list-operate {
             float: right;
             margin-right: 17px;
             padding-top: 3px;
             align-items: normal;
           }
+
           :deep(.el-icon) {
             font-size: 13px;
             display: none;
             color: #909399;
+
             &:hover {
               color: var(--el-color-primary);
             }
           }
+
           &:hover {
             :deep(.el-icon) {
               display: inline-block;
             }
           }
         }
+
         .unread-list {
           .el-menu-item:not(.is-active) {
             color: #aaa9a9;
@@ -282,14 +300,17 @@ const handleOperate = (message: MessageItem) => {
         width: calc(100% - 450px);
         padding: 12px 20px 0;
         overflow: auto;
+
         .message-content-header {
           margin-bottom: 20px;
+
           .message-content-title {
             display: inline-block;
             color: #515a6e;
             margin: 0;
             padding: 0;
           }
+
           .message-content-time {
             margin-left: 20px;
           }
@@ -302,6 +323,7 @@ const handleOperate = (message: MessageItem) => {
 <style lang="scss">
 .message-center-container {
   height: 100%;
+
   .message-center-card {
     .el-card__body {
       height: 100%;
@@ -310,6 +332,7 @@ const handleOperate = (message: MessageItem) => {
     }
   }
 }
+
 .mobile {
   .message-center {
     .message-content {

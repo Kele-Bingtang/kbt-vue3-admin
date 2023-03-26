@@ -81,15 +81,19 @@ const gridData = [
   width: 100%;
   height: 100%;
   background: #fff;
+
   .el-button--text {
     margin-right: 15px;
   }
+
   .el-select {
     width: 300px;
   }
+
   .el-input {
     width: 300px;
   }
+
   .dialog-footer button:first-child {
     margin-right: 10px;
   }

@@ -105,6 +105,7 @@ const logout = async () => {
   height: 100%;
   display: flex;
   align-items: center;
+
   .user-avatar {
     cursor: pointer;
     width: 35px;

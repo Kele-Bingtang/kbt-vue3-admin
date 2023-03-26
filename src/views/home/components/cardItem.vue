@@ -46,12 +46,12 @@ const shadowClass = computed(() => {
 <style lang="scss" scoped>
 .always-shadow {
   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-  -webkit-box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
 }
+
 .hover-shadow:hover {
   box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
-  -webkit-box-shadow: 0 2px 12px 0 rgb(0 0 0 / 10%);
 }
+
 .card-info {
   height: 120px;
   font-size: 12px;
@@ -59,17 +59,20 @@ const shadowClass = computed(() => {
   overflow: hidden;
   color: #666;
   background: #fff;
-  border: 1px solid rgba(0, 0, 0, 0.05);
+  border: 1px solid rgb(0 0 0 / 5%);
+
   .card-content {
     display: flex;
     align-items: center;
     width: 100%;
     height: 100%;
     position: relative;
+
     .left-area {
       float: left;
       margin-left: 25px;
     }
+
     .right-area {
       & > div {
         float: right;

@@ -1,0 +1,6 @@
+#!/usr/bin/env sh
+
+# 真正 commit 前拿到 commit 信息内容，去做一些检验工作
+. "$(dirname -- "$0")/_/husky.sh"
+
+npx --no-install commitlint --edit "$1"

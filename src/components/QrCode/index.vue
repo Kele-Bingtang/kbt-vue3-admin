@@ -207,6 +207,7 @@ const disabledClick = () => {
   display: inline-block;
   position: relative;
 }
+
 .qrcode--disabled {
   position: absolute;
   top: 0;
@@ -218,6 +219,7 @@ const disabledClick = () => {
   height: 100%;
   background: #fffffff2;
 }
+
 .qrcode-icon {
   position: absolute;
   top: 50%;

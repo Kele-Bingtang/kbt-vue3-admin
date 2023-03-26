@@ -21,6 +21,7 @@ const openErrorLogger = () => {
 .badge {
   width: 18px;
   margin-top: -5px;
+
   :deep(.el-badge__content.is-fixed) {
     top: 11px;
     right: 7px;

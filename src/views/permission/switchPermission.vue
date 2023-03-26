@@ -162,6 +162,7 @@ const authList = ref(getAuthList());
     display: inline-flex;
     flex-direction: column;
   }
+
   .permission-alert {
     width: 320px;
     margin-top: 15px;

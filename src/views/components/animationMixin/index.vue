@@ -119,21 +119,23 @@ const articleList = [
 
 <style lang="scss" scoped>
 .animation-mixin-container {
-  height: 100%;
-  .mixin-col {
-    margin-bottom: 15px;
-  }
   @mixin colorBtn($color) {
     background: $color;
 
     &:hover {
       color: $color;
 
-      &:before,
-      &:after {
+      &::before,
+      &::after {
         background: $color;
       }
     }
+  }
+
+  height: 100%;
+
+  .mixin-col {
+    margin-bottom: 15px;
   }
 
   .blue-btn {
@@ -178,15 +180,15 @@ const articleList = [
     &:hover {
       background: #fff;
 
-      &:before,
-      &:after {
+      &::before,
+      &::after {
         width: 100%;
         transition: 600ms ease all;
       }
     }
 
-    &:before,
-    &:after {
+    &::before,
+    &::after {
       content: "";
       position: absolute;
       top: 0;

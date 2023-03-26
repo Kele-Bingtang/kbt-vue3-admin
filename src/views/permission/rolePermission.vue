@@ -236,6 +236,7 @@ const generateTree = (routes: RouterConfig[], checkedKeys: TreeKey[]) => {
 .role-permission-container {
   padding: 20px;
   background-color: #fff;
+
   .roles-table {
     margin-top: 30px;
   }

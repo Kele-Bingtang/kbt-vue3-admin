@@ -110,6 +110,7 @@ const data: Tree[] = [
   flex-direction: row;
   align-items: flex-start;
   height: 100%;
+
   .descriptions-card {
     flex: 1;
     height: 100%;

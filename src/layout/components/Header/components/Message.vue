@@ -44,7 +44,7 @@
                 <div class="message-content">
                   <el-tooltip
                     popper-class="message-tooltip"
-                    effect="light"
+                    :effect="settings.tooltipEffect"
                     :content="message.title"
                     placement="top"
                     :disabled="!titleTooltip"
@@ -55,7 +55,7 @@
                   </el-tooltip>
                   <el-tooltip
                     popper-class="message-tooltip"
-                    effect="light"
+                    :effect="settings.tooltipEffect"
                     :content="message.description"
                     placement="top"
                     :disabled="!descriptionTooltip"
@@ -82,7 +82,7 @@
                   <div class="message-title">
                     <el-tooltip
                       popper-class="message-tooltip"
-                      effect="light"
+                      :effect="settings.tooltipEffect"
                       :content="ar.title"
                       placement="top"
                       :disabled="!titleTooltip"
@@ -98,7 +98,7 @@
                   </div>
                   <el-tooltip
                     popper-class="message-tooltip"
-                    effect="light"
+                    :effect="settings.tooltipEffect"
                     :content="ar.description"
                     placement="top"
                     :disabled="!descriptionTooltip"
@@ -124,6 +124,7 @@
 
 <script setup lang="ts">
 import { useMessageStore } from "@/stores/message";
+import settings from "@/config/settings";
 
 interface Notice {
   id: string;
@@ -289,32 +290,39 @@ const hoverDescription = (event: any, description: string | undefined) => {
   height: 260px;
   line-height: 45px;
 }
+
 .message-list {
   display: flex;
   flex-direction: column;
   padding: 10px 24px;
+
   .message-item {
     display: flex;
     align-items: center;
     padding: 13px 0;
     border-bottom: 1px solid var(--el-border-color-light);
+
     &:last-child {
       border: none;
     }
+
     .message-icon {
       width: 40px;
       height: 40px;
       margin: 0 20px 0 5px;
     }
+
     .message-content {
       display: flex;
       flex-direction: column;
       flex: 1;
+
       .message-title {
         display: flex;
         flex: 1;
         margin-bottom: 5px;
-        color: rgba(0, 0, 0, 0.85);
+        color: rgb(0 0 0 / 85%);
+
         .title {
           flex: 1;
           width: 150px;
@@ -323,6 +331,7 @@ const hoverDescription = (event: any, description: string | undefined) => {
           white-space: nowrap; // 1 行溢出后隐藏文字
         }
       }
+
       .message-desc {
         display: -webkit-box;
         -webkit-line-clamp: 2; // 2 行溢出后隐藏文字
@@ -333,6 +342,7 @@ const hoverDescription = (event: any, description: string | undefined) => {
         color: #000;
         font-size: 12px;
       }
+
       .message-date {
         font-size: 12px;
         color: var(--el-text-color-secondary);
@@ -345,14 +355,17 @@ const hoverDescription = (event: any, description: string | undefined) => {
 <style lang="scss">
 .message-popover {
   padding: 0 !important;
+
   .el-tabs__header {
     margin: 0;
   }
+
   .el-tabs__nav-wrap {
     display: flex;
     justify-content: center;
   }
 }
+
 .message-tooltip {
   max-width: 240px;
 }

@@ -1,7 +1,9 @@
 @import "@/styles/variables.module.scss";
+
 .layout-container {
   width: 100%;
   height: 100%;
+
   .aside-split {
     display: flex;
     flex-direction: column;
@@ -10,20 +12,25 @@
     height: 100%;
     background-color: var(--menu-bg-color);
     border-right: 1px solid var(--menu-logo-line-color);
+
     .logo {
       box-sizing: border-box;
       height: 55px;
       border-bottom: 1px solid var(--menu-logo-line-color);
       cursor: pointer;
+
       img {
         width: 32px;
         object-fit: contain;
       }
     }
+
     .el-scrollbar {
       height: calc(100% - 55px);
+
       .split-list {
         flex: 1;
+
         .split-item {
           display: flex;
           flex-direction: column;
@@ -32,14 +39,17 @@
           height: 70px;
           cursor: pointer;
           transition: all 0.3s ease;
+
           &:hover {
             background-color: var(--split-menu-active-bg-color);
           }
+
           .el-icon,
           .svg-icon {
             font-size: 21px;
             color: var(--menu-icon-color);
           }
+
           .title {
             margin-top: 6px;
             font-size: 12px;
@@ -48,8 +58,10 @@
           }
         }
       }
+
       .split-active {
         background-color: var(--split-menu-active-bg-color);
+
         .el-icon,
         .svg-icon {
           color: var(--menu-icon-color);
@@ -57,6 +69,7 @@
       }
     }
   }
+
   .el-aside {
     display: flex;
     flex-direction: column;
@@ -65,17 +78,21 @@
     overflow: hidden;
     background: var(--menu-bg-color);
     transition: all 0.3s ease;
+
     .el-scrollbar {
       height: calc(100% - 55px);
+
       .el-menu {
         overflow-x: hidden;
         border-right: none;
       }
     }
+
     .logo {
       box-sizing: border-box;
       height: 55px;
       border-bottom: 1px solid var(--menu-logo-line-color);
+
       span {
         font-size: 24px;
         font-weight: bold;
@@ -84,17 +101,21 @@
       }
     }
   }
+
   &.menu-expand .el-aside {
     width: $sideMenuWidth;
   }
+
   &.menu-collapse .el-aside {
     transition-duration: 0.3s;
     width: 64px;
   }
+
   .not-aside {
     width: 0 !important;
-    border: 0; // 折叠时确保 border-right 不能多出 1px
+    border: 0; /* 折叠时确保 border-right 不能多出 1px */
   }
+
   .el-header {
     box-sizing: border-box;
     display: flex;
@@ -102,7 +123,7 @@
     justify-content: space-between;
     height: 55px;
     padding: 0 15px;
-    background-color: #ffffff;
+    background-color: #fff;
     border-bottom: 1px solid #f1f1f1;
   }
 }

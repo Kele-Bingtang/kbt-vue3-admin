@@ -82,19 +82,23 @@ const handleBreadcrumbClick = (item: RouteConfig) => {
   align-items: center;
   padding-right: 50px;
   overflow: hidden;
-  mask-image: linear-gradient(90deg, #000000 0%, #000000 calc(100% - 50px), transparent);
+  mask-image: linear-gradient(90deg, #000 0%, #000 calc(100% - 50px), transparent);
   white-space: nowrap;
+
   .breadcrumb-link {
     display: inline-flex;
     align-items: center;
   }
+
   .breadcrumb-icon {
     margin-right: 6px;
     font-size: 16px;
+
     &.svg-icon {
       font-size: 12px;
     }
   }
+
   .no-click-bread {
     display: inline-flex;
     align-items: center;

@@ -68,18 +68,23 @@ const handleMoving = (e: any) => {
 .split-pane-container {
   padding: 20px;
   height: 100%;
+
   .pane {
     width: 100%;
     height: 100%;
+
     &.left-pane {
       background: sandybrown;
     }
+
     &.right-pane {
       background: powderblue;
     }
+
     &.top-pane {
       background: teal;
     }
+
     &.bottom-pane {
       background: palegreen;
     }

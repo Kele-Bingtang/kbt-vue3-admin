@@ -9,8 +9,8 @@ import {
 interface Settings {
   title: string; // 项目 title
   titleMode: string; // 标题在浏览器标签上的多种模式。0：项目 title + 页面 title，1：用户名 + 页面 title，2：项目 title，3：页面 title
-  layoutMode: LayoutModeType; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
-  tabsNavMode: TabsNavModeType; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
+  layoutMode: LayoutModeType; // 布局设置：vertical、classic、transverse、columns、subsystem、mixins
+  tabsNavMode: TabsNavModeType; // 标签页设置：classic、popular
   showSettings: boolean; // 是否显示设置
   showBreadcrumb: boolean; // 是否使用 Breadcrumb
   showTabsNav: boolean; // 是否使用 tagsNav

@@ -37,6 +37,114 @@
 
 <style lang="scss" scoped>
 .button-component {
+  @keyframes sheen {
+    0% {
+      transform: skewY(-45deg) translateX(0);
+    }
+
+    100% {
+      transform: skewY(-45deg) translateX(12.5em);
+    }
+  }
+
+  @keyframes anim-in {
+    0% {
+      width: 0%;
+    }
+
+    100% {
+      width: 100%;
+    }
+  }
+
+  @keyframes anim-in-pseudo {
+    0% {
+      background: rgb(0 0 0 / 30%);
+    }
+
+    100% {
+      background: transparent;
+    }
+  }
+
+  @keyframes anim-out {
+    0% {
+      width: 0%;
+    }
+
+    100% {
+      width: 100%;
+    }
+  }
+
+  @keyframes anim-out-pseudo {
+    0% {
+      background: rgb(0 0 0 / 35%);
+    }
+
+    100% {
+      background: transparent;
+    }
+  }
+
+  @keyframes halftone {
+    100% {
+      background-size: 2.375em 2.375em, 0.1em 0.1em;
+    }
+  }
+
+  @keyframes stripes-move {
+    100% {
+      background-position: 5em 0;
+    }
+  }
+
+  @keyframes sawtooth {
+    100% {
+      background-position: 1em 0;
+    }
+  }
+
+  @keyframes zigzag {
+    100% {
+      background-position: 1em 0, 1em 0, -0.75em 0, -0.75em 0;
+    }
+  }
+
+  @keyframes pulse {
+    50% {
+      background-position: 0.66em 0.66em, -0.33em -0.33em;
+    }
+
+    100% {
+      background-size: 2em 2em, 1em 1em;
+      background-position: -1.5em -1.5em, -1em -1em;
+    }
+  }
+
+  /* calc(122px - 36px)  按钮宽度 - dot宽度 - 边框宽度 */
+  @keyframes atom {
+    0% {
+      transform: translateX(0) rotate(0);
+    }
+
+    30% {
+      transform: translateX(calc(122px - 42px)) rotate(0);
+    }
+
+    50% {
+      transform: translateX(calc(122px - 42px)) rotate(180deg);
+    }
+
+    80% {
+      transform: translateX(0) rotate(180deg);
+    }
+
+    100% {
+      transform: translateX(0) rotate(360deg);
+    }
+  }
+
   .btn {
     vertical-align: top;
     margin: 15px;
@@ -73,7 +181,7 @@
     line-height: 44px;
     background: #55acee;
     transition: all 0.5s;
-    box-shadow: 0px 5px 0px 0px #3486d5;
+    box-shadow: 0 5px 0 0 #3486d5;
   }
 
   .c:hover {
@@ -81,18 +189,8 @@
   }
 
   .c:active {
-    transform: translate(0px, 4px);
-    box-shadow: 0px 1px 0px 0px #3486d5;
-  }
-
-  @keyframes sheen {
-    0% {
-      transform: skewY(-45deg) translateX(0);
-    }
-
-    100% {
-      transform: skewY(-45deg) translateX(12.5em);
-    }
+    transform: translate(0, 4px);
+    box-shadow: 0 1px 0 0 #3486d5;
   }
 
   .golang {
@@ -108,9 +206,9 @@
     overflow: hidden;
   }
 
-  .golang:before {
+  .golang::before {
     content: "";
-    background-color: rgba(255, 255, 255, 0.5);
+    background-color: rgb(255 255 255 / 50%);
     height: 100%;
     width: 3em;
     display: block;
@@ -126,7 +224,7 @@
     color: #fff;
   }
 
-  .golang:hover:before {
+  .golang:hover::before {
     transform: skewX(-45deg) translateX(260px);
     transition: all 0.5s ease-in-out;
   }
@@ -136,7 +234,6 @@
   }
 
   .js {
-    width: 160px;
     height: 42px;
     line-height: 42px;
     background: #0d6;
@@ -166,7 +263,7 @@
     transition: padding-right 0.5s;
   }
 
-  .js span:after {
+  .js span::after {
     content: " ";
     position: absolute;
     top: 0;
@@ -175,7 +272,7 @@
     width: 10px;
     height: 10px;
     margin-top: -10px;
-    background: rgba(0, 0, 0, 0);
+    background: rgb(0 0 0 / 0%);
     border: 2px solid #fff;
     border-top: none;
     border-right: none;
@@ -188,8 +285,8 @@
     padding-right: 30px;
   }
 
-  .js:hover span:after,
-  .js:active span:after {
+  .js:hover span::after,
+  .js:active span::after {
     transition: opacity 0.5s, top 0.5s, right 0.5s;
     opacity: 1;
     border-color: #0c5;
@@ -230,20 +327,17 @@
     z-index: -1;
   }
 
-  .anim:before {
+  .anim::before {
     position: relative;
     content: "";
     display: block;
     margin-top: 100%;
   }
 
-  .anim:after {
+  .anim::after {
     content: "";
     position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    right: 0;
+    inset: 0;
     border-radius: 50%;
   }
 
@@ -251,7 +345,7 @@
     animation: 0.75s anim-in;
   }
 
-  .node .toggle:checked + .anim:after {
+  .node .toggle:checked + .anim::after {
     animation: anim-in-pseudo 0.75s;
   }
 
@@ -259,7 +353,7 @@
     animation: anim-out 0.75s;
   }
 
-  .node .toggle:not(:checked) + .anim:after {
+  .node .toggle:not(:checked) + .anim::after {
     animation: anim-out-pseudo 0.75s;
   }
 
@@ -279,48 +373,8 @@
     animation: anim-out 0.75s;
   }
 
-  .ruby:hover > .anim:after {
+  .ruby:hover > .anim::after {
     animation: anim-out-pseudo 0.75s;
-  }
-
-  @keyframes anim-in {
-    0% {
-      width: 0%;
-    }
-
-    100% {
-      width: 100%;
-    }
-  }
-
-  @keyframes anim-in-pseudo {
-    0% {
-      background: rgba(0, 0, 0, 0.3);
-    }
-
-    100% {
-      background: transparent;
-    }
-  }
-
-  @keyframes anim-out {
-    0% {
-      width: 0%;
-    }
-
-    100% {
-      width: 100%;
-    }
-  }
-
-  @keyframes anim-out-pseudo {
-    0% {
-      background: rgba(0, 0, 0, 0.35);
-    }
-
-    100% {
-      background: transparent;
-    }
   }
 
   .python {
@@ -388,7 +442,7 @@
     width: 100%;
   }
 
-  .php-1:hover:after {
+  .php-1:hover::after {
     height: 100%;
   }
 
@@ -399,7 +453,7 @@
     width: 0;
   }
 
-  .php-2:hover:after {
+  .php-2:hover::after {
     width: 100%;
   }
 
@@ -410,7 +464,7 @@
     width: 0;
   }
 
-  .php-3:hover:after {
+  .php-3:hover::after {
     height: 100%;
     left: 0;
     top: 0;
@@ -432,7 +486,7 @@
     width: 100%;
   }
 
-  .php-4:hover:after {
+  .php-4:hover::after {
     height: 0;
     left: 50%;
     top: 50%;
@@ -453,7 +507,7 @@
     width: 0;
   }
 
-  .php-5:hover:after {
+  .php-5:hover::after {
     height: 100%;
     width: 135%;
   }
@@ -480,12 +534,6 @@
     color: #e4f789;
   }
 
-  @keyframes halftone {
-    100% {
-      background-size: 2.375em 2.375em, 0.1em 0.1em;
-    }
-  }
-
   .kotlin-2 {
     color: #82f6d8;
   }
@@ -494,12 +542,6 @@
     animation: stripes-move 0.75s infinite linear;
     background: repeating-linear-gradient(45deg, #82f6d8 0, #82f6d8 0.25em, transparent 0.25em, transparent 0.5em);
     color: #f682a0;
-  }
-
-  @keyframes stripes-move {
-    100% {
-      background-position: 5em 0px;
-    }
   }
 
   .kotlin-3 {
@@ -513,30 +555,18 @@
     color: #8769f1;
   }
 
-  @keyframes sawtooth {
-    100% {
-      background-position: 1em 0;
-    }
-  }
-
   .kotlin-4 {
     color: #eea163;
   }
 
   .kotlin-4:hover {
     animation: zigzag 1s linear infinite;
-    background: linear-gradient(135deg, rgba(238, 161, 99, 0.25) 0.25em, transparent 0.25em) -0.5em 0,
-      linear-gradient(225deg, rgba(238, 161, 99, 0.25) 0.25em, transparent 0.25em) -0.5em 0,
-      linear-gradient(315deg, rgba(238, 161, 99, 0.25) 0.25em, transparent 0.25em) 0 0,
-      linear-gradient(45deg, rgba(238, 161, 99, 0.25) 0.25em, transparent 0.25em) 0 0;
+    background: linear-gradient(135deg, rgb(238 161 99 / 25%) 0.25em, transparent 0.25em) -0.5em 0,
+      linear-gradient(225deg, rgb(238 161 99 / 25%) 0.25em, transparent 0.25em) -0.5em 0,
+      linear-gradient(315deg, rgb(238 161 99 / 25%) 0.25em, transparent 0.25em) 0 0,
+      linear-gradient(45deg, rgb(238 161 99 / 25%) 0.25em, transparent 0.25em) 0 0;
     background-size: 0.75em 0.75em;
     color: #63b0ee;
-  }
-
-  @keyframes zigzag {
-    100% {
-      background-position: 1em 0, 1em 0, -0.75em 0, -0.75em 0;
-    }
   }
 
   .kotlin-5 {
@@ -545,24 +575,13 @@
 
   .kotlin-5:hover {
     animation: pulse 1s ease-in infinite;
-    background: radial-gradient(circle, rgba(249, 135, 155, 0.25) 43%, transparent 50%) 0 0/1em 1em,
-      radial-gradient(circle, rgba(249, 135, 155, 0.25) 43%, transparent 50%) 0.5em 0.5em/2em 2em;
+    background: radial-gradient(circle, rgb(249 135 155 / 25%) 43%, transparent 50%) 0 0/1em 1em,
+      radial-gradient(circle, rgb(249 135 155 / 25%) 43%, transparent 50%) 0.5em 0.5em/2em 2em;
     color: #0bdcb7;
   }
 
-  @keyframes pulse {
-    50% {
-      background-position: 0.66em 0.66em, -0.33em -0.33em;
-    }
-
-    100% {
-      background-size: 2em 2em, 1em 1em;
-      background-position: -1.5em -1.5em, -1em -1em;
-    }
-  }
-
-  .vb:before,
-  .vb:after {
+  .vb::before,
+  .vb::after {
     box-sizing: border-box;
   }
 
@@ -589,7 +608,7 @@
     display: none;
   }
 
-  .dot:after {
+  .dot::after {
     content: "";
     position: absolute;
     top: -6px;
@@ -605,29 +624,6 @@
   .vb:focus .dot {
     animation: atom 2s infinite linear;
     display: block;
-  }
-
-  /*calc(122px - 36px)  按钮宽度 - dot宽度 - 边框宽度*/
-  @keyframes atom {
-    0% {
-      transform: translateX(0) rotate(0);
-    }
-
-    30% {
-      transform: translateX(calc(122px - 42px)) rotate(0);
-    }
-
-    50% {
-      transform: translateX(calc(122px - 42px)) rotate(180deg);
-    }
-
-    80% {
-      transform: translateX(0) rotate(180deg);
-    }
-
-    100% {
-      transform: translateX(0) rotate(360deg);
-    }
   }
 }
 </style>

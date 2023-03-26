@@ -86,22 +86,27 @@ const lineBarData = [
   padding: 20px;
   background-color: #f0f2f5;
   width: 100%;
+
   .el-card {
     width: 100%;
   }
+
   .card-col {
     margin-bottom: 20px;
+
     .card-title {
-      color: rgba(0, 0, 0, 0.45);
+      color: rgb(0 0 0 / 45%);
       font-size: 16px;
       font-weight: bold;
       margin-bottom: 12px;
     }
+
     .count-style {
       font-size: 36px;
       font-weight: bold;
     }
   }
+
   .chart-col {
     margin-bottom: 20px;
   }

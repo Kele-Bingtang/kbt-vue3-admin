@@ -20,8 +20,6 @@ const toggleTrigger = () => {
   font-size: 22px;
   cursor: pointer;
   // 点击避免中择文字
-  -moz-user-select: none;
-  -khtml-user-select: none;
   user-select: none;
 }
 </style>

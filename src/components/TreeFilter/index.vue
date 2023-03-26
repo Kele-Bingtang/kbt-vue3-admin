@@ -130,6 +130,7 @@ defineExpose({ treeData, treeAllData });
   border: 1px solid var(--el-border-color-light);
   border-radius: 4px;
   box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+
   .title {
     margin: 0 0 15px;
     font-size: 18px;
@@ -140,24 +141,30 @@ defineExpose({ treeData, treeAllData });
     text-overflow: ellipsis;
     white-space: nowrap;
   }
+
   .el-input {
     margin: 0 0 15px;
   }
+
   .el-scrollbar {
     :deep(.el-tree) {
       height: 80%;
       overflow: auto;
+
       .el-tree-node__content {
         height: 33px;
       }
     }
+
     :deep(.el-tree--highlight-current) {
       .el-tree-node.is-current > .el-tree-node__content {
         background-color: var(--el-color-primary);
+
         .el-tree-node__label,
         .el-tree-node__expand-icon {
           color: white;
         }
+
         .is-leaf {
           color: transparent;
         }

@@ -460,15 +460,19 @@ const handleSizeChange = (pagingParam: Paging) => {
 .integrationTable-table-container {
   background-color: #fff;
   padding: 20px;
+
   .search-container {
     margin-bottom: 20px;
+
     .search-content {
       display: inline-block;
     }
+
     .multiple-search {
       margin-left: 20px;
     }
   }
+
   .edit-input {
     padding-right: 90px;
   }
@@ -478,6 +482,7 @@ const handleSizeChange = (pagingParam: Paging) => {
     right: 55px;
     top: 10px;
   }
+
   .confirm-btn {
     position: absolute;
     right: 15px;

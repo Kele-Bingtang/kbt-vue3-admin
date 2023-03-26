@@ -197,11 +197,14 @@ const handleDelete = (row: any, index: number) => {
 .single-search-table-container {
   background-color: #fff;
   padding: 20px;
+
   .search-container {
     margin-bottom: 20px;
+
     .search-content {
       display: inline-block;
     }
+
     .multiple-search {
       margin-left: 20px;
     }

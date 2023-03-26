@@ -12,7 +12,6 @@ const include = [
   "pinia",
   "echarts",
   "vue-i18n",
-  "js-cookie",
   "sortablejs",
   "@vueuse/core",
   "@wangeditor/editor",

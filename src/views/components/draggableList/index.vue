@@ -73,27 +73,32 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
   width: 100%;
   height: 100%;
   padding: 20;
+
   .draggable-list-card {
     width: 100%;
     height: 100%;
+
     .drag-card {
       width: 40%;
       height: 100%;
       display: inline-block;
     }
   }
+
   .handle-card {
     display: inline-block;
     width: 220px;
     height: 100%;
+
     .handle-inner-card {
       p {
         padding: 7px 0;
         margin: 0 7px;
-        border-bottom: 1px dashed #eeeeee;
+        border-bottom: 1px dashed #eee;
       }
     }
   }
+
   .res-show-card {
     display: inline-block;
     margin-left: 10px;
@@ -110,6 +115,7 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
       height: 100%;
     }
   }
+
   .drag-box {
     margin-right: 10px;
     height: calc(100% - 60px);

@@ -83,10 +83,12 @@ const onPrint = () => {
 .pdf-preview-container {
   .pdf-box {
     height: calc(100vh - 230px);
+
     .pdf-header {
       display: flex;
       justify-content: space-between;
       align-items: center;
+
       .header-content {
         width: 170px;
         display: flex;

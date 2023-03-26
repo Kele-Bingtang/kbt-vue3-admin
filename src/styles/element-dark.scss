@@ -1,18 +1,21 @@
 /* 自定义 element 暗黑模式样式 */
 html.dark {
-  // kbt-admin
+  /* kbt-admin */
   --kbt-bg-color: #141414;
   --kbt-main-bg-color: #0d0d0d;
   --kbt-border-light: 1px solid #4c4c4d;
 
-  // 以下为自定义暗黑模式内容
+  /* 以下为自定义暗黑模式内容 */
   .login-container {
     background-color: var(--el-fill-color-extra-light) !important;
+
     .login-box {
       background-color: var(--el-mask-color) !important;
+
       .login-form {
         background-color: var(--el-bg-color) !important;
         box-shadow: 5px 5px 15px rgb(161 161 161 / 20%) !important;
+
         .logo-text {
           color: var(--el-text-color-primary) !important;
         }
@@ -20,10 +23,11 @@ html.dark {
     }
   }
 
-  // scroll-bar
+  /* scroll-bar */
   ::-webkit-scrollbar {
     background-color: var(--el-scrollbar-bg-color) !important;
   }
+
   ::-webkit-scrollbar-thumb {
     background-color: var(--el-border-color-darker) !important;
   }
@@ -36,43 +40,53 @@ html.dark {
     }
   }
 
-  // layout
+  /* layout */
   .el-container {
     .el-aside {
       background-color: var(--kbt-bg-color) !important;
       border-right: var(--kbt-border-light) !important;
+
       .logo {
         border-bottom: var(--kbt-border-light) !important;
       }
     }
+
     .aside-split {
       border-right: var(--kbt-border-light) !important;
+
       .logo {
         background-color: var(--kbt-bg-color) !important;
       }
     }
+
     .not-aside {
       border-right: none !important;
     }
+
     .el-header {
       background-color: var(--kbt-bg-color) !important;
       border-bottom-color: var(--el-border-color-light) !important;
       color: var(--el-text-color-regular) !important;
+
       .header-left {
         .el-breadcrumb__inner {
           color: var(--el-text-color-regular) !important;
         }
       }
     }
+
     .el-main,
     .el-main > div {
       background-color: var(--kbt-main-bg-color) !important;
     }
+
     .tabs-nav {
       border-bottom: 1px solid var(--el-border-color-light);
+
       .el-tabs {
         background-color: var(--kbt-bg-color) !important;
         border-bottom: 1px solid var(--el-border-color-light);
+
         .btn-icon .el-button {
           border-color: var(--el-border-color-light) !important;
         }
@@ -82,37 +96,41 @@ html.dark {
     .el-dropdown {
       color: var(--el-text-color-regular) !important;
     }
+
     .el-footer {
       .footer {
         background-color: var(--kbt-bg-color) !important;
         border-top-color: var(--el-border-color-light) !important;
+
         a {
           color: var(--el-text-color-regular) !important;
         }
       }
     }
   }
+
   .el-menu,
   .el-menu-item,
   .el-sub-menu__title {
     background-color: var(--kbt-bg-color) !important;
   }
 
-  // 克隆并自定义 ElMessage 样式，不会影响 ElMessage 原本样式，在 src/utils/message.ts 中调用自定义样式 ElMessage 方法即可，非暗黑模式在 src/style/element-plus.scss 文件进行了适配
+  /* 克隆并自定义 ElMessage 样式，不会影响 ElMessage 原本样式，在 src/utils/message.ts 中调用自定义样式 ElMessage 方法即可，非暗黑模式在 src/style/element-plus.scss 文件进行了适配 */
   .antd-message {
     background-image: initial !important;
-    background-color: rgb(36, 37, 37) !important;
-    box-shadow: rgb(13 13 13 / 12%) 0px 3px 6px -4px, rgb(13 13 13 / 8%) 0px 6px 16px 0px,
-      rgb(13 13 13 / 5%) 0px 9px 28px 8px !important;
+    background-color: rgb(36 37 37) !important;
+    box-shadow: rgb(13 13 13 / 12%) 0 3px 6px -4px, rgb(13 13 13 / 8%) 0 6px 16px 0, rgb(13 13 13 / 5%) 0 9px 28px 8px !important;
+
     & .el-message__content {
       color: #fff !important;
       pointer-events: all !important;
       background-image: initial !important;
     }
+
     & .el-message__closeBtn {
       &:hover {
-        color: rgba(255, 255, 255, 0.85);
-        background-color: rgba(255, 255, 255, 0.12);
+        color: rgb(255 255 255 / 85%);
+        background-color: rgb(255 255 255 / 12%);
       }
     }
   }

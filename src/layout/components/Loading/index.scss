@@ -5,6 +5,7 @@
   justify-content: center;
   width: 100%;
   height: 100%;
+
   .loading-wrap {
     display: flex;
     align-items: center;
@@ -12,6 +13,7 @@
     padding: 98px;
   }
 }
+
 .dot {
   position: relative;
   box-sizing: border-box;
@@ -22,6 +24,7 @@
   transform: rotate(45deg);
   animation: ant-rotate 1.2s infinite linear;
 }
+
 .dot i {
   position: absolute;
   display: block;
@@ -34,20 +37,24 @@
   transform-origin: 50% 50%;
   animation: ant-spin-move 1s infinite linear alternate;
 }
+
 .dot i:nth-child(1) {
   top: 0;
   left: 0;
 }
+
 .dot i:nth-child(2) {
   top: 0;
   right: 0;
   animation-delay: 0.4s;
 }
+
 .dot i:nth-child(3) {
   right: 0;
   bottom: 0;
   animation-delay: 0.8s;
 }
+
 .dot i:nth-child(4) {
   bottom: 0;
   left: 0;

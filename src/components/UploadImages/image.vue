@@ -196,29 +196,34 @@ const uploadError = () => {
     :deep(.el-upload),
     :deep(.el-upload-dragger) {
       border: 1px dashed var(--el-color-danger) !important;
+
       &:hover {
         border-color: var(--el-color-primary) !important;
       }
     }
   }
 }
+
 :deep(.disabled) {
   .el-upload,
   .el-upload-dragger {
     cursor: not-allowed !important;
     background: var(--el-disabled-bg-color);
     border: 1px dashed var(--el-border-color-darker) !important;
+
     &:hover {
       border: 1px dashed var(--el-border-color-darker) !important;
     }
   }
 }
+
 .upload-box {
   .no-border {
     :deep(.el-upload) {
       border: none !important;
     }
   }
+
   :deep(.upload) {
     .el-upload {
       position: relative;
@@ -229,14 +234,17 @@ const uploadError = () => {
       height: v-bind(height);
       overflow: hidden;
       border: 1px dashed var(--el-border-color-darker);
-      border-radius: v-bind(borderRadius);
+      border-radius: v-bind(borderradius);
       transition: var(--el-transition-duration-fast);
+
       &:hover {
         border-color: var(--el-color-primary);
+
         .upload-handle {
           opacity: 1;
         }
       }
+
       .el-upload-dragger {
         display: flex;
         align-items: center;
@@ -247,20 +255,24 @@ const uploadError = () => {
         overflow: hidden;
         background-color: transparent;
         border: 1px dashed var(--el-border-color-darker);
-        border-radius: v-bind(borderRadius);
+        border-radius: v-bind(borderradius);
+
         &:hover {
           border: 1px dashed var(--el-color-primary);
         }
       }
+
       .el-upload-dragger.is-dragover {
         background-color: var(--el-color-primary-light-9);
         border: 2px dashed var(--el-color-primary) !important;
       }
+
       .upload-image {
         width: 100%;
         height: 100%;
         object-fit: contain;
       }
+
       .upload-empty {
         position: relative;
         display: flex;
@@ -270,11 +282,13 @@ const uploadError = () => {
         font-size: 12px;
         line-height: 30px;
         color: var(--el-color-info);
+
         .el-icon {
           font-size: 28px;
           color: var(--el-text-color-secondary);
         }
       }
+
       .upload-handle {
         position: absolute;
         top: 0;
@@ -289,6 +303,7 @@ const uploadError = () => {
         background: rgb(0 0 0 / 60%);
         opacity: 0;
         transition: var(--el-transition-duration-fast);
+
         .handle-icon {
           display: flex;
           flex-direction: column;
@@ -296,11 +311,13 @@ const uploadError = () => {
           justify-content: center;
           padding: 0 6%;
           color: aliceblue;
+
           .el-icon {
             margin-bottom: 40%;
             font-size: 130%;
             line-height: 130%;
           }
+
           span {
             font-size: 85%;
             line-height: 85%;
@@ -309,6 +326,7 @@ const uploadError = () => {
       }
     }
   }
+
   .el-upload__tip {
     line-height: 18px;
     text-align: center;

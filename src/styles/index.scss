@@ -6,8 +6,8 @@ body {
   height: 100%;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  font-family: -apple-system, BlinkMacSystemFont, PingFang SC, Segoe UI, Helvetica Neue, Helvetica, Hiragino Sans GB,
-    Microsoft YaHei, Arial, sans-serif;
+  font-family: -apple-system, BlinkMacSystemFont, "PingFang SC", "Segoe UI", "Helvetica Neue", Helvetica,
+    "Hiragino Sans GB", "Microsoft YaHei", Arial, sans-serif;
   overflow: hidden;
   margin: 0 !important;
 }
@@ -21,8 +21,8 @@ html {
 }
 
 *,
-*:before,
-*:after {
+*::before,
+*::after {
   box-sizing: border-box;
 }
 
@@ -39,7 +39,7 @@ div:focus {
 }
 
 .clearfix {
-  &:after {
+  &::after {
     content: "";
     display: table;
     clear: both;
@@ -51,7 +51,7 @@ div:focus {
 }
 
 .no-padding {
-  padding: 0px !important;
+  padding: 0 !important;
 }
 
 /* flex */
@@ -60,18 +60,20 @@ div:focus {
   align-items: center;
   justify-content: center;
 }
+
 .flx-justify-between {
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
+
 .flx-align-center {
   display: flex;
   align-items: center;
 }
 
 /* clearfix */
-.clearfix::after {
+.clearfix-after {
   display: block;
   height: 0;
   overflow: hidden;
@@ -105,6 +107,7 @@ div:focus {
   width: 8px;
   height: 8px;
 }
+
 ::-webkit-scrollbar-thumb {
   background-color: #d3d3d3;
   border-radius: 20px;
@@ -115,10 +118,12 @@ div:focus {
 #nprogress .bar {
   background: var(--el-color-primary) !important;
 }
+
 #nprogress .spinner-icon {
   border-top-color: var(--el-color-primary) !important;
   border-left-color: var(--el-color-primary) !important;
 }
+
 #nprogress .peg {
   box-shadow: 0 0 10px var(--el-color-primary), 0 0 5px var(--el-color-primary) !important;
 }
@@ -162,7 +167,7 @@ div:focus {
     transition: background-color 0.2s, color 0.2s;
 
     &:hover {
-      background-color: rgba(0, 0, 0, 0.06);
+      background-color: rgb(0 0 0 / 6%);
     }
   }
 }

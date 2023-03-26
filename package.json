@@ -9,11 +9,21 @@
     "build:prod": "rimraf dist && vite build --mode production",
     "build:test": "rimraf dist && vite build --mode test",
     "preview": "vite preview",
-    "lint": "eslint . --ext .vue,.js,.jsx,.cjs,.mjs,.ts,.tsx,.cts,.mts --fix --ignore-path .eslintignore",
     "report": "rimraf dist && vite build",
     "cloc": "NODE_OPTIONS=--max-old-space-size=4096 cloc . --exclude-dir=node_modules",
-    "clean:cache": "rm -rf node_modules && rm -rf .eslintcache && yarn install"
+    "clean:cache": "rm -rf node_modules && rm -rf .eslintcache && yarn install",
+    "prepare": "husky install",
+    "lint-staged": "lint-staged -c ./.husky/lintstagedrc.js",
+    "stylelint": "stylelint \"**/*.{vue,css,scss,postcss,less}\" --fix",
+    "prettier": "prettier --write  \"src/**/*.{js,ts,json,tsx,css,less,scss,vue,html,md}\"",
+    "eslint": "eslint --max-warnings 0  \"{src,mock,build}/**/*.{vue,js,ts,tsx}\" --fix",
+    "lint": "yarn eslint && yarn prettier && yarn stylelint"
   },
+  "browserslist": [
+    "> 1%",
+    "not ie 11",
+    "not op_mini all"
+  ],
   "dependencies": {
     "@element-plus/icons-vue": "^2.0.10",
     "@tinymce/tinymce-vue": "^5.0.0",
@@ -46,6 +56,8 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@commitlint/cli": "^17.5.0",
+    "@commitlint/config-conventional": "^17.4.4",
     "@rushstack/eslint-patch": "^1.1.4",
     "@types/file-saver": "^2.0.5",
     "@types/node": "^18.11.12",
@@ -61,6 +73,8 @@
     "cssnano": "^5.1.15",
     "eslint": "^8.22.0",
     "eslint-plugin-vue": "^9.3.0",
+    "husky": "^8.0.3",
+    "lint-staged": "^13.2.0",
     "npm-run-all": "^4.1.5",
     "postcss": "^8.4.21",
     "postcss-html": "^1.5.0",
@@ -69,6 +83,9 @@
     "prettier": "^2.7.1",
     "rollup-plugin-visualizer": "^5.9.0",
     "sass": "^1.58.1",
+    "stylelint": "^15.3.0",
+    "stylelint-config-standard-vue": "^1.0.0",
+    "stylelint-order": "^6.0.3",
     "typescript": "~4.7.4",
     "unplugin-auto-import": "^0.14.2",
     "vite": "^4.0.0",

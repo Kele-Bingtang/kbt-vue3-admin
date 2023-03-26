@@ -149,26 +149,31 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .header-search {
   &:not(.show) {
-    :deep(.el-autocomplete, ) {
+    :deep(.el-autocomplete) {
       width: 0;
       transition: width 0.2s;
+
       .el-input__wrapper {
         width: 0;
         padding: 0;
       }
+
       .el-input__prefix {
         display: none;
       }
     }
   }
+
   &.show {
-    :deep(.el-autocomplete, ) {
+    :deep(.el-autocomplete) {
       width: 220px;
       transition: width 0.2s;
     }
   }
+
   .search-icon {
     cursor: pointer;
+
     &:hover {
       color: var(--el-color-primary);
     }
@@ -181,6 +186,7 @@ onUnmounted(() => {
     top: 2px;
     font-size: 16px;
   }
+
   span {
     margin: 0 0 0 10px;
     font-size: 14px;

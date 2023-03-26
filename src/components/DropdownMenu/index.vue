@@ -56,6 +56,14 @@ $transition-time: 0.1s;
   }
 
   &-item {
+    @for $i from 1 through $item-length {
+      &:nth-of-type(#{$i}) {
+        z-index: -1;
+        transition-delay: $i * $transition-time;
+        transform: translate3d(0, -60px, 0);
+      }
+    }
+
     text-align: center;
     position: absolute;
     width: 100%;
@@ -72,14 +80,6 @@ $transition-time: 0.1s;
     &:hover {
       background: var(--el-color-primary);
       color: white;
-    }
-
-    @for $i from 1 through $item-length {
-      &:nth-of-type(#{$i}) {
-        z-index: -1;
-        transition-delay: $i * $transition-time;
-        transform: translate3d(0, -60px, 0);
-      }
     }
   }
 

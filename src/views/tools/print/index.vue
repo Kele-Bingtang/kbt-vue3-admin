@@ -83,6 +83,7 @@ const tableData = ref(simpleData);
     justify-content: space-between;
     align-items: center;
   }
+
   .img {
     width: 300px;
     height: 300px;

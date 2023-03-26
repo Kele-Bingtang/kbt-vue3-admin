@@ -133,12 +133,15 @@ const pushList = (list: DragList, type: string) => {
 <style lang="scss" scoped>
 .drag-list-component {
   height: 100%;
+
   .drag-list {
     height: 100%;
     float: left;
+
     .drag-list-item {
       position: relative;
       line-height: inherit;
+
       .icon {
         position: absolute;
         line-height: inherit;

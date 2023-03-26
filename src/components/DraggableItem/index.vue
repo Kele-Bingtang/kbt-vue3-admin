@@ -78,7 +78,7 @@ withDefaults(defineProps<DraggableItemProps>(), {
       line-height: 54px;
       padding: 5px 10px;
       box-sizing: border-box;
-      box-shadow: 0px 1px 3px 0 rgba(0, 0, 0, 0.2);
+      box-shadow: 0 1px 3px 0 rgb(0 0 0 / 20%);
     }
   }
 }
