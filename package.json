@@ -105,5 +105,12 @@
     "commitizen": {
       "path": "node_modules/cz-git"
     }
+  },
+  "standard-version": {
+    "skip": {
+      "bump": true,
+      "commit": true,
+      "tag": true
+    }
   }
 }

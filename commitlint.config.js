@@ -1,5 +1,7 @@
-// @see: https://cz-git.qbenben.com/zh/guide
+/* @see: https://cz-git.qbenben.com/zh/guide */
 /** @type {import('cz-git').UserConfig} */
+
+/* CHANGELOG.md @see: https://www.5axxw.com/wiki/content/yy4uxs#96t5oseui9?w */
 
 /**
  * feat：新特性、新功能
@@ -14,7 +16,6 @@
  * chore：其他修改, 比如改变构建流程、或者增加依赖库、工具等
  * revert：回滚到上一个版本
  * optimize: 优化构建工具或运行时性能
- * workflow: 工作流变动
  * wip: 开发中
  * types: 类型定义文件更改
  */
@@ -55,7 +56,6 @@ module.exports = {
         "chore",
         "revert",
         "optimize",
-        "workflow",
         "wip",
         "types",
       ],
@@ -105,6 +105,8 @@ module.exports = {
       { value: "ci", name: "ci:       🎡  Changes to our CI configuration files and scripts", emoji: "🎡" },
       { value: "chore", name: "chore:    🔨  Other changes that don't modify src or test files", emoji: "🔨" },
       { value: "revert", name: "revert:   ⏪️  Reverts a previous commit", emoji: "⏪️" },
+      { value: "wip", name: "wip:      🪡  Code development in progress", emoji: "🪡" },
+      { value: "types", name: "types:    🪒  TypeScript Definition File Change", emoji: "🪒" },
       // 中文版
       // { value: "特性", name: "特性:   🚀  新增功能", emoji: "🚀" },
       // { value: "修复", name: "修复:   🧩  修复缺陷", emoji: "🧩" },
@@ -117,6 +119,8 @@ module.exports = {
       // { value: "集成", name: "集成:   🎡  修改 CI 配置、脚本", emoji: "🎡" },
       // { value: "回退", name: "回退:   ⏪️  回滚 commit", emoji: "⏪️" },
       // { value: "其他", name: "其他:   🔨  对构建过程或辅助工具和库的更改（不影响源文件、测试用例）", emoji: "🔨" }
+      // { value: "开发中", name: "开发中:      🪡  代码正在开发中", emoji: "🪡" },
+      // { value: "类型", name: "类型:    🪒  类型定义文件更改", emoji: "🪒" },
     ],
     useEmoji: true,
     themeColorCode: "",
