@@ -2,11 +2,15 @@
   <div class="header-right-container">
     <div class="header-icon">
       <MenuSearch id="menuSearch" />
-      <Fullscreen id="fullscreen" />
+      <Fullscreen id="fullscreen" v-if="!isMobile" />
       <LayoutSizeSelect id="layoutSizeSelect" />
       <LanguageSelect id="languageSelect" />
       <Message id="message" />
-      <ErrorLog id="errorLog" :errorCount="errorCount" v-if="settings.errorLog.showInHeader && errorCount > 0" />
+      <ErrorLog
+        id="errorLog"
+        :errorCount="errorCount"
+        v-if="settings.errorLog.showInHeader && errorCount > 0 && !isMobile"
+      />
       <User id="user" />
     </div>
   </div>
@@ -22,14 +26,20 @@ import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
 import settings from "@/config/settings";
 import { useErrorLogStore } from "@/stores/errorLog";
+import { useLayoutStore } from "@/stores/layout";
+import { DeviceType } from "@/stores/index.d";
 
+const layoutStore = useLayoutStore();
 const errorLogStore = useErrorLogStore();
+
 const errorCount = computed(() => {
   const noReadErrorLogs = errorLogStore.errorLogs.filter(errorLog => {
     return !errorLog.hasRead;
   });
   return noReadErrorLogs.length;
 });
+
+const isMobile = computed(() => layoutStore.device === DeviceType.Mobile);
 </script>
 
 <style lang="scss" scoped>
@@ -37,7 +47,7 @@ const errorCount = computed(() => {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 0 30px 0 0;
+  margin: 0 20px 0 0;
 
   .header-icon {
     display: flex;

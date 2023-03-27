@@ -41,7 +41,7 @@ import "tinymce/plugins/visualchars"; // 增加了查看可编辑区域中显示
 import "tinymce/plugins/wordcount"; // 右下角统计字数，https://www.tiny.cloud/docs/tinymce/6/wordcount/
 import "tinymce/models/dom";
 import { plugins, toolbar } from "./config";
-// import "/public/tinymce/plugins/axupimgs";
+import "/public/tinymce/plugins/axupimgs/plugin"; // 多图片上传
 
 export type UITheme = "default" | "dark" | "tinymce-5" | "tinymce-5-dark";
 export type ContentTheme = "" | "default" | "dark" | "document" | "tinymce-5" | "tinymce-5-dark";
@@ -76,7 +76,13 @@ const props = withDefaults(defineProps<TinymceProps>(), {
 
 type TinymceEmitProps = {
   (e: "update:value", value: string): void;
-  (e: "img-upload", blobInfo: Function, resolve: Function, reject: Function, progress: Function): void;
+  (
+    e: "img-upload",
+    blobInfo: Function,
+    resolve: (value: unknown) => void,
+    reject: (value: unknown) => void,
+    progress: Function
+  ): void;
   (e: "file-upload", file: File, filetype: "image" | "media" | "file", callback: Function): void;
 };
 

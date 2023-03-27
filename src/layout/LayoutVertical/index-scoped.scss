@@ -69,3 +69,18 @@
     border-bottom: 1px solid #3c3c3c1f;
   }
 }
+
+.mobile {
+  .el-aside {
+    position: fixed !important;
+    top: 0 !important;
+    transition: transform 0.28s !important;
+  }
+
+  &.menu-collapse .el-aside {
+    width: $sideMenuWidth !important;
+    pointer-events: none !important;
+    transition-duration: 0.3s !important;
+    transform: translate3d(-$sideMenuWidth, 0, 0) !important;
+  }
+}

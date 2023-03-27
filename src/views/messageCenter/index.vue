@@ -334,7 +334,7 @@ const handleOperate = (message: MessageItem) => {
 }
 
 .mobile {
-  .message-center {
+  .message-center-container {
     .message-content {
       width: 100% !important;
     }

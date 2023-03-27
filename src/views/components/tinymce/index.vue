@@ -67,7 +67,7 @@ const handleTheme = () => {
  * @param success 成功回调，返回链接
  * @param failure 失败回调，返回提示信息
  */
-const handleImgUpload = async (blobInfo: any, success: Function, failure: Function) => {
+const handleImgUpload = async (blobInfo: any, success: (value: unknown) => void, failure: (value: unknown) => void) => {
   const blobFile = blobInfo.blob(); // blob 图片
   // let base64File = blobInfo.base64(); // base64 图片
   // fileName 为 Tinymce 内部处理的文件名（官网说 fileName 一定唯一），而 blobFile.name 是文件上传前自带的文件名
@@ -88,11 +88,13 @@ const handleImgUpload = async (blobInfo: any, success: Function, failure: Functi
    * 模拟本地批量上传图片，实际应该上传到云端，则下面的 if 需要去掉（单个图片上传时，length 大于 2，只有批量上传，才等于 2）
    * 批量上传只是类似于 for 循环调用该 handleImgUpload 函数，所以实际的云端批量上传，直接把下面的 if 去掉即可
    */
-  if (Object.keys(blobInfo).length === 2) {
-    const { blobInfo: b, file: f } = await uploadLocal(blobFile);
-    success(b.blobUri(), { text: f.name, title: f.name });
-  }
-
+  // if (Object.keys(blobInfo).length === 2) {
+  //   const { blobInfo: b, file: f } = await uploadLocal(blobFile);
+  //   success(b.blobUri());
+  // }
+  // const { blobInfo: b } = await uploadLocal(blobFile);
+  // console.log(b.blobUri());
+  // success(b.blobUri());
   // 上传服务器
   // let formData = new FormData();
   // formData.append("file", blobInfo.blob());
@@ -130,6 +132,7 @@ const handleFileUpload = async (file: File, filetype: "image" | "media" | "file"
      * 为了演示 Demo，这里仅仅是上传到本地浏览器，如果上传云端，则在 @img-upload 回调执行逻辑，这里就不进行 if 判断逻辑处理
      */
     const { blobInfo, file: f } = await uploadLocal(file);
+    console.log(blobInfo);
     callback(blobInfo.blobUri(), { text: f.name, title: f.name });
   } else if (filetype === "media") {
     const isValid = await validateVideo(file);

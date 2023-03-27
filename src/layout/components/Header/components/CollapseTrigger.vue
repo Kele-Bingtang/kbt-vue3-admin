@@ -1,5 +1,5 @@
 <template>
-  <el-icon class="collapse-icon" @click="toggleTrigger">
+  <el-icon class="collapse-icon" @click.stop="toggleTrigger">
     <component :is="isCollapse ? 'Expand' : 'Fold'"></component>
   </el-icon>
 </template>

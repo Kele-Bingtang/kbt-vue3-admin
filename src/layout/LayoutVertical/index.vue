@@ -1,7 +1,7 @@
 <template>
   <el-container
     class="layout-container"
-    :class="{ mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }"
+    :class="{ mobile: isMobile, 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }"
   >
     <el-aside>
       <div class="logo flx-center" @click="router.push(HOME_URL)">
@@ -10,7 +10,7 @@
       </div>
       <Menu />
     </el-aside>
-    <div v-if="isMobile() && !isCollapse" class="drawer-bg" @click="handleClickOutSide" />
+    <div v-if="isMobile && !isCollapse" class="drawer-bg" @click="handleClickOutSide" />
     <el-container>
       <el-header class="flx-justify-between">
         <Header />
@@ -35,10 +35,11 @@ const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
 const layoutStore = useLayoutStore();
-const { resizeHandler, isMobile } = useLayout();
+const { resizeHandler } = useLayout();
 
 const isCollapse = computed(() => settingsStore.isCollapse);
 const device = computed(() => layoutStore.device);
+const isMobile = computed(() => device.value === DeviceType.Mobile);
 
 // 监听路由的变化，判断是移动端还是桌面端
 watch(
@@ -49,6 +50,10 @@ watch(
     }
   }
 );
+
+onMounted(() => {
+  resizeHandler();
+});
 
 onBeforeMount(() => {
   window.addEventListener("resize", resizeHandler);

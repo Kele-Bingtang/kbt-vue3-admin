@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts" name="Print">
-import Print from "@/utils/layout/print";
+import Print from "@/utils/print";
 import ChartLine from "@/views/home/components/chartLine.vue";
 import { simpleData } from "@/test/table";
 

@@ -1,9 +1,6 @@
 <template>
   <!-- 布局：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧 -->
-  <el-container
-    class="layout-container"
-    :class="{ mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }"
-  >
+  <el-container class="layout-container" :class="{ 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }">
     <el-header class="flx-justify-between">
       <Header>
         <template #left>
@@ -17,7 +14,6 @@
         </template>
       </Header>
     </el-header>
-    <div v-if="isMobile() && !isCollapse" class="drawer-bg" @click="handleClickOutSide" />
     <el-container class="classic-container">
       <el-aside>
         <Menu />
@@ -30,9 +26,6 @@
 </template>
 
 <script setup lang="ts" name="LayoutVertical">
-import { useLayout } from "@/hooks/useLayout";
-import { DeviceType } from "@/stores/index.d";
-import { useLayoutStore } from "@/stores/layout";
 import { useSettingsStore } from "@/stores/settings";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
@@ -41,35 +34,10 @@ import settings from "@/config/settings";
 import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
 import { HOME_URL } from "@/router/routesConfig";
 
-const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
-const layoutStore = useLayoutStore();
-const { resizeHandler, isMobile } = useLayout();
 
 const isCollapse = computed(() => settingsStore.isCollapse);
-const device = computed(() => layoutStore.device);
-
-// 监听路由的变化
-watch(
-  () => route.fullPath,
-  () => {
-    if (device.value === DeviceType.Mobile && !isCollapse.value) {
-      settingsStore.closeSideMenu();
-    }
-  }
-);
-
-onBeforeMount(() => {
-  window.addEventListener("resize", resizeHandler);
-});
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", resizeHandler);
-});
-
-const handleClickOutSide = () => {
-  settingsStore.closeSideMenu();
-};
 </script>
 
 <style lang="scss" scoped>

@@ -83,7 +83,7 @@
 </template>
 
 <script setup lang="ts" name="Tabs">
-import { appendFieldById, deleteChildren, getNodeById } from "@/utils/layout/tree";
+import { appendFieldById, deleteChildren, getNodeById } from "@/utils/tree";
 import { useDetail } from "./hooks";
 import { usePermissionStore } from "@/stores/permission";
 import { useLayoutStore } from "@/stores/layout";
