@@ -32,10 +32,7 @@
         flex: 1;
 
         .split-item {
-          display: flex;
           flex-direction: column;
-          align-items: center;
-          justify-content: center;
           height: 70px;
           cursor: pointer;
           transition: all 0.3s ease;
@@ -119,9 +116,6 @@
 
   .el-header {
     box-sizing: border-box;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
     height: 55px;
     padding: 0 15px;
     background-color: #ffffff;

@@ -59,6 +59,8 @@
     "cloc",
     "antd",
     "framename",
-    "auths"
+    "auths",
+    "commitlint",
+    "stylelint"
   ]
 }

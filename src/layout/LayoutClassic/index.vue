@@ -4,7 +4,7 @@
     class="layout-container"
     :class="{ mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }"
   >
-    <el-header>
+    <el-header class="flx-justify-between">
       <Header>
         <template #left>
           <div class="header-left">

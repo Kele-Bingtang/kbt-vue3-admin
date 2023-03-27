@@ -2,6 +2,12 @@
 
 基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 搭建的 Admin 模板。
 
+Admin 集成了很多插件、组件等内容，更适合进行学习和参考。如果你需要基于 Admin 来开发，建议使用 Admin 的纯净版，该版本去掉了集成的内容，只保留最基本的、项目必须的东西，分为国际化和非国际化版。
+
+[国际化版](https://github.com/Kele-Bingtang/kbt-vue3-template)
+
+[非国际化版](https://github.com/Kele-Bingtang/kbt-vue3-template/tree/no-i18n)
+
 克隆项目下来后，记得切换 GitLab 地址，修改为您真正的项目地址。
 
 如果您暂时不确定您当前开发的项目地址，可以先把根目录下的 .git 文件删除，因为 .git 目录在 Windows 是隐藏的，所以您可以有两个步骤来删除它：

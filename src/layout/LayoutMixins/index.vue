@@ -1,6 +1,6 @@
 <template>
   <el-container class="layout-container" :class="{ 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }">
-    <el-header>
+    <el-header class="flx-justify-between">
       <div class="logo flx-center" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span>{{ settings.title }}</span>

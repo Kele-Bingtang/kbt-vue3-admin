@@ -27,7 +27,7 @@ const config = {
   // 默认地址请求地址，可在 .env.*** 文件中修改
   baseURL: mappingUrl.default,
   // 设置超时时间（10s）
-  timeout: 1000,
+  timeout: 10000,
 };
 
 class RequestHttp {

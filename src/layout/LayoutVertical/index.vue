@@ -12,7 +12,7 @@
     </el-aside>
     <div v-if="isMobile() && !isCollapse" class="drawer-bg" @click="handleClickOutSide" />
     <el-container>
-      <el-header>
+      <el-header class="flx-justify-between">
         <Header />
       </el-header>
       <MainContent />

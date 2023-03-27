@@ -20,7 +20,7 @@
 </template>
 
 <script setup lang="ts" name="Download">
-import { downloadByOnlineUrl, downloadByBase64, downloadByData, downloadByUrl } from "@/utils/layout/download";
+import { downloadByOnlineUrl, downloadByBase64, downloadByData, downloadByUrl } from "@/utils/download";
 import axios from "axios";
 
 const imgUrl = "https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/user/avatar1.png";
