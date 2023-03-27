@@ -43,7 +43,7 @@ class RequestHttp {
       config => {
         // 如果当前请求需要显示 loading，在 api 服务中通过指定: { headers: { loading: true } } 来控制显示 loading
         config.headers!.loading || showFullScreenLoading();
-        const accessToken = localStorage.get("token");
+        const accessToken = localStorage.getItem("token");
         if (!accessToken) {
           config.cancelToken = source.token;
           source.cancel("身份异常");
@@ -54,6 +54,7 @@ class RequestHttp {
         config.headers && config.method?.toLocaleLowerCase() === "post" && processParamsType(config);
         config.params?._type === "multi" && processArray(config);
         config.params && delete config.params._type;
+        config.headers!.token = accessToken;
         return config;
       },
       (error: AxiosError) => {

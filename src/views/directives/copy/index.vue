@@ -18,7 +18,7 @@
 
 <script setup lang="ts" name="Copy">
 const router = useRouter();
-const data = ref<string>("http://172.16.49.8:8081/Common/vue3-ts-template.git");
+const data = ref<string>("https://github.com/Kele-Bingtang/kbt-vue3-admin");
 </script>
 
 <style lang="scss" scoped></style>

@@ -19,7 +19,8 @@
     "lint:eslint": "eslint --max-warnings 0  \"{src,mock,build}/**/*.{vue,js,ts,tsx}\" --fix",
     "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:stylelint",
     "release": "standard-version",
-    "commit": "git pull && git add . && git-cz && git push"
+    "commit": "git add . && git-cz && git push",
+    "commit:all": "git pull && git add . && git-cz && git push"
   },
   "browserslist": [
     "> 1%",

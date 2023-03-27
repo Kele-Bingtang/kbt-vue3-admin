@@ -79,6 +79,7 @@
     "__dirname": true,
     "NodeListOf": true,
     "AppInfo": true,
-    "__APP_INFO__": true
+    "__APP_INFO__": true,
+    "http": true
   }
 }

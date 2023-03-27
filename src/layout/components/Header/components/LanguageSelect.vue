@@ -18,6 +18,7 @@
 
 <script setup lang="ts" name="LanguageSelect">
 import { useLayout } from "@/hooks/useLayout";
+import type { LanguageType } from "@/stores";
 import { useLayoutStore } from "@/stores/layout";
 import { ElMessage } from "element-plus";
 import { useI18n } from "vue-i18n";
@@ -35,7 +36,7 @@ const { setBrowserTitle } = useLayout();
 
 const language = computed(() => layoutStore.language);
 
-const handleSelectLanguage = (lang: string) => {
+const handleSelectLanguage = (lang: LanguageType) => {
   i18n.locale.value = lang;
   layoutStore.setLanguage(lang);
   document.documentElement.lang = lang;

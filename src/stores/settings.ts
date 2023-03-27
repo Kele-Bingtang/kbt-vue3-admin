@@ -54,7 +54,7 @@ export const useSettingsStore = defineStore(
     };
 
     const resetSettings = () => {
-      localStorage.removeItem("kbt_settingsStore");
+      localStorage.removeItem(defaultSettings.settingCacheKey);
       if (!recordTabsNav.value) {
         removeCacheTabNavList();
       }

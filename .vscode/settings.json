@@ -58,6 +58,7 @@
     "cssnano",
     "cloc",
     "antd",
-    "framename"
+    "framename",
+    "auths"
   ]
 }

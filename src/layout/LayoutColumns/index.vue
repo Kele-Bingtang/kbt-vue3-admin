@@ -14,7 +14,11 @@
             @click="changeMenuItem(item)"
           >
             <CommonIcon v-if="item.meta.icon" :icon="item.meta.icon" />
-            <span class="title">{{ item.meta.title }}</span>
+            <div class="flx-center" style="width: 100%">
+              <Tooltip :effect="settings.tooltipEffect">
+                <span class="title">{{ item.meta.title }}</span>
+              </Tooltip>
+            </div>
           </div>
         </div>
       </el-scrollbar>
@@ -45,6 +49,7 @@ import { useLayout } from "@/hooks/useLayout";
 import settings from "@/config/settings";
 import CommonIcon from "@/components/CommonIcon/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
+import Tooltip from "@/components/Tooltip/index.vue";
 import { HOME_URL } from "@/router/routesConfig";
 
 const route = useRoute();

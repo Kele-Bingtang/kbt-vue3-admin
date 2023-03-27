@@ -69,6 +69,7 @@ export interface SettingsState {
   isDark: boolean; // 是否开启暗色主题
   isWeak: boolean; // 是否开启灰色主题
   isGrey: boolean; // 是否开启色弱主题
+  headerTheme: LayoutThemeType; // 是否开启灰色模式
 }
 // UserState
 export interface UserInfo {
