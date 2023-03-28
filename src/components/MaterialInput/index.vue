@@ -117,7 +117,7 @@
 </template>
 
 <script setup lang="ts" name="MaterialInput">
-import CommonIcon from "@/components/CommonIcon/index.vue";
+import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 
 interface MaterialInputProps {
   value: any;

@@ -130,6 +130,7 @@ function processMappingUrl(config: InternalAxiosRequestConfig) {
   for (const key of keys) {
     if (prefix === key) {
       config.url = mappingUrl[key] + url;
+      config.baseURL = "";
       break;
     }
   }

@@ -3,11 +3,17 @@ import settings from "@/config/settings";
 import { useRoutes } from "@/hooks/useRoutes";
 import { usePermissionStore } from "@/stores/permission";
 import { useUserStore } from "@/stores/user";
-import { createRouter, createWebHistory, type RouteRecordRaw } from "vue-router";
+import {
+  createRouter,
+  createWebHashHistory,
+  createWebHistory,
+  type RouteRecordRaw,
+  type RouterHistory,
+} from "vue-router";
 import { constantRoutes, LOGIN_URL } from "./routesConfig";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: getHistoryMode(import.meta.env.VITE_ROUTER_MODE),
   routes: [...constantRoutes] as RouteRecordRaw[],
   scrollBehavior: () => ({ left: 0, top: 0 }),
 });
@@ -84,3 +90,23 @@ router.onError(error => {
 });
 
 export default router;
+
+/**
+ * 获取路由历史模式 https://next.router.vuejs.org/zh/guide/essentials/history-mode.html
+ * @param routerHistory 路由的历史模式
+ */
+function getHistoryMode(routerHistory: string): RouterHistory {
+  if (!routerHistory) return createWebHistory("");
+  // len 为 1 代表只有历史模式 为 2 代表历史模式中存在 base 参数 https://next.router.vuejs.org/zh/api/#%E5%8F%82%E6%95%B0-1
+  const historyMode = routerHistory.split(",");
+  const leftMode = historyMode[0];
+  const rightMode = historyMode[1];
+  if (historyMode.length === 1) {
+    if (leftMode === "hash") return createWebHashHistory("");
+    else if (leftMode === "h5") return createWebHistory("");
+  } else if (historyMode.length === 2) {
+    if (leftMode === "hash") return createWebHashHistory(rightMode);
+    else if (leftMode === "h5") return createWebHistory(rightMode);
+  }
+  return createWebHistory("");
+}

@@ -47,7 +47,7 @@ import Header from "@/layout/components/Header/index.vue";
 import { usePermissionStore } from "@/stores/permission";
 import { useLayout } from "@/hooks/useLayout";
 import settings from "@/config/settings";
-import CommonIcon from "@/components/CommonIcon/index.vue";
+import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
 import Tooltip from "@/components/Tooltip/index.vue";
 import { HOME_URL } from "@/router/routesConfig";

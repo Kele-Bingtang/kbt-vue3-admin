@@ -16,8 +16,9 @@ declare module "*.scss" {
 interface ImportMetaEnv {
   readonly VITE_NODE_ENV: string;
   readonly VITE_API_URL: string;
-  readonly VITE_BASE_URL: string;
+  readonly VITE_PUBLIC_PATH: string;
   readonly VITE_COMPRESSION: "none" | "gzip" | "brotli" | "both" | "gzip-clear" | "brotli-clear" | "both-clear";
+  readonly VITE_ROUTER_MODE: string | "h5" | "hash";
 }
 
 // 覆盖全局的 useRoute 类型

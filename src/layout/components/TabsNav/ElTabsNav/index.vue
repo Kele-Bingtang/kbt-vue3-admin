@@ -38,7 +38,7 @@
 <script setup lang="ts" name="ElTabsNav">
 import { useSettingsStore } from "@/stores/settings";
 import type { TabPaneName, TabsPaneContext } from "element-plus";
-import CommonIcon from "@/components/CommonIcon/index.vue";
+import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuButton from "../components/MenuDropdown.vue";

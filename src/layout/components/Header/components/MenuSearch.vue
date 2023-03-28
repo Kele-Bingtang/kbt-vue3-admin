@@ -34,7 +34,7 @@
 <script setup lang="ts" name="MenuSearch">
 import { useLayout } from "@/hooks/useLayout";
 import { usePermissionStore } from "@/stores/permission";
-import CommonIcon from "@/components/CommonIcon/index.vue";
+import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils/layout/validate";
 

@@ -29,7 +29,7 @@
 import { useLayout } from "@/hooks/useLayout";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { compile } from "path-to-regexp";
-import CommonIcon from "@/components/CommonIcon/index.vue";
+import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useSettingsStore } from "@/stores/settings";
 
 const route = useRoute();

@@ -28,7 +28,7 @@
 <script setup lang="ts" name="MenuItem">
 import { useLayout } from "@/hooks/useLayout";
 import { isExternal } from "@/utils/layout/validate";
-import CommonIcon from "@/components/CommonIcon/index.vue";
+import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import Tooltip from "@/components/Tooltip/index.vue";
 import settings from "@/config/settings";
 

@@ -19,7 +19,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd());
   const viteEnv = wrapperEnv(env);
   return {
-    base: env.VITE_BASE_URL,
+    base: env.VITE_PUBLIC_PATH,
     resolve: {
       alias: {
         "@": fileURLToPath(new URL("./src", import.meta.url)),
