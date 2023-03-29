@@ -1,11 +1,13 @@
 import axios, { type AxiosInstance, AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios";
-import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/serviceLoading";
+import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/request/serviceLoading";
 import qs from "qs";
 import { isArray, isExternal } from "@/utils/layout/validate";
 import { ElNotification } from "element-plus";
-import { ContentTypeEnum } from "./enums/httpEnum";
+import { ContentTypeEnum } from "../enums/httpEnum";
 import { useErrorLogStore } from "@/stores/errorLog";
+import { AxiosCanceler } from "./axiosCancel";
 
+const axiosCanceler = new AxiosCanceler();
 const cancelToken = axios.CancelToken;
 const source = cancelToken.source();
 
@@ -42,19 +44,23 @@ class RequestHttp {
     this.service.interceptors.request.use(
       config => {
         // 如果当前请求需要显示 loading，在 api 服务中通过指定: { headers: { loading: true } } 来控制显示 loading
-        config.headers!.loading || showFullScreenLoading();
+        if (config.headers?.loading) showFullScreenLoading();
+        else {
+          axiosCanceler.removePendingRequest(config);
+          axiosCanceler.addPendingRequest(config);
+        }
         const accessToken = localStorage.getItem("token");
         if (!accessToken) {
           config.cancelToken = source.token;
           source.cancel("身份异常");
         }
         // 处理 url 映射
-        config.headers!.mapping && processMappingUrl(config) && delete config.headers!.mapping;
+        config.headers?.mapping && processMappingUrl(config) && delete config.headers?.mapping;
         // 处理 ContentType
         config.headers && config.method?.toLocaleLowerCase() === "post" && processParamsType(config);
         config.params?._type === "multi" && processArray(config);
         config.params && delete config.params._type;
-        config.headers!.token = accessToken;
+        config.headers && (config.headers.token = accessToken);
         return config;
       },
       (error: AxiosError) => {
@@ -70,12 +76,14 @@ class RequestHttp {
       response => {
         const res = response.data;
         // 在请求结束后，并关闭请求 loading
-        tryHideFullScreenLoading();
+        if (response.config.headers?.loading) tryHideFullScreenLoading();
+        else axiosCanceler.removePendingRequest(response.config);
         return res;
       },
       async (error: AxiosError) => {
         const errorStore = useErrorLogStore();
-        tryHideFullScreenLoading();
+        if (error.config?.headers?.loading) tryHideFullScreenLoading();
+        else axiosCanceler.removePendingRequest(error.config || {});
         if (error.message === "身份异常") return ElNotification.error("身份异常");
         else if (error.message.indexOf("timeout") !== -1) ElNotification.error("请求超时！请您稍后重试");
         else if (error.message.indexOf("Network Error") !== -1) ElNotification.error("网络错误！请您稍后重试");

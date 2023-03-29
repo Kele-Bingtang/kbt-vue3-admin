@@ -165,21 +165,6 @@ export const useRoutes = () => {
     return routers;
   };
   /**
-   * @description
-   * 用于找到路由列表中 name 为 home 的对象
-   * 如果你的首页 name 不为 home，请更改
-   */
-  const getHomeRoute = (routers: RouterConfig[], homeName = "Home"): RouterConfig => {
-    for (const route of routers) {
-      if (route.name === homeName) return route;
-      if (route.children && route.children.length) {
-        const home = getHomeRoute(route.children, homeName);
-        if (home && home.name) return home;
-      }
-    }
-    return {} as RouterConfig;
-  };
-  /**
    * @description 扁平化数组对象，将多级嵌套路由处理成一维数组（主要用来处理路由菜单）
    * @param {Array} routeList 所有路由表
    * @return array
@@ -216,16 +201,34 @@ export const useRoutes = () => {
   };
   /**
    * @description 查找 path 对应的路由信息
-   * @param path 查找的 path
    * @param routes 路由表
+   * @param path 查找的 path
    */
-  const findCurrentRouteByPath = (path: string, routes: RouterConfigRaw[]): RouterConfigRaw | null => {
-    let res = routes.find((item: { path: string }) => item.path === path) || null;
+  const findRouteByPath = (routes: RouterConfig[], path: string): RouterConfig | null => {
+    let res = routes.find(item => item.path === path) || null;
     if (res) return isProxy(res) ? toRaw(res) : res;
     else {
       for (let i = 0; i < routes.length; i++) {
         if (routes[i].children instanceof Array && routes[i].children?.length) {
-          res = findCurrentRouteByPath(path, routes[i].children || []);
+          res = findRouteByPath(routes[i].children || [], path);
+          if (res) return isProxy(res) ? toRaw(res) : res;
+        }
+      }
+      return null;
+    }
+  };
+  /**
+   * @description 查找 name 对应的路由信息
+   * @param routes 路由表
+   * @param name 查找的 name
+   */
+  const findRouteByName = (routes: RouterConfig[], name: string): RouterConfig | null => {
+    let res = routes.find(item => item.name === name) || null;
+    if (res) return isProxy(res) ? toRaw(res) : res;
+    else {
+      for (let i = 0; i < routes.length; i++) {
+        if (routes[i].children instanceof Array && routes[i].children?.length) {
+          res = findRouteByName(routes[i].children || [], name);
           if (res) return isProxy(res) ? toRaw(res) : res;
         }
       }
@@ -341,10 +344,10 @@ export const useRoutes = () => {
     filterOnlyRolesRoutes,
     hasPermission,
     processRouteMeta,
-    getHomeRoute,
     filterFlatRoutes,
     ascending,
-    findCurrentRouteByPath,
+    findRouteByPath,
+    findRouteByName,
     findParentRoutesByPath,
   };
 };
