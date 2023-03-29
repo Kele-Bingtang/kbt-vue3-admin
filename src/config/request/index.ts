@@ -2,7 +2,6 @@ import axios, { type AxiosInstance, AxiosError, type AxiosRequestConfig, type In
 import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/request/serviceLoading";
 import qs from "qs";
 import { isArray, isExternal } from "@/utils/layout/validate";
-import { ElNotification } from "element-plus";
 import { ContentTypeEnum, ResultEnum } from "./httpEnum";
 import { useErrorLogStore } from "@/stores/errorLog";
 import { AxiosCanceler } from "./axiosCancel";
@@ -10,6 +9,7 @@ import { checkStatus } from "./checkStatus";
 import router from "@/router";
 import { useUserStore } from "@/stores/user";
 import { LOGIN_URL } from "@/router/routesConfig";
+import { message } from "@/utils/layout/message";
 
 const axiosCanceler = new AxiosCanceler();
 const cancelToken = axios.CancelToken;
@@ -85,14 +85,14 @@ class RequestHttp {
         const userStore = useUserStore();
         //  登陆失效（code == 401）
         if (data.code === ResultEnum.OVERDUE) {
-          ElNotification.error(data.msg);
+          message.error(data.msg);
           userStore.logout();
           router.replace(LOGIN_URL);
           return Promise.reject(data);
         }
         // 全局错误信息拦截（防止下载文件得时候返回数据流，没有 code，直接报错）
         if (data.code && data.code !== ResultEnum.SUCCESS) {
-          ElNotification.error(data.msg);
+          message.error(data.msg);
           return Promise.reject(data);
         }
         return data;
@@ -101,9 +101,9 @@ class RequestHttp {
         const errorStore = useErrorLogStore();
         if (error.config?.headers?.loading) tryHideFullScreenLoading();
         else axiosCanceler.removePendingRequest(error.config || {});
-        if (error.message === "身份异常") return ElNotification.error("身份异常");
-        else if (error.message.indexOf("timeout") !== -1) ElNotification.error("请求超时！请您稍后重试");
-        else if (error.message.indexOf("Network Error") !== -1) ElNotification.error("网络错误！请您稍后重试");
+        if (error.message === "身份异常") return message.error("身份异常");
+        else if (error.message.indexOf("timeout") !== -1) message.error("请求超时！请您稍后重试");
+        else if (error.message.indexOf("Network Error") !== -1) message.error("网络错误！请您稍后重试");
         // 根据响应的错误状态码，做不同的处理
         if (error.response) checkStatus(error.response.status);
         // 服务器结果都没有返回(可能服务器错误可能客户端断网)，断网处理:可以跳转到断网页面
