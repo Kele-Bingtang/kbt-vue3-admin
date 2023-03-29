@@ -3,9 +3,13 @@ import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/reques
 import qs from "qs";
 import { isArray, isExternal } from "@/utils/layout/validate";
 import { ElNotification } from "element-plus";
-import { ContentTypeEnum } from "../enums/httpEnum";
+import { ContentTypeEnum, ResultEnum } from "./httpEnum";
 import { useErrorLogStore } from "@/stores/errorLog";
 import { AxiosCanceler } from "./axiosCancel";
+import { checkStatus } from "./checkStatus";
+import router from "@/router";
+import { useUserStore } from "@/stores/user";
+import { LOGIN_URL } from "@/router/routesConfig";
 
 const axiosCanceler = new AxiosCanceler();
 const cancelToken = axios.CancelToken;
@@ -29,7 +33,7 @@ const config = {
   // 默认地址请求地址，可在 .env.*** 文件中修改
   baseURL: mappingUrl.default,
   // 设置超时时间（10s）
-  timeout: 10000,
+  timeout: ResultEnum.TIMEOUT as number,
 };
 
 class RequestHttp {
@@ -74,11 +78,24 @@ class RequestHttp {
      */
     this.service.interceptors.response.use(
       response => {
-        const res = response.data;
+        const { data } = response;
         // 在请求结束后，并关闭请求 loading
         if (response.config.headers?.loading) tryHideFullScreenLoading();
         else axiosCanceler.removePendingRequest(response.config);
-        return res;
+        const userStore = useUserStore();
+        //  登陆失效（code == 401）
+        if (data.code === ResultEnum.OVERDUE) {
+          ElNotification.error(data.msg);
+          userStore.logout();
+          router.replace(LOGIN_URL);
+          return Promise.reject(data);
+        }
+        // 全局错误信息拦截（防止下载文件得时候返回数据流，没有 code，直接报错）
+        if (data.code && data.code !== ResultEnum.SUCCESS) {
+          ElNotification.error(data.msg);
+          return Promise.reject(data);
+        }
+        return data;
       },
       async (error: AxiosError) => {
         const errorStore = useErrorLogStore();
@@ -87,6 +104,10 @@ class RequestHttp {
         if (error.message === "身份异常") return ElNotification.error("身份异常");
         else if (error.message.indexOf("timeout") !== -1) ElNotification.error("请求超时！请您稍后重试");
         else if (error.message.indexOf("Network Error") !== -1) ElNotification.error("网络错误！请您稍后重试");
+        // 根据响应的错误状态码，做不同的处理
+        if (error.response) checkStatus(error.response.status);
+        // 服务器结果都没有返回(可能服务器错误可能客户端断网)，断网处理:可以跳转到断网页面
+        if (!window.navigator.onLine) router.replace("/500");
         const e = processError(error);
         e && errorStore.addErrorLog(e);
         return Promise.reject(error);
