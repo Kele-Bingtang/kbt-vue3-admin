@@ -218,7 +218,7 @@ defineExpose({
 /* 富文本组件样式 */
 .editor-component {
   /* 防止富文本编辑器全屏时 tabs组件 在其层级之上 */
-  z-index: 2;
+  z-index: 1100;
   width: 100%;
   border: 1px solid #cccccc;
 
