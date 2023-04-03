@@ -7,7 +7,8 @@
   >
     <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
     <template #title>
-      <Tooltip :effect="settings.tooltipEffect" :offset="-10" :real-time="menuItem.meta.useTooltip">
+      <span v-if="!menuItem.meta.useTooltip">{{ getTitle(menuItem) }}</span>
+      <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
         <span>{{ getTitle(menuItem) }}</span>
       </Tooltip>
     </template>
@@ -15,7 +16,8 @@
   <el-sub-menu v-else :index="menuItem.meta._fullPath" class="sub-menu">
     <template #title>
       <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
-      <Tooltip :effect="settings.tooltipEffect" :offset="-10" :real-time="menuItem.meta.useTooltip">
+      <span v-if="!menuItem.meta.useTooltip">{{ getTitle(menuItem) }}</span>
+      <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
         <span>{{ getTitle(menuItem) }}</span>
       </Tooltip>
     </template>

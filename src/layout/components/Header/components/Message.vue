@@ -14,17 +14,11 @@
               <div class="message-item" v-for="notice in noticeList" :key="notice.id">
                 <img :src="notice.image" alt="" class="message-icon" />
                 <div class="message-content">
-                  <el-tooltip
-                    popper-class="message-tooltip"
-                    effect="light"
-                    :content="notice.title"
-                    placement="top"
-                    :disabled="!titleTooltip"
-                  >
-                    <div class="message-title" @mouseover="hoverTitle">
+                  <div class="message-title">
+                    <Tooltip :effect="settings.tooltipEffect" :line="1" :try="1">
                       <span class="title">{{ notice.title }}</span>
-                    </div>
-                  </el-tooltip>
+                    </Tooltip>
+                  </div>
                   <span class="message-date">{{ notice.createTime }}</span>
                 </div>
               </div>
@@ -42,28 +36,14 @@
               <div class="message-item" v-for="message in messageList" :key="message.id">
                 <img src="@/assets/images/msg/msg02.png" alt="" class="message-icon" />
                 <div class="message-content">
-                  <el-tooltip
-                    popper-class="message-tooltip"
-                    :effect="settings.tooltipEffect"
-                    :content="message.title"
-                    placement="top"
-                    :disabled="!titleTooltip"
-                  >
-                    <div class="message-title" @mouseover="hoverTitle">
+                  <div class="message-title">
+                    <Tooltip :effect="settings.tooltipEffect" :line="1" :try="1">
                       <span class="title">{{ message.title }}</span>
-                    </div>
-                  </el-tooltip>
-                  <el-tooltip
-                    popper-class="message-tooltip"
-                    :effect="settings.tooltipEffect"
-                    :content="message.description"
-                    placement="top"
-                    :disabled="!descriptionTooltip"
-                  >
-                    <span class="message-desc" @mouseover="hoverDescription($event, message.description)">
-                      {{ message.description }}
-                    </span>
-                  </el-tooltip>
+                    </Tooltip>
+                  </div>
+                  <Tooltip :effect="settings.tooltipEffect" :line="2" :try="1">
+                    <span class="message-desc">{{ message.description }}</span>
+                  </Tooltip>
                   <span class="message-date">{{ message.createTime }}</span>
                 </div>
               </div>
@@ -80,15 +60,9 @@
               <div class="message-item" v-for="ar in arList" :key="ar.id">
                 <div class="message-content">
                   <div class="message-title">
-                    <el-tooltip
-                      popper-class="message-tooltip"
-                      :effect="settings.tooltipEffect"
-                      :content="ar.title"
-                      placement="top"
-                      :disabled="!titleTooltip"
-                    >
-                      <span class="title" @mouseover="hoverTitle">{{ ar.title }}</span>
-                    </el-tooltip>
+                    <Tooltip :line="1" :try="1">
+                      <span class="title">{{ ar.title }}</span>
+                    </Tooltip>
                     <el-tag v-if="ar.priority.name" style="margin-right: 2px" :type="ar.priority.type" size="small">
                       {{ ar.priority.name }}
                     </el-tag>
@@ -96,17 +70,9 @@
                       {{ ar.status.name }}
                     </el-tag>
                   </div>
-                  <el-tooltip
-                    popper-class="message-tooltip"
-                    :effect="settings.tooltipEffect"
-                    :content="ar.description"
-                    placement="top"
-                    :disabled="!descriptionTooltip"
-                  >
-                    <span class="message-desc" @mouseover="hoverDescription($event, ar.description)">
-                      {{ ar.description }}
-                    </span>
-                  </el-tooltip>
+                  <Tooltip :line="2" :try="1">
+                    <span class="message-desc">{{ ar.description }}</span>
+                  </Tooltip>
                   <span class="message-date">{{ ar.closeTime }}</span>
                 </div>
               </div>
@@ -125,6 +91,7 @@
 <script setup lang="ts">
 import { useMessageStore } from "@/stores/message";
 import settings from "@/config/settings";
+import Tooltip from "@/components/Tooltip/index.vue";
 
 interface Notice {
   id: string;
@@ -245,40 +212,11 @@ const messageStore = useMessageStore();
 const activeName = ref("first");
 const messageList = computed(() => messageStore.unreadMessageList);
 const messageLength = computed(() => noticeList.length + messageList.value.length);
-const titleTooltip = ref(false);
-const descriptionTooltip = ref(false);
 
 onMounted(() => {
   // 请求获取消息列表
   messageStore.getMessageList();
 });
-
-const hoverTitle = (e: any) => {
-  nextTick(() => {
-    const titleDom = e.target;
-    titleDom && titleDom.scrollWidth > titleDom?.clientWidth
-      ? (titleTooltip.value = true)
-      : (titleTooltip.value = false);
-  });
-};
-
-const hoverDescription = (event: any, description: string | undefined) => {
-  // currentWidth 为文本在页面中所占的宽度，创建标签，加入到页面，获取 currentWidth ,最后在移除
-  const tempTag = document.createElement("span");
-  tempTag.innerText = description ?? "";
-  tempTag.className = "getDescriptionWidth";
-  const bodyDom = document.querySelector("body");
-  bodyDom && bodyDom.appendChild(tempTag);
-  const currentWidth = (document.querySelector(".getDescriptionWidth") as HTMLSpanElement).offsetWidth;
-  const descriptionDom = document.querySelector(".getDescriptionWidth");
-  descriptionDom && descriptionDom.remove();
-
-  // cellWidth 为容器的宽度
-  const cellWidth = event.target?.offsetWidth;
-
-  // 当文本宽度大于容器宽度两倍时，代表文本显示超过两行
-  currentWidth > 2 * cellWidth ? (descriptionTooltip.value = true) : (descriptionTooltip.value = false);
-};
 </script>
 
 <style lang="scss" scoped>
@@ -320,27 +258,15 @@ const hoverDescription = (event: any, description: string | undefined) => {
       .message-title {
         display: flex;
         flex: 1;
+        width: 220px;
         margin-bottom: 5px;
         color: rgb(0 0 0 / 85%);
-
-        .title {
-          flex: 1;
-          width: 150px;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          white-space: nowrap; // 1 行溢出后隐藏文字
-        }
       }
 
       .message-desc {
-        display: -webkit-box;
         margin-bottom: 5px;
-        overflow: hidden;
         font-size: 12px;
         color: #000000;
-        text-overflow: ellipsis;
-        -webkit-line-clamp: 2; // 2 行溢出后隐藏文字
-        -webkit-box-orient: vertical;
       }
 
       .message-date {

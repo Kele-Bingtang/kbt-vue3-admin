@@ -55,7 +55,7 @@ const props = withDefaults(defineProps<DragDrawerProps>(), {
   title: "",
 });
 
-type CodeMirrorEmitProps = {
+type DragDrawerEmitProps = {
   (e: "update:visible", visible: boolean): void;
   (e: "on-resize-start"): void;
   (e: "update:width", width: number): void;
@@ -63,7 +63,7 @@ type CodeMirrorEmitProps = {
   (e: "on-resize-end"): void;
 };
 
-const emits = defineEmits<CodeMirrorEmitProps>();
+const emits = defineEmits<DragDrawerEmitProps>();
 
 const drawerWrapperRef = ref();
 const canMove = ref(false);

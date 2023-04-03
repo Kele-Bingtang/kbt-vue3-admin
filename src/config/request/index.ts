@@ -12,8 +12,6 @@ import { LOGIN_URL } from "@/router/routesConfig";
 import { message } from "@/utils/layout/message";
 
 const axiosCanceler = new AxiosCanceler();
-const cancelToken = axios.CancelToken;
-const source = cancelToken.source();
 
 type AxiosRequestConfigProp<D = any> = AxiosRequestConfig<D> & {
   method: "get" | "post" | "delete" | "put" | "download";
@@ -53,18 +51,14 @@ class RequestHttp {
           axiosCanceler.removePendingRequest(config);
           axiosCanceler.addPendingRequest(config);
         }
-        const accessToken = localStorage.getItem("token");
-        if (!accessToken) {
-          config.cancelToken = source.token;
-          source.cancel("身份异常");
-        }
+        const userStore = useUserStore();
         // 处理 url 映射
         config.headers?.mapping && processMappingUrl(config) && delete config.headers?.mapping;
         // 处理 ContentType
         config.headers && config.method?.toLocaleLowerCase() === "post" && processParamsType(config);
         config.params?._type === "multi" && processArray(config);
         config.params && delete config.params._type;
-        config.headers && (config.headers.token = accessToken);
+        config.headers && (config.headers.token = userStore.token);
         return config;
       },
       (error: AxiosError) => {
