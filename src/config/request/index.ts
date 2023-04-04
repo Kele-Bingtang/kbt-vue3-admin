@@ -55,10 +55,10 @@ class RequestHttp {
         // 处理 url 映射
         config.headers?.mapping && processMappingUrl(config) && delete config.headers?.mapping;
         // 处理 ContentType
-        config.headers && config.method?.toLocaleLowerCase() === "post" && processParamsType(config);
+        config.params?._type && config.method?.toLocaleLowerCase() === "post" && processParamsType(config);
         config.params?._type === "multi" && processArray(config);
         config.params && delete config.params._type;
-        config.headers && (config.headers.token = userStore.token);
+        config.headers.token = userStore.token;
         return config;
       },
       (error: AxiosError) => {
