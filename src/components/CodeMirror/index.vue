@@ -45,7 +45,7 @@ const emits = defineEmits<CodeMirrorEmitProps>();
 const codemirrorRef = shallowRef();
 const code = computed({
   get() {
-    return props.value;
+    return props.value || "";
   },
   set(value) {
     emits("update:value", value);

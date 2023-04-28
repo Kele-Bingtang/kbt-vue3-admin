@@ -108,8 +108,8 @@ export const notFoundRouter = {
 
 export const rolesRoutes: RouterConfigRaw[] = [
   {
-    path: "/home",
-    name: "Home",
+    path: HOME_URL,
+    name: HOME_NAME,
     component: "/home/index",
     meta: {
       isAffix: true,

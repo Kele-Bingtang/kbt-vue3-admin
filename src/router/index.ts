@@ -105,8 +105,8 @@ function getHistoryMode(routerHistory: string): RouterHistory {
     if (leftMode === "hash") return createWebHashHistory("");
     else if (leftMode === "h5") return createWebHistory("");
   } else if (historyMode.length === 2) {
-    if (leftMode === "hash") return createWebHashHistory(rightMode);
-    else if (leftMode === "h5") return createWebHistory(rightMode);
+    if (leftMode === "hash") return createWebHashHistory(rightMode.trim());
+    else if (leftMode === "h5") return createWebHistory(rightMode.trim());
   }
   return createWebHistory("");
 }

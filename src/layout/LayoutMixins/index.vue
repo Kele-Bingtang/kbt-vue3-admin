@@ -66,7 +66,7 @@ watch(
     if (!menuList.value.length) return;
     activeMenu.value = `/${route.path.split("/")[1]}` || route.path;
     const item = menuList.value.filter(
-      item => route.path === item.path || `/${route.path.split("/")[1]}` === item.path
+      item => route.path === item.path || `/${route.path.split("/")[1]}` === item.path || route.path === item.redirect
     );
     if (item[0].children?.length) return (childrenMenu.value = item[0].children);
     childrenMenu.value = [];

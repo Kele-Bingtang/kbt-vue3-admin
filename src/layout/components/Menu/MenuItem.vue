@@ -7,18 +7,18 @@
   >
     <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
     <template #title>
-      <span v-if="!menuItem.meta.useTooltip">{{ getTitle(menuItem) }}</span>
+      <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
       <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
-        <span>{{ getTitle(menuItem) }}</span>
+        <span>{{ title(menuItem) }}</span>
       </Tooltip>
     </template>
   </el-menu-item>
   <el-sub-menu v-else :index="menuItem.meta._fullPath" class="sub-menu">
     <template #title>
       <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
-      <span v-if="!menuItem.meta.useTooltip">{{ getTitle(menuItem) }}</span>
+      <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
       <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
-        <span>{{ getTitle(menuItem) }}</span>
+        <span>{{ title(menuItem) }}</span>
       </Tooltip>
     </template>
     <template v-if="menuItem.children">
@@ -33,6 +33,7 @@ import { isExternal } from "@/utils/layout/validate";
 import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import Tooltip from "@/components/Tooltip/index.vue";
 import settings from "@/config/settings";
+import { useLayoutStore } from "@/stores/layout";
 
 defineProps<{
   menuItem: RouterConfig;
@@ -40,11 +41,30 @@ defineProps<{
 
 const { getTitle } = useLayout();
 const router = useRouter();
+const layoutStore = useLayoutStore();
+
+const isSwitchLanguage = ref(false);
 
 const handleMenuClick = (menuItem: RouterConfig) => {
   if (isExternal(menuItem.path)) return window.open(menuItem.path, "_blank");
   router.push(menuItem.meta._fullPath);
 };
+
+const title = (menuItem: RouterConfig) => {
+  const title = getTitle(menuItem, isSwitchLanguage.value);
+  menuItem.meta.title = title;
+  return title;
+};
+
+watch(
+  () => layoutStore.language,
+  () => {
+    isSwitchLanguage.value = true;
+    nextTick(() => {
+      isSwitchLanguage.value = false;
+    });
+  }
+);
 </script>
 
 <style lang="scss" scoped>

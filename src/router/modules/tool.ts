@@ -38,6 +38,18 @@ const toolsRoutes: RouterConfigRaw = {
       component: () => import("@/views/tools/pdf/index.vue"),
       meta: { title: "PDF 预览", icon: "StarFilled" },
     },
+    {
+      path: "v-contextmenu",
+      name: "VContextmenu",
+      component: () => import("@/views/tools/vContextmenu/index.vue"),
+      meta: { title: "右键菜单 1", icon: "StarFilled" },
+    },
+    {
+      path: "v-menus",
+      name: "VMenus",
+      component: () => import("@/views/tools/vMenus/index.vue"),
+      meta: { title: "右键菜单 2", icon: "StarFilled" },
+    },
   ],
 };
 

@@ -49,6 +49,8 @@ export default {
     Download: "下载",
     Timeline: "时间线",
     PdfPreview: "PDF 预览",
+    VContextmenu: "右键菜单 1",
+    VMenus: "右键菜单 2",
     Nested: "嵌套菜单",
     Menu1: "菜单 1",
     "Menu1-1": "菜单 1-1",

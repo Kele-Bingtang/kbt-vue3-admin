@@ -193,7 +193,7 @@ function processArray(config: InternalAxiosRequestConfig) {
   else url += "?";
   const keys = Object.keys(config.params);
   for (const key of keys) {
-    if (config.params[key]) {
+    if (!!config.params[key] || config.params[key] === 0 || config.params[key] === undefined) {
       if (isArray(config.params[key])) {
         config.params[key].forEach((item: any) => {
           url += `${key}=${item}&`;
@@ -211,8 +211,8 @@ function processArray(config: InternalAxiosRequestConfig) {
  * @returns 持久化数据
  */
 function processError(error: AxiosError) {
-  const e = JSON.stringify(error);
-  if (e !== "{}") {
+  const e = JSON.parse(JSON.stringify(error));
+  if (Object.keys(e).includes("baseURL")) {
     const {
       config: { baseURL, url, params, method, data },
     } = JSON.parse(e);
