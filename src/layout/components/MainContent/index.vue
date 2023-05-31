@@ -9,6 +9,7 @@
         </keep-alive>
       </CustomTransition>
     </router-view>
+    <FrameLayout />
   </el-main>
 </template>
 
@@ -19,6 +20,7 @@ import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue
 import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
 import CustomTransition from "./components/CustomTransition.vue";
 import Maximize from "./components/Maximize.vue";
+import FrameLayout from "../FrameLayout/index.vue";
 
 export type RefreshFunction = (value?: boolean) => boolean;
 

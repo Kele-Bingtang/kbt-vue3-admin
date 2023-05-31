@@ -52,7 +52,9 @@ declare global {
     activeMenu?: string; // Restful 路由搭配使用，当前路由为详情页时，需要高亮的菜单
     beforeCloseName?: string; // 关闭路由前的回调，如果设置该字段，则在关闭当前 tab 页时会去 @/router/before-close.js 里寻找该字段名「对应」的方法，作为关闭前的钩子函数，无默认值
     rank?: number; // 路由在左侧菜单的排序，rank 值越高越靠后，当 rank 不存在时，根据顺序自动创建，首页路由永远在第一位，当 rank 存在时，可以插入指定的菜单位置，默认不存在
-    frameSrc?: string; // IFrame 页是否开启首次加载动画（默认 true）
+    frameSrc?: string; // IFrame 链接，填写后该路由将打开 IFrame 指定的链接
+    frameLoading?: boolean; // IFrame 页是否开启首次加载动画（默认 true）
+    frameKeepAlive?: boolean; // IFrame 页是否开启缓（默认 false）
     /**
      * @description 页面加载动画（有两种形式，一种直接采用 vue 内置的 transitions 动画，另一种是使用 animate.css 写进、离场动画）
      * @see {@link https://next.router.vuejs.org/guide/advanced/transitions.html#transitions}

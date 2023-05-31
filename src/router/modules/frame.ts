@@ -31,6 +31,7 @@ const frameRoutes: RouterConfigRaw = {
         title: "Vue3 文档",
         icon: "HotWater",
         frameSrc: "https://cn.vuejs.org/",
+        frameKeepAlive: true,
       },
     },
     {

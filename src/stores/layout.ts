@@ -3,6 +3,7 @@ import { setCacheTabNavList, getCacheTabNavList, removeCacheTabNavList } from "@
 import { DeviceType, type LanguageType, type LayoutSizeType, type TabProp } from "./index.d";
 import { useSettingsStore } from "./settings";
 import defaultSettings from "@/config/settings";
+import type { Frame } from "@/layout/components/FrameLayout/useKeepFrameAlive";
 
 export const useLayoutStore = defineStore(
   "layoutStore",
@@ -12,6 +13,7 @@ export const useLayoutStore = defineStore(
     const device = ref(DeviceType.Desktop);
     const layoutSize = ref<LayoutSizeType>(defaultSettings.layoutSize);
     const language = ref(defaultSettings.language);
+    const frameList = ref<Array<Frame>>([]);
 
     const toggleDevice = (deviceParam: DeviceType) => {
       device.value = deviceParam;
@@ -51,7 +53,9 @@ export const useLayoutStore = defineStore(
     const removeLeftTab = async (tab: TabProp) => {
       const index = tabNavList.value.findIndex(v => v.path === tab.path);
       if (index === -1) return;
+      const frameNameList = frameList.value.map(e => e.name);
       tabNavList.value = tabNavList.value.filter((item, i) => {
+        if (frameNameList.includes(item.name)) removeFrame(item);
         if (i >= index || (item.meta && item.meta.isAffix)) return true;
         if (tab.meta.isKeepAlive) removeKeepAliveName(tab.name);
         return false;
@@ -61,7 +65,9 @@ export const useLayoutStore = defineStore(
     const removeRightTab = async (tab: TabProp) => {
       const index = tabNavList.value.findIndex(v => v.path === tab.path);
       if (index === -1) return;
+      const frameNameList = frameList.value.map(e => e.name);
       tabNavList.value = tabNavList.value.filter((item, i) => {
+        if (frameNameList.includes(item.name)) removeFrame(item);
         if (i <= index || (item.meta && item.meta.isAffix)) return true;
         if (tab.meta.isKeepAlive) removeKeepAliveName(tab.name);
         return false;
@@ -72,11 +78,15 @@ export const useLayoutStore = defineStore(
       tabNavList.value = tabNavList.value.filter(v => {
         return !v.close || v.path === tab.path;
       });
+      frameList.value = frameList.value.filter(v => {
+        return v.name === tab.name;
+      });
     };
 
     const removeAllTabs = async () => {
       const fixedTabs = tabNavList.value.filter(tab => !tab.close);
       tabNavList.value = fixedTabs;
+      frameList.value = [];
     };
 
     const updateTab = (tab: TabProp) => {
@@ -98,6 +108,19 @@ export const useLayoutStore = defineStore(
 
     const setKeepAliveName = async (keepAliveNameList: string[] = []) => {
       keepAliveName.value = keepAliveNameList;
+    };
+
+    const addFrame = (obj: Frame) => {
+      frameList.value.push(obj);
+    };
+
+    const removeFrame = (tab: TabProp) => {
+      for (const [i, v] of frameList.value.entries()) {
+        if (v.name === tab.name) {
+          frameList.value.splice(i, 1);
+          break;
+        }
+      }
     };
 
     const settingsStore = useSettingsStore();
@@ -127,6 +150,7 @@ export const useLayoutStore = defineStore(
       device,
       layoutSize,
       language,
+      frameList,
 
       toggleDevice,
       setLayoutSize,
@@ -141,6 +165,8 @@ export const useLayoutStore = defineStore(
       addKeepAliveName,
       removeKeepAliveName,
       setKeepAliveName,
+      addFrame,
+      removeFrame,
     };
   },
   {

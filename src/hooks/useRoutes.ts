@@ -10,7 +10,8 @@ import { useLayoutNoSetup } from "./useLayout";
 import type { BackstageMenuList } from "@/api/menu";
 
 const modules = import.meta.glob("@/views/**/*.vue");
-const IFrame = () => import("@/layout/frameView.vue");
+const FrameView = () => import("@/layout/components/FrameLayout/frameView.vue");
+const FrameBlank = () => import("@/layout/components/FrameLayout/blankFrame.vue");
 
 export const useRoutes = () => {
   const permissionStore = usePermissionStore();
@@ -101,7 +102,8 @@ export const useRoutes = () => {
         if (!r.name) r.name = (r.children[0].name as string) + "Parent";
       }
 
-      if (r.meta?.frameSrc) r.component = IFrame;
+      if (r.meta?.frameKeepAlive) r.component = FrameBlank;
+      else if (!r.meta?.frameKeepAlive && r.meta?.frameSrc) r.component = FrameView;
       else {
         if (r.component && isType(r.component) === "string") r.component = modules["/src/views" + r.component + ".vue"];
         // 如果动态路由的 component 存在且为 string，则必须是 views 下的目录，以 / 分割，如果/home/index，则是 views/home/index.vue 组件，如果不存在 component，则读取 path 来获取 component

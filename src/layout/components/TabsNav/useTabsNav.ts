@@ -243,8 +243,8 @@ export const useTabsNav = () => {
   const toLastTab = () => {
     // 获取最后一个 tab 数据
     const lastTab = layoutStore.tabNavList.slice(-1)[0];
-    const path = lastTab ? lastTab.path : permissionStore.homeRoute.meta._fullPath;
-    router.push(path).catch(err => console.warn(err));
+    const path = lastTab ? lastTab.path : permissionStore.homeRoute?.meta._fullPath;
+    path && router.push(path).catch(err => console.warn(err));
   };
 
   watchEffect(() => {
