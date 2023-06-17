@@ -63,7 +63,7 @@
 
 <script setup lang="ts" name="ExportExcel">
 import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
-import { largeData } from "@/test/table";
+import { largeData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
 
 const options = ["xlsx", "csv", "txt"];

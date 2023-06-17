@@ -103,7 +103,7 @@
 <script setup lang="ts" name="SortTable">
 import TableSort from "@/components/TableSort/index.vue";
 import Pagination, { type Paging, pageSetting } from "@/components/Pagination/index.vue";
-import { largeData } from "@/test/table";
+import { largeData } from "@/mock/table";
 import { ElMessage, ElMessageBox } from "element-plus";
 
 const loading = ref(true);

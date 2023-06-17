@@ -30,7 +30,7 @@
 
 <script setup lang="ts" name="pageTable">
 import Pagination, { pageSetting, type Paging } from "@/components/Pagination/index.vue";
-import { largeData } from "@/test/table";
+import { largeData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
 
 const tableData = ref(largeData);

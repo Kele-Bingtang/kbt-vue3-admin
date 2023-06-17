@@ -34,6 +34,10 @@ export default {
     OperateTable: "Operate Table",
     SortTable: "Sort Table",
     IntegrationTable: "Integration Table",
+    ProTable: "ProTable",
+    SimpleProTable: "SimpleP roTable",
+    TreeProTable: "Tree ProTable",
+    ComplexProTable: "Complex ProTable",
     Excel: "Excel",
     ExportExcel: "Export Excel",
     SelectExcel: "Select Excel",
@@ -83,6 +87,7 @@ export default {
     OuterChain: "OuterChain",
     Github: "Github",
     Vue2Admin: "Vue2 Admin",
+    Vue2AdminOpen: "Vue2 Admin Open",
     Notes: "My Blog",
   },
   _tabsNav: {

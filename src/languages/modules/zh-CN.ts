@@ -34,6 +34,10 @@ export default {
     OperateTable: "表格操作",
     SortTable: "表格排序",
     IntegrationTable: "表格集成",
+    ProTable: "超级表格",
+    SimpleProTable: "使用 ProTable",
+    TreeProTable: "使用 TreeProTable",
+    ComplexProTable: "复杂 ProTable",
     Excel: "Excel",
     ExportExcel: "Excel 导出",
     SelectExcel: "指定数据导出",
@@ -83,6 +87,7 @@ export default {
     OuterChain: "外部链接",
     Github: "Github",
     Vue2Admin: "Vue2 Admin",
+    Vue2AdminOpen: "Kbt Vue2 Admin（新标签打开）",
     Notes: "我的博客",
   },
   _tabsNav: {

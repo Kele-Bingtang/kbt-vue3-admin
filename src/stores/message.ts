@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { MessageItem } from ".";
-import { hasReadList, recycleList, unreadList } from "@/test/message";
+import { hasReadList, recycleList, unreadList } from "@/mock/message";
 
 export const useMessageStore = defineStore("messageStore", () => {
   const unreadMessageList = ref<MessageItem[]>([]);

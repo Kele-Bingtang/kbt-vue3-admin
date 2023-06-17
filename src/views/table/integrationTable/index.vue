@@ -174,7 +174,7 @@
 
 <script setup lang="ts" name="IntegrationTable">
 import Pagination, { pageSetting, type Paging } from "@/components/Pagination/index.vue";
-import { largeData } from "@/test/table";
+import { largeData } from "@/mock/table";
 import Sortable from "sortablejs";
 import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";

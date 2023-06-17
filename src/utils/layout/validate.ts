@@ -1,7 +1,7 @@
 /**
  * @description 是否为合法的前缀
  */
-export const isExternal = (path: string) => /^(https?:|mailto:|tel:)/.test(path);
+export const isExternal = (path: string) => /^(http?:|https?:|mailto:|tel:)/.test(path);
 
 /**
  * @description 是否是有效的 URL

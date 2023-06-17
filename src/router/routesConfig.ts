@@ -22,6 +22,7 @@
  * @param meta.frameSrc ==> IFrame 链接，填写后该路由将打开 IFrame 指定的链接
  * @param meta.frameLoading ==> IFrame 页是否开启首次加载动画（默认 true）
  * @param meta.frameKeepAlive ==> IFrame 页是否开启缓（默认 false）
+ * @param meta.frameOpen ==> IFrame 页是否开新标签页打开，true 以新标签页打开，false 不打开（默认 false）
  * @param meta.transition ==> 页面加载动画（有两种形式，一种直接采用 vue 内置的 transitions 动画，另一种是使用 animate.css 写进、离场动画）
  * @param meta.transition.name ==> 当前路由动画效果
  * @param meta.transition.enterTransition ==> 进场动画
@@ -42,6 +43,7 @@ import nestedRoutes from "./modules/nested";
 import outerChainRoutes from "./modules/outerChain";
 import permissionRoutes from "./modules/permission";
 import tableRoutes from "./modules/table";
+import proTableRoutes from "./modules/proTable";
 import toolsRoutes from "./modules/tool";
 
 export const HOME_URL = "/home";
@@ -132,6 +134,7 @@ export const rolesRoutes: RouterConfigRaw[] = [
   },
   { ...componentRoutes },
   { ...tableRoutes },
+  { ...proTableRoutes },
   { ...excelRoutes },
   { ...permissionRoutes },
   { ...toolsRoutes },

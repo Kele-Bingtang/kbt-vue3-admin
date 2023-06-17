@@ -27,7 +27,7 @@
 <script setup lang="ts" name="TinymceDemo">
 import Tinymce, { type UITheme } from "@/components/Tinymce/index.vue";
 import { useLayoutStore } from "@/stores/layout";
-import { tinymceHtml } from "@/test/tinymce";
+import { tinymceHtml } from "@/mock/tinymce";
 import { ElMessage } from "element-plus";
 
 const layoutStore = useLayoutStore();

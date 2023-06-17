@@ -171,3 +171,64 @@ div:focus {
     }
   }
 }
+
+/* 自定义 card 卡片样式 */
+.card {
+  box-sizing: border-box;
+  padding: 20px;
+  overflow-x: hidden;
+  background-color: var(--el-fill-color-blank);
+  border: 1px solid var(--el-border-color-light);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+}
+
+/* 自定义 el-drawer 样式 */
+.el-drawer {
+  .el-drawer__header {
+    padding: 15px 20px 14px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+
+    span {
+      font-size: 17px;
+      color: var(--el-text-color-primary) !important;
+    }
+  }
+
+  .el-drawer__footer {
+    border-top: 1px solid var(--el-border-color-lighter);
+  }
+
+  /* drawer select 样式 */
+  .el-select {
+    width: 100%;
+  }
+
+  /* drawer-form 中存在两列 form-item */
+  .drawer-multiColumn-form {
+    display: flex;
+    flex-wrap: wrap;
+
+    .el-form-item {
+      width: 47%;
+
+      &:nth-child(2n-1) {
+        margin-right: 5%;
+      }
+    }
+  }
+}
+
+/* 自定义 el-dialog 样式 */
+.el-dialog {
+  .el-dialog__header {
+    padding: 15px 20px;
+    margin: 0;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+
+    .el-dialog__title {
+      font-size: 17px;
+    }
+  }
+}

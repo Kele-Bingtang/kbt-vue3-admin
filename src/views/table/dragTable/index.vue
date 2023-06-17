@@ -43,7 +43,7 @@
 
 <script setup lang="ts" name="DragTable">
 import Sortable from "sortablejs";
-import { simpleData } from "@/test/table";
+import { simpleData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
 
 interface ColItem {

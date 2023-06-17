@@ -7,6 +7,17 @@ const frameRoutes: RouterConfigRaw = {
   },
   children: [
     {
+      path: "vue2-admin-open",
+      name: "Vue2AdminOpen",
+      meta: {
+        title: "Kbt Vue2 Admin（新标签打开）",
+        icon: "HotWater",
+        frameSrc: "https://vue2-admin.youngkbt.cn/",
+        frameOpen: true,
+        useTooltip: true,
+      },
+    },
+    {
       path: "vue2-admin",
       name: "Vue2Admin",
       meta: {

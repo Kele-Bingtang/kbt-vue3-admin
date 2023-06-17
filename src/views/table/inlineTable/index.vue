@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts" name="InlineTable">
-import { simpleData } from "@/test/table";
+import { simpleData } from "@/mock/table";
 import { ElMessage } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
 

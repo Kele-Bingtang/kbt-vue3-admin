@@ -102,14 +102,17 @@ export const useRoutes = () => {
         if (!r.name) r.name = (r.children[0].name as string) + "Parent";
       }
 
-      if (r.meta?.frameKeepAlive) r.component = FrameBlank;
-      else if (!r.meta?.frameKeepAlive && r.meta?.frameSrc) r.component = FrameView;
-      else {
-        if (r.component && isType(r.component) === "string") r.component = modules["/src/views" + r.component + ".vue"];
-        // 如果动态路由的 component 存在且为 string，则必须是 views 下的目录，以 / 分割，如果/home/index，则是 views/home/index.vue 组件，如果不存在 component，则读取 path 来获取 component
-        if (r.component) {
-          if (isType(r.component) === "string") r.component = modules["/src/views" + r.component + ".vue"];
-        } else r.component = modules["/src/views" + r.path + ".vue"];
+      if (r.meta?.frameOpen && r.meta?.frameSrc && isExternal(r.meta?.frameSrc)) {
+        r.path = r.meta?.frameSrc;
+      } else {
+        if (r.meta?.frameKeepAlive) r.component = FrameBlank;
+        else if (!r.meta?.frameKeepAlive && r.meta?.frameSrc) r.component = FrameView;
+        else {
+          // 如果动态路由的 component 存在且为 string，则必须是 views 下的目录，以 / 分割，如果/home/index，则是 views/home/index.vue 组件，如果不存在 component，则读取 path 来获取 component
+          if (r.component) {
+            if (isType(r.component) === "string") r.component = modules["/src/views" + r.component + ".vue"];
+          } else r.component = modules["/src/views" + r.path + ".vue"];
+        }
       }
       if (r?.children && r.children.length) processDynamicRoutes(r.children);
     });

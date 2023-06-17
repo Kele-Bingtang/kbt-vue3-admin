@@ -58,7 +58,7 @@
 </template>
 
 <script setup lang="ts" name="SearchTable">
-import { middleData } from "@/test/table";
+import { middleData } from "@/mock/table";
 import { ElMessageBox, ElNotification } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
 

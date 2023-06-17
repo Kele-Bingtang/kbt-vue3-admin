@@ -122,7 +122,7 @@ import { usePermission } from "@/hooks/usePermission";
 
 const userStore = useUserStore();
 const { getRoleList, getAuthList, hasRole, hasAuth } = usePermission();
-const refreshCurrentPage = inject("refresh") as RefreshFunction;
+const refreshCurrentPage = inject("refresh", () => {}) as RefreshFunction;
 
 const roleList = computed(() => getRoleList());
 const switchRole = computed({

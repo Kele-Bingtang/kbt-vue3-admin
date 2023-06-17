@@ -22,7 +22,7 @@
 
 <script setup lang="ts" name="DraggableItemDemo">
 import DraggableItem from "@/components/DraggableItem/index.vue";
-import { list1, list2, list3 } from "@/test/drag-item";
+import { list1, list2, list3 } from "@/mock/drag-item";
 
 const group = ref("drag_item");
 const listData1 = ref(list1);

@@ -41,7 +41,7 @@
 
 <script setup lang="ts" name="SelectExcel">
 import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
-import { largeData } from "@/test/table";
+import { largeData } from "@/mock/table";
 import { ElMessage, ElTable } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
 

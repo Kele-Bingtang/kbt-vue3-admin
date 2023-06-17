@@ -55,6 +55,7 @@ declare global {
     frameSrc?: string; // IFrame 链接，填写后该路由将打开 IFrame 指定的链接
     frameLoading?: boolean; // IFrame 页是否开启首次加载动画（默认 true）
     frameKeepAlive?: boolean; // IFrame 页是否开启缓（默认 false）
+    frameOpen?: boolean; // IFrame 页是否开新标签页打开（默认 false）
     /**
      * @description 页面加载动画（有两种形式，一种直接采用 vue 内置的 transitions 动画，另一种是使用 animate.css 写进、离场动画）
      * @see {@link https://next.router.vuejs.org/guide/advanced/transitions.html#transitions}

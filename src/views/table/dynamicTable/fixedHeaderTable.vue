@@ -19,7 +19,7 @@
 </template>
 
 <script setup lang="ts" name="FixedHeaderTable">
-import { simpleData } from "@/test/table";
+import { simpleData } from "@/mock/table";
 
 const tableData = ref(simpleData);
 const key = ref(1);

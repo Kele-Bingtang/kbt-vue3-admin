@@ -51,7 +51,7 @@
 
 <script setup lang="ts" name="DraggableList">
 import DraggableList, { type DragClass } from "@/components/DraggableList/index.vue";
-import { list1, list2 } from "@/test/drag-list";
+import { list1, list2 } from "@/mock/drag-list";
 
 const listData1 = ref(list1);
 const listData2 = ref(list2);
