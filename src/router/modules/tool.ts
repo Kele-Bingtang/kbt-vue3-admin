@@ -40,8 +40,8 @@ const toolsRoutes: RouterConfigRaw = {
     },
     {
       path: "v-contextmenu",
-      name: "VContextmenu",
-      component: () => import("@/views/tools/vContextmenu/index.vue"),
+      name: "VContextMenu",
+      component: () => import("@/views/tools/vContextMenu/index.vue"),
       meta: { title: "右键菜单 1", icon: "StarFilled" },
     },
     {

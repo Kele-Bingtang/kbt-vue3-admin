@@ -53,7 +53,7 @@ export default {
     Download: "Download",
     Timeline: "Timeline",
     PdfPreview: "PDF Preview",
-    VContextmenu: "v-contextmenu",
+    VContextMenu: "v-contextmenu",
     VMenus: "vue-menus",
     Nested: "Nested Route",
     Menu1: "menu 1",
