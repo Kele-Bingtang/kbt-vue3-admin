@@ -25,7 +25,7 @@
             </div>
           </el-scrollbar>
           <div class="message-empty" v-else>
-            <img src="@/assets/images/msg/notData.png" alt="notData" />
+            <img src="@/assets/images/notData.png" alt="notData" />
             <div>暂无消息</div>
           </div>
         </el-tab-pane>
@@ -50,7 +50,7 @@
             </div>
           </el-scrollbar>
           <div class="message-empty" v-else>
-            <img src="@/assets/images/msg/notData.png" alt="notData" />
+            <img src="@/assets/images/notData.png" alt="notData" />
             <div>暂无消息</div>
           </div>
         </el-tab-pane>
@@ -79,7 +79,7 @@
             </div>
           </el-scrollbar>
           <div class="message-empty" v-else>
-            <img src="@/assets/images/msg/notData.png" alt="notData" />
+            <img src="@/assets/images/notData.png" alt="notData" />
             <div>暂无代办</div>
           </div>
         </el-tab-pane>
