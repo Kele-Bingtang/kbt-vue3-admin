@@ -27,7 +27,7 @@ export const useTabsNav = () => {
   const layoutStore = useLayoutStore();
   const permissionStore = usePermissionStore();
   const { getTitle } = useLayout();
-  const refreshCurrentPage = inject("refresh") as RefreshFunction;
+  const refreshCurrentPage = inject("refresh", () => {}) as RefreshFunction;
 
   const { bool: rightMenuVisible, setFalse } = useBoolean(); // 右键菜单显示
 
