@@ -47,22 +47,22 @@
       <el-table :data="[clickCurrentRow]" border>
         <el-table-column label="name" width="160px">
           <template #default="{ row }">
-            {{ row.err.name }}
+            {{ row.error.name }}
           </template>
         </el-table-column>
         <el-table-column label="message" width="160px">
           <template #default="{ row }">
-            {{ row.err.message }}
+            {{ row.error.message }}
           </template>
         </el-table-column>
         <el-table-column label="cause" width="160px">
           <template #default="{ row }">
-            {{ row.err.cause }}
+            {{ row.error.cause }}
           </template>
         </el-table-column>
         <el-table-column label="stack">
           <template #default="{ row }">
-            {{ row.err.stack }}
+            {{ row.error.stack }}
           </template>
         </el-table-column>
       </el-table>

@@ -129,14 +129,14 @@ const initOptions = computed(() => ({
   language: language.value,
   promotion: false, // 去除右上角的 ⚡️Upgrade
   branding: false, // 去除左下角的 Tiny
-  // language_url: props.language === "en" ? "" : `${process.env.BASE_URL}tinymce/langs/${props.language}.js`,
-  base_url: import.meta.env.VITE_BASE_URL === "/" ? "/tinymce" : `${import.meta.env.VITE_BASE_URL}/tinymce`,
+  // language_url: props.language === "en" ? "" : `${import.meta.env.VITE_PUBLIC_PATH}tinymce/langs/${props.language}.js`,
+  base_url: import.meta.env.VITE_PUBLIC_PATH === "/" ? "/tinymce" : `${import.meta.env.VITE_PUBLIC_PATH}/tinymce`,
   skin: skinTheme.value,
   content_css: props.contentTheme ? props.contentTheme : props.theme,
   // emoticons_database_url:
-  //   import.meta.env.VITE_BASE_URL === "/"
+  //   import.meta.env.VITE_PUBLIC_PATH === "/"
   //     ? "tinymce/emojis.min.js"
-  //     : `${import.meta.env.VITE_BASE_URL}/tinymce/emojis.min.js`,
+  //     : `${import.meta.env.VITE_PUBLIC_PATH}/tinymce/emojis.min.js`,
   end_container_on_empty_block: true,
   draggable_modal: true,
   autosave_restore_when_empty: true,

@@ -40,7 +40,7 @@ const imageUpload = async (file: File, insertFn: ImageInsertFnType) => {
   //   .then(res => {
   //     if (res.result === true) {
   //       let { fileKey, fileName } = res.data[0];
-  //       let url = `${process.env.VUE_APP_BASE_URL}/documentStore/api/public/v1/download/downloadFileByGet?appId=a41d9bf7-5ffa-4ad0-bfd7-a57692cfdbc7&fileKey=${fileKey}`;
+  //       let url = `${import.meta.env.VITE_API_URL}/documentStore/api/public/v1/download/downloadFileByGet?appId=a41d9bf7-5ffa-4ad0-bfd7-a57692cfdbc7&fileKey=${fileKey}`;
   //       insertFn(url, fileName);
   //     } else {
   //       this.$message.error("上传出错，服务器开小差了呢");
@@ -62,7 +62,7 @@ const videoUpload = async (file: File, insertFn: VideoInsertFnType) => {
   //   .then(res => {
   //     if (res.result === true) {
   //       let { fileKey, fileName } = res.data[0];
-  //       let url = `${process.env.VUE_APP_BASE_URL}/documentStore/api/public/v1/download/downloadFileByGet?appId=a41d9bf7-5ffa-4ad0-bfd7-a57692cfdbc7&fileKey=${fileKey}`;
+  //       let url = `${import.meta.env.VITE_API_URL}/documentStore/api/public/v1/download/downloadFileByGet?appId=a41d9bf7-5ffa-4ad0-bfd7-a57692cfdbc7&fileKey=${fileKey}`;
   //       insertFn(url, fileName);
   //     } else {
   //       this.$message.error("上传出错，服务器开小差了呢");
@@ -84,7 +84,7 @@ const fileUpload = async (file: File, insertFn: FileInsertFnType) => {
   //   .then(res => {
   //     if (res.result === true) {
   //       let { fileKey, fileName } = res.data[0];
-  //       let url = `${process.env.VUE_APP_BASE_URL}/documentStore/api/public/v1/download/downloadFileByGet?appId=a41d9bf7-5ffa-4ad0-bfd7-a57692cfdbc7&fileKey=${fileKey}`;
+  //       let url = `${import.meta.env.VITE_API_URL}/documentStore/api/public/v1/download/downloadFileByGet?appId=a41d9bf7-5ffa-4ad0-bfd7-a57692cfdbc7&fileKey=${fileKey}`;
   // 名称放在前面
   //       insertFn(fileName, url);
   //     } else {

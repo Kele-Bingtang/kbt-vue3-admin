@@ -9,6 +9,7 @@ import type { RefreshFunction } from "../MainContent/index.vue";
 import settings from "@/config/settings";
 import { HOME_URL } from "@/router/routesConfig";
 import { useBoolean } from "@/hooks/useBoolean";
+import mittBus from "@/utils/layout/mittBus";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";
 
@@ -204,12 +205,15 @@ export const useTabsNav = () => {
 
   // 刷新选中的 tab
   const refreshSelectedTab = (tab: TabProp) => {
-    layoutStore.removeKeepAliveName(tab.name);
-    refreshCurrentPage(false);
-    nextTick(() => {
-      layoutStore.addKeepAliveName(tab.name);
-      refreshCurrentPage(true);
-    });
+    if (tab.meta?.frameSrc) mittBus.emit("refreshFrame");
+    else {
+      layoutStore.removeKeepAliveName(tab.name);
+      refreshCurrentPage(false);
+      nextTick(() => {
+        layoutStore.addKeepAliveName(tab.name);
+        refreshCurrentPage(true);
+      });
+    }
   };
 
   const closeLeftTab = async (tab: TabProp) => {

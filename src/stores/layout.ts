@@ -3,7 +3,7 @@ import { setCacheTabNavList, getCacheTabNavList, removeCacheTabNavList } from "@
 import { DeviceType, type LanguageType, type LayoutSizeType, type TabProp } from "./index.d";
 import { useSettingsStore } from "./settings";
 import defaultSettings from "@/config/settings";
-import type { Frame } from "@/layout/components/FrameLayout/useKeepFrameAlive";
+import type { Frame } from "@/layout/components/FrameLayout/useFrame";
 
 export const useLayoutStore = defineStore(
   "layoutStore",

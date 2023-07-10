@@ -12,7 +12,7 @@ import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import { getBrowserLang } from "./utils";
 import { useTheme } from "./hooks/useTheme";
-import { useTabsNav } from "./layout/components/TabsNav/useTabsNav";
+import { useFrame } from "./layout/components/FrameLayout/useFrame";
 
 const layoutStore = useLayoutStore();
 
@@ -39,34 +39,13 @@ onMounted(() => {
   handleMsgFromFrame();
 });
 
-const router = useRouter();
-const { closeSelectedTab } = useTabsNav();
-
+const { acceptFrameMsg } = useFrame();
 /**
  * 接收 frame 传来的消息，执行该消息（如果把 admin 作为门户来嵌入各个系统，则用到）
  * 消息：需要打开的连接
  */
 const handleMsgFromFrame = () => {
-  function handleIframeMsg(evt: MessageEvent) {
-    const tarType = Object.prototype.toString.call(evt.data);
-    let msg: typeof evt.data;
-    if (tarType === "[object String]") msg = JSON.parse(evt.data || "{}");
-    else if (tarType === "[object Object]") msg = evt.data;
-    if (msg.code !== undefined) {
-      // 匹配路由表的 name  参见 src\hooks\useRoutes.ts
-      if (msg.shutdownCode) {
-        for (const tab of layoutStore.tabNavList) {
-          if (tab.name === msg.shutdownCode) {
-            closeSelectedTab(tab);
-            break;
-          }
-        }
-      }
-      router.push({ name: msg.name });
-      // TODO：如果传的是 msg.url，则打开 url
-    }
-  }
-  window.addEventListener("message", handleIframeMsg);
+  window.addEventListener("message", acceptFrameMsg);
 };
 </script>
 

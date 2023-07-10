@@ -1,18 +1,20 @@
 <template>
   <div class="frame-container" v-loading="loading" element-loading-text="加载中...">
-    <iframe :src="iframeSrc" class="frame-iframe" ref="frameRef" />
+    <iframe v-if="needRefresh" :src="iframeSrc" class="frame-iframe" ref="frameRef" />
   </div>
 </template>
 
 <script setup lang="ts" name="FrameView">
+import mittBus from "@/utils/layout/mittBus";
 import { useRoute } from "vue-router";
 
 const loading = ref(true);
 const route = useRoute();
 const frameRef = ref<HTMLElement | null>(null);
 
-const props = withDefaults(defineProps<{ frameSrc?: string }>(), {
+const props = withDefaults(defineProps<{ frameSrc?: string; frameName?: string }>(), {
   frameSrc: "",
+  frameName: "",
 });
 
 const iframeSrc = computed(() => {
@@ -42,6 +44,16 @@ function init() {
     }
   });
 }
+
+const needRefresh = ref(true);
+
+mittBus.on("refreshFrame", async () => {
+  if (route.name === props.frameName) {
+    needRefresh.value = false;
+    await nextTick();
+    needRefresh.value = true;
+  }
+});
 
 onMounted(() => {
   init();

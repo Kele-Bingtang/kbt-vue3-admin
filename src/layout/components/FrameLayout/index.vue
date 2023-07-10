@@ -1,7 +1,7 @@
 <template>
   <div v-if="showFrames">
     <template v-for="frame in frameList" :key="frame.path">
-      <FrameView v-if="frame.src" v-show="showIframe(frame)" :frameSrc="frame.src" />
+      <FrameView v-if="frame.src" v-show="showIframe(frame)" :frameSrc="frame.src" :frameName="frame.name" />
     </template>
   </div>
 </template>
@@ -9,10 +9,10 @@
 <script setup lang="ts" name="FrameLayout">
 import FrameView from "./frameView.vue";
 import { useLayoutStore } from "@/stores/layout";
-import { useFrameKeepAlive, type Frame } from "./useKeepFrameAlive";
+import { useFrame, type Frame } from "./useFrame";
 
 const layoutStore = useLayoutStore();
-const { showIframe } = useFrameKeepAlive();
+const { showIframe } = useFrame();
 const showFrames = computed(() => unref(layoutStore.frameList).length > 0);
 const frameList = computed(() => layoutStore.frameList);
 const route = useRoute();
@@ -73,3 +73,4 @@ watch(
   display: none;
 }
 </style>
+./useFrame
