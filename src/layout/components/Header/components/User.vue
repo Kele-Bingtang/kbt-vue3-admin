@@ -15,23 +15,23 @@
     <template #dropdown>
       <el-dropdown-menu>
         <router-link to="/profile">
-          <el-dropdown-item icon="User">
+          <el-dropdown-item :icon="User">
             {{ profileLabel }}
           </el-dropdown-item>
         </router-link>
 
         <router-link to="/message-center">
-          <el-dropdown-item icon="Bell">
+          <el-dropdown-item :icon="Bell">
             {{ messageCenterLabel }}
           </el-dropdown-item>
         </router-link>
 
-        <el-dropdown-item @click="openSettingsDrawer" icon="Setting" v-if="showSettings">
+        <el-dropdown-item @click="openSettingsDrawer" :icon="Setting" v-if="showSettings">
           <span>
             {{ settingsLabel }}
           </span>
         </el-dropdown-item>
-        <el-dropdown-item divided @click="logout" icon="Back">
+        <el-dropdown-item divided @click="logout" :icon="Back">
           <span>
             {{ logOutLabel }}
           </span>
@@ -46,7 +46,7 @@ import { useSettingsStore } from "@/stores/settings";
 import { useUserStore } from "@/stores/user";
 import { useI18n } from "vue-i18n";
 import defaultAvatar from "@/assets/images/default.png";
-import { ArrowDownBold } from "@element-plus/icons-vue";
+import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
 import mittBus from "@/utils/layout/mittBus";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { LOGIN_URL } from "@/router/routesConfig";

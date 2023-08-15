@@ -14,7 +14,7 @@
       </el-table-column>
       <el-table-column prop="priority" label="优先级">
         <template #default="{ row }">
-          <svg-icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
+          <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
         </template>
       </el-table-column>
     </el-table>

@@ -1,11 +1,16 @@
 <template>
   <el-form ref="ruleFormRef" :model="ruleForm" :rules="phoneRules" size="large">
     <el-form-item prop="phone">
-      <el-input clearable v-model="ruleForm.phone" placeholder="手机号码" prefix-icon="Phone" />
+      <el-input clearable v-model="ruleForm.phone" placeholder="手机号码" :prefix-icon="Phone" />
     </el-form-item>
     <el-form-item prop="verifyCode">
       <div style="display: flex; justify-content: space-between; width: 100%">
-        <el-input clearable v-model="ruleForm.verifyCode" placeholder="请输入验证码" prefix-icon="WarnTriangleFilled" />
+        <el-input
+          clearable
+          v-model="ruleForm.verifyCode"
+          placeholder="请输入验证码"
+          :prefix-icon="WarnTriangleFilled"
+        />
         <el-button :disabled="isDisabled" @click="useVerifyCode().start(ruleFormRef, 'phone')">
           {{ text.length > 0 ? text + " 秒后重新获取" : "获取验证码" }}
         </el-button>
@@ -14,10 +19,17 @@
 
     <el-form-item>
       <div class="login-btn">
-        <el-button icon="UserFilled" round @click="onLogin(ruleFormRef)" size="large" type="primary" :loading="loading">
+        <el-button
+          :icon="UserFilled"
+          round
+          @click="onLogin(ruleFormRef)"
+          size="large"
+          type="primary"
+          :loading="loading"
+        >
           登录
         </el-button>
-        <el-button icon="CircleClose" round @click="onBack" size="large">返回</el-button>
+        <el-button :icon="CircleClose" round @click="onBack" size="large">返回</el-button>
       </div>
     </el-form-item>
   </el-form>
@@ -27,6 +39,7 @@
 import { ElMessage, type FormInstance } from "element-plus";
 import { useVerifyCode } from "../verifyCode";
 import { phoneRules } from "../rules";
+import { Phone, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
 
 const loading = ref(false);
 const ruleForm = reactive({

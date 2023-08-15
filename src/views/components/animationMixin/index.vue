@@ -38,7 +38,7 @@
           <div style="height: 100px">
             <el-form :model="demo" :rules="demoRules">
               <el-form-item prop="title">
-                <MaterialInput v-model:value="demo.title" icon="Search" name="title" placeholder="输入标题">
+                <MaterialInput v-model:value="demo.title" :icon="Search" name="title" placeholder="输入标题">
                   标题
                 </MaterialInput>
               </el-form-item>
@@ -91,6 +91,7 @@ import MaterialInput from "@/components/MaterialInput/index.vue";
 import TextHoverEffect from "@/components/TextHoverEffect/index.vue";
 import DropdownMenu from "@/components/DropdownMenu/index.vue";
 import Button from "./button.vue";
+import { Search } from "@element-plus/icons-vue";
 
 const demo = reactive({
   title: "",

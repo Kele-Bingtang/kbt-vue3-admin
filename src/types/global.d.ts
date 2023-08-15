@@ -1,4 +1,6 @@
 import type { RouteRecordRaw, RouteLocationNormalizedLoaded, RouteComponent } from "vue-router";
+import type { IconifyIcon } from "@iconify/vue";
+import type { Component } from "vue";
 
 export {}; // 扩展 global 而不是覆盖
 
@@ -41,7 +43,7 @@ declare global {
     roles?: string[]; // 可访问该页面的权限数组，当前路由设置的权限会影响子路由
     auths?: string[]; // 路由内的按钮权限
     title?: string | number | ((route: RouteConfig) => string); // 显示在侧边栏、面包屑和标签栏的文字，使用 '{{ 多语言字段 }}' 形式结合「多语言」使用，可以传入一个回调函数，参数是当前路由对象 to
-    icon?: string; // 菜单图标，该页面在左侧菜单、面包屑显示的图标，无默认值
+    icon?: string | IconifyIcon | Component; // 菜单图标，该页面在左侧菜单、面包屑显示的图标，无默认值
     notClickBread?: boolean; // 是否允许点击面包屑，如果为 true，则该路由无法在面包屑中被点击，默认为 false
     hideInBread?: boolean; // 是否不添加到面包屑，如果为 true，则该路由将不会出现在面包屑中，默认为 false
     hideInMenu?: boolean; // 是否不添加到菜单，如果为 true，则该路由不会显示在左侧菜单，默认为 false

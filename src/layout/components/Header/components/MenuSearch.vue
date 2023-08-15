@@ -1,6 +1,6 @@
 <template>
   <div :class="{ show: isShowSearch }" class="header-search">
-    <svg-icon
+    <Icon
       name="search"
       width="20px"
       height="20px"
@@ -37,6 +37,7 @@ import { usePermissionStore } from "@/stores/permission";
 import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils/layout/validate";
+import { Search } from "@element-plus/icons-vue";
 
 const router = useRouter();
 const permissionStore = usePermissionStore();

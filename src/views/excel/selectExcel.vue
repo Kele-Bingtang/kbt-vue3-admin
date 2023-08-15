@@ -4,9 +4,9 @@
       v-model="filename"
       placeholder="请输入导出的文件名，默认为 excel-table"
       style="width: 350px"
-      prefix-icon="Document"
+      :prefix-icon="Document"
     />
-    <el-button :loading="downloadLoading" type="success" icon="Top" @click="handleDownload">导出选择的数据</el-button>
+    <el-button :loading="downloadLoading" type="success" :icon="Top" @click="handleDownload">导出选择的数据</el-button>
 
     <el-table
       ref="multipleTableRef"
@@ -32,7 +32,7 @@
       </el-table-column>
       <el-table-column prop="priority" label="优先级" width="140">
         <template #default="{ row }">
-          <svg-icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
+          <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
         </template>
       </el-table-column>
     </el-table>
@@ -44,6 +44,7 @@ import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
 import { largeData } from "@/mock/table";
 import { ElMessage, ElTable } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
+import { Document, Top } from "@element-plus/icons-vue";
 
 const tableData = ref(largeData);
 const multipleSelection = ref([]);

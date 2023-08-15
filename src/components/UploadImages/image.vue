@@ -51,6 +51,7 @@
 import { generateUUID } from "@/utils";
 import { ElNotification, formContextKey, formItemContextKey } from "element-plus";
 import type { UploadProps, UploadRequestOptions } from "element-plus";
+import { Edit, ZoomIn, Delete, Plus } from "@element-plus/icons-vue";
 
 export type SuccessFun = (response: string) => void;
 

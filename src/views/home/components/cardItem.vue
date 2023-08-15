@@ -16,9 +16,11 @@
 </template>
 
 <script setup lang="ts" name="CardItem">
+import type { Component } from "vue";
+
 interface CardItemProps {
   shadow?: string;
-  icon?: string;
+  icon?: Component;
   iconSize?: number;
   color?: string;
   iconWidth?: number;
@@ -26,7 +28,7 @@ interface CardItemProps {
 
 const props = withDefaults(defineProps<CardItemProps>(), {
   shadow: "",
-  icon: "",
+  icon: undefined,
   iconSize: 48,
   color: "#168BF7",
   iconWidth: 40,

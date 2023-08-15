@@ -86,6 +86,48 @@ export const useRoutes = () => {
     router.addRoute(notFoundRouter);
   };
   /**
+   * @description 过滤出当前系统角色的路由权限
+   */
+  const filterOnlyRolesRoutes = (routers: RouterConfigRaw[], roles: string[]) => {
+    const rolesRoutes: RouterConfigRaw[] = [];
+    routers.forEach(router => {
+      const r = { ...router };
+      if (hasPermission(r, roles)) {
+        if (r.children && r.children.length) r.children = filterOnlyRolesRoutes(r.children, roles);
+        rolesRoutes.push(r);
+      }
+    });
+    return rolesRoutes;
+  };
+  /**
+   * @description 处理路由的 meta：拼接每个路由的完整路径 fullPath，处理国际化 title 显示，判断是否使用国际化
+   * @param routers 路由表
+   * @param basePath 路由 fullPath
+   * @returns 处理后的路由表
+   */
+  const processRouteMeta = (routers: RouterConfigRaw[], basePath = "/") => {
+    routers.forEach(router => {
+      const fullPath = router.path.startsWith("/") ? router.path : (basePath + "/" + router.path).replace(/\/+/g, "/");
+      // 处理成后面布局要用到的 title。title 如果为函数，则涉及到当前路由，所以这里无法处理
+      if (router.meta) {
+        const { useI18n, isKeepAlive, isFull, useTooltip } = router.meta;
+        const { routeUseI18n, isKeepAlive: keepAlive, isFull: full, routeUseTooltip } = settings;
+        router.meta._fullPath = fullPath;
+        // 这两个顺序不能互换，因为 getLayoutTitle 函数需要 useI18n
+        if (useI18n === undefined && routeUseI18n !== undefined) router.meta.useI18n = routeUseI18n;
+        router.meta.title = getLayoutTitle(router as RouteConfig);
+        if (isKeepAlive === undefined && keepAlive !== undefined) router.meta.isKeepAlive = keepAlive;
+        if (isFull === undefined && full !== undefined) router.meta.isFull = full;
+        if (useTooltip === undefined && routeUseTooltip !== undefined) router.meta.useTooltip = routeUseTooltip;
+      }
+      if (router.children && router.children.length) {
+        if (isExternal(fullPath)) router.children = processRouteMeta(router.children, "");
+        else router.children = processRouteMeta(router.children, fullPath);
+      }
+    });
+    return routers;
+  };
+  /**
    * @description 过滤动态路由，重新生成规范路由
    * @param routers 路由
    * @returns routers
@@ -119,20 +161,6 @@ export const useRoutes = () => {
     return routers;
   };
   /**
-   * @description 过滤出当前系统角色的路由权限
-   */
-  const filterOnlyRolesRoutes = (routers: RouterConfigRaw[], roles: string[]) => {
-    const rolesRoutes: RouterConfigRaw[] = [];
-    routers.forEach(router => {
-      const r = { ...router };
-      if (hasPermission(r, roles)) {
-        if (r.children && r.children.length) r.children = filterOnlyRolesRoutes(r.children, roles);
-        rolesRoutes.push(r);
-      }
-    });
-    return rolesRoutes;
-  };
-  /**
    * @description 该系统角色是否有权限访问当前路由
    * roles 带有 * 的代表所有路由都能访问
    */
@@ -140,34 +168,6 @@ export const useRoutes = () => {
     if (roles.includes("*")) return true;
     if (router.meta && router.meta.roles) return roles.some(role => router.meta && router.meta?.roles?.includes(role));
     else return true; // 没有添加权限验证
-  };
-  /**
-   * @description 处理路由的 meta：拼接每个路由的完整路径 fullPath，处理国际化 title 显示，判断是否使用国际化
-   * @param routers 路由表
-   * @param basePath 路由 fullPath
-   * @returns 处理后的路由表
-   */
-  const processRouteMeta = (routers: RouterConfigRaw[], basePath = "/") => {
-    routers.forEach(router => {
-      const fullPath = router.path.startsWith("/") ? router.path : (basePath + "/" + router.path).replace(/\/+/g, "/");
-      // 处理成后面布局要用到的 title。title 如果为函数，则涉及到当前路由，所以这里无法处理
-      if (router.meta) {
-        const { useI18n, isKeepAlive, isFull, useTooltip } = router.meta;
-        const { routeUseI18n, isKeepAlive: keepAlive, isFull: full, routeUseTooltip } = settings;
-        router.meta._fullPath = fullPath;
-        // 这两个顺序不能互换，因为 getLayoutTitle 函数需要 useI18n
-        if (useI18n === undefined && routeUseI18n !== undefined) router.meta.useI18n = routeUseI18n;
-        router.meta.title = getLayoutTitle(router as RouteConfig);
-        if (isKeepAlive === undefined && keepAlive !== undefined) router.meta.isKeepAlive = keepAlive;
-        if (isFull === undefined && full !== undefined) router.meta.isFull = full;
-        if (useTooltip === undefined && routeUseTooltip !== undefined) router.meta.useTooltip = routeUseTooltip;
-      }
-      if (router.children && router.children.length) {
-        if (isExternal(fullPath)) router.children = processRouteMeta(router.children, "");
-        else router.children = processRouteMeta(router.children, fullPath);
-      }
-    });
-    return routers;
   };
   /**
    * @description 扁平化数组对象，将多级嵌套路由处理成一维数组（主要用来处理路由菜单）
@@ -245,7 +245,7 @@ export const useRoutes = () => {
    * @description 通过 path 获取父级路由信息
    * @param path 查找的 path，传入完整的 path，如 route.meta._fullPath
    * @param routes 路由表
-   * @param target 返回的数组类型，all 表示饭返回父级路由，path 表示返回父级路由的 path，name 表示返回父级的 name
+   * @param target 返回的数组类型，all 表示返回父级路由，path 表示返回父级路由的 path，name 表示返回父级的 name
    */
   function findParentRoutesByPath(path: string, routes: RouterConfig[], target: "all" | "path" | "name" = "all") {
     // 深度遍历查找
@@ -314,16 +314,16 @@ export const useRoutes = () => {
 				},
 			]
 		}
-   * @param menuList 后台返回的菜单
+   * @param routerList 后台返回的路由
    * @param menuCode 菜单 code，等价于路由的 name
    * @returns 路由表信息
    */
-  const getDynamicRouters = (menuList: BackstageMenuList[], menuCode = "") => {
+  const getDynamicRouters = (routerList: BackstageMenuList[], menuCode = "") => {
     const dynamicRouterList: RouterConfigRaw[] = [];
-    menuList.forEach(item => {
+    routerList.forEach(item => {
       if (item.parentMenuCode === menuCode) {
         const children = getDynamicRouters(
-          menuList.filter(v => v.menuCode !== menuCode),
+          routerList.filter(v => v.menuCode !== menuCode),
           item.menuCode
         );
         const menu = {

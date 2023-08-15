@@ -60,6 +60,7 @@ import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuDropdown from "../components/MenuDropdown.vue";
+import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
 
 const route = useRoute();
 const layoutStore = useLayoutStore();

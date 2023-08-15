@@ -54,6 +54,7 @@
 
 <script setup lang="ts" name="PdfPreview">
 import VuePdfEmbed from "vue-pdf-embed";
+import { Refresh, Printer } from "@element-plus/icons-vue";
 
 const pdfRef = ref<any>();
 const pageCount = ref(1);

@@ -15,3 +15,17 @@ export const getCacheTabNavList = () => JSON.parse(localStorage.getItem(tabsNavK
 export const setCacheTabNavList = (tabsNavList: TabProp[]) =>
   localStorage.setItem(tabsNavKey, JSON.stringify(tabsNavList));
 export const removeCacheTabNavList = () => localStorage.removeItem(tabsNavKey);
+
+// 版本号缓存
+const versionKey = settings.versionCacheKey;
+export const getCacheVersion = () => JSON.parse(localStorage.getItem(versionKey) || "[]");
+export const setCacheVersion = (version: string) => localStorage.setItem(versionKey, JSON.stringify(version));
+export const removeCacheVersion = () => localStorage.removeItem(versionKey);
+
+export const removeProjectsCache = () => {
+  localStorage.removeItem(settings.settingCacheKey);
+  localStorage.removeItem(settings.layoutCacheKey);
+  localStorage.removeItem(settings.tabsNavCacheKey);
+  localStorage.removeItem(settings.cacheDynamicRoutesKey);
+  localStorage.removeItem(settings.versionCacheKey);
+};

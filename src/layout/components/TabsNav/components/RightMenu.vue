@@ -30,6 +30,7 @@
 <script setup lang="ts" name="RightMenu">
 import type { TabProp } from "@/stores";
 import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
+import { Refresh, Close, ArrowLeft, ArrowRight, SemiSelect, FolderDelete } from "@element-plus/icons-vue";
 
 const { refreshSelectedTab, closeCurrentTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } =
   useTabsNav();

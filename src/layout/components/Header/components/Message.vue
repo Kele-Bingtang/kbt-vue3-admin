@@ -4,7 +4,7 @@
     <el-popover placement="bottom" :width="330" trigger="click" popper-class="message-popover">
       <template #reference>
         <el-badge :value="messageLength" class="item">
-          <svg-icon name="bell" width="25px" height="25px" :icon-style="{ cursor: 'pointer' }" />
+          <Icon name="bell" width="25px" height="25px" :icon-style="{ cursor: 'pointer' }" />
         </el-badge>
       </template>
       <el-tabs v-model="activeName">

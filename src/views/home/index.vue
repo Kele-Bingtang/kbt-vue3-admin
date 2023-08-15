@@ -44,12 +44,13 @@ import ChartPie from "./components/chartPie.vue";
 import ChartBar from "./components/chartBar.vue";
 import ChartLineBar from "./components/chartLineBar.vue";
 import ChartLine from "./components/chartLine.vue";
+import { Avatar, UserFilled, Share, Comment } from "@element-plus/icons-vue";
 
 const cardInfo = [
-  { title: "访问人数", icon: "Avatar", count: 1803, color: "#2d8cf0" },
-  { title: "累计用户", icon: "UserFilled", count: 232, color: "#19be6b" },
-  { title: "分享统计", icon: "Share", count: 657, color: "#ed3f14" },
-  { title: "消息数量", icon: "Comment", count: 12, color: "#E46CBB" },
+  { title: "访问人数", icon: Avatar, count: 1803, color: "#2d8cf0" },
+  { title: "累计用户", icon: UserFilled, count: 232, color: "#19be6b" },
+  { title: "分享统计", icon: Share, count: 657, color: "#ed3f14" },
+  { title: "消息数量", icon: Comment, count: 12, color: "#E46CBB" },
 ];
 
 const pieData = [

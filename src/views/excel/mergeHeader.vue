@@ -1,6 +1,12 @@
 <template>
   <div class="merge-header-container">
-    <el-button :loading="downloadLoading" style="margin-bottom: 20px" type="success" icon="Top" @click="handleDownload">
+    <el-button
+      :loading="downloadLoading"
+      style="margin-bottom: 20px"
+      type="success"
+      :icon="Top"
+      @click="handleDownload"
+    >
       Excel Export
     </el-button>
 
@@ -20,7 +26,7 @@
         </el-table-column>
         <el-table-column prop="priority" label="优先级" width="140">
           <template #default="{ row }">
-            <svg-icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
+            <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
           </template>
         </el-table-column>
       </el-table-column>
@@ -32,6 +38,7 @@
 import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
 import { largeData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
+import { Top } from "@element-plus/icons-vue";
 
 const tableData = ref(largeData);
 const downloadLoading = ref(false);

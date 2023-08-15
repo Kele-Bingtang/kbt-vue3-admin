@@ -1,8 +1,10 @@
+import { HotWater, StarFilled } from "@element-plus/icons-vue";
+
 const frameRoutes: RouterConfigRaw = {
   path: "/iframe",
   name: "IFrame",
   meta: {
-    icon: "StarFilled",
+    icon: StarFilled,
     title: "外部页面",
   },
   children: [
@@ -11,7 +13,7 @@ const frameRoutes: RouterConfigRaw = {
       name: "Vue2AdminOpen",
       meta: {
         title: "Kbt Vue2 Admin（新标签打开）",
-        icon: "HotWater",
+        icon: HotWater,
         frameSrc: "https://vue2-admin.youngkbt.cn/",
         frameOpen: true,
         useTooltip: true,
@@ -22,7 +24,7 @@ const frameRoutes: RouterConfigRaw = {
       name: "Vue2Admin",
       meta: {
         title: "Kbt Vue2 Admin",
-        icon: "HotWater",
+        icon: HotWater,
         frameSrc: "https://vue2-admin.youngkbt.cn/",
       },
     },
@@ -31,7 +33,7 @@ const frameRoutes: RouterConfigRaw = {
       name: "FrameEp",
       meta: {
         title: "Element Plus 文档",
-        icon: "HotWater",
+        icon: HotWater,
         frameSrc: "https://element-plus.org/zh-CN/",
       },
     },
@@ -40,7 +42,7 @@ const frameRoutes: RouterConfigRaw = {
       name: "FrameVue",
       meta: {
         title: "Vue3 文档",
-        icon: "HotWater",
+        icon: HotWater,
         frameSrc: "https://cn.vuejs.org/",
         frameKeepAlive: true,
       },
@@ -50,7 +52,7 @@ const frameRoutes: RouterConfigRaw = {
       name: "FrameVite",
       meta: {
         title: "Vite 文档",
-        icon: "HotWater",
+        icon: HotWater,
         frameSrc: "https://cn.vitejs.dev/",
       },
     },
@@ -59,7 +61,7 @@ const frameRoutes: RouterConfigRaw = {
       name: "FramePinia",
       meta: {
         title: "Pinia 文档",
-        icon: "HotWater",
+        icon: HotWater,
         frameSrc: "https://pinia.vuejs.org/zh/index.html",
       },
     },
@@ -68,7 +70,7 @@ const frameRoutes: RouterConfigRaw = {
       name: "FrameRouter",
       meta: {
         title: "Vue Router 文档",
-        icon: "HotWater",
+        icon: HotWater,
         frameSrc: "https://router.vuejs.org/zh/",
       },
     },

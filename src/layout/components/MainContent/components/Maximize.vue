@@ -6,6 +6,7 @@
 
 <script setup lang="ts" name="Maximize">
 import { useSettingsStore } from "@/stores/settings";
+import { Close } from "@element-plus/icons-vue";
 
 const settingsStore = useSettingsStore();
 

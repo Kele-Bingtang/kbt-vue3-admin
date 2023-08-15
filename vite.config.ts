@@ -53,7 +53,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         },
       },
     },
-    // * 打包去除 console.log && debugger
+    // 打包去除 console.log && debugger
     esbuild: {
       pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log", "debugger"] : [],
     },
@@ -68,7 +68,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
       //   },
       // },
       sourcemap: false,
-      // 消除打包大小超过500kb警告
+      // 消除打包大小超过 500kb 警告
       chunkSizeWarningLimit: 4000,
       rollupOptions: {
         input: {

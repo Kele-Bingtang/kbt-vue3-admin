@@ -26,15 +26,15 @@
       </el-table-column>
       <el-table-column prop="priority" label="优先级" width="140" sortable="custom">
         <template #default="{ row }">
-          <svg-icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
+          <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
         </template>
       </el-table-column>
 
       <el-table-column label="操作" width="190px">
         <template #default="{ row, $index }">
-          <el-button link size="small" icon="Search" @click="handleLook">查看</el-button>
-          <el-button link type="primary" size="small" icon="EditPen" @click="handleEdit">编辑</el-button>
-          <el-button link type="danger" size="small" icon="Delete" @click="handleDelete(row, $index)">删除</el-button>
+          <el-button link size="small" :icon="Search" @click="handleLook">查看</el-button>
+          <el-button link type="primary" size="small" :icon="EditPen" @click="handleEdit">编辑</el-button>
+          <el-button link type="danger" size="small" :icon="Delete" @click="handleDelete(row, $index)">删除</el-button>
         </template>
       </el-table-column>
     </TableSort>
@@ -75,15 +75,15 @@
           </el-table-column>
           <el-table-column prop="priority" label="优先级" width="140" sortable="custom">
             <template #default="{ row }">
-              <svg-icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
+              <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
             </template>
           </el-table-column>
 
           <el-table-column label="操作" width="190px">
             <template #default="{ row, $index }">
-              <el-button link size="small" icon="Search" @click="handleLook">查看</el-button>
-              <el-button link type="primary" size="small" icon="EditPen" @click="handleEdit">编辑</el-button>
-              <el-button link type="danger" size="small" icon="Delete" @click="handleDelete(row, $index)">
+              <el-button link size="small" :icon="Search" @click="handleLook">查看</el-button>
+              <el-button link type="primary" size="small" :icon="EditPen" @click="handleEdit">编辑</el-button>
+              <el-button link type="danger" size="small" :icon="Delete" @click="handleDelete(row, $index)">
                 删除
               </el-button>
             </template>
@@ -105,6 +105,7 @@ import TableSort from "@/components/TableSort/index.vue";
 import Pagination, { type Paging, pageSetting } from "@/components/Pagination/index.vue";
 import { largeData } from "@/mock/table";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Search, EditPen, Delete } from "@element-plus/icons-vue";
 
 const loading = ref(true);
 const tableData = ref(largeData);

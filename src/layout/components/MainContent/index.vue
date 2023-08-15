@@ -3,7 +3,7 @@
   <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
   <el-main>
     <router-view v-slot="{ Component, route }">
-      <CustomTransition appear name="fade-transform">
+      <CustomTransition name="fade-transform">
         <keep-alive :include="layoutStore.keepAliveName">
           <component :is="Component" :key="route.path" v-if="isRouterShow" />
         </keep-alive>

@@ -1,12 +1,10 @@
-# kbt-vue3-admin
+# kbt-vue3-template
 
-基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 搭建的 Admin 模板。
+基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 搭建的 Admin Template 模板。
 
-Admin 集成了很多插件、组件等内容，更适合进行学习和参考。如果你需要基于 Admin 来开发，建议使用 Admin 的纯净版，该版本去掉了集成的内容，只保留最基本的、项目必须的东西，分为国际化和非国际化版。
+这是纯净版，只有项目框架必要的信息。完整版请看 [kbt-vue3-admin](https://github.com/Kele-Bingtang/kbt-vue3-admin)。
 
-[国际化版](https://github.com/Kele-Bingtang/kbt-vue3-template)
-
-[非国际化版](https://github.com/Kele-Bingtang/kbt-vue3-template/tree/no-i18n)
+master 支持国际化，如果你不需要国际化，则看本仓库的另一个分支：[no-i18n](https://github.com/Kele-Bingtang/kbt-vue3-template/tree/no-i18n)。
 
 克隆项目下来后，记得切换 GitLab 地址，修改为您真正的项目地址。
 
@@ -27,6 +25,10 @@ Admin 项目用到的 key 暂时只有缓存功能，如个性化配置、布局
 如：Admin 使用的 key 默认前缀是 `kbt_`，如果您的项目叫做 MIT，则将 `kbt_` 改为 `mit_` 即可。
 
 注意：tokenKey 不需要修改，因为 token 是所有 Admin 的访问凭证。如果您修改了 tokenKey，则无法利用该 token 访问其他项目。
+
+## 使用文档
+
+[使用文档](https://vue3-docs.youngkbt.cn/)
 
 ## 效果预览
 
@@ -84,6 +86,7 @@ sh push.sh "您的 commit 信息"
 
 ```text
 Vue3-Admin-Ts
+├─ .husky                 # git commit 钩子
 ├─ .vscode                # VSCode 推荐配置
 ├─ public                 # 静态资源文件（该文件夹不会被打包）
 ├─ src
@@ -121,7 +124,6 @@ Vue3-Admin-Ts
 ├─ commitlint.config.js   # git 提交规范配置
 ├─ index.html             # 入口 html
 ├─ LICENSE                # 开源协议文件
-├─ lint-staged.config     # lint-staged 配置文件
 ├─ package-lock.json      # 依赖包包版本锁
 ├─ package.json           # 依赖包管理
 ├─ postcss.config.js      # postcss 配置
@@ -358,13 +360,13 @@ Admin 继承了 Vue3 的核心思想：hooks 函数，位于 `sc/hooks` 下。
 
 Admin 模板布局用到的可定制化样式位于 `src/styles` 下，如侧边栏主题、全局样式，您可以查看源码，根据自己的美观修改对应的样式。
 
-### 图标
+### SVG 图标
 
 Admin 模板使用的图标是 Element UI 内置的和 SVG 格式，因为 Element UI 内置的图标较少，所以自行在网上找 SVG 图标，如 [阿里云矢量图标库](https://www.iconfont.cn/)。
 
-图标放置于 `src/assets/icons` 下。
+图标放置于 `src/assets/svg` 下。
 
-使用步骤：在 vue 组件里使用 svg-icon 标签，如 `<svg-icon name="bug" width="20px" height="20px" />`，其中 name 是 svg 的文件名，width 和 height 为图标的宽度和高度。
+使用步骤：在 vue 组件里使用 Icon 标签，如 `<Icon name="bug" width="20px" height="20px" />`，其中 name 是 svg 的文件名，width 和 height 为图标的宽度和高度。
 
 ### 多环境
 
@@ -398,8 +400,8 @@ User.vue
 ```typescript
 import mittBus from "@/utils/mittBus";
 
-con每个环境都有 `VITE_API_URL`，这是路由、静态文件的根路径。
-us.emit("openThemeDrawer", true);
+const openSettingsDrawer = () => {
+  mittBus.emit("openThemeDrawer", true);
 };
 ```
 
@@ -520,7 +522,7 @@ router.replace("/redirect" + route.path);
 	name: "Github",
 	meta: {
 		title: "Github",
-		icon: "svg-github",
+		icon: "SVG-github",
 	},
 },
 ```

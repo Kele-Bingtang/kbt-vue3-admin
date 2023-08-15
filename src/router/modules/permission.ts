@@ -1,10 +1,12 @@
+import { StarFilled } from "@element-plus/icons-vue";
+
 const permissionRoutes = {
   path: "/permission",
   redirect: "/permission/switch",
   name: "Permission",
   meta: {
     title: "权限",
-    icon: "svg-lock",
+    icon: "SVG-lock",
     roles: ["admin", "visitor"],
     alwaysShowRoot: true,
   },
@@ -16,7 +18,7 @@ const permissionRoutes = {
       meta: {
         title: "权限切换",
         auths: ["btn_add", "btn_edit", "btn_delete"],
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
     {
@@ -26,7 +28,7 @@ const permissionRoutes = {
       meta: {
         title: "权限编辑",
         roles: ["admin"],
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
   ],

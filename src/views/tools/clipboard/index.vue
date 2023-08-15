@@ -2,13 +2,14 @@
   <div class="clipboard-container">
     <p>点击按钮即可复制内容</p>
     <el-input v-model="content" placeholder="Please input" style="width: 400px; max-width: 100%" />
-    <el-button type="primary" icon="Document" @click="doClipboard()">复制</el-button>
+    <el-button type="primary" :icon="Document" @click="doClipboard()">复制</el-button>
   </div>
 </template>
 
 <script setup lang="ts" name="Clipboard">
 import { ElMessage } from "element-plus";
 import useClipboard from "vue-clipboard3";
+import { Document } from "@element-plus/icons-vue";
 
 const { toClipboard } = useClipboard();
 const content = ref("https://github.com/Kele-Bingtang/kbt-vue3-admin");

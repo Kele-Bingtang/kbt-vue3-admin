@@ -1,7 +1,7 @@
 <template>
   <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
     <el-form-item prop="username">
-      <el-input v-model="loginForm.username" placeholder="用户名（任意）" prefix-icon="user"></el-input>
+      <el-input v-model="loginForm.username" placeholder="用户名（任意）" :prefix-icon="User"></el-input>
     </el-form-item>
     <el-form-item prop="password">
       <el-input
@@ -10,11 +10,11 @@
         placeholder="密码（任意）"
         show-password
         autocomplete="new-password"
-        prefix-icon="Lock"
+        :prefix-icon="Lock"
       ></el-input>
     </el-form-item>
     <el-form-item prop="verifyCode">
-      <el-input clearable v-model="loginForm.verifyCode" placeholder="验证码" prefix-icon="WarnTriangleFilled">
+      <el-input clearable v-model="loginForm.verifyCode" placeholder="验证码" :prefix-icon="WarnTriangleFilled">
         <template #append>
           <ImageVerify v-model:code="imgCode" />
         </template>
@@ -28,8 +28,8 @@
     </el-form-item>
     <el-form-item>
       <div class="login-btn">
-        <el-button icon="CircleClose" round @click="resetForm()" size="large">重置</el-button>
-        <el-button icon="UserFilled" round @click="startLogin()" size="large" type="primary" :loading="loading">
+        <el-button :icon="CircleClose" round @click="resetForm()" size="large">重置</el-button>
+        <el-button :icon="UserFilled" round @click="startLogin()" size="large" type="primary" :loading="loading">
           登录
         </el-button>
       </div>
@@ -45,7 +45,7 @@
       <el-divider>第三方登录</el-divider>
       <div class="third-item">
         <span v-for="(item, index) in thirdParty" :key="index" :title="item.title">
-          <svg-icon :name="item.icon" width="20" height="20" />
+          <Icon :name="item.icon" width="20" height="20" />
         </span>
       </div>
     </el-form-item>
@@ -61,6 +61,7 @@ import settings from "@/config/settings";
 import ImageVerify from "@/components/ImageVerify/index.vue";
 import { HOME_URL } from "@/router/routesConfig";
 import { useRoutes } from "@/hooks/useRoutes";
+import { User, Lock, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
 
 interface LoginForm {
   username: string;

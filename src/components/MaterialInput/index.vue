@@ -118,12 +118,14 @@
 
 <script setup lang="ts" name="MaterialInput">
 import CommonIcon from "@/layout/components/CommonIcon/index.vue";
+import type { IconifyIcon } from "@iconify/vue";
+import type { Component } from "vue";
 
 interface MaterialInputProps {
   value: any;
   type?: string;
   id?: string;
-  icon?: string;
+  icon?: string | IconifyIcon | Component;
   name?: string;
   placeholder?: string;
   readonly?: boolean;

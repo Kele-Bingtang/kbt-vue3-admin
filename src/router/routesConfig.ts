@@ -45,6 +45,7 @@ import permissionRoutes from "./modules/permission";
 import tableRoutes from "./modules/table";
 import proTableRoutes from "./modules/proTable";
 import toolsRoutes from "./modules/tool";
+import { User, Bell, HomeFilled, StarFilled } from "@element-plus/icons-vue";
 
 export const HOME_URL = "/home";
 export const HOME_NAME = "Home";
@@ -88,13 +89,13 @@ export const constantRoutes: RouterConfigRaw[] = [
         path: "/profile",
         name: "Profile",
         component: () => import("@/views/profile/index.vue"),
-        meta: { title: "我的主页", icon: "User" },
+        meta: { title: "我的主页", icon: User },
       },
       {
         path: "/message-center",
         name: "MessageCenter",
         component: () => import("@/views/messageCenter/index.vue"),
-        meta: { title: "我的消息", icon: "Bell" },
+        meta: { title: "我的消息", icon: Bell },
       },
     ],
   },
@@ -117,7 +118,7 @@ export const rolesRoutes: RouterConfigRaw[] = [
     meta: {
       isAffix: true,
       title: "首页",
-      icon: "HomeFilled",
+      icon: HomeFilled,
     },
   },
   {
@@ -127,7 +128,7 @@ export const rolesRoutes: RouterConfigRaw[] = [
     meta: {
       isAffix: true,
       title: "全屏首页",
-      icon: "HomeFilled",
+      icon: HomeFilled,
       isFull: true,
       useI18n: false,
     },
@@ -147,7 +148,7 @@ export const rolesRoutes: RouterConfigRaw[] = [
     component: "/tabs/index",
     meta: {
       title: "标签页操作",
-      icon: "StarFilled",
+      icon: StarFilled,
     },
   },
   { ...frameRoutes },

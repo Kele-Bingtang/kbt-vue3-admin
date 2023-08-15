@@ -8,6 +8,7 @@ export default {
     MessageCenter: "我的消息",
     Components: "组件",
     MessageDemo: "消息组件",
+    IconDemo: "图标选择",
     CountToDemo: "数字渐变",
     ClipperDemo: "图片裁剪",
     SplitPaneDemo: "分割窗口",

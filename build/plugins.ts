@@ -23,9 +23,9 @@ export function getPluginsList(command: string, viteEnv: ViteEnv) {
         enabled: false, // 改为 true 用于生成 eslint 配置。生成后改回 false，避免重复生成消耗
       },
     }),
-    // * 使用 svg 图标
+    // 使用 svg 图标
     createSvgIconsPlugin({
-      iconDirs: [resolve(process.cwd(), "src/assets/icons")],
+      iconDirs: [resolve(process.cwd(), "src/assets/svg")],
       symbolId: "icon-[dir]-[name]",
     }),
     viteEnv.VITE_BUILD_GZIP && configCompressPlugin(viteEnv.VITE_COMPRESSION),

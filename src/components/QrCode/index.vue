@@ -14,6 +14,7 @@
 <script setup lang="ts" name="QrCode">
 import QRCode, { type QRCodeRenderersOptions } from "qrcode";
 import { isString } from "@/utils/layout/validate";
+import { RefreshRight } from "@element-plus/icons-vue";
 
 interface QrCodeLogo {
   src?: string;

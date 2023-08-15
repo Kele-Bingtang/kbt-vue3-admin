@@ -11,7 +11,7 @@
           style="width: 200px"
           @keyup.enter="handleSearch('single')"
         />
-        <el-button v-waves type="primary" icon="Search" @click="handleSearch('single')" style="margin-left: 10px">
+        <el-button v-waves type="primary" :icon="Search" @click="handleSearch('single')" style="margin-left: 10px">
           单条件查询
         </el-button>
       </div>
@@ -23,10 +23,10 @@
         <el-select v-model="multipleSearchParams.priority" placeholder="优先级" clearable style="width: 120px">
           <el-option v-for="item in priorityOptions" :key="item" :label="item" :value="item" />
         </el-select>
-        <el-button v-waves type="primary" icon="Search" @click="handleSearch('multiple')" style="margin-left: 10px">
+        <el-button v-waves type="primary" :icon="Search" @click="handleSearch('multiple')" style="margin-left: 10px">
           多条件查询
         </el-button>
-        <el-button v-waves type="primary" icon="Refresh" @click="handleReset">重置</el-button>
+        <el-button v-waves type="primary" :icon="Refresh" @click="handleReset">重置</el-button>
       </div>
     </div>
 
@@ -44,13 +44,13 @@
       </el-table-column>
       <el-table-column prop="priority" label="优先级">
         <template #default="{ row }">
-          <svg-icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
+          <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
         </template>
       </el-table-column>
 
       <el-table-column align="center" label="操作" width="120">
         <template #default="{ row, $index }">
-          <el-button link type="danger" icon="Delete" @click="handleDelete(row, $index)">删除</el-button>
+          <el-button link type="danger" :icon="Delete" @click="handleDelete(row, $index)">删除</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -61,6 +61,7 @@
 import { middleData } from "@/mock/table";
 import { ElMessageBox, ElNotification } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
+import { Search, Refresh, Delete } from "@element-plus/icons-vue";
 
 const searchOptions = [
   {

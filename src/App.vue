@@ -13,6 +13,7 @@ import en from "element-plus/es/locale/lang/en";
 import { getBrowserLang } from "./utils";
 import { useTheme } from "./hooks/useTheme";
 import { useFrame } from "./layout/components/FrameLayout/useFrame";
+import { getCacheVersion, removeProjectsCache, setCacheVersion } from "./utils/layout/cache";
 
 const layoutStore = useLayoutStore();
 
@@ -35,6 +36,10 @@ const i18nLocale = computed(() => {
 // 配置全局组件大小
 const layoutSize = computed(() => layoutStore.layoutSize);
 
+onBeforeMount(() => {
+  versionCache();
+});
+
 onMounted(() => {
   handleMsgFromFrame();
 });
@@ -46,6 +51,19 @@ const { acceptFrameMsg } = useFrame();
  */
 const handleMsgFromFrame = () => {
   window.addEventListener("message", acceptFrameMsg);
+};
+
+/**
+ * 根据版本号进行缓存
+ */
+
+const versionCache = () => {
+  const { version } = __APP_INFO__.pkg;
+  const cacheVersion = getCacheVersion();
+  if (version && cacheVersion !== version) {
+    removeProjectsCache();
+    setCacheVersion(version);
+  }
 };
 </script>
 

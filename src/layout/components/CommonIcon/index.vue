@@ -1,19 +1,53 @@
 <template>
-  <el-icon v-if="isElIcon" :class="icon">
-    <component :is="icon"></component>
+  <el-icon v-if="isElIcon">
+    <component v-if="isString(icon)" :is="icon.slice(3)"></component>
+    <component v-else :is="iconRaw"></component>
   </el-icon>
-  <svg-icon v-else :name="icon.slice(4)" :class="icon" />
+  <Icon v-else-if="isSVG" :name="(icon as string).slice(4)" :class="icon" />
+  <Icon
+    v-else
+    :icon="icon"
+    :class="icon"
+    style="width: var(--el-menu-icon-width) !important; margin-right: 5px; color: var(--menu-icon-color)"
+  />
 </template>
 
 <script setup lang="ts" name="CommonIcon">
-const props = defineProps<{ icon: string }>();
+import { isString } from "@/utils/layout/validate";
+import type { IconifyIcon } from "@iconify/vue";
+import type { Component } from "vue";
+
+type CommonIconProps = string | Object | IconifyIcon | Component;
+
+const props = defineProps<{ icon: CommonIconProps }>();
+
+const iconRaw = computed(() => toRaw(props.icon));
 
 const isElIcon = computed(() => {
-  if (props.icon.startsWith("svg-")) return false;
-  return true;
+  const icon = props.icon;
+  if (isString(icon) && icon.toLowerCase().startsWith("el-")) return true;
+  if (isComponent(icon)) return true;
+  return false;
 });
+
+const isSVG = computed(() => {
+  if (isString(props.icon) && props.icon.toLowerCase().startsWith("svg-")) return true;
+  return false;
+});
+
+/**
+ * 判断是否为 Component
+ */
+const isComponent = (icon: CommonIconProps): icon is Component => {
+  return !(isIconifyIcon(icon) || isSVG.value);
+};
+
+/**
+ * 判断是否为 IconifyIcon
+ */
+const isIconifyIcon = (icon: CommonIconProps): icon is IconifyIcon => {
+  return !!(icon as IconifyIcon).body;
+};
 </script>
 
 <style lang="scss" scoped></style>
-
-<!-- 内置两个图标系统：Element Plu Icon 和 SVG。根据传来的 icon 判断是哪种图标，SVG 的图标必选手动加上前缀 svg-，否则默认以 Element Plu Icon 为渲染的 icon -->

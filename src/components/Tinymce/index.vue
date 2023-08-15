@@ -41,7 +41,7 @@ import "tinymce/plugins/visualchars"; // 增加了查看可编辑区域中显示
 import "tinymce/plugins/wordcount"; // 右下角统计字数，https://www.tiny.cloud/docs/tinymce/6/wordcount/
 import "tinymce/models/dom";
 import { plugins, toolbar } from "./config";
-import "/public/tinymce/plugins/axupimgs/plugin"; // 多图片上传
+import "/public/tinymce/plugins/axupimgs/plugin";
 
 export type UITheme = "default" | "dark" | "tinymce-5" | "tinymce-5-dark";
 export type ContentTheme = "" | "default" | "dark" | "document" | "tinymce-5" | "tinymce-5-dark";
@@ -129,14 +129,9 @@ const initOptions = computed(() => ({
   language: language.value,
   promotion: false, // 去除右上角的 ⚡️Upgrade
   branding: false, // 去除左下角的 Tiny
-  // language_url: props.language === "en" ? "" : `${import.meta.env.VITE_PUBLIC_PATH}tinymce/langs/${props.language}.js`,
   base_url: import.meta.env.VITE_PUBLIC_PATH === "/" ? "/tinymce" : `${import.meta.env.VITE_PUBLIC_PATH}/tinymce`,
   skin: skinTheme.value,
   content_css: props.contentTheme ? props.contentTheme : props.theme,
-  // emoticons_database_url:
-  //   import.meta.env.VITE_PUBLIC_PATH === "/"
-  //     ? "tinymce/emojis.min.js"
-  //     : `${import.meta.env.VITE_PUBLIC_PATH}/tinymce/emojis.min.js`,
   end_container_on_empty_block: true,
   draggable_modal: true,
   autosave_restore_when_empty: true,

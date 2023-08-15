@@ -43,7 +43,7 @@
               link
               class="list-operate operate-icon"
               :loading="message.loading"
-              :icon="selectedMessageType === 'hasRead' ? 'Delete' : 'RefreshLeft'"
+              :icon="selectedMessageType === 'hasRead' ? Delete : RefreshLeft"
               @click.stop="handleOperate(message)"
               v-if="selectedMessageType !== 'unread'"
             ></el-button>
@@ -66,6 +66,7 @@
 import type { MessageItem } from "@/stores";
 import { useMessageStore } from "@/stores/message";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { Delete, RefreshLeft } from "@element-plus/icons-vue";
 
 type MessageType = "unread" | "hasRead" | "recycle";
 

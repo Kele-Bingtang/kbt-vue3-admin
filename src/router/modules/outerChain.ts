@@ -1,9 +1,11 @@
+import { StarFilled } from "@element-plus/icons-vue";
+
 const outerChainRoutes: RouterConfigRaw = {
   path: "/outer-chain",
   name: "OuterChain",
   meta: {
     title: "外部链接",
-    icon: "Link",
+    icon: "EL-Link",
     rank: 100,
   },
   children: [
@@ -12,7 +14,7 @@ const outerChainRoutes: RouterConfigRaw = {
       name: "Github",
       meta: {
         title: "Github",
-        icon: "svg-github",
+        icon: "SVG-github",
       },
     },
     {
@@ -20,7 +22,7 @@ const outerChainRoutes: RouterConfigRaw = {
       name: "Vue2Admin",
       meta: {
         title: "Kbt Vue2 Admin",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
     {
@@ -28,7 +30,7 @@ const outerChainRoutes: RouterConfigRaw = {
       name: "Notes",
       meta: {
         title: "我的博客",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
   ],

@@ -1,5 +1,5 @@
 <template>
-  <transition
+  <Transition
     appear
     :name="name"
     :enterActiveClass="enterActiveClass"
@@ -7,7 +7,7 @@
     mode="out-in"
   >
     <slot></slot>
-  </transition>
+  </Transition>
 </template>
 
 <script setup lang="ts" name="CustomTransition">

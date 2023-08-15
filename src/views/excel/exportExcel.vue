@@ -7,7 +7,7 @@
           v-model="filename"
           placeholder="请输入导出的文件名，默认为 excel-table"
           style="width: 345px"
-          prefix-icon="Document"
+          :prefix-icon="Document"
         />
       </div>
 
@@ -32,7 +32,7 @@
         :loading="downloadLoading"
         style="margin: 0 0 20px 20px"
         type="success"
-        icon="Top"
+        :icon="Top"
         @click="handleDownload"
       >
         Excel Export
@@ -54,7 +54,7 @@
       </el-table-column>
       <el-table-column prop="priority" label="优先级" width="140">
         <template #default="{ row }">
-          <svg-icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
+          <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
         </template>
       </el-table-column>
     </el-table>
@@ -65,6 +65,7 @@
 import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
 import { largeData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
+import { Document, Top } from "@element-plus/icons-vue";
 
 const options = ["xlsx", "csv", "txt"];
 

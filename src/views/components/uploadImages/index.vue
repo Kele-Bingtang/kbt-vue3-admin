@@ -206,6 +206,7 @@ import type { FormInstance } from "element-plus";
 import UploadImg from "@/components/UploadImages/image.vue";
 import UploadImgs, { type SuccessFun } from "@/components/UploadImages/images.vue";
 import { uploadLocal } from "@/utils";
+import { Avatar, Picture } from "@element-plus/icons-vue";
 
 const fileList = ref([{ name: "img", url: "https://i.imgtg.com/2023/01/16/QRBHS.jpg" }]);
 const fileList1 = ref([]);

@@ -1,10 +1,12 @@
+import { Stamp, DocumentCopy, StarFilled } from "@element-plus/icons-vue";
+
 const directiveRoutes: RouterConfigRaw = {
   path: "/directives",
   name: "Directives",
   redirect: "/directives/copy",
   meta: {
     title: "自定义指令",
-    icon: "Stamp",
+    icon: Stamp,
   },
   children: [
     {
@@ -13,7 +15,7 @@ const directiveRoutes: RouterConfigRaw = {
       component: "/directives/copy/index",
       meta: {
         title: "复制指令",
-        icon: "DocumentCopy",
+        icon: DocumentCopy,
       },
     },
     {
@@ -22,7 +24,7 @@ const directiveRoutes: RouterConfigRaw = {
       component: "/directives/watermark/index",
       meta: {
         title: "水印指令",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
     {
@@ -31,7 +33,7 @@ const directiveRoutes: RouterConfigRaw = {
       component: "/directives/drag/index",
       meta: {
         title: "拖拽指令",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
     {
@@ -40,7 +42,7 @@ const directiveRoutes: RouterConfigRaw = {
       component: "/directives/debounce/index",
       meta: {
         title: "防抖指令",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
     {
@@ -49,7 +51,7 @@ const directiveRoutes: RouterConfigRaw = {
       component: "/directives/throttle/index",
       meta: {
         title: "节流指令",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
     {
@@ -58,7 +60,7 @@ const directiveRoutes: RouterConfigRaw = {
       component: "/directives/longPress/index",
       meta: {
         title: "长按指令",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
   ],

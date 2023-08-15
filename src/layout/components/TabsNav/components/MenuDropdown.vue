@@ -3,7 +3,7 @@
     <slot>
       <el-button text size="small" type="primary" @click="expandDropdown">
         <span>{{ $t("_tabsNav.more") }}</span>
-        <el-icon class="el-icon--right"><arrow-down /></el-icon>
+        <el-icon class="el-icon--right"><ArrowDown /></el-icon>
       </el-button>
     </slot>
     <template #dropdown>
@@ -45,6 +45,16 @@
 import { useSettingsStore } from "@/stores/settings";
 import { useDebounceFn } from "@vueuse/core";
 import { useTabsNav } from "../useTabsNav";
+import {
+  ArrowDown,
+  Refresh,
+  FullScreen,
+  Close,
+  ArrowLeft,
+  ArrowRight,
+  SemiSelect,
+  FolderDelete,
+} from "@element-plus/icons-vue";
 
 const {
   contextMenuCondition,

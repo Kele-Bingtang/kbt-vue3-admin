@@ -29,7 +29,7 @@
         <template #default="{ row }">
           <template v-if="row.edit">
             <el-input v-model="row.title" class="edit-input" />
-            <el-button class="cancel-btn" icon="Refresh" type="warning" @click="cancelEdit(row)">取消</el-button>
+            <el-button class="cancel-btn" :icon="Refresh" type="warning" @click="cancelEdit(row)">取消</el-button>
           </template>
           <span v-else>{{ row.title }}</span>
         </template>
@@ -37,8 +37,8 @@
 
       <el-table-column align="center" label="操作" width="120">
         <template #default="{ row }">
-          <el-button v-if="row.edit" type="success" icon="Check" @click="confirmEdit(row)">确定</el-button>
-          <el-button v-else link type="primary" icon="EditPen" @click="handleEdit(row)">编辑</el-button>
+          <el-button v-if="row.edit" type="success" :icon="Check" @click="confirmEdit(row)">确定</el-button>
+          <el-button v-else link type="primary" :icon="EditPen" @click="handleEdit(row)">编辑</el-button>
         </template>
       </el-table-column>
     </el-table>
@@ -49,6 +49,7 @@
 import { simpleData } from "@/mock/table";
 import { ElMessage } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
+import { Refresh, Check, EditPen } from "@element-plus/icons-vue";
 
 const tableData = ref(simpleData);
 

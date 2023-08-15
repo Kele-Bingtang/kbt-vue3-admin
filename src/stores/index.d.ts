@@ -1,10 +1,13 @@
 import { type RouteRecordRaw } from "vue-router";
+import type { IconifyIcon } from "@iconify/vue";
+import type { Component } from "vue";
+
 // LayoutState
 export interface TabProp {
   path: string; // 路由的 path
   name: string; // 路由的 name
   title: string; // 展示的描述
-  icon: string; // 图标
+  icon: string | IconifyIcon | Component; // 图标
   close: boolean; // 是否允许关闭
   meta: MetaProp;
 }

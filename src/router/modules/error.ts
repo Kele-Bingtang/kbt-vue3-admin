@@ -1,10 +1,12 @@
+import { WarningFilled, StarFilled } from "@element-plus/icons-vue";
+
 const errorRoutes: RouterConfigRaw = {
   path: "/error",
   name: "Error",
   redirect: "/error/403",
   meta: {
     title: "错误页面",
-    icon: "WarningFilled",
+    icon: WarningFilled,
   },
   children: [
     {
@@ -13,7 +15,7 @@ const errorRoutes: RouterConfigRaw = {
       component: () => import("@/views/error/403.vue"),
       meta: {
         title: "403 页面",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
     {
@@ -22,7 +24,7 @@ const errorRoutes: RouterConfigRaw = {
       component: () => import("@/views/error/404.vue"),
       meta: {
         title: "404 页面",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
     {
@@ -31,7 +33,7 @@ const errorRoutes: RouterConfigRaw = {
       component: () => import("@/views/error/500.vue"),
       meta: {
         title: "500 页面",
-        icon: "StarFilled",
+        icon: StarFilled,
       },
     },
   ],

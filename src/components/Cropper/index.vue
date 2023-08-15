@@ -38,14 +38,14 @@
         :before-upload="beforeUpload"
         class="upload-img"
       >
-        <el-button type="primary" plain icon="Upload">选择</el-button>
+        <el-button type="primary" plain :icon="Upload">选择</el-button>
       </el-upload>
-      <el-button type="primary" plain icon="ZoomIn" @click="changeScale(1)">放大</el-button>
-      <el-button type="primary" plain icon="ZoomOut" @click="changeScale(-1)">缩小</el-button>
+      <el-button type="primary" plain :icon="ZoomIn" @click="changeScale(1)">放大</el-button>
+      <el-button type="primary" plain :icon="ZoomOut" @click="changeScale(-1)">缩小</el-button>
       <el-button type="primary" plain @click="rotateLeft">↺ 左旋转</el-button>
       <el-button type="primary" plain @click="rotateRight">↻ 右旋转</el-button>
-      <el-button type="primary" plain icon="Download" @click="downloadImg('blob')">下载</el-button>
-      <el-button type="primary" icon="Upload" @click="uploadImage" class="upload-btn">提交</el-button>
+      <el-button type="primary" plain :icon="Download" @click="downloadImg('blob')">下载</el-button>
+      <el-button type="primary" :icon="Upload" @click="uploadImage" class="upload-btn">提交</el-button>
     </div>
   </div>
 </template>
@@ -54,6 +54,7 @@
 import { ElMessage, type UploadRequestOptions } from "element-plus";
 import { VueCropper } from "vue-cropper";
 import "vue-cropper/dist/index.css";
+import { Upload, ZoomIn, ZoomOut, Download } from "@element-plus/icons-vue";
 
 interface CropperProps {
   imgLink?: string;
