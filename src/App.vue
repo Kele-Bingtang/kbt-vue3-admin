@@ -66,5 +66,3 @@ const versionCache = () => {
   }
 };
 </script>
-
-<style lang="scss"></style>

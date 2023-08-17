@@ -68,9 +68,9 @@ const handleClickOutSide = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "./index-scoped.scss";
+@import "./index-scoped";
 </style>
 
 <style lang="scss">
-@import "./index-unlimited.scss";
+@import "./index-unlimited";
 </style>

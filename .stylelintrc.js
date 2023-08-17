@@ -1,9 +1,12 @@
 module.exports = {
   root: true,
   extends: [
-    "stylelint-config-standard-vue", // 配置stylelint拓展插件
-    "stylelint-config-html", // 配置 html 样式格式化
-    "stylelint-config-recess-order", // 配置 stylelint css 属性书写顺序插件
+    "stylelint-config-standard", // 配置stylelint拓展插件
+    "stylelint-config-html/vue", // 配置 vue 中 template 样式格式化
+    "stylelint-config-standard-scss", // 配置stylelint scss插件
+    "stylelint-config-recommended-vue/scss", // 配置 vue 中 scss 样式格式化
+    "stylelint-config-recess-order", // 配置stylelint css属性书写顺序插件,
+    "stylelint-config-prettier", // 配置stylelint和prettier兼容
   ],
   /**
    * null  => 关闭该规则
@@ -50,6 +53,7 @@ module.exports = {
         ],
       },
     ],
+    "media-feature-range-notation": "prefix",
     "named-grid-areas-no-invalid": null,
     "function-no-unknown": null,
     "import-notation": "string",
@@ -80,7 +84,16 @@ module.exports = {
       { severity: "warning" },
     ],
   },
-  ignoreFiles: ["**/*.js", "**/*.jsx", "**/*.tsx", "**/*.ts", "**/*.json", "src/styles/*.css", "**/*.module.scss"],
+  ignoreFiles: [
+    "**/*.js",
+    "**/*.jsx",
+    "**/*.tsx",
+    "**/*.ts",
+    "**/*.json",
+    "src/styles/*.css",
+    "**/*.module.scss",
+    "src/assets/**/*.*",
+  ],
   overrides: [
     // 扫描 .vue/html 文件中的 <style> 标签内的样式
     {

@@ -120,7 +120,7 @@ const articleList = [
 
 <style lang="scss" scoped>
 .animation-mixin-container {
-  @mixin colorBtn($color) {
+  @mixin color-btn($color) {
     background: $color;
 
     &:hover {
@@ -140,31 +140,31 @@ const articleList = [
   }
 
   .blue-btn {
-    @include colorBtn($blue);
+    @include color-btn($blue);
   }
 
   .light-blue-btn {
-    @include colorBtn($light-blue);
+    @include color-btn($light-blue);
   }
 
   .red-btn {
-    @include colorBtn($red);
+    @include color-btn($red);
   }
 
   .pink-btn {
-    @include colorBtn($pink);
+    @include color-btn($pink);
   }
 
   .green-btn {
-    @include colorBtn($green);
+    @include color-btn($green);
   }
 
   .tiffany-btn {
-    @include colorBtn($tiffany);
+    @include color-btn($tiffany);
   }
 
   .yellow-btn {
-    @include colorBtn($yellow);
+    @include color-btn($yellow);
   }
 
   .animation-btn {

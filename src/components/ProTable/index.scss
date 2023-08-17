@@ -8,6 +8,7 @@
       .el-form-item__content > * {
         width: 100%;
       }
+
       // 去除时间选择器上下 padding
       .el-range-editor.el-input__wrapper {
         padding: 0 10px;
@@ -28,6 +29,7 @@
     flex-direction: column;
     width: 100%;
     height: 100%;
+
     // 表格 header 样式
     .table-header {
       .header-button-lf {
@@ -42,9 +44,11 @@
         margin-bottom: 15px;
       }
     }
+
     // el-table 表格样式
     .el-table {
       flex: 1;
+
       // 修复 safari 浏览器表格错位
       table {
         width: 100%;
@@ -66,10 +70,12 @@
           display: inline;
         }
       }
+
       // 设置 el-table 中 header 文字不换行，并省略
       .el-table__header .el-table__cell > .cell {
         white-space: nowrap;
       }
+
       // 解决表格数据为空时样式不居中问题(仅在element-plus中)
       .el-table__empty-block {
         position: absolute;
@@ -81,6 +87,7 @@
           line-height: 30px;
         }
       }
+
       // table 中 image 图片样式
       .table-image {
         width: 50px;
@@ -88,6 +95,7 @@
         border-radius: 50%;
       }
     }
+
     // 表格 pagination 样式
     .el-pagination {
       display: flex;
@@ -95,6 +103,7 @@
       margin-top: 20px;
     }
   }
+
   /* ProTable 不需要 card 样式（在组件内使用 ProTable 会使用到） */
   .no-card {
     .card {

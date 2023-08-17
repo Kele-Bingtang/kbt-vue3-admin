@@ -285,7 +285,7 @@ $color-black: black;
 
   &.material--active {
     .material-label {
-      @include slided-top();
+      @include slided-top;
 
       color: $color-blue;
     }
@@ -384,7 +384,7 @@ $color-black: black;
   // Raised state:
   &.material--raised {
     .material-label {
-      @include slided-top();
+      @include slided-top;
     }
   }
 

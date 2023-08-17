@@ -48,6 +48,11 @@
             :align="item.align ?? 'center'"
             :reserve-selection="item.type == 'selection'"
           >
+            <template #header="scope">
+              <component :is="item.headerRender" v-bind="scope" v-if="item.headerRender"></component>
+              <slot v-else :name="`${item.type}Header`" v-bind="scope">{{ scope.column.label }}</slot>
+            </template>
+
             <template v-if="item.type == 'expand'" #default="scope">
               <component :is="item.render" v-bind="scope" v-if="item.render"></component>
               <slot v-else :name="item.type" v-bind="scope"></slot>
@@ -212,5 +217,5 @@ defineExpose({
 </script>
 
 <style lang="scss">
-@import "./index.scss";
+@import "./index";
 </style>
