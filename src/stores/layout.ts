@@ -8,7 +8,7 @@ import type { Frame } from "@/layout/components/FrameLayout/useFrame";
 export const useLayoutStore = defineStore(
   "layoutStore",
   () => {
-    const tabNavList = ref<TabProp[]>(getCacheTabNavList() && []);
+    const tabNavList = ref<TabProp[]>(getCacheTabNavList() || []);
     const keepAliveName = ref<string[]>([]);
     const device = ref(DeviceType.Desktop);
     const layoutSize = ref<LayoutSizeType>(defaultSettings.layoutSize);
