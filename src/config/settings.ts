@@ -58,6 +58,7 @@ interface Settings {
   cacheDynamicRoutesKey: string; // 缓存路由的 key
   tooltipEffect: "light" | "dark"; // 布局的 el-toolTip 风格
   routeUseTooltip: boolean; // 菜单的文字超出后，是否使用 el-toolTip 提示，仅针二级路由及以上生效
+  watchFrame: boolean; // 是否监听 IFrame 传来的通信，用于 Portal 门户系统，来监听门户所有 IFrame 嵌入系统的通信，比如 A 系统想打开 B 系统，则告诉 Portal 门户帮忙打开
 }
 
 const themeSettings: Partial<Settings> = {
@@ -70,7 +71,7 @@ const themeSettings: Partial<Settings> = {
   showLayoutLogo: true,
   showBreadcrumbIcon: true,
   showTabsNavIcon: false,
-  recordTabsNav: true,
+  recordTabsNav: false,
   isCollapse: false,
   isDark: false,
   isWeak: false,
@@ -90,6 +91,7 @@ const layoutSettings: Partial<Settings> = {
   tooltipEffect: "light",
   layoutSize: "default",
   language: "zh-CN",
+  watchFrame: false,
 };
 
 const routerSettings: Partial<Settings> = {

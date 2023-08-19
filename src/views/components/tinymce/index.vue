@@ -9,13 +9,11 @@
     </el-button>
     <Tinymce
       v-if="tinymceActive"
-      v-model:value="content"
+      v-model="content"
       :height="400"
       :disabled="disabled"
       :lang="lang"
       :theme="theme"
-      :move="true"
-      toolbar-mode="sliding"
       @img-upload="handleImgUpload"
       @file-upload="handleFileUpload"
     />

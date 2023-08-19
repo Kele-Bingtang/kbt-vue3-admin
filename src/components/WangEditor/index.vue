@@ -25,7 +25,7 @@ import { Boot, type IEditorConfig, type IDomEditor } from "@wangeditor/editor";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import attachmentModule from "@wangeditor/plugin-upload-attachment"; // wangeditor 的附件插件
 import "@wangeditor/editor/dist/css/style.css";
-import { toolbarKeys } from "./config";
+import { toolbarKeys as toolbarKeysConfig } from "./config";
 
 export type ImageInsertFnType = (url: string, alt: string) => void;
 export type VideoInsertFnType = (url: string, poster: string) => void;
@@ -148,7 +148,7 @@ const editorConfig = reactive<Partial<IEditorConfig>>({
 
 const toolbarConfig = computed(() => {
   return {
-    toolbarKeys: props.toolbarKeys.length > 0 ? props.toolbarKeys : toolbarKeys, // 工具栏内容
+    toolbarKeys: props.toolbarKeys.length > 0 ? props.toolbarKeys : toolbarKeysConfig, // 工具栏内容
     excludeKeys: props.excludeKeys, // 去除掉指定的工具类内容3
     // 插入哪些菜单
     insertKeys: {

@@ -27,6 +27,12 @@ const proTable: RouterConfigRaw = {
       name: "ComplexProTable",
       meta: { title: "复杂 ProTable", icon: StarFilled, auths: ["add", "edit", "delete", "import", "export"] },
     },
+    {
+      path: "detail",
+      component: () => import("@/views/proTable/detailProTable/index.vue"),
+      name: "DetailProTable",
+      meta: { title: "详情 ProTable", icon: StarFilled, auths: ["add", "edit", "delete", "import", "export"] },
+    },
   ],
 };
 

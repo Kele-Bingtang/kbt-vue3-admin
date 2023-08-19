@@ -1,11 +1,11 @@
-import { StarFilled } from "@element-plus/icons-vue";
+import { Link, StarFilled } from "@element-plus/icons-vue";
 
 const outerChainRoutes: RouterConfigRaw = {
   path: "/outer-chain",
   name: "OuterChain",
   meta: {
     title: "外部链接",
-    icon: "EL-Link",
+    icon: Link,
     rank: 100,
   },
   children: [

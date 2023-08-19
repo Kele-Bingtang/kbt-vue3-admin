@@ -1,3 +1,5 @@
+import { isNumber, isString } from "./layout/validate";
+
 /**
  * @description 数据解耦后，再返回
  */
@@ -208,4 +210,12 @@ export const isIncludeAll = (arr: string[], value: string[]) => {
  */
 export const isIncludeSome = (arr: string[], value: string[]) => {
   return arr.some(a => value.includes(a));
+};
+
+export const getPx = (val: number | string) => {
+  if (isString(val)) {
+    if (isNumber(val)) return `${val}px`;
+    return val;
+  }
+  return `${val}px`;
 };

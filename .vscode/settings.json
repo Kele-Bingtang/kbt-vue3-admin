@@ -64,6 +64,7 @@
     "stylelint",
     "iconfont",
     "Iconify",
-    "xlink"
+    "xlink",
+    "cascader"
   ]
 }

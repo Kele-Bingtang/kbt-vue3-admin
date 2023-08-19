@@ -45,6 +45,7 @@ import permissionRoutes from "./modules/permission";
 import tableRoutes from "./modules/table";
 import proTableRoutes from "./modules/proTable";
 import toolsRoutes from "./modules/tool";
+import proFormRoutes from "./modules/proForm";
 import { User, Bell, HomeFilled, StarFilled } from "@element-plus/icons-vue";
 
 export const HOME_URL = "/home";
@@ -136,6 +137,7 @@ export const rolesRoutes: RouterConfigRaw[] = [
   { ...componentRoutes },
   { ...tableRoutes },
   { ...proTableRoutes },
+  { ...proFormRoutes },
   { ...excelRoutes },
   { ...permissionRoutes },
   { ...toolsRoutes },

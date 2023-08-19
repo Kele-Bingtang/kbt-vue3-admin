@@ -66,11 +66,5 @@
 
   .classic-container {
     height: calc(100% - 55px); /* 减去头部高度 */
-    .classic-main-content {
-      display: flex;
-      flex-direction: column;
-      width: 100%;
-      height: 100%;
-    }
   }
 }

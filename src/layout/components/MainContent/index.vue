@@ -1,7 +1,7 @@
 <template>
   <Maximize v-if="settingsStore.maximize" />
-  <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
   <el-main>
+    <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
     <router-view v-slot="{ Component, route }">
       <CustomTransition name="fade-transform">
         <keep-alive :include="layoutStore.keepAliveName">

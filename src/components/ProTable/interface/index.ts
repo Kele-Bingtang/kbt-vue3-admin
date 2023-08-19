@@ -4,6 +4,7 @@ import type { Responsive } from "@/components/Grid/components/GridItem.vue";
 import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
 import type { ProTableProps } from "@/components/ProTable/index.vue";
 import type ProTable from "@/components/ProTable/index.vue";
+
 export interface EnumProps {
   label?: string; // 选项框显示的文字
   value?: string | number | boolean | any[]; // 选项框值
@@ -12,7 +13,9 @@ export interface EnumProps {
   children?: EnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
   [key: string]: any;
 }
+
 export type TypeProps = "index" | "selection" | "expand";
+
 export type SearchType =
   | "input"
   | "input-number"
@@ -25,6 +28,7 @@ export type SearchType =
   | "time-select"
   | "switch"
   | "slider";
+
 export type SearchRenderScope = {
   searchParam: { [key: string]: any };
   placeholder: string;
@@ -32,6 +36,7 @@ export type SearchRenderScope = {
   options: EnumProps[];
   data: EnumProps[];
 };
+
 export type SearchProps = {
   el?: SearchType; // 当前项搜索框的类型
   props?: any; // 搜索项参数，根据 element plus 官方文档来传递，该属性所有值会透传到组件
@@ -42,22 +47,26 @@ export type SearchProps = {
   defaultValue?: string | number | boolean | any[]; // 搜索项默认值
   render?: (scope: SearchRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
 } & Partial<Record<BreakPoint, Responsive>>;
+
 export type FieldNamesProps = {
   label: string;
   value: string;
   children?: string;
 };
+
 export type RenderScope<T> = {
   row: T;
   $index: number;
   column: TableColumnCtx<T>;
   [key: string]: any;
 };
+
 export type HeaderRenderScope<T> = {
   $index: number;
   column: TableColumnCtx<T>;
   [key: string]: any;
 };
+
 /**
  * 表字段属性配置
  * 在 Element Plus 的类型基础增强
@@ -74,4 +83,5 @@ export interface ColumnProps<T = any>
   render?: (scope: RenderScope<T>) => VNode | string; // 自定义单元格内容渲染（tsx 语法）
   _children?: ColumnProps<T>[]; // 多级表头
 }
+
 export type ProTableInstance = Omit<InstanceType<typeof ProTable>, keyof ComponentPublicInstance | keyof ProTableProps>;

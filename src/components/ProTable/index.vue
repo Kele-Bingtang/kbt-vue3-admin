@@ -9,6 +9,7 @@
       :search-param="searchParam"
       :search-cols="searchCols"
     />
+
     <div class="card table-main">
       <!-- 表格头部 操作按钮 -->
       <div class="table-header">
@@ -20,6 +21,7 @@
             :is-selected="isSelected"
           />
         </div>
+
         <div v-if="toolButton" class="header-button-ri">
           <slot name="toolButton">
             <el-button :icon="Refresh" circle @click="getTableList" />
@@ -40,6 +42,7 @@
       >
         <!-- 默认插槽 -->
         <slot></slot>
+
         <template v-for="item in tableColumns" :key="item">
           <!-- selection || index || expand -->
           <el-table-column
@@ -58,6 +61,7 @@
               <slot v-else :name="item.type" v-bind="scope"></slot>
             </template>
           </el-table-column>
+
           <!-- other -->
           <TableColumn v-if="!item.type && item.prop && item.isShow" :column="item">
             <template v-for="slot in Object.keys($slots)" #[slot]="scope">
@@ -65,10 +69,12 @@
             </template>
           </TableColumn>
         </template>
+
         <!-- 插入表格最后一行之后的插槽 -->
         <template #append>
           <slot name="append"></slot>
         </template>
+
         <!-- 无数据 -->
         <template #empty>
           <div class="table-empty">
@@ -79,18 +85,23 @@
           </div>
         </template>
       </el-table>
+
+      <el-dialog v-if="dialog" v-model="dialogFormVisible" v-bind="dialog">
+        <slot name="form"></slot>
+      </el-dialog>
       <!-- 分页组件 -->
       <slot name="pagination">
         <Pagination v-if="pagination" :total="data ? data.length : paging.total" @pagination="handlePagination" />
       </slot>
     </div>
+
     <!-- 列设置 -->
     <ColSetting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting" />
   </div>
 </template>
 <script setup lang="ts" name="ProTable">
 import { ref, watch, provide, onMounted } from "vue";
-import { ElTable } from "element-plus";
+import { ElTable, type DialogProps } from "element-plus";
 import { useTable } from "@/hooks/useTable";
 import { useSelection } from "@/hooks/useSelection";
 import type { BreakPoint } from "@/components/Grid/index.vue";
@@ -101,6 +112,7 @@ import SearchForm from "@/components/SearchForm/index.vue";
 import Pagination from "@/components/Pagination/index.vue";
 import ColSetting from "./components/ColSetting.vue";
 import TableColumn from "./components/TableColumn.vue";
+
 export interface ProTableProps {
   columns: ColumnProps[]; // 列配置项  ==> 必传
   data?: any[]; // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
@@ -115,6 +127,7 @@ export interface ProTableProps {
   toolButton?: boolean; // 是否显示表格功能按钮 ==> 非必传（默认为 true）
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   searchCols?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
+  dialog?: Partial<Omit<DialogProps, "modelValue">>;
 }
 // 接受父组件参数，配置默认值
 const props = withDefaults(defineProps<ProTableProps>(), {
@@ -127,6 +140,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   rowKey: "id",
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 });
+
 // 是否显示搜索模块
 const isShowSearch = ref(true);
 // 表格 DOM 元素
@@ -141,21 +155,30 @@ const { tableData, paging, searchParam, searchInitParam, getTableList, search, r
   props.dataCallback,
   props.requestError
 );
+
+const dialogFormVisible = ref(true);
+
 // 清空选中数据列表
 const clearSelection = () => tableRef.value!.clearSelection();
+
 // 静态数据分页
-const tablePageData = computed(() =>
-  props.data?.slice((paging.value.pageNum - 1) * paging.value.pageSize, paging.value.pageNum * paging.value.pageSize)
+const tablePageData = computed(
+  () =>
+    props.data?.slice((paging.value.pageNum - 1) * paging.value.pageSize, paging.value.pageNum * paging.value.pageSize)
 );
+
 // 初始化请求
 onMounted(() => props.requestAuto && getTableList());
+
 // 监听页面 initRequestParam 改化，重新获取表格数据
 watch(() => props.initRequestParam, getTableList, { deep: true });
+
 // 接收 columns 并设置为响应式
 const tableColumns = ref<ColumnProps[]>(props.columns);
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>());
 provide("enumMap", enumMap);
+
 const setEnumMap = async (col: ColumnProps) => {
   if (!col.enum) return;
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
@@ -163,6 +186,7 @@ const setEnumMap = async (col: ColumnProps) => {
   const { data } = await col.enum();
   enumMap.value.set(col.prop!, data);
 };
+
 // 扁平化 columns，为了过滤需要搜索的配置项
 const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) => {
   columns.forEach(async col => {
@@ -176,11 +200,15 @@ const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) =>
   });
   return flatArr.filter(item => !item._children?.length);
 };
+
 // flatColumns
 const flatColumns = ref<ColumnProps[]>();
+
 flatColumns.value = flatColumnsFunc(tableColumns.value);
+
 // 过滤需要搜索的配置项
 const searchColumns = flatColumns.value.filter(item => item.search?.el || item.search?.render);
+
 // 设置搜索表单排序默认值 && 设置搜索表单项的默认值
 searchColumns.forEach((column, index) => {
   column.search!.order = column.search!.order ?? index + 2;
@@ -189,14 +217,18 @@ searchColumns.forEach((column, index) => {
     searchParam.value[column.search.key ?? lastProp(column.prop!)] = column.search?.defaultValue;
   }
 });
+
 // 排序搜索表单项
 searchColumns.sort((a, b) => a.search!.order! - b.search!.order!);
+
 // 列设置 ==> 过滤掉不需要设置的列
 const colRef = ref();
 const colSetting = tableColumns.value!.filter(
   item => !["selection", "index", "expand"].includes(item.type!) && item.prop !== "operation" && item.isShow
 );
+
 const openColSetting = () => colRef.value.openColSetting();
+
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
   element: tableRef,

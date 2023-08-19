@@ -19,9 +19,7 @@
       <el-aside :class="{ 'not-aside': !childrenMenu.length }">
         <Menu :menu-list="childrenMenu" />
       </el-aside>
-      <div class="mixins-main-content">
-        <MainContent />
-      </div>
+      <MainContent />
     </el-container>
   </el-container>
 </template>
@@ -70,7 +68,7 @@ watch(
   () => {
     // 当前菜单没有数据直接 return
     if (!menuList.value.length) return;
-    activeMenu.value = `/${route.path.split("/")[1]}` || route.path;
+
     const item = menuList.value.filter(
       item =>
         route.path === item.path ||
@@ -79,6 +77,9 @@ watch(
         findParentRoutesByPath(route.path, permissionStore.loadedRouteList, "path")[0] === item.path ||
         findParentRoutesByPath(`/${route.path.split("/")[1]}`, permissionStore.loadedRouteList, "path")[0] === item.path
     );
+
+    activeMenu.value = item[0].path;
+
     if (item[0].children?.length) return (childrenMenu.value = item[0].children);
     childrenMenu.value = [];
   },

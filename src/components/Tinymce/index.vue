@@ -40,14 +40,14 @@ import "tinymce/plugins/visualblocks"; // 允许用户在可编辑区域中查�
 import "tinymce/plugins/visualchars"; // 增加了查看可编辑区域中显示的不可见字符的功能，https://www.tiny.cloud/docs/tinymce/6/visualchars/
 import "tinymce/plugins/wordcount"; // 右下角统计字数，https://www.tiny.cloud/docs/tinymce/6/wordcount/
 import "tinymce/models/dom";
-import { plugins, toolbar } from "./config";
+import { plugins, toolbar as toolbarConfig } from "./config";
 import "/public/tinymce/plugins/axupimgs/plugin";
 
 export type UITheme = "default" | "dark" | "tinymce-5" | "tinymce-5-dark";
 export type ContentTheme = "" | "default" | "dark" | "document" | "tinymce-5" | "tinymce-5-dark";
 
 interface TinymceProps {
-  value: string; // 内容
+  modelValue: string; // 内容
   disabled?: boolean; // 编辑器是否禁用
   theme?: UITheme; // UI 主题
   contentTheme?: ContentTheme; // 内容区主题，如果不传，默认等于 UI 主题
@@ -75,7 +75,7 @@ const props = withDefaults(defineProps<TinymceProps>(), {
 });
 
 type TinymceEmitProps = {
-  (e: "update:value", value: string): void;
+  (e: "update:modelValue", value: string): void;
   (
     e: "img-upload",
     blobInfo: Function,
@@ -97,10 +97,10 @@ const languageTypeList = reactive<{ [key: string]: string }>({
 const language = computed(() => languageTypeList[props.lang]);
 const tinymceContent = computed({
   get() {
-    return props.value;
+    return props.modelValue;
   },
   set(value) {
-    emits("update:value", value);
+    emits("update:modelValue", value);
   },
 });
 
@@ -123,7 +123,7 @@ const initOptions = computed(() => ({
   body_class: "panel-body",
   resize: props.move,
   plugins: plugins,
-  toolbar: props.toolbar.length > 0 ? props.toolbar : toolbar,
+  toolbar: props.toolbar.length > 0 ? props.toolbar : toolbarConfig,
   toolbar_mode: props.toolbarMode,
   menubar: props.menubar,
   language: language.value,

@@ -26,7 +26,7 @@
       filterable
       default-expand-all
       :props="{
-				label: (data: any) => getTitle(data),
+        label: (data: any) => getTitle(data),
         value: 'id',
         children: 'children',
         disabled: 'disabled',

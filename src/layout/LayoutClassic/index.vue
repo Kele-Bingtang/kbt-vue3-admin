@@ -18,9 +18,7 @@
       <el-aside>
         <Menu />
       </el-aside>
-      <div class="classic-main-content">
-        <MainContent />
-      </div>
+      <MainContent />
     </el-container>
   </el-container>
 </template>
