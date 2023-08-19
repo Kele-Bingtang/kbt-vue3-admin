@@ -23,15 +23,18 @@ const options: OptionsProps = {
   columns: [
     {
       formItem: { label: "用户名", prop: "username", labelWidth: "80px", required: true },
-      attrs: { el: "el-input", clearable: true, placeholder: "请输入用户名", disabled: true },
+      attrs: { el: "el-input", props: { clearable: true, placeholder: "请输入用户名", disabled: true } },
     },
     {
       formItem: { label: "密码", prop: "password", class: "data" },
-      attrs: { el: "el-input", clearable: true, autofocus: true, placeholder: "请输入密码", type: "password" },
+      attrs: {
+        el: "el-input",
+        props: { clearable: true, autofocus: true, placeholder: "请输入密码", type: "password" },
+      },
     },
     {
       formItem: { label: "邮箱", prop: "email" },
-      attrs: { el: "el-input", placeholder: "请输入邮箱", clearable: true, style: "width: 500px" },
+      attrs: { el: "el-input", props: { placeholder: "请输入邮箱", clearable: true }, width: 500 },
     },
   ],
 };

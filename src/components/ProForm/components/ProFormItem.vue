@@ -94,11 +94,11 @@ const handleFormProps = computed(() => {
 const placeholder = computed(() => {
   const attrs = props.column.attrs;
 
-  if (["el-datetimerange", "el-daterange", "el-monthrange"].includes(attrs?.props.type) || attrs?.props.isRange) {
+  if (["el-datetimerange", "el-daterange", "el-monthrange"].includes(attrs?.props?.type) || attrs?.props?.isRange) {
     return { rangeSeparator: "至", startPlaceholder: "开始时间", endPlaceholder: "结束时间" };
   }
 
-  const placeholder = attrs?.props.placeholder ?? (attrs?.el?.includes("el-input") ? "请输入" : "请选择");
+  const placeholder = attrs?.props?.placeholder ?? (attrs?.el?.includes("el-input") ? "请输入" : "请选择");
   return { placeholder };
 });
 
