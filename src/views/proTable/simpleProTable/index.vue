@@ -83,7 +83,7 @@ const columns: ColumnProps<ResUserList>[] = [
   {
     prop: "username",
     label: "用户姓名",
-    search: { el: "input" },
+    search: { el: "el-input" },
     render: scope => {
       return (
         <el-button type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
@@ -100,7 +100,7 @@ const columns: ColumnProps<ResUserList>[] = [
       { genderLabel: "女", genderValue: 2 },
     ],
     fieldNames: { label: "genderLabel", value: "genderValue" },
-    search: { el: "select", props: { filterable: true } },
+    search: { el: "el-select", props: { filterable: true } },
   },
   {
     // 多级 prop
@@ -119,7 +119,7 @@ const columns: ColumnProps<ResUserList>[] = [
       },
     },
   },
-  { prop: "idCard", label: "身份证号", search: { el: "input" } },
+  { prop: "idCard", label: "身份证号", search: { el: "el-input" } },
   { prop: "email", label: "邮箱" },
   { prop: "address", label: "居住地址" },
   {
@@ -129,7 +129,7 @@ const columns: ColumnProps<ResUserList>[] = [
       { userLabel: "启用", userStatus: 1 },
       { userLabel: "禁用", userStatus: 0 },
     ],
-    search: { el: "tree-select", props: { filterable: true } },
+    search: { el: "el-tree-select", props: { filterable: true } },
     fieldNames: { label: "userLabel", value: "userStatus" },
     render: scope => {
       return (
@@ -161,7 +161,7 @@ const columns: ColumnProps<ResUserList>[] = [
     },
     width: 180,
     search: {
-      el: "date-picker",
+      el: "el-date-picker",
       span: 2,
       props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
       defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"],

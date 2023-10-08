@@ -3,6 +3,7 @@
     <slot></slot>
   </div>
 </template>
+
 <script setup lang="ts" name="Grid">
 import {
   ref,
@@ -18,48 +19,61 @@ import {
   type VNodeArrayChildren,
   type VNode,
 } from "vue";
+
 export type BreakPoint = "xs" | "sm" | "md" | "lg" | "xl";
+
 interface GridProps {
   cols: number | Record<BreakPoint, number>; // 响应式布局
   collapsed?: boolean; // 是否开启折叠功能
   collapsedRows?: number; // 可见的行数
   gap?: [number, number] | number; // 行和列间距
 }
+
 const props = withDefaults(defineProps<GridProps>(), {
   cols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
   collapsed: false,
   collapsedRows: 1,
   gap: 0,
 });
+
 // 注入 gap 间距
 provide("gap", Array.isArray(props.gap) ? props.gap[0] : props.gap);
+
 // 注入响应式断点
 const breakPoint = ref<BreakPoint>("xl");
 provide("breakPoint", breakPoint);
+
 // 注入 cols
 const gridCols = computed(() => {
   if (typeof props.cols === "object") return props.cols[breakPoint.value] ?? props.cols;
   return props.cols;
 });
 provide("cols", gridCols);
+
 // 注入要开始折叠的 index
 const hiddenIndex = ref(-1);
 provide("shouldHiddenIndex", hiddenIndex);
+
 onBeforeMount(() => props.collapsed && findHiddenIndex());
+
 onMounted(() => {
   resize({ target: { innerWidth: window.innerWidth } } as unknown as UIEvent);
   window.addEventListener("resize", resize);
 });
+
 onActivated(() => {
   resize({ target: { innerWidth: window.innerWidth } } as unknown as UIEvent);
   window.addEventListener("resize", resize);
 });
+
 onUnmounted(() => {
   window.removeEventListener("resize", resize);
 });
+
 onDeactivated(() => {
   window.removeEventListener("resize", resize);
 });
+
 // 监听屏幕变化
 const resize = (e: UIEvent) => {
   const width = (e.target as Window).innerWidth;
@@ -81,7 +95,9 @@ const resize = (e: UIEvent) => {
       break;
   }
 };
+
 const slots = useSlots().default!();
+
 /**
  * 计算元素是否超出指定可见的行数，超出则折叠不可见的行数
  */
@@ -124,6 +140,7 @@ const findHiddenIndex = () => {
     // console.warn(e);
   }
 };
+
 // 断点变化时 执行 findHiddenIndex
 watch(
   () => breakPoint.value,
@@ -131,6 +148,7 @@ watch(
     if (props.collapsed) findHiddenIndex();
   }
 );
+
 // 监听 collapsed
 watch(
   () => props.collapsed,
@@ -139,11 +157,13 @@ watch(
     hiddenIndex.value = -1;
   }
 );
+
 const gridGap = computed(() => {
   if (typeof props.gap === "number") return `${props.gap}px`;
   if (Array.isArray(props.gap)) return `${props.gap[1]}px ${props.gap[0]}px`;
   return "unset";
 });
+
 const style = computed(() => {
   return {
     display: "grid",
@@ -151,5 +171,6 @@ const style = computed(() => {
     gridTemplateColumns: `repeat(${gridCols.value}, minmax(0, 1fr))`, // 设置网格的列数
   };
 });
+
 defineExpose({ breakPoint });
 </script>

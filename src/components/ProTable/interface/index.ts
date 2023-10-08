@@ -6,9 +6,11 @@ import type { ProTableProps } from "@/components/ProTable/index.vue";
 import type ProTable from "@/components/ProTable/index.vue";
 import type { ColumnsProps } from "@/components/ProForm/interface";
 
+type ValueType = string | number | boolean | any[];
+
 export interface EnumProps {
   label?: string; // 选项框显示的文字
-  value?: string | number | boolean | any[]; // 选项框值
+  value?: ValueType; // 选项框值
   disabled?: boolean; // 是否禁用此选项
   tagType?: string; // 当 tag 为 true 时，此选择会指定 tag 显示类型
   children?: EnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
@@ -28,7 +30,8 @@ export type SearchType =
   | "el-time-picker"
   | "el-time-select"
   | "el-switch"
-  | "el-slider";
+  | "el-slider"
+  | "select-user";
 
 export type SearchRenderScope = {
   searchParam: { [key: string]: any }; // 搜索参数
@@ -45,9 +48,9 @@ export type SearchProps = {
   order?: number; // 搜索项排序（从大到小）
   span?: number; // 搜索项所占用的列数，默认为 1 列
   offset?: number; // 搜索字段左侧偏移列数
-  defaultValue?: string | number | boolean | any[]; // 搜索项默认值
-  beforeSearch?: (searchParams: { [key: string]: any }, col: ColumnProps) => any;
-  render?: (scope: SearchRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
+  defaultValue?: ValueType; // 搜索项默认值
+  beforeSearch?: (val: ValueType, searchParams: { [key: string]: any }, col: ColumnProps) => any; // 自定义搜索内容渲染（tsx 语法）
+  type?: string; // el-select 有 el-select-group
 } & Partial<Record<BreakPoint, Responsive>>;
 
 export type FieldNamesProps = { label: string; value: string; children?: string };
@@ -56,7 +59,10 @@ export type RenderScope<T> = { row: T; $index: number; column: TableColumnCtx<T>
 
 export type HeaderRenderScope<T> = { $index: number; column: TableColumnCtx<T>; [key: string]: any };
 
-/** * 表字段属性配置 * 在 Element Plus 的类型基础增强 */
+/**
+ * 表字段属性配置
+ * 在 Element Plus 的类型基础增强
+ **/
 export interface ColumnProps<T = any>
   extends Partial<Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader">> {
   tag?: boolean; // 是否是标签展示

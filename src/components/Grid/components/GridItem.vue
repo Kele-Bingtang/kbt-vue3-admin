@@ -3,13 +3,16 @@
     <slot></slot>
   </div>
 </template>
+
 <script setup lang="ts" name="GridItem">
 import { computed, inject, type Ref, ref, useAttrs, watch } from "vue";
 import type { BreakPoint } from "../index.vue";
+
 export type Responsive = {
   span?: number; // 偏移量
   offset?: number; // 占位量
 };
+
 interface GridItemProps {
   offset?: number; // 偏移量
   span?: number; // 占位量
@@ -20,6 +23,7 @@ interface GridItemProps {
   lg?: Responsive;
   xl?: Responsive;
 }
+
 const props = withDefaults(defineProps<GridItemProps>(), {
   offset: 0,
   span: 1,
@@ -30,11 +34,15 @@ const props = withDefaults(defineProps<GridItemProps>(), {
   lg: undefined,
   xl: undefined,
 });
+
 const attrs = useAttrs() as { index: string };
+
 const isShow = ref(true);
+
 // 引入断点
 const breakPoint = inject<Ref<BreakPoint>>("breakPoint", ref("xl"));
 const shouldHiddenIndex = inject<Ref<number>>("shouldHiddenIndex", ref(-1));
+
 watch(
   () => [shouldHiddenIndex.value, breakPoint.value],
   nv => {
@@ -44,8 +52,10 @@ watch(
   },
   { immediate: true }
 );
+
 const gap = inject("gap", 0);
 const cols = inject("cols", ref(4));
+
 const style = computed(() => {
   const span = props[breakPoint.value]?.span ?? props.span;
   const offset = props[breakPoint.value]?.offset ?? props.offset;

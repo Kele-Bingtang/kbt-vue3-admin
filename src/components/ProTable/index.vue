@@ -67,6 +67,7 @@
       >
         <!-- 默认插槽 -->
         <slot></slot>
+
         <template v-for="item in tableColumns" :key="item">
           <!-- selection || index || expand -->
           <el-table-column
@@ -79,17 +80,20 @@
               <component v-if="item.headerRender" :is="item.headerRender" v-bind="scope"></component>
               <slot v-else :name="`${item.type}Header`" v-bind="scope">{{ scope.column.label }}</slot>
             </template>
+
             <template v-if="item.type == 'expand'" #default="scope">
               <component v-if="item.render" :is="item.render" v-bind="scope"></component>
               <slot v-else :name="item.type" v-bind="scope"></slot>
             </template>
           </el-table-column>
+
           <!-- other -->
           <TableColumn v-if="!item.type && item.prop && item.isShow && item.prop !== 'operation'" :column="item">
             <template v-for="slot in Object.keys($slots)" #[slot]="scope">
               <slot :name="slot" v-bind="scope"></slot>
             </template>
           </TableColumn>
+
           <TableColumn v-else-if="item.prop === 'operation'" :column="item">
             <template #operation="scope">
               <slot name="operation" v-bind="scope">
@@ -105,8 +109,10 @@
             </template>
           </TableColumn>
         </template>
+
         <!-- 插入表格最后一行之后的插槽 -->
         <template #append><slot name="append"></slot></template>
+
         <!-- 无数据 -->
         <template #empty>
           <div class="table-empty">
@@ -117,6 +123,7 @@
           </div>
         </template>
       </el-table>
+
       <DialogOperate
         ref="dialogOperateRef"
         v-if="detailForm"
@@ -139,7 +146,7 @@
 <script setup lang="ts" name="ProTable">
 import { ref, watch, provide, onMounted } from "vue";
 import { ElTable } from "element-plus";
-import { useTable } from "@/hooks/useProTable";
+import { useTable } from "@/hooks/useTable";
 import { useSelection } from "@/hooks/useSelection";
 import type { BreakPoint } from "@/components/Grid/index.vue";
 import type { ColumnProps } from "@/components/ProTable/interface";

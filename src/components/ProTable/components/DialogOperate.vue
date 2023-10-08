@@ -27,7 +27,7 @@ export interface DialogFormProps {
     Omit<DialogProps, "modelValue" | "title"> & { title: string | ((form: any, status: DialogStatus) => string) }
   >; // el-dialog 配置项
   addApi?: (params: any) => Promise<any>; // 新增接口
-  addCarryParams?: any;
+  addCarryParams?: any; // 过滤走的参数
   addFilterParams?: string[];
   editApi?: (params: any) => Promise<any>; // 编辑接口
   editCarryParams?: any;

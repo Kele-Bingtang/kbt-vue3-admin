@@ -40,7 +40,7 @@ export default {
     TreeProTable: "使用 TreeProTable",
     ComplexProTable: "复杂 ProTable",
     DetailProTable: "详情 ProTable",
-    ProForm: "超级表格",
+    ProForm: "超级表单",
     SimpleProForm: "使用 ProForm",
     DetailProForm: "详情 ProForm",
     Excel: "Excel",

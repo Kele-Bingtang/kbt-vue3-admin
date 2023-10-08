@@ -54,14 +54,14 @@ const changeTreeFilter = () => {
 // 表格配置项
 const columns: ColumnProps<ResUserList>[] = [
   { type: "index", label: "#", width: 80 },
-  { prop: "username", label: "用户姓名", width: 120, search: { el: "input" } },
+  { prop: "username", label: "用户姓名", width: 120, search: { el: "el-input" } },
   {
     prop: "gender",
     label: "性别",
     width: 120,
     sortable: true,
     enum: genderType,
-    search: { el: "select" },
+    search: { el: "el-select" },
   },
   { prop: "idCard", label: "身份证号" },
   { prop: "email", label: "邮箱" },
@@ -73,7 +73,7 @@ const columns: ColumnProps<ResUserList>[] = [
     sortable: true,
     tag: true,
     enum: userStatus,
-    search: { el: "select" },
+    search: { el: "el-select" },
   },
   { prop: "createTime", label: "创建时间", width: 180 },
   { prop: "operation", label: "操作", width: 330, fixed: "right" },
