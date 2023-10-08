@@ -15,23 +15,20 @@ export interface EnumProps {
   children?: EnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
   [key: string]: any;
 }
-
 type FormItem = Partial<Omit<FormItemProps, "prop">> & { prop: string; class?: string } & { br?: boolean };
 
 export type FormType =
   | "el-input"
   | "el-input-number"
   | "el-select"
-  | "el-select-v2"
+  | "el-select-v 2"
   | "el-tree-select"
   | "el-cascader"
   | "el-date-picker"
   | "el-time-picker"
   | "el-time-select"
   | "el-switch"
-  | "el-slider"
-  | "wangEditor"
-  | "tinymce";
+  | "el-slider";
 
 export type FieldNamesProps = { label: string; value: string; children?: string };
 
@@ -46,8 +43,9 @@ export type FormRenderScope = {
 export interface ColumnsProps {
   formItem: FormItem;
   attrs: {
-    el: FormType; // 元素
-    enum?: EnumProps[] | ((params?: any) => Promise<any>); // 枚举类型（字典）
+    el: any;
+    enum?: EnumProps[] | ((params?: any) => Promise<any>);
+    // 枚举类型（字典）
     fieldNames?: FieldNamesProps; // 字典指定 label && value && children 的 key 值
     props?: any; // 搜索项参数，根据 element plus 官方文档来传递，该属性所有值会透传到组件
     order?: number; // 表单排序（从大到小）

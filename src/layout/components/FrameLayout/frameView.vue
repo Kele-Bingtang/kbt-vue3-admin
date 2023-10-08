@@ -74,12 +74,3 @@ onMounted(() => {
   }
 }
 </style>
-<style lang="scss">
-.el-main {
-  padding: 0 !important;
-}
-
-::-webkit-scrollbar {
-  display: none;
-}
-</style>

@@ -9,7 +9,6 @@
       :search-param="searchParam"
       :search-cols="searchCols"
     />
-
     <div class="card table-main">
       <!-- 表格头部 操作按钮 -->
       <div class="table-header">
@@ -21,28 +20,53 @@
             :is-selected="isSelected"
           />
         </div>
-
         <div v-if="toolButton" class="header-button-ri">
           <slot name="toolButton">
-            <el-button :icon="Refresh" circle @click="getTableList" />
-            <el-button v-if="columns.length" :icon="Printer" circle />
-            <el-button v-if="columns.length" :icon="Operation" circle @click="openColSetting" />
-            <el-button v-if="searchColumns.length" :icon="Search" circle @click="isShowSearch = !isShowSearch" />
+            <el-tooltip effect="light" content="刷新" placement="top">
+              <el-button :icon="Refresh" circle @click="getTableList" />
+            </el-tooltip>
+            <el-tooltip effect="light" content="密度" placement="top">
+              <el-dropdown style="margin: 0 15px" @command="handleSizeCommand">
+                <el-button :icon="Coin" circle />
+                <template #dropdown>
+                  <el-dropdown-menu>
+                    <el-dropdown-item command="large" :disabled="customTableSize === 'large'">Large</el-dropdown-item>
+                    <el-dropdown-item command="default" :disabled="customTableSize === 'default'">
+                      Default
+                    </el-dropdown-item>
+                    <el-dropdown-item command="small" :disabled="customTableSize === 'small'">Small</el-dropdown-item>
+                    <el-dropdown-item command="mini" :disabled="customTableSize === 'mini'">Mini</el-dropdown-item>
+                  </el-dropdown-menu>
+                </template>
+              </el-dropdown>
+            </el-tooltip>
+            <el-tooltip v-if="columns.length && detailForm?.addApi" effect="light" content="新增" placement="top">
+              <el-button :icon="Plus" circle @click="dialogOperateRef?.handleAdd" />
+            </el-tooltip>
+            <el-tooltip v-if="columns.length" effect="light" content="列配置" placement="top">
+              <el-button :icon="Operation" circle @click="openColSetting" />
+            </el-tooltip>
+            <el-tooltip v-if="searchColumns.length" effect="light" content="隐藏搜索" placement="top">
+              <el-button :icon="Search" circle @click="isShowSearch = !isShowSearch" />
+            </el-tooltip>
           </slot>
         </div>
       </div>
       <!-- 表格主体 -->
       <el-table
         ref="tableRef"
+        :size="elTableSize"
         v-bind="$attrs"
         :data="tablePageData ?? tableData"
         :border="border"
         :row-key="rowKey"
         @selection-change="selectionChange"
+        :row-style="rowStyle"
+        :cell-style="cellStyle"
+        :header-cell-style="headerCellStyle"
       >
         <!-- 默认插槽 -->
         <slot></slot>
-
         <template v-for="item in tableColumns" :key="item">
           <!-- selection || index || expand -->
           <el-table-column
@@ -52,73 +76,91 @@
             :reserve-selection="item.type == 'selection'"
           >
             <template #header="scope">
-              <component :is="item.headerRender" v-bind="scope" v-if="item.headerRender"></component>
+              <component v-if="item.headerRender" :is="item.headerRender" v-bind="scope"></component>
               <slot v-else :name="`${item.type}Header`" v-bind="scope">{{ scope.column.label }}</slot>
             </template>
-
             <template v-if="item.type == 'expand'" #default="scope">
-              <component :is="item.render" v-bind="scope" v-if="item.render"></component>
+              <component v-if="item.render" :is="item.render" v-bind="scope"></component>
               <slot v-else :name="item.type" v-bind="scope"></slot>
             </template>
           </el-table-column>
-
           <!-- other -->
-          <TableColumn v-if="!item.type && item.prop && item.isShow" :column="item">
+          <TableColumn v-if="!item.type && item.prop && item.isShow && item.prop !== 'operation'" :column="item">
             <template v-for="slot in Object.keys($slots)" #[slot]="scope">
               <slot :name="slot" v-bind="scope"></slot>
             </template>
           </TableColumn>
+          <TableColumn v-else-if="item.prop === 'operation'" :column="item">
+            <template #operation="scope">
+              <slot name="operation" v-bind="scope">
+                <el-button link type="primary" size="small" :icon="Edit" @click="dialogOperateRef?.handleEdit(scope)">
+                  编辑
+                </el-button>
+                <el-popconfirm title="你确定删除吗?" @confirm="dialogOperateRef?.handleDelete(scope)">
+                  <template #reference>
+                    <el-button link type="danger" size="small" :icon="Delete">删除</el-button>
+                  </template>
+                </el-popconfirm>
+              </slot>
+            </template>
+          </TableColumn>
         </template>
-
         <!-- 插入表格最后一行之后的插槽 -->
-        <template #append>
-          <slot name="append"></slot>
-        </template>
-
+        <template #append><slot name="append"></slot></template>
         <!-- 无数据 -->
         <template #empty>
           <div class="table-empty">
             <slot name="empty">
-              <img src="@/assets/images/notData.png" alt="notData" />
+              <img src="@/assets/images/msg/notData.png" alt="notData" />
               <div>暂无数据</div>
             </slot>
           </div>
         </template>
       </el-table>
-
-      <el-dialog v-if="dialog" v-model="dialogFormVisible" v-bind="dialog">
-        <slot name="form"></slot>
-      </el-dialog>
+      <DialogOperate
+        ref="dialogOperateRef"
+        v-if="detailForm"
+        v-bind="{ ...detailForm, afterConfirm: () => getTableList() }"
+      />
       <!-- 分页组件 -->
       <slot name="pagination">
-        <Pagination v-if="pagination" :total="data ? data.length : paging.total" @pagination="handlePagination" />
+        <Pagination
+          v-if="pagination && (data?.length || tableData?.length)"
+          :total="data?.length ?? paging?.total ?? tableData?.length"
+          @pagination="handlePagination"
+        />
       </slot>
     </div>
-
     <!-- 列设置 -->
     <ColSetting v-if="toolButton" ref="colRef" v-model:col-setting="colSetting" />
   </div>
 </template>
+
 <script setup lang="ts" name="ProTable">
 import { ref, watch, provide, onMounted } from "vue";
-import { ElTable, type DialogProps } from "element-plus";
-import { useTable } from "@/hooks/useTable";
+import { ElTable } from "element-plus";
+import { useTable } from "@/hooks/useProTable";
 import { useSelection } from "@/hooks/useSelection";
 import type { BreakPoint } from "@/components/Grid/index.vue";
 import type { ColumnProps } from "@/components/ProTable/interface";
-import { Refresh, Printer, Operation, Search } from "@element-plus/icons-vue";
+import { Refresh, Plus, Operation, Search, Edit, Delete, Coin } from "@element-plus/icons-vue";
 import { lastProp } from "@/utils/table";
 import SearchForm from "@/components/SearchForm/index.vue";
 import Pagination from "@/components/Pagination/index.vue";
 import ColSetting from "./components/ColSetting.vue";
 import TableColumn from "./components/TableColumn.vue";
+import DialogOperate from "./components/DialogOperate.vue";
+import type { DialogFormProps } from "./components/DialogOperate.vue";
+
+export type DialogForm = DialogFormProps;
 
 export interface ProTableProps {
-  columns: ColumnProps[]; // 列配置项  ==> 必传
+  columns: ColumnProps[]; // 列配置项 ==> 必传
   data?: any[]; // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
   requestApi?: (params: any) => Promise<any>; // 请求表格数据的 api ==> 非必传
   requestAuto?: boolean; // 是否自动执行请求 api ==> 非必传（默认为true）
   requestError?: (params: any) => void; // 表格 api 请求错误监听 ==> 非必传
+  beforeSearch?: (data: any) => any; // 查询数据前的回调函数，可以对查询参数进行处理或禁止查询 ==> 非必传
   dataCallback?: (data: any) => any; // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
   initRequestParam?: any; // 初始化请求参数 ==> 非必传（默认为{}）
   title?: string; // 表格标题，目前只在打印的时候用到 ==> 非必传
@@ -126,9 +168,11 @@ export interface ProTableProps {
   border?: boolean; // 是否带有纵向边框 ==> 非必传（默认为 true）
   toolButton?: boolean; // 是否显示表格功能按钮 ==> 非必传（默认为 true）
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
+  size?: CustomTableSize; // 表格密度
   searchCols?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
-  dialog?: Partial<Omit<DialogProps, "modelValue">>;
+  detailForm?: DialogFormProps;
 }
+
 // 接受父组件参数，配置默认值
 const props = withDefaults(defineProps<ProTableProps>(), {
   columns: () => [],
@@ -138,6 +182,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   border: true,
   toolButton: true,
   rowKey: "id",
+  size: "default",
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 });
 
@@ -145,6 +190,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
 const isShowSearch = ref(true);
 // 表格 DOM 元素
 const tableRef = ref<InstanceType<typeof ElTable>>();
+
 // 表格多选 Hooks
 const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(props.rowKey);
 // 表格操作 Hooks
@@ -152,11 +198,11 @@ const { tableData, paging, searchParam, searchInitParam, getTableList, search, r
   props.requestApi,
   props.initRequestParam,
   props.pagination,
+  props.beforeSearch,
   props.dataCallback,
-  props.requestError
+  props.requestError,
+  props.columns
 );
-
-const dialogFormVisible = ref(true);
 
 // 清空选中数据列表
 const clearSelection = () => tableRef.value!.clearSelection();
@@ -175,6 +221,7 @@ watch(() => props.initRequestParam, getTableList, { deep: true });
 
 // 接收 columns 并设置为响应式
 const tableColumns = ref<ColumnProps[]>(props.columns);
+
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>());
 provide("enumMap", enumMap);
@@ -183,7 +230,7 @@ const setEnumMap = async (col: ColumnProps) => {
   if (!col.enum) return;
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
   if (typeof col.enum !== "function") return enumMap.value.set(col.prop!, col.enum!);
-  const { data } = await col.enum();
+  const data = await col.enum();
   enumMap.value.set(col.prop!, data);
 };
 
@@ -201,9 +248,7 @@ const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) =>
   return flatArr.filter(item => !item._children?.length);
 };
 
-// flatColumns
 const flatColumns = ref<ColumnProps[]>();
-
 flatColumns.value = flatColumnsFunc(tableColumns.value);
 
 // 过滤需要搜索的配置项
@@ -229,9 +274,74 @@ const colSetting = tableColumns.value!.filter(
 
 const openColSetting = () => colRef.value.openColSetting();
 
+// 操作框
+const dialogOperateRef = ref();
+// 表格大小样式
+type ElTableSize = "" | "default" | "small" | "large";
+type CustomTableSize = "" | "default" | "small" | "large" | "mini";
+enum TableSizeEnum {
+  Large = "large",
+  Default = "default",
+  Small = "small",
+  Mini = "mini",
+}
+
+const tableSizeValueMap = { small: { height: "40px" }, mini: { height: "24px", fontSize: "12px", padding: "0" } };
+
+// 如果是 mini，则取 ElTableSize 为 default，反之默认
+const elTableSize = ref<ElTableSize>(TableSizeEnum.Default);
+const customTableSize = ref<CustomTableSize>(TableSizeEnum.Default);
+
+// 表格样式
+const rowStyle = ref({});
+const cellStyle = ref({});
+const headerCellStyle = ref({});
+
+watch(
+  () => props.size,
+  () => nextTick(() => handleSizeCommand(props.size)),
+  { immediate: true }
+);
+
+const handleSizeCommand = (command: CustomTableSize) => {
+  if (command === TableSizeEnum.Large) {
+    changeTableSize(TableSizeEnum.Large);
+    changeStyle({});
+  } else if (command === TableSizeEnum.Default) {
+    changeTableSize(TableSizeEnum.Default);
+    changeStyle({});
+  } else if (command === TableSizeEnum.Small) {
+    changeTableSize(TableSizeEnum.Small);
+    cellStyle.value = {};
+    headerCellStyle.value = rowStyle.value = { height: tableSizeValueMap.small.height };
+  } else if (command === TableSizeEnum.Mini) {
+    elTableSize.value = TableSizeEnum.Default;
+    customTableSize.value = TableSizeEnum.Mini;
+    rowStyle.value = { height: tableSizeValueMap.mini.height, fontSize: tableSizeValueMap.mini.fontSize };
+    headerCellStyle.value = {
+      height: tableSizeValueMap.mini.height,
+      fontSize: tableSizeValueMap.mini.fontSize,
+      padding: tableSizeValueMap.mini.padding,
+    };
+    cellStyle.value = { padding: tableSizeValueMap.mini.padding };
+  }
+};
+
+const changeTableSize = (size: ElTableSize) => {
+  elTableSize.value = size;
+  customTableSize.value = size;
+};
+
+const changeStyle = (style: Object) => {
+  rowStyle.value = style;
+  cellStyle.value = style;
+  headerCellStyle.value = style;
+};
+
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
   element: tableRef,
+  dialogOperateRef,
   tableData,
   paging,
   searchParam,

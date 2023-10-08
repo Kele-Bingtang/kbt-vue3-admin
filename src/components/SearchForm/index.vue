@@ -13,9 +13,7 @@
             <el-button :icon="Delete" @click="reset">重置</el-button>
             <el-button v-if="showCollapse" type="primary" link class="search-isOpen" @click="collapsed = !collapsed">
               {{ collapsed ? "展开" : "合并" }}
-              <el-icon class="el-icon--right">
-                <component :is="collapsed ? ArrowDown : ArrowUp"></component>
-              </el-icon>
+              <el-icon class="el-icon--right"><component :is="collapsed ? ArrowDown : ArrowUp"></component></el-icon>
             </el-button>
           </div>
         </GridItem>
@@ -42,10 +40,7 @@ interface SearchFormProps {
 }
 
 // 默认值
-const props = withDefaults(defineProps<SearchFormProps>(), {
-  columns: () => [],
-  searchParam: () => ({}),
-});
+const props = withDefaults(defineProps<SearchFormProps>(), { columns: () => [], searchParam: () => ({}) });
 
 // 获取响应式设置
 const getResponsive = (item: ColumnProps) => {
@@ -74,6 +69,7 @@ const showCollapse = computed(() => {
     prev +=
       (current.search![breakPoint.value]?.span ?? current.search?.span ?? 1) +
       (current.search![breakPoint.value]?.offset ?? current.search?.offset ?? 0);
+
     if (typeof props.searchCols !== "number") {
       if (prev >= props.searchCols[breakPoint.value]) show = true;
     } else {
@@ -84,5 +80,3 @@ const showCollapse = computed(() => {
   return show;
 });
 </script>
-
-<style lang="scss" scoped></style>

@@ -1,4 +1,5 @@
 import type { Paging } from "@/components/Pagination/index.vue";
+import type { ColumnProps } from "@/components/ProTable/interface";
 import { reactive, computed, toRefs } from "vue";
 
 export namespace Table {
@@ -7,21 +8,14 @@ export namespace Table {
     pageSize: number;
     total: number;
   }
+
   export interface StateProps {
     tableData: any[];
     paging: Paging;
-    searchParam: {
-      [key: string]: any;
-    };
-    searchInitParam: {
-      [key: string]: any;
-    };
-    totalParam: {
-      [key: string]: any;
-    };
-    icon?: {
-      [key: string]: any;
-    };
+    searchParam: { [key: string]: any };
+    searchInitParam: { [key: string]: any };
+    totalParam: { [key: string]: any };
+    icon?: { [key: string]: any };
   }
 }
 
@@ -44,8 +38,10 @@ export const useTable = (
   api?: (params: any) => Promise<any>,
   initRequestParam: object = {},
   openPage: boolean = true,
+  beforeSearch?: (searchParam: any) => any,
   dataCallBack?: (data: any) => any,
-  requestError?: (error: any) => void
+  requestError?: (error: any) => void,
+  columns?: ColumnProps[]
 ) => {
   const state = reactive<Table.StateProps>({
     // 表格数据
@@ -72,10 +68,7 @@ export const useTable = (
    * */
   const pageParam = computed({
     get: () => {
-      return {
-        pageNum: state.paging.pageNum,
-        pageSize: state.paging.pageSize,
-      };
+      return { pageNum: state.paging.pageNum, pageSize: state.paging.pageSize };
     },
     set: (newVal: any) => {
       console.log("我是分页更新之后的值", newVal);
@@ -91,15 +84,34 @@ export const useTable = (
     try {
       // 先把初始化参数和分页参数放到总参数里面
       Object.assign(state.totalParam, initRequestParam, openPage ? pageParam.value : {});
-      let { data } = await api({ ...state.searchInitParam, ...state.totalParam });
-      dataCallBack && (data = dataCallBack(data));
-      state.tableData = openPage ? data.list : data;
+      let searchParam = { ...state.searchInitParam, ...state.totalParam };
+      beforeSearch && (searchParam = beforeSearch(searchParam) ?? searchParam);
+
+      // 排除 0、undefined 等，返回 false 则不执行查询
+      if ((searchParam as unknown as boolean) === false) return;
+
+      if (columns) {
+        for (let i = 0; i < columns.length; i++) {
+          const col = columns[i];
+          col.search?.beforeSearch &&
+            (searchParam[col.prop!] =
+              col.search?.beforeSearch(searchParam[col.prop!], searchParam, col) ?? searchParam[col.prop!]);
+
+          if (searchParam[col.prop!] === false) return;
+        }
+      }
+
+      let data = await api(searchParam);
+      dataCallBack && (data = dataCallBack(data) || data);
+      state.tableData = openPage ? data : data;
+
       // 解构后台返回的分页数据 (如果有分页更新分页信息)
       if (openPage) {
         const { pageNum, pageSize, total } = data;
         updatePaging({ pageNum, pageSize, total });
       }
     } catch (error) {
+      console.error(error);
       requestError && requestError(error);
     }
   };
@@ -167,12 +179,5 @@ export const useTable = (
     getTableList();
   };
 
-  return {
-    ...toRefs(state),
-    getTableList,
-    search,
-    reset,
-    handlePagination,
-    updatedTotalParam,
-  };
+  return { ...toRefs(state), getTableList, search, reset, handlePagination, updatedTotalParam };
 };

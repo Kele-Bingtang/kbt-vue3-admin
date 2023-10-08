@@ -38,6 +38,10 @@
 
       .header-button-ri {
         float: right;
+
+        .el-button:focus-visible {
+          outline: none;
+        }
       }
 
       .el-button {

@@ -45,6 +45,7 @@ export const useLayoutStore = defineStore(
       for (const [i, v] of tabNavList.value.entries()) {
         if (v.path === tab.path) {
           tabNavList.value.splice(i, 1);
+          removeFrame(tab);
           break;
         }
       }
