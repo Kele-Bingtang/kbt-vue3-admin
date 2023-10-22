@@ -28,12 +28,16 @@ export type FormType =
   | "el-time-picker"
   | "el-time-select"
   | "el-switch"
-  | "el-slider";
+  | "el-slider"
+  | "wang-editor";
 
 export type FieldNamesProps = { label: string; value: string; children?: string };
 
 export type FormRenderScope = {
-  form: { [key: string]: any };
+  scope: {
+    form: { [key: string]: any };
+    data: BaseType;
+  };
   placeholder: string;
   clearable: boolean;
   options: EnumProps[];
@@ -43,7 +47,7 @@ export type FormRenderScope = {
 export interface ColumnsProps {
   formItem: FormItem;
   attrs: {
-    el: any;
+    el?: FormType;
     enum?: EnumProps[] | ((params?: any) => Promise<any>);
     // 枚举类型（字典）
     fieldNames?: FieldNamesProps; // 字典指定 label && value && children 的 key 值

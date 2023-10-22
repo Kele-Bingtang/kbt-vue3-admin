@@ -158,8 +158,8 @@ const initRequestParam = { serviceName: "ETS_MIT_iWork_problem" };
 
 const columns: ColumnProps[] = [
   { type: "expand", label: "Expand", width: 50 },
-  { prop: "ticketNo", label: "TicketNo", width: 100 },
-  { prop: "ticketDesc", label: "TicketDesc" },
+  { prop: "ticketNo", label: "TicketNo", width: 100, search: { el: "el-input" } },
+  { prop: "ticketDesc", label: "TicketDesc", search: { el: "el-input" } },
   { prop: "priority", label: "Priority", width: 80 },
   { prop: "status", label: "Status", width: 70 },
   {
@@ -174,7 +174,7 @@ const columns: ColumnProps[] = [
       );
     },
   },
-  { prop: "dueDate", label: "DueDate", width: 110 },
+  { prop: "dueDate", label: "DueDate", width: 110, search: { el: "el-date-picker" } },
   { prop: "ownerName", label: "Owner", width: 110 },
   { prop: "operation", label: "操作", fixed: "right", width: 200 },
 ];

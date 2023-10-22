@@ -18,7 +18,11 @@
             :selected-list-ids="selectedListIds"
             :selected-list="selectedList"
             :is-selected="isSelected"
-          />
+          >
+            <el-button type="primary" :icon="Plus" @click="dialogOperateRef?.handleAdd" v-if="detailForm?.addApi">
+              新增
+            </el-button>
+          </slot>
         </div>
         <div v-if="toolButton" class="header-button-ri">
           <slot name="toolButton">
@@ -39,9 +43,6 @@
                   </el-dropdown-menu>
                 </template>
               </el-dropdown>
-            </el-tooltip>
-            <el-tooltip v-if="columns.length && detailForm?.addApi" effect="light" content="新增" placement="top">
-              <el-button :icon="Plus" circle @click="dialogOperateRef?.handleAdd" />
             </el-tooltip>
             <el-tooltip v-if="columns.length" effect="light" content="列配置" placement="top">
               <el-button :icon="Operation" circle @click="openColSetting" />
@@ -97,12 +98,26 @@
           <TableColumn v-else-if="item.prop === 'operation'" :column="item">
             <template #operation="scope">
               <slot name="operation" v-bind="scope">
-                <el-button link type="primary" size="small" :icon="Edit" @click="dialogOperateRef?.handleEdit(scope)">
+                <el-button
+                  link
+                  type="primary"
+                  size="small"
+                  :icon="Edit"
+                  @click="dialogOperateRef?.handleEdit(scope)"
+                  disabled="scope.row.disableEdit"
+                  v-if="detailForm?.editApi"
+                >
                   编辑
                 </el-button>
-                <el-popconfirm title="你确定删除吗?" @confirm="dialogOperateRef?.handleDelete(scope)">
+                <el-popconfirm
+                  title="你确定删除吗?"
+                  @confirm="dialogOperateRef?.handleDelete(scope)"
+                  v-if="detailForm?.deleteApi"
+                >
                   <template #reference>
-                    <el-button link type="danger" size="small" :icon="Delete">删除</el-button>
+                    <el-button link type="danger" size="small" :icon="Delete" :disabled="scope.row.disableDelete">
+                      删除
+                    </el-button>
                   </template>
                 </el-popconfirm>
               </slot>
@@ -128,7 +143,21 @@
         ref="dialogOperateRef"
         v-if="detailForm"
         v-bind="{ ...detailForm, afterConfirm: () => getTableList() }"
-      />
+      >
+        <template #form>
+          <slot name="form"></slot>
+        </template>
+
+        <template #formFooter>
+          <slot name="formFooter"></slot>
+        </template>
+
+        <!-- 修复 dialog footer 插槽为空元素却占位问题 -->
+        <template #dialogFooter v-if="$slots.dialogFooter">
+          <slot name="dialogFooter"></slot>
+        </template>
+      </DialogOperate>
+
       <!-- 分页组件 -->
       <slot name="pagination">
         <Pagination

@@ -2,7 +2,10 @@
   <el-dialog v-model="dialogFormVisible" v-bind="dialog" :title="dialogTitle">
     <slot name="form">
       <ProForm v-if="options" ref="formElement" :options="options" v-model="form">
-        <template #footer><slot name="formFooter" v-bind="form"></slot></template>
+        <template #footer>
+          <slot name="formFooter" v-bind="form"></slot>
+        </template>
+
         <template #operation>
           <div style="width: 100%; text-align: right">
             <el-button @click="dialogFormVisible = !dialogFormVisible">取消</el-button>
@@ -11,6 +14,10 @@
         </template>
       </ProForm>
     </slot>
+
+    <template #footer v-if="$slots.dialogFooter">
+      <slot name="dialogFooter" v-bind="form"></slot>
+    </template>
   </el-dialog>
 </template>
 
@@ -27,8 +34,8 @@ export interface DialogFormProps {
     Omit<DialogProps, "modelValue" | "title"> & { title: string | ((form: any, status: DialogStatus) => string) }
   >; // el-dialog 配置项
   addApi?: (params: any) => Promise<any>; // 新增接口
-  addCarryParams?: any; // 过滤走的参数
-  addFilterParams?: string[];
+  addCarryParams?: any; // 额外添加的函数
+  addFilterParams?: string[]; // 过滤走的参数
   editApi?: (params: any) => Promise<any>; // 编辑接口
   editCarryParams?: any;
   editFilterParams?: string[];
@@ -38,12 +45,14 @@ export interface DialogFormProps {
   apiFilterParams?: string[];
   id?: string; // 数据主键
   cache?: boolean; // 是否缓存新增、编辑后遗留的数据
-  beforeAdd?: (form: any) => void | Promise<any>; // 新增前回调
-  afterAdd?: (form: any, res: any) => void | Promise<any>; // 新增后回调
-  beforeEdit?: (form: any) => void | Promise<any>; // 编辑前回调
-  afterEdit?: (form: any, res: any) => void | Promise<any>; // 编辑后回调
-  beforeDelete?: (form: any) => void | Promise<any>; // 删除前回调
-  afterDelete?: (form: any, res: any) => void | Promise<any>; // 删除后回调
+  clickAdd?: (form: any) => void | Promise<any> | any; // 点击新增按钮回调
+  clickEdit?: (form: any) => void | Promise<any> | any; // 点击编辑按钮回调
+  beforeAdd?: (form: any) => void | Promise<any> | any; // 新增前回调
+  afterAdd?: (form: any, res: any) => void; // 新增后回调
+  beforeEdit?: (form: any) => void | Promise<any> | any; // 编辑前回调
+  afterEdit?: (form: any, res: any) => void; // 编辑后回调
+  beforeDelete?: (form: any) => void | Promise<any> | any; // 删除前回调
+  afterDelete?: (form: any, res: any) => void; // 删除后回调
   beforeConfirm?: (status: string) => void; // 确定按钮触发前回调
   afterConfirm?: (result: boolean) => void; // 确定按钮触发后回调
 }
@@ -60,16 +69,18 @@ const dialogTitle = computed(() =>
   typeof props?.dialog?.title === "function" ? props?.dialog?.title(form.value, status.value) : props?.dialog?.title
 );
 
-const handleAdd = () => {
+const handleAdd = async () => {
   status.value = "add";
   if (!props?.cache) form.value = {};
   else props?.id && delete (form.value as any)[props?.id!];
+  props.clickAdd && (form.value = (await props.clickAdd(form.value)) ?? form.value);
   dialogFormVisible.value = true;
 };
 
-const handleEdit = ({ row }: any) => {
+const handleEdit = async ({ row }: any) => {
   status.value = "edit";
   form.value = { ...row };
+  props.clickEdit && (form.value = (await props.clickEdit(form.value)) ?? form.value);
   dialogFormVisible.value = true;
 };
 
@@ -90,7 +101,7 @@ const handleFormConfirm = (form: any, status: string) => {
         // 执行新增接口
         executeApi(
           props.addApi,
-          { ...props.addCarryParams, data },
+          { ...props.addCarryParams, ...data },
           "添加成功！",
           "添加失败！",
           async res => {
@@ -114,7 +125,7 @@ const handleFormConfirm = (form: any, status: string) => {
 
         executeApi(
           props.editApi,
-          { ...props.editCarryParams, data },
+          { ...props.editCarryParams, ...data },
           "编辑成功！",
           "编辑失败！",
           async res => {
@@ -133,9 +144,7 @@ const handleFormConfirm = (form: any, status: string) => {
 
 const handleDelete = async ({ row }: any) => {
   if (props) {
-    let data: any = {};
-    if (props.id) data = { [props.id]: row[props.id] };
-    else data = { data: row };
+    let data = { ...row };
 
     // 删除 Delete 不允许传输的数据
     const filterParams = [...(props?.apiFilterParams || []), ...(props?.deleteFilterParams || [])];
@@ -145,7 +154,7 @@ const handleDelete = async ({ row }: any) => {
 
     executeApi(
       props.deleteApi,
-      { ...props.deleteCarryParams, data },
+      { ...props.deleteCarryParams, ...data },
       "删除成功！",
       "删除失败！",
       async res => {

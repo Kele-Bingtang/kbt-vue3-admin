@@ -51,6 +51,7 @@ export type SearchProps = {
   defaultValue?: ValueType; // 搜索项默认值
   beforeSearch?: (val: ValueType, searchParams: { [key: string]: any }, col: ColumnProps) => any; // 自定义搜索内容渲染（tsx 语法）
   type?: string; // el-select 有 el-select-group
+  render?: (scope: SearchRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
 } & Partial<Record<BreakPoint, Responsive>>;
 
 export type FieldNamesProps = { label: string; value: string; children?: string };

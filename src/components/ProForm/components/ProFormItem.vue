@@ -2,13 +2,18 @@
   <WangEditor
     v-if="column.attrs?.el === 'wang-editor'"
     v-model="_form[column.formItem.prop]"
-    v-bind="{ ...handleFormProps, ...placeholder, scope: { form: _form, row: _form[column.formItem.prop] } }"
+    v-bind="{ ...handleFormProps, ...placeholder, scope: { form: _form, data: _form[column.formItem.prop] } }"
   ></WangEditor>
 
   <component
     v-else
-    :is="column.attrs?.render ?? column.attrs?.el"
-    v-bind="{ ...handleFormProps, ...placeholder, scope: { form: _form, row: _form[column.formItem.prop] }, clearable }"
+    :is="column.attrs?.render ?? column.attrs?.el ?? ''"
+    v-bind="{
+      ...handleFormProps,
+      ...placeholder,
+      scope: { form: _form, data: _form[column.formItem.prop] },
+      clearable,
+    }"
     v-model="_form[column.formItem.prop]"
     :data="column.attrs?.el === 'el-tree-select' ? columnEnum : []"
     :options="['el-cascader', 'el-select-v 2'].includes(column.attrs?.el!) ? columnEnum : []"
@@ -16,6 +21,7 @@
     <template v-if="column.attrs?.el === 'el-cascader'" #default="{ data }">
       <span>{{ data[fieldNames.label] }}</span>
     </template>
+
     <template v-if="column.attrs?.el === 'el-select'">
       <component
         :is="`el-option`"
@@ -25,6 +31,7 @@
         :value="col[fieldNames.value]"
       ></component>
     </template>
+
     <slot v-else></slot>
   </component>
 </template>
@@ -75,10 +82,13 @@ const handleFormProps = computed(() => {
   if (formEl === "el-tree-select") {
     formProps = { ...formProps, props: { ...formProps.props, label, children }, nodeKey: value };
   }
+
   if (formEl === "el-cascader") {
     formProps = { ...formProps, props: { ...formProps.props, label, value, children } };
   }
+
   if (formProps.type === "date") formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
+
   if (formProps.type === "datetime") formProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...formProps };
   return formProps;
 });
@@ -86,10 +96,10 @@ const handleFormProps = computed(() => {
 // 处理默认 placeholder
 const placeholder = computed(() => {
   const attrs = props.column.attrs;
-  if (["el-datetimerange", "el-daterange", "el-monthrange"].includes(attrs?.props.type) || attrs?.props.isRange) {
+  if (["el-datetimerange", "el-daterange", "el-monthrange"].includes(attrs?.props?.type) || attrs?.props?.isRange) {
     return { rangeSeparator: "至", startPlaceholder: "开始时间", endPlaceholder: "结束时间" };
   }
-  const placeholder = attrs?.props.placeholder ?? (attrs?.el?.includes("el-input") ? "请输入" : "请选择");
+  const placeholder = attrs?.props?.placeholder ?? (attrs?.el?.includes("el-input") ? "请输入" : "请选择");
   return { placeholder };
 });
 

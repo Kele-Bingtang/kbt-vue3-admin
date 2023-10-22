@@ -1,6 +1,8 @@
 <template>
-  <div class="tree-filter-component" :style="{ width: width }">
-    <h4 class="title" v-if="title">{{ title }}</h4>
+  <div class="card filter">
+    <slot name="title">
+      <h4 class="title sle" v-if="title">{{ title }}</h4>
+    </slot>
     <el-input v-model="filterText" placeholder="输入关键字进行过滤" clearable />
     <el-scrollbar :style="{ height: title ? `calc(100% - 95px)` : `calc(100% - 56px)` }">
       <el-tree
@@ -33,6 +35,7 @@
 </template>
 
 <script setup lang="ts" name="TreeFilter">
+import { ref, watch, onBeforeMount } from "vue";
 import { ElTree } from "element-plus";
 
 // 接收父组件参数并设置默认值
@@ -40,17 +43,15 @@ interface TreeFilterProps {
   requestApi?: (data?: any) => Promise<any>; // 请求分类数据的 api ==> 非必传
   data?: { [key: string]: any }[]; // 分类数据，如果有分类数据，则不会执行 api 请求 ==> 非必传
   title?: string; // treeFilter 标题 ==> 非必传
-  id?: string; // 选择的 id ==> 非必传，默认为 "id"
-  label?: string; // 显示的 label ==> 非必传，默认为 "label"
+  id?: string; // 选择的id ==> 非必传，默认为 “id”
+  label?: string; // 显示的label ==> 非必传，默认为 “label”
   multiple?: boolean; // 是否为多选 ==> 非必传，默认为 false
   defaultValue?: any; // 默认选中的值 ==> 非必传
-  width?: string; // 组件宽度 ==> 250
 }
 const props = withDefaults(defineProps<TreeFilterProps>(), {
   id: "id",
   label: "label",
   multiple: false,
-  width: "250px",
 });
 
 const defaultProps = {
@@ -78,7 +79,7 @@ onBeforeMount(async () => {
   }
   const { data } = await props.requestApi!();
   treeData.value = data;
-  treeAllData.value = [{ id: "", [props.label]: "全部" }, ...data];
+  treeAllData.value = [{ [props.id]: "", [props.label]: "全部" }, ...data];
 });
 
 watch(filterText, val => {
@@ -91,6 +92,7 @@ const filterNode = (value: string, data: { [key: string]: any }, node: any) => {
   let parentNode = node.parent;
   let labels = [node.label];
   let level = 1;
+
   while (level < node.level) {
     labels = [...labels, parentNode.label];
     parentNode = parentNode.parent;
@@ -119,57 +121,6 @@ const handleCheckChange = () => {
 defineExpose({ treeData, treeAllData });
 </script>
 
-<style lang="scss" scoped>
-.tree-filter-component {
-  box-sizing: border-box;
-  height: 100%;
-  padding: 18px;
-  margin-right: 10px;
-  overflow-x: hidden;
-  background-color: var(--el-fill-color-blank);
-  border: 1px solid var(--el-border-color-light);
-  border-radius: 4px;
-  box-shadow: 0 0 12px rgb(0 0 0 / 5%);
-
-  .title {
-    margin: 0 0 15px;
-    overflow: hidden;
-    font-size: 18px;
-    font-weight: bold;
-    color: var(--el-color-info-dark-2);
-    text-overflow: ellipsis;
-    letter-spacing: 0.5px;
-    white-space: nowrap;
-  }
-
-  .el-input {
-    margin: 0 0 15px;
-  }
-
-  .el-scrollbar {
-    :deep(.el-tree) {
-      height: 80%;
-      overflow: auto;
-
-      .el-tree-node__content {
-        height: 33px;
-      }
-    }
-
-    :deep(.el-tree--highlight-current) {
-      .el-tree-node.is-current > .el-tree-node__content {
-        background-color: var(--el-color-primary);
-
-        .el-tree-node__label,
-        .el-tree-node__expand-icon {
-          color: white;
-        }
-
-        .is-leaf {
-          color: transparent;
-        }
-      }
-    }
-  }
-}
+<style scoped lang="scss">
+@import "./index";
 </style>
