@@ -145,16 +145,16 @@
         v-bind="{ ...detailForm, afterConfirm: () => getTableList() }"
       >
         <template #form>
-          <slot name="form"></slot>
+          <slot name="form" />
         </template>
 
         <template #formFooter>
-          <slot name="formFooter"></slot>
+          <slot name="formFooter" />
         </template>
 
         <!-- 修复 dialog footer 插槽为空元素却占位问题 -->
         <template #dialogFooter v-if="$slots.dialogFooter">
-          <slot name="dialogFooter"></slot>
+          <slot name="dialogFooter" />
         </template>
       </DialogOperate>
 

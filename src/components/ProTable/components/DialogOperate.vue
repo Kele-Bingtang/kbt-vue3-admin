@@ -84,11 +84,11 @@ const handleEdit = async ({ row }: any) => {
   dialogFormVisible.value = true;
 };
 
-const handleFormConfirm = (form: any, status: string) => {
+const handleFormConfirm = (f: any, status: string) => {
   const formRef = formElement.value.formRef as FormInstance;
   props.beforeConfirm && props.beforeConfirm(status);
 
-  let data = { ...form };
+  let data = { ...f };
   if (status === "add") {
     // 删除 Insert 不允许传输的数据
     const filterParams = [...(props?.apiFilterParams || []), ...(props?.addFilterParams || [])];

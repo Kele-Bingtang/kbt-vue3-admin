@@ -45,6 +45,8 @@ const initDefaultValue = (column: ColumnsProps, index: number) => {
   // 设置表单排序默认值 && 设置表单项的默认值
   attrs!.order = attrs!.order ?? index + 2;
   if (attrs?.defaultValue !== undefined && attrs?.defaultValue !== null) {
+    // 如果存在值，则不需要赋默认值
+    if (form.value[formItem.prop]) return;
     if (typeof attrs?.defaultValue === "function") form.value[formItem.prop] = attrs?.defaultValue();
     else form.value[formItem.prop] = attrs?.defaultValue;
   }

@@ -93,11 +93,12 @@ export const useTable = (
       if (columns) {
         for (let i = 0; i < columns.length; i++) {
           const col = columns[i];
-          col.search?.beforeSearch &&
-            (searchParam[col.prop!] =
-              col.search?.beforeSearch(searchParam[col.prop!], searchParam, col) ?? searchParam[col.prop!]);
+          if (col.search?.beforeSearch) {
+            searchParam[col.prop!] =
+              col.search?.beforeSearch(searchParam[col.prop!], searchParam, col) ?? searchParam[col.prop!];
 
-          if (searchParam[col.prop!] === false) return;
+            if (searchParam[col.prop!] === false) return;
+          }
         }
       }
 
