@@ -1,7 +1,7 @@
 <template>
   <el-card class="cropper-container">
     <Cropper
-      imgLink="https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/user/avatar1.png"
+      imgLink="https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar1.png"
       :crop-width="200"
       :crop-height="200"
       :crop-container-height="350"

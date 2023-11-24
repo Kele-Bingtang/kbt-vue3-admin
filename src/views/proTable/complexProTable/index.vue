@@ -1,5 +1,5 @@
 <template>
-  <div class="table-box">
+  <div class="complex-pro-table-container">
     <ProTable
       ref="proTable"
       highlight-current-row
@@ -187,5 +187,11 @@ const resetPass = async (params: ResUserList) => {
 .el-table .success-row .el-table-fixed-column--right,
 .el-table .success-row .el-table-fixed-column--left {
   background-color: var(--el-color-success-light-9);
+}
+</style>
+
+<style lang="scss" scoped>
+.complex-pro-table-container {
+  padding: 10px;
 }
 </style>

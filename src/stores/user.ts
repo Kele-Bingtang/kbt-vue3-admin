@@ -48,7 +48,7 @@ export const useUserStore = defineStore(
         sex: "男",
         email: "2456019588@qq.com",
         phone: "13377492843",
-        avatar: "https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/user/avatar1.png",
+        avatar: "https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar1.png",
         roles: ["visitor"],
         registerTime: "2022-10-01 19:07:27",
       };

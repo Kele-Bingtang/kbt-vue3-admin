@@ -53,30 +53,25 @@ const initDefaultValue = (column: ColumnsProps, index: number) => {
 };
 
 const cascadeEnum = (column: ColumnsProps) => {
-  const attrs = column.attrs;
+  const { formItem, attrs } = column;
   const formEl = attrs?.el;
-  const formProps = attrs?.props;
   if (formEl === "el-select") {
     if (attrs && attrs.subProp && typeof attrs.subProp === "string") {
-      const customOnChange = formProps.onChange;
-      formProps.onChange = async (value: string) => {
-        // 先执行自定义的 change 事件
-        if (customOnChange && typeof customOnChange === "function") customOnChange();
-        form.value[attrs.subProp!] = "";
-        // 然后执行内置的级联 change 事件
-        const { subEnum } = attrs;
-        if (subEnum) {
-          if (typeof subEnum === "function") {
-            const enumList = await subEnum(value);
-            enumMap.value.set(attrs.subProp!, enumList);
-          } else if (typeof subEnum === "object") {
-            enumMap.value.set(attrs.subProp!, subEnum);
+      watch(
+        () => form.value[formItem.prop],
+        async (newVal: string) => {
+          // 然后执行内置的级联 change 事件
+          const { subEnum } = attrs;
+          if (subEnum && !enumMap.value.get(attrs.subProp!)) {
+            if (typeof subEnum === "function") enumMap.value.set(attrs.subProp!, await subEnum(newVal));
+            else if (typeof subEnum === "object") enumMap.value.set(attrs.subProp!, subEnum);
           }
-        }
-        const formEnum = enumMap.value.get(attrs.prop) || [];
-        const e = formEnum.filter(item => item.value === value);
-        if (e[0].subValue) form.value[attrs.subProp!] = e[0].subValue;
-      };
+          const formEnum = enumMap.value.get(formItem.prop) || [];
+          const e = formEnum.filter(item => item.value === newVal);
+          if (e[0]?.subValue) form.value[attrs.subProp!] = e[0].subValue;
+        },
+        { immediate: true }
+      );
     }
   }
 };
@@ -84,10 +79,10 @@ const cascadeEnum = (column: ColumnsProps) => {
 props.options.columns.forEach((item, index) => {
   // 设置枚举
   setEnumMap(item);
+  // 级联下拉监听
+  cascadeEnum(item);
   // 设置默认值
   initDefaultValue(item, index);
-  // 级联下拉添加 change 事件
-  cascadeEnum(item);
 });
 
 // 排序表单项
@@ -97,7 +92,7 @@ const formWidth = (column: ColumnsProps) => {
   const { attrs } = column;
   const style = attrs.style || {};
   if (attrs.width) return { ...style, width: getPx(attrs.width) };
-  if (form?.fixWidth && !column.formItem.br) return { ...style, width: form.width || "220px" };
+  if (form?.fixWidth && !column.formItem.br) return { ...style, width: getPx(attrs.width || "220px") };
   return style;
 };
 

@@ -107,7 +107,7 @@ const downloadFile = async () => {
   ElMessageBox.confirm("确认导出用户数据?", "温馨提示", { type: "warning" }).then(() => {
     const tHeader = [] as string[];
     columns.forEach(item => {
-      if (!item.type && item.type === "operation") tHeader.push(item.prop!);
+      if (!item.type && item.prop !== "operation") tHeader.push(item.prop!);
     });
     const filterVal = tHeader;
     const d = formatJsonToArray(data.value, filterVal);
@@ -121,6 +121,7 @@ const downloadFile = async () => {
   display: flex;
   width: 100%;
   height: 100%;
+  padding: 10px;
 
   .table-box {
     // 这里减去的是 treeFilter 组件宽度

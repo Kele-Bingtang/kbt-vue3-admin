@@ -62,10 +62,7 @@
         <el-col :xl="6" :lg="6" :md="12" :sm="24" :xs="24">
           <el-card shadow="hover" class="mb-[10px] text-center">
             <div class="font-bold">logo配置</div>
-            <QrCode
-              :text="qrCodeText"
-              logo="https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/user/avatar1.png"
-            />
+            <QrCode :text="qrCodeText" logo="https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar1.png" />
           </el-card>
         </el-col>
         <el-col :xl="6" :lg="6" :md="12" :sm="24" :xs="24">
@@ -74,7 +71,7 @@
             <QrCode
               :text="qrCodeText"
               :logo="{
-                src: 'https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/user/avatar1.png',
+                src: 'https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar1.png',
                 logoSize: 0.2,
                 borderSize: 0.05,
                 borderRadius: 50,

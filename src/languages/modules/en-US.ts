@@ -93,6 +93,7 @@ export default {
     Vue2Admin: "Vue2 Admin",
     Vue2AdminOpen: "Vue2 Admin Open",
     Notes: "My Blog",
+    Document: "Document",
   },
   _tabsNav: {
     refresh: "Refresh Page",

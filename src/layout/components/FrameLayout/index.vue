@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts" name="FrameLayout">
-import FrameView from "./frameView.vue";
+import FrameView from "./FrameView.vue";
 import { useLayoutStore } from "@/stores/layout";
 import { useFrame, type Frame } from "./useFrame";
 

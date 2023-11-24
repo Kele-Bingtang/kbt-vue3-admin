@@ -7,16 +7,20 @@
         </template>
 
         <template #operation>
-          <div style="width: 100%; text-align: right">
-            <el-button @click="dialogFormVisible = !dialogFormVisible">取消</el-button>
-            <el-button type="primary" @click="handleFormConfirm(form, status)">保存</el-button>
-          </div>
+          <slot name="formOperation" v-bind="form"></slot>
         </template>
       </ProForm>
     </slot>
 
-    <template #footer v-if="$slots.dialogFooter">
-      <slot name="dialogFooter" v-bind="form"></slot>
+    <template #header="scope" v-if="$slots.dialogHeader">
+      <slot name="dialogHeader" v-bind="{ ...form, ...scope }"></slot>
+    </template>
+
+    <template #footer>
+      <slot name="dialogFooter" v-bind="form">
+        <el-button @click="dialogFormVisible = !dialogFormVisible">取消</el-button>
+        <el-button type="primary" @click="handleFormConfirm(form, status)">保存</el-button>
+      </slot>
     </template>
   </el-dialog>
 </template>
@@ -55,6 +59,12 @@ export interface DialogFormProps {
   afterDelete?: (form: any, res: any) => void; // 删除后回调
   beforeConfirm?: (status: string) => void; // 确定按钮触发前回调
   afterConfirm?: (result: boolean) => void; // 确定按钮触发后回调
+  disableAdd?: boolean;
+  disableEdit?: boolean;
+  disableDelete?: boolean;
+  useAdd?: boolean;
+  useEdit?: boolean;
+  useDelete?: boolean;
 }
 
 const props = defineProps<DialogFormProps>();

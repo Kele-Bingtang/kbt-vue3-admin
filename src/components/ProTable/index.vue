@@ -19,7 +19,13 @@
             :selected-list="selectedList"
             :is-selected="isSelected"
           >
-            <el-button type="primary" :icon="Plus" @click="dialogOperateRef?.handleAdd" v-if="detailForm?.addApi">
+            <el-button
+              type="primary"
+              :icon="Plus"
+              @click="dialogOperateRef?.handleAdd"
+              v-if="detailForm?.addApi || detailForm?.useAdd"
+              :disabled="detailForm?.disableAdd"
+            >
               新增
             </el-button>
           </slot>
@@ -104,18 +110,24 @@
                   size="small"
                   :icon="Edit"
                   @click="dialogOperateRef?.handleEdit(scope)"
-                  disabled="scope.row.disableEdit"
-                  v-if="detailForm?.editApi"
+                  :disabled="scope.row.disableEdit || detailForm?.disableEdit"
+                  v-if="detailForm?.editApi || detailForm?.useEdit"
                 >
                   编辑
                 </el-button>
                 <el-popconfirm
                   title="你确定删除吗?"
                   @confirm="dialogOperateRef?.handleDelete(scope)"
-                  v-if="detailForm?.deleteApi"
+                  v-if="detailForm?.deleteApi || detailForm?.useDelete"
                 >
                   <template #reference>
-                    <el-button link type="danger" size="small" :icon="Delete" :disabled="scope.row.disableDelete">
+                    <el-button
+                      link
+                      type="danger"
+                      size="small"
+                      :icon="Delete"
+                      :disabled="scope.row.disableDelete && !detailForm?.disableDelete"
+                    >
                       删除
                     </el-button>
                   </template>
@@ -132,7 +144,7 @@
         <template #empty>
           <div class="table-empty">
             <slot name="empty">
-              <img src="@/assets/images/msg/notData.png" alt="notData" />
+              <img src="@/assets/images/notData.png" alt="notData" />
               <div>暂无数据</div>
             </slot>
           </div>
@@ -150,6 +162,10 @@
 
         <template #formFooter>
           <slot name="formFooter" />
+        </template>
+
+        <template #dialogHeader>
+          <slot name="dialogHeader" />
         </template>
 
         <!-- 修复 dialog footer 插槽为空元素却占位问题 -->

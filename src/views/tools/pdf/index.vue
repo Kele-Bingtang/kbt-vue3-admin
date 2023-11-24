@@ -64,7 +64,7 @@ const currentRotation = ref(0);
 const showAllPages = ref(false);
 const rotations = [0, 90, 180, 270];
 
-const source = "https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/index/Nginx_day01.pdf";
+const source = "https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/index/Nginx_day01.pdf";
 
 const handleDocumentRender = () => {
   loading.value = false;

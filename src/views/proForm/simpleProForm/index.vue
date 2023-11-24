@@ -1,5 +1,9 @@
 <template>
-  <div class="card content-box"><ProForm :options="options" v-model="form" /></div>
+  <div style="padding: 10px">
+    <div class="card">
+      <ProForm :options="options" v-model="form" />
+    </div>
+  </div>
 </template>
 
 <script setup lang="ts" name="SimpleProForm">

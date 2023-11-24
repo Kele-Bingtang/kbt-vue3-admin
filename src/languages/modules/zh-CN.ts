@@ -94,6 +94,7 @@ export default {
     Vue2Admin: "Vue2 Admin",
     Vue2AdminOpen: "Kbt Vue2 Admin（新标签打开）",
     Notes: "我的博客",
+    Document: "使用文档",
   },
   _tabsNav: {
     refresh: "刷新当前标签页",

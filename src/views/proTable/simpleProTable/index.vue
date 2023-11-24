@@ -205,7 +205,7 @@ const downloadFile = async () => {
   ElMessageBox.confirm("确认导出用户数据?", "温馨提示", { type: "warning" }).then(() => {
     const tHeader = [] as string[];
     columns.forEach(item => {
-      if (!item.type && item.type === "operation") tHeader.push(item.prop!);
+      if (!item.type && item.prop !== "operation") tHeader.push(item.prop!);
     });
     const filterVal = tHeader;
     const d = formatJsonToArray(data.value, filterVal);
@@ -216,6 +216,6 @@ const downloadFile = async () => {
 
 <style lang="scss" scoped>
 .simple-pro-table-container {
-  padding: 20px;
+  padding: 10px;
 }
 </style>

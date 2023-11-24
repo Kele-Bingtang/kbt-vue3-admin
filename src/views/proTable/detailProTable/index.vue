@@ -1,5 +1,5 @@
 <template>
-  <div class="common-ticket-container">
+  <div class="detail-pro-table-container">
     <ProTable
       ref="proTableRef"
       :columns="columns"
@@ -45,14 +45,15 @@
         </div>
       </template>
 
-      <template #operation>
+      <!-- <template #operation>
         <el-button link type="info" size="small" :icon="Document" class="btn-info">附件</el-button>
         <el-button link type="primary" size="small" :icon="Edit" class="btn-primary">编辑</el-button>
         <el-button link type="danger" size="small" :icon="Delete" class="btn-primary">删除</el-button>
-      </template>
-      <template #form>
+      </template> -->
+
+      <!-- <template #form>
         <ProForm :options="options" v-model="form"></ProForm>
-      </template>
+      </template> -->
     </ProTable>
   </div>
 </template>
@@ -60,21 +61,26 @@
 import ProTable from "@/components/ProTable/index.vue";
 import type { ColumnProps } from "@/components/ProTable/interface";
 import Grid from "@/components/Grid/index.vue";
-import ProForm from "@/components/ProForm/index.vue";
+// import ProForm from "@/components/ProForm/index.vue";
 import GridItem from "@/components/Grid/components/GridItem.vue";
-import { ArrowUp, ArrowDown, Document, Edit, Delete } from "@element-plus/icons-vue";
+import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
 import { options } from "@/views/proForm/detailProForm/options";
 
 interface ProblemData {
-  Id: string;
-  TicketNo: string;
-  TicketDesc: string;
-  PriorityName: string;
-  StatusName: string;
-  EventTimeStr: string;
-  DueDateStr: string;
-  OwnerName: string;
-  ActionList: any[];
+  id: string;
+  ticketNo: string;
+  ticketDesc: string;
+  priority: string;
+  status: string;
+  eventStartTime: string;
+  eventEndTime: string;
+  dueDate: string;
+  owner: string;
+  description: string;
+  rootCause: string;
+  createUser: string;
+  createTime: string;
+  actionList: any[];
 }
 
 const getTicketList = () => {
@@ -89,7 +95,7 @@ const getTicketList = () => {
         eventStartTime: "2023-09-28 08:00:00",
         eventEndTime: "2023-10-07 18:00:00",
         dueDate: "2023-10-07",
-        ownerName: "Kobe Liu",
+        owner: "k100338",
         description: "这是一封测试信",
         rootCause: "根因分析",
         createUser: "Kobe Liu",
@@ -124,7 +130,7 @@ const getTicketList = () => {
         eventStartTime: "2023-09-28 08:00:00",
         eventEndTime: "2023-10-07 18:00:00",
         dueDate: "2072-01-16",
-        ownerName: "Jessany Liu",
+        owner: "j100378",
         description: "这是一封偏爱信",
         rootCause: "根因分析",
         createUser: "Jessany Liu",
@@ -156,7 +162,7 @@ const getTicketList = () => {
 
 const initRequestParam = { serviceName: "ETS_MIT_iWork_problem" };
 
-const columns: ColumnProps[] = [
+const columns: ColumnProps<ProblemData>[] = [
   { type: "expand", label: "Expand", width: 50 },
   { prop: "ticketNo", label: "TicketNo", width: 100, search: { el: "el-input" } },
   { prop: "ticketDesc", label: "TicketDesc", search: { el: "el-input" } },
@@ -175,16 +181,20 @@ const columns: ColumnProps[] = [
     },
   },
   { prop: "dueDate", label: "DueDate", width: 110, search: { el: "el-date-picker" } },
-  { prop: "ownerName", label: "Owner", width: 110 },
-  { prop: "operation", label: "操作", fixed: "right", width: 200 },
+  { prop: "owner", label: "Owner", width: 110 },
+  { prop: "operation", label: "操作", fixed: "right", width: 140 },
 ];
 
 const detailForm = {
+  options: options,
+  useAdd: true,
+  useEdit: true,
+  useDelete: true,
   dialog: { title: "测试", width: "90%", top: "2vh", closeOnClickModal: false },
 };
 
 const proTableRef = shallowRef();
-const form = ref({});
+// const form = ref({});
 const expandAll = ref(true);
 const expandKeys = ref<string[]>([]);
 const collapseActive = ref([]);
@@ -197,3 +207,9 @@ const handleExpandAll = () => {
   else expandKeys.value = [];
 };
 </script>
+
+<style lang="scss" scoped>
+.detail-pro-table-container {
+  padding: 10px;
+}
+</style>

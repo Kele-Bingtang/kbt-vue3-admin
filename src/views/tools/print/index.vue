@@ -33,11 +33,7 @@
 
       <el-col :xs="6" :sm="6" :md="6" :lg="6" :xl="6">
         <p>Image</p>
-        <img
-          src="https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/user/avatar1.png"
-          alt="avatars"
-          class="img"
-        />
+        <img src="https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar1.png" alt="avatars" class="img" />
       </el-col>
     </el-row>
   </el-card>

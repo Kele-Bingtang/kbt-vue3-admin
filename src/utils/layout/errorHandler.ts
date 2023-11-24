@@ -10,7 +10,7 @@ const { env } = errorLog;
 /**
  * @description 检查当前环境是否符合错误日志的运行
  */
-const checkNeed = () => {
+export const checkNeed = () => {
   const node_env = import.meta.env.MODE;
   if (isArray(env) && node_env) return env.includes(node_env);
   return false;

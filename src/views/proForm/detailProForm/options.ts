@@ -12,11 +12,11 @@ export const options: OptionsProps = {
   },
   columns: [
     {
-      formItem: { label: "Ticket Desc", prop: "TicketDesc", required: true, br: true },
+      formItem: { label: "Ticket Desc", prop: "ticketDesc", required: true, br: true },
       attrs: { el: "el-input", props: { clearable: true, placeholder: "请输入 TicketDesc" } },
     },
     {
-      formItem: { label: "EventStarTime", prop: "EventStarTime" },
+      formItem: { label: "EventStarTime", prop: "eventStarTime" },
       attrs: {
         el: "el-date-picker",
         props: {
@@ -28,21 +28,21 @@ export const options: OptionsProps = {
       },
     },
     {
-      formItem: { label: "EventEndTime", prop: "EventEndTime" },
+      formItem: { label: "EventEndTime", prop: "eventEndTime" },
       attrs: {
         el: "el-date-picker",
         props: { type: "datetime", clearable: true, placeholder: "请输入 EndTime", valueFormat: "YYYY-MM-DD HH:mm:ss" },
       },
     },
     {
-      formItem: { label: "Due Date", prop: "DueDate", required: true },
+      formItem: { label: "Due Date", prop: "dueDate", required: true },
       attrs: {
         el: "el-date-picker",
         props: { placeholder: "请输入 DueDate", type: "date", valueFormat: "YYYY-MM-DD" },
       },
     },
     {
-      formItem: { label: "Status", prop: "Status", required: true },
+      formItem: { label: "Status", prop: "status", required: true },
       attrs: {
         el: "el-select",
         fieldNames: { value: "OptionValue", label: "OptionDesc" },
@@ -56,7 +56,7 @@ export const options: OptionsProps = {
       },
     },
     {
-      formItem: { label: "Priority", prop: "Priority", required: true },
+      formItem: { label: "Priority", prop: "priority", required: true },
       attrs: {
         el: "el-select",
         fieldNames: { value: "OptionValue", label: "OptionDesc" },
@@ -69,23 +69,23 @@ export const options: OptionsProps = {
       },
     },
     {
-      formItem: { label: "Category", prop: "Category" },
+      formItem: { label: "Category", prop: "category" },
       attrs: { el: "el-input", props: { placeholder: "请选择 Category", filterable: true } },
     },
     {
-      formItem: { label: "Sub Category", prop: "SubCategory" },
+      formItem: { label: "Sub Category", prop: "subCategory" },
       attrs: { el: "el-input", props: { placeholder: "请选择 Sub Category", filterable: true } },
     },
     {
-      formItem: { label: "Owner", prop: "Owner", required: true },
+      formItem: { label: "Owner", prop: "owner", required: true },
       attrs: {
         el: "el-select",
         enum: [
-          { value: "k100338", label: "k100338", subValue: "智能制造科" },
-          { value: "j100378", label: "j100378", subValue: "Litho EE 科" },
-          { value: "p100339", label: "p100339", subValue: "CIM 科" },
+          { value: "k100338", label: "Kobe Liu", subValue: "智能制造科" },
+          { value: "j100378", label: "Jessany Liu", subValue: "IPS 科" },
+          { value: "p100339", label: "Peter Yu", subValue: "CIM 科" },
         ],
-        subProp: "OwnerDept",
+        subProp: "ownerDept",
         defaultValue: "",
         props: {
           placeholder: "请选择 Owner",
@@ -97,7 +97,7 @@ export const options: OptionsProps = {
       },
     },
     {
-      formItem: { label: "OwnerDept", prop: "OwnerDept" },
+      formItem: { label: "OwnerDept", prop: "ownerDept" },
       attrs: {
         el: "el-input",
         defaultValue: "",
@@ -105,7 +105,7 @@ export const options: OptionsProps = {
       },
     },
     {
-      formItem: { label: "Root Cause", prop: "RootCause", br: true },
+      formItem: { label: "Root Cause", prop: "rootCause", br: true },
       attrs: {
         el: "el-input",
         props: {
@@ -119,8 +119,8 @@ export const options: OptionsProps = {
       },
     },
     {
-      formItem: { label: "Description", prop: "Description", br: true },
-      attrs: { el: "wangEditor", props: { placeholder: "请输入 Description" } },
+      formItem: { label: "Description", prop: "description", br: true },
+      attrs: { el: "wang-editor", props: { placeholder: "请输入 Description" } },
     },
   ],
 };

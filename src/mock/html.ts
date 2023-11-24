@@ -23,7 +23,7 @@ export const myHtml = (data: Email) => {
                               <tbody>
                               <tr>
                                   <td style="padding: 0px; text-align: center;">
-                                      <img src="https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/user/20211205131212.jpg" alt="请在上方选择信任，以此显示头像">
+                                      <img src="https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/20211205131212.jpg" alt="请在上方选择信任，以此显示头像">
                                   </td>
                               </tr>
                               <tr>
@@ -82,11 +82,11 @@ export const myHtml = (data: Email) => {
                           This is a WebSite
                           <br>
                           ${new Date().getFullYear()}-${
-    new Date().getMonth() + 1 === 13 ? 12 : new Date().getMonth() + 1
-  }-${new Date().getDate() > 10 ? new Date().getDate() : "0" + new Date().getDate()}
+                            new Date().getMonth() + 1 === 13 ? 12 : new Date().getMonth() + 1
+                          }-${new Date().getDate() > 10 ? new Date().getDate() : "0" + new Date().getDate()}
                             ${new Date().getHours() > 10 ? new Date().getHours() : "0" + new Date().getHours()}:${
-    new Date().getMinutes() > 10 ? new Date().getMinutes() : "0" + new Date().getMinutes()
-  }:${new Date().getSeconds() > 10 ? new Date().getSeconds() : "0" + new Date().getSeconds()}
+                              new Date().getMinutes() > 10 ? new Date().getMinutes() : "0" + new Date().getMinutes()
+                            }:${new Date().getSeconds() > 10 ? new Date().getSeconds() : "0" + new Date().getSeconds()}
                       </td>
                   </tr>
                   <tr>
@@ -117,7 +117,7 @@ export const otherHtml = (data: Email) => {
                         <tbody>
                           <tr>
                             <td style="padding: 0px; text-align: center;">
-                              <img src="https://cdn.staticaly.com/gh/Kele-Bingtang/static@master/user/20211205131212.jpg" alt="请在上方选择信任，以此显示头像">
+                              <img src="https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/20211205131212.jpg" alt="请在上方选择信任，以此显示头像">
                             </td>
                           </tr>
                           <tr>
@@ -186,11 +186,11 @@ export const otherHtml = (data: Email) => {
                       This is a WebSite
                       <br>
                       ${new Date().getFullYear()}-${
-    new Date().getMonth() + 1 === 13 ? 12 : new Date().getMonth() + 1
-  }-${new Date().getDate() > 10 ? new Date().getDate() : "0" + new Date().getDate()}
+                        new Date().getMonth() + 1 === 13 ? 12 : new Date().getMonth() + 1
+                      }-${new Date().getDate() > 10 ? new Date().getDate() : "0" + new Date().getDate()}
                       ${new Date().getHours() > 10 ? new Date().getHours() : "0" + new Date().getHours()}:${
-    new Date().getMinutes() > 10 ? new Date().getMinutes() : "0" + new Date().getMinutes()
-  }:${new Date().getSeconds() > 10 ? new Date().getSeconds() : "0" + new Date().getSeconds()}
+                        new Date().getMinutes() > 10 ? new Date().getMinutes() : "0" + new Date().getMinutes()
+                      }:${new Date().getSeconds() > 10 ? new Date().getSeconds() : "0" + new Date().getSeconds()}
                     </td>
                   </tr>
                   <tr>

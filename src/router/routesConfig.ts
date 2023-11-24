@@ -46,7 +46,7 @@ import tableRoutes from "./modules/table";
 import proTableRoutes from "./modules/proTable";
 import toolsRoutes from "./modules/tool";
 import proFormRoutes from "./modules/proForm";
-import { User, Bell, HomeFilled, StarFilled } from "@element-plus/icons-vue";
+import { User, Bell, HomeFilled, StarFilled, Document } from "@element-plus/icons-vue";
 
 export const HOME_URL = "/home";
 export const HOME_NAME = "Home";
@@ -156,4 +156,12 @@ export const rolesRoutes: RouterConfigRaw[] = [
   { ...frameRoutes },
   { ...outerChainRoutes },
   { ...detailsRoutes },
+  {
+    path: "https://vue3-docs.youngkbt.cn/",
+    name: "Document",
+    meta: {
+      title: "使用文档",
+      icon: Document,
+    },
+  },
 ];

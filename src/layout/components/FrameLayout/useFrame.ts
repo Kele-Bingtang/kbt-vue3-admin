@@ -1,8 +1,8 @@
 import { useLayoutStore } from "@/stores/layout";
 import { useTabsNav } from "../TabsNav/useTabsNav";
 
-const FrameView = () => import("./frameView.vue");
-const FrameBlank = () => import("./blankFrame.vue");
+const FrameView = () => import("./FrameView.vue");
+const FrameBlank = () => import("./BlankFrame.vue");
 
 export interface Frame {
   src: string; // 地址
