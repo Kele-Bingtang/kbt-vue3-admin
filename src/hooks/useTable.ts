@@ -95,7 +95,8 @@ export const useTable = (
           const col = columns[i];
           if (col.search?.beforeSearch) {
             searchParam[col.prop!] =
-              col.search?.beforeSearch(searchParam[col.prop!], searchParam, col) ?? searchParam[col.prop!];
+              col.search?.beforeSearch(searchParam[col.search.key ?? col.prop!], searchParam, col) ??
+              searchParam[col.prop!];
 
             if (searchParam[col.prop!] === false) return;
           }

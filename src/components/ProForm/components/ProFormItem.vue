@@ -88,8 +88,11 @@ const handleFormProps = computed(() => {
   }
 
   if (formProps.type === "date") formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
+  else if (formEl === "el-date-picker") formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
 
   if (formProps.type === "datetime") formProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...formProps };
+  else if (formEl === "el-time-picker") formProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...formProps };
+
   return formProps;
 });
 

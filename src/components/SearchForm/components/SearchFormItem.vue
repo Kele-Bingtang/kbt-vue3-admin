@@ -4,7 +4,7 @@
     v-bind="{ ...handleSearchProps, ...placeholder, searchParam: _searchParam, clearable }"
     v-model.trim="_searchParam[column.search?.key ?? lastProp(column.prop!)]"
     :data="column.search?.el === 'el-tree-select' ? columnEnum : []"
-    :options="['cascader', 'select-v 2'].includes(column.search?.el!) ? columnEnum : []"
+    :options="['el-cascader', 'el-select-v 2'].includes(column.search?.el!) ? columnEnum : []"
   >
     <template v-if="column.search?.el === 'el-cascader'" #default="{ data }">
       <span>{{ data[fieldNames.label] }}</span>
@@ -87,13 +87,12 @@ const handleSearchProps = computed(() => {
     searchProps = { ...searchProps, props: { ...searchProps.props, label, value, children } };
   }
 
-  if (["date", "daterange"].includes(searchProps.type)) {
-    searchProps = { valueFormat: "YYYY-MM-DD", ...searchProps };
-  }
+  if (["date", "daterange"].includes(searchProps.type)) searchProps = { valueFormat: "YYYY-MM-DD", ...searchProps };
+  else if (searchEl === "el-date-picker") searchProps = { valueFormat: "YYYY-MM-DD", ...searchProps };
 
   if (["datetime", "datetimerange"].includes(searchProps.type)) {
     searchProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...searchProps };
-  }
+  } else if (searchEl === "el-time-picker") searchProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...searchProps };
 
   return searchProps;
 });
