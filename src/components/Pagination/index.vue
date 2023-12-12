@@ -17,47 +17,46 @@
 <script lang="ts">
 import { scrollTo } from "@/utils/layout/scrollTo";
 
-export const pageSetting = {
-  currentPage: 1,
-  pageSizes: [10, 20, 50, 100, 200],
-  pageSize: 20,
-};
+export const pageSetting = { currentPage: 1, pageSizes: [10, 20, 50, 100, 200], pageSize: 20 };
 </script>
 
 <script setup lang="ts" name="Pagination">
 export interface Paging {
-  currentPage: number;
-  pageSizes: number[];
-  pageSize: number;
+  currentPage: number; // 当前页
+  pageSizes: number[]; // 页数数组
+  pageSize: number; // 一页显示多少条数据
 }
 
 export interface PaginationProps {
-  total: number;
-  paging?: Paging;
-  layout?: string;
-  background?: boolean;
-  autoScroll?: boolean;
-  hidden?: boolean;
+  total: number; // 总页数
+  modelValue?: Paging; // 分页信息
+  layout?: string; // 布局
+  background?: boolean; // 是否开启背景色
+  autoScroll?: boolean; // 切换页数，是否自动滚动到最上面
+  hidden?: boolean; // 是否不显示分页
+  reset?: boolean; // 切换 pageSize，currentPage 重置为 1
 }
 
 const props = withDefaults(defineProps<PaginationProps>(), {
-  paging: () => pageSetting,
+  modelValue: () => reactive(pageSetting),
   layout: "total, sizes, prev, pager, next, jumper",
   background: true,
   autoScroll: true,
   hidden: false,
+  reset: true,
 });
 
-type PaginationEmitProps = {
-  (e: "pagination", value: Paging): void;
-};
+type PaginationEmitProps = { (e: "update:modelValue", value: Paging): void; (e: "pagination", value: Paging): void };
 
 const emits = defineEmits<PaginationEmitProps>();
-const pageObj = toRef(props, "paging");
+
+const pageObj = toRef(props, "modelValue");
 
 const handleSizeChange = (value: number) => {
+  if (props.reset) handleCurrentChange(1);
   pageObj.value.pageSize = value;
-  emits("pagination", props.paging);
+  emits("update:modelValue", pageObj.value);
+  emits("pagination", props.modelValue);
   nextTick(() => {
     if (props.autoScroll) {
       scrollTo("el-table__body-wrapper", 0, 700);
@@ -68,7 +67,8 @@ const handleSizeChange = (value: number) => {
 
 const handleCurrentChange = (value: number) => {
   pageObj.value.currentPage = value;
-  emits("pagination", props.paging);
+  emits("update:modelValue", pageObj.value);
+  emits("pagination", props.modelValue);
   nextTick(() => {
     if (props.autoScroll) {
       scrollTo("el-table__body-wrapper", 0, 700);
@@ -76,6 +76,8 @@ const handleCurrentChange = (value: number) => {
     }
   });
 };
+
+defineExpose({ paging: pageSetting });
 </script>
 
 <style lang="scss" scoped>

@@ -54,7 +54,7 @@
               <el-button :icon="Operation" circle @click="openColSetting" />
             </el-tooltip>
             <el-tooltip v-if="searchColumns.length" effect="light" content="隐藏搜索" placement="top">
-              <el-button :icon="Search" circle @click="isShowSearch = !isShowSearch" />
+              <el-button :icon="Search" circle @click="isShowSearchProp = !isShowSearchProp" />
             </el-tooltip>
           </slot>
         </div>
@@ -176,11 +176,7 @@
 
       <!-- 分页组件 -->
       <slot name="pagination">
-        <Pagination
-          v-if="pagination && (data?.length || tableData?.length)"
-          :total="data?.length ?? paging?.total ?? tableData?.length"
-          @pagination="handlePagination"
-        />
+        <Pagination v-if="isOpenPage(pagination) && pageTotal" :total="pageTotal" @pagination="handlePagination" />
       </slot>
     </div>
     <!-- 列设置 -->
@@ -191,7 +187,7 @@
 <script setup lang="ts" name="ProTable">
 import { ref, watch, provide, onMounted } from "vue";
 import { ElTable } from "element-plus";
-import { useTable } from "@/hooks/useTable";
+import { useTable, type Table } from "@/hooks/useTable";
 import { useSelection } from "@/hooks/useSelection";
 import type { BreakPoint } from "@/components/Grid/index.vue";
 import type { ColumnProps } from "@/components/ProTable/interface";
@@ -216,13 +212,14 @@ export interface ProTableProps {
   dataCallback?: (data: any) => any; // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
   initRequestParam?: any; // 初始化请求参数 ==> 非必传（默认为{}）
   title?: string; // 表格标题，目前只在打印的时候用到 ==> 非必传
-  pagination?: boolean; // 是否需要分页组件 ==> 非必传（默认为 true）
+  pagination?: boolean | Table.PaginationProps; // 是否需要分页组件 ==> 非必传（默认为 true）
   border?: boolean; // 是否带有纵向边框 ==> 非必传（默认为 true）
   toolButton?: boolean; // 是否显示表格功能按钮 ==> 非必传（默认为 true）
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   size?: CustomTableSize; // 表格密度
   searchCols?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
   detailForm?: DialogFormProps;
+  isShowSearch?: boolean;
 }
 
 // 接受父组件参数，配置默认值
@@ -239,14 +236,26 @@ const props = withDefaults(defineProps<ProTableProps>(), {
 });
 
 // 是否显示搜索模块
-const isShowSearch = ref(true);
+const isShowSearchProp = computed(() => props.isShowSearch);
 // 表格 DOM 元素
 const tableRef = ref<InstanceType<typeof ElTable>>();
 
 // 表格多选 Hooks
 const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(props.rowKey);
 // 表格操作 Hooks
-const { tableData, paging, searchParam, searchInitParam, getTableList, search, reset, handlePagination } = useTable(
+const {
+  tableData,
+  paging,
+  searchParam,
+  searchInitParam,
+  getTableList,
+  search,
+  reset,
+  handlePagination,
+  isOpenPage,
+  isBackPage,
+  isFrontPage,
+} = useTable(
   props.requestApi,
   props.initRequestParam,
   props.pagination,
@@ -260,10 +269,19 @@ const { tableData, paging, searchParam, searchInitParam, getTableList, search, r
 const clearSelection = () => tableRef.value!.clearSelection();
 
 // 静态数据分页
-const tablePageData = computed(
-  () =>
-    props.data?.slice((paging.value.pageNum - 1) * paging.value.pageSize, paging.value.pageNum * paging.value.pageSize)
-);
+const tablePageData = computed(() => {
+  let data;
+  if (props.data?.length) data = props.data;
+  if (isFrontPage(props.pagination)) data = tableData.value;
+  return data?.slice((paging.value.pageNum - 1) * paging.value.pageSize, paging.value.pageNum * paging.value.pageSize);
+});
+
+const pageTotal = computed(() => {
+  if (props.data?.length) return props.data?.length;
+  if (isFrontPage(props.pagination)) return props.data?.length ?? tableData.value.length;
+  if (isBackPage(props.pagination)) return paging.value?.total ?? tableData.value?.length;
+  return 0;
+});
 
 // 初始化请求
 onMounted(() => props.requestAuto && getTableList());

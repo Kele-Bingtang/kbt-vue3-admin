@@ -9,6 +9,11 @@ export namespace Table {
     total: number;
   }
 
+  export interface PaginationProps {
+    enabled: boolean; // 是否开启分页
+    fake: boolean; // 是否前端分页
+  }
+
   export interface StateProps {
     tableData: any[];
     paging: Paging;
@@ -37,7 +42,7 @@ export namespace Theme {
 export const useTable = (
   api?: (params: any) => Promise<any>,
   initRequestParam: object = {},
-  openPage: boolean = true,
+  openPage: boolean | Table.PaginationProps = true,
   beforeSearch?: (searchParam: any) => any,
   dataCallBack?: (data: any) => any,
   requestError?: (error: any) => void,
@@ -83,7 +88,7 @@ export const useTable = (
     if (!api) return;
     try {
       // 先把初始化参数和分页参数放到总参数里面
-      Object.assign(state.totalParam, initRequestParam, openPage ? pageParam.value : {});
+      Object.assign(state.totalParam, initRequestParam, isBackPage(openPage) ? pageParam.value : {});
       let searchParam = { ...state.searchInitParam, ...state.totalParam };
       beforeSearch && (searchParam = beforeSearch(searchParam) ?? searchParam);
 
@@ -105,10 +110,10 @@ export const useTable = (
 
       let data = await api(searchParam);
       dataCallBack && (data = dataCallBack(data) || data);
-      state.tableData = openPage ? data : data;
+      state.tableData = data;
 
       // 解构后台返回的分页数据 (如果有分页更新分页信息)
-      if (openPage) {
+      if (isBackPage(openPage)) {
         const { pageNum, pageSize, total } = data;
         updatePaging({ pageNum, pageSize, total });
       }
@@ -133,7 +138,7 @@ export const useTable = (
         nowSearchParam[key] = state.searchParam[key];
       }
     }
-    Object.assign(state.totalParam, nowSearchParam, openPage ? pageParam.value : {});
+    Object.assign(state.totalParam, nowSearchParam, isBackPage(openPage) ? pageParam.value : {});
   };
 
   /**
@@ -178,8 +183,37 @@ export const useTable = (
   const handlePagination = (paging: Paging) => {
     state.paging.pageNum = paging.currentPage;
     state.paging.pageSize = paging.pageSize;
-    getTableList();
+    if (isBackPage(openPage)) getTableList();
   };
 
-  return { ...toRefs(state), getTableList, search, reset, handlePagination, updatedTotalParam };
+  const isOpenPage = (openPage: boolean | Table.PaginationProps) => {
+    if (openPage === true) return true;
+    if ((openPage as Table.PaginationProps)?.enabled) return true;
+    return false;
+  };
+
+  const isBackPage = (openPage: boolean | Table.PaginationProps) => {
+    if (openPage === true) return true;
+    if (openPage === false) return false;
+    if ((openPage as Table.PaginationProps)?.enabled && (openPage as Table.PaginationProps)?.fake !== true) return true;
+    return false;
+  };
+
+  const isFrontPage = (openPage: boolean | Table.PaginationProps) => {
+    if (openPage === true || openPage === false) return false;
+    if ((openPage as Table.PaginationProps)?.enabled && (openPage as Table.PaginationProps)?.fake) return true;
+    return false;
+  };
+
+  return {
+    ...toRefs(state),
+    getTableList,
+    search,
+    reset,
+    handlePagination,
+    updatedTotalParam,
+    isOpenPage,
+    isBackPage,
+    isFrontPage,
+  };
 };
