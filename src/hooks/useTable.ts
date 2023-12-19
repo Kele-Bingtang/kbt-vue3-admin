@@ -1,5 +1,6 @@
 import type { Paging } from "@/components/Pagination/index.vue";
 import type { ColumnProps } from "@/components/ProTable/interface";
+import { isArray } from "@/utils/layout/validate";
 import { reactive, computed, toRefs } from "vue";
 
 export namespace Table {
@@ -110,7 +111,8 @@ export const useTable = (
 
       let data = await api(searchParam);
       dataCallBack && (data = dataCallBack(data) || data);
-      state.tableData = data;
+
+      if (isArray(data)) state.tableData = data;
 
       // 解构后台返回的分页数据 (如果有分页更新分页信息)
       if (isBackPage(openPage)) {
