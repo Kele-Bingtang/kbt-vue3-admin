@@ -164,7 +164,7 @@ const loopAnim = () => {
   counter.value.start(() => {
     const isTruly = typeof props.loop === "boolean" && props.loop;
     if (isTruly || props.loop > loopCount) {
-      delay(() => {
+      useDelay(() => {
         counter.value.reset();
         loopAnim();
       }, props.delay);
@@ -176,7 +176,7 @@ const loopAnim = () => {
 
 let delayRafId: number = 0;
 // delay to execute callback function
-const delay = (cb: () => unknown, seconds = 1) => {
+const useDelay = (cb: () => unknown, seconds = 1) => {
   let startTime: number;
   function count(timestamp: number) {
     if (!startTime) startTime = timestamp;

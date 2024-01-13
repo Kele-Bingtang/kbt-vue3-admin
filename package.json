@@ -39,7 +39,7 @@
     "@wangeditor/editor-for-vue": "^5.1.12",
     "@wangeditor/plugin-upload-attachment": "^1.1.0",
     "axios": "^1.6.5",
-    "codemirror": "^6.0.1",
+    "codemirror": "^5.65.14",
     "codemirror-editor-vue3": "^2.4.1",
     "countup": "^1.8.2",
     "echarts": "^5.4.3",
