@@ -133,6 +133,8 @@ export default {
     showTabsNavIcon: "显示标签栏图标",
     recordTagsNav: "持久化标签页",
     showLayoutLogo: "显示侧边菜单 Logo",
+    headerHeight: "顶部高度",
+    menuWidth: "菜单宽度",
     titleModeOne: "项目 Title + 页面 Title",
     titleModeTwo: "用户名 + 页面 Title",
     titleModeThree: "项目 Title",

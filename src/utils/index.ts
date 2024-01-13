@@ -212,6 +212,20 @@ export const isIncludeSome = (arr: string[], value: string[]) => {
   return arr.some(a => value.includes(a));
 };
 
+/**
+ * 设置 css var 需要的变量
+ * @param key key
+ * @param value value
+ */
+export const setStyleVar = (key: string, value: string) => {
+  document.documentElement.style.setProperty(key, value);
+};
+
+/**
+ * 补 px 单位
+ * @param val 值
+ * @returns 补 px 单位的 string
+ */
 export const getPx = (val: number | string) => {
   if (isString(val)) {
     if (isNumber(val)) return `${val}px`;

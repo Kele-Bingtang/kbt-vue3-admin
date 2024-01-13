@@ -49,12 +49,3 @@ watch(
   }
 );
 </script>
-
-<style lang="scss">
-.vertical,
-.mixins {
-  .el-main {
-    padding: 0 !important;
-  }
-}
-</style>

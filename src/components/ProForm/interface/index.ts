@@ -56,6 +56,7 @@ export interface ColumnsProps {
     defaultValue?: BaseType | (() => BaseType | any) | any[]; // 默认值
     width?: string | number;
     subProp?: string; // 级联表单的 prop
+    subEnum?: EnumProps[] | ((params?: any) => Promise<any>); // 级联表单的 prop
     render?: (scope: FormRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
     [key: string]: any;
   };

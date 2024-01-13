@@ -5,7 +5,7 @@
 
   .el-header {
     box-sizing: border-box;
-    height: 55px;
+    height: var(--el-menu-horizontal-height);
     padding: 0;
     color: var(--header-text-color);
     background-color: var(--header-bg-color);

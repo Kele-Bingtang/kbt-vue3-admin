@@ -22,7 +22,19 @@
       <span>{{ data[fieldNames.label] }}</span>
     </template>
 
-    <template v-if="column.attrs?.el === 'el-select'">
+    <template v-if="column.attrs?.el === 'el-select' && column.attrs?.type === 'el-select-group'">
+      <component :is="`el-option-group`" v-for="(colGroup, index) in columnEnum" :key="index" :label="colGroup.label">
+        <component
+          :is="`el-option`"
+          v-for="(col, index) in colGroup.options"
+          :key="index"
+          :label="col[fieldNames.label]"
+          :value="col[fieldNames.value]"
+        ></component>
+      </component>
+    </template>
+
+    <template v-else-if="column.attrs?.el === 'el-select'">
       <component
         :is="`el-option`"
         v-for="(col, index) in columnEnum"

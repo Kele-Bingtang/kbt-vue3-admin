@@ -2,7 +2,7 @@
   <div class="pro-table-container">
     <!-- 查询表单 card -->
     <SearchForm
-      v-show="isShowSearch"
+      v-show="isShowSearchProp"
       :search="search"
       :reset="reset"
       :columns="searchColumns"
@@ -236,7 +236,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
 });
 
 // 是否显示搜索模块
-const isShowSearchProp = computed(() => props.isShowSearch);
+const isShowSearchProp = ref(props.isShowSearch);
 // 表格 DOM 元素
 const tableRef = ref<InstanceType<typeof ElTable>>();
 

@@ -21,6 +21,8 @@ const {
   isWeak: isWeakSetting,
   isGrey: isGreySetting,
   maximize: maximizeSetting,
+  menuWidth: menuWidthSetting,
+  headerHeight: headerHeightSetting,
 } = defaultSettings;
 
 export const useSettingsStore = defineStore(
@@ -44,6 +46,8 @@ export const useSettingsStore = defineStore(
     const isGrey = ref(isGreySetting);
     const headerTheme = ref<LayoutThemeType>(layoutThemeSetting);
     const maximize = ref(maximizeSetting);
+    const menuWidth = ref(parseInt(menuWidthSetting));
+    const headerHeight = ref(parseInt(headerHeightSetting));
 
     const closeSideMenu = () => {
       isCollapse.value = true;
@@ -79,6 +83,8 @@ export const useSettingsStore = defineStore(
       isGrey,
       headerTheme,
       maximize,
+      menuWidth,
+      headerHeight,
 
       closeSideMenu,
       toggleSideMenu,

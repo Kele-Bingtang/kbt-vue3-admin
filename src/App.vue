@@ -61,10 +61,7 @@ const versionCache = () => {
   const cacheVersion = getCacheVersion();
   if (version && cacheVersion !== version) {
     const { layoutSize, language } = settings;
-    settingsStore.$patch({
-      ...settings,
-      menuTheme: settings.layoutTheme,
-    });
+    settingsStore.$patch({ ...(settings as any), menuTheme: settings.layoutTheme });
     layoutStore.$patch({
       layoutSize,
       language,

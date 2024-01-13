@@ -44,7 +44,9 @@ const RenderTableColumn = (item: ColumnProps) => {
               if (item._children) return item._children.map(child => RenderTableColumn(child));
               if (item.render) return item.render(scope);
               if (slots[lastProp(item.prop!)]) return slots[lastProp(item.prop!)]!(scope);
-              if (item.tag) return <el-tag type={getTagType(item, scope)}>{renderCellData(item, scope)}</el-tag>;
+              if (item.tag && renderCellData(item, scope)) {
+                return <el-tag type={getTagType(item, scope)}>{renderCellData(item, scope)}</el-tag>;
+              }
               return renderCellData(item, scope);
             },
             header: (scope: HeaderRenderScope<any>) => {

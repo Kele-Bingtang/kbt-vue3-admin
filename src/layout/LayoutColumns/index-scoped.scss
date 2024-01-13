@@ -15,7 +15,7 @@
 
     .logo {
       box-sizing: border-box;
-      height: 55px;
+      height: var(--el-menu-horizontal-height);
       cursor: pointer;
       border-bottom: 1px solid var(--menu-logo-line-color);
 
@@ -26,7 +26,7 @@
     }
 
     .el-scrollbar {
-      height: calc(100% - 55px);
+      height: calc(100% - var(--el-menu-horizontal-height));
 
       .split-list {
         flex: 1;
@@ -78,7 +78,7 @@
     transition: all 0.3s ease;
 
     .el-scrollbar {
-      height: calc(100% - 55px);
+      height: calc(100% - var(--el-menu-horizontal-height));
 
       .el-menu {
         overflow-x: hidden;
@@ -88,7 +88,7 @@
 
     .logo {
       box-sizing: border-box;
-      height: 55px;
+      height: var(--el-menu-horizontal-height);
       border-bottom: 1px solid var(--menu-logo-line-color);
 
       span {
@@ -101,7 +101,7 @@
   }
 
   &.menu-expand .el-aside {
-    width: $sideMenuWidth;
+    width: var(--aside-width) !important;
   }
 
   &.menu-collapse .el-aside {
@@ -116,7 +116,7 @@
 
   .el-header {
     box-sizing: border-box;
-    height: 55px;
+    height: var(--el-menu-horizontal-height);
     padding: 0 15px;
     background-color: #ffffff;
     border-bottom: 1px solid #f1f1f1;

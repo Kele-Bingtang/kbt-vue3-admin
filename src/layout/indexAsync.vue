@@ -15,6 +15,7 @@ import { useSettingsStore } from "@/stores/settings";
 import { useLayout } from "@/hooks/useLayout";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
+import { getPx, setStyleVar } from "@/utils";
 
 const LayoutComponents: { [key: string]: Component } = {
   vertical: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),
@@ -38,6 +39,10 @@ watch(
     immediate: true,
   }
 );
+
+watchEffect(() => setStyleVar("--aside-width", getPx(settingsStore.menuWidth)));
+
+watchEffect(() => setStyleVar("--el-menu-horizontal-height", getPx(settingsStore.headerHeight)));
 </script>
 
 <style lang="scss">

@@ -5,6 +5,7 @@
         <el-icon><Notification /></el-icon>
         {{ $t("_settings.layoutSwitch") }}
       </el-divider>
+
       <div class="layout-box">
         <el-tooltip effect="dark" content="纵向" placement="top" :show-after="200">
           <div
@@ -123,6 +124,7 @@
           </el-tooltip>
         </div>
       </template>
+
       <template
         v-if="
           settingsStore.layoutMode === LayoutModeType.Classic ||
@@ -154,10 +156,12 @@
         </div>
       </template>
     </template>
+
     <el-divider class="divider" content-position="center">
       <el-icon><Menu /></el-icon>
       {{ $t("_settings.tabsNavSwitch") }}
     </el-divider>
+
     <div class="tab-box">
       <div class="tab-item">
         <el-tooltip effect="dark" content="经典" placement="left" :show-after="200">
@@ -194,11 +198,13 @@
         </el-icon>
       </div>
     </div>
+
     <!-- 全局主题 -->
     <el-divider class="divider" content-position="center">
       <el-icon><ColdDrink /></el-icon>
       {{ $t("_settings.globalTheme") }}
     </el-divider>
+
     <div class="drawer-item">
       <span>{{ $t("_settings.theme") }}</span>
       <el-color-picker v-model="settingsStore.primaryTheme" :predefine="colorList" @change="changePrimary" />
@@ -221,11 +227,13 @@
       <span>{{ $t("_settings.weakMode") }}</span>
       <el-switch v-model="settingsStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />
     </div>
+
     <!-- 界面设置 -->
     <el-divider class="divider" content-position="center">
       <el-icon><Setting /></el-icon>
       {{ $t("_settings.interfaceSettings") }}
     </el-divider>
+
     <div class="drawer-item">
       <span>{{ $t("_settings.collapseMenu") }}</span>
       <el-switch v-model="settingsStore.isCollapse" />
@@ -258,10 +266,22 @@
       <span>{{ $t("_tabsNav.maximize") }}</span>
       <el-switch v-model="settingsStore.maximize" />
     </div>
+
+    <div>
+      <span style="font-size: 14px">{{ $t("_settings.headerHeight") }}</span>
+      <el-slider v-model="settingsStore.headerHeight" :min="30" :max="70" />
+    </div>
+
+    <div>
+      <span style="font-size: 14px">{{ $t("_settings.menuWidth") }}</span>
+      <el-slider v-model="settingsStore.menuWidth" :min="100" :max="400" />
+    </div>
+
     <el-divider class="divider" content-position="center">
       <el-icon><Box /></el-icon>
       {{ $t("_settings.titleSwitch") }}
     </el-divider>
+
     <div class="drawer-item">
       <el-select
         v-model="settingsStore.titleMode"
@@ -277,7 +297,9 @@
         ></el-option>
       </el-select>
     </div>
+
     <el-divider />
+
     <el-button plain :icon="Refresh" @click="resetSettings">
       {{ $t("_settings.resetSettingsTitle") }}
     </el-button>

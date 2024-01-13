@@ -6,7 +6,7 @@
 
   .el-header {
     box-sizing: border-box;
-    height: 55px;
+    height: var(--el-menu-horizontal-height);
     padding: 0;
     color: var(--header-text-color);
     background-color: var(--header-bg-color);
@@ -46,7 +46,7 @@
   }
 
   &.menu-expand .el-aside {
-    width: $sideMenuWidth;
+    width: var(--aside-width) !important;
   }
 
   &.menu-collapse .el-aside {
@@ -60,7 +60,7 @@
   }
 
   .mixins-container {
-    height: calc(100% - 55px); /* 减去头部高度 */
+    height: calc(100% - var(--el-menu-horizontal-height)); /* 减去头部高度 */
 
     .not-aside {
       width: 0 !important;

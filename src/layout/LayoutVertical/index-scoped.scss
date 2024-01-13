@@ -24,7 +24,7 @@
     transition: width 0.28s;
 
     :deep(.el-scrollbar) {
-      height: calc(100% - 55px);
+      height: calc(100% - var(--el-menu-horizontal-height));
 
       .el-menu {
         overflow-x: hidden;
@@ -34,7 +34,7 @@
 
     .logo {
       box-sizing: border-box;
-      height: 55px;
+      height: var(--el-menu-horizontal-height);
       cursor: pointer;
       border-bottom: 1px solid var(--menu-logo-line-color);
 
@@ -54,7 +54,7 @@
   }
 
   &.menu-expand .el-aside {
-    width: $sideMenuWidth !important;
+    width: var(--aside-width) !important;
   }
 
   &.menu-collapse .el-aside {
@@ -64,7 +64,7 @@
 
   .el-header {
     box-sizing: border-box;
-    height: 55px;
+    height: var(--el-menu-horizontal-height);
     padding: 0 15px;
     border-bottom: 1px solid #3c3c3c1f;
   }
@@ -78,9 +78,9 @@
   }
 
   &.menu-collapse .el-aside {
-    width: $sideMenuWidth !important;
+    width: var(--aside-width) !important;
     pointer-events: none !important;
     transition-duration: 0.3s !important;
-    transform: translate3d(-$sideMenuWidth, 0, 0) !important;
+    transform: translate3d(-var(--aside-width), 0, 0) !important;
   }
 }
