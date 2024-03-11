@@ -28,6 +28,7 @@
             >
               新增
             </el-button>
+            <slot name="tableHeaderExtra"></slot>
           </slot>
         </div>
         <div v-if="toolButton" class="header-button-ri">
@@ -132,6 +133,7 @@
                     </el-button>
                   </template>
                 </el-popconfirm>
+                <slot name="operationExtra"></slot>
               </slot>
             </template>
           </TableColumn>
@@ -232,6 +234,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   toolButton: true,
   rowKey: "id",
   size: "default",
+  isShowSearch: true,
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 });
 

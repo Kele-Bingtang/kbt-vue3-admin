@@ -67,6 +67,8 @@ watchEffect(() => {
 <style lang="scss" scoped>
 .el-main {
   box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
   padding: 0;
   overflow-x: hidden;
   background-color: #f0f2f5;

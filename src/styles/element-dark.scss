@@ -119,7 +119,10 @@ html.dark {
   .antd-message {
     background-color: rgb(36 37 37) !important;
     background-image: initial !important;
-    box-shadow: rgb(13 13 13 / 12%) 0 3px 6px -4px, rgb(13 13 13 / 8%) 0 6px 16px 0, rgb(13 13 13 / 5%) 0 9px 28px 8px !important;
+    box-shadow:
+      rgb(13 13 13 / 12%) 0 3px 6px -4px,
+      rgb(13 13 13 / 8%) 0 6px 16px 0,
+      rgb(13 13 13 / 5%) 0 9px 28px 8px !important;
 
     & .el-message__content {
       color: #ffffff !important;
@@ -134,4 +137,8 @@ html.dark {
       }
     }
   }
+}
+
+.el-sub-menu__title:hover {
+  background-color: var(--menu-active-bg-color);
 }
