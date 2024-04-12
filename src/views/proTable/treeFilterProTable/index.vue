@@ -33,7 +33,7 @@
 
 <script setup lang="ts" name="treeFilterProTable">
 import ProTable from "@/components/ProTable/index.vue";
-import type { ColumnProps, ProTableInstance } from "@/components/ProTable/interface";
+import type { TableColumnProps, ProTableInstance } from "@/components/ProTable/interface";
 import { useHandleData } from "@/hooks/useHandleData";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { genderType, tableData, userStatus, department } from "@/mock/pro-table";
@@ -52,7 +52,7 @@ const changeTreeFilter = () => {
 };
 
 // 表格配置项
-const columns: ColumnProps<ResUserList>[] = [
+const columns: TableColumnProps<ResUserList>[] = [
   { type: "index", label: "#", width: 80 },
   { prop: "username", label: "用户姓名", width: 120, search: { el: "el-input" } },
   {

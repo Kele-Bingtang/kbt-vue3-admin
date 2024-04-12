@@ -1,5 +1,4 @@
-import type { FieldNamesProps } from "@/components/ProTable/interface";
-import { isArray } from "./layout/validate";
+import type { FieldNamesProps } from "../interface";
 
 /**
  * @description 处理 prop，当 prop 为多级嵌套时 ==> 返回最后一级 prop
@@ -13,26 +12,49 @@ export function lastProp(prop: string) {
 }
 
 /**
- * @description 根据枚举列表查询当需要的数据（如果指定了 label 和 value 的 key 值，会自动识别格式化）
+ * @description 根据枚举列表查询当需要的数据（如果指定了 value 的 key 值，会自动识别格式化）
  * @param {String} callValue 当前单元格值
  * @param {Array} enumData 字典列表
  * @param {Array} fieldNames label && value && children 的 key 值
  * @param {String} type 过滤类型（目前只有 tag）
  * @returns {String}
  * */
-export function filterEnum(callValue: any, enumData?: any, fieldNames?: FieldNamesProps, type?: "tag") {
+export function filterEnum(callValue: any, enumData?: any, fieldNames?: FieldNamesProps) {
   const value = fieldNames?.value ?? "value";
-  const label = fieldNames?.label ?? "label";
   const children = fieldNames?.children ?? "children";
+  const filterDataArray: { [key: string]: any }[] = [];
   let filterData: { [key: string]: any } = {};
   // 判断 enumData 是否为数组
-  if (Array.isArray(enumData)) filterData = findItemNested(enumData, callValue, value, children);
-  // 判断是否输出的结果为 tag 类型
-  if (type === "tag") {
-    return filterData?.tagType ? filterData.tagType : "";
-  } else {
-    return filterData ? filterData[label] : "--";
+  if (Array.isArray(enumData)) {
+    if (Array.isArray(callValue)) {
+      callValue.forEach(item => {
+        const data = findItemNested(enumData, item, value, children);
+        data && filterDataArray.push(data);
+      });
+    } else filterData = findItemNested(enumData, callValue, value, children);
   }
+
+  return filterDataArray.length ? filterDataArray : filterData || "";
+}
+
+/**
+ * @description 根据枚举列表查询当需要的数据（如果指定了 label 的 key 值，会自动识别格式化）
+ * @param {String} callValue 当前单元格值
+ * @param {Array} enumData 字典列表
+ * @param {Array} fieldNames label && value && children 的 key 值
+ * @param {String} type 过滤类型（目前只有 tag）
+ * @returns {String}
+ * */
+export function filterEnumLabel(enumData: any, fieldNames?: FieldNamesProps) {
+  const label = fieldNames?.label ?? "label";
+
+  if (Array.isArray(enumData)) {
+    const filterDataArray: any[] = [];
+    enumData.forEach((item: any) => filterDataArray.push(item[label]));
+    return filterDataArray;
+  }
+
+  return enumData ? enumData[label] : "--";
 }
 
 /**
@@ -42,7 +64,7 @@ export function filterEnum(callValue: any, enumData?: any, fieldNames?: FieldNam
  * */
 export function formatValue(callValue: any) {
   // 如果当前值为数组，使用 / 拼接（根据需求自定义）
-  if (isArray(callValue)) return callValue.length ? callValue.join(" / ") : "--";
+  if (Array.isArray(callValue)) return callValue.length ? callValue.join(" / ") : "--";
   return callValue ?? "--";
 }
 
@@ -64,7 +86,7 @@ export function handleRowAccordingToProp(row: { [key: string]: any }, prop: stri
 export function findItemNested(enumData: any, callValue: any, value: string, children: string) {
   return enumData.reduce((accumulator: any, current: any) => {
     if (accumulator) return accumulator;
-    if (current[value] === callValue) return current;
+    if (current[value] === callValue + "") return current;
     if (current[children]) return findItemNested(current[children], callValue, value, children);
   }, null);
 }

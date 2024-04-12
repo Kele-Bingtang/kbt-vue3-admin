@@ -1,19 +1,18 @@
 import type { VNode, ComponentPublicInstance } from "vue";
+import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
+import ProTable, { type ProTableProps } from "../index.vue";
 import type { BreakPoint } from "@/components/Grid/index.vue";
 import type { Responsive } from "@/components/Grid/components/GridItem.vue";
-import type { TableColumnCtx } from "element-plus/es/components/table/src/table-column/defaults";
-import type { ProTableProps } from "@/components/ProTable/index.vue";
-import type ProTable from "@/components/ProTable/index.vue";
-import type { ColumnsProps } from "@/components/ProForm/interface";
+import type { FormColumnProps } from "@/components/ProForm/interface";
 
 type ValueType = string | number | boolean | any[];
 
-export interface EnumProps {
+export interface TableEnumProps {
   label?: string; // 选项框显示的文字
   value?: ValueType; // 选项框值
   disabled?: boolean; // 是否禁用此选项
   tagType?: string; // 当 tag 为 true 时，此选择会指定 tag 显示类型
-  children?: EnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
+  children?: TableEnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
   [key: string]: any;
 }
 
@@ -37,8 +36,8 @@ export type SearchRenderScope = {
   searchParam: { [key: string]: any }; // 搜索参数
   placeholder: string;
   clearable: boolean;
-  options: EnumProps[]; // cascader、select-v 2 的选项
-  data: EnumProps[]; // el-tree-select 的数据
+  options: TableEnumProps[]; // cascader、select-v 2 的选项
+  data: TableEnumProps[]; // el-tree-select 的数据
 };
 
 export type SearchProps = {
@@ -48,8 +47,8 @@ export type SearchProps = {
   order?: number; // 搜索项排序（从大到小）
   span?: number; // 搜索项所占用的列数，默认为 1 列
   offset?: number; // 搜索字段左侧偏移列数
-  defaultValue?: ValueType; // 搜索项默认值
-  beforeSearch?: (val: ValueType, searchParams: { [key: string]: any }, col: ColumnProps) => any; // 自定义搜索内容渲染（tsx 语法）
+  defaultValue?: ValueType | (() => ValueType | any) | Ref<ValueType>; // 搜索项默认值
+  beforeSearch?: (val: ValueType, searchParams: { [key: string]: any }, col: TableColumnProps) => any; // 自定义搜索内容渲染（tsx 语法）
   type?: string; // el-select 有 el-select-group
   render?: (scope: SearchRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
 } & Partial<Record<BreakPoint, Responsive>>;
@@ -60,22 +59,26 @@ export type RenderScope<T> = { row: T; $index: number; column: TableColumnCtx<T>
 
 export type HeaderRenderScope<T> = { $index: number; column: TableColumnCtx<T>; [key: string]: any };
 
+declare type PartialKey<T, U extends keyof T> = Pick<T, Exclude<keyof T, U>> & Partial<Pick<T, U>>;
+
 /**
  * 表字段属性配置
  * 在 Element Plus 的类型基础增强
  **/
-export interface ColumnProps<T = any>
+export interface TableColumnProps<T = any>
   extends Partial<Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader">> {
   tag?: boolean; // 是否是标签展示
   isShow?: boolean; // 是否显示在表格当中
   search?: SearchProps | undefined; // 搜索项配置
-  enum?: EnumProps[] | ((params?: any) => Promise<any>); // 枚举类型（字典）
+  enum?: TableEnumProps[] | ((enumMap?: any) => Promise<any>) | ComputedRef<TableEnumProps[]>; // 枚举类型（字典）
+  enumKey?: string; // 如果 enum 是接口调用，那么可以指定哪个 key 获取 enum 数据，默认返回的数据作为 enum
+  useEnumMap?: string | ((enumMap?: any) => any); // 从 enumMap 中获取其他的 enum 数据
   isFilterEnum?: boolean; // 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据，不参与内容格式化）
   fieldNames?: FieldNamesProps; // 字典指定 label && value && children 的 key 值
   headerRender?: (scope: HeaderRenderScope<T>) => VNode; // 自定义表头内容渲染（tsx 语法）
   render?: (scope: RenderScope<T>) => VNode | string; // 自定义单元格内容渲染（tsx 语法）
-  _children?: ColumnProps<T>[]; // 多级表头
-  form?: PartialKey<ColumnsProps, "formItem">;
+  _children?: TableColumnProps<T>[]; // 多级表头
+  form?: PartialKey<FormColumnProps, "formItem">;
 }
 
 export type ProTableInstance = Omit<InstanceType<typeof ProTable>, keyof ComponentPublicInstance | keyof ProTableProps>;

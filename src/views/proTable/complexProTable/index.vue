@@ -47,9 +47,9 @@
 
 <script setup lang="tsx" name="ComplexProTable">
 import ProTable from "@/components/ProTable/index.vue";
-import type { ColumnProps, HeaderRenderScope, ProTableInstance } from "@/components/ProTable/interface";
+import type { TableColumnProps, HeaderRenderScope, ProTableInstance } from "@/components/ProTable/interface";
 import { useHandleData } from "@/hooks/useHandleData";
-import { ElMessage, type TableColumnCtx } from "element-plus";
+import { ElButton, ElMessage, type TableColumnCtx } from "element-plus";
 import { genderType, tableData, userStatus } from "@/mock/pro-table";
 import { CirclePlus, Delete, Pointer, Refresh } from "@element-plus/icons-vue";
 import type { ResUserList } from "../simpleProTable/index.vue";
@@ -60,13 +60,13 @@ const data = ref(tableData);
 // 自定义渲染表头（使用tsx语法）
 const headerRender = (scope: HeaderRenderScope<ResUserList>) => {
   return (
-    <el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
+    <ElButton type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
       {scope.column.label}
-    </el-button>
+    </ElButton>
   );
 };
 
-const columns: ColumnProps<ResUserList>[] = [
+const columns: TableColumnProps<ResUserList>[] = [
   { type: "selection", width: 80 },
   { type: "index", label: "#", width: 80 },
   { type: "expand", label: "Expand", width: 100 },

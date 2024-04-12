@@ -1,17 +1,11 @@
 <template>
-  <WangEditor
-    v-if="column.attrs?.el === 'wang-editor'"
-    v-model="_form[column.formItem.prop]"
-    v-bind="{ ...handleFormProps, ...placeholder, scope: { form: _form, data: _form[column.formItem.prop] } }"
-  ></WangEditor>
-
   <component
-    v-else
     :is="column.attrs?.render ?? column.attrs?.el ?? ''"
+    :disabled="isDisabled()"
     v-bind="{
       ...handleFormProps,
       ...placeholder,
-      scope: { form: _form, data: _form[column.formItem.prop] },
+      scope: { form: _form, data: _form[column.formItem.prop], enumData: columnEnum },
       clearable,
     }"
     v-model="_form[column.formItem.prop]"
@@ -22,39 +16,83 @@
       <span>{{ data[fieldNames.label] }}</span>
     </template>
 
-    <template v-if="column.attrs?.el === 'el-select' && column.attrs?.type === 'el-select-group'">
-      <component :is="`el-option-group`" v-for="(colGroup, index) in columnEnum" :key="index" :label="colGroup.label">
+    <template v-if="column.attrs?.el === 'el-select'">
+      <template v-if="column.attrs?.type === 'el-select-group'">
+        <component :is="`el-option-group`" v-for="(colGroup, index) in columnEnum" :key="index" :label="colGroup.label">
+          <component
+            :is="`el-option`"
+            v-for="(col, index) in colGroup.options"
+            :key="index"
+            :label="col[fieldNames.label]"
+            :value="col[fieldNames.value]"
+          ></component>
+        </component>
+      </template>
+
+      <template v-else>
         <component
           :is="`el-option`"
-          v-for="(col, index) in colGroup.options"
+          v-for="(col, index) in columnEnum"
           :key="index"
           :label="col[fieldNames.label]"
           :value="col[fieldNames.value]"
         ></component>
-      </component>
+      </template>
     </template>
 
-    <template v-else-if="column.attrs?.el === 'el-select'">
-      <component
-        :is="`el-option`"
-        v-for="(col, index) in columnEnum"
-        :key="index"
-        :label="col[fieldNames.label]"
-        :value="col[fieldNames.value]"
-      ></component>
+    <template v-if="column.attrs?.el === 'el-radio-group'">
+      <template v-if="column.attrs?.type === 'el-radio-button'">
+        <component
+          :is="`el-radio-button`"
+          v-for="(col, index) in columnEnum"
+          :key="index"
+          :value="col[fieldNames.value]"
+          :label="col[fieldNames.label]"
+        ></component>
+      </template>
+
+      <template v-else>
+        <component :is="`el-radio`" v-for="(col, index) in columnEnum" :key="index" :value="col[fieldNames.value]">
+          {{ col[fieldNames.label] }}
+        </component>
+      </template>
+    </template>
+
+    <template v-if="column.attrs?.el === 'el-checkbox-group'">
+      <template v-if="column.attrs?.type === 'el-checkbox-button'">
+        <component
+          :is="`el-checkbox-button`"
+          v-for="(col, index) in columnEnum"
+          :key="index"
+          :value="col[fieldNames.value]"
+        >
+          {{ col[fieldNames.label] }}
+        </component>
+      </template>
+
+      <template v-else>
+        <component
+          :is="`el-checkbox`"
+          v-for="(col, index) in columnEnum"
+          :key="index"
+          :value="col[fieldNames.value]"
+          :label="col[fieldNames.label]"
+        ></component>
+      </template>
     </template>
 
     <slot v-else></slot>
   </component>
 </template>
 
-<script setup lang="ts" name="ProFormItem">
+<script setup lang="ts">
 import { computed, inject, ref } from "vue";
-import type { ColumnsProps } from "../interface/index";
-import WangEditor from "@/components/WangEditor/index.vue";
+import type { FormColumnProps } from "../interface";
+
+defineOptions({ name: "ProFormItem" });
 
 interface ProFormItemProps {
-  column: ColumnsProps;
+  column: FormColumnProps;
   form: { [key: string]: any };
 }
 
@@ -74,13 +112,28 @@ const fieldNames = computed(() => {
 // 接收 enumMap (el 为 select-v 2 需单独处理 enumData)
 const enumMap = inject("enumMap", ref(new Map()));
 const columnEnum = computed(() => {
+  const attrs = props.column.attrs;
+
+  if (attrs.useEnumMap) {
+    if (typeof attrs.useEnumMap === "function") {
+      return attrs.useEnumMap(enumMap.value);
+    }
+
+    const data = enumMap.value.get(attrs.useEnumMap);
+    if (!data) return [];
+    if (attrs.enumKey) return data[attrs.enumKey] || [];
+    return data;
+  }
+
   let enumData = enumMap.value.get(props.column.formItem.prop);
+
   if (!enumData) return [];
-  if (props.column.attrs?.el === "el-select-v 2" && props.column.attrs.fieldNames) {
+  if (props.column.attrs?.el === "el-select-v2") {
     enumData = enumData.map((item: { [key: string]: any }) => {
       return { ...item, label: item[fieldNames.value.label], value: item[fieldNames.value.value] };
     });
   }
+  if (attrs.enumKey) return enumData[attrs.enumKey];
   return enumData;
 });
 
@@ -91,6 +144,7 @@ const handleFormProps = computed(() => {
   const children = fieldNames.value.children;
   const formEl = props.column.attrs?.el;
   let formProps = props.column.attrs.props ?? {};
+
   if (formEl === "el-tree-select") {
     formProps = { ...formProps, props: { ...formProps.props, label, children }, nodeKey: value };
   }
@@ -99,11 +153,13 @@ const handleFormProps = computed(() => {
     formProps = { ...formProps, props: { ...formProps.props, label, value, children } };
   }
 
-  if (formProps.type === "date") formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
-  else if (formEl === "el-date-picker") formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
+  if (formEl === "el-date-picker") {
+    if (formProps.type === "datetime") formProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...formProps };
+    if (formProps.type === "date") formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
+    else formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
+  }
 
-  if (formProps.type === "datetime") formProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...formProps };
-  else if (formEl === "el-time-picker") formProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...formProps };
+  if (formEl === "el-time-picker") formProps = { valueFormat: "HH:mm:ss", ...formProps };
 
   return formProps;
 });
@@ -123,4 +179,9 @@ const clearable = computed(() => {
   const attrs = props.column.attrs;
   return attrs?.props?.clearable ?? (attrs?.defaultValue === null || attrs?.defaultValue === undefined);
 });
+
+const isDisabled = () => {
+  if (typeof props.column.attrs.isDisabled === "function") return props.column.attrs.isDisabled(_form.value);
+  return props.column.attrs.isDisabled;
+};
 </script>

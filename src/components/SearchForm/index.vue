@@ -22,17 +22,17 @@
   </div>
 </template>
 
-<script setup lang="ts" name="SearchForm">
+<script setup lang="ts">
 import { computed, ref } from "vue";
-import type { ColumnProps } from "@/components/ProTable/interface";
-import type { BreakPoint } from "@/components/Grid/index.vue";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import SearchFormItem from "./components/SearchFormItem.vue";
-import Grid from "@/components/Grid/index.vue";
-import GridItem from "@/components/Grid/components/GridItem.vue";
+import type { TableColumnProps } from "@/components/ProTable/interface";
+import type { BreakPoint } from "@/components/Grid/index.vue";
+
+defineOptions({ name: "SearchForm" });
 
 interface SearchFormProps {
-  columns?: ColumnProps[]; // 搜索配置列
+  columns?: TableColumnProps[]; // 搜索配置列
   searchParam?: { [key: string]: any }; // 搜索参数
   searchCols: number | Record<BreakPoint, number>;
   search: (params: any) => void; // 搜索方法
@@ -43,7 +43,7 @@ interface SearchFormProps {
 const props = withDefaults(defineProps<SearchFormProps>(), { columns: () => [], searchParam: () => ({}) });
 
 // 获取响应式设置
-const getResponsive = (item: ColumnProps) => {
+const getResponsive = (item: TableColumnProps) => {
   return {
     span: item.search?.span,
     offset: item.search?.offset ?? 0,

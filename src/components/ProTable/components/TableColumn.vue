@@ -2,51 +2,70 @@
   <RenderTableColumn v-bind="column" />
 </template>
 
-<script setup lang="tsx" name="TableColumn">
+<script setup lang="tsx">
 import { inject, ref, useSlots } from "vue";
-import type { ColumnProps, RenderScope, HeaderRenderScope } from "@/components/ProTable/interface";
-import { filterEnum, formatValue, lastProp, handleRowAccordingToProp } from "@/utils/table";
+import type { TableColumnProps, RenderScope, HeaderRenderScope } from "../interface";
+import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../utils";
+import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
 
-defineProps<{ column: ColumnProps }>();
+defineOptions({ name: "TableColumn" });
+
+defineProps<{ column: TableColumnProps }>();
 
 const slots = useSlots();
 
 const enumMap = inject("enumMap", ref(new Map()));
 
-// 渲染表格数据
-const renderCellData = (item: ColumnProps, scope: RenderScope<any>) => {
+const getEnumData = (item: TableColumnProps, scope: RenderScope<any>) => {
   return enumMap.value.get(item.prop) && item.isFilterEnum
     ? filterEnum(handleRowAccordingToProp(scope.row, item.prop!), enumMap.value.get(item.prop)!, item.fieldNames)
+    : "";
+};
+
+const renderCellData = (item: TableColumnProps, scope: RenderScope<any>, enumData: any) => {
+  return enumMap.value.get(item.prop) && item.isFilterEnum
+    ? filterEnumLabel(enumData, item.fieldNames)
     : formatValue(handleRowAccordingToProp(scope.row, item.prop!));
 };
 
-// 获取 tag 类型
-const getTagType = (item: ColumnProps, scope: RenderScope<any>) => {
-  return filterEnum(
-    handleRowAccordingToProp(scope.row, item.prop!),
-    enumMap.value.get(item.prop),
-    item.fieldNames,
-    "tag"
+// 获取 tag 标签
+const renderTag = (item: any, data: any, last?: boolean, index?: number) => {
+  const { tagType = "primary", tagEffect = "light" } = item;
+
+  if (item.tagEl === "el-check-tag") {
+    // 直接 index ? : 是不行的，因为这样 index = 0 是 false
+    return index !== undefined ? (
+      <>
+        <ElCheckTag key={index} checked type={tagType}>
+          {data}
+        </ElCheckTag>
+        {last ? "" : " "}
+      </>
+    ) : (
+      <ElCheckTag checked type={tagType}>
+        {data}
+      </ElCheckTag>
+    );
+  }
+  return index !== undefined ? (
+    <>
+      <ElTag key={index} type={tagType} effect={tagEffect}>
+        {data}
+      </ElTag>
+      {last ? "" : " "}
+    </>
+  ) : (
+    <ElTag type={tagType} effect={tagEffect}>
+      {data}
+    </ElTag>
   );
 };
 
-// 获取枚举信息，存放到 [prop.prop]EnumValue 里
-const tryCreateEnumValue = (item: ColumnProps, scope: RenderScope<any>) => {
-  if (enumMap.value.get(item.prop) && item.isFilterEnum) {
-    scope.row[`${item.prop}EnumValue`] = filterEnum(
-      handleRowAccordingToProp(scope.row, item.prop!),
-      enumMap.value.get(item.prop)!,
-      item.fieldNames
-    );
-  }
-  return scope;
-};
-
-const RenderTableColumn = (item: ColumnProps) => {
+const RenderTableColumn = (item: TableColumnProps) => {
   return (
     <>
       {item.isShow && (
-        <el-table-column
+        <ElTableColumn
           {...item}
           align={item.align ?? "center"}
           showOverflowTooltip={item.showOverflowTooltip ?? item.prop !== "operation"}
@@ -55,11 +74,19 @@ const RenderTableColumn = (item: ColumnProps) => {
             default: (scope: RenderScope<any>) => {
               if (item._children) return item._children.map(child => RenderTableColumn(child));
               if (item.render) return item.render(scope);
-              if (slots[lastProp(item.prop!)]) return slots[lastProp(item.prop!)]!(tryCreateEnumValue(item, scope));
-              if (item.tag && renderCellData(item, scope)) {
-                return <el-tag type={getTagType(item, scope)}>{renderCellData(item, scope)}</el-tag>;
+              if (slots[lastProp(item.prop!)]) return slots[lastProp(item.prop!)]!(scope);
+              const enumData = getEnumData(item, scope);
+
+              const data = renderCellData(item, scope, enumData);
+
+              if (item.tag && enumData) {
+                // data 是从 enumData 取出来的，如果 enumData 是数组，那么 data 必然是数组
+                if (Array.isArray(enumData)) {
+                  return enumData.map((e, index) => renderTag(e, data[index], enumData.length - 1 === index, index));
+                }
+                return renderTag(getEnumData, data);
               }
-              return renderCellData(item, scope);
+              return Array.isArray(data) ? data.join(",") : data;
             },
             header: (scope: HeaderRenderScope<any>) => {
               if (item.headerRender) return item.headerRender(scope);
@@ -67,7 +94,7 @@ const RenderTableColumn = (item: ColumnProps) => {
               return item.label;
             },
           }}
-        </el-table-column>
+        </ElTableColumn>
       )}
     </>
   );

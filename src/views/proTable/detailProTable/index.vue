@@ -59,7 +59,7 @@
 </template>
 <script setup lang="tsx" name="CommonTicket">
 import ProTable from "@/components/ProTable/index.vue";
-import type { ColumnProps } from "@/components/ProTable/interface";
+import type { TableColumnProps } from "@/components/ProTable/interface";
 import Grid from "@/components/Grid/index.vue";
 // import ProForm from "@/components/ProForm/index.vue";
 import GridItem from "@/components/Grid/components/GridItem.vue";
@@ -162,7 +162,7 @@ const getTicketList = () => {
 
 const initRequestParam = { serviceName: "ETS_MIT_iWork_problem" };
 
-const columns: ColumnProps<ProblemData>[] = [
+const columns: TableColumnProps<ProblemData>[] = [
   { type: "expand", label: "Expand", width: 50 },
   { prop: "ticketNo", label: "TicketNo", width: 100, search: { el: "el-input" } },
   { prop: "ticketDesc", label: "TicketDesc", search: { el: "el-input" } },

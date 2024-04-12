@@ -47,9 +47,9 @@
 
 <script setup lang="tsx" name="SimpleProTable">
 import ProTable from "@/components/ProTable/index.vue";
-import type { ColumnProps, ProTableInstance } from "@/components/ProTable/interface";
+import type { TableColumnProps, ProTableInstance } from "@/components/ProTable/interface";
 import { useHandleData } from "@/hooks/useHandleData";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElButton, ElInput, ElMessage, ElMessageBox, ElSwitch, ElTag } from "element-plus";
 import { tableData } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
 import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
@@ -76,7 +76,7 @@ const { hasAuth } = usePermission();
 const proTable = ref<ProTableInstance>();
 const data = ref(tableData);
 
-const columns: ColumnProps<ResUserList>[] = [
+const columns: TableColumnProps<ResUserList>[] = [
   { type: "selection", fixed: "left", width: 80 },
   { type: "index", label: "index", width: 80 },
   { type: "expand", label: "Expand", width: 100 },
@@ -86,9 +86,9 @@ const columns: ColumnProps<ResUserList>[] = [
     search: { el: "el-input" },
     render: scope => {
       return (
-        <el-button type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
+        <ElButton type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
           {scope.row.username}
-        </el-button>
+        </ElButton>
       );
     },
   },
@@ -111,9 +111,9 @@ const columns: ColumnProps<ResUserList>[] = [
       render: ({ searchParam }) => {
         return (
           <div class="flx-center">
-            <el-input vModel_trim={searchParam.minAge} placeholder="最小年龄" />
+            <ElInput vModel_trim={searchParam.minAge} placeholder="最小年龄" />
             <span style="margin: 0 10px">-</span>
-            <el-input vModel_trim={searchParam.maxAge} placeholder="最大年龄" />
+            <ElInput vModel_trim={searchParam.maxAge} placeholder="最大年龄" />
           </div>
         );
       },
@@ -135,7 +135,7 @@ const columns: ColumnProps<ResUserList>[] = [
       return (
         <>
           {hasAuth("edit") ? (
-            <el-switch
+            <ElSwitch
               model-value={scope.row.status}
               active-text={scope.row.status ? "启用" : "禁用"}
               active-value={1}
@@ -143,7 +143,7 @@ const columns: ColumnProps<ResUserList>[] = [
               onClick={() => changeStatus(scope.row)}
             />
           ) : (
-            <el-tag type={scope.row.status ? "success" : "danger"}>{scope.row.status ? "启用" : "禁用"}</el-tag>
+            <ElTag type={scope.row.status ? "success" : "danger"}>{scope.row.status ? "启用" : "禁用"}</ElTag>
           )}
         </>
       );
@@ -154,9 +154,9 @@ const columns: ColumnProps<ResUserList>[] = [
     label: "创建时间",
     headerRender: scope => {
       return (
-        <el-button type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
+        <ElButton type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
           {scope.column.label}
-        </el-button>
+        </ElButton>
       );
     },
     width: 180,

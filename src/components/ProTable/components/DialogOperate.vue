@@ -1,7 +1,7 @@
 <template>
-  <el-dialog v-model="dialogFormVisible" v-bind="dialog" :title="dialogTitle">
+  <el-dialog v-model="dialogFormVisible" v-bind="dialog" :title="dialogTitle" destroy-on-close>
     <slot name="form">
-      <ProForm v-if="options" ref="formElement" :options="options" v-model="form">
+      <ProForm v-if="options" ref="formElementRef" :options="formOptions" v-model="form">
         <template #footer>
           <slot name="formFooter" v-bind="form"></slot>
         </template>
@@ -26,19 +26,21 @@
 </template>
 
 <script setup lang="ts" name="DialogOperate">
-import { type DialogProps, ElMessage, type FormInstance } from "element-plus";
+import { type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
 import ProForm from "@/components/ProForm/index.vue";
-import type { OptionsProps } from "@/components/ProForm/interface";
+import type { FormOptionsProps } from "@/components/ProForm/interface";
+
+defineOptions({ name: "DialogOperate" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
 export interface DialogFormProps {
-  options: OptionsProps; // 表单配置项
+  options: FormOptionsProps; // 表单配置项
   dialog: Partial<
     Omit<DialogProps, "modelValue" | "title"> & { title: string | ((form: any, status: DialogStatus) => string) }
   >; // el-dialog 配置项
   addApi?: (params: any) => Promise<any>; // 新增接口
-  addCarryParams?: any; // 额外添加的函数
+  addCarryParams?: any; // 额外添加的函数, valueEquals
   addFilterParams?: string[]; // 过滤走的参数
   editApi?: (params: any) => Promise<any>; // 编辑接口
   editCarryParams?: any;
@@ -46,6 +48,7 @@ export interface DialogFormProps {
   deleteApi?: (params: any) => Promise<any>; // 删除接口
   deleteCarryParams?: any;
   deleteFilterParams?: string[];
+  deleteBatchApi?: (params: any) => Promise<any>; // 批量删除接口
   apiFilterParams?: string[];
   id?: string; // 数据主键
   cache?: boolean; // 是否缓存新增、编辑后遗留的数据
@@ -57,18 +60,22 @@ export interface DialogFormProps {
   afterEdit?: (form: any, res: any) => void; // 编辑后回调
   beforeDelete?: (form: any) => void | Promise<any> | any; // 删除前回调
   afterDelete?: (form: any, res: any) => void; // 删除后回调
+  beforeDeleteBatch?: (form: any) => void | Promise<any> | any; // 批量删除前回调
+  afterDeleteBatch?: (form: any, res: any) => void; // 批量删除后回调
   beforeConfirm?: (status: string) => void; // 确定按钮触发前回调
   afterConfirm?: (result: boolean) => void; // 确定按钮触发后回调
   disableAdd?: boolean;
   disableEdit?: boolean;
   disableDelete?: boolean;
+  disableDeleteBatch?: boolean;
   useAdd?: boolean;
   useEdit?: boolean;
   useDelete?: boolean;
+  useDeleteBatch?: boolean;
 }
 
 const props = defineProps<DialogFormProps>();
-const formElement = shallowRef();
+const formElementRef = shallowRef();
 const dialogFormVisible = ref(false);
 
 // 表单
@@ -79,9 +86,32 @@ const dialogTitle = computed(() =>
   typeof props?.dialog?.title === "function" ? props?.dialog?.title(form.value, status.value) : props?.dialog?.title
 );
 
-const handleAdd = async () => {
+const formOptions = computed(() => {
+  // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 isHidden 设置为 true
+  props.options.columns.forEach(column => {
+    const { destroy, hidden, disabled } = column.attrs;
+
+    if (Array.isArray(destroy)) {
+      if (destroy.includes("add")) column.attrs.isDestroy = status.value === "add";
+      else if (destroy.includes("edit")) column.attrs.isDestroy = status.value === "edit";
+    }
+    if (Array.isArray(hidden)) {
+      if (hidden.includes("add")) column.attrs.isHidden = status.value === "add";
+      else if (hidden.includes("edit")) column.attrs.isHidden = status.value === "edit";
+    }
+
+    if (Array.isArray(disabled)) {
+      if (disabled.includes("add")) column.attrs.isDisabled = status.value === "add";
+      else if (disabled.includes("edit")) column.attrs.isDisabled = status.value === "edit";
+    }
+  });
+
+  return props.options;
+});
+
+const handleAdd = async (row?: any) => {
   status.value = "add";
-  if (!props?.cache) form.value = {};
+  if (!props?.cache) form.value = { ...row };
   else props?.id && delete (form.value as any)[props?.id!];
   props.clickAdd && (form.value = (await props.clickAdd(form.value)) ?? form.value);
   dialogFormVisible.value = true;
@@ -95,18 +125,21 @@ const handleEdit = async ({ row }: any) => {
 };
 
 const handleFormConfirm = (f: any, status: string) => {
-  const formRef = formElement.value.formRef as FormInstance;
+  const formRef = formElementRef.value.formRef as FormInstance;
   props.beforeConfirm && props.beforeConfirm(status);
 
   let data = { ...f };
-  if (status === "add") {
-    // 删除 Insert 不允许传输的数据
-    const filterParams = [...(props?.apiFilterParams || []), ...(props?.addFilterParams || [])];
-    filterParams.forEach(item => delete data[item]);
+  // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台
+  delete data._enum;
 
+  if (status === "add") {
     formRef.validate(async valid => {
       if (valid && props) {
         data = (props.beforeAdd && (await props.beforeAdd(data))) || data;
+
+        // 删除 Insert 不允许传输的数据
+        const filterParams = [...(props?.apiFilterParams || []), ...(props?.addFilterParams || [])];
+        filterParams.forEach(item => delete data[item]);
 
         // 执行新增接口
         executeApi(
@@ -125,13 +158,13 @@ const handleFormConfirm = (f: any, status: string) => {
       }
     });
   } else if (status === "edit") {
-    // 删除 Update 不允许传输的数据
-    const filterParams = [...(props?.apiFilterParams || []), ...(props?.editFilterParams || [])];
-    filterParams.forEach(item => delete data[item]);
-
     formRef.validate(async valid => {
       if (valid && props) {
         data = (props.beforeEdit && (await props.beforeEdit(data))) || data;
+
+        // 删除 Update 不允许传输的数据
+        const filterParams = [...(props?.apiFilterParams || []), ...(props?.editFilterParams || [])];
+        filterParams.forEach(item => delete data[item]);
 
         executeApi(
           props.editApi,
@@ -155,12 +188,14 @@ const handleFormConfirm = (f: any, status: string) => {
 const handleDelete = async ({ row }: any) => {
   if (props) {
     let data = { ...row };
+    // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台
+    delete data._enum;
 
+    props.beforeConfirm && props.beforeConfirm("delete");
+    data = (props.beforeDelete && (await props.beforeDelete(data))) || data;
     // 删除 Delete 不允许传输的数据
     const filterParams = [...(props?.apiFilterParams || []), ...(props?.deleteFilterParams || [])];
     filterParams.forEach(item => delete data[item]);
-    props.beforeConfirm && props.beforeConfirm("delete");
-    data = (props.beforeDelete && (await props.beforeDelete(data))) || data;
 
     executeApi(
       props.deleteApi,
@@ -175,6 +210,35 @@ const handleDelete = async ({ row }: any) => {
       () => props.afterConfirm && props.afterConfirm(false)
     );
   }
+};
+
+const handleDeleteBatch = async (selectedListIds: string[], fallback: () => {}) => {
+  ElMessageBox.confirm(`删除所选信息?`, "温馨提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+    draggable: true,
+  }).then(async () => {
+    if (props) {
+      let data = selectedListIds;
+
+      props.beforeConfirm && props.beforeConfirm("deleteBatch");
+      data = (props.beforeDeleteBatch && (await props.beforeDeleteBatch(data))) || data;
+
+      executeApi(
+        props.deleteBatchApi,
+        data,
+        "删除成功！",
+        "删除失败！",
+        async res => {
+          props.afterDeleteBatch && (await props.afterDeleteBatch(form, res));
+          props.afterConfirm && props.afterConfirm(true);
+          fallback();
+        },
+        () => props.afterConfirm && props.afterConfirm(false)
+      );
+    }
+  });
 };
 
 const executeApi = (
@@ -192,10 +256,10 @@ const executeApi = (
       return successCallBack && successCallBack(res);
     })
     .catch(err => {
-      ElMessage.warning(failure + "错误：", err);
+      // ElMessage.warning(failure + "错误：", err);
       return failureCallBack && failureCallBack(err);
     });
 };
 
-defineExpose({ handleAdd, handleEdit, handleDelete });
+defineExpose({ handleAdd, handleEdit, handleDelete, handleDeleteBatch });
 </script>

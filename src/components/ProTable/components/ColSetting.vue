@@ -27,11 +27,13 @@
   </el-drawer>
 </template>
 
-<script setup lang="ts" name="ColSetting">
+<script setup lang="ts">
 import { ref } from "vue";
-import type { ColumnProps } from "@/components/ProTable/interface";
+import type { TableColumnProps } from "../interface";
 
-defineProps<{ colSetting: ColumnProps[] }>();
+defineOptions({ name: "ColSetting" });
+
+defineProps<{ colSetting: TableColumnProps[] }>();
 
 const drawerVisible = ref(false);
 

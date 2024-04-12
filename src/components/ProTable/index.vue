@@ -20,13 +20,26 @@
             :is-selected="isSelected"
           >
             <el-button
+              v-if="visibleButton(detailForm?.addApi, detailForm?.useAdd)"
               type="primary"
               :icon="Plus"
               @click="dialogOperateRef?.handleAdd"
-              v-if="detailForm?.addApi || detailForm?.useAdd"
               :disabled="detailForm?.disableAdd"
             >
               新增
+            </el-button>
+            <el-button
+              v-if="
+                visibleButton(detailForm?.deleteBatchApi, detailForm?.useDeleteBatch) &&
+                columns[0]?.type === 'selection'
+              "
+              type="danger"
+              :icon="Delete"
+              plain
+              @click="handleDeleteBatch"
+              :disabled="detailForm?.disableDeleteBatch || !isSelected"
+            >
+              删除
             </el-button>
             <slot name="tableHeaderExtra"></slot>
           </slot>
@@ -53,6 +66,13 @@
             </el-tooltip>
             <el-tooltip v-if="columns.length" effect="light" content="列配置" placement="top">
               <el-button :icon="Operation" circle @click="openColSetting" />
+            </el-tooltip>
+            <el-tooltip v-if="useExport" effect="light" content="导出" placement="top">
+              <el-button
+                :icon="Download"
+                circle
+                @click="() => downloadFile(columns, tableData, 'export', '确认导出数据?', exportKey)"
+              />
             </el-tooltip>
             <el-tooltip v-if="searchColumns.length" effect="light" content="隐藏搜索" placement="top">
               <el-button :icon="Search" circle @click="isShowSearchProp = !isShowSearchProp" />
@@ -112,14 +132,14 @@
                   :icon="Edit"
                   @click="dialogOperateRef?.handleEdit(scope)"
                   :disabled="scope.row.disableEdit || detailForm?.disableEdit"
-                  v-if="detailForm?.editApi || detailForm?.useEdit"
+                  v-if="visibleButton(detailForm?.editApi, detailForm?.useEdit)"
                 >
                   编辑
                 </el-button>
                 <el-popconfirm
                   title="你确定删除吗?"
                   @confirm="dialogOperateRef?.handleDelete(scope)"
-                  v-if="detailForm?.deleteApi || detailForm?.useDelete"
+                  v-if="visibleButton(detailForm?.deleteApi, detailForm?.useDelete)"
                 >
                   <template #reference>
                     <el-button
@@ -133,7 +153,7 @@
                     </el-button>
                   </template>
                 </el-popconfirm>
-                <slot name="operationExtra"></slot>
+                <slot name="operationExtra" v-bind="scope"></slot>
               </slot>
             </template>
           </TableColumn>
@@ -189,26 +209,27 @@
 <script setup lang="ts" name="ProTable">
 import { ref, watch, provide, onMounted } from "vue";
 import { ElTable } from "element-plus";
-import { useTable, type Table } from "@/hooks/useTable";
-import { useSelection } from "@/hooks/useSelection";
+import { useTable, type Table } from "./hooks/useTable";
+import { useSelection } from "./hooks/useSelection";
 import type { BreakPoint } from "@/components/Grid/index.vue";
-import type { ColumnProps } from "@/components/ProTable/interface";
+import type { TableColumnProps } from "@/components/ProTable/interface";
 import { Refresh, Plus, Operation, Search, Edit, Delete, Coin } from "@element-plus/icons-vue";
-import { lastProp } from "@/utils/table";
+import { lastProp, filterEnum, filterEnumLabel, handleRowAccordingToProp } from "./utils";
 import SearchForm from "@/components/SearchForm/index.vue";
 import Pagination from "@/components/Pagination/index.vue";
 import ColSetting from "./components/ColSetting.vue";
 import TableColumn from "./components/TableColumn.vue";
 import DialogOperate from "./components/DialogOperate.vue";
 import type { DialogFormProps } from "./components/DialogOperate.vue";
+import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
 
 export type DialogForm = DialogFormProps;
 
 export interface ProTableProps {
-  columns: ColumnProps[]; // 列配置项 ==> 必传
+  columns: TableColumnProps[]; // 列配置项 ==> 必传
   data?: any[]; // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
   requestApi?: (params: any) => Promise<any>; // 请求表格数据的 api ==> 非必传
-  requestAuto?: boolean; // 是否自动执行请求 api ==> 非必传（默认为true）
+  requestAuto?: boolean; // 是否自动执行请求 api ==> 非必传（默认为 true）
   requestError?: (params: any) => void; // 表格 api 请求错误监听 ==> 非必传
   beforeSearch?: (data: any) => any; // 查询数据前的回调函数，可以对查询参数进行处理或禁止查询 ==> 非必传
   dataCallback?: (data: any) => any; // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
@@ -220,8 +241,10 @@ export interface ProTableProps {
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   size?: CustomTableSize; // 表格密度
   searchCols?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
-  detailForm?: DialogFormProps;
-  isShowSearch?: boolean;
+  isShowSearch?: boolean; // 初始化时是否显示搜索模块
+  useExport?: boolean; // 是否显示导出按钮
+  exportKey?: "props" | "label" | "dataKey"; // 导出时的表头配置（prop 为使用  columns 的 props，label 为使用 columns 的 label，dataKey 为使用 data 的 key），默认为 dataKey
+  detailForm?: DialogFormProps; // 新增、编辑、删除表单配置
 }
 
 // 接受父组件参数，配置默认值
@@ -235,8 +258,30 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   rowKey: "id",
   size: "default",
   isShowSearch: true,
+  useExport: true,
+  exportKey: "dataKey",
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 });
+
+// 配置 _enum 字典信息
+const enumCallback = (data: Record<string, any>[]) => {
+  tableColumns.value.forEach(async col => {
+    const enumObj = enumMap.value.get(col.prop!);
+    // 如果字段有配置枚举信息，则存放到 _enum[col.prop] 里
+    if (enumObj && col.isFilterEnum) {
+      data = data.map(row => {
+        const d = filterEnumLabel(
+          filterEnum(handleRowAccordingToProp(row, col.prop!), enumObj, col.fieldNames),
+          col.fieldNames
+        );
+        if (!row._enum) row._enum = {};
+        row._enum[col.prop!] = d;
+        return row;
+      });
+    }
+  });
+  return data;
+};
 
 // 是否显示搜索模块
 const isShowSearchProp = ref(props.isShowSearch);
@@ -263,7 +308,14 @@ const {
   props.initRequestParam,
   props.pagination,
   props.beforeSearch,
-  props.dataCallback,
+  data => {
+    // 配置 _enum 字典信息
+    if (isBackPage()) data.list = enumCallback(data.list) || data.list;
+    else data = enumCallback(data) || data;
+
+    props.dataCallback && (data = props.dataCallback(data) || data);
+    return data;
+  },
   props.requestError,
   props.columns
 );
@@ -281,8 +333,8 @@ const tablePageData = computed(() => {
 
 const pageTotal = computed(() => {
   if (props.data?.length) return props.data?.length;
-  if (isFrontPage(props.pagination)) return props.data?.length ?? tableData.value.length;
-  if (isBackPage(props.pagination)) return paging.value?.total ?? tableData.value?.length;
+  if (isFrontPage(props.pagination)) return props.data?.length || tableData.value.length;
+  if (isBackPage(props.pagination)) return paging.value?.total || tableData.value?.length;
   return 0;
 });
 
@@ -290,25 +342,30 @@ const pageTotal = computed(() => {
 onMounted(() => props.requestAuto && getTableList());
 
 // 监听页面 initRequestParam 改化，重新获取表格数据
-watch(() => props.initRequestParam, getTableList, { deep: true });
+watch(
+  () => props.initRequestParam,
+  () => getTableList(props.initRequestParam),
+  { deep: true }
+);
 
 // 接收 columns 并设置为响应式
-const tableColumns = ref<ColumnProps[]>(props.columns);
+const tableColumns = ref<TableColumnProps[]>(props.columns);
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>());
 provide("enumMap", enumMap);
 
-const setEnumMap = async (col: ColumnProps) => {
+const setEnumMap = async (col: TableColumnProps) => {
   if (!col.enum) return;
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
+  if (isRef(col.enum)) return enumMap.value.set(col.prop!, (col.enum as ComputedRef).value!);
   if (typeof col.enum !== "function") return enumMap.value.set(col.prop!, col.enum!);
-  const data = await col.enum();
+  const { data } = await col.enum(enumMap);
   enumMap.value.set(col.prop!, data);
 };
 
 // 扁平化 columns，为了过滤需要搜索的配置项
-const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) => {
+const flatColumnsFunc = (columns: TableColumnProps[], flatArr: TableColumnProps[] = []) => {
   columns.forEach(async col => {
     if (col._children?.length) flatArr.push(...flatColumnsFunc(col._children));
     flatArr.push(col);
@@ -321,7 +378,7 @@ const flatColumnsFunc = (columns: ColumnProps[], flatArr: ColumnProps[] = []) =>
   return flatArr.filter(item => !item._children?.length);
 };
 
-const flatColumns = ref<ColumnProps[]>();
+const flatColumns = ref<TableColumnProps[]>();
 flatColumns.value = flatColumnsFunc(tableColumns.value);
 
 // 过滤需要搜索的配置项
@@ -411,6 +468,70 @@ const changeStyle = (style: Object) => {
   headerCellStyle.value = style;
 };
 
+const visibleButton = (api: any, flag: boolean | undefined) => {
+  // flag为 undefined 时，判断 api 是否存在
+  if (flag) return true;
+  if (flag === false) return false;
+  return api;
+};
+
+const handleDeleteBatch = () => {
+  dialogOperateRef.value?.handleDeleteBatch(selectedListIds.value, () => {
+    clearSelection();
+    getTableList();
+  });
+};
+
+// 导出
+const downloadFile = async (
+  columns: any,
+  data: any[],
+  fileName: string,
+  msg: string,
+  exportKey: "props" | "label" | "dataKey"
+) => {
+  ElMessageBox.confirm(msg, "温馨提示", { type: "warning" }).then(() => {
+    const tHeader = [] as string[];
+    const propName = [] as string[];
+
+    const flatData = filterFlatData(data);
+    if (exportKey === "dataKey") {
+      Object.keys(flatData[0]).forEach((item: any) => {
+        propName.push(item);
+        tHeader.push(item);
+      });
+    } else {
+      columns.forEach((item: any) => {
+        if (!item.type && item.prop !== "operation") {
+          propName.push(item.prop!);
+          if (exportKey === "props") tHeader.push(item.prop!);
+          else tHeader.push(item.label!);
+        }
+      });
+    }
+
+    const filterVal = propName;
+    // filterFlatData：扁平化 data，data 可能有 children 属性和 _enum 属性
+    const d = formatJsonToArray(flatData, filterVal);
+    exportJsonToExcel(tHeader, d, fileName, undefined, undefined, true, "xlsx");
+  });
+};
+
+/**
+ * @description 扁平化 data，data 可能有 children 属性和 _enum 属性
+ */
+const filterFlatData = (data: any[]) => {
+  return data.reduce((pre: any[], current: any) => {
+    // 针对枚举类的导出
+    if (current._enum) {
+      Object.keys(current._enum).forEach(key => (current[key] = unref(current._enum[key])));
+      delete current._enum;
+    }
+    let flatArr = [...pre, current];
+    if (current.children) flatArr = [...flatArr, ...filterFlatData(current.children)];
+    return flatArr;
+  }, []);
+};
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 defineExpose({
   element: tableRef,

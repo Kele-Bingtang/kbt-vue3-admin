@@ -1,6 +1,5 @@
 import type { Paging } from "@/components/Pagination/index.vue";
-import type { ColumnProps } from "@/components/ProTable/interface";
-import { isArray } from "@/utils/layout/validate";
+import type { TableColumnProps } from "../interface";
 import { reactive, computed, toRefs } from "vue";
 
 export namespace Table {
@@ -38,7 +37,11 @@ export namespace Theme {
  * @param {Function} api 获取表格数据 api 方法 (必传)
  * @param {Object} initRequestParam 获取数据初始化参数 (非必传，默认为{})
  * @param {Boolean} openPage 是否有分页 (非必传，默认为true)
+ * @param {Function} beforeSearch 查询前的回调函数
  * @param {Function} dataCallBack 对后台返回的数据进行处理的方法 (非必传)
+ * @param {Function} requestError 请求出错后的回调函数
+ * @param {Object[]} columns 表格的列配置项
+ * @param {Function} enumCallBack 字典设置的回调函数，ProTable 内置函数
  * */
 export const useTable = (
   api?: (params: any) => Promise<any>,
@@ -47,7 +50,7 @@ export const useTable = (
   beforeSearch?: (searchParam: any) => any,
   dataCallBack?: (data: any) => any,
   requestError?: (error: any) => void,
-  columns?: ColumnProps[]
+  columns?: TableColumnProps[]
 ) => {
   const state = reactive<Table.StateProps>({
     // 表格数据
@@ -85,11 +88,11 @@ export const useTable = (
    * @description 获取表格数据
    * @return void
    * */
-  const getTableList = async () => {
+  const getTableList = async (requestParam: object = initRequestParam) => {
     if (!api) return;
     try {
       // 先把初始化参数和分页参数放到总参数里面
-      Object.assign(state.totalParam, initRequestParam, isBackPage(openPage) ? pageParam.value : {});
+      Object.assign(state.totalParam, requestParam, isBackPage(openPage) ? pageParam.value : {});
       let searchParam = { ...state.searchInitParam, ...state.totalParam };
       beforeSearch && (searchParam = beforeSearch(searchParam) ?? searchParam);
 
@@ -109,15 +112,18 @@ export const useTable = (
         }
       }
 
-      let data = await api(searchParam);
-      dataCallBack && (data = dataCallBack(data) || data);
+      let { data } = await api(searchParam);
 
-      if (isArray(data)) state.tableData = data;
+      dataCallBack && (data = dataCallBack(data) || data);
+      if (data) state.tableData = isBackPage(openPage) ? data.list : data;
 
       // 解构后台返回的分页数据 (如果有分页更新分页信息)
       if (isBackPage(openPage)) {
         const { pageNum, pageSize, total } = data;
-        updatePaging({ pageNum, pageSize, total });
+        if (pageNum) updatePaging({ pageNum });
+        if (pageSize) updatePaging({ pageSize });
+        if (total) updatePaging({ total });
+        else updatePaging({ total: data.length });
       }
     } catch (error) {
       console.error(error);
@@ -136,16 +142,11 @@ export const useTable = (
     // 防止手动清空输入框携带参数（这里可以自定义查询参数前缀）
     for (const key in state.searchParam) {
       // 某些情况下参数为 false/0 也应该携带参数
-      if (
-        state.searchParam[key] ||
-        state.searchParam[key] === false ||
-        state.searchParam[key] === 0 ||
-        state.searchParam[key] === ""
-      ) {
+      if (state.searchParam[key] || state.searchParam[key] === false || state.searchParam[key] === 0) {
         nowSearchParam[key] = state.searchParam[key];
       }
     }
-    Object.assign(state.totalParam, nowSearchParam, isBackPage(openPage) ? pageParam.value : {});
+    Object.assign(state.totalParam, nowSearchParam, isBackPage() ? pageParam.value : {});
   };
 
   /**
@@ -153,7 +154,7 @@ export const useTable = (
    * @param {Object} paging 后台返回的分页数据
    * @return void
    * */
-  const updatePaging = (paging: Table.Paging) => {
+  const updatePaging = (paging: Partial<Table.Paging>) => {
     Object.assign(state.paging, paging);
   };
 
@@ -190,25 +191,25 @@ export const useTable = (
   const handlePagination = (paging: Paging) => {
     state.paging.pageNum = paging.currentPage;
     state.paging.pageSize = paging.pageSize;
-    if (isBackPage(openPage)) getTableList();
+    if (isBackPage()) getTableList();
   };
 
-  const isOpenPage = (openPage: boolean | Table.PaginationProps) => {
-    if (openPage === true) return true;
-    if ((openPage as Table.PaginationProps)?.enabled) return true;
+  const isOpenPage = (open: boolean | Table.PaginationProps = openPage) => {
+    if (open === true) return true;
+    if ((open as Table.PaginationProps)?.enabled) return true;
     return false;
   };
 
-  const isBackPage = (openPage: boolean | Table.PaginationProps) => {
-    if (openPage === true) return true;
-    if (openPage === false) return false;
-    if ((openPage as Table.PaginationProps)?.enabled && (openPage as Table.PaginationProps)?.fake !== true) return true;
+  const isBackPage = (open: boolean | Table.PaginationProps = openPage) => {
+    if (open === true) return true;
+    if (open === false) return false;
+    if ((open as Table.PaginationProps)?.enabled && (open as Table.PaginationProps)?.fake !== true) return true;
     return false;
   };
 
-  const isFrontPage = (openPage: boolean | Table.PaginationProps) => {
-    if (openPage === true || openPage === false) return false;
-    if ((openPage as Table.PaginationProps)?.enabled && (openPage as Table.PaginationProps)?.fake) return true;
+  const isFrontPage = (open: boolean | Table.PaginationProps = openPage) => {
+    if (open === true || open === false) return false;
+    if ((open as Table.PaginationProps)?.enabled && (open as Table.PaginationProps)?.fake) return true;
     return false;
   };
 
