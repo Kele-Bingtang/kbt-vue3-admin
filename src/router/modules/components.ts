@@ -85,7 +85,7 @@ const componentRoutes: RouterConfigRaw = {
       path: "upload-images",
       name: "UploadImagesDemo",
       component: () => import("@/views/components/uploadImages/index.vue"),
-      meta: { title: "文件上传", icon: StarFilled },
+      meta: { title: "图片上传", icon: StarFilled },
     },
     {
       path: "tinymce-demo",
@@ -110,6 +110,24 @@ const componentRoutes: RouterConfigRaw = {
       name: "SeamlessScrollDemo",
       component: () => import("@/views/components/seamlessScroll/index.vue"),
       meta: { title: "无限滚动", icon: StarFilled },
+    },
+    {
+      path: "image-viewer",
+      name: "ImageViewerDemo",
+      component: () => import("@/views/components/imageViewer/index.vue"),
+      meta: { title: "图片预览", icon: StarFilled },
+    },
+    {
+      path: "use-dialog",
+      name: "UseDialogDemo",
+      component: () => import("@/views/components/useDialog/index.vue"),
+      meta: { title: "Use Dialog", icon: StarFilled },
+    },
+    {
+      path: "use-drawer",
+      name: "UseDrawerDemo",
+      component: () => import("@/views/components/useDrawer/index.vue"),
+      meta: { title: "Use Drawer", icon: StarFilled },
     },
   ],
 };

@@ -230,12 +230,10 @@ div:focus {
 /* 自定义 el-dialog 样式 */
 .el-dialog {
   .el-dialog__header {
-    padding: 15px 20px;
-    margin: 0;
     border-bottom: 1px solid var(--el-border-color-lighter);
+  }
 
-    .el-dialog__title {
-      font-size: 17px;
-    }
+  .el-dialog__body {
+    padding-top: 15px;
   }
 }

@@ -38,3 +38,7 @@ declare type RequiredKeyPartialOther<T, U extends keyof T> = Partial<Pick<T, Exc
  * 指定属性变为只读
  */
 declare type ReadOnlyKey<T, U extends keyof T> = Pick<T, Exclude<keyof T, U>> & Readonly<Pick<T, U>>;
+
+declare type Recordable<T = any, K = string> = Record<K extends null | undefined ? string : K, T>;
+
+declare type Nullable<T> = T | null;

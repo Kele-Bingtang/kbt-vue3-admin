@@ -153,3 +153,12 @@ export function isNullOrUnDef(val: unknown): val is null | undefined {
 export function isPhone(val: string) {
   return /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(val);
 }
+
+// 是否是图片链接
+export const isImgPath = (path: string): boolean => {
+  return /(https?:\/\/|data:image\/).*?\.(png|jpg|jpeg|gif|svg|webp|ico)/gi.test(path);
+};
+
+export const isEmptyVal = (val: any): boolean => {
+  return val === "" || val === null || val === undefined;
+};

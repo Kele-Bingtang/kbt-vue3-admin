@@ -1,0 +1,8 @@
+.work-dialog.el-dialog.is-fullscreen {
+  --el-dialog-width: 100% !important;
+  --el-dialog-margin-top: 0 !important;
+
+  height: 100%;
+  margin-bottom: 0;
+  overflow: auto;
+}

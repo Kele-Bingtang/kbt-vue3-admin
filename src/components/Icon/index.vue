@@ -2,16 +2,26 @@
   <SvgIcon
     v-if="isSvgIcon(name, icon)"
     :name="name ? name : (icon as string).slice(4)"
+    :color="color"
     v-bind="attrsComputed as any"
+    class="com-icon"
   ></SvgIcon>
   <FontIcon
     v-else-if="isFontIcon(icon)"
     :icon="fontIcon.iconName"
     :iconType="fontIcon.iconType"
     v-bind="attrsComputed"
+    :color="color"
+    class="com-icon"
   ></FontIcon>
-  <IconifyOffline v-else-if="isIconifyOffline(icon)" :icon="icon" v-bind="attrsComputed"></IconifyOffline>
-  <IconifyOnline v-else-if="isIconifyOnline(icon)" :icon="icon" v-bind="attrsComputed"></IconifyOnline>
+  <IconifyOffline
+    v-else-if="isIconifyOffline(icon)"
+    :icon="icon"
+    v-bind="attrsComputed"
+    :color="color"
+    class="com-icon"
+  ></IconifyOffline>
+  <IconifyOnline v-else-if="isIconifyOnline(icon)" :icon="icon" v-bind="attrsComputed" :color="color"></IconifyOnline>
 </template>
 
 <script setup lang="ts" name="Icon">
@@ -30,6 +40,8 @@ type IconTypes = string | Object | IconifyIcon;
 interface IconProps {
   icon?: IconTypes;
   name?: string;
+  color?: string;
+  hoverColor?: string;
   attrs?: IconType;
 }
 
@@ -65,3 +77,25 @@ const fontIcon = computed(() => {
   };
 });
 </script>
+
+<style lang="scss" scoped>
+.com-icon {
+  &:hover {
+    color: v-bind(hoverColor) !important;
+  }
+}
+
+.iconify {
+  &:hover {
+    color: v-bind(hoverColor) !important;
+  }
+}
+</style>
+
+<style lang="scss">
+.com-icon.iconfont {
+  &:hover {
+    color: v-bind(hoverColor) !important;
+  }
+}
+</style>

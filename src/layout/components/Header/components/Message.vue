@@ -102,7 +102,7 @@ interface Notice {
 
 interface TitleTag {
   name: string;
-  type: "" | "danger" | "success" | "info" | "warning";
+  type: "primary" | "danger" | "success" | "info" | "warning";
 }
 
 interface Ar {
@@ -154,7 +154,7 @@ const arList: Ar[] = [
     description: "Kbt Vue3 Admin 版本发布",
     status: {
       name: "进行中",
-      type: "",
+      type: "primary",
     },
     priority: {
       name: "高",
