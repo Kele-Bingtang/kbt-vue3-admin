@@ -1,5 +1,5 @@
 <template>
-  <el-drawer v-model="drawerVisible" title="布局设置" size="300px">
+  <el-drawer v-model="drawerVisible" title="布局设置" size="300px" class="theme-drawer">
     <template v-if="!isMobile">
       <el-divider class="divider" content-position="center">
         <el-icon><Notification /></el-icon>
@@ -305,18 +305,23 @@
     </el-button>
   </el-drawer>
 </template>
+
 <script setup lang="ts" name="ThemeDrawer">
-import { useTheme } from "@/hooks/useTheme";
+import { useTheme, useLayout } from "@/hooks";
 import settings from "@/config/settings";
-import { useSettingsStore } from "@/stores/settings";
-import { LayoutModeType, LayoutThemeType, TabsNavModeType, DeviceType } from "@/stores/index.d";
-import mittBus from "@/utils/layout/mittBus";
+import {
+  useSettingsStore,
+  useLayoutStore,
+  LayoutModeType,
+  LayoutThemeType,
+  TabsNavModeType,
+  DeviceType,
+} from "@/stores";
+import { mittBus } from "@/utils";
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
-import { useLayout } from "@/hooks/useLayout";
 import { ElMessage } from "element-plus";
 import variables from "@/styles/variables.module.scss";
-import { useLayoutStore } from "@/stores/layout";
 import {
   Notification,
   CircleCheckFilled,
@@ -508,7 +513,7 @@ watchEffect(() => {
 @import "./index";
 </style>
 <style lang="scss">
-.el-drawer {
+.theme-drawer {
   .el-drawer__header {
     padding: 15px 20px 14px;
     margin-bottom: 0;

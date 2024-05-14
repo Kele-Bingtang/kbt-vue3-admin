@@ -27,8 +27,8 @@
 </template>
 
 <script setup lang="ts" name="CodeMirrorDemo">
-import CodeMirror from "@/components/CodeMirror/index.vue";
-import { cmThemeOptions, cmModeOptions } from "@/components/CodeMirror/code-mirror";
+import { CodeMirror } from "@/components";
+import { cmThemeOptions, cmModeOptions } from "@/components/CodeMirror/src/code-mirror";
 const cmTheme = ref("default");
 const cmMode = ref("application/json");
 const value = ref(

@@ -1,6 +1,7 @@
 import { render, getCurrentInstance, type Component, type ComponentInternalInstance, type VNode } from "vue";
-import { ElDialog, ElButton, type DialogProps } from "element-plus";
+import { ElDialog, ElButton, type DialogProps, ElScrollbar } from "element-plus";
 import "./index.scss";
+import { getPx } from "@/utils";
 
 let id = 0;
 let thisAppContext: any = null;
@@ -11,27 +12,31 @@ const getFather = (): Element => {
   return document.querySelector("body") as HTMLBodyElement;
 };
 
-interface Dialog extends Partial<DialogProps> {
-  render?: () => VNode;
-  headerRender?: () => VNode;
-  showFooter?: boolean;
-  footerRender?: () => VNode;
-  onConfirm?: (closeDialog: () => void) => void;
-  onClose?: (closeDialog: () => void) => void;
-  fullscreen?: boolean;
+export interface UseDialogProps extends Partial<DialogProps> {
+  render?: () => VNode; // 内容渲染
+  headerRender?: (scope: any) => VNode; // 头部渲染
+  footerRender?: () => VNode; // 底部渲染
+  showFooter?: boolean; // 显示 footer，默认 true
+  onConfirm?: (closeDialog: () => void) => void; // 确认按钮点击事件
+  onClose?: (closeDialog: () => void) => void; // 关闭按钮点击事件
+  fullscreen?: boolean; // 是否默认全屏，默认 true
+  height?: string | number; // 内容高度，默认 400px
 }
 
+/**
+ * @description 关闭弹框
+ */
 export const closeDialog = () => {
   const vm = document.querySelector(`#work-dialog-${id--}`) as HTMLElement;
-  getFather().removeChild(vm);
+  vm && getFather().removeChild(vm);
 };
 
-const handleClose = (dialogProps?: Dialog) => {
+const handleClose = (dialogProps?: UseDialogProps) => {
   if (dialogProps?.onClose) dialogProps?.onClose(closeDialog);
   return closeDialog();
 };
 
-const handleConfirm = (dialogProps?: Dialog) => {
+const handleConfirm = (dialogProps?: UseDialogProps) => {
   if (dialogProps?.onConfirm) dialogProps?.onConfirm(closeDialog);
   return closeDialog();
 };
@@ -44,7 +49,7 @@ const handleConfirm = (dialogProps?: Dialog) => {
  * 在第一个参数里写 headerRender 和 footerRender，可以自定义 el-dialog 的 header 和 footer
  */
 export const showDialog = (
-  dialogProps?: Dialog,
+  dialogProps: UseDialogProps,
   component?: Component,
   componentsProps?: any,
   ctx?: ComponentInternalInstance
@@ -54,10 +59,28 @@ export const showDialog = (
   const isFullscreen = ref(false);
 
   const toggleFull = () => {
-    const elDialogEl = document.querySelector(".el-dialog") as HTMLElement;
+    const elDialogEl = document.querySelector(`${`#work-dialog-${id}`} .work-dialog.el-dialog`) as HTMLElement;
     if (elDialogEl) elDialogEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !isFullscreen.value;
   };
+
+  const contentHeight = ref(getPx(dialogProps.height || 400));
+
+  watch(
+    () => isFullscreen.value,
+    async (val: boolean) => {
+      await nextTick();
+      if (val) {
+        const windowHeight = document.documentElement.offsetHeight;
+        contentHeight.value = `${windowHeight - 41 - 49 - (dialogProps.footerRender ? 63 : 0)}px`;
+      } else {
+        contentHeight.value = getPx(dialogProps.height || 400);
+      }
+    },
+    {
+      immediate: true,
+    }
+  );
 
   const vm = (
     <ElDialog
@@ -67,6 +90,7 @@ export const showDialog = (
       width="50%"
       before-close={() => handleClose(dialogProps)}
       close-on-click-modal={false}
+      draggable
       {...dialogProps}
       render
       headerRender
@@ -75,16 +99,24 @@ export const showDialog = (
     >
       {{
         default: () => {
-          if (dialogProps?.render) return dialogProps?.render();
-          return <component is={component} {...componentsProps}></component>;
-        },
-        header: () => {
-          if (dialogProps?.headerRender) return dialogProps?.headerRender();
+          if (dialogProps.render) {
+            return <ElScrollbar style={{ height: contentHeight.value }}>{dialogProps.render()}</ElScrollbar>;
+          }
           return (
-            <div style="position: relative">
-              <span class="el-dialog__title">{dialogProps?.title}</span>
-              {dialogProps?.fullscreen === true ||
-                (dialogProps?.fullscreen === undefined && (
+            <ElScrollbar style={{ height: contentHeight.value }}>
+              <component is={component} {...componentsProps}></component>
+            </ElScrollbar>
+          );
+        },
+        header: (scope: any) => {
+          if (dialogProps?.headerRender) return dialogProps.headerRender(scope);
+          return (
+            <div style="display: flex">
+              <span class="el-dialog__title" style="flex: 1">
+                {dialogProps.title}
+              </span>
+              {dialogProps.fullscreen === true ||
+                (dialogProps.fullscreen === undefined && (
                   <Icon
                     name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
                     onClick={() => toggleFull()}
@@ -92,15 +124,15 @@ export const showDialog = (
                     height="15px"
                     color="var(--el-color-info)"
                     hover-color="var(--el-color-primary)"
-                    icon-style={{ cursor: "pointer", position: "absolute", top: "-3%", right: "-5px" }}
+                    icon-style={{ cursor: "pointer" }}
                   />
                 ))}
             </div>
           );
         },
         footer: () => {
-          if (dialogProps?.footerRender) return dialogProps?.footerRender();
-          if (dialogProps?.showFooter === false) return;
+          if (dialogProps.footerRender) return dialogProps.footerRender();
+          if (dialogProps.showFooter === false) return;
           return (
             <>
               <ElButton onClick={() => handleClose(dialogProps)}>取 消</ElButton>

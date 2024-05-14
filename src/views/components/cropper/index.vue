@@ -12,7 +12,7 @@
 </template>
 
 <script setup lang="ts" name="CropperDemo">
-import Cropper from "@/components/Cropper/index.vue";
+import { Cropper } from "@/components";
 const uploadImage = (imgData: FormData) => {
   console.log(imgData);
 };

@@ -1,7 +1,6 @@
 import router from "@/router";
-import { useUserStore } from "@/stores/user";
-import { isIncludeAll, isIncludeSome } from "@/utils";
-import { isString } from "@/utils/layout/validate";
+import { useUserStore } from "@/stores";
+import { isIncludeAll, isIncludeSome, isString } from "@/utils";
 
 export const usePermission = () => {
   const userStore = useUserStore();

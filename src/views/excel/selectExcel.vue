@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts" name="SelectExcel">
-import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
+import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 import { largeData } from "@/mock/table";
 import { ElMessage, ElTable } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";

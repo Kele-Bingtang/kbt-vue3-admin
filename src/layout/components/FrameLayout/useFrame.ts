@@ -1,4 +1,4 @@
-import { useLayoutStore } from "@/stores/layout";
+import { useLayoutStore } from "@/stores";
 import { useTabsNav } from "../TabsNav/useTabsNav";
 
 const FrameView = () => import("./FrameView.vue");

@@ -129,6 +129,18 @@ const componentRoutes: RouterConfigRaw = {
       component: () => import("@/views/components/useDrawer/index.vue"),
       meta: { title: "Use Drawer", icon: StarFilled },
     },
+    {
+      path: "highlight",
+      name: "HighlightDemo",
+      component: () => import("@/views/components/highlight/index.vue"),
+      meta: { title: "文字高亮", icon: StarFilled },
+    },
+    {
+      path: "video-player",
+      name: "VideoPlayerDemo",
+      component: () => import("@/views/components/videoPlayer/index.vue"),
+      meta: { title: "视频播放器", icon: StarFilled },
+    },
   ],
 };
 

@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="ts" name="ImageViewerDemo">
-import { createImageViewer } from "@/components/ImageViewer";
+import { createImageViewer } from "@/components";
 
 const open = () => {
   createImageViewer({

@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts" name="MenuButton">
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores";
 import { useDebounceFn } from "@vueuse/core";
 import { useTabsNav } from "../useTabsNav";
 import {

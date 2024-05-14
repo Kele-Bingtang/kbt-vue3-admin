@@ -21,10 +21,8 @@
 </template>
 
 <script setup lang="ts" name="LayoutVertical">
-import { useLayout } from "@/hooks/useLayout";
-import { DeviceType } from "@/stores/index.d";
-import { useLayoutStore } from "@/stores/layout";
-import { useSettingsStore } from "@/stores/settings";
+import { useLayout } from "@/hooks";
+import { useLayoutStore, useSettingsStore, DeviceType } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";

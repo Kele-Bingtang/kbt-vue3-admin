@@ -8,7 +8,7 @@
 
 <script setup lang="ts" name="FrameLayout">
 import FrameView from "./FrameView.vue";
-import { useLayoutStore } from "@/stores/layout";
+import { useLayoutStore } from "@/stores";
 import { useFrame, type Frame } from "./useFrame";
 
 const layoutStore = useLayoutStore();

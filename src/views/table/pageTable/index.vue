@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts" name="pageTable">
-import Pagination, { pageSetting, type Paging } from "@/components/Pagination/index.vue";
+import { Pagination, pageSetting, type Paging } from "@/components";
 import { largeData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
 

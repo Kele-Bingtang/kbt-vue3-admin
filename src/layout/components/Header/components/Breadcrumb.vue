@@ -26,11 +26,11 @@
 </template>
 
 <script setup lang="ts" name="Breadcrumb">
-import { useLayout } from "@/hooks/useLayout";
+import { useLayout } from "@/hooks";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { compile } from "path-to-regexp";
 import CommonIcon from "@/layout/components/CommonIcon/index.vue";
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores";
 
 const route = useRoute();
 const router = useRouter();
@@ -82,8 +82,8 @@ const handleBreadcrumbClick = (item: RouteConfig) => {
   align-items: center;
   padding-right: 50px;
   overflow: hidden;
-  mask-image: linear-gradient(90deg, #000000 0%, #000000 calc(100% - 50px), transparent);
   white-space: nowrap;
+  mask-image: linear-gradient(90deg, #000000 0%, #000000 calc(100% - 50px), transparent);
 
   .breadcrumb-link {
     display: inline-flex;

@@ -1,15 +1,13 @@
 import axios, { type AxiosInstance, AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios";
 import { showFullScreenLoading, tryHideFullScreenLoading } from "@/config/request/serviceLoading";
 import qs from "qs";
-import { isArray, isExternal } from "@/utils/layout/validate";
+import { isArray, isExternal, message } from "@/utils";
 import { ContentTypeEnum, ResultEnum } from "./httpEnum";
-import { useErrorLogStore } from "@/stores/errorLog";
+import { useErrorLogStore, useUserStore } from "@/stores";
 import { AxiosCanceler } from "./axiosCancel";
 import { checkStatus } from "./checkStatus";
 import router from "@/router";
-import { useUserStore } from "@/stores/user";
 import { LOGIN_URL } from "@/router/routesConfig";
-import { message } from "@/utils/layout/message";
 
 const axiosCanceler = new AxiosCanceler();
 

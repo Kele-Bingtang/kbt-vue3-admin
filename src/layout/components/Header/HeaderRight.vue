@@ -25,9 +25,7 @@ import Message from "./components/Message.vue";
 import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
 import settings from "@/config/settings";
-import { useErrorLogStore } from "@/stores/errorLog";
-import { useLayoutStore } from "@/stores/layout";
-import { DeviceType } from "@/stores/index.d";
+import { useErrorLogStore, useLayoutStore, DeviceType } from "@/stores";
 
 const layoutStore = useLayoutStore();
 const errorLogStore = useErrorLogStore();

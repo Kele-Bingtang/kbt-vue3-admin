@@ -1,0 +1,20 @@
+.work-drawer.el-drawer.is-fullscreen {
+  --el-drawer-width: 100% !important;
+  --el-drawer-margin-top: 0 !important;
+
+  height: 100%;
+  margin-bottom: 0;
+  overflow: auto;
+}
+
+.work-drawer.el-drawer {
+  .el-drawer__header {
+    padding: 15px 20px 14px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--el-border-color-lighter);
+  }
+
+  .el-drawer__footer {
+    border-top: 1px solid var(--el-border-color-lighter);
+  }
+}

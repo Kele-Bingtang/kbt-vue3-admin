@@ -46,14 +46,12 @@
 </template>
 
 <script setup lang="tsx" name="SimpleProTable">
-import ProTable from "@/components/ProTable/index.vue";
-import type { TableColumnProps, ProTableInstance } from "@/components/ProTable/interface";
-import { useHandleData } from "@/hooks/useHandleData";
+import { ProTable, type TableColumnProps, type ProTableInstance } from "@/components";
+import { useHandleData, usePermission } from "@/hooks";
 import { ElButton, ElInput, ElMessage, ElMessageBox, ElSwitch, ElTag } from "element-plus";
 import { tableData } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
-import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
-import { usePermission } from "@/hooks/usePermission";
+import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 
 export interface ResUserList {
   id: string;

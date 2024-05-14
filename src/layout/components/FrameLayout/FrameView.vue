@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts" name="FrameView">
-import mittBus from "@/utils/layout/mittBus";
+import { mittBus } from "@/utils";
 import { useRoute } from "vue-router";
 
 const loading = ref(true);

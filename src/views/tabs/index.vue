@@ -83,11 +83,10 @@
 </template>
 
 <script setup lang="ts" name="Tabs">
-import { appendFieldById, deleteChildren, getNodeById } from "@/utils/tree";
+import { appendFieldById, deleteChildren, getNodeById } from "@/utils";
 import { useDetail } from "./hooks";
-import { usePermissionStore } from "@/stores/permission";
-import { useLayoutStore } from "@/stores/layout";
-import { useLayout } from "@/hooks/useLayout";
+import { usePermissionStore, useLayoutStore } from "@/stores";
+import { useLayout } from "@/hooks";
 import { copyObj } from "@/utils";
 
 const layoutStore = useLayoutStore();

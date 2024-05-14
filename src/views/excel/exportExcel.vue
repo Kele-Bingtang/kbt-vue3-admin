@@ -62,7 +62,7 @@
 </template>
 
 <script setup lang="ts" name="ExportExcel">
-import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
+import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 import { largeData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
 import { Document, Top } from "@element-plus/icons-vue";

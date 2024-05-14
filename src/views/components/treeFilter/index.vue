@@ -32,7 +32,7 @@
 
 <script setup lang="ts" name="TreeFilterDemo">
 import { ElMessage } from "element-plus";
-import TreeFilter from "@/components/TreeFilter/index.vue";
+import { TreeFilter } from "@/components";
 
 interface Tree {
   id: number;

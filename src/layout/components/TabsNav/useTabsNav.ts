@@ -1,15 +1,11 @@
-import { useLayout } from "@/hooks/useLayout";
+import { useLayout, useBoolean } from "@/hooks";
 import beforeClose from "@/router/beforeClose";
-import type { TabProp } from "@/stores";
-import { useLayoutStore } from "@/stores/layout";
-import { usePermissionStore } from "@/stores/permission";
-import { getUrlParams } from "@/utils";
+import { useLayoutStore, usePermissionStore, type TabProp } from "@/stores";
+import { getUrlParams, mittBus } from "@/utils";
 import Sortable from "sortablejs";
 import type { RefreshFunction } from "../MainContent/index.vue";
 import settings from "@/config/settings";
 import { HOME_URL } from "@/router/routesConfig";
-import { useBoolean } from "@/hooks/useBoolean";
-import mittBus from "@/utils/layout/mittBus";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";
 

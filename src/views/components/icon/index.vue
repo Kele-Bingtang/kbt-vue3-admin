@@ -67,7 +67,7 @@
 </template>
 
 <script setup lang="ts" name="IconDemo">
-import { useIcon } from "@/components/Icon/useIcon";
+import { useIcon } from "@/components";
 import UpOutlined from "@iconify-icons/ant-design/up-outlined";
 import Upload from "@iconify-icons/ant-design/upload";
 

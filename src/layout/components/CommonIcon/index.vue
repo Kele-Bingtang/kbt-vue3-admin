@@ -13,7 +13,7 @@
 </template>
 
 <script setup lang="ts" name="CommonIcon">
-import { isString } from "@/utils/layout/validate";
+import { isString } from "@/utils";
 import type { IconifyIcon } from "@iconify/vue";
 import type { Component } from "vue";
 

@@ -89,9 +89,9 @@
 </template>
 
 <script setup lang="ts">
-import { useMessageStore } from "@/stores/message";
+import { useMessageStore } from "@/stores";
 import settings from "@/config/settings";
-import Tooltip from "@/components/Tooltip/index.vue";
+import { Tooltip } from "@/components";
 
 interface Notice {
   id: string;

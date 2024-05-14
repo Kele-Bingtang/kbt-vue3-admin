@@ -1,4 +1,4 @@
-import { isFunction } from "@/utils/layout/validate";
+import { isFunction } from "@/utils";
 import axios, { type AxiosRequestConfig, type Canceler } from "axios";
 import qs from "qs";
 

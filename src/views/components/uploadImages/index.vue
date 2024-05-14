@@ -4,29 +4,29 @@
     <div class="upload-card upload-box">
       <h2>单图片上传组件 🍓🍇🍈🍉</h2>
       <div class="upload-list">
-        <UploadImg v-model:imageUrl="avatar1" @upload-img="uploadImg" :fileSize="3">
+        <UploadImage v-model:imageUrl="avatar1" @upload-img="uploadImg" :fileSize="3">
           <template #tip>上传图片最大为 3M</template>
-        </UploadImg>
-        <UploadImg v-model:imageUrl="avatar2" @upload-img="uploadImg" :drag="false" borderRadius="50%">
+        </UploadImage>
+        <UploadImage v-model:imageUrl="avatar2" @upload-img="uploadImg" :drag="false" borderRadius="50%">
           <template #empty>
             <el-icon><Avatar /></el-icon>
             <span>请上传头像</span>
           </template>
           <template #tip>圆形组件（禁止拖拽上传）</template>
-        </UploadImg>
-        <UploadImg v-model:imageUrl="avatar3" @upload-img="uploadImg" width="250px">
+        </UploadImage>
+        <UploadImage v-model:imageUrl="avatar3" @upload-img="uploadImg" width="250px">
           <template #empty>
             <el-icon><Picture /></el-icon>
             <span>请上传 Banner 图</span>
           </template>
           <template #tip>长方形组件（可拖拽上传）</template>
-        </UploadImg>
-        <UploadImg v-model:imageUrl="avatar4" @upload-img="uploadImg" disabled>
+        </UploadImage>
+        <UploadImage v-model:imageUrl="avatar4" @upload-img="uploadImg" disabled>
           <template #tip>无图（禁用上传）</template>
-        </UploadImg>
-        <UploadImg v-model:imageUrl="avatar5" @upload-img="uploadImg" disabled>
+        </UploadImage>
+        <UploadImage v-model:imageUrl="avatar5" @upload-img="uploadImg" disabled>
           <template #tip>有图（禁用编辑、删除）</template>
-        </UploadImg>
+        </UploadImage>
       </div>
       <el-descriptions title="属性项 📚" :column="1" border>
         <el-descriptions-item label="imageUrl">
@@ -62,20 +62,20 @@
     <div class="upload-card upload-box">
       <h2>多图片上传组件 🍓🍇🍈🍉</h2>
       <div class="upload-list">
-        <UploadImgs v-model:fileList="fileList" @upload-img="uploadImg" :drag="false" borderRadius="50%">
+        <UploadImages v-model:fileList="fileList" @upload-img="uploadImg" :drag="false" borderRadius="50%">
           <template #empty>
             <el-icon><Picture /></el-icon>
             <span>请上传照片</span>
           </template>
           <template #tip>圆形组件，图片最大为 5M（禁止拖拽上传）</template>
-        </UploadImgs>
-        <UploadImgs v-model:fileList="fileList1" @upload-img="uploadImg" width="250px">
+        </UploadImages>
+        <UploadImages v-model:fileList="fileList1" @upload-img="uploadImg" width="250px">
           <template #empty>
             <el-icon><Picture /></el-icon>
             <span>请上传照片</span>
           </template>
           <template #tip>长方形组件（可拖拽上传）</template>
-        </UploadImgs>
+        </UploadImages>
       </div>
       <el-descriptions title="配置项 📚（其它参数和单图上传组件相同）" :column="1" border>
         <el-descriptions-item label="fileList">
@@ -104,7 +104,7 @@
         />
         <el-form ref="ruleFormRef" label-width="100px" label-suffix=" :" :rules="rules" :model="fromModel">
           <el-form-item label="用户头像" prop="avatar">
-            <UploadImg
+            <UploadImage
               v-model:imageUrl="fromModel.avatar"
               @upload-img="uploadImg"
               width="135px"
@@ -116,10 +116,10 @@
                 <span>请上传头像</span>
               </template>
               <template #tip>头像大小不能超过 3M</template>
-            </UploadImg>
+            </UploadImage>
           </el-form-item>
           <el-form-item label="用户照片" prop="photo">
-            <UploadImgs
+            <UploadImages
               v-model:fileList="fromModel.photo"
               @upload-img="uploadImg"
               :limit="3"
@@ -132,7 +132,7 @@
                 <span>请上传照片</span>
               </template>
               <template #tip>最多上传 3 张照片</template>
-            </UploadImgs>
+            </UploadImages>
           </el-form-item>
           <el-form-item label="用户姓名" prop="username">
             <el-input v-model="fromModel.username" placeholder="请填写用户姓名" clearable></el-input>
@@ -159,16 +159,16 @@
         />
         <el-form label-width="100px" label-suffix=" :" disabled :model="fromModel1">
           <el-form-item label="用户头像" prop="avatar">
-            <UploadImg v-model:imageUrl="fromModel1.avatar" width="135px" height="135px" :file-size="3">
+            <UploadImage v-model:imageUrl="fromModel1.avatar" width="135px" height="135px" :file-size="3">
               <template #empty>
                 <el-icon><Avatar /></el-icon>
                 <span>请上传头像</span>
               </template>
               <template #tip>头像大小不能超过 3M</template>
-            </UploadImg>
+            </UploadImage>
           </el-form-item>
           <el-form-item label="用户照片" prop="photo">
-            <UploadImgs
+            <UploadImages
               v-model:fileList="fromModel1.photo"
               @upload-img="uploadImg"
               height="140px"
@@ -180,7 +180,7 @@
                 <span>请上传照片</span>
               </template>
               <template #tip>照片大小不能超过 5M</template>
-            </UploadImgs>
+            </UploadImages>
           </el-form-item>
           <el-form-item label="用户姓名" prop="username">
             <el-input v-model="fromModel1.username" placeholder="请填写用户姓名" clearable></el-input>
@@ -203,8 +203,8 @@
 
 <script setup lang="ts" name="UploadImagesDemo">
 import type { FormInstance } from "element-plus";
-import UploadImg from "@/components/UploadImages/image.vue";
-import UploadImgs, { type SuccessFun } from "@/components/UploadImages/images.vue";
+import { UploadImage, UploadImages } from "@/components";
+import type { SuccessFun } from "@/components/UploadImages/src/images.vue";
 import { uploadLocal } from "@/utils";
 import { Avatar, Picture } from "@element-plus/icons-vue";
 

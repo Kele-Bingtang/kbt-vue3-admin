@@ -23,8 +23,8 @@
 </template>
 
 <script setup lang="ts" name="TinymceDemo">
-import Tinymce, { type UITheme } from "@/components/Tinymce/index.vue";
-import { useLayoutStore } from "@/stores/layout";
+import { Tinymce, type UITheme } from "@/components";
+import { useLayoutStore } from "@/stores";
 import { tinymceHtml } from "@/mock/tinymce";
 import { ElMessage } from "element-plus";
 

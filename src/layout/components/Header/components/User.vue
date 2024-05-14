@@ -42,12 +42,11 @@
 </template>
 
 <script setup lang="ts" name="User">
-import { useSettingsStore } from "@/stores/settings";
-import { useUserStore } from "@/stores/user";
+import { useSettingsStore, useUserStore } from "@/stores";
 import { useI18n } from "vue-i18n";
 import defaultAvatar from "@/assets/images/default.png";
 import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
-import mittBus from "@/utils/layout/mittBus";
+import { mittBus } from "@/utils";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { LOGIN_URL } from "@/router/routesConfig";
 

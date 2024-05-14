@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts" name="QrCode">
-import QrCode from "@/components/QrCode/index.vue";
+import { QrCode } from "@/components";
 import { CircleClose } from "@element-plus/icons-vue";
 
 const switchFormMode = inject("switchFormMode") as (mode: string) => {};

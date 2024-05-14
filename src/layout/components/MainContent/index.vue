@@ -14,8 +14,7 @@
 </template>
 
 <script setup lang="ts" name="MainContent">
-import { useLayoutStore } from "@/stores/layout";
-import { useSettingsStore } from "@/stores/settings";
+import { useLayoutStore, useSettingsStore } from "@/stores";
 import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";
 import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
 import CustomTransition from "./components/CustomTransition.vue";

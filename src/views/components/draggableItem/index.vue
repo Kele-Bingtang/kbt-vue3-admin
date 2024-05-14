@@ -21,7 +21,7 @@
 </template>
 
 <script setup lang="ts" name="DraggableItemDemo">
-import DraggableItem from "@/components/DraggableItem/index.vue";
+import { DraggableItem } from "@/components";
 import { list1, list2, list3 } from "@/mock/drag-item";
 
 const group = ref("drag_item");

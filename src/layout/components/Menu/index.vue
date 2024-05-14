@@ -16,9 +16,8 @@
 </template>
 
 <script setup lang="ts" name="Menu">
-import { useLayout } from "@/hooks/useLayout";
-import { usePermissionStore } from "@/stores/permission";
-import { useSettingsStore } from "@/stores/settings";
+import { useLayout } from "@/hooks";
+import { usePermissionStore, useSettingsStore } from "@/stores";
 import settings from "@/config/settings";
 import MenuItem from "@/layout/components/Menu/MenuItem.vue";
 

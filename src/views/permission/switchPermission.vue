@@ -117,8 +117,8 @@
 
 <script setup lang="ts" name="SwitchPermission">
 import type { RefreshFunction } from "@/layout/components/MainContent/index.vue";
-import { useUserStore } from "@/stores/user";
-import { usePermission } from "@/hooks/usePermission";
+import { useUserStore } from "@/stores";
+import { usePermission } from "@/hooks";
 
 const userStore = useUserStore();
 const { getRoleList, getAuthList, hasRole, hasAuth } = usePermission();

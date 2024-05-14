@@ -1,20 +1,18 @@
-import { DeviceType } from "@/stores/index.d";
-import { useLayoutStore } from "@/stores/layout";
-import { usePermissionStore } from "@/stores/permission";
+import { useLayoutStore, usePermissionStore, useSettingsStore, useUserStore, DeviceType } from "@/stores";
 import { ElMessage } from "element-plus";
 import { useI18n } from "vue-i18n";
 import settings from "@/config/settings";
-import { useSettingsStore } from "@/stores/settings";
-import { useUserStore } from "@/stores/user";
 import { transformI18n } from "@/languages";
-import { isFunction, isString } from "@/utils/layout/validate";
+import { isFunction, isString } from "@/utils";
 import { useRoutes } from "./useRoutes";
+
 export const useLayout = () => {
   const layoutStore = useLayoutStore();
   const settingsStore = useSettingsStore();
   const userStore = useUserStore();
   const { homeRoute, loadedRouteList } = usePermissionStore();
   const { t } = useI18n();
+
   /**
    * @description 是否为移动端
    * @returns boolean：true 是，false 不是
@@ -23,6 +21,7 @@ export const useLayout = () => {
     const rect = document.body.getBoundingClientRect();
     return rect.width - 1 < 767; // 这里以 ipad Mini 的宽度为移动端的阈值
   };
+
   /**
    * @description 计算页面尺寸
    */
@@ -33,6 +32,7 @@ export const useLayout = () => {
       if (result) settingsStore.closeSideMenu();
     }
   };
+
   /**
    * @description 根据当前跳转的路由设置显示在浏览器标签的 title
    * @param route 当前路由
@@ -40,8 +40,10 @@ export const useLayout = () => {
   const setBrowserTitle = (route: RouteConfig) => {
     const { title } = settings;
     const pageTitle = getTitle(route);
+
     let resTitle = pageTitle ? `${title} - ${pageTitle}` : title; // 默认标题的模式
     const { titleMode } = settingsStore;
+
     // 展示标题的多种模式判断
     if (titleMode === "0") resTitle = pageTitle ? `${title} - ${pageTitle}` : title;
     else if (titleMode === "1") {
@@ -53,6 +55,7 @@ export const useLayout = () => {
     else if (titleMode === "3") resTitle = pageTitle + "";
     window.document.title = resTitle;
   };
+
   /**
    * @description 获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title
    * @param route 当前路由
@@ -67,6 +70,7 @@ export const useLayout = () => {
     if (titleIsFunction) return handleI18nTitle(route.name as string | undefined, title, true, route.meta?.useI18n);
     return title;
   };
+
   /**
    * @description 完整获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title
    * @param route 当前路由
@@ -79,6 +83,7 @@ export const useLayout = () => {
     const t = title || name || "no-name";
     return handleI18nTitle(name, t, titleIsFunction, route.meta?.useI18n);
   };
+
   /**
    * @description 获取 i18n 转换后的文字
    * @param name 路由的 name
@@ -99,6 +104,7 @@ export const useLayout = () => {
     if (!titleIsFunction && name) return t(`_route.${name}`) === `_route.${name}` ? name : t(`_route.${name}`);
     return title;
   };
+
   /**
    * @description 处理路由的 title，因为 title 支持函数格式，所以这里解析出函数的返回值
    * @param route 当前路由
@@ -110,6 +116,7 @@ export const useLayout = () => {
     if (title && isFunction(title)) return { title: title({ ...route }), titleIsFunction: true };
     return { title: title + "", titleIsFunction: false };
   }
+
   /**
    * @description 获取面包屑列表
    * @returns 面包屑列表
@@ -124,8 +131,10 @@ export const useLayout = () => {
       });
       return [];
     }
+
     // 如果是首页，直接返回
     if (route.path === homeRoute?.path || route.name === homeRoute?.name) return [homeRoute] as RouteConfig[];
+
     // 当前路由的父级路由组成的数组
     let matched = useRoutes().findParentRoutesByPath(route.meta._fullPath, loadedRouteList) as RouteConfig[];
     matched.push(toRaw(route));
@@ -134,6 +143,7 @@ export const useLayout = () => {
     // 过滤掉 hideInBread 的配置
     return matched.filter(item => (item.name || item.meta?.title) && !item.meta?.hideInBread);
   };
+
   /**
    * @description 通过路由表获取菜单列表
    * @param loadRolesRoutes 权限路由
@@ -166,6 +176,7 @@ export const useLayout = () => {
     getMenuListByRouter,
   };
 };
+
 /**
  * 非 setup 使用
  */
@@ -183,6 +194,7 @@ export const useLayoutNoSetup = () => {
     const title = route.meta?.title || name || "no-name";
     return handleI18nTitle(name, title + "", route.meta?.useI18n);
   };
+
   /**
    * @description 获取 i18n 转换后的文字
    * @param name 路由的 name
@@ -205,6 +217,7 @@ export const useLayoutNoSetup = () => {
     }
     return title;
   };
+
   return {
     getLayoutTitle,
     handleI18nTitle,

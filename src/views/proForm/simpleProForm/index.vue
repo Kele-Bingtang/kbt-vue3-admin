@@ -8,12 +8,11 @@
 
 <script setup lang="ts" name="SimpleProForm">
 import { ref } from "vue";
-import ProForm from "@/components/ProForm/index.vue";
-import type { OptionsProps } from "@/components/ProForm/interface";
+import { ProForm, type FormOptionsProps } from "@/components";
 
 const form = ref<any>({});
 
-const options: OptionsProps = {
+const options: FormOptionsProps = {
   // 表单整体配置项
   form: {
     inline: false,

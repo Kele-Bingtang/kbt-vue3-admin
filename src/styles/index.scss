@@ -197,10 +197,11 @@ div:focus {
     margin-bottom: 0;
     border-bottom: 1px solid var(--el-border-color-lighter);
 
-    span {
-      font-size: 17px;
-      color: var(--el-text-color-primary) !important;
-    }
+    // 统一 Dialog、Drawer 字体大小可以打开
+    // span {
+    //   font-size: 17px;
+    //   color: var(--el-text-color-primary) !important;
+    // }
   }
 
   .el-drawer__footer {
@@ -231,9 +232,19 @@ div:focus {
 .el-dialog {
   .el-dialog__header {
     border-bottom: 1px solid var(--el-border-color-lighter);
+
+    // 统一 Dialog、Drawer 字体大小可以打开
+    // span {
+    //   font-size: 17px;
+    //   color: var(--el-text-color-primary) !important;
+    // }
   }
 
   .el-dialog__body {
     padding-top: 15px;
+  }
+
+  .el-dialog__footer {
+    border-top: 1px solid var(--el-border-color-lighter);
   }
 }

@@ -41,7 +41,7 @@
 </template>
 
 <script setup lang="ts" name="DragDrawerDemo">
-import DragDrawer from "@/components/DragDrawer/index.vue";
+import { DragDrawer } from "@/components";
 
 const visible1 = ref(false);
 const visible2 = ref(false);

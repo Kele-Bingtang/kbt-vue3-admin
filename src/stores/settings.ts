@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { removeCacheTabNavList } from "@/utils/layout/cache";
+import { removeCacheTabNavList } from "@/utils";
 import type { LayoutModeType, LayoutThemeType, TabsNavModeType } from ".";
 import defaultSettings from "@/config/settings";
 
@@ -59,9 +59,7 @@ export const useSettingsStore = defineStore(
 
     const resetSettings = () => {
       localStorage.removeItem(defaultSettings.settingCacheKey);
-      if (!recordTabsNav.value) {
-        removeCacheTabNavList();
-      }
+      if (!recordTabsNav.value) removeCacheTabNavList();
     };
 
     return {

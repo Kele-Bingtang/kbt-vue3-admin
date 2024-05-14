@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts" name="LayoutVertical">
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";

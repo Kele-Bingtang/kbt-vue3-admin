@@ -19,11 +19,7 @@
 </template>
 
 <script setup lang="ts" name="WangEditorDemo">
-import WangEditor, {
-  type FileInsertFnType,
-  type ImageInsertFnType,
-  type VideoInsertFnType,
-} from "@/components/WangEditor/index.vue";
+import { WangEditor, type FileInsertFnType, type ImageInsertFnType, type VideoInsertFnType } from "@/components";
 import { uploadLocal } from "@/utils";
 
 const content = ref("");

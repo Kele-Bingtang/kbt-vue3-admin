@@ -388,7 +388,7 @@ Admin 使用了 mittBus 实现事件总栈。
 ThemeDrawer.vue
 
 ```typescript
-import mittBus from "@/utils/mittBus";
+import mittBus from "@/utils/layout/mittBus";
 
 mittBus.on("openThemeDrawer", (value: boolean) => (drawerVisible.value = value));
 ```
@@ -398,7 +398,7 @@ mittBus.on("openThemeDrawer", (value: boolean) => (drawerVisible.value = value))
 User.vue
 
 ```typescript
-import mittBus from "@/utils/mittBus";
+import mittBus from "@/utils/layout/mittBus";
 
 const openSettingsDrawer = () => {
   mittBus.emit("openThemeDrawer", true);

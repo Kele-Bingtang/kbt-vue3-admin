@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useRoutes } from "@/hooks/useRoutes";
+import { useRoutes } from "@/hooks";
 import { constantRoutes, HOME_NAME } from "@/router/routesConfig";
 
 export const usePermissionStore = defineStore("permissionStore", () => {

@@ -41,15 +41,14 @@
 </template>
 
 <script setup lang="ts" name="LayoutVertical">
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
-import { usePermissionStore } from "@/stores/permission";
-import { useLayout } from "@/hooks/useLayout";
+import { useLayout } from "@/hooks";
 import settings from "@/config/settings";
 import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
-import Tooltip from "@/components/Tooltip/index.vue";
+import { Tooltip } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";
 
 const route = useRoute();

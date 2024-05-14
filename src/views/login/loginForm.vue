@@ -16,7 +16,7 @@
     <el-form-item prop="verifyCode">
       <el-input clearable v-model="loginForm.verifyCode" placeholder="验证码" :prefix-icon="WarnTriangleFilled">
         <template #append>
-          <ImageVerify v-model:code="imgCode" />
+          <ImageVerifyCode v-model:code="imgCode" />
         </template>
       </el-input>
     </el-form-item>
@@ -55,12 +55,12 @@
 <script setup lang="ts" name="LoginForm">
 import { useRouter } from "vue-router";
 import { ElNotification, type FormInstance } from "element-plus";
-import { useUserStore } from "@/stores/user";
+import { useUserStore } from "@/stores";
 import { getTimeState } from "@/utils";
 import settings from "@/config/settings";
-import ImageVerify from "@/components/ImageVerify/index.vue";
+import { ImageVerifyCode } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";
-import { useRoutes } from "@/hooks/useRoutes";
+import { useRoutes } from "@/hooks";
 import { User, Lock, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
 
 interface LoginForm {

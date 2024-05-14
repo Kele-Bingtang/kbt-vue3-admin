@@ -1,8 +1,7 @@
-import NProgress from "@/config/nprogress";
+import { NProgress } from "@/utils";
 import settings from "@/config/settings";
-import { useRoutes } from "@/hooks/useRoutes";
-import { usePermissionStore } from "@/stores/permission";
-import { useUserStore } from "@/stores/user";
+import { useRoutes } from "@/hooks";
+import { usePermissionStore, useUserStore } from "@/stores";
 import {
   createRouter,
   createWebHashHistory,

@@ -50,11 +50,9 @@
 </template>
 
 <script setup lang="ts" name="RolePermission">
-import { usePermissionStore } from "@/stores/permission";
-import { useUserStore } from "@/stores/user";
-import { useLayout } from "@/hooks/useLayout";
+import { usePermissionStore, useUserStore } from "@/stores";
+import { useLayout, useRoutes } from "@/hooks";
 import { ElMessage, ElMessageBox, ElNotification, ElTree } from "element-plus";
-import { useRoutes } from "@/hooks/useRoutes";
 import type { TreeKey } from "element-plus/es/components/tree/src/tree.type";
 import router, { resetRouter } from "@/router";
 

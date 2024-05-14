@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts" name="MergeHeader">
-import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
+import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 import { largeData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
 import { Top } from "@element-plus/icons-vue";

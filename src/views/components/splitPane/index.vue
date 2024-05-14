@@ -29,7 +29,7 @@
 </template>
 
 <script setup lang="ts" name="SplitPaneDemo">
-import SplitPane from "@/components/SplitPane/index.vue";
+import { SplitPane } from "@/components";
 
 /**
  * SplitPane 接收的插槽位置为 left、right、top、bottom，即 <div slot="left/right/top/bottom">位置</div>
@@ -53,7 +53,7 @@ import SplitPane from "@/components/SplitPane/index.vue";
  *
  * 如果你想自定义自己的分割线，可传入插槽，name 为 line，即 <div slot="line">分割线</div>
  *
- * 详细代码，请看 src/components/SplitPane/index.vue 组件内容
+ * 详细代码，请看 src/components/SplitPane/src/index.vue 组件内容
  */
 const offset1 = ref(0.4); // 数值单位 1 最大，0 最小
 const offset2 = ref("500px"); // 页面宽度最大， 0 最小

@@ -50,7 +50,8 @@
 </template>
 
 <script setup lang="ts" name="DraggableList">
-import DraggableList, { type DragClass } from "@/components/DraggableList/index.vue";
+import { DraggableList } from "@/components";
+import type { DragClass } from "@/components/DraggableList/src/index.vue";
 import { list1, list2 } from "@/mock/drag-list";
 import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
 

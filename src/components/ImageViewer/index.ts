@@ -2,7 +2,7 @@ import ImageViewer from "./src/index.vue";
 import { createVNode, render, type VNode } from "vue";
 import type { ImageViewerProps } from "./src/index.vue";
 
-let instance: Nullable<VNode> = null;
+let instance: VNode | null = null;
 
 export const createImageViewer = (options: ImageViewerProps) => {
   if (typeof window === "undefined") return;

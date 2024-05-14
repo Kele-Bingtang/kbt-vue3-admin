@@ -1,4 +1,4 @@
-import { message } from "@/utils/layout/message";
+import { message } from "@/utils";
 
 /**
  * @description 校验网络请求状态码

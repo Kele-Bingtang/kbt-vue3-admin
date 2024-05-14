@@ -6,3 +6,17 @@
   margin-bottom: 0;
   overflow: auto;
 }
+
+.work-dialog.el-dialog {
+  .el-dialog__header {
+    border-bottom: 1px solid var(--el-border-color-lighter);
+  }
+
+  .el-dialog__body {
+    padding-top: 15px;
+  }
+
+  .el-dialog__footer {
+    border-top: 1px solid var(--el-border-color-lighter);
+  }
+}

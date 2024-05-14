@@ -63,8 +63,7 @@
 </template>
 
 <script setup lang="ts" name="MessageCenter">
-import type { MessageItem } from "@/stores";
-import { useMessageStore } from "@/stores/message";
+import { useMessageStore, type MessageItem } from "@/stores";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Delete, RefreshLeft } from "@element-plus/icons-vue";
 

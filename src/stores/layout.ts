@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
-import { setCacheTabNavList, getCacheTabNavList, removeCacheTabNavList } from "@/utils/layout/cache";
-import { DeviceType, type LanguageType, type LayoutSizeType, type TabProp } from "./index.d";
+import { setCacheTabNavList, getCacheTabNavList, removeCacheTabNavList } from "@/utils";
+import { DeviceType, type LanguageType, type LayoutSizeType, type TabProp } from "./interface";
 import { useSettingsStore } from "./settings";
 import defaultSettings from "@/config/settings";
 import type { Frame } from "@/layout/components/FrameLayout/useFrame";

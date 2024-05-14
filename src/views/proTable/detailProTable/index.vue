@@ -58,11 +58,8 @@
   </div>
 </template>
 <script setup lang="tsx" name="CommonTicket">
-import ProTable from "@/components/ProTable/index.vue";
-import type { TableColumnProps } from "@/components/ProTable/interface";
-import Grid from "@/components/Grid/index.vue";
-// import ProForm from "@/components/ProForm/index.vue";
-import GridItem from "@/components/Grid/components/GridItem.vue";
+import { ProTable, Grid, GridItem, type TableColumnProps } from "@/components";
+// import ProForm from "@/components";
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
 import { options } from "@/views/proForm/detailProForm/options";
 

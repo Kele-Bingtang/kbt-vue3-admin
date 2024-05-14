@@ -6,9 +6,7 @@
 import { ElImageViewer } from "element-plus";
 import { computed, ref, withDefaults } from "vue";
 
-defineOptions({
-  name: "ImageViewer",
-});
+defineOptions({ name: "ImageViewer" });
 
 export interface ImageViewerProps {
   urlList?: string[];
@@ -31,7 +29,7 @@ const props = withDefaults(defineProps<ImageViewerProps>(), {
 });
 
 const bindValue = computed(() => {
-  const propsData: Recordable = { ...props };
+  const propsData: Record<string, any> = { ...props };
   delete propsData.show;
   return propsData;
 });

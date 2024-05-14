@@ -23,8 +23,7 @@
 </template>
 
 <script setup lang="ts" name="EditorInfo">
-import type { UserInfo } from "@/stores";
-import { useUserStore } from "@/stores/user";
+import { useUserStore, type UserInfo } from "@/stores";
 import { ElMessage, type FormInstance } from "element-plus";
 
 const props = defineProps<{ user: UserInfo }>();

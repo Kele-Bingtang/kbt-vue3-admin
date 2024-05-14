@@ -32,15 +32,13 @@
 </template>
 
 <script setup lang="ts" name="treeFilterProTable">
-import ProTable from "@/components/ProTable/index.vue";
-import type { TableColumnProps, ProTableInstance } from "@/components/ProTable/interface";
-import { useHandleData } from "@/hooks/useHandleData";
+import { ProTable, TreeFilter, type TableColumnProps, type ProTableInstance } from "@/components";
+import { useHandleData } from "@/hooks";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { genderType, tableData, userStatus, department } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
-import { exportJsonToExcel, formatJsonToArray } from "@/utils/excel";
+import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 import type { ResUserList } from "../simpleProTable/index.vue";
-import TreeFilter from "@/components/TreeFilter/index.vue";
 
 const proTable = ref<ProTableInstance>();
 const data = ref(tableData);

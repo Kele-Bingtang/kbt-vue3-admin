@@ -1,4 +1,4 @@
-import type { FormOptionsProps } from "@/components/ProForm/interface";
+import type { FormOptionsProps } from "@/components";
 import type { FormRules } from "element-plus";
 
 const rules = reactive<FormRules>({

@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts" name="ElTabsNav">
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores";
 import type { TabPaneName, TabsPaneContext } from "element-plus";
 import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useTabsNav } from "../useTabsNav";

@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts" name="seamlessScroll">
-import SeamlessScroll from "@/components/SeamlessScroll/index.vue";
+import { SeamlessScroll } from "@/components";
 
 const scroll = ref();
 

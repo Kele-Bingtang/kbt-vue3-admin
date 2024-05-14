@@ -4,7 +4,7 @@ import { wrapperEnv } from "./build/getEnv";
 import { resolve } from "path";
 import { getPluginsList } from "./build/plugins";
 import { include, exclude } from "./build/optimize";
-import { getNowDate } from "./src/utils";
+import { getNowDate } from "./src/utils/helper";
 import pkg from "./package.json";
 
 const { dependencies, devDependencies, name, version } = pkg;

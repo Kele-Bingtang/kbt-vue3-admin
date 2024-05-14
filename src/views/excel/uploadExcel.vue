@@ -1,6 +1,6 @@
 <template>
   <div class="upload-excel-container">
-    <upload-excel-component :on-success="handleSuccess" :before-upload="beforeUpload" />
+    <upload-excel :on-success="handleSuccess" :before-upload="beforeUpload" />
     <el-table :data="tableData" border highlight-current-row style="width: 100%; margin-top: 20px">
       <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" />
     </el-table>
@@ -8,7 +8,8 @@
 </template>
 
 <script setup lang="ts" name="UploadExcel">
-import UploadExcelComponent, { type ExcelData } from "@/components/UploadExcel/index.vue";
+import { UploadExcel } from "@/components";
+import type { ExcelData } from "@/components/UploadExcel/src/index.vue";
 import { ElMessage } from "element-plus";
 
 const tableData = ref([]);

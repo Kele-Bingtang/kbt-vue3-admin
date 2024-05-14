@@ -4,7 +4,7 @@
 
 <script setup lang="ts" name="ChartLine">
 import * as echarts from "echarts";
-import { useEcharts } from "@/hooks/useEcharts";
+import { useEcharts } from "@/hooks";
 
 interface ChartBarProps {
   width?: string;

@@ -4,7 +4,7 @@
 
 <script setup lang="ts" name="ChartBar">
 import * as echarts from "echarts";
-import { useEcharts } from "@/hooks/useEcharts";
+import { useEcharts } from "@/hooks";
 
 interface BarData {
   title: string;

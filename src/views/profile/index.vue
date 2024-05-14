@@ -31,8 +31,7 @@ import Account from "./components/account.vue";
 import UserCard from "./components/userCard.vue";
 import UserAvatar from "./components/userAvatar.vue";
 import Timeline from "./components/timeline.vue";
-import type { UserInfo } from "@/stores";
-import { useUserStore } from "@/stores/user";
+import { useUserStore, type UserInfo } from "@/stores";
 
 const userStore = useUserStore();
 const activeTab = ref("timeline");

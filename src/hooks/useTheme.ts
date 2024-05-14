@@ -1,7 +1,7 @@
-import { getLightColor, getDarkColor } from "@/utils/layout/themeTool";
+import { getLightColor, getDarkColor } from "@/utils";
 import settings from "@/config/settings";
 import { ElMessage } from "element-plus";
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores";
 
 /**
  * @description 切换主题

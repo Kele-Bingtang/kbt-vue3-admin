@@ -1,5 +1,6 @@
 import { render, getCurrentInstance, type Component, type ComponentInternalInstance, type VNode } from "vue";
 import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
+import { Icon } from "@/components";
 
 let id = 0;
 let thisAppContext: any = null;
@@ -20,17 +21,17 @@ interface Drawer extends Partial<DrawerProps> {
 }
 
 export const closeDrawer = () => {
-  const vm = document.querySelector(`#work-drawer-${id--}`) as Element;
-  getFather().removeChild(vm);
+  const vm = document.querySelector(`#work-drawer-${id--}`) as HTMLElement;
+  vm && getFather().removeChild(vm);
 };
 
-const handleClose = (drawerProps?: Drawer) => {
-  if (drawerProps?.onClose) drawerProps?.onClose(closeDrawer);
+const handleClose = (drawerProps: Drawer) => {
+  if (drawerProps.onClose) drawerProps.onClose(closeDrawer);
   return closeDrawer();
 };
 
-const handleConfirm = (drawerProps?: Drawer) => {
-  if (drawerProps?.onConfirm) drawerProps?.onConfirm(closeDrawer);
+const handleConfirm = (drawerProps: Drawer) => {
+  if (drawerProps.onConfirm) drawerProps.onConfirm(closeDrawer);
   return closeDrawer();
 };
 
@@ -42,12 +43,20 @@ const handleConfirm = (drawerProps?: Drawer) => {
  * 在第一个参数里写 headerRender 和 footerRender，可以自定义 el-drawer 的 header 和 footer
  */
 export const showDrawer = (
-  drawerProps?: Drawer,
+  drawerProps: Drawer,
   component?: Component,
   componentsProps?: any,
   ctx?: ComponentInternalInstance
 ) => {
   ctx && (thisAppContext = ctx?.appContext);
+
+  const isFullscreen = ref(false);
+
+  const toggleFull = () => {
+    const elDrawerEl = document.querySelector("${`#work-drawer-${id}`} .work-drawer.el-drawer") as HTMLElement;
+    if (elDrawerEl) elDrawerEl.classList.toggle("is-fullscreen");
+    isFullscreen.value = !isFullscreen.value;
+  };
 
   const vm = (
     <ElDrawer
@@ -59,18 +68,36 @@ export const showDrawer = (
       render
       headerRender
       footerRender
+      class="work-drawer"
     >
       {{
         default: () => {
-          if (drawerProps?.render) return drawerProps?.render();
+          if (drawerProps.render) return drawerProps.render();
           return <component is={component} {...componentsProps}></component>;
         },
         header: () => {
-          if (drawerProps?.headerRender) return drawerProps?.headerRender();
+          if (drawerProps.headerRender) return drawerProps.headerRender();
+          return (
+            <>
+              <span class="el-drawer__title">{drawerProps.title}</span>
+              {drawerProps.fullscreen === true ||
+                (drawerProps.fullscreen === undefined && (
+                  <Icon
+                    name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
+                    onClick={() => toggleFull()}
+                    width="18px"
+                    height="18px"
+                    color="var(--el-color-info)"
+                    hover-color="var(--el-color-primary)"
+                    icon-style={{ cursor: "pointer" }}
+                  />
+                ))}
+            </>
+          );
         },
         footer: () => {
-          if (drawerProps?.footerRender) return drawerProps?.footerRender();
-          if (drawerProps?.showFooter === false) return;
+          if (drawerProps.footerRender) return drawerProps.footerRender();
+          if (drawerProps.showFooter === false) return;
           return (
             <>
               <ElButton onClick={() => handleClose(drawerProps)}>取 消</ElButton>

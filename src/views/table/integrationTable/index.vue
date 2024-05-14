@@ -173,12 +173,11 @@
 </template>
 
 <script setup lang="ts" name="IntegrationTable">
-import Pagination, { pageSetting, type Paging } from "@/components/Pagination/index.vue";
+import { Pagination, TableSort, pageSetting, type Paging } from "@/components";
 import { largeData } from "@/mock/table";
 import Sortable from "sortablejs";
 import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
-import TableSort from "@/components/TableSort/index.vue";
 import { Search, Refresh, Plus, Check, EditPen, Delete } from "@element-plus/icons-vue";
 
 const defaultTableData = {

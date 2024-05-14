@@ -40,7 +40,7 @@
 </template>
 
 <script setup lang="ts" name="Print">
-import Print from "@/utils/print";
+import { Print } from "@/utils";
 import ChartLine from "@/views/home/components/chartLine.vue";
 import { simpleData } from "@/mock/table";
 

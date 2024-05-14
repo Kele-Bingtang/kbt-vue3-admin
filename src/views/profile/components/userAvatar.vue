@@ -32,7 +32,7 @@
 
 <script setup lang="ts" name="UserAvatar">
 import type { UserInfo } from "@/stores";
-import Cropper from "@/components/Cropper/index.vue";
+import { Cropper } from "@/components";
 import defaultAvatar from "@/assets/images/default.png";
 
 const props = defineProps<{ user: UserInfo }>();

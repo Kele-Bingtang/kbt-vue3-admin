@@ -1,6 +1,6 @@
-import { isArray } from "@/utils/layout/validate";
+import { isArray } from "@/utils";
 import settings from "@/config/settings";
-import { useErrorLogStore } from "@/stores/errorLog";
+import { useErrorLogStore } from "@/stores";
 import { ElNotification } from "element-plus";
 
 const { errorLog } = settings;
@@ -19,7 +19,7 @@ export const checkNeed = () => {
 /**
  * @description 捕获错误回调
  */
-const errorHandler = (error: any, vm: ComponentPublicInstance | null, info: string) => {
+export const errorHandler = (error: any, vm: ComponentPublicInstance | null, info: string) => {
   if (!checkNeed()) return;
   const errorStore = useErrorLogStore();
   errorStore.addErrorLog({
@@ -48,5 +48,3 @@ const errorHandler = (error: any, vm: ComponentPublicInstance | null, info: stri
     duration: 3000,
   });
 };
-
-export default errorHandler;

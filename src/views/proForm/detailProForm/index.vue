@@ -10,7 +10,7 @@
 </template>
 
 <script setup lang="ts" name="DetailProForm">
-import ProForm from "@/components/ProForm/index.vue";
+import { ProForm } from "@/components";
 import { options } from "./options";
 
 const form = ref({});

@@ -11,8 +11,8 @@
 </template>
 
 <script setup lang="ts" name="Layout">
-import { useSettingsStore } from "@/stores/settings";
-import { useLayout } from "@/hooks/useLayout";
+import { useSettingsStore } from "@/stores";
+import { useLayout } from "@/hooks";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
 import { getPx, setStyleVar } from "@/utils";

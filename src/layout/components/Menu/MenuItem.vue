@@ -28,12 +28,12 @@
 </template>
 
 <script setup lang="ts" name="MenuItem">
-import { useLayout } from "@/hooks/useLayout";
-import { isExternal } from "@/utils/layout/validate";
+import { useLayout } from "@/hooks";
+import { isExternal } from "@/utils";
 import CommonIcon from "@/layout/components/CommonIcon/index.vue";
-import Tooltip from "@/components/Tooltip/index.vue";
+import { Tooltip } from "@/components";
 import settings from "@/config/settings";
-import { useLayoutStore } from "@/stores/layout";
+import { useLayoutStore } from "@/stores";
 
 defineProps<{
   menuItem: RouterConfig;

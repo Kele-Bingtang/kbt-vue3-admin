@@ -15,7 +15,7 @@ import { useTheme } from "./hooks/useTheme";
 import { useFrame } from "./layout/components/FrameLayout/useFrame";
 import { getCacheVersion, removeProjectsCache, setCacheVersion } from "./utils/layout/cache";
 import settings from "@/config/settings";
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores";
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
@@ -72,3 +72,4 @@ const versionCache = () => {
   }
 };
 </script>
+./utils/helper

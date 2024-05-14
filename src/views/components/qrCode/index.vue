@@ -93,8 +93,8 @@
 
 <script setup lang="ts" name="QrCodeDemo">
 import { ref, unref } from "vue";
-import { message } from "@/utils/layout/message";
-import QrCode from "@/components/QrCode/index.vue";
+import { message } from "@/utils";
+import { QrCode } from "@/components";
 
 const qrCodeText = "kbt-vue3-admin";
 

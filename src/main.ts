@@ -12,12 +12,10 @@ import directives from "@/directives/index";
 import I18n from "@/languages/index";
 // svg icons
 import "virtual:svg-icons-register";
-import Icon from "@/components/Icon/index.vue";
-import errorHandler, { checkNeed } from "@/utils/layout/errorHandler";
+import { Icon, Auth, Role } from "@/components";
+import { errorHandler, checkNeed } from "@/utils";
 import vue3TreeOrg from "vue3-tree-org";
 import "vue3-tree-org/lib/vue3-tree-org.css";
-import Auth from "@/components/Permission/auth";
-import Role from "@/components/Permission/role.vue";
 
 const pinia = createPinia();
 const app = createApp(App);
@@ -25,12 +23,7 @@ pinia.use(piniaPluginPersistedstate);
 
 checkNeed() && (app.config.errorHandler = errorHandler);
 
-// 全局注册按钮级别权限组件
-app.component("Auth", Auth);
-
-// 全局注册页面级别权限组件
-app.component("Role", Role);
-
-app.component("Icon", Icon);
+// 全局注册按钮级别权限、页面级别权限、Icon 图标组件组件
+app.use(Auth).use(Role).use(Icon);
 
 app.use(I18n).use(pinia).use(router).use(directives).use(ElementPlus).use(vue3TreeOrg).mount("#app");

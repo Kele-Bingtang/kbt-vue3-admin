@@ -17,9 +17,8 @@
 </template>
 
 <script setup lang="ts" name="LanguageSelect">
-import { useLayout } from "@/hooks/useLayout";
-import type { LanguageType } from "@/stores";
-import { useLayoutStore } from "@/stores/layout";
+import { useLayout } from "@/hooks";
+import { useLayoutStore, type LanguageType } from "@/stores";
 import { ElMessage } from "element-plus";
 import { useI18n } from "vue-i18n";
 

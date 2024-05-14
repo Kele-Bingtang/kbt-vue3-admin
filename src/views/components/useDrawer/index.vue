@@ -8,7 +8,7 @@
 </template>
 
 <script setup lang="tsx" name="UseDrawerDemo">
-import { useDrawer } from "@/components/useDrawer";
+import { useDrawer } from "@/components";
 
 const { open } = useDrawer();
 

@@ -4,7 +4,7 @@
 
 <script setup lang="ts" name="ChartPie">
 import * as echarts from "echarts";
-import { useEcharts } from "@/hooks/useEcharts";
+import { useEcharts } from "@/hooks";
 
 export interface PieData {
   name: string;

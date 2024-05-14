@@ -40,7 +40,7 @@
 
 <script setup lang="ts" name="TimeLine">
 import { markRaw } from "vue";
-import { useFlicker } from "@/components/Flicker";
+import { useFlicker } from "@/components";
 
 const { lastBuildTime } = __APP_INFO__;
 const activities = [

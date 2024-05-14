@@ -1,10 +1,9 @@
 import router from "@/router";
 import { HOME_NAME, LOGIN_URL, notFoundRouter, rolesRoutes } from "@/router/routesConfig";
-import { usePermissionStore } from "@/stores/permission";
-import { isExternal, isType } from "@/utils/layout/validate";
+import { usePermissionStore, useUserStore } from "@/stores";
+import { isExternal, isType } from "@/utils";
 import { ElNotification } from "element-plus";
 import type { RouteRecordRaw } from "vue-router";
-import { useUserStore } from "@/stores/user";
 import settings from "@/config/settings";
 import { useLayoutNoSetup } from "./useLayout";
 import type { BackstageMenuList } from "@/api/menu";

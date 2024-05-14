@@ -46,9 +46,8 @@
 </template>
 
 <script setup lang="tsx" name="ComplexProTable">
-import ProTable from "@/components/ProTable/index.vue";
-import type { TableColumnProps, HeaderRenderScope, ProTableInstance } from "@/components/ProTable/interface";
-import { useHandleData } from "@/hooks/useHandleData";
+import { ProTable, type TableColumnProps, type HeaderRenderScope, type ProTableInstance } from "@/components";
+import { useHandleData } from "@/hooks";
 import { ElButton, ElMessage, type TableColumnCtx } from "element-plus";
 import { genderType, tableData, userStatus } from "@/mock/pro-table";
 import { CirclePlus, Delete, Pointer, Refresh } from "@element-plus/icons-vue";

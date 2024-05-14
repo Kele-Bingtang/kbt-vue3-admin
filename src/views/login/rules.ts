@@ -1,4 +1,4 @@
-import { isPhone } from "@/utils/layout/validate";
+import { isPhone } from "@/utils";
 import type { FormRules } from "element-plus";
 
 /** 6位数字验证码正则 */

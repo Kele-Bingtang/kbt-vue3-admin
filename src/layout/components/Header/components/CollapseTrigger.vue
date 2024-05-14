@@ -4,7 +4,7 @@
   </el-icon>
 </template>
 <script setup lang="ts" name="CollapseTrigger">
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore } from "@/stores";
 import { Expand, Fold } from "@element-plus/icons-vue";
 
 const settingsStore = useSettingsStore();

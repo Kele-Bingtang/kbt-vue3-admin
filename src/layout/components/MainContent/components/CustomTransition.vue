@@ -22,10 +22,12 @@ const name = computed(() => {
 const enterActiveClass = computed(() => {
   const transition = route.meta.transition;
   if (transition) return `animate__animated ${transition.enterTransition}`;
+  return "";
 });
 const leaveActiveClass = computed(() => {
   const transition = route.meta.transition;
   if (transition) return `animate__animated ${transition.leaveTransition}`;
+  return "";
 });
 </script>
 

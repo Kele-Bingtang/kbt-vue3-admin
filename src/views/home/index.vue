@@ -39,7 +39,7 @@
 
 <script setup lang="ts" name="Home">
 import CardItem from "./components/cardItem.vue";
-import CountTo from "@/components/CountTo/index.vue";
+import { CountTo } from "@/components";
 import ChartPie from "./components/chartPie.vue";
 import ChartBar from "./components/chartBar.vue";
 import ChartLineBar from "./components/chartLineBar.vue";

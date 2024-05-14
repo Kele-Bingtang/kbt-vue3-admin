@@ -24,11 +24,9 @@
   </el-container>
 </template>
 <script setup lang="ts" name="LayoutMixins">
-import { useSettingsStore } from "@/stores/settings";
+import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
-import { usePermissionStore } from "@/stores/permission";
-import { useLayout } from "@/hooks/useLayout";
-import { useRoutes } from "@/hooks/useRoutes";
+import { useLayout, useRoutes } from "@/hooks";
 import settings from "@/config/settings";
 import Menu from "@/layout/components/Menu/index.vue";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";

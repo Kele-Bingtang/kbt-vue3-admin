@@ -87,9 +87,7 @@
 </template>
 
 <script setup lang="ts" name="AnimationMixin">
-import MaterialInput from "@/components/MaterialInput/index.vue";
-import TextHoverEffect from "@/components/TextHoverEffect/index.vue";
-import DropdownMenu from "@/components/DropdownMenu/index.vue";
+import { MaterialInput, TextHoverEffect, DropdownMenu } from "@/components";
 import Button from "./button.vue";
 import { Search } from "@element-plus/icons-vue";
 

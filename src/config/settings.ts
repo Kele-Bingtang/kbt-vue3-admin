@@ -4,7 +4,7 @@ import {
   TabsNavModeType,
   type LanguageType,
   type LayoutSizeType,
-} from "@/stores/index.d";
+} from "@/stores/interface";
 
 interface Settings {
   title: string; // 项目 title

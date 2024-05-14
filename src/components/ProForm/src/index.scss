@@ -1,0 +1,16 @@
+.pro-form-container {
+  &.el-form {
+    width: 100%;
+    margin-top: 10px;
+  }
+
+  .form-operation {
+    .form-footer {
+      display: flex;
+    }
+  }
+
+  .title-col {
+    margin-bottom: 15px;
+  }
+}

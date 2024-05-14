@@ -101,8 +101,7 @@
 </template>
 
 <script setup lang="ts" name="SortTable">
-import TableSort from "@/components/TableSort/index.vue";
-import Pagination, { type Paging, pageSetting } from "@/components/Pagination/index.vue";
+import { TableSort, Pagination, pageSetting, type Paging } from "@/components";
 import { largeData } from "@/mock/table";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Search, EditPen, Delete } from "@element-plus/icons-vue";
