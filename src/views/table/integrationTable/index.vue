@@ -285,7 +285,7 @@ onMounted(() => {
 });
 
 const rowDrop = () => {
-  const el = tableRef.value.$el.querySelector(
+  const el = tableRef.value.el.$el.querySelector(
     ".el-table__body-wrapper .el-scrollbar__view > table > tbody"
   ) as HTMLElement;
   sortable.value = Sortable.create(el, {

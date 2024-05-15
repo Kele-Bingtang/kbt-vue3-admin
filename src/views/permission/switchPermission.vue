@@ -5,8 +5,8 @@
       <el-card shadow="never">
         <template #header>角色切换</template>
         <el-radio-group v-model="switchRole">
-          <el-radio-button label="admin" />
-          <el-radio-button label="visitor" />
+          <el-radio-button value="admin" />
+          <el-radio-button value="visitor" />
         </el-radio-group>
       </el-card>
 

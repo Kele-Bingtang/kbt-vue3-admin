@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
 import { ProForm, type FormOptionsProps } from "@/components";
-import { shallowRef, ref, computed, defineOptions } from "vue";
+import { shallowRef, ref, computed, defineOptions, defineProps } from "vue";
 import { deepCloneTableRow } from "../utils";
 
 defineOptions({ name: "DialogOperate" });

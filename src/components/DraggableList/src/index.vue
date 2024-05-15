@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineOptions } from "vue";
+import { ref, defineOptions, defineEmits, defineProps } from "vue";
 import Draggable from "vuedraggable";
 
 defineOptions({ name: "DraggableList" });

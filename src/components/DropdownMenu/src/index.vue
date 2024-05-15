@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineOptions } from "vue";
+import { ref, defineOptions, defineProps } from "vue";
 
 defineOptions({ name: "DropdownMenu" });
 

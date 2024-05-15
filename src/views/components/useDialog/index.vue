@@ -1,8 +1,5 @@
 <template>
-  <el-card shadow="never">
-    <template #header>
-      <span>Dialog 组件</span>
-    </template>
+  <el-card shadow="never" header="useDialog 组件">
     <el-button @click="openDialog()">使用函数打开 Dialog 组件</el-button>
 
     <el-button @Click="visible = true">通过 modelValue 打开 Dialog 组件</el-button>

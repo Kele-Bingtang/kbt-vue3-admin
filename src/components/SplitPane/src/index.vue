@@ -22,7 +22,7 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef, ref, computed, watch, onMounted, nextTick, defineOptions } from "vue";
+import { shallowRef, ref, computed, watch, onMounted, nextTick, defineOptions, defineEmits, defineProps } from "vue";
 import SplitLine from "./SplitLine.vue";
 
 defineOptions({ name: "SplitPane" });

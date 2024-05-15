@@ -1,8 +1,5 @@
 <template>
-  <el-card shadow="never">
-    <template #header>
-      <span>useDrawer 组件</span>
-    </template>
+  <el-card shadow="never" header="useDrawer 组件">
     <el-button @click="openDialog()">使用函数打开 Drawer</el-button>
   </el-card>
 </template>

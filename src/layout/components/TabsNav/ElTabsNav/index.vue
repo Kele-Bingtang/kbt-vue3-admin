@@ -11,11 +11,7 @@
         >
           <template #label>
             <div style="display: inline-block" @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)">
-              <CommonIcon
-                v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
-                :icon="tab.meta.icon"
-                class="tab-icon"
-              />
+              <Icon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
               <span>{{ tab.title }}</span>
             </div>
           </template>
@@ -38,7 +34,6 @@
 <script setup lang="ts" name="ElTabsNav">
 import { useSettingsStore } from "@/stores";
 import type { TabPaneName, TabsPaneContext } from "element-plus";
-import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuButton from "../components/MenuDropdown.vue";

@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, defineOptions } from "vue";
+import { computed, ref, defineOptions, defineProps } from "vue";
 import { Grid, GridItem, type TableColumnProps, type BreakPoint } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import SearchFormItem from "./components/SearchFormItem.vue";

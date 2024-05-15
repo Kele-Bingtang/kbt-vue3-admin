@@ -1,10 +1,10 @@
 <template>
   <div class="checkbox-container" style="margin-bottom: 10px">
     <el-checkbox-group v-model="checkboxVal">
-      <el-checkbox label="date">date</el-checkbox>
-      <el-checkbox label="address">address</el-checkbox>
-      <el-checkbox label="status">status</el-checkbox>
-      <el-checkbox label="title">title</el-checkbox>
+      <el-checkbox value="date">date</el-checkbox>
+      <el-checkbox value="address">address</el-checkbox>
+      <el-checkbox value="status">status</el-checkbox>
+      <el-checkbox value="title">title</el-checkbox>
     </el-checkbox-group>
   </div>
 

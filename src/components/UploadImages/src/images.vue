@@ -47,7 +47,7 @@
 import { Plus, ZoomIn, Delete } from "@element-plus/icons-vue";
 import type { UploadProps, UploadFile, UploadUserFile, UploadRequestOptions } from "element-plus";
 import { ElNotification, formContextKey, formItemContextKey } from "element-plus";
-import { inject, computed, ref, defineOptions } from "vue";
+import { inject, computed, ref, defineOptions, defineProps, defineEmits } from "vue";
 
 defineOptions({ name: "UploadImgs" });
 

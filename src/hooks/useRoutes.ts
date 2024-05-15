@@ -134,7 +134,7 @@ export const useRoutes = () => {
   const processDynamicRoutes = (routers: RouterConfigRaw[]) => {
     if (!routers || !routers.length) return [];
     routers.forEach(r => {
-      // 将 dynamic 属性加入 meta，标识此路由为后端返回路由
+      // 将 dynamic 属性加入 meta，标识此路由为动态路由
       r.meta && ((r.meta._dynamic as boolean) = true);
       if (r?.children && r.children.length) {
         // 父级的 redirect 属性取值：如果子级存在且父级的 redirect 属性不存在，默认取第一个子级的 path；如果子级存在且父级的 redirect 属性存在，取存在的 redirect 属性，会覆盖默认值

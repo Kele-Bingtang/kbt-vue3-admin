@@ -2,6 +2,7 @@ import { render, getCurrentInstance, type Component, type ComponentInternalInsta
 import { ElDialog, ElButton, type DialogProps, ElScrollbar } from "element-plus";
 import "./index.scss";
 import { getPx } from "@/utils";
+import { Icon } from "@/components";
 
 let id = 0;
 let thisAppContext: any = null;

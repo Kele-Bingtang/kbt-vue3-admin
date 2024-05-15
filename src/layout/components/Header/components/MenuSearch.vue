@@ -23,7 +23,7 @@
       </template>
       <template #default="{ item }">
         <template v-if="!isFunction(item.meta.title)">
-          <CommonIcon :icon="item.meta.icon" />
+          <Icon :icon="item.meta.icon" />
           <span>{{ nestMode ? item.title.join(" > ") : item.meta.title }}</span>
         </template>
       </template>
@@ -34,7 +34,6 @@
 <script setup lang="ts" name="MenuSearch">
 import { useLayout } from "@/hooks";
 import { usePermissionStore } from "@/stores";
-import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils";
 import { Search } from "@element-plus/icons-vue";

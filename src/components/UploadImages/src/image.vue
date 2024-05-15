@@ -52,7 +52,7 @@ import { generateUUID } from "@/utils";
 import { ElNotification, formContextKey, formItemContextKey } from "element-plus";
 import type { UploadProps, UploadRequestOptions } from "element-plus";
 import { Edit, ZoomIn, Delete, Plus } from "@element-plus/icons-vue";
-import { ref, inject, computed, defineOptions } from "vue";
+import { ref, inject, computed, defineOptions, defineProps, defineEmits } from "vue";
 
 defineOptions({ name: "UploadImg" });
 

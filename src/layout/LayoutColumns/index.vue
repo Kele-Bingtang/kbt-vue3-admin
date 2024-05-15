@@ -13,7 +13,7 @@
             :key="item.path"
             @click="changeMenuItem(item)"
           >
-            <CommonIcon v-if="item.meta.icon" :icon="item.meta.icon" />
+            <Icon v-if="item.meta.icon" :icon="item.meta.icon" />
             <div class="flx-center" style="width: 100%">
               <Tooltip :effect="settings.tooltipEffect">
                 <span class="title">{{ item.meta.title }}</span>
@@ -46,7 +46,6 @@ import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import { useLayout } from "@/hooks";
 import settings from "@/config/settings";
-import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
 import { Tooltip } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";

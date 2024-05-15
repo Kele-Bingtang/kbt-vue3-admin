@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, shallowRef, ref, provide, watch, type Ref } from "vue";
+import { computed, shallowRef, ref, provide, watch, defineProps, type Ref } from "vue";
 import type { FormColumnProps, FormEnumProps, FormOptionsProps } from "./interface";
 import ProFormItem from "./components/ProFormItem.vue";
 import { getPx } from "@/utils";

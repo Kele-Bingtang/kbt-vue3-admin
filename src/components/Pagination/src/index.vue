@@ -16,9 +16,7 @@
 
 <script lang="ts">
 import { scrollTo } from "@/utils";
-import { reactive, toRef, nextTick, defineOptions } from "vue";
-
-defineOptions({ name: "MaterialInput" });
+import { reactive, toRef, nextTick, defineOptions, defineEmits, defineProps } from "vue";
 
 export const pageSetting = { currentPage: 1, pageSizes: [10, 20, 50, 100, 200], pageSize: 20 };
 </script>
@@ -48,6 +46,8 @@ const props = withDefaults(defineProps<PaginationProps>(), {
   hidden: false,
   reset: true,
 });
+
+defineOptions({ name: "Pagination" });
 
 type PaginationEmits = {
   "update:modelValue": [value: Paging];

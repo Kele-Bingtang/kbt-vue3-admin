@@ -6,3 +6,4 @@ export * from "./usePermission";
 export * from "./useRoutes";
 export * from "./useTheme";
 export * from "./useValidator";
+export * from "./useClipboard";

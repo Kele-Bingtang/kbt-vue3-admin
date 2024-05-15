@@ -1,7 +1,7 @@
 <template>
   <div :class="computedClasses" class="material-input-component">
     <div :class="{ iconClass: icon }">
-      <CommonIcon v-if="icon" :icon="icon" class="material-input__icon" />
+      <Icon v-if="icon" :icon="icon" class="material-input__icon" />
       <input
         v-if="type === 'email'"
         :id="id"
@@ -117,9 +117,18 @@
 </template>
 
 <script setup lang="ts">
-import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import type { IconifyIcon } from "@iconify/vue";
-import { computed, getCurrentInstance, onMounted, ref, watch, defineOptions, type Component } from "vue";
+import {
+  computed,
+  getCurrentInstance,
+  onMounted,
+  ref,
+  watch,
+  defineOptions,
+  defineEmits,
+  defineProps,
+  type Component,
+} from "vue";
 
 defineOptions({ name: "MaterialInput" });
 

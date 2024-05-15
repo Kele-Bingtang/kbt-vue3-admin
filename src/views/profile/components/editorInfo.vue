@@ -11,8 +11,8 @@
     </el-form-item>
     <el-form-item label="用户性别">
       <el-radio-group v-model="user.sex">
-        <el-radio label="男">男</el-radio>
-        <el-radio label="女">女</el-radio>
+        <el-radio value="男">男</el-radio>
+        <el-radio value="女">女</el-radio>
       </el-radio-group>
     </el-form-item>
     <el-form-item>

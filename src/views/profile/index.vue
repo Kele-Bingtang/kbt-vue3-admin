@@ -42,9 +42,12 @@ const canEditUser = ref<UserInfo>({
   roles: [],
 });
 
+onMounted(() => {
+  canEditUser.value = { ...userStore.userInfo };
+});
+
 const user = computed(() => {
   const { userInfo } = userStore;
-  canEditUser.value = { ...userInfo };
   return userInfo;
 });
 

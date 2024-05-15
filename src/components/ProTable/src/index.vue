@@ -226,6 +226,7 @@ import {
   useAttrs,
   shallowRef,
   defineOptions,
+  defineProps,
 } from "vue";
 import { ElTable } from "element-plus";
 import { useTable, type Table } from "./hooks/useTable";

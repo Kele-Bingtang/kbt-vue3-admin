@@ -1,5 +1,5 @@
 <template>
-  <el-card shadow="never" title="视频播放器">
+  <el-card shadow="never" header="视频播放器">
     <VideoPlayer
       url="//sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-720p.mp4"
       poster="//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/poster.jpg"

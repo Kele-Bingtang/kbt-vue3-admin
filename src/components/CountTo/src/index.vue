@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import CountUp from "countup";
-import { ref, watch, onMounted, onUnmounted, defineOptions } from "vue";
+import { ref, watch, onMounted, onUnmounted, defineOptions, defineEmits, defineProps } from "vue";
 
 defineOptions({ name: "CountTo" });
 

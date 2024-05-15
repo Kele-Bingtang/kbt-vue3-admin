@@ -20,7 +20,7 @@
             @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
           >
             <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
-            <CommonIcon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
+            <Icon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
             <span>{{ tab.title }}</span>
             <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
               <Close />
@@ -54,7 +54,6 @@
 
 <script setup lang="ts" name="TabsNav">
 import { useLayoutStore, useSettingsStore, type TabProp } from "@/stores";
-import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuDropdown from "../components/MenuDropdown.vue";

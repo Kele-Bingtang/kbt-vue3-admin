@@ -110,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref } from "vue";
+import { computed, inject, ref, defineProps } from "vue";
 import type { FormColumnProps } from "../interface";
 import { WangEditor, Tinymce } from "@/components";
 import Tree from "./Tree.vue";

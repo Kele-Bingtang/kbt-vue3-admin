@@ -17,6 +17,7 @@ import {
   onDeactivated,
   onActivated,
   defineOptions,
+  defineProps,
   type VNodeArrayChildren,
   type VNode,
 } from "vue";

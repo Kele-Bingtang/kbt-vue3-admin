@@ -23,16 +23,24 @@ const copy: Directive = {
 };
 
 function handleClick(this: any) {
-  const input = document.createElement("input");
-  input.value = this.copyData.toLocaleString();
-  document.body.appendChild(input);
-  input.select();
-  document.execCommand("Copy");
-  document.body.removeChild(input);
-  ElMessage({
-    type: "success",
-    message: "复制成功",
-  });
+  if (!this.copyData) return ElMessage({ type: "error", message: "复制失败，内容为空" });
+  // 优先使用现代 Clipboard API
+  if (navigator.clipboard) {
+    try {
+      navigator.clipboard.writeText(this.copyData);
+    } catch (error: any) {
+      ElMessage({ type: "error", message: `复制失败：${error?.name}` });
+    }
+  } else {
+    const input = document.createElement("input");
+    input.value = this.copyData.toLocaleString();
+    document.body.appendChild(input);
+    input.select();
+    // input.setSelectionRange(0, 9999); // 限制选择内容大小
+    if (document.execCommand) document.execCommand("Copy");
+    document.body.removeChild(input);
+  }
+  ElMessage({ type: "success", message: "复制成功" });
 }
 
 export default copy;

@@ -1,16 +1,18 @@
-<template v-if="slots.length">
+<template>
   <el-table
     v-if="!slots.custom"
+    ref="elTableRef"
     :data="tableData"
     :header-cell-class-name="handleHeaderCellClassName"
     @sort-change="handleSort"
-    v-bind="$attrs"
     v-loading="loading"
+    v-bind="$attrs"
   >
     <slot></slot>
   </el-table>
+
   <slot
-    v-if="!slots.default"
+    v-else-if="!slots.default"
     name="custom"
     :sortChange="handleSort"
     :headerCellClassName="handleHeaderCellClassName"
@@ -19,10 +21,16 @@
 
 <script setup lang="ts">
 import { isNumber } from "@/utils";
-import { ElMessage } from "element-plus";
-import { useSlots, ref, computed, onMounted, defineOptions } from "vue";
+import type { TableInstance } from "element-plus";
+import { useSlots, ref, computed, defineOptions, defineProps } from "vue";
+import TableSort from "./index.vue";
 
 defineOptions({ name: "TableSort" });
+
+export type TableSortInstance = Omit<
+  InstanceType<typeof TableSort>,
+  keyof ComponentPublicInstance | keyof TableSortProps
+>;
 
 type Record = { [key: string]: string };
 
@@ -38,18 +46,6 @@ const props = withDefaults(defineProps<TableSortProps>(), {
 
 const sortOrder = ref<any[]>([]);
 const tableData = computed(() => props.data);
-
-onMounted(() => {
-  if (slots.custom) {
-    const defaultSlots = (slots as any).default();
-    if (defaultSlots.length > 1) {
-      return ElMessage.warning("TableSort 仅支持传入一个组件或者一个根节点");
-    }
-    if (defaultSlots[0].type.name !== "ElTable") {
-      return ElMessage.warning("TableSort 仅支持传入 ElementPlu 的 el-table 组件");
-    }
-  }
-});
 
 const handleHeaderCellClassName = ({ column }: any) => {
   sortOrder.value.forEach(element => {
@@ -137,7 +133,6 @@ const multiSort = (data: any, sortSameArr: number[], orderArray: any) => {
  */
 const singleSort = (data: any, sortProp: string, sortOrder: string, sortSameArr: any) => {
   let newOrderArr = data.slice(sortSameArr[0], sortSameArr[1] + 1);
-  console.log(newOrderArr);
   newOrderArr = newOrderArr.sort((x: Record, y: Record) => {
     // 数字
     if (isNumber(x[sortProp] + "")) {
@@ -153,8 +148,11 @@ const singleSort = (data: any, sortProp: string, sortOrder: string, sortSameArr:
   }
 };
 
+const elTableRef = shallowRef<TableInstance | null>(null);
+
 defineExpose({
   handleHeaderCellClassName,
   handleSort,
+  el: elTableRef,
 });
 </script>

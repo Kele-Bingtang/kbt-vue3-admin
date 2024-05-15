@@ -5,7 +5,7 @@
     v-if="!menuItem.children || menuItem.children.length == 0"
     class="menu-item"
   >
-    <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
+    <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
     <template #title>
       <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
       <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
@@ -15,7 +15,7 @@
   </el-menu-item>
   <el-sub-menu v-else :index="menuItem.meta._fullPath" class="sub-menu">
     <template #title>
-      <CommonIcon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
+      <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
       <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
       <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
         <span>{{ title(menuItem) }}</span>
@@ -30,7 +30,6 @@
 <script setup lang="ts" name="MenuItem">
 import { useLayout } from "@/hooks";
 import { isExternal } from "@/utils";
-import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { Tooltip } from "@/components";
 import settings from "@/config/settings";
 import { useLayoutStore } from "@/stores";

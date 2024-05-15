@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ElMessage } from "element-plus";
-import { ref, reactive, shallowRef, defineOptions } from "vue";
+import { ref, reactive, shallowRef, defineOptions, defineProps } from "vue";
 import { read, utils } from "xlsx";
 
 defineOptions({ name: "UploadExcel" });

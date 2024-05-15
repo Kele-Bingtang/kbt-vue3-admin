@@ -3,7 +3,7 @@
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbList" :key="breadcrumb.path">
         <span v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1" class="no-click-bread">
-          <CommonIcon
+          <Icon
             v-if="breadcrumb.meta.icon && settingsStore.showBreadcrumbIcon"
             :icon="breadcrumb.meta.icon"
             class="breadcrumb-icon"
@@ -12,7 +12,7 @@
         </span>
         <a v-else @click.prevent="handleBreadcrumbClick(breadcrumb)" class="breadcrumb-link">
           <template v-if="breadcrumb.meta && breadcrumb.meta.icon">
-            <CommonIcon
+            <Icon
               v-if="breadcrumb.meta.icon && settingsStore.showBreadcrumbIcon"
               :icon="breadcrumb.meta.icon"
               class="breadcrumb-icon"
@@ -29,7 +29,6 @@
 import { useLayout } from "@/hooks";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { compile } from "path-to-regexp";
-import CommonIcon from "@/layout/components/CommonIcon/index.vue";
 import { useSettingsStore } from "@/stores";
 
 const route = useRoute();

@@ -28,7 +28,7 @@
 </template>
 <script setup lang="ts">
 import { ElTree } from "element-plus";
-import { nextTick, ref, watch } from "vue";
+import { nextTick, ref, watch, defineEmits, defineProps } from "vue";
 
 defineOptions({ name: "Tree" });
 

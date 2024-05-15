@@ -6,7 +6,7 @@
       <el-table-column
         v-for="(item, index) in col"
         :key="`col_${index}`"
-        :prop="dropCol[index].prop"
+        :prop="dropCol[index]?.prop"
         :label="item.label"
         :type="item.type"
         :width="item.width"

@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import Draggable from "vuedraggable";
-import { defineOptions } from "vue";
+import { defineOptions, defineProps } from "vue";
 
 defineOptions({ name: "DraggableItem" });
 

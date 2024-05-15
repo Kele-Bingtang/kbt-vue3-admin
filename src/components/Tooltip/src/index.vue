@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { isArray } from "@/utils";
-import { useSlots, ref, computed, onMounted, onUpdated, onBeforeMount, defineOptions } from "vue";
+import { useSlots, ref, computed, onMounted, onUpdated, onBeforeMount, defineOptions, defineProps } from "vue";
 
 defineOptions({ name: "Tooltip" });
 
@@ -112,9 +112,8 @@ onMounted(() => {
 });
 
 onUpdated(() => {
-  if (isFirstMounted.value) {
-    isFirstMounted.value = false;
-  } else {
+  if (isFirstMounted.value) isFirstMounted.value = false;
+  else {
     slotDom = slots.default();
     tryNumber = 0;
     compareWidth();

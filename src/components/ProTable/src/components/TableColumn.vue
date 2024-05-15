@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="tsx">
-import { inject, ref, useSlots, defineOptions } from "vue";
+import { inject, ref, useSlots, defineOptions, defineProps } from "vue";
 import type { TableColumnProps, RenderScope, HeaderRenderScope } from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../utils";
 import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";

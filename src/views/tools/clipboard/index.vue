@@ -27,9 +27,6 @@ import useClipboard from "vue-clipboard3";
 import { Document } from "@element-plus/icons-vue";
 import { useClipboard as vueuseClipboard } from "@vueuse/core";
 
-const source = ref("https://github.com/Kele-Bingtang/kbt-vue3-admin");
-const { text, copy, copied, isSupported } = vueuseClipboard({ source });
-
 const { toClipboard } = useClipboard();
 const content = ref("https://github.com/Kele-Bingtang/kbt-vue3-admin");
 
@@ -57,6 +54,9 @@ const clipboardFailed = () => {
     duration: 1500,
   });
 };
+
+const source = ref("https://github.com/Kele-Bingtang/kbt-vue3-admin");
+const { text, copy, copied, isSupported } = vueuseClipboard({ source });
 </script>
 
 <style lang="scss" scoped>

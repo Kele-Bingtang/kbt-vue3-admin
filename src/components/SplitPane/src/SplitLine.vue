@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, defineOptions } from "vue";
+import { computed, defineOptions, defineProps } from "vue";
 
 defineOptions({ name: "SplitLine" });
 
