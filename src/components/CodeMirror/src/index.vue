@@ -140,5 +140,3 @@ const formatStrInJson = (strValue: string) => {
   return JSON.stringify(JSON.parse(strValue), null, props.cmIndentUnit);
 };
 </script>
-
-<style lang="scss" scoped></style>

@@ -25,7 +25,7 @@
       }
     }
 
-    .el-scrollbar {
+    .#{$el-namespace}-scrollbar {
       height: calc(100% - var(--el-menu-horizontal-height));
 
       .split-list {
@@ -41,7 +41,7 @@
             background-color: var(--split-menu-active-bg-color);
           }
 
-          .el-icon,
+          .#{$el-namespace}-icon,
           .svg-icon {
             font-size: 21px;
             color: var(--menu-icon-color);
@@ -60,7 +60,7 @@
       .split-active {
         background-color: var(--split-menu-active-bg-color);
 
-        .el-icon,
+        .#{$el-namespace}-icon,
         .svg-icon {
           color: var(--menu-icon-color);
         }
@@ -68,7 +68,7 @@
     }
   }
 
-  .el-aside {
+  .#{$el-namespace}-aside {
     display: flex;
     flex-direction: column;
     height: 100%;
@@ -77,10 +77,10 @@
     box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
     transition: all 0.3s ease;
 
-    .el-scrollbar {
+    .#{$el-namespace}-scrollbar {
       height: calc(100% - var(--el-menu-horizontal-height));
 
-      .el-menu {
+      .#{$el-namespace}-menu {
         overflow-x: hidden;
         border-right: none;
       }
@@ -100,11 +100,11 @@
     }
   }
 
-  &.menu-expand .el-aside {
+  &.menu-expand .#{$el-namespace}-aside {
     width: var(--aside-width) !important;
   }
 
-  &.menu-collapse .el-aside {
+  &.menu-collapse .#{$el-namespace}-aside {
     width: 64px;
     transition-duration: 0.3s;
   }
@@ -114,7 +114,7 @@
     border: 0; /* 折叠时确保 border-right 不能多出 1px */
   }
 
-  .el-header {
+  .#{$el-namespace}-header {
     box-sizing: border-box;
     height: var(--el-menu-horizontal-height);
     padding: 0 15px;

@@ -71,23 +71,12 @@
           </div>
         </el-card>
       </el-col>
-
-      <el-col :xs="24" :sm="12" :md="8" :lg="6" class="mixin-col">
-        <el-card class="box-card">
-          <template #header>
-            <span>Share</span>
-          </template>
-          <div class="component-item" style="height: 420px">
-            <DropdownMenu :items="articleList" style="margin: 0 auto" title="系列文章" />
-          </div>
-        </el-card>
-      </el-col>
     </el-row>
   </div>
 </template>
 
 <script setup lang="ts" name="AnimationMixin">
-import { MaterialInput, TextHoverEffect, DropdownMenu } from "@/components";
+import { MaterialInput, TextHoverEffect } from "@/components";
 import Button from "./button.vue";
 import { Search } from "@element-plus/icons-vue";
 

@@ -156,7 +156,7 @@ const deleteImg = () => {
  * @description 编辑图片
  * */
 const editImg = () => {
-  const dom = document.querySelector(`#${uuid.value} .el-upload__input`);
+  const dom = document.querySelector(`#${uuid.value} .#{$el-namespace}-upload__input`);
   dom && dom.dispatchEvent(new MouseEvent("click"));
 };
 
@@ -194,11 +194,12 @@ const uploadError = () => {
   });
 };
 </script>
-<style scoped lang="scss">
+
+<style lang="scss" scoped>
 .is-error {
   .upload {
-    :deep(.el-upload),
-    :deep(.el-upload-dragger) {
+    :deep(.#{$el-namespace}-upload),
+    :deep(.#{$el-namespace}-upload-dragger) {
       border: 1px dashed var(--el-color-danger) !important;
 
       &:hover {
@@ -208,9 +209,10 @@ const uploadError = () => {
   }
 }
 
+// #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
 :deep(.disabled) {
-  .el-upload,
-  .el-upload-dragger {
+  .#{$el-namespace}-upload,
+  .#{$el-namespace}-upload-dragger {
     cursor: not-allowed !important;
     background: var(--el-disabled-bg-color);
     border: 1px dashed var(--el-border-color-darker) !important;
@@ -223,13 +225,13 @@ const uploadError = () => {
 
 .upload-box {
   .no-border {
-    :deep(.el-upload) {
+    :deep(.#{$el-namespace}-upload) {
       border: none !important;
     }
   }
 
   :deep(.upload) {
-    .el-upload {
+    .#{$el-namespace}-upload {
       position: relative;
       display: flex;
       align-items: center;
@@ -249,7 +251,7 @@ const uploadError = () => {
         }
       }
 
-      .el-upload-dragger {
+      .#{$el-namespace}-upload-dragger {
         display: flex;
         align-items: center;
         justify-content: center;
@@ -266,7 +268,7 @@ const uploadError = () => {
         }
       }
 
-      .el-upload-dragger.is-dragover {
+      .#{$el-namespace}-upload-dragger.is-dragover {
         background-color: var(--el-color-primary-light-9);
         border: 2px dashed var(--el-color-primary) !important;
       }
@@ -287,7 +289,7 @@ const uploadError = () => {
         line-height: 30px;
         color: var(--el-color-info);
 
-        .el-icon {
+        .#{$el-namespace}-icon {
           font-size: 28px;
           color: var(--el-text-color-secondary);
         }
@@ -316,7 +318,7 @@ const uploadError = () => {
           padding: 0 6%;
           color: aliceblue;
 
-          .el-icon {
+          .#{$el-namespace}-icon {
             margin-bottom: 40%;
             font-size: 130%;
             line-height: 130%;
@@ -331,7 +333,7 @@ const uploadError = () => {
     }
   }
 
-  .el-upload__tip {
+  .#{$el-namespace}-upload__tip {
     line-height: 18px;
     text-align: center;
   }

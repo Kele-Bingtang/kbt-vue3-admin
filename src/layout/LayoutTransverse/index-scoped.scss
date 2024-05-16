@@ -3,7 +3,7 @@
   width: 100%;
   height: 100%;
 
-  .el-header {
+  .#{$el-namespace}-header {
     box-sizing: border-box;
     height: var(--el-menu-horizontal-height);
     padding: 0;
@@ -25,12 +25,12 @@
 
       img {
         width: 28px;
-        object-fit: contain;
         margin-right: 6px;
+        object-fit: contain;
       }
     }
 
-    :deep(.el-scrollbar) {
+    :deep(.#{$el-namespace}-scrollbar) {
       flex: 1;
       overflow: hidden;
     }

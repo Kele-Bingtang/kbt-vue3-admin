@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ hidden: hidden }" class="pagination-component">
+  <div :class="[prefixClass, { hidden: hidden }]" class="pagination-component">
     <el-pagination
       :background="background"
       v-model:current-page="pageObj.pageNum"
@@ -22,6 +22,8 @@ export const pageSetting = { pageNum: 1, pageSizes: [10, 20, 50, 100, 200], page
 </script>
 
 <script setup lang="ts" name="Pagination">
+import { useDesign } from "@/hooks";
+
 export interface Paging {
   pageNum: number; // 当前页
   pageSizes?: number[]; // 页数数组
@@ -38,6 +40,11 @@ export interface PaginationProps {
   reset?: boolean; // 切换 pageSize，pageNum 重置为 1
 }
 
+defineOptions({ name: "Pagination" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("pagination");
+
 const props = withDefaults(defineProps<PaginationProps>(), {
   modelValue: () => reactive(pageSetting),
   layout: "total, sizes, prev, pager, next, jumper",
@@ -46,8 +53,6 @@ const props = withDefaults(defineProps<PaginationProps>(), {
   hidden: false,
   reset: true,
 });
-
-defineOptions({ name: "Pagination" });
 
 type PaginationEmits = {
   "update:modelValue": [value: Paging];
@@ -88,12 +93,14 @@ defineExpose({ paging: pageSetting });
 </script>
 
 <style lang="scss" scoped>
-.pagination-component {
+$prefix-class: #{$namespace}-pagination;
+
+.#{$prefix-class} {
   padding: 32px 16px;
   background: #ffffff;
-}
 
-.pagination-component.hidden {
-  display: none;
+  &.hidden {
+    display: none;
+  }
 }
 </style>

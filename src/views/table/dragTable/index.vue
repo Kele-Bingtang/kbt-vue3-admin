@@ -45,6 +45,7 @@
 import Sortable from "sortablejs";
 import { simpleData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
+import { useDesign } from "@/hooks";
 
 interface ColItem {
   label: string;
@@ -77,6 +78,8 @@ const col: Array<ColItem> = [
     prop: "status",
   },
 ];
+
+const { variables } = useDesign();
 const draggableTable1 = ref();
 const draggableTable2 = ref();
 const dropCol = ref<ColItem[]>([]);
@@ -95,7 +98,7 @@ onMounted(() => {
 // 循环 table-column 行拖拽
 const rowDrop = () => {
   const el = draggableTable1.value.$el.querySelector(
-    ".el-table__body-wrapper .el-scrollbar__view > table > tbody"
+    `.${variables.elNamespace}-table__body-wrapper .${variables.elNamespace}-scrollbar__view > table > tbody`
   ) as HTMLElement;
   sortable.value = Sortable.create(el, {
     ghostClass: "sortable-ghost",
@@ -111,7 +114,7 @@ const rowDrop = () => {
 };
 // 列拖拽
 const columnDrop = () => {
-  const el = draggableTable1.value.$el.querySelector(".el-table__header tr") as HTMLElement;
+  const el = draggableTable1.value.$el.querySelector(`.${variables.elNamespace}-table__header tr`) as HTMLElement;
   sortable.value = Sortable.create(el, {
     animation: 180,
     delay: 0,
@@ -127,7 +130,7 @@ const columnDrop = () => {
 // 完整 table-column 行拖拽
 const rowDrop2 = () => {
   const el = draggableTable2.value.$el.querySelector(
-    ".el-table__body-wrapper .el-scrollbar__view > table > tbody"
+    `.${variables.elNamespace}-table__body-wrapper .${variables.elNamespace}-scrollbar__view > table > tbody`
   ) as HTMLElement;
   sortable.value = Sortable.create(el, {
     ghostClass: "sortable-ghost",
@@ -147,13 +150,11 @@ const rowDrop2 = () => {
 .drag-table-container {
   padding: 20px;
   background-color: #ffffff;
-}
-</style>
 
-<style lang="scss">
-.sortable-ghost {
-  color: #ffffff !important;
-  background: #42b983 !important;
-  opacity: 0.8;
+  :deep(.sortable-ghost) {
+    color: #ffffff !important;
+    background: #42b983 !important;
+    opacity: 0.8;
+  }
 }
 </style>

@@ -33,16 +33,16 @@ html.dark {
   }
 
   .columns {
-    .el-aside {
-      .el-menu-item:not(.is-active) > * {
+    .#{$el-namespace}-aside {
+      .#{$el-namespace}-menu-item:not(.is-active) > * {
         color: var(--menu-text-color) !important;
       }
     }
   }
 
   /* layout */
-  .el-container {
-    .el-aside {
+  .#{$el-namespace}-container {
+    .#{$el-namespace}-aside {
       background-color: var(--kbt-bg-color) !important;
       border-right: var(--kbt-border-light) !important;
 
@@ -63,41 +63,41 @@ html.dark {
       border-right: none !important;
     }
 
-    .el-header {
+    .#{$el-namespace}-header {
       color: var(--el-text-color-regular) !important;
       background-color: var(--kbt-bg-color) !important;
       border-bottom-color: var(--el-border-color-light) !important;
 
       .header-left {
-        .el-breadcrumb__inner {
+        .#{$el-namespace}-breadcrumb__inner {
           color: var(--el-text-color-regular) !important;
         }
       }
     }
 
-    .el-main,
-    .el-main > div {
+    .#{$el-namespace}-main,
+    .#{$el-namespace}-main > div {
       background-color: var(--kbt-main-bg-color) !important;
     }
 
     .tabs-nav {
       border-bottom: 1px solid var(--el-border-color-light);
 
-      .el-tabs {
+      .#{$el-namespace}-tabs {
         background-color: var(--kbt-bg-color) !important;
         border-bottom: 1px solid var(--el-border-color-light);
 
-        .btn-icon .el-button {
+        .btn-icon .#{$el-namespace}-button {
           border-color: var(--el-border-color-light) !important;
         }
       }
     }
 
-    .el-dropdown {
+    .#{$el-namespace}-dropdown {
       color: var(--el-text-color-regular) !important;
     }
 
-    .el-footer {
+    .#{$el-namespace}-footer {
       .footer {
         background-color: var(--kbt-bg-color) !important;
         border-top-color: var(--el-border-color-light) !important;
@@ -109,9 +109,9 @@ html.dark {
     }
   }
 
-  .el-menu,
-  .el-menu-item,
-  .el-sub-menu__title {
+  .#{$el-namespace}-menu,
+  .#{$el-namespace}-menu-item,
+  .#{$el-namespace}-sub-menu__title {
     background-color: var(--kbt-bg-color) !important;
   }
 
@@ -124,13 +124,13 @@ html.dark {
       rgb(13 13 13 / 8%) 0 6px 16px 0,
       rgb(13 13 13 / 5%) 0 9px 28px 8px !important;
 
-    & .el-message__content {
+    & .#{$el-namespace}-message__content {
       color: #ffffff !important;
       pointer-events: all !important;
       background-image: initial !important;
     }
 
-    & .el-message__closeBtn {
+    & .#{$el-namespace}-message__closeBtn {
       &:hover {
         color: rgb(255 255 255 / 85%);
         background-color: rgb(255 255 255 / 12%);
@@ -139,6 +139,6 @@ html.dark {
   }
 }
 
-.el-sub-menu__title:hover {
+.#{$el-namespace}-sub-menu__title:hover {
   background-color: var(--menu-active-bg-color);
 }

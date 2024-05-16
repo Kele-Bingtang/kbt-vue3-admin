@@ -1,10 +1,8 @@
-@import "@/styles/variables.module";
-
 .layout-container {
   width: 100%;
   height: 100%;
 
-  .el-header {
+  .#{$el-namespace}-header {
     box-sizing: border-box;
     height: var(--el-menu-horizontal-height);
     padding: 0;
@@ -34,14 +32,14 @@
 
         img {
           width: 28px;
-          object-fit: contain;
           margin-right: 6px;
+          object-fit: contain;
         }
       }
     }
   }
 
-  .el-aside {
+  .#{$el-namespace}-aside {
     z-index: 1000;
     height: 100%;
     overflow: inherit;
@@ -49,17 +47,17 @@
     box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
     transition: width 0.28s;
 
-    :deep(.el-menu) {
+    :deep(.#{$el-namespace}-menu) {
       overflow-x: hidden;
       border-right: none;
     }
   }
 
-  &.menu-expand .el-aside {
+  &.menu-expand .#{$el-namespace}-aside {
     width: var(--aside-width) !important;
   }
 
-  &.menu-collapse .el-aside {
+  &.menu-collapse .#{$el-namespace}-aside {
     width: 64px !important;
     transition-duration: 0.3s;
   }

@@ -274,7 +274,7 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
       margin: 10px 0;
     }
 
-    :deep(.el-descriptions) {
+    :deep(.#{$el-namespace}-descriptions) {
       width: 100%;
       padding: 40px 0 0;
     }
@@ -296,7 +296,7 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
         margin-right: 0;
       }
 
-      .el-form {
+      .#{$el-namespace}-form {
         width: 100%;
       }
     }

@@ -114,9 +114,5 @@ const handleConfirm = () => {
   dialogVisible.value = false;
 };
 
-defineExpose({
-  elDialogRef,
-});
+defineExpose({ elDialogRef });
 </script>
-
-<style lang="scss" scoped></style>

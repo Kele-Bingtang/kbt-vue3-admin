@@ -84,7 +84,7 @@ const lineBarData = [
 .home-container {
   padding: 20px;
 
-  .el-card {
+  .#{$el-namespace}-card {
     width: 100%;
   }
 

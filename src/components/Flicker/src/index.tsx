@@ -1,5 +1,9 @@
 import { defineComponent, h } from "vue";
 import "./index.scss";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("point-flicker");
 
 export interface attrsType {
   width?: string; // 可选 string 宽
@@ -19,7 +23,7 @@ export const useFlicker = (attrs?: attrsType): Component => {
       return h(
         "div",
         {
-          class: "point point-flicker",
+          class: `${prefixClass}`,
           style: {
             "--point-width": attrs?.width ?? "12px",
             "--point-height": attrs?.height ?? "12px",

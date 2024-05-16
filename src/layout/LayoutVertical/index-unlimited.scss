@@ -1,6 +1,6 @@
 .vertical {
-  .el-menu,
-  .el-menu--popup {
+  .#{$el-namespace}-menu,
+  .#{$el-namespace}-menu--popup {
     .menu-item {
       &.is-active {
         background: var(--menu-active-bg-color);
@@ -24,7 +24,7 @@
     .sub-menu,
     .menu-item {
       &:not(.is-active) {
-        .el-icon,
+        .#{$el-namespace}-icon,
         .svg-icon {
           color: var(--menu-icon-color);
         }
@@ -33,11 +33,11 @@
 
     .sub-menu {
       /* 子级高亮，父级也高亮 */
-      &.is-active > .el-sub-menu__title {
+      &.is-active > .#{$el-namespace}-sub-menu__title {
         color: var(--el-color-primary) !important;
       }
 
-      .el-menu {
+      .#{$el-namespace}-menu {
         background-color: var(--sub-menu-bg-color) !important;
 
         .menu-item {
@@ -53,12 +53,12 @@
     }
   }
 
-  .menu-collapse .sub-menu.is-active .el-sub-menu__title {
+  .menu-collapse .sub-menu.is-active .#{$el-namespace}-sub-menu__title {
     background-color: var(--sub-menu-active-bg-color) !important;
   }
 
   /* 菜单折叠的样式 */
-  .el-menu--popup {
+  .#{$el-namespace}-menu--popup {
     background: var(--sub-menu-bg-color);
 
     /* 不用 .el-menu-item 为防止全局菜单样式污染 */
@@ -74,7 +74,7 @@
   }
 
   .header-icon,
-  .header-icon .el-dropdown {
+  .header-icon .#{$el-namespace}-dropdown {
     color: var(--header-text-color);
   }
 }

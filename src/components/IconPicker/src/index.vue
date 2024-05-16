@@ -1,8 +1,8 @@
 <template>
-  <div class="icon-picker">
+  <div :class="prefixClass">
     <ElInput disabled v-model="modelValue" clearable />
     <ElPopover
-      popper-class="icon-picker__popover"
+      :popper-class="`${prefixClass}__popover`"
       placement="bottom"
       trigger="click"
       :width="450"
@@ -20,7 +20,7 @@
           <ElTabPane label="在线图标" name="在线图标">
             <ElTabs tab-position="left" v-model="iconName" @tab-change="tabChange">
               <ElTabPane v-for="item in icons" :key="item.name" :label="item.name" :name="item.prefix">
-                <div class="icon-picker__icons">
+                <div :class="`${prefixClass}__icons`">
                   <div
                     v-for="icon in filterIcons(filterItemIcons(item.icons))"
                     :key="icon"
@@ -29,7 +29,7 @@
                       height: iconSize,
                       border: `1px solid ${icon === modelValue ? 'var(--el-color-primary)' : 'var(--el-border-color)'}`,
                     }"
-                    class="icon-picker__icon"
+                    :class="`${prefixClass}__icon`"
                     @click="iconSelect(icon)"
                     v-copy="modelValue"
                   >
@@ -42,7 +42,7 @@
           <ElTabPane label="本地图标" name="本地图标"></ElTabPane>
         </ElTabs>
       </ElScrollbar>
-      <div class="icon-picker__pagination">
+      <div :class="`${prefixClass}__pagination`">
         <ElPagination
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"
@@ -62,9 +62,16 @@ import epIcons from "./data/icons.ep";
 import antIcons from "./data/icons.ant-design";
 import tIcons from "./data/icons.tdesign";
 import { ElInput, ElPopover, ElScrollbar, ElTabs, ElTabPane, ElPagination } from "element-plus";
-import { useLayoutStore } from "@/stores";
-import { computed, type CSSProperties, ref, unref, watch } from "vue";
+import { computed, type CSSProperties, ref, unref, watch, inject, defineOptions } from "vue";
 import { nextTick } from "vue";
+import { useDesign } from "@/hooks";
+
+defineOptions({ name: "IconPicker" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("icon-picker");
+
+const configGlobal = inject("configGlobal") as Record<string, any>;
 
 const init = async (icon?: string) => {
   if (!icon) return;
@@ -80,9 +87,7 @@ const init = async (icon?: string) => {
 
 const modelValue = defineModel<string>();
 
-const layoutStore = useLayoutStore();
-
-const size = computed(() => layoutStore.layoutSize);
+const size = computed(() => configGlobal?.size || "default");
 
 const iconSize = computed(() => {
   return unref(size) === "small"

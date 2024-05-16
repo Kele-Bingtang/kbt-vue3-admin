@@ -1,6 +1,6 @@
 .columns {
-  .el-menu,
-  .el-menu--popup {
+  .#{$el-namespace}-menu,
+  .#{$el-namespace}-menu--popup {
     .menu-item {
       &.is-active {
         background: var(--el-color-primary-light-9);
@@ -24,7 +24,7 @@
     .sub-menu,
     .menu-item {
       &:not(.is-active) {
-        .el-icon,
+        .#{$el-namespace}-icon,
         .svg-icon {
           color: var(--menu-icon-color);
         }
@@ -33,9 +33,9 @@
   }
 
   /* 菜单折叠的样式 */
-  .el-popper {
-    .el-menu,
-    .el-menu--popup {
+  .#{$el-namespace}-popper {
+    .#{$el-namespace}-menu,
+    .#{$el-namespace}-menu--popup {
       background: #ffffff;
 
       .menu-item {
@@ -51,7 +51,7 @@
   }
 
   .header-icon,
-  .header-icon .el-dropdown {
+  .header-icon .#{$el-namespace}-dropdown {
     color: var(--header-text-color);
   }
 }

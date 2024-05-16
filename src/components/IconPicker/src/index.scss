@@ -1,20 +1,18 @@
-.icon-picker {
+$prefix-class: #{$namespace}-icon-picker;
+
+.#{$prefix-class} {
   display: flex;
   align-items: center;
   justify-content: center;
 }
 
-.icon-picker__popover {
-  :deep(.el-scrollbar__wrap) {
-    width: 98%;
-  }
-
-  .icon-picker__icons {
+.#{$prefix-class}__popover {
+  .#{$prefix-class}__icons {
     box-sizing: border-box;
     display: flex;
     flex-wrap: wrap;
 
-    .icon-picker__icon {
+    .#{$prefix-class}__icon {
       box-sizing: border-box;
       display: flex;
       align-items: center;
@@ -29,7 +27,7 @@
     }
   }
 
-  .icon-picker__pagination {
+  .#{$prefix-class}__pagination {
     position: absolute;
     bottom: 0;
     left: 0;

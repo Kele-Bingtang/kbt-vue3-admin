@@ -37,7 +37,9 @@ import type { TabPaneName, TabsPaneContext } from "element-plus";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuButton from "../components/MenuDropdown.vue";
+import { useDesign } from "@/hooks";
 
+const { variables } = useDesign();
 const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
@@ -61,7 +63,7 @@ const tabsNavValue = ref(resolveFullPath(route));
 const tabsNavRef = ref<HTMLElement>(); // 根标签
 
 onMounted(() => {
-  tabsDrop(".el-tabs__nav", ".el-tabs__item");
+  tabsDrop(`.${variables.elNamespace}-tabs__nav`, `.${variables.elNamespace}-tabs__item`);
   initTabs();
   addOneTab();
 });

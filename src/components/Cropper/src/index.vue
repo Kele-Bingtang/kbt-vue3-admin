@@ -1,6 +1,6 @@
 <template>
-  <div class="cropper-component" :style="{ height: cropContainerHeight + 'px' }">
-    <div class="cropper-img">
+  <div :class="prefixClass" :style="{ height: cropContainerHeight + 'px' }">
+    <div :class="`${prefixClass}__img`">
       <VueCropper
         ref="cropperRef"
         :img="options.img"
@@ -22,21 +22,21 @@
         @crop-moving="emits('crop-moving')"
       />
     </div>
-    <div class="cropper-img show-previews" v-if="previews.url">
-      <div class="previews-img" :style="previews.div">
+    <div :class="`${prefixClass}__img ${prefixClass}__img--previews`" v-if="previews.url">
+      <div :class="`${prefixClass}--previews__img`" :style="previews.div">
         <img :src="previews.url" :style="previews.img" class="img" alt="头像" />
       </div>
     </div>
   </div>
 
-  <div class="btn-container">
-    <div class="scope-btn">
+  <div :class="`${prefixClass}__btn`">
+    <div>
       <el-upload
         action="#"
         :http-request="handleHttpRequest"
         :show-file-list="false"
         :before-upload="beforeUpload"
-        class="upload-img"
+        :class="`${prefixClass}__btn--upload`"
       >
         <el-button type="primary" plain :icon="Upload">选择</el-button>
       </el-upload>
@@ -45,7 +45,9 @@
       <el-button type="primary" plain @click="rotateLeft">↺ 左旋转</el-button>
       <el-button type="primary" plain @click="rotateRight">↻ 右旋转</el-button>
       <el-button type="primary" plain :icon="Download" @click="downloadImg('blob')">下载</el-button>
-      <el-button type="primary" :icon="Upload" @click="uploadImage" class="upload-btn">提交</el-button>
+      <el-button type="primary" :icon="Upload" @click="uploadImage" :class="`${prefixClass}__btn--submit`">
+        提交
+      </el-button>
     </div>
   </div>
 </template>
@@ -56,8 +58,12 @@ import { VueCropper } from "vue-cropper";
 import "vue-cropper/dist/index.css";
 import { Upload, ZoomIn, ZoomOut, Download } from "@element-plus/icons-vue";
 import { toRefs, ref, reactive, shallowRef, onMounted, defineOptions, defineEmits, defineProps, unref } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "Cropper" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("cropper");
 
 interface CropperProps {
   imgLink?: string;
@@ -209,44 +215,44 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
 </script>
 
 <style lang="scss" scoped>
-.cropper-component {
+$prefix-class: #{$namespace}-cropper;
+
+.#{$prefix-class} {
   display: flex;
 
-  .cropper-img {
+  &__img {
     position: relative;
     width: 50%;
     height: 100%;
-  }
 
-  .show-previews {
-    display: flex;
-    display: --webkit-flex;
-    align-items: center;
-    justify-content: center;
-    padding-left: 10px;
-    overflow: hidden;
-
-    .previews-img {
+    &--previews {
+      display: flex;
+      display: --webkit-flex;
+      align-items: center;
+      justify-content: center;
+      padding-left: 10px;
       overflow: hidden;
-      border-radius: 50%;
-      box-shadow: 0 0 4px #cccccc;
+
+      &__img {
+        overflow: hidden;
+        border-radius: 50%;
+        box-shadow: 0 0 4px #cccccc;
+      }
     }
   }
-}
 
-.btn-container {
-  .scope-btn {
+  &__btn {
     display: flex;
     margin-top: 50px;
 
-    .upload-img {
+    &--upload {
       display: inline-block;
       margin-right: 30px;
     }
-  }
 
-  .upload-btn {
-    margin-left: 30px;
+    &--submit {
+      margin-left: 30px;
+    }
   }
 }
 </style>

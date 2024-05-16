@@ -112,7 +112,7 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
 <style lang="scss">
 .draggable-list-container {
   .draggable-list-card {
-    .el-card__body {
+    .#{$el-namespace}-card__body {
       width: 100%;
       height: 100%;
     }

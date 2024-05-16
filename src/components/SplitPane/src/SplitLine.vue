@@ -1,26 +1,31 @@
 <template>
-  <div class="split-trigger-component" :class="classes">
-    <div class="split-trigger-bar" :class="barConClasses"></div>
+  <div :class="[prefixClass, classes]">
+    <div :class="`${prefixClass}__bar ${barConClasses}`"></div>
   </div>
 </template>
 
 <script setup lang="ts">
 import { computed, defineOptions, defineProps } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "SplitLine" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("split-trigger");
 
 const props = defineProps<{ mode: "vertical" | "horizontal" }>();
 
 const isVertical = computed(() => props.mode === "vertical");
-const classes = computed(() => (isVertical.value ? "split-trigger-vertical" : "split-trigger-horizontal"));
+const classes = computed(() => (isVertical.value ? `${prefixClass}__vertical` : `${prefixClass}__horizontal`));
 const barConClasses = computed(() => (isVertical.value ? "vertical" : "horizontal"));
 </script>
 
 <style lang="scss" scoped>
+$prefix-class: #{$namespace}-split-trigger;
 $trigger-background: #f8f8f9;
 
-.split-trigger-component {
-  .split-trigger-bar {
+.#{$prefix-class} {
+  &__bar {
     position: absolute;
     overflow: hidden;
 
@@ -33,13 +38,13 @@ $trigger-background: #f8f8f9;
     }
   }
 
-  &.split-trigger-vertical {
+  &__vertical {
     width: 5px;
     height: 100%;
     cursor: col-resize;
     background: $trigger-background;
 
-    .split-trigger-bar {
+    .#{$prefix-class}__bar {
       position: absolute;
       left: 3px;
       z-index: 1;
@@ -52,7 +57,7 @@ $trigger-background: #f8f8f9;
     }
   }
 
-  &.split-trigger-horizontal {
+  &__horizontal {
     width: 100%;
     height: 3px;
     cursor: row-resize;

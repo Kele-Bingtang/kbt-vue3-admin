@@ -42,5 +42,3 @@ const handleSetSize = (layoutSize: LayoutSizeType) => {
   });
 };
 </script>
-
-<style lang="scss" scoped></style>

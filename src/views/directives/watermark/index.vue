@@ -14,5 +14,3 @@
 </template>
 
 <script setup lang="ts" name="Watermark"></script>
-
-<style lang="scss" scoped></style>

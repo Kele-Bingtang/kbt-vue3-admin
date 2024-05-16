@@ -55,5 +55,3 @@ const resetUser = () => {
   canEditUser.value = { ...userStore.userInfo };
 };
 </script>
-
-<style lang="scss" scoped></style>

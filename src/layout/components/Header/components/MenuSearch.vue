@@ -149,23 +149,23 @@ onUnmounted(() => {
 <style lang="scss" scoped>
 .header-search {
   &:not(.show) {
-    :deep(.el-autocomplete) {
+    :deep(.#{$el-namespace}-autocomplete) {
       width: 0;
       transition: width 0.2s;
 
-      .el-input__wrapper {
+      .#{$el-namespace}-input__wrapper {
         width: 0;
         padding: 0;
       }
 
-      .el-input__prefix {
+      .#{$el-namespace}-input__prefix {
         display: none;
       }
     }
   }
 
   &.show {
-    :deep(.el-autocomplete) {
+    :deep(.#{$el-namespace}-autocomplete) {
       width: 220px;
       transition: width 0.2s;
     }
@@ -180,8 +180,8 @@ onUnmounted(() => {
   }
 }
 
-.el-autocomplete__popper {
-  .el-icon {
+.#{$el-namespace}-autocomplete__popper {
+  .#{$el-namespace}-icon {
     position: relative;
     top: 2px;
     font-size: 16px;

@@ -509,14 +509,7 @@ watchEffect(() => {
   }
 });
 </script>
+
 <style lang="scss" scoped>
 @import "./index";
-</style>
-<style lang="scss">
-.theme-drawer {
-  .el-drawer__header {
-    padding: 15px 20px 14px;
-    margin-bottom: 0;
-  }
-}
 </style>

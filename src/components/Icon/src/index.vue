@@ -8,7 +8,7 @@
     :name="name ? name : (icon as string).slice(4)"
     :color="color"
     v-bind="attrsComputed as any"
-    class="com-icon"
+    :class="prefixClass"
   ></SvgIcon>
   <FontIcon
     v-else-if="isFontIcon(icon)"
@@ -16,14 +16,14 @@
     :iconType="fontIcon.iconType"
     v-bind="attrsComputed"
     :color="color"
-    class="com-icon"
+    :class="prefixClass"
   ></FontIcon>
   <IconifyOffline
     v-else-if="isIconifyOffline(icon)"
     :icon="icon"
     v-bind="attrsComputed"
     :color="color"
-    class="com-icon"
+    :class="prefixClass"
   ></IconifyOffline>
   <IconifyOnline v-else-if="isIconifyOnline(icon)" :icon="icon" v-bind="attrsComputed" :color="color"></IconifyOnline>
 </template>
@@ -37,8 +37,12 @@ import type { IconType } from "./iconType";
 import type { IconifyIcon } from "@iconify/vue";
 import { defineOptions, defineProps, useAttrs, computed, type Component } from "vue";
 import { ElIcon } from "element-plus";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "Icon" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("icon");
 
 type IconTypes = string | Object | IconifyIcon | Component;
 
@@ -98,7 +102,9 @@ const isString = (icon: Undefined<IconTypes>): icon is string => {
 </script>
 
 <style lang="scss" scoped>
-.com-icon {
+$prefix-class: #{$namespace}-icon;
+
+.#{$prefix-class} {
   &:hover {
     color: v-bind(hoverColor) !important;
   }
@@ -112,7 +118,9 @@ const isString = (icon: Undefined<IconTypes>): icon is string => {
 </style>
 
 <style lang="scss">
-.com-icon.iconfont {
+$prefix-class: #{$namespace}-icon;
+
+.#{$prefix-class}.iconfont {
   &:hover {
     color: v-bind(hoverColor) !important;
   }

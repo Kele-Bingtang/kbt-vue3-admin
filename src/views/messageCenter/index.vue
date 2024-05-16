@@ -193,10 +193,11 @@ const handleOperate = (message: MessageItem) => {
       vertical-align: top;
       border-right: 1px solid #e6e6e6;
 
-      .el-menu {
+      // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
+      .#{$el-namespace}-menu {
         width: auto;
 
-        .el-menu-item.is-active {
+        .#{$el-namespace}-menu-item.is-active {
           // background-color: #f0faff;
           &::after {
             position: absolute;
@@ -214,11 +215,11 @@ const handleOperate = (message: MessageItem) => {
           }
         }
 
-        .el-badge {
+        .#{$el-namespace}-badge {
           margin-left: 10px;
           vertical-align: middle;
 
-          :deep(.el-badge__content) {
+          :deep(.#{$el-namespace}-badge__content) {
             vertical-align: middle;
           }
         }
@@ -231,7 +232,7 @@ const handleOperate = (message: MessageItem) => {
       &.message-list {
         width: 230px;
 
-        .el-menu-item {
+        .#{$el-namespace}-menu-item {
           display: block;
           height: auto;
           padding: 14px 20px;
@@ -272,7 +273,7 @@ const handleOperate = (message: MessageItem) => {
             margin-right: 17px;
           }
 
-          :deep(.el-icon) {
+          :deep(.#{$el-namespace}-icon) {
             display: none;
             font-size: 13px;
             color: #909399;
@@ -283,14 +284,14 @@ const handleOperate = (message: MessageItem) => {
           }
 
           &:hover {
-            :deep(.el-icon) {
+            :deep(.#{$el-namespace}-icon) {
               display: inline-block;
             }
           }
         }
 
         .unread-list {
-          .el-menu-item:not(.is-active) {
+          .#{$el-namespace}-menu-item:not(.is-active) {
             color: #aaa9a9;
           }
         }
@@ -325,7 +326,7 @@ const handleOperate = (message: MessageItem) => {
   height: 100%;
 
   .message-center-card {
-    .el-card__body {
+    .#{$el-namespace}-card__body {
       height: 100%;
       overflow: auto;
       white-space: nowrap;

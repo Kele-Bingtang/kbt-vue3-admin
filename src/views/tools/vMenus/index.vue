@@ -431,7 +431,7 @@ const directives = [
 
 <style lang="scss">
 .v-menus-container {
-  .el-table tr th .cell {
+  .#{$el-namespace}-table tr th .cell {
     font-size: 16px;
     font-weight: 700;
     color: #000000;

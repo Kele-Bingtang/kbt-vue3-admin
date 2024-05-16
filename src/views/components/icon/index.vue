@@ -47,7 +47,7 @@
           <Icon :icon="Upload"></Icon>
         </el-descriptions-item>
         <el-descriptions-item label="本地 FontIcon 图标：<Icon icon='IF-icon-dagouyouquan'></Icon>" width="300">
-          <Icon icon="IF-icon-dagouyouquan"></Icon>
+          <Icon hover-color="red" icon="IF-icon-dagouyouquan"></Icon>
         </el-descriptions-item>
         <el-descriptions-item label="本地 SVG 图标：<Icon icon='SVG-bug'></Icon>" width="300">
           <Icon icon="SVG-bug"></Icon>

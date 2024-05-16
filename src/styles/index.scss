@@ -1,5 +1,6 @@
 @import "./variables";
 @import "./transition";
+@import "./namespace";
 
 /* Global scss */
 body {
@@ -133,9 +134,9 @@ div:focus {
 /* 当前页面最大化 css */
 .main-maximize {
   .aside-split,
-  .el-aside,
-  .el-header,
-  .el-footer,
+  .#{$el-namespace}-aside,
+  .#{$el-namespace}-header,
+  .#{$el-namespace}-footer,
   .tabs-nav {
     display: none !important;
   }
@@ -151,21 +152,21 @@ div:focus {
     0 6px 16px #00000014,
     0 9px 28px 8px #0000000d !important;
 
-  &.el-message.is-closable .el-message__content {
+  &.#{$el-namespace}-message.is-closable .#{$el-namespace}-message__content {
     padding-right: 17px !important;
   }
 
-  & .el-message__content {
+  & .#{$el-namespace}-message__content {
     color: #000000d9 !important;
     pointer-events: all !important;
     background-image: initial !important;
   }
 
-  & .el-message__icon {
+  & .#{$el-namespace}-message__icon {
     margin-right: 8px !important;
   }
 
-  & .el-message__closeBtn {
+  & .#{$el-namespace}-message__closeBtn {
     right: 9px !important;
     border-radius: 4px;
     outline: none;
@@ -191,8 +192,8 @@ div:focus {
 }
 
 /* 自定义 el-drawer 样式 */
-.el-drawer {
-  .el-drawer__header {
+.#{$el-namespace}-drawer {
+  .#{$el-namespace}-drawer__header {
     padding: 15px 20px 14px;
     margin-bottom: 0;
     border-bottom: 1px solid var(--el-border-color-lighter);
@@ -204,12 +205,12 @@ div:focus {
     // }
   }
 
-  .el-drawer__footer {
+  .#{$el-namespace}-drawer__footer {
     border-top: 1px solid var(--el-border-color-lighter);
   }
 
   /* drawer select 样式 */
-  .el-select {
+  .#{$el-namespace}-select {
     width: 100%;
   }
 
@@ -218,7 +219,7 @@ div:focus {
     display: flex;
     flex-wrap: wrap;
 
-    .el-form-item {
+    .#{$el-namespace}-form-item {
       width: 47%;
 
       &:nth-child(2n-1) {
@@ -229,8 +230,8 @@ div:focus {
 }
 
 /* 自定义 el-dialog 样式 */
-.el-dialog {
-  .el-dialog__header {
+.#{$el-namespace}-dialog {
+  .#{$el-namespace}-dialog__header {
     border-bottom: 1px solid var(--el-border-color-lighter);
 
     // 统一 Dialog、Drawer 字体大小可以打开
@@ -240,11 +241,11 @@ div:focus {
     // }
   }
 
-  .el-dialog__body {
+  .#{$el-namespace}-dialog__body {
     padding-top: 15px;
   }
 
-  .el-dialog__footer {
+  .#{$el-namespace}-dialog__footer {
     border-top: 1px solid var(--el-border-color-lighter);
   }
 }

@@ -1,11 +1,11 @@
 <template>
-  <div class="drag-item-component">
-    <div class="drag-item-header" :class="titleClass" :style="{ backgroundColor: titleBgColor }">
+  <div :class="prefixClass">
+    <div :class="`${prefixClass}__header ${titleClass}`" :style="{ backgroundColor: titleBgColor }">
       <slot name="title">{{ title }}</slot>
     </div>
-    <draggable :list="list" v-bind="$attrs" class="drag-item-content" :class="dragClass" itemKey="id">
+    <draggable :list="list" v-bind="$attrs" :class="`${prefixClass}__content ${dragClass}`" itemKey="id">
       <template #item="{ element }">
-        <div class="item">
+        <div :class="`${prefixClass}__content--item`">
           <slot name="content" :item="element">{{ element }}</slot>
         </div>
       </template>
@@ -16,8 +16,12 @@
 <script setup lang="ts">
 import Draggable from "vuedraggable";
 import { defineOptions, defineProps } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "DraggableItem" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("drag-item");
 
 export interface DragItemList {
   id: string;
@@ -42,7 +46,9 @@ withDefaults(defineProps<DraggableItemProps>(), {
 </script>
 
 <style lang="scss" scoped>
-.drag-item-component {
+$prefix-class: #{$namespace}-drag-item;
+
+.#{$prefix-class} {
   min-width: 300px;
   height: auto;
   min-height: 100px;
@@ -50,7 +56,7 @@ withDefaults(defineProps<DraggableItemProps>(), {
   background: #f0f0f0;
   border-radius: 3px;
 
-  .drag-item-header {
+  &__header {
     height: 50px;
     padding: 0 20px;
     overflow: hidden;
@@ -61,7 +67,7 @@ withDefaults(defineProps<DraggableItemProps>(), {
     border-radius: 3px 3px 0 0;
   }
 
-  .drag-item-content {
+  &__content {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -71,7 +77,7 @@ withDefaults(defineProps<DraggableItemProps>(), {
     overflow: hidden;
     border: 10px solid transparent;
 
-    .item {
+    &--item {
       box-sizing: border-box;
       width: 100%;
       height: 64px;

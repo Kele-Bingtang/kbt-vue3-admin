@@ -24,5 +24,3 @@ import { simpleData } from "@/mock/table";
 const tableData = ref(simpleData);
 const formThead = ref(["date", "address"]);
 </script>
-
-<style lang="scss" scoped></style>

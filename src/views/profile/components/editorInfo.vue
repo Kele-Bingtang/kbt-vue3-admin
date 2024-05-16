@@ -65,5 +65,3 @@ const reset = (formRef: FormInstance) => {
   emit("reset-user");
 };
 </script>
-
-<style lang="scss" scoped></style>

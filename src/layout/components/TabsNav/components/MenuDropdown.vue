@@ -88,5 +88,3 @@ watch(
   () => (selectedTab.value = getOneTab(route))
 );
 </script>
-
-<style lang="scss" scoped></style>

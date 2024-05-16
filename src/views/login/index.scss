@@ -62,7 +62,7 @@
         }
       }
 
-      .el-form-item {
+      .#{$el-namespace}-form-item {
         margin-bottom: 20px;
 
         .custom-item {
@@ -84,7 +84,7 @@
           }
         }
 
-        :deep(.el-input-group__append) {
+        :deep(.#{$el-namespace}-input-group__append) {
           padding: 0;
         }
       }
@@ -98,7 +98,7 @@
     width: 100%;
     white-space: nowrap;
 
-    .el-button {
+    .#{$el-namespace}-button {
       width: 185px;
     }
   }

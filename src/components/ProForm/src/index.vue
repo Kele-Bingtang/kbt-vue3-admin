@@ -200,6 +200,6 @@ const getTitleFontStyle = (column: FormColumnProps) => {
 defineExpose({ formRef });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import "./index";
 </style>

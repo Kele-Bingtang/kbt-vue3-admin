@@ -1,22 +1,24 @@
 <template>
-  <div ref="splitPaneRef" class="split-pane-component" :class="{ 'no-select': isMoving }">
-    <div v-if="isHorizontal" class="split-horizontal">
-      <div :style="{ bottom: `${anotherOffset}%` }" class="split-pane top-pane"><slot name="top" /></div>
-      <div class="split-line-container" :style="{ top: `${offset}%` }" @mousedown="handleMousedown">
+  <div ref="splitPaneRef" :class="[prefixClass, { 'no-select': isMoving }]">
+    <div v-if="isHorizontal" :class="`${prefixClass}__horizontal`">
+      <div :style="{ bottom: `${anotherOffset}%` }" :class="`${prefixClass}__item top-pane`">
+        <slot name="top" />
+      </div>
+      <div :class="`${prefixClass}__container`" :style="{ top: `${offset}%` }" @mousedown="handleMousedown">
         <slot name="line">
           <split-line mode="horizontal" />
         </slot>
       </div>
-      <div :style="{ top: `${offset}%` }" class="split-pane bottom-pane"><slot name="bottom" /></div>
+      <div :style="{ top: `${offset}%` }" :class="`${prefixClass}__item bottom-pane`"><slot name="bottom" /></div>
     </div>
-    <div v-else class="split-vertical">
-      <div :style="{ right: `${anotherOffset}%` }" class="split-pane left-pane"><slot name="left" /></div>
-      <div class="split-line-container" :style="{ left: `${offset}%` }" @mousedown="handleMousedown">
+    <div v-else :class="`${prefixClass}__vertical`">
+      <div :style="{ right: `${anotherOffset}%` }" :class="`${prefixClass}__item left-pane`"><slot name="left" /></div>
+      <div :class="`${prefixClass}__container`" :style="{ left: `${offset}%` }" @mousedown="handleMousedown">
         <slot name="line">
           <split-line mode="vertical" />
         </slot>
       </div>
-      <div :style="{ left: `${offset}%` }" class="split-pane right-pane"><slot name="right" /></div>
+      <div :style="{ left: `${offset}%` }" :class="`${prefixClass}__item right-pane`"><slot name="right" /></div>
     </div>
   </div>
 </template>
@@ -35,8 +37,12 @@ import {
   unref,
 } from "vue";
 import SplitLine from "./SplitLine.vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "SplitPane" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("split-pane");
 
 type NumOrStr = number | string;
 
@@ -157,12 +163,14 @@ const handleMousedown = (e: MouseEvent) => {
 </script>
 
 <style lang="scss" scoped>
-.split-pane-component {
+$prefix-class: #{$namespace}-split-pane;
+
+.#{$prefix-class} {
   position: relative;
   width: 100%;
   height: 100%;
 
-  .split-pane {
+  &__item {
     position: absolute;
 
     &.left-pane,
@@ -194,10 +202,10 @@ const handleMousedown = (e: MouseEvent) => {
     }
   }
 
-  .split-vertical {
+  &__vertical {
     height: 100%;
 
-    .split-line-container {
+    .#{$prefix-class}__container {
       top: 50%;
       left: 50%;
       width: 0;
@@ -205,16 +213,16 @@ const handleMousedown = (e: MouseEvent) => {
     }
   }
 
-  .split-line-container {
+  &__container {
     position: absolute;
     z-index: 10;
     transform: translate(-50%, -50%);
   }
 
-  .split-horizontal {
+  &__horizontal {
     width: 100%;
 
-    .split-line-container {
+    .#{$prefix-class}__container {
       position: absolute;
       top: 50%;
       left: 50%;

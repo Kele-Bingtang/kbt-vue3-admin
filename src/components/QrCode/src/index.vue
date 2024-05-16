@@ -1,9 +1,9 @@
 <template>
-  <div v-loading="loading" class="qrcode" :style="wrapStyle">
+  <div v-loading="loading" :class="prefixClass" :style="wrapStyle">
     <canvas ref="wrapRef" @click="clickCode" v-if="props.tag === 'canvas'"></canvas>
     <img v-else ref="wrapRef" @click="clickCode" />
-    <div v-if="props.disabled" class="qrcode--disabled" @click="disabledClick">
-      <div class="qrcode-icon" color="var(--el-color-primary)">
+    <div v-if="props.disabled" :class="`${prefixClass}--disabled`" @click="disabledClick">
+      <div :class="`${prefixClass}__icon`" color="var(--el-color-primary)">
         <el-icon style="cursor: pointer" :size="30"><RefreshRight /></el-icon>
         <div>{{ props.disabledText }}</div>
       </div>
@@ -16,8 +16,12 @@ import QRCode, { type QRCodeRenderersOptions } from "qrcode";
 import { isString } from "@/utils";
 import { RefreshRight } from "@element-plus/icons-vue";
 import { ref, computed, nextTick, unref, watch, defineOptions, defineEmits, defineProps } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "QrCode" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("qrcode");
 
 interface QrCodeLogo {
   src?: string;
@@ -207,28 +211,30 @@ const disabledClick = () => {
 </script>
 
 <style lang="scss" scoped>
-.qrcode {
+$prefix-class: #{$namespace}-qrcode;
+
+.#{$prefix-class} {
   position: relative;
   display: inline-block;
-}
 
-.qrcode--disabled {
-  position: absolute;
-  top: 0;
-  left: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100%;
-  height: 100%;
-  background: #fffffff2;
-}
+  &--disabled {
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background: #fffffff2;
+  }
 
-.qrcode-icon {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  font-weight: bold;
-  transform: translate(-50%, -50%);
+  &__icon {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    font-weight: bold;
+    transform: translate(-50%, -50%);
+  }
 }
 </style>

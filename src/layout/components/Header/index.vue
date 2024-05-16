@@ -11,5 +11,3 @@
 import HeaderLeft from "./HeaderLeft.vue";
 import HeaderRight from "./HeaderRight.vue";
 </script>
-
-<style lang="scss" scoped></style>

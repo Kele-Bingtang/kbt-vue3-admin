@@ -1,5 +1,5 @@
 <template>
-  <el-config-provider :locale="i18nLocale" :button="config" :size="layoutSize">
+  <el-config-provider :namespace="variables.elNamespace" :locale="i18nLocale" :button="config" :size="layoutSize">
     <router-view v-slot="{ Component }">
       <component :is="Component" />
     </router-view>
@@ -16,6 +16,9 @@ import { useFrame } from "./layout/components/FrameLayout/useFrame";
 import { getCacheVersion, removeProjectsCache, setCacheVersion } from "./utils/layout/cache";
 import settings from "@/config/settings";
 import { useSettingsStore } from "@/stores";
+import { useDesign } from "@/hooks";
+
+const { variables } = useDesign();
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
@@ -38,6 +41,11 @@ const i18nLocale = computed(() => {
 
 // 配置全局组件大小
 const layoutSize = computed(() => layoutStore.layoutSize);
+
+// 注入全局参数
+provide("configGlobal", {
+  size: layoutSize,
+});
 
 onMounted(() => {
   handleMsgFromFrame();
@@ -72,4 +80,3 @@ const versionCache = () => {
   }
 };
 </script>
-./utils/helper

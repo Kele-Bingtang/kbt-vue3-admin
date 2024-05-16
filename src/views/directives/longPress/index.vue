@@ -12,5 +12,3 @@ const longPress = () => {
   ElMessage.success("长按事件触发成功 🎉🎉🎉");
 };
 </script>
-
-<style lang="scss" scoped></style>

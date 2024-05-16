@@ -1,3 +1,4 @@
+// #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
 .filter {
   box-sizing: border-box;
   width: 220px;
@@ -13,26 +14,26 @@
     letter-spacing: 0.5px;
   }
 
-  .el-input {
+  .#{$el-namespace}-input {
     margin: 0 0 15px;
   }
 
-  .el-scrollbar {
-    :deep(.el-tree) {
+  .#{$el-namespace}-scrollbar {
+    :deep(.#{$el-namespace}-tree) {
       height: 80%;
       overflow: auto;
 
-      .el-tree-node__content {
+      .#{$el-namespace}-tree-node__content {
         height: 33px;
       }
     }
 
-    :deep(.el-tree--highlight-current) {
-      .el-tree-node.is-current > .el-tree-node__content {
+    :deep(.#{$el-namespace}-tree--highlight-current) {
+      .#{$el-namespace}-tree-node.is-current > .#{$el-namespace}-tree-node__content {
         background-color: var(--el-color-primary);
 
-        .el-tree-node__label,
-        .el-tree-node__expand-icon {
+        .#{$el-namespace}-tree-node__label,
+        .#{$el-namespace}-tree-node__expand-icon {
           color: white;
         }
 

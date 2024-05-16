@@ -121,7 +121,7 @@ const logout = async () => {
     user-select: none;
   }
 
-  .el-icon-caret-bottom {
+  .#{$el-namespace}-icon-caret-bottom {
     font-size: 12px;
     cursor: pointer;
   }

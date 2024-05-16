@@ -1,7 +1,7 @@
 <template>
-  <div class="drag-drawer-component">
+  <div :class="prefixClass">
     <el-drawer
-      ref="drawerWrapperRef"
+      ref="drawerRef"
       :title="title"
       v-model="drawerVisible"
       :size="width"
@@ -17,14 +17,14 @@
       <div
         v-if="draggable"
         :style="triggerStyle"
-        class="drag-drawer-trigger-wrapper"
+        :class="`${prefixClass}__trigger`"
         @mousedown="handleTriggerMousedown"
       >
         <slot name="trigger">
           <DragDrawerTrigger></DragDrawerTrigger>
         </slot>
       </div>
-      <div v-if="$slots.footer" class="drag-drawer-footer">
+      <div v-if="$slots.footer" :class="`${prefixClass}__footer`">
         <slot name="footer"></slot>
       </div>
     </el-drawer>
@@ -46,8 +46,12 @@ import {
   type StyleValue,
 } from "vue";
 import { ElDrawer } from "element-plus";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "DragDrawer" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("drag-drawer");
 
 interface DragDrawerProps {
   visible?: boolean;
@@ -79,7 +83,7 @@ type DragDrawerEmits = {
 
 const emits = defineEmits<DragDrawerEmits>();
 
-const drawerWrapperRef = ref();
+const drawerRef = ref();
 const canMove = ref(false);
 const wrapperWidth = ref(0);
 const wrapperLeft = ref(0);
@@ -94,11 +98,7 @@ watch(
 );
 
 const outerClasses = computed(() => {
-  const classesArray = [
-    props.inner ? "drag-drawer-inner" : "",
-    `drag-drawer-wrapper`,
-    unref(canMove) ? "no-select" : "",
-  ];
+  const classesArray = [props.inner ? `${prefixClass}__inner` : "", unref(canMove) ? "no-select" : ""];
   return classesArray.join(" ");
 });
 
@@ -184,48 +184,37 @@ const handleMouseup = () => {
 };
 
 const setWrapperWidth = () => {
-  const { width, left } =
-    drawerWrapperRef.value && unref(drawerWrapperRef).$el.nextElementSibling.getBoundingClientRect();
+  const { width, left } = drawerRef.value && unref(drawerRef).$el.nextElementSibling.getBoundingClientRect();
   wrapperWidth.value = width;
   wrapperLeft.value = left;
 };
 </script>
 
 <style lang="scss" scoped>
-.drag-drawer-component {
+$prefix-class: #{$namespace}-drag-drawer;
+
+.#{$prefix-class} {
   .no-select {
     pointer-events: none;
     user-select: none;
 
-    .drag-drawer-trigger-wrapper {
+    .#{$prefix-class}__trigger {
       pointer-events: all;
     }
   }
 
-  .drag-drawer-trigger-wrapper {
+  // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
+  :deep(.no-select.#{$el-namespace}-drawer) {
+    transition: none;
+  }
+
+  &__trigger {
     top: 0;
     width: 0;
     height: 100%;
   }
 
-  .drag-drawer-footer {
-    bottom: 0;
-    left: 0;
-    flex-grow: 1;
-    width: 100%;
-    padding: 10px 16px;
-    background: #ffffff;
-    border-top: 1px solid #e8e8e8;
-  }
-}
-</style>
-<style lang="scss">
-.drag-drawer-component {
-  .no-select.el-drawer {
-    transition: none;
-  }
-
-  .drag-drawer-footer {
+  &__footer {
     bottom: 0;
     left: 0;
     flex-grow: 1;
@@ -235,7 +224,7 @@ const setWrapperWidth = () => {
     border-top: 1px solid #e8e8e8;
   }
 
-  .drag-drawer-inner {
+  :deep(.#{$prefix-class}__inner) {
     position: absolute;
     overflow: visible;
 

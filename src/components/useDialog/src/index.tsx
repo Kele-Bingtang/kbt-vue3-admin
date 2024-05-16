@@ -3,7 +3,9 @@ import { ElDialog, ElButton, type DialogProps, ElScrollbar } from "element-plus"
 import { getPx } from "@/utils";
 import { Icon } from "@/components";
 import "./index.scss";
+import { useDesign } from "@/hooks";
 
+const { variables } = useDesign();
 let id = 0;
 let thisAppContext: any = null;
 
@@ -60,7 +62,9 @@ export const showDialog = (
   const isFullscreen = ref(false);
 
   const toggleFull = () => {
-    const elDialogEl = document.querySelector(`${`#work-dialog-${id}`} .work-dialog.el-dialog`) as HTMLElement;
+    const elDialogEl = document.querySelector(
+      `${`#work-dialog-${id}`} .work-dialog.${variables.elNamespace}-dialog`
+    ) as HTMLElement;
     if (elDialogEl) elDialogEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !isFullscreen.value;
   };

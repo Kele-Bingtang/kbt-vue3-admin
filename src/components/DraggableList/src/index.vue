@@ -1,39 +1,41 @@
 <template>
-  <div class="drag-list-component">
-    <div class="drag-list" :style="{ width: leftWidth }">
+  <div :class="prefixClass">
+    <div :class="`${prefixClass}__content`" :style="{ width: leftWidth }">
       <slot name="leftTitle">{{ leftTitle }}</slot>
       <draggable
         :list="leftList"
         itemKey="id"
-        class="drag-left-list"
-        :class="dragClass.left"
+        :class="`${prefixClass}__content--left ${dragClass.left}`"
         :group="group"
         v-bind="$attrs"
         @end="handleEnd($event, 'left')"
       >
         <template #item="{ element }">
-          <div class="drag-list-item" @click="handleClick(element.id, 'left')">
+          <div :class="`${prefixClass}__content--item`" @click="handleClick(element.id, 'left')">
             <slot name="left" :item="element">{{ element }}</slot>
-            <div class="left-icon icon" @click="pushList(element, 'left')"><slot name="leftIcon"></slot></div>
+            <div :class="`${prefixClass}__item--left__icon icon`" @click="pushList(element, 'left')">
+              <slot name="leftIcon"></slot>
+            </div>
           </div>
         </template>
       </draggable>
     </div>
-    <div class="drag-list" :style="{ width: rightWidth }">
+    <div :class="`${prefixClass}__content`" :style="{ width: rightWidth }">
       <slot name="rightTitle">{{ rightTitle }}</slot>
       <draggable
         :list="rightList"
         itemKey="id"
-        class="drag-right-list"
-        :class="dragClass.right"
+        :class="`${prefixClass}__content--right ${dragClass.right}`"
         :group="group"
         v-bind="$attrs"
         @end="handleEnd($event, 'right')"
       >
         <template #item="{ element }">
-          <div class="drag-list-item" @click="handleClick(element.id, 'right')">
+          <div :class="`${prefixClass}__content--item`" @click="handleClick(element.id, 'right')">
             <slot name="right" :item="element">{{ element }}</slot>
-            <div class="right-icon icon" @click="pushList(element, 'right')"><slot name="rightIcon"></slot></div>
+            <div :class="`${prefixClass}__item--right__icon icon`" @click="pushList(element, 'right')">
+              <slot name="rightIcon"></slot>
+            </div>
           </div>
         </template>
       </draggable>
@@ -44,8 +46,12 @@
 <script setup lang="ts">
 import { ref, defineOptions, defineEmits, defineProps } from "vue";
 import Draggable from "vuedraggable";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "DraggableList" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("drag-list");
 
 export interface DragClass {
   left: string[];
@@ -134,14 +140,15 @@ const pushList = (list: DragList, type: string) => {
 </script>
 
 <style lang="scss" scoped>
-.drag-list-component {
+$prefix-class: #{$namespace}-drag-list;
+.#{$prefix-class} {
   height: 100%;
 
-  .drag-list {
+  &__content {
     float: left;
     height: 100%;
 
-    .drag-list-item {
+    &--item {
       position: relative;
       line-height: inherit;
 

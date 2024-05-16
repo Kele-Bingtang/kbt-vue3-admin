@@ -1,5 +1,5 @@
 .transverse {
-  .el-menu {
+  .#{$el-namespace}-menu {
     border: none;
 
     .menu-item {
@@ -21,7 +21,7 @@
   .sub-menu,
   .menu-item {
     &:not(.is-active) {
-      .el-icon,
+      .#{$el-namespace}-icon,
       .svg-icon {
         color: var(--menu-icon-color);
       }
@@ -29,7 +29,7 @@
   }
 
   /* 下拉菜单 */
-  .el-menu--popup .menu-item {
+  .#{$el-namespace}-menu--popup .menu-item {
     &.is-active {
       background: var(--menu-active-bg-color);
 
@@ -50,25 +50,25 @@
   }
 
   /* 横向菜单 */
-  .el-menu--horizontal {
+  .#{$el-namespace}-menu--horizontal {
     /* 菜单高度 */
     .sub-menu,
     .menu-item {
       height: 54px !important;
 
-      .el-sub-menu__title {
+      .#{$el-namespace}-sub-menu__title {
         height: 100%;
       }
     }
 
-    .el-sub-menu__hide-arrow {
+    .#{$el-namespace}-sub-menu__hide-arrow {
       width: 54px !important;
     }
   }
 
   /* 右侧图标 */
   .header-icon,
-  .header-icon .el-dropdown {
+  .header-icon .#{$el-namespace}-dropdown {
     color: var(--header-text-color);
   }
 }

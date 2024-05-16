@@ -45,9 +45,3 @@ defineExpose({
   openColSetting,
 });
 </script>
-
-<style scoped lang="scss">
-.cursor-move {
-  cursor: move;
-}
-</style>

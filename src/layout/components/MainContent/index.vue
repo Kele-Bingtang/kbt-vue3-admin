@@ -64,7 +64,7 @@ watchEffect(() => {
 </script>
 
 <style lang="scss" scoped>
-.el-main {
+.#{$el-namespace}-main {
   box-sizing: border-box;
   display: flex;
   flex-direction: column;

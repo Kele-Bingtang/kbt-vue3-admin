@@ -4,7 +4,6 @@ export * from "./Cropper";
 export * from "./DragDrawer";
 export * from "./DraggableItem";
 export * from "./DraggableList";
-export * from "./DropdownMenu";
 export * from "./Flicker";
 export * from "./Grid";
 export * from "./Highlight";

@@ -154,5 +154,3 @@ const addErrorLog = () => {
   throw new Error(errorMessage);
 };
 </script>
-
-<style lang="scss" scoped></style>

@@ -1,5 +1,5 @@
 <template>
-  <a :class="className" class="link--hover" :style="{ color: initColor }" href="#">
+  <a :class="[prefixClass, className]" :style="{ color: initColor }" href="#">
     <slot>
       {{ text }}
     </slot>
@@ -10,8 +10,12 @@
 
 <script setup lang="ts">
 import { onMounted, defineOptions, defineProps } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "TextHoverEffect" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("link-hover");
 
 interface TextHoverEffectProps {
   className?: string;
@@ -27,14 +31,16 @@ const props = withDefaults(defineProps<TextHoverEffectProps>(), {
 });
 
 onMounted(() => {
-  document.styleSheets[0].insertRule(`.link--hover::before { background: ${props.hoverColor} !important}`, 0);
-  document.styleSheets[0].insertRule(`.link--hover span::before { color: ${props.hoverColor} !important}`, 0);
+  document.styleSheets[0].insertRule(`.${prefixClass}::before { background: ${props.hoverColor} !important}`, 0);
+  document.styleSheets[0].insertRule(`.${prefixClass} span::before { color: ${props.hoverColor} !important}`, 0);
 });
 </script>
 
 <style lang="scss" scoped>
+$prefix-class: #{$namespace}-link-hover;
+
 /* hover */
-.link--hover {
+.#{$prefix-class} {
   position: relative;
   display: inline-block;
   overflow: hidden;
@@ -102,11 +108,11 @@ onMounted(() => {
       transform: translate3d(0, -100%, 0);
     }
   }
-}
 
-.link--hover:hover span::before {
-  transition-delay: 0.3s;
-  transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-  transform: translate3d(0, 0, 0);
+  &:hover span::before {
+    transition-delay: 0.3s;
+    transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
+    transform: translate3d(0, 0, 0);
+  }
 }
 </style>

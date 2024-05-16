@@ -112,5 +112,3 @@ const initChart = () => {
   useEcharts(chart, option);
 };
 </script>
-
-<style lang="scss" scoped></style>

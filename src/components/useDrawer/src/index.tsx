@@ -2,7 +2,9 @@ import { render, getCurrentInstance, unref, type Component, type ComponentIntern
 import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
 import { Icon } from "@/components";
 import "./index.scss";
+import { useDesign } from "@/hooks";
 
+const { variables } = useDesign();
 let id = 0;
 let thisAppContext: any = null;
 
@@ -54,7 +56,9 @@ export const showDrawer = (
   const isFullscreen = ref(false);
 
   const toggleFull = () => {
-    const elDrawerEl = document.querySelector(`${`#work-drawer-${id}`} .work-drawer.el-drawer`) as HTMLElement;
+    const elDrawerEl = document.querySelector(
+      `${`#work-drawer-${id}`} .work-drawer.${variables.elNamespace}-drawer`
+    ) as HTMLElement;
     if (elDrawerEl) elDrawerEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !unref(isFullscreen);
   };

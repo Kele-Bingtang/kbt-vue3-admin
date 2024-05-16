@@ -66,5 +66,3 @@ const reset = (formRef: FormInstance) => {
   user.confirmPassword = "";
 };
 </script>
-
-<style lang="scss" scoped></style>

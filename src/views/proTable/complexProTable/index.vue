@@ -176,15 +176,15 @@ const resetPass = async (params: ResUserList) => {
 </script>
 
 <style lang="scss">
-.el-table .warning-row,
-.el-table .warning-row .el-table-fixed-column--right,
-.el-table .warning-row .el-table-fixed-column--left {
+.#{$el-namespace}-table .warning-row,
+.#{$el-namespace}-table .warning-row .#{$el-namespace}-table-fixed-column--right,
+.#{$el-namespace}-table .warning-row .#{$el-namespace}-table-fixed-column--left {
   background-color: var(--el-color-warning-light-9);
 }
 
-.el-table .success-row,
-.el-table .success-row .el-table-fixed-column--right,
-.el-table .success-row .el-table-fixed-column--left {
+.#{$el-namespace}-table .success-row,
+.#{$el-namespace}-table .success-row .#{$el-namespace}-table-fixed-column--right,
+.#{$el-namespace}-table .success-row .#{$el-namespace}-table-fixed-column--left {
   background-color: var(--el-color-success-light-9);
 }
 </style>

@@ -251,13 +251,13 @@ watch(
 );
 </script>
 
-<style lang="scss">
+<style lang="scss" scoped>
 .tinymce-component {
   position: relative;
   line-height: normal;
 }
 
-.tox {
+:deep(.tox) {
   z-index: 2000 !important;
 }
 </style>

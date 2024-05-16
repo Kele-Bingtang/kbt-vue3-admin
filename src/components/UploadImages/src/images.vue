@@ -196,10 +196,11 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
 </script>
 
 <style scoped lang="scss">
+// #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
 .is-error {
   .upload {
-    :deep(.el-upload--picture-card),
-    :deep(.el-upload-dragger) {
+    :deep(.#{$el-namespace}-upload--picture-card),
+    :deep(.#{$el-namespace}-upload-dragger) {
       border: 1px dashed var(--el-color-danger) !important;
 
       &:hover {
@@ -210,8 +211,8 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
 }
 
 :deep(.disabled) {
-  .el-upload--picture-card,
-  .el-upload-dragger {
+  .#{$el-namespace}-upload--picture-card,
+  .#{$el-namespace}-upload-dragger {
     cursor: not-allowed;
     background: var(--el-disabled-bg-color) !important;
     border: 1px dashed var(--el-border-color-darker);
@@ -224,13 +225,13 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
 
 .upload-box {
   .no-border {
-    :deep(.el-upload--picture-card) {
+    :deep(.#{$el-namespace}-upload--picture-card) {
       border: none !important;
     }
   }
 
   :deep(.upload) {
-    .el-upload-dragger {
+    .#{$el-namespace}-upload-dragger {
       display: flex;
       align-items: center;
       justify-content: center;
@@ -246,13 +247,13 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
       }
     }
 
-    .el-upload-dragger.is-dragover {
+    .#{$el-namespace}-upload-dragger.is-dragover {
       background-color: var(--el-color-primary-light-9);
       border: 2px dashed var(--el-color-primary) !important;
     }
 
-    .el-upload-list__item,
-    .el-upload--picture-card {
+    .#{$el-namespace}-upload-list__item,
+    .#{$el-namespace}-upload--picture-card {
       width: v-bind(width);
       height: v-bind(height);
       background-color: transparent;
@@ -288,7 +289,7 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
         padding: 0 6%;
         color: aliceblue;
 
-        .el-icon {
+        .#{$el-namespace}-icon {
           margin-bottom: 15%;
           font-size: 140%;
         }
@@ -299,7 +300,7 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
       }
     }
 
-    .el-upload-list__item {
+    .#{$el-namespace}-upload-list__item {
       &:hover {
         .upload-handle {
           opacity: 1;
@@ -315,14 +316,14 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
       line-height: 30px;
       color: var(--el-color-info);
 
-      .el-icon {
+      .#{$el-namespace}-icon {
         font-size: 28px;
         color: var(--el-text-color-secondary);
       }
     }
   }
 
-  .el-upload__tip {
+  .#{$el-namespace}-upload__tip {
     line-height: 15px;
     text-align: center;
   }

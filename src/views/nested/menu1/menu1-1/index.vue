@@ -5,5 +5,3 @@
 </template>
 
 <script setup lang="ts" name="Menu1-1"></script>
-
-<style lang="scss" scoped></style>

@@ -282,11 +282,11 @@ onMounted(() => {
 .message-popover {
   padding: 0 !important;
 
-  .el-tabs__header {
+  .#{$el-namespace}-tabs__header {
     margin: 0;
   }
 
-  .el-tabs__nav-wrap {
+  .#{$el-namespace}-tabs__nav-wrap {
     display: flex;
     justify-content: center;
   }

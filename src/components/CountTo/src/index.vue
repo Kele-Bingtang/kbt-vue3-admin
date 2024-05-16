@@ -1,9 +1,9 @@
 <template>
-  <div class="count-to-component">
+  <div :class="prefixClass">
     <slot name="prefix">
       <span v-if="prefix">{{ prefix }}</span>
     </slot>
-    <p class="content-outer">
+    <p :class="`${prefixClass}__content--outer`">
       <span ref="countRef" :class="[countClass]">{{ init }}</span>
       <span :class="[unitClass]">{{ unitText }}</span>
     </p>
@@ -16,8 +16,12 @@
 <script setup lang="ts">
 import CountUp from "countup";
 import { ref, watch, onMounted, onUnmounted, defineOptions, defineEmits, defineProps, unref } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "CountTo" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("count-to");
 
 interface CountToProps {
   init?: number; // 初始值，后面会被 startVal 覆盖
@@ -219,8 +223,10 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-.count-to-component {
-  .content-outer {
+$prefix-class: #{$namespace}-count-to;
+
+.#{$prefix-class} {
+  &__content--outer {
     display: inline-block;
     margin: 0;
   }

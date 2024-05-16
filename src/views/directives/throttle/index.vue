@@ -13,5 +13,3 @@ const throttleClick = () => {
   ElMessage.success("我是节流按钮触发的事件 🍍🍓🍌");
 };
 </script>
-
-<style lang="scss" scoped></style>

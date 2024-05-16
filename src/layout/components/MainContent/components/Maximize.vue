@@ -33,7 +33,7 @@ const exitMaximize = () => {
     background-color: var(--el-color-primary);
   }
 
-  .el-icon {
+  .#{$el-namespace}-icon {
     position: relative;
     top: 68%;
     left: 32%;

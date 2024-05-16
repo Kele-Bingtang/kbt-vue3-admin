@@ -82,15 +82,15 @@ const gridData = [
   height: 100%;
   background: #ffffff;
 
-  .el-button--text {
+  .#{$el-namespace}-button--text {
     margin-right: 15px;
   }
 
-  .el-select {
+  .#{$el-namespace}-select {
     width: 300px;
   }
 
-  .el-input {
+  .#{$el-namespace}-input {
     width: 300px;
   }
 

@@ -1,7 +1,7 @@
 export interface ScssVariables {
   [x: string]: unknown;
   // 暗色主题
-  menuTextDark: string; // // 所有菜单文字颜色
+  menuTextDark: string; // 所有菜单文字颜色
   menuBgDark: string; // 一级菜单背景色
   menuHoverBgDark: string; // 一级菜单悬停背景色
   menuActiveBgDark: string; // 一级菜单激活文字颜色

@@ -77,7 +77,7 @@ withDefaults(defineProps<RightMenuProps>(), {
       color: var(--el-color-primary);
     }
 
-    .el-icon {
+    .#{$el-namespace}-icon {
       margin-right: 8px;
     }
   }

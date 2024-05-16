@@ -7,3 +7,4 @@ export * from "./useRoutes";
 export * from "./useTheme";
 export * from "./useValidator";
 export * from "./useClipboard";
+export * from "./useDesign";

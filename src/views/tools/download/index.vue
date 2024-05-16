@@ -38,5 +38,3 @@ function down() {
     });
 }
 </script>
-
-<style lang="scss" scoped></style>

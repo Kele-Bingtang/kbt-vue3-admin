@@ -1,3 +1,4 @@
+// #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
 .pro-table-container {
   display: flex;
   flex: 1;
@@ -10,13 +11,13 @@
     padding: 18px 18px 0;
     margin-bottom: 10px;
 
-    .el-form {
-      .el-form-item__content > * {
+    .#{$el-namespace}-form {
+      .#{$el-namespace}-form-item__content > * {
         width: 100%;
       }
 
       // 去除时间选择器上下 padding
-      .el-range-editor.el-input__wrapper {
+      .#{$el-namespace}-range-editor.#{$el-namespace}-input__wrapper {
         padding: 0 10px;
       }
     }
@@ -45,18 +46,18 @@
       .header-button-ri {
         float: right;
 
-        .el-button:focus-visible {
+        .#{$el-namespace}-button:focus-visible {
           outline: none;
         }
       }
 
-      .el-button {
+      .#{$el-namespace}-button {
         margin-bottom: 15px;
       }
     }
 
     // el-table 表格样式
-    .el-table {
+    .#{$el-namespace}-table {
       flex: 1;
 
       // 修复 safari 浏览器表格错位
@@ -64,7 +65,7 @@
         width: 100%;
       }
 
-      .el-table__header th {
+      .#{$el-namespace}-table__header th {
         height: 45px;
         font-size: 15px;
         font-weight: bold;
@@ -72,22 +73,22 @@
         background: var(--el-fill-color-light);
       }
 
-      .el-table__row {
+      .#{$el-namespace}-table__row {
         height: 45px;
         font-size: 14px;
 
-        .el-table__placeholder {
+        .#{$el-namespace}-table__placeholder {
           display: inline;
         }
       }
 
       // 设置 el-table 中 header 文字不换行，并省略
-      .el-table__header .el-table__cell > .cell {
+      .#{$el-namespace}-table__header .#{$el-namespace}-table__cell > .cell {
         white-space: nowrap;
       }
 
       // 解决表格数据为空时样式不居中问题(仅在element-plus中)
-      .el-table__empty-block {
+      .#{$el-namespace}-table__empty-block {
         position: absolute;
         top: 50%;
         left: 50%;
@@ -107,7 +108,7 @@
     }
 
     // 表格 pagination 样式
-    .el-pagination {
+    .#{$el-namespace}-pagination {
       display: flex;
       justify-content: flex-end;
       margin-top: 20px;

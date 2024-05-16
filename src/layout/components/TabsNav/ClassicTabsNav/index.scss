@@ -104,7 +104,7 @@
       right: 60px;
     }
 
-    .el-button {
+    .#{$el-namespace}-button {
       width: 28px;
       height: 100%;
       padding: 6px 4px;
@@ -118,8 +118,8 @@
         border-color: #a2d0ff !important;
       }
 
-      .el-icon-arrow-left,
-      .el-icon-arrow-right {
+      .#{$el-namespace}-icon-arrow-left,
+      .#{$el-namespace}-icon-arrow-right {
         font-weight: 600;
       }
     }

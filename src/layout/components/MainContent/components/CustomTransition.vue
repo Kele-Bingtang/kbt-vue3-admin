@@ -30,5 +30,3 @@ const leaveActiveClass = computed(() => {
   return "";
 });
 </script>
-
-<style lang="scss" scoped></style>

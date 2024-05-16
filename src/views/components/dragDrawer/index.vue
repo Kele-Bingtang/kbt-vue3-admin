@@ -78,7 +78,7 @@ const handleResize = (event: any) => {
     background: var(--el-color-primary);
     border: 1px solid var(--el-color-primary);
 
-    :deep(.el-overlay) {
+    :deep(.#{$el-namespace}-overlay) {
       position: absolute;
     }
   }

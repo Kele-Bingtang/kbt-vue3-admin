@@ -48,5 +48,3 @@ const handleSelectLanguage = (lang: LanguageType) => {
   });
 };
 </script>
-
-<style lang="scss" scoped></style>

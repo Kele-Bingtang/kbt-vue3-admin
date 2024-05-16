@@ -14,5 +14,3 @@ const debounceClick = () => {
   ElMessage.success("我是防抖按钮触发的事件 🍍🍓🍌");
 };
 </script>
-
-<style lang="scss" scoped></style>

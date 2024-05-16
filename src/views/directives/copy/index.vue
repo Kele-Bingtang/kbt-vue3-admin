@@ -20,5 +20,3 @@
 const router = useRouter();
 const data = ref<string>("https://github.com/Kele-Bingtang/kbt-vue3-admin");
 </script>
-
-<style lang="scss" scoped></style>
