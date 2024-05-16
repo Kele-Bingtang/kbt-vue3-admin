@@ -28,7 +28,7 @@
 </template>
 <script setup lang="ts">
 import { ElTree } from "element-plus";
-import { nextTick, ref, watch, defineEmits, defineProps } from "vue";
+import { nextTick, ref, watch, defineEmits, defineProps, unref } from "vue";
 
 defineOptions({ name: "Tree" });
 
@@ -64,8 +64,7 @@ const filterText = ref(""); // 搜索的文本
 const treeRef = ref<InstanceType<typeof ElTree>>();
 
 watch(defaultExpandAll, val => {
-  const nodes = treeRef.value?.store._getAllNodes();
-  console.log(treeRef.value);
+  const nodes = unref(treeRef)?.store._getAllNodes();
   // true 全展开，false 全折叠
   if (val) nodes?.forEach(item => (item.expanded = true));
   else nodes?.forEach(item => (item.expanded = false));
@@ -73,14 +72,14 @@ watch(defaultExpandAll, val => {
 
 watch(isSelectAll, val => {
   // true 全选，false 全不选
-  if (val) treeRef.value?.setCheckedNodes(props.data);
-  else treeRef.value?.setCheckedNodes([]);
+  if (val) unref(treeRef)?.setCheckedNodes(props.data);
+  else unref(treeRef)?.setCheckedNodes([]);
   // 关闭处于全选和全不选期间的状态
   indeterminate.value = false;
 });
 
 watch(filterText, val => {
-  treeRef.value!.filter(val);
+  unref(treeRef)!.filter(val);
 });
 
 // 过滤搜索条件
@@ -97,7 +96,7 @@ const handleCheck = (_: any, selected: any) => {
   if (!selected.checkedKeys?.length) {
     isSelectAll.value = false;
     indeterminate.value = false;
-  } else if (selected.checkedKeys?.length === treeRef.value?.store._getAllNodes().length) {
+  } else if (selected.checkedKeys?.length === unref(treeRef)?.store._getAllNodes().length) {
     // 如果选择的节点等于节点数量，则代表全选
     isSelectAll.value = true;
     indeterminate.value = false;
@@ -109,10 +108,10 @@ const setChecked = (val: any[]) => {
   nextTick(() => {
     const { checkValueType, expandSelected, nodeKey } = props;
     if (checkValueType === "nodes") {
-      treeRef.value?.setCheckedNodes(val);
+      unref(treeRef)?.setCheckedNodes(val);
       if (expandSelected) defaultExpandedKeys.value = val?.map(item => item[nodeKey]);
     } else {
-      treeRef.value?.setCheckedKeys(val, false);
+      unref(treeRef)?.setCheckedKeys(val, false);
       if (expandSelected) defaultExpandedKeys.value = val;
     }
   });

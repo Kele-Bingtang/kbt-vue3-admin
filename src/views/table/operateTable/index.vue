@@ -2,7 +2,7 @@
   <div class="operate-table-container">
     <el-button v-waves type="primary" :icon="Plus" @click="handleAdd()" style="margin-bottom: 10px">添加</el-button>
     <el-table
-      :data="tableData.slice((paging.currentPage - 1) * paging.pageSize, paging.currentPage * paging.pageSize)"
+      :data="tableData.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)"
       border
       highlight-current-row
       row-key="id"
@@ -297,7 +297,7 @@ const handleDelete = (row: any, index: number) => {
 };
 
 const handleSizeChange = (pagingParam: Paging) => {
-  paging.currentPage = pagingParam.currentPage;
+  paging.pageNum = pagingParam.pageNum;
   paging.pageSize = pagingParam.pageSize;
 };
 </script>

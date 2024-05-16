@@ -35,6 +35,7 @@ import {
   withDefaults,
   defineProps,
   defineEmits,
+  unref,
 } from "vue";
 
 defineOptions({ name: "WangEditor" });
@@ -44,7 +45,7 @@ export type VideoInsertFnType = (url: string, poster: string) => void;
 export type FileInsertFnType = (fileName: string, url: string) => void;
 
 interface WangEditorProp {
-  value?: string; // 编辑器内容 ==> 必传
+  modelValue: string; // 编辑器内容 ==> 必传
   toolbarKeys?: string[]; // 工具栏内容 ==> 非必传（默认为空）
   excludeKeys?: string[]; // 去除掉指定的工具类内容 ==> 非必传（默认为空）
   height?: string; // 富文本高度 ==> 非必传（默认为 500px）
@@ -53,7 +54,7 @@ interface WangEditorProp {
   hideToolBar?: boolean; // 是否隐藏工具栏 ==> 非必传（默认为false）
 }
 type WangEditorEmits = {
-  "update:value": [value: string];
+  "update:modelValue": [value: string];
   "image-upload": [file: File, insertFn: ImageInsertFnType];
   "image-before-upload": [file: File];
   "image-progress": [progress: number];
@@ -173,30 +174,35 @@ const toolbarConfig = computed(() => {
 
 const content = computed({
   get() {
-    return props.value;
+    return props.modelValue;
   },
   set(value) {
     // 防止富文本内容为空时，校验失败
-    if (editorRef.value.isEmpty()) value = "";
-    emits("update:value", value);
+    if (unref(editorRef).isEmpty()) value = "";
+    emits("update:modelValue", value);
   },
 });
 
 watch(
   () => props.disabled,
   () => {
-    if (editorRef.value) {
-      props.disabled ? editorRef.value.disable() : editorRef.value.enable();
+    if (unref(editorRef)) {
+      props.disabled ? unref(editorRef).disable() : unref(editorRef).enable();
     }
   }
 );
 
 onMounted(() => {
-  Boot.registerModule(attachmentModule);
+  try {
+    Boot.registerModule(attachmentModule);
+  } catch (e) {
+    /* empty */
+  }
 });
+
 const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor;
-  props.disabled ? editorRef.value.disable() : editorRef.value.enable();
+  props.disabled ? unref(editorRef).disable() : unref(editorRef).enable();
   emits("on-created", editor);
 };
 
@@ -205,8 +211,8 @@ const handlePaste = (editor: IDomEditor, event: ClipboardEvent) => {
 };
 
 onBeforeUnmount(() => {
-  if (!editorRef.value) return;
-  editorRef.value.destroy(); // 组件销毁时，及时销毁编辑器
+  if (!unref(editorRef)) return;
+  unref(editorRef).destroy(); // 组件销毁时，及时销毁编辑器
 });
 
 defineExpose({

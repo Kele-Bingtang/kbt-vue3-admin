@@ -83,7 +83,7 @@ const toggleFull = () => {
 const dialogHeight = ref(getPx(props.height));
 
 watch(
-  () => isFullscreen.value,
+  isFullscreen,
   async (val: boolean) => {
     await nextTick();
     if (val) {
@@ -105,12 +105,12 @@ const dialogStyle = computed(() => {
 });
 
 const handleClose = () => {
-  emits("close", elDialogRef.value);
+  emits("close", unref(elDialogRef));
   dialogVisible.value = false;
 };
 
 const handleConfirm = () => {
-  emits("confirm", elDialogRef.value);
+  emits("confirm", unref(elDialogRef));
   dialogVisible.value = false;
 };
 

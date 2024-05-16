@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineOptions, defineProps } from "vue";
+import { ref, defineOptions, defineProps, unref } from "vue";
 
 defineOptions({ name: "DropdownMenu" });
 
@@ -26,7 +26,7 @@ withDefaults(defineProps<DropdownMenuProps>(), {
 
 const isActive = ref(false);
 const clickTitle = () => {
-  isActive.value = !isActive.value;
+  isActive.value = !unref(isActive);
 };
 </script>
 

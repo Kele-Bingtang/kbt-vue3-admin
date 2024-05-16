@@ -82,78 +82,87 @@ interface ProblemData {
 
 const getTicketList = () => {
   return new Promise(resolve => {
-    resolve([
-      {
-        id: "100338",
-        ticketNo: "k100338",
-        ticketDesc: "这是一封测试信",
-        priority: "低",
-        status: "Open",
-        eventStartTime: "2023-09-28 08:00:00",
-        eventEndTime: "2023-10-07 18:00:00",
-        dueDate: "2023-10-07",
-        owner: "k100338",
-        description: "这是一封测试信",
-        rootCause: "根因分析",
-        createUser: "Kobe Liu",
-        createTime: "2023-10-08 24:00:00",
-        actionList: [
+    resolve({
+      code: 200,
+      status: "success",
+      data: {
+        list: [
           {
-            actionId: 1,
-            actionDesc: "这是一封测试信 Action 记录 1",
-            actionUpdateUser: "Kobe Liu",
-            actionUpdateTime: "2023-10-08 24:00:00",
+            id: "100338",
+            ticketNo: "k100338",
+            ticketDesc: "这是一封测试信",
+            priority: "低",
+            status: "Open",
+            eventStartTime: "2023-09-28 08:00:00",
+            eventEndTime: "2023-10-07 18:00:00",
+            dueDate: "2023-10-07",
+            owner: "k100338",
+            description: "这是一封测试信",
+            rootCause: "根因分析",
+            createUser: "Kobe Liu",
+            createTime: "2023-10-08 24:00:00",
+            actionList: [
+              {
+                actionId: 1,
+                actionDesc: "这是一封测试信 Action 记录 1",
+                actionUpdateUser: "Kobe Liu",
+                actionUpdateTime: "2023-10-08 24:00:00",
+              },
+              {
+                actionId: 2,
+                actionDesc: "这是一封测试信 Action 记录 2",
+                actionUpdateUser: "Kobe Liu",
+                actionUpdateTime: "2023-10-09 15:00:00",
+              },
+              {
+                actionId: 3,
+                actionDesc: "这是一封测试信 Action 记录 3",
+                actionUpdateUser: "Kobe Liu",
+                actionUpdateTime: "2023-10-09 16:00:00",
+              },
+            ],
           },
           {
-            actionId: 2,
-            actionDesc: "这是一封测试信 Action 记录 2",
-            actionUpdateUser: "Kobe Liu",
-            actionUpdateTime: "2023-10-09 15:00:00",
-          },
-          {
-            actionId: 3,
-            actionDesc: "这是一封测试信 Action 记录 3",
-            actionUpdateUser: "Kobe Liu",
-            actionUpdateTime: "2023-10-09 16:00:00",
+            id: "100378",
+            ticketNo: "j100378",
+            ticketDesc: "这是一封偏爱信",
+            priority: "高",
+            status: "Open",
+            eventStartTime: "2023-09-28 08:00:00",
+            eventEndTime: "2023-10-07 18:00:00",
+            dueDate: "2072-01-16",
+            owner: "j100378",
+            description: "这是一封偏爱信",
+            rootCause: "根因分析",
+            createUser: "Jessany Liu",
+            createTime: "2023-10-08 20:00:00",
+            actionList: [
+              {
+                actionId: 1,
+                actionDesc: "这是一封偏爱信 Action 记录 1",
+                actionUpdateUserName: "Jessany Liu",
+                actionUpdateTime: "2023-10-08 20:00:00",
+              },
+              {
+                actionId: 2,
+                actionDesc: "这是一封偏爱信 Action 记录 2",
+                actionUpdateUserName: "Jessany Liu",
+                actionUpdateTime: "2023-10-10 12:00:00",
+              },
+              {
+                actionId: 3,
+                actionDesc: "这是一封偏爱信 Action 记录 3",
+                actionUpdateUserName: "Jessany Liu",
+                actionUpdateTime: "2023-10-11 18:00:00",
+              },
+            ],
           },
         ],
+        pageNum: 1,
+        total: 2,
+        pageSize: 20,
       },
-      {
-        id: "100378",
-        ticketNo: "j100378",
-        ticketDesc: "这是一封偏爱信",
-        priority: "高",
-        status: "Open",
-        eventStartTime: "2023-09-28 08:00:00",
-        eventEndTime: "2023-10-07 18:00:00",
-        dueDate: "2072-01-16",
-        owner: "j100378",
-        description: "这是一封偏爱信",
-        rootCause: "根因分析",
-        createUser: "Jessany Liu",
-        createTime: "2023-10-08 20:00:00",
-        actionList: [
-          {
-            actionId: 1,
-            actionDesc: "这是一封偏爱信 Action 记录 1",
-            actionUpdateUserName: "Jessany Liu",
-            actionUpdateTime: "2023-10-08 20:00:00",
-          },
-          {
-            actionId: 2,
-            actionDesc: "这是一封偏爱信 Action 记录 2",
-            actionUpdateUserName: "Jessany Liu",
-            actionUpdateTime: "2023-10-10 12:00:00",
-          },
-          {
-            actionId: 3,
-            actionDesc: "这是一封偏爱信 Action 记录 3",
-            actionUpdateUserName: "Jessany Liu",
-            actionUpdateTime: "2023-10-11 18:00:00",
-          },
-        ],
-      },
-    ]);
+    });
   });
 };
 

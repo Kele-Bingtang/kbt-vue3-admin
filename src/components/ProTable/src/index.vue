@@ -81,7 +81,7 @@
                 @click="() => downloadFile(columns, tableData, 'export', '确认导出数据?', exportKey)"
               />
             </el-tooltip>
-            <el-tooltip v-if="searchColumns.length" effect="light" content="隐藏搜索" placement="top">
+            <el-tooltip v-if="searchColumns?.length" effect="light" content="隐藏搜索" placement="top">
               <el-button :icon="Search" circle @click="isShowSearchProp = !isShowSearchProp" />
             </el-tooltip>
           </slot>
@@ -205,7 +205,12 @@
 
       <!-- 分页组件 -->
       <slot name="pagination">
-        <Pagination v-if="isOpenPage(pagination) && pageTotal" :total="pageTotal" @pagination="handlePagination" />
+        <Pagination
+          v-if="isOpenPage(pagination) && pageTotal"
+          v-model="paging"
+          :total="pageTotal"
+          @pagination="handlePagination"
+        />
       </slot>
     </div>
     <!-- 列设置 -->
@@ -227,6 +232,7 @@ import {
   shallowRef,
   defineOptions,
   defineProps,
+  unref,
 } from "vue";
 import { ElTable } from "element-plus";
 import { useTable, type Table } from "./hooks/useTable";
@@ -284,8 +290,8 @@ const props = withDefaults(defineProps<ProTableProps>(), {
 
 // 配置 _enum 字典信息
 const enumCallback = (data: Record<string, any>[]) => {
-  tableColumns.value.forEach(async col => {
-    const enumObj = enumMap.value.get(col.prop!);
+  unref(tableColumns).forEach(async col => {
+    const enumObj = unref(enumMap).get(col.prop!);
     // 如果字段有配置枚举信息，则存放到 _enum[col.prop] 里
     if (enumObj && col.isFilterEnum) {
       data = data.map(row => {
@@ -328,6 +334,7 @@ const {
   props.pagination,
   props.beforeSearch,
   data => {
+    if (!data) return;
     // 配置 _enum 字典信息
     if (isBackPage()) data.list = enumCallback(data.list) || data.list;
     else data = enumCallback(data) || data;
@@ -340,20 +347,23 @@ const {
 );
 
 // 清空选中数据列表
-const clearSelection = () => tableRef.value!.clearSelection();
+const clearSelection = () => unref(tableRef)?.clearSelection();
 
 // 静态数据分页
 const tablePageData = computed(() => {
   let data;
   if (props.data?.length) data = props.data;
-  if (isFrontPage(props.pagination)) data = tableData.value;
-  return data?.slice((paging.value.pageNum - 1) * paging.value.pageSize, paging.value.pageNum * paging.value.pageSize);
+  if (isFrontPage(props.pagination)) data = unref(tableData);
+  return data?.slice(
+    (unref(paging).pageNum - 1) * unref(paging).pageSize,
+    unref(paging).pageNum * unref(paging).pageSize
+  );
 });
 
 const pageTotal = computed(() => {
   if (props.data?.length) return props.data?.length;
-  if (isFrontPage(props.pagination)) return props.data?.length || tableData.value.length;
-  if (isBackPage(props.pagination)) return paging.value?.total || tableData.value?.length;
+  if (isFrontPage(props.pagination)) return props.data?.length || unref(tableData)?.length;
+  if (isBackPage(props.pagination)) return unref(paging)?.total || unref(tableData)?.length;
   return 0;
 });
 
@@ -377,10 +387,10 @@ provide("enumMap", enumMap);
 const setEnumMap = async (col: TableColumnProps) => {
   if (!col.enum) return;
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
-  if (isRef(col.enum)) return enumMap.value.set(col.prop!, (col.enum as ComputedRef).value!);
-  if (typeof col.enum !== "function") return enumMap.value.set(col.prop!, col.enum!);
+  if (isRef(col.enum)) return unref(enumMap).set(col.prop!, unref(col.enum as ComputedRef));
+  if (typeof col.enum !== "function") return unref(enumMap).set(col.prop!, col.enum!);
   const { data } = await col.enum(enumMap);
-  enumMap.value.set(col.prop!, data);
+  unref(enumMap).set(col.prop!, data);
 };
 
 // 扁平化 columns，为了过滤需要搜索的配置项
@@ -398,30 +408,30 @@ const flatColumnsFunc = (columns: TableColumnProps[], flatArr: TableColumnProps[
 };
 
 const flatColumns = ref<TableColumnProps[]>();
-flatColumns.value = flatColumnsFunc(tableColumns.value);
+flatColumns.value = flatColumnsFunc(unref(tableColumns));
 
 // 过滤需要搜索的配置项
-const searchColumns = flatColumns.value.filter(item => item.search?.el || item.search?.render);
+const searchColumns = unref(flatColumns)?.filter(item => item.search?.el || item.search?.render);
 
 // 设置搜索表单排序默认值 && 设置搜索表单项的默认值
-searchColumns.forEach((column, index) => {
+searchColumns?.forEach((column, index) => {
   column.search!.order = column.search!.order ?? index + 2;
   if (column.search?.defaultValue !== undefined && column.search?.defaultValue !== null) {
-    searchInitParam.value[column.search.key ?? lastProp(column.prop!)] = column.search?.defaultValue;
-    searchParam.value[column.search.key ?? lastProp(column.prop!)] = column.search?.defaultValue;
+    unref(searchInitParam)[column.search.key ?? lastProp(column.prop!)] = column.search?.defaultValue;
+    unref(searchParam)[column.search.key ?? lastProp(column.prop!)] = column.search?.defaultValue;
   }
 });
 
 // 排序搜索表单项
-searchColumns.sort((a, b) => a.search!.order! - b.search!.order!);
+searchColumns?.sort((a, b) => a.search!.order! - b.search!.order!);
 
 // 列设置 ==> 过滤掉不需要设置的列
 const colRef = ref();
-const colSetting = tableColumns.value!.filter(
+const colSetting = unref(tableColumns)?.filter(
   item => !["selection", "index", "expand"].includes(item.type!) && item.prop !== "operation" && item.isShow
 );
 
-const openColSetting = () => colRef.value.openColSetting();
+const openColSetting = () => unref(colRef).openColSetting();
 
 // 操作框
 const dialogOperateRef = shallowRef<DialogOperateInstance>();
@@ -429,13 +439,13 @@ const dialogOperateRef = shallowRef<DialogOperateInstance>();
 // 编辑回调
 const handleEdit = (scope: any, item: TableColumnProps) => {
   if (item.handleEdit) item.handleEdit(scope, expose);
-  else dialogOperateRef.value?.handleEdit(scope);
+  else unref(dialogOperateRef)?.handleEdit(scope);
 };
 
 // 删除回调
 const handleDelete = (scope: any, item: TableColumnProps) => {
   if (item.handleDelete) item.handleDelete(scope, expose);
-  dialogOperateRef.value?.handleDelete(scope);
+  unref(dialogOperateRef)?.handleDelete(scope);
 };
 
 // 表格大小样式
@@ -510,15 +520,15 @@ const getStyle = (tableInfo: any, styleName: string, styleRef: any) => {
 };
 
 const getRowStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, "rowStyle", rowStyle.value);
+  return getStyle(tableInfo, "rowStyle", unref(rowStyle));
 };
 
 const getCellStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, "cellStyle", cellStyle.value);
+  return getStyle(tableInfo, "cellStyle", unref(cellStyle));
 };
 
 const getHeaderCellStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, "headerCellStyle", headerCellStyle.value);
+  return getStyle(tableInfo, "headerCellStyle", unref(headerCellStyle));
 };
 
 const visibleButton = (api: any, flag: boolean | undefined) => {
@@ -529,7 +539,7 @@ const visibleButton = (api: any, flag: boolean | undefined) => {
 };
 
 const handleDeleteBatch = () => {
-  dialogOperateRef.value?.handleDeleteBatch(selectedListIds.value, selectedList.value, () => {
+  dialogOperateRef.value?.handleDeleteBatch(unref(selectedListIds), unref(selectedList), () => {
     clearSelection();
     getTableList();
   });

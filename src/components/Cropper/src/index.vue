@@ -55,7 +55,7 @@ import { ElMessage, ElButton, type UploadRequestOptions } from "element-plus";
 import { VueCropper } from "vue-cropper";
 import "vue-cropper/dist/index.css";
 import { Upload, ZoomIn, ZoomOut, Download } from "@element-plus/icons-vue";
-import { toRefs, ref, reactive, shallowRef, onMounted, defineOptions, defineEmits, defineProps } from "vue";
+import { toRefs, ref, reactive, shallowRef, onMounted, defineOptions, defineEmits, defineProps, unref } from "vue";
 
 defineOptions({ name: "Cropper" });
 
@@ -126,9 +126,9 @@ const options = reactive({
 const cropperRef = shallowRef();
 
 onMounted(() => {
-  options.autoCropWidth = cropWidth.value || 200;
-  options.autoCropHeight = cropHeight.value || 200;
-  options.img = imgLink.value || "";
+  options.autoCropWidth = unref(cropWidth) || 200;
+  options.autoCropHeight = unref(cropHeight) || 200;
+  options.img = unref(imgLink) || "";
 });
 
 // 实时缩略图的回调
@@ -155,13 +155,13 @@ const imgLoad = (res: "success" | "error") => {
 const uploadImage = () => {
   const formData = new FormData();
   if (imageType.value === "blob") {
-    cropperRef.value.getCropBlob((data: Blob) => {
+    unref(cropperRef).getCropBlob((data: Blob) => {
       const timer = new Date().getTime();
       formData.append("file", data, timer + ".png");
       emits("upload-image", formData);
     });
   } else if (imageType.value === "base64") {
-    cropperRef.value.getCropData((data: string) => {
+    unref(cropperRef).getCropData((data: string) => {
       formData.append("images", data);
       emits("upload-image", formData);
     });
@@ -176,28 +176,28 @@ const downloadImg = (type?: string) => {
   aLink.download = timer + ""; // 文件名
   if (type === "blob") {
     // 获取截图的 blob 数据
-    cropperRef.value.getCropBlob((data: Blob) => {
+    unref(cropperRef).getCropBlob((data: Blob) => {
       aLink.href = window.URL.createObjectURL(data); // 生成 blob 格式图片路径
       aLink.click();
     });
   } else {
     // 获取截图的 base64 数据
-    cropperRef.value.getCropData((data: string) => {
+    unref(cropperRef).getCropData((data: string) => {
       aLink.href = data;
     });
   }
 };
 
 const rotateLeft = () => {
-  cropperRef.value.rotateLeft();
+  unref(cropperRef).rotateLeft();
 };
 
 const rotateRight = () => {
-  cropperRef.value.rotateRight();
+  unref(cropperRef).rotateRight();
 };
 
 const changeScale = (num: number) => {
-  cropperRef.value.changeScale(num);
+  unref(cropperRef).changeScale(num);
 };
 
 // 手动上传的回调，目前为了取消自动上传

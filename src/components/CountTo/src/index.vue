@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import CountUp from "countup";
-import { ref, watch, onMounted, onUnmounted, defineOptions, defineEmits, defineProps } from "vue";
+import { ref, watch, onMounted, onUnmounted, defineOptions, defineEmits, defineProps, unref } from "vue";
 
 defineOptions({ name: "CountTo" });
 
@@ -105,19 +105,19 @@ onUnmounted(() => {
 });
 
 const initCountUp = () => {
-  if (!countRef.value) return;
+  if (!unref(countRef)) return;
   const endVal = getValue(props.endVal);
-  counter.value = new (CountUp as any)(countRef.value, props.startVal, endVal, props.decimals, props.duration, {
+  counter.value = new (CountUp as any)(unref(countRef), props.startVal, endVal, props.decimals, props.duration, {
     useEasing: props.useEasing,
     useGrouping: props.useGroup,
     separator: props.separator,
     decimal: props.decimal,
   });
-  if (counter.value.error) {
-    console.error(counter.value.error);
+  if (unref(counter).error) {
+    console.error(unref(counter).error);
     return;
   }
-  emits("init", counter.value);
+  emits("init", unref(counter));
 };
 
 const getValue = (val: number) => {

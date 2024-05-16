@@ -1,9 +1,9 @@
 <template>
   <div class="split-pane-container">
-    <split-pane v-model:value="offset1" mode="vertical" @on-moving="handleMoving">
+    <split-pane v-model="offset1" mode="vertical" @on-moving="handleMoving">
       <template #left>
         <div class="pane left-pane">
-          <split-pane v-model:value="offset2" mode="horizontal" @on-moving="handleMoving">
+          <split-pane v-model="offset2" mode="horizontal" @on-moving="handleMoving">
             <template #top>
               <div class="pane top-pane"></div>
             </template>
@@ -15,7 +15,7 @@
       </template>
 
       <template #right>
-        <split-pane v-model:value="offset3" class="pane right-pane" mode="vertical">
+        <split-pane v-model="offset3" class="pane right-pane" mode="vertical">
           <template #left>
             <div class="pane left-pane"></div>
           </template>

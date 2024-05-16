@@ -42,6 +42,7 @@ import {
   defineOptions,
   defineEmits,
   defineProps,
+  unref,
   type StyleValue,
 } from "vue";
 import { ElDrawer } from "element-plus";
@@ -96,7 +97,7 @@ const outerClasses = computed(() => {
   const classesArray = [
     props.inner ? "drag-drawer-inner" : "",
     `drag-drawer-wrapper`,
-    canMove.value ? "no-select" : "",
+    unref(canMove) ? "no-select" : "",
   ];
   return classesArray.join(" ");
 });
@@ -116,7 +117,7 @@ const direction = computed(() => {
 
 const innerWidth = computed(() => {
   const width = props.width as number;
-  return width <= 100 ? (wrapperWidth.value * width) / 100 : width;
+  return width <= 100 ? (unref(wrapperWidth) * width) / 100 : width;
 });
 
 const triggerStyle = computed(() => {
@@ -133,7 +134,7 @@ const triggerStyle = computed(() => {
   //   direction = "bottom";
   // }
   return {
-    [d]: `${innerWidth.value}px`,
+    [d]: `${unref(innerWidth)}px`,
     position: props.inner ? "absolute" : "fixed",
   } as StyleValue;
 });
@@ -162,17 +163,17 @@ const handleTriggerMousedown = (event: Event) => {
 };
 
 const handleMousemove = (event: any) => {
-  if (!canMove.value) return;
+  if (!unref(canMove)) return;
   // 更新容器宽度和距离左侧页面距离，如果是 window 则距左侧距离为 0
   setWrapperWidth();
-  const left = event.pageX - wrapperLeft.value;
+  const left = event.pageX - unref(wrapperLeft);
   // 如果抽屉方向为右边，宽度计算需用容器宽度减去 left
-  let width = direction.value === "rtl" ? wrapperWidth.value - left : left;
+  let width = direction.value === "rtl" ? unref(wrapperWidth) - left : left;
   // 限定做小宽度
   width = Math.max(width, parseFloat(props.minWidth as string));
   event.atMin = width === parseFloat(props.minWidth as string);
   // 如果当前 width 不大于 100，视为百分比
-  if (width <= 100) width = (width / wrapperWidth.value) * 100;
+  if (width <= 100) width = (width / unref(wrapperWidth)) * 100;
   emits("update:width", width);
   emits("on-resize", event);
 };
@@ -184,7 +185,7 @@ const handleMouseup = () => {
 
 const setWrapperWidth = () => {
   const { width, left } =
-    drawerWrapperRef.value && drawerWrapperRef.value.$el.nextElementSibling.getBoundingClientRect();
+    drawerWrapperRef.value && unref(drawerWrapperRef).$el.nextElementSibling.getBoundingClientRect();
   wrapperWidth.value = width;
   wrapperLeft.value = left;
 };

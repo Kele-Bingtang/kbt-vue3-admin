@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, defineOptions, defineProps } from "vue";
+import { computed, inject, ref, defineOptions, defineProps, unref } from "vue";
 import { lastProp, type TableColumnProps } from "@/components";
 
 defineOptions({ name: "SearchFormItem" });
@@ -66,20 +66,20 @@ const columnEnum = computed(() => {
 
   if (column.useEnumMap) {
     if (typeof column.useEnumMap === "function") {
-      return column.useEnumMap(enumMap.value);
+      return column.useEnumMap(unref(enumMap));
     }
 
-    const data = enumMap.value.get(column.useEnumMap);
+    const data = unref(enumMap).get(column.useEnumMap);
     if (!data) return [];
     if (column.enumKey) return data[column.enumKey] || [];
     return data;
   }
 
-  let enumData = enumMap.value.get(props.column.prop);
+  let enumData = unref(enumMap).get(props.column.prop);
   if (!enumData) return [];
   if (props.column.search?.el === "el-select-v2" && props.column.fieldNames) {
     enumData = enumData.map((item: { [key: string]: any }) => {
-      return { ...item, label: item[fieldNames.value.label], value: item[fieldNames.value.value] };
+      return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
   }
   if (column.enumKey) return enumData[column.enumKey];
@@ -88,9 +88,9 @@ const columnEnum = computed(() => {
 
 // 处理透传的 searchProps (el 为 tree-select、cascader 的时候需要给下默认 label && value && children)
 const handleSearchProps = computed(() => {
-  const label = fieldNames.value.label;
-  const value = fieldNames.value.value;
-  const children = fieldNames.value.children;
+  const label = unref(fieldNames).label;
+  const value = unref(fieldNames).value;
+  const children = unref(fieldNames).children;
   const searchEl = props.column.search?.el;
   let searchProps = props.column.search?.props ?? {};
 

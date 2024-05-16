@@ -1,6 +1,7 @@
-import { render, getCurrentInstance, type Component, type ComponentInternalInstance, type VNode } from "vue";
+import { render, getCurrentInstance, unref, type Component, type ComponentInternalInstance, type VNode } from "vue";
 import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
 import { Icon } from "@/components";
+import "./index.scss";
 
 let id = 0;
 let thisAppContext: any = null;
@@ -53,9 +54,9 @@ export const showDrawer = (
   const isFullscreen = ref(false);
 
   const toggleFull = () => {
-    const elDrawerEl = document.querySelector("${`#work-drawer-${id}`} .work-drawer.el-drawer") as HTMLElement;
+    const elDrawerEl = document.querySelector(`${`#work-drawer-${id}`} .work-drawer.el-drawer`) as HTMLElement;
     if (elDrawerEl) elDrawerEl.classList.toggle("is-fullscreen");
-    isFullscreen.value = !isFullscreen.value;
+    isFullscreen.value = !unref(isFullscreen);
   };
 
   const vm = (
@@ -83,7 +84,7 @@ export const showDrawer = (
               {drawerProps.fullscreen === true ||
                 (drawerProps.fullscreen === undefined && (
                   <Icon
-                    name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
+                    name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
                     onClick={() => toggleFull()}
                     width="18px"
                     height="18px"

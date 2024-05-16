@@ -1,8 +1,8 @@
 import { render, getCurrentInstance, type Component, type ComponentInternalInstance, type VNode } from "vue";
 import { ElDialog, ElButton, type DialogProps, ElScrollbar } from "element-plus";
-import "./index.scss";
 import { getPx } from "@/utils";
 import { Icon } from "@/components";
+import "./index.scss";
 
 let id = 0;
 let thisAppContext: any = null;

@@ -84,7 +84,7 @@ const form = ref({});
 const status = ref<DialogStatus>("");
 
 const dialogTitle = computed(() =>
-  typeof props?.dialog?.title === "function" ? props?.dialog?.title(form.value, status.value) : props?.dialog?.title
+  typeof props?.dialog?.title === "function" ? props?.dialog?.title(unref(form), unref(status)) : props?.dialog?.title
 );
 
 const formOptions = computed(() => {
@@ -114,20 +114,20 @@ const formOptions = computed(() => {
 const handleAdd = async () => {
   status.value = "add";
   if (!props?.cache) form.value = {};
-  else props?.id && delete (form.value as any)[props?.id!];
-  props.clickAdd && (form.value = (await props.clickAdd(form.value)) ?? form.value);
+  else props?.id && delete (form.value as Record<string, any>)[props?.id!];
+  props.clickAdd && (form.value = (await props.clickAdd(unref(form))) ?? unref(form));
   dialogFormVisible.value = true;
 };
 
 const handleEdit = async ({ row }: any) => {
   status.value = "edit";
   form.value = deepCloneTableRow(row);
-  props.clickEdit && (form.value = (await props.clickEdit(form.value)) ?? form.value);
+  props.clickEdit && (form.value = (await props.clickEdit(unref(form))) ?? unref(form));
   dialogFormVisible.value = true;
 };
 
 const handleFormConfirm = (data: any, status: string) => {
-  const formRef = formElementRef.value.formRef as FormInstance;
+  const formRef = unref(formElementRef).formRef as FormInstance;
   props.beforeConfirm && props.beforeConfirm(status);
 
   // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台

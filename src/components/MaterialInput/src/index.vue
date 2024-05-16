@@ -127,13 +127,14 @@ import {
   defineOptions,
   defineEmits,
   defineProps,
+  unref,
   type Component,
 } from "vue";
 
 defineOptions({ name: "MaterialInput" });
 
 interface MaterialInputProps {
-  value: any;
+  modelValue: any;
   type?: string;
   id?: string;
   icon?: string | IconifyIcon | Component;
@@ -190,28 +191,28 @@ const themeColor = computed(() => {
   return "";
 });
 const computedClasses = computed(() => ({
-  "material--active": focus.value,
+  "material--active": unref(focus),
   "material--disabled": props.disabled,
-  "material--raised": Boolean(focus.value || valueCopy.value),
+  "material--raised": Boolean(unref(focus) || unref(valueCopy)),
 }));
 
 const filledPlaceholder = computed(() => {
-  if (focus.value) {
+  if (unref(focus)) {
     return props.placeholder;
   }
   return "";
 });
 
 watch(
-  () => props.value,
+  () => props.modelValue,
   () => {
-    valueCopy.value = props.value;
+    valueCopy.value = props.modelValue;
   }
 );
 
 onMounted(() => {
-  valueCopy.value = props.value;
-  const activeColor = themeColor.value ? themeColor.value : props.activeColor;
+  valueCopy.value = props.modelValue;
+  const activeColor = unref(themeColor) ? unref(themeColor) : props.activeColor;
   document.styleSheets[0].insertRule(
     `.material-input-component.material--active .material-label { color: ${activeColor} !important}`,
     0
@@ -244,7 +245,7 @@ const handleBlur = (event: FocusEvent) => {
     if (props.validateEvent) {
       // See https://github.com/ElemeFE/element/blob/dev/packages/form/src/form-item.vue#L292
       // eslint-disable-next-line vue/custom-event-name-casing
-      (instance?.parent as any).$emit("el.form.blur", [valueCopy.value]);
+      (instance?.parent as any).$emit("el.form.blur", [unref(valueCopy)]);
     }
   }
 };

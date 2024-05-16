@@ -38,7 +38,7 @@
           <div style="height: 100px">
             <el-form :model="demo" :rules="demoRules">
               <el-form-item prop="title">
-                <MaterialInput v-model:value="demo.title" :icon="Search" name="title" placeholder="输入标题">
+                <MaterialInput v-model="demo.title" :icon="Search" name="title" placeholder="输入标题">
                   标题
                 </MaterialInput>
               </el-form-item>

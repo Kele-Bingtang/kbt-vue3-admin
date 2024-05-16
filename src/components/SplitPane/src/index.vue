@@ -22,7 +22,18 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef, ref, computed, watch, onMounted, nextTick, defineOptions, defineEmits, defineProps } from "vue";
+import {
+  shallowRef,
+  ref,
+  computed,
+  watch,
+  onMounted,
+  nextTick,
+  defineOptions,
+  defineEmits,
+  defineProps,
+  unref,
+} from "vue";
 import SplitLine from "./SplitLine.vue";
 
 defineOptions({ name: "SplitPane" });
@@ -30,20 +41,20 @@ defineOptions({ name: "SplitPane" });
 type NumOrStr = number | string;
 
 interface SplitPaneProps {
-  value?: NumOrStr;
+  modelValue?: NumOrStr;
   mode?: "horizontal" | "vertical";
   min?: NumOrStr;
   max?: NumOrStr;
 }
 
 const props = withDefaults(defineProps<SplitPaneProps>(), {
-  value: 0.5,
+  modelValue: 0.5,
   mode: "horizontal",
   min: "40px",
   max: "40px",
 });
 
-const emits = defineEmits(["update:value", "on-moving", "on-move-end", "on-move-start"]);
+const emits = defineEmits(["update:modelValue", "on-moving", "on-move-end", "on-move-start"]);
 
 const splitPaneRef = shallowRef();
 const offset = ref(0);
@@ -52,14 +63,14 @@ const oldOffset = ref<unknown>(0);
 const isMoving = ref(false);
 
 const isHorizontal = computed(() => props.mode === "horizontal");
-const anotherOffset = computed(() => 100 - offset.value);
-const valueIsString = computed(() => typeof props.value === "string");
-const offsetSize = computed(() => (isHorizontal.value ? "offsetHeight" : "offsetWidth"));
+const anotherOffset = computed(() => 100 - unref(offset));
+const valueIsString = computed(() => typeof props.modelValue === "string");
+const offsetSize = computed(() => (unref(isHorizontal) ? "offsetHeight" : "offsetWidth"));
 const computedMin = computed(() => getComputedThresholdValue("min"));
 const computedMax = computed(() => getComputedThresholdValue("max"));
 
 watch(
-  () => props.value,
+  () => props.modelValue,
   () => init()
 );
 
@@ -70,9 +81,9 @@ onMounted(() => {
 });
 
 const init = () => {
-  const value = valueIsString.value
-    ? px2percent(props.value as string, splitPaneRef.value[offsetSize.value])
-    : props.value;
+  const value = unref(valueIsString)
+    ? px2percent(props.modelValue as string, unref(splitPaneRef)[unref(offsetSize)])
+    : props.modelValue;
   offset.value = ((value as number) * 10000) / 100;
 };
 
@@ -84,47 +95,47 @@ const getComputedThresholdValue = (type: string) => {
   let value: NumOrStr = "";
   if (type === "min") value = props.min;
   else if (type === "max") value = props.max;
-  const size = splitPaneRef.value[offsetSize.value];
-  if (valueIsString.value) return typeof value === "string" ? value : size * value;
+  const size = unref(splitPaneRef)[unref(offsetSize)];
+  if (unref(valueIsString)) return typeof value === "string" ? value : size * value;
   else return typeof value === "string" ? px2percent(value, size) : value;
 };
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
 const getMin = (value1: NumOrStr, value2: NumOrStr) => {
-  if (valueIsString.value) return `${Math.min(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
+  if (unref(valueIsString)) return `${Math.min(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
   else return Math.min(value1 as number, value2 as number);
 };
 
 const getMax = (value1: NumOrStr, value2: NumOrStr) => {
-  if (valueIsString.value) return `${Math.max(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
+  if (unref(valueIsString)) return `${Math.max(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
   else return Math.max(value1 as number, value2 as number);
 };
 
 const getAnotherOffset = (value: NumOrStr) => {
   let res: NumOrStr = "0";
-  if (valueIsString.value) (res as string) = `${splitPaneRef.value[offsetSize.value] - parseFloat(value as string)}px`;
+  if (unref(valueIsString)) res = `${unref(splitPaneRef)[unref(offsetSize)] - parseFloat(value as string)}px`;
   else res = 1 - (value as number);
   return res;
 };
 
 const handleMove = (e: any) => {
-  const pageOffset = isHorizontal.value ? e.pageY : e.pageX;
-  const offset = pageOffset - initOffset.value;
-  const outerWidth = splitPaneRef.value[offsetSize.value];
-  let value = valueIsString.value
-    ? `${parseFloat(oldOffset.value + "") + offset}px`
-    : px2percent(outerWidth * (oldOffset.value as number) + offset + "", outerWidth);
-  console.log(px2percent(outerWidth * (oldOffset.value as number) + offset + "", outerWidth));
+  const pageOffset = unref(isHorizontal) ? e.pageY : e.pageX;
+  const offset = pageOffset - unref(initOffset);
+  const outerWidth = unref(splitPaneRef)[unref(offsetSize)];
+  let value = unref(valueIsString)
+    ? `${parseFloat(unref(oldOffset) + "") + offset}px`
+    : px2percent(outerWidth * (unref(oldOffset) as number) + offset + "", outerWidth);
+  console.log(px2percent(outerWidth * (unref(oldOffset) as number) + offset + "", outerWidth));
   const anotherValue = getAnotherOffset(value);
-  if (parseFloat(value + "") <= parseFloat(computedMin.value + "")) value = getMax(value, computedMin.value);
-  if (parseFloat(anotherValue + "") <= parseFloat(computedMax.value + "")) {
-    value = getAnotherOffset(getMax(anotherValue, computedMax.value));
+  if (parseFloat(value + "") <= parseFloat(unref(computedMin) + "")) value = getMax(value, unref(computedMin));
+  if (parseFloat(anotherValue + "") <= parseFloat(unref(computedMax) + "")) {
+    value = getAnotherOffset(getMax(anotherValue, unref(computedMax)));
   }
-  e.atMin = props.value === computedMin.value;
-  e.atMax = valueIsString.value
-    ? getAnotherOffset(props.value) === computedMax.value
-    : (getAnotherOffset(props.value) as number).toFixed(5) === (computedMax.value as number).toFixed(5);
-  emits("update:value", value);
+  e.atMin = props.modelValue === unref(computedMin);
+  e.atMax = unref(valueIsString)
+    ? getAnotherOffset(props.modelValue) === unref(computedMax)
+    : (getAnotherOffset(props.modelValue) as number).toFixed(5) === (unref(computedMax) as number).toFixed(5);
+  emits("update:modelValue", value);
   emits("on-moving", e);
 };
 
@@ -136,8 +147,8 @@ const handleUp = () => {
 };
 
 const handleMousedown = (e: MouseEvent) => {
-  initOffset.value = isHorizontal.value ? e.pageY : e.pageX;
-  oldOffset.value = props.value;
+  initOffset.value = unref(isHorizontal) ? e.pageY : e.pageX;
+  oldOffset.value = props.modelValue;
   isMoving.value = true;
   document.addEventListener("mousemove", handleMove);
   document.addEventListener("mouseup", handleUp);

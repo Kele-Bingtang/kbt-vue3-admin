@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onBeforeMount, defineOptions, defineEmits, defineProps } from "vue";
+import { ref, watch, onBeforeMount, defineOptions, defineEmits, defineProps, unref } from "vue";
 import { ElTree } from "element-plus";
 
 defineOptions({ name: "TreeFilter" });
@@ -85,7 +85,7 @@ onBeforeMount(async () => {
 });
 
 watch(filterText, val => {
-  treeRef.value!.filter(val);
+  unref(treeRef)!.filter(val);
 });
 
 // 过滤
@@ -116,7 +116,7 @@ const handleNodeClick = (data: { [key: string]: any }) => {
 
 // 多选
 const handleCheckChange = () => {
-  emit("change", treeRef.value?.getCheckedKeys());
+  emit("change", unref(treeRef)?.getCheckedKeys());
 };
 
 // 暴露给父组件使用

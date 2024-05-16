@@ -7,7 +7,7 @@
   ></Tinymce>
 
   <WangEditor
-    v-if="column.attrs?.el === 'wang-editor'"
+    v-else-if="column.attrs?.el === 'wang-editor'"
     :model-value="getFormProp(_form, column.formItem.prop)"
     @update:model-value="v => setFormProp(_form, column.formItem.prop, v)"
     v-bind="{ ...handleFormProps }"
@@ -110,7 +110,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, defineProps } from "vue";
+import { computed, inject, ref, defineProps, unref } from "vue";
 import type { FormColumnProps } from "../interface";
 import { WangEditor, Tinymce } from "@/components";
 import Tree from "./Tree.vue";
@@ -144,21 +144,21 @@ const columnEnum = computed(() => {
 
   if (attrs.useEnumMap) {
     if (typeof attrs.useEnumMap === "function") {
-      return attrs.useEnumMap(enumMap.value);
+      return attrs.useEnumMap(unref(enumMap));
     }
 
-    const data = enumMap.value.get(attrs.useEnumMap);
+    const data = unref(enumMap).get(attrs.useEnumMap);
     if (!data) return [];
     if (attrs.enumKey) return data[attrs.enumKey] || [];
     return data;
   }
 
-  let enumData = enumMap.value.get(props.column.formItem.prop);
+  let enumData = unref(enumMap).get(props.column.formItem.prop);
 
   if (!enumData) return [];
   if (props.column.attrs?.el === "el-select-v2") {
     enumData = enumData.map((item: { [key: string]: any }) => {
-      return { ...item, label: item[fieldNames.value.label], value: item[fieldNames.value.value] };
+      return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
   }
   if (attrs.enumKey) return enumData[attrs.enumKey];
@@ -167,9 +167,9 @@ const columnEnum = computed(() => {
 
 // 处理透传的 formProps (el 为 tree-select、cascader 的时候需要给下默认 label && value && children)
 const handleFormProps = computed(() => {
-  const label = fieldNames.value.label;
-  const value = fieldNames.value.value;
-  const children = fieldNames.value.children;
+  const label = unref(fieldNames).label;
+  const value = unref(fieldNames).value;
+  const children = unref(fieldNames).children;
   const formEl = props.column.attrs?.el;
   let formProps = props.column.attrs.props ?? {};
 
@@ -209,7 +209,7 @@ const clearable = computed(() => {
 });
 
 const isDisabled = () => {
-  if (typeof props.column.attrs.isDisabled === "function") return props.column.attrs.isDisabled(_form.value);
+  if (typeof props.column.attrs.isDisabled === "function") return props.column.attrs.isDisabled(unref(_form));
   return props.column.attrs.isDisabled;
 };
 </script>

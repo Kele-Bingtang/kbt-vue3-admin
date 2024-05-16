@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="tsx">
-import { inject, ref, useSlots, defineOptions, defineProps } from "vue";
+import { inject, ref, useSlots, defineOptions, defineProps, unref } from "vue";
 import type { TableColumnProps, RenderScope, HeaderRenderScope } from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../utils";
 import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
@@ -17,13 +17,13 @@ const slots = useSlots();
 const enumMap = inject("enumMap", ref(new Map()));
 
 const getEnumData = (item: TableColumnProps, scope: RenderScope<any>) => {
-  return enumMap.value.get(item.prop) && item.isFilterEnum
-    ? filterEnum(handleRowAccordingToProp(scope.row, item.prop!), enumMap.value.get(item.prop)!, item.fieldNames)
+  return unref(enumMap).get(item.prop) && item.isFilterEnum
+    ? filterEnum(handleRowAccordingToProp(scope.row, item.prop!), unref(enumMap).get(item.prop)!, item.fieldNames)
     : "";
 };
 
 const renderCellData = (item: TableColumnProps, scope: RenderScope<any>, enumData: any) => {
-  return enumMap.value.get(item.prop) && item.isFilterEnum
+  return unref(enumMap).get(item.prop) && item.isFilterEnum
     ? filterEnumLabel(enumData, item.fieldNames)
     : formatValue(handleRowAccordingToProp(scope.row, item.prop!));
 };

@@ -23,7 +23,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, defineOptions, defineProps } from "vue";
+import { computed, ref, defineOptions, defineProps, unref } from "vue";
 import { Grid, GridItem, type TableColumnProps, type BreakPoint } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import SearchFormItem from "./components/SearchFormItem.vue";
@@ -59,18 +59,18 @@ const collapsed = ref(true);
 
 // 获取响应式断点
 const gridRef = ref();
-const breakPoint = computed<BreakPoint>(() => gridRef.value?.breakPoint);
+const breakPoint = computed<BreakPoint>(() => unref(gridRef)?.breakPoint);
 
 // 判断是否显示 展开/合并 按钮
 const showCollapse = computed(() => {
   let show = false;
   props.columns.reduce((prev, current) => {
     prev +=
-      (current.search![breakPoint.value]?.span ?? current.search?.span ?? 1) +
-      (current.search![breakPoint.value]?.offset ?? current.search?.offset ?? 0);
+      (current.search![unref(breakPoint)]?.span ?? current.search?.span ?? 1) +
+      (current.search![unref(breakPoint)]?.offset ?? current.search?.offset ?? 0);
 
     if (typeof props.searchCols !== "number") {
-      if (prev >= props.searchCols[breakPoint.value]) show = true;
+      if (prev >= props.searchCols[unref(breakPoint)]) show = true;
     } else {
       if (prev >= props.searchCols) show = true;
     }

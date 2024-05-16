@@ -6,6 +6,7 @@ export namespace Table {
   export interface Paging {
     pageNum: number;
     pageSize: number;
+    pageSizes?: number[];
     total: number;
   }
 
@@ -61,6 +62,8 @@ export const useTable = (
       pageNum: 1,
       // 每页显示条数
       pageSize: 20,
+      // 一页显示多少条数据
+      pageSizes: [10, 20, 50, 100, 200],
       // 总条数
       total: 0,
     },
@@ -119,9 +122,10 @@ export const useTable = (
 
       // 解构后台返回的分页数据 (如果有分页更新分页信息)
       if (isBackPage(openPage)) {
-        const { pageNum, pageSize, total } = data;
+        const { pageNum, pageSize, pageSizes, total } = data;
         if (pageNum) updatePaging({ pageNum });
         if (pageSize) updatePaging({ pageSize });
+        if (pageSizes) updatePaging({ pageSizes });
         if (total) updatePaging({ total });
         else updatePaging({ total: data.length });
       }
@@ -189,7 +193,7 @@ export const useTable = (
    * @return void
    * */
   const handlePagination = (paging: Paging) => {
-    state.paging.pageNum = paging.currentPage;
+    state.paging.pageNum = paging.pageNum;
     state.paging.pageSize = paging.pageSize;
     if (isBackPage()) getTableList();
   };

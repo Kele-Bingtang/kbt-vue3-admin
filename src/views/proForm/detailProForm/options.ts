@@ -96,13 +96,13 @@ export const options: FormOptionsProps = {
             ];
           }
           if (value === "Tool") {
-            [
+            return [
               { value: "ATNA101", label: "AANA101" },
               { value: "ATNA102", label: "ATNA102" },
             ];
           }
           if (value === "AR") {
-            [
+            return [
               { value: "OP", label: "OP" },
               { value: "Q", label: "Q" },
             ];

@@ -1,7 +1,5 @@
 .work-drawer.el-drawer.is-fullscreen {
-  --el-drawer-width: 100% !important;
-  --el-drawer-margin-top: 0 !important;
-
+  width: 100% !important;
   height: 100%;
   margin-bottom: 0;
   overflow: auto;

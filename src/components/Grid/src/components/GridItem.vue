@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, type Ref, ref, useAttrs, watch, defineOptions, defineProps } from "vue";
+import { computed, inject, type Ref, ref, useAttrs, watch, defineOptions, defineProps, unref } from "vue";
 import type { BreakPoint } from "../index.vue";
 
 defineOptions({ name: "GridItem" });
@@ -59,19 +59,18 @@ const gap = inject("gap", 0);
 const cols = inject("cols", ref(4));
 
 const style = computed(() => {
-  const span = props[breakPoint.value]?.span ?? props.span;
-  const offset = props[breakPoint.value]?.offset ?? props.offset;
+  const span = props[unref(breakPoint)]?.span ?? props.span;
+  const offset = props[unref(breakPoint)]?.offset ?? props.offset;
   if (props.suffix) {
     return {
-      gridColumnStart: cols.value - span - offset + 1,
+      gridColumnStart: unref(cols) - span - offset + 1,
       gridColumnEnd: `span ${span + offset}`,
       marginLeft: offset !== 0 ? `calc(((100% + ${gap}px) / ${span + offset}) * ${offset})` : "unset",
     };
   } else {
+    const c = unref(cols);
     return {
-      gridColumn: `span ${span + offset > cols.value ? cols.value : span + offset}/span ${
-        span + offset > cols.value ? cols.value : span + offset
-      }`,
+      gridColumn: `span ${span + offset > c ? c : span + offset}/span ${span + offset > c ? c : span + offset}`,
       marginLeft: offset !== 0 ? `calc(((100% + ${gap}px) / ${span + offset}) * ${offset})` : "unset",
     };
   }

@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { isArray } from "@/utils";
-import { useSlots, ref, computed, onMounted, onUpdated, onBeforeMount, defineOptions, defineProps } from "vue";
+import { useSlots, ref, computed, onMounted, onUpdated, onBeforeMount, defineOptions, defineProps, unref } from "vue";
 
 defineOptions({ name: "Tooltip" });
 
@@ -60,7 +60,7 @@ const childrenIsArray = (arr: any, content: Array<string>) => {
 };
 
 const slotDomIsSingleElArray = (slotDom: any) => {
-  if (isArray(slotDom.children)) childrenIsArray(slotDom.children, content.value);
+  if (isArray(slotDom.children)) childrenIsArray(slotDom.children, unref(content));
   else content.value = [slotDom.children];
 };
 
@@ -74,30 +74,30 @@ const getContent = () => {
 
 const compareWidth = () => {
   // 如果已经溢出，则不需要处理
-  if (showTip.value) return;
+  if (unref(showTip)) return;
   if (!props.realTime) {
     if (tryNumber > props.try) return;
     tryNumber = tryNumber + 1;
   }
   content.value = [];
-  if (line.value === 1) {
-    const parentW = slotRef.value?.offsetWidth ?? 0;
+  if (unref(line) === 1) {
+    const parentW = unref(slotRef)?.offsetWidth ?? 0;
     if (parentW === 0) return;
-    const childW = (slotRef.value?.firstElementChild as any).offsetWidth ?? 0;
+    const childW = (unref(slotRef)?.firstElementChild as any).offsetWidth ?? 0;
     childW > parentW ? (showTip.value = true) : (showTip.value = false);
-    if (showTip.value) getContent();
+    if (unref(showTip)) getContent();
   } else {
     getContent();
     // childW 为文本在页面中所占的宽度，创建标签，加入到页面，获取 parentW，最后在移除
     const tempTag = document.createElement("span");
-    tempTag.innerText = content.value.join("") ?? "";
+    tempTag.innerText = unref(content).join("") ?? "";
     tempTag.className = "tooltip-slot";
     const bodyDom = document.querySelector(".line");
     bodyDom && bodyDom.appendChild(tempTag);
     const tooTipSlot = document.querySelector(".tooltip-slot");
     const childW = (tooTipSlot as HTMLSpanElement).offsetWidth;
     tooTipSlot && tooTipSlot.remove();
-    const parentW = slotRef.value?.offsetWidth ?? 0;
+    const parentW = unref(slotRef)?.offsetWidth ?? 0;
     if (parentW === 0) return;
     // 当文本宽度大于容器宽度两倍时，代表文本显示超过两行
     childW > line.value * parentW ? (showTip.value = true) : (showTip.value = false);
@@ -107,12 +107,12 @@ const compareWidth = () => {
 onMounted(() => {
   isFirstMounted.value = true;
   compareWidth();
-  if (props.try > 0) slotRef.value?.addEventListener("mouseover", compareWidth);
-  else slotRef.value?.removeEventListener("mouseout", compareWidth);
+  if (props.try > 0) unref(slotRef)?.addEventListener("mouseover", compareWidth);
+  else unref(slotRef)?.removeEventListener("mouseout", compareWidth);
 });
 
 onUpdated(() => {
-  if (isFirstMounted.value) isFirstMounted.value = false;
+  if (unref(isFirstMounted)) isFirstMounted.value = false;
   else {
     slotDom = slots.default();
     tryNumber = 0;
@@ -121,7 +121,7 @@ onUpdated(() => {
 });
 
 onBeforeMount(() => {
-  slotRef.value?.removeEventListener("mouseout", compareWidth);
+  unref(slotRef)?.removeEventListener("mouseout", compareWidth);
 });
 </script>
 

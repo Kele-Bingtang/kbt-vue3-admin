@@ -22,7 +22,7 @@
     <pagination
       v-show="tableData.length > 0"
       :total="tableData.length"
-      :paging="paging"
+      v-model="paging"
       @pagination="handleSizeChange"
     />
   </div>
@@ -37,11 +37,11 @@ const tableData = ref(largeData);
 const paging = reactive(pageSetting);
 
 const tablePageData = computed(() =>
-  tableData.value.slice((paging.currentPage - 1) * paging.pageSize, paging.currentPage * paging.pageSize)
+  tableData.value.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)
 );
 
 const handleSizeChange = (pagingParam: Paging) => {
-  paging.currentPage = pagingParam.currentPage;
+  paging.pageNum = pagingParam.pageNum;
   paging.pageSize = pagingParam.pageSize;
 };
 </script>

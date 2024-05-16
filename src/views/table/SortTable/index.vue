@@ -111,7 +111,7 @@ const tableData = ref(largeData);
 const paging = reactive(pageSetting);
 
 const data = computed(() =>
-  tableData.value.slice((paging.currentPage - 1) * paging.pageSize, paging.currentPage * paging.pageSize)
+  tableData.value.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)
 );
 
 onMounted(() => {
@@ -144,7 +144,7 @@ const handleDelete = (row: any, index: number) => {
 };
 
 const handleSizeChange = (pagingParams: Paging) => {
-  paging.currentPage = pagingParams.currentPage;
+  paging.pageNum = pagingParams.pageNum;
   paging.pageSize = pagingParams.pageSize;
 };
 const tableRowClassName = (row: any) => {

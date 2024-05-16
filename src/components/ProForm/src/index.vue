@@ -36,7 +36,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, shallowRef, ref, provide, watch, defineProps, type Ref } from "vue";
+import { computed, shallowRef, ref, provide, watch, defineProps, unref, type Ref } from "vue";
 import type { FormColumnProps, FormEnumProps, FormOptionsProps } from "./interface";
 import ProFormItem from "./components/ProFormItem.vue";
 import { getPx } from "@/utils";
@@ -63,36 +63,37 @@ const setEnumMap = async (column: FormColumnProps) => {
   const { attrs, formItem } = column;
   if (!attrs.enum) return;
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
-  if (isResponsive(attrs.enum)) return enumMap.value.set(formItem.prop, (attrs.enum as Ref).value!);
-  if (typeof attrs.enum !== "function") return enumMap.value.set(formItem.prop, (attrs.enum as FormEnumProps[])!);
-  const { data } = await attrs.enum(form.value);
-  enumMap.value.set(formItem.prop, data);
+  if (isResponsive(attrs.enum)) return unref(enumMap).set(formItem.prop, unref(attrs.enum as Ref)!);
+  if (typeof attrs.enum !== "function") return unref(enumMap).set(formItem.prop, (attrs.enum as FormEnumProps[])!);
+  const { data } = await attrs.enum(unref(form));
+  unref(enumMap).set(formItem.prop, data);
 };
 
 // 初始化默认值
 const initDefaultValue = async (column: FormColumnProps) => {
   const { attrs, formItem } = column;
-  const value = getFormProp(form.value, formItem.prop);
+  const formConst = unref(form);
+  const value = getFormProp(formConst, formItem.prop);
   if (value || value === false || value === 0) return;
 
   const defaultValue = attrs.defaultValue;
   // 设置表单项的默认值
   if (defaultValue !== undefined && defaultValue !== null) {
     // 如果存在值，则不需要赋默认值
-    if (isResponsive(defaultValue)) return setFormProp(form.value, formItem.prop, (defaultValue as Ref).value);
+    if (isResponsive(defaultValue)) return setFormProp(formConst, formItem.prop, unref(defaultValue as Ref));
     if (typeof defaultValue === "function") {
-      return setFormProp(form.value, formItem.prop, await defaultValue(form.value, enumMap.value));
+      return setFormProp(formConst, formItem.prop, await defaultValue(formConst, unref(enumMap)));
     }
-    return setFormProp(form.value, formItem.prop, defaultValue);
+    return setFormProp(formConst, formItem.prop, defaultValue);
   }
 
   // 如果没有设置默认值，则判断后台是否返回 isDefault 为 Y 的枚举
-  const enumData = enumMap.value.get(formItem.prop);
+  const enumData = unref(enumMap).get(formItem.prop);
   if (enumData && enumData.length) {
     // 找出 isDefault 为 Y 的 value
     const data = enumData.filter(item => item.isDefault === "Y");
 
-    return data.length && setFormProp(form.value, formItem.prop, data[0][attrs.fieldNames?.value ?? "value"]);
+    return data.length && setFormProp(formConst, formItem.prop, data[0][attrs.fieldNames?.value ?? "value"]);
   }
 };
 
@@ -105,31 +106,33 @@ const cascadeEnum = (column: FormColumnProps) => {
     if (typeof attrs.subProp !== "string") return;
     // 监听级联下拉变化
     watch(
-      () => getFormProp(form.value, formItem.prop),
+      () => getFormProp(unref(form), formItem.prop),
       async (newVal: string) => {
-        if (!newVal) return;
+        const enumMapConst = unref(enumMap);
+
+        if (!newVal) return enumMapConst.set(attrs.subProp!, []);
         const { subEnum } = attrs;
         if (!subEnum) return;
 
         let subEnumData;
-        if (enumMap.value.get(`${attrs.subProp!}-${newVal}`)) {
+        if (enumMapConst.get(`${attrs.subProp!}-${newVal}`)) {
           // 存在缓存字典数据，则取出来赋值
-          enumMap.value.set(`${attrs.subProp!}`, enumMap.value.get(`${attrs.subProp!}-${newVal}`) || []);
+          enumMapConst.set(attrs.subProp!, enumMapConst.get(`${attrs.subProp!}-${newVal}`) || []);
         } else {
           if (typeof subEnum === "function") {
-            subEnumData = await subEnum(newVal, enumMap.value.get(formItem.prop));
-            enumMap.value.set(attrs.subProp!, subEnumData);
+            subEnumData = await subEnum(newVal, enumMapConst.get(formItem.prop));
+            enumMapConst.set(attrs.subProp!, subEnumData);
           } else if (Array.isArray(subEnum)) {
             subEnumData = subEnum;
-            enumMap.value.set(`${attrs.subProp!}`, subEnumData);
+            enumMapConst.set(attrs.subProp!, subEnumData);
           }
           // 缓存字典数据
-          enumMap.value.set(`${attrs.subProp!}-${newVal}`, subEnumData);
+          enumMapConst.set(`${attrs.subProp!}-${newVal}`, subEnumData);
         }
-        const formEnum = enumMap.value.get(formItem.prop) || [];
+        const formEnum = enumMapConst.get(formItem.prop) || [];
         const e = formEnum.filter(item => item.value === newVal);
         // 如果选中的字典有 subValue，则直接赋值给 subProp
-        if (e[0]?.subValue) form.value[attrs.subProp!] = e[0].subValue;
+        if (e[0]?.subValue) unref(form)[attrs.subProp!] = e[0].subValue;
       },
       { immediate: true }
     );
@@ -140,7 +143,7 @@ const cascadeEnum = (column: FormColumnProps) => {
  * 是否隐藏表单项
  */
 const isHidden = (column: FormColumnProps) => {
-  if (typeof column.attrs.isHidden === "function") return column.attrs.isHidden(form.value);
+  if (typeof column.attrs.isHidden === "function") return column.attrs.isHidden(unref(form));
   return column.attrs.isHidden;
 };
 /**
@@ -148,18 +151,18 @@ const isHidden = (column: FormColumnProps) => {
  */
 const isDestroy = (column: FormColumnProps) => {
   let destroy;
-  if (typeof column.attrs.isDestroy === "function") destroy = column.attrs.isDestroy(form.value);
+  if (typeof column.attrs.isDestroy === "function") destroy = column.attrs.isDestroy(unref(form));
   else destroy = column.attrs.isDestroy;
 
   // 如果不销毁，则初始化表单默认值，反之则重置为空
   if (!destroy) initDefaultValue(column);
-  else column.formItem && delete form.value[column.formItem.prop];
+  else column.formItem && delete unref(form)[column.formItem.prop];
 
   return destroy;
 };
 
 const parseLabel = (label: any) => {
-  if (typeof label === "function") return label(form.value);
+  if (typeof label === "function") return label(unref(form));
   return label;
 };
 

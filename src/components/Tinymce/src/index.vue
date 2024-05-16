@@ -16,6 +16,7 @@ import {
   defineOptions,
   defineEmits,
   defineProps,
+  unref,
 } from "vue";
 import TinymceEditor from "@tinymce/tinymce-vue";
 import "tinymce/tinymce";
@@ -140,11 +141,11 @@ const initOptions = computed(() => ({
   toolbar: props.toolbar.length > 0 ? props.toolbar : toolbarConfig, // 工具栏
   toolbar_mode: props.toolbarMode, // 工具栏溢出展示模式
   menubar: props.menubar, // 菜单栏
-  language: language.value, // 语言
+  language: unref(language), // 语言
   promotion: false, // 去除右上角的 ⚡️Upgrade
   branding: false, // 去除左下角的 Tiny
   base_url: import.meta.env.VITE_PUBLIC_PATH === "/" ? "/tinymce" : `${import.meta.env.VITE_PUBLIC_PATH}/tinymce`, // 静态资源根路径
-  skin: skinTheme.value, // 皮肤
+  skin: unref(skinTheme), // 皮肤
   content_css: props.contentTheme ? props.contentTheme : props.theme, // 内容 CSS 文件
   end_container_on_empty_block: true, // 在空的内部块元素内按下 Enter 键时如何拆分当前容器块元素
   draggable_modal: true, // 对话框拖拽
@@ -220,7 +221,7 @@ onBeforeUnmount(() => {
 
 const destroyTinymce = () => {
   const tinymce = (window as any).tinymce.get(props.id);
-  if (fullscreen.value) tinymce.execCommand("mceFullScreen");
+  if (unref(fullscreen)) tinymce.execCommand("mceFullScreen");
   if (tinymce) tinymce.destroy();
 };
 
@@ -232,20 +233,17 @@ const onDisabledChange = () => {
   }
 };
 
-watch(
-  () => language.value,
-  () => {
-    const tinymceManager = (window as any).tinymce;
-    const tinymceInstance = tinymceManager.get(props.id);
-    if (fullscreen.value) {
-      tinymceInstance.execCommand("mceFullScreen");
-    }
-    if (tinymceInstance) {
-      tinymceInstance.destroy();
-    }
-    nextTick(() => tinymceManager.init(initOptions.value));
+watch(language, () => {
+  const tinymceManager = (window as any).tinymce;
+  const tinymceInstance = tinymceManager.get(props.id);
+  if (unref(fullscreen.value)) {
+    tinymceInstance.execCommand("mceFullScreen");
   }
-);
+  if (tinymceInstance) {
+    tinymceInstance.destroy();
+  }
+  nextTick(() => tinymceManager.init(unref(initOptions)));
+});
 
 watch(
   () => props.disabled,

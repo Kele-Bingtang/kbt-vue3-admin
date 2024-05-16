@@ -17,7 +17,7 @@ import "codemirror/addon/display/autorefresh";
 import "./config";
 import "./theme";
 import "./mode";
-import { withDefaults, shallowRef, defineEmits, computed, onMounted, defineOptions, defineProps } from "vue";
+import { withDefaults, shallowRef, defineEmits, computed, onMounted, defineOptions, defineProps, unref } from "vue";
 
 defineOptions({ name: "CodeMirror" });
 
@@ -99,7 +99,7 @@ const onCmBlur = (cm: any) => {
     }
     code.value = formatStrInJson(editorValue);
   }
-  emits("on-blur", code.value);
+  emits("on-blur", unref(code));
 };
 
 // 重置检查格式
@@ -130,9 +130,9 @@ const onCmBlur = (cm: any) => {
 
 const onPaste = () => {
   if (cmOptions.value.mode === "application/json") {
-    const oldCode = code.value;
-    emits("update:modelValue", formatStrInJson(code.value));
-    emits("on-paste", code.value, oldCode);
+    const oldCode = unref(code);
+    emits("update:modelValue", formatStrInJson(unref(code)));
+    emits("on-paste", unref(code), oldCode);
   }
 };
 
