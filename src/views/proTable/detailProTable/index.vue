@@ -196,7 +196,7 @@ const detailForm = {
   useAdd: true,
   useEdit: true,
   useDelete: true,
-  dialog: { title: "测试", width: "90%", top: "2vh", closeOnClickModal: false },
+  dialog: { title: "测试", width: "90%", top: "2vh", closeOnClickModal: false, height: 700 },
 };
 
 const proTableRef = shallowRef();

@@ -1,6 +1,6 @@
 <template>
-  <div class="header-right-container">
-    <div class="header-icon">
+  <div :class="prefixClass">
+    <div :class="`${prefixClass}__icon`">
       <MenuSearch id="menuSearch" />
       <Fullscreen id="fullscreen" v-if="!isMobile" />
       <LayoutSizeSelect id="layoutSizeSelect" />
@@ -16,7 +16,7 @@
   </div>
 </template>
 
-<script setup lang="ts" name="ToolBarRight">
+<script setup lang="ts" name="HeaderRight">
 import Fullscreen from "./components/Fullscreen.vue";
 import LanguageSelect from "./components/LanguageSelect.vue";
 import LayoutSizeSelect from "./components/LayoutSizeSelect.vue";
@@ -26,6 +26,10 @@ import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
 import settings from "@/config/settings";
 import { useErrorLogStore, useLayoutStore, DeviceType } from "@/stores";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("header-right");
 
 const layoutStore = useLayoutStore();
 const errorLogStore = useErrorLogStore();
@@ -41,15 +45,22 @@ const isMobile = computed(() => layoutStore.device === DeviceType.Mobile);
 </script>
 
 <style lang="scss" scoped>
-.header-right-container {
+$prefix-class: #{$namespace}-header-right;
+
+.#{$prefix-class} {
   display: flex;
   align-items: center;
   justify-content: center;
   margin: 0 20px 0 0;
 
-  .header-icon {
+  &__icon {
     display: flex;
     align-items: center;
+    color: var(--header-text-color);
+
+    .#{$el-namespace}-dropdown {
+      color: var(--header-text-color);
+    }
 
     & > * {
       margin-left: 21px;

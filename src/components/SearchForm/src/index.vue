@@ -1,5 +1,5 @@
 <template>
-  <div v-if="columns.length" class="card table-search">
+  <div v-if="columns.length" :class="`card ${prefixClass}`">
     <el-form ref="formRef" :model="searchParam">
       <Grid ref="gridRef" :collapsed="collapsed" :gap="[20, 0]" :cols="searchCols">
         <GridItem v-for="(item, index) in columns" :key="item.prop" v-bind="getResponsive(item)" :index="index">
@@ -7,8 +7,9 @@
             <SearchFormItem :column="item" :search-param="searchParam" />
           </el-form-item>
         </GridItem>
+
         <GridItem suffix>
-          <div class="operation">
+          <div :class="`${prefixClass}__operation`">
             <el-button type="primary" :icon="Search" @click="search">搜索</el-button>
             <el-button :icon="Delete" @click="reset">重置</el-button>
             <el-button v-if="showCollapse" type="primary" link class="search-isOpen" @click="collapsed = !collapsed">
@@ -27,8 +28,12 @@ import { computed, ref, defineOptions, defineProps, unref } from "vue";
 import { Grid, GridItem, type TableColumnProps, type BreakPoint } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import SearchFormItem from "./components/SearchFormItem.vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "SearchForm" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("search-form");
 
 interface SearchFormProps {
   columns?: TableColumnProps[]; // 搜索配置列
@@ -79,3 +84,30 @@ const showCollapse = computed(() => {
   return show;
 });
 </script>
+
+<style lang="scss" scoped>
+$prefix-class: #{$namespace}-search-form;
+
+.#{$prefix-class} {
+  padding: 18px 18px 0;
+  margin-bottom: 10px;
+
+  .#{$el-namespace}-form {
+    .#{$el-namespace}-form-item__content > * {
+      width: 100%;
+    }
+
+    // 去除时间选择器上下 padding
+    .#{$el-namespace}-range-editor.#{$el-namespace}-input__wrapper {
+      padding: 0 10px;
+    }
+  }
+
+  &__operation {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    margin-bottom: 18px;
+  }
+}
+</style>

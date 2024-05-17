@@ -1,14 +1,18 @@
 <template>
-  <div class="header-left-container">
+  <div :class="prefixClass">
     <CollapseTrigger />
     <Breadcrumb v-if="showBreadcrumb && layoutStore.device !== DeviceType.Mobile" />
   </div>
 </template>
 
-<script setup lang="ts" name="ToolBarLeft">
+<script setup lang="ts" name="HeaderLeft">
 import CollapseTrigger from "./components/CollapseTrigger.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
 import { useSettingsStore, useLayoutStore, DeviceType } from "@/stores";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("header-left");
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
@@ -16,7 +20,9 @@ const showBreadcrumb = computed(() => settingsStore.showBreadcrumb);
 </script>
 
 <style lang="scss" scoped>
-.header-left-container {
+$prefix-class: #{$namespace}-header-left;
+
+.#{$prefix-class} {
   display: flex;
   align-items: center;
   justify-content: center;

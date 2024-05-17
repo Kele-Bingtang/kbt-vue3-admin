@@ -1,5 +1,7 @@
+$prefix-class: #{$namespace}-work-dialog;
+
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
-.work-dialog.#{$el-namespace}-dialog.is-fullscreen {
+.#{$prefix-class}.#{$el-namespace}-dialog.is-fullscreen {
   --el-dialog-width: 100% !important;
   --el-dialog-margin-top: 0 !important;
 
@@ -8,7 +10,7 @@
   overflow: auto;
 }
 
-.work-dialog.#{$el-namespace}-dialog {
+.#{$prefix-class}.#{$el-namespace}-dialog {
   .#{$el-namespace}-dialog__header {
     border-bottom: 1px solid var(--el-border-color-lighter);
   }

@@ -1,36 +1,14 @@
+$prefix-class: #{$namespace}-pro-table;
+
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
-.pro-table-container {
+.#{$prefix-class} {
   display: flex;
   flex: 1;
   flex-direction: column;
   width: 100%;
   height: 100%;
 
-  // table-search 表格搜索样式
-  .table-search {
-    padding: 18px 18px 0;
-    margin-bottom: 10px;
-
-    .#{$el-namespace}-form {
-      .#{$el-namespace}-form-item__content > * {
-        width: 100%;
-      }
-
-      // 去除时间选择器上下 padding
-      .#{$el-namespace}-range-editor.#{$el-namespace}-input__wrapper {
-        padding: 0 10px;
-      }
-    }
-
-    .operation {
-      display: flex;
-      align-items: center;
-      justify-content: flex-end;
-      margin-bottom: 18px;
-    }
-  }
-
-  .table-main {
+  &__main {
     display: flex;
     flex: 1;
     flex-direction: column;
@@ -38,12 +16,12 @@
     height: 100%;
 
     // 表格 header 样式
-    .table-header {
-      .header-button-lf {
+    &__header {
+      &--button-lf {
         float: left;
       }
 
-      .header-button-ri {
+      &--button-ri {
         float: right;
 
         .#{$el-namespace}-button:focus-visible {
@@ -94,7 +72,7 @@
         left: 50%;
         transform: translate(-50%, -50%);
 
-        .table-empty {
+        .#{$prefix-class}__empty {
           line-height: 30px;
         }
       }

@@ -1,12 +1,14 @@
+$prefix-class: #{$namespace}-work-drawer;
+
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
-.work-drawer.#{$el-namespace}-drawer.is-fullscreen {
+.#{$prefix-class}.#{$el-namespace}-drawer.is-fullscreen {
   width: 100% !important;
   height: 100%;
   margin-bottom: 0;
   overflow: auto;
 }
 
-.work-drawer.#{$el-namespace}-drawer {
+.#{$prefix-class}.#{$el-namespace}-drawer {
   .#{$el-namespace}-drawer__header {
     padding: 15px 20px 14px;
     margin-bottom: 0;

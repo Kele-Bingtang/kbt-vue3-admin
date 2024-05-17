@@ -1,14 +1,11 @@
 <template>
-  <el-container
-    class="layout-container"
-    :class="{ mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }"
-  >
+  <el-container :class="[prefixClass, { mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
     <el-aside>
-      <div class="logo flx-center" @click="router.push(HOME_URL)">
+      <div :class="`${prefixClass}__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ settings.title }}</span>
       </div>
-      <div class="menu-header">
+      <div :class="`${prefixClass}__menu-header`">
         <CollapseTrigger />
         <template v-if="!isCollapse">
           <Fullscreen />
@@ -21,7 +18,7 @@
       </div>
       <Menu />
     </el-aside>
-    <div v-if="isMobile() && !isCollapse" class="drawer-bg" @click="handleClickOutSide" />
+    <div v-if="isMobile() && !isCollapse" :class="`${prefixClass}__drawer-bg`" @click="handleClickOutSide" />
     <el-container>
       <MainContent />
     </el-container>
@@ -29,6 +26,8 @@
 </template>
 
 <script setup lang="ts" name="LayoutSubsystem">
+import { computed, watch, onBeforeMount, onBeforeUnmount, unref } from "vue";
+import { ElContainer, ElAside } from "element-plus";
 import { useLayout } from "@/hooks";
 import { useLayoutStore, useSettingsStore, useErrorLogStore, DeviceType } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
@@ -42,6 +41,10 @@ import ErrorLog from "@/layout/components/Header/components/ErrorLog.vue";
 import User from "@/layout/components/Header/components/User.vue";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import { HOME_URL } from "@/router/routesConfig";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("layout");
 
 const route = useRoute();
 const router = useRouter();
@@ -63,7 +66,7 @@ const device = computed(() => layoutStore.device);
 watch(
   () => route.fullPath,
   () => {
-    if (device.value === DeviceType.Mobile && !isCollapse.value) {
+    if (device.value === DeviceType.Mobile && !unref(isCollapse)) {
       settingsStore.closeSideMenu();
     }
   }

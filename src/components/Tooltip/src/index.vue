@@ -23,6 +23,7 @@
 <script setup lang="ts">
 import { isArray } from "@/utils";
 import { useSlots, ref, computed, onMounted, onUpdated, onBeforeMount, defineOptions, defineProps, unref } from "vue";
+import { ElTooltip } from "element-plus";
 
 defineOptions({ name: "Tooltip" });
 
@@ -48,8 +49,8 @@ const isFirstMounted = ref(false);
 const line = computed(() => props.line);
 
 const className = computed(() => {
-  if (props.line === 1) return "line sle";
-  else return "line line-clamp";
+  if (props.line === 1) return "sle";
+  else return "line-clamp";
 });
 
 const childrenIsArray = (arr: any, content: Array<string>) => {
@@ -80,6 +81,7 @@ const compareWidth = () => {
     tryNumber = tryNumber + 1;
   }
   content.value = [];
+
   if (unref(line) === 1) {
     const parentW = unref(slotRef)?.offsetWidth ?? 0;
     if (parentW === 0) return;
@@ -88,19 +90,19 @@ const compareWidth = () => {
     if (unref(showTip)) getContent();
   } else {
     getContent();
-    // childW 为文本在页面中所占的宽度，创建标签，加入到页面，获取 parentW，最后在移除
+    // childW 为文本在页面中所占的宽度，创建 span 标签，加入到页面，获取不换行时的 span 标签 宽度，最后在移除 span 标签
     const tempTag = document.createElement("span");
     tempTag.innerText = unref(content).join("") ?? "";
     tempTag.className = "tooltip-slot";
-    const bodyDom = document.querySelector(".line");
-    bodyDom && bodyDom.appendChild(tempTag);
-    const tooTipSlot = document.querySelector(".tooltip-slot");
-    const childW = (tooTipSlot as HTMLSpanElement).offsetWidth;
+    tempTag.style.whiteSpace = "nowrap";
+    slotRef.value?.appendChild(tempTag);
+    const tooTipSlot = slotRef.value?.querySelector(".tooltip-slot");
+    const childW = (tooTipSlot && (tooTipSlot as HTMLSpanElement).offsetWidth) || 0;
     tooTipSlot && tooTipSlot.remove();
     const parentW = unref(slotRef)?.offsetWidth ?? 0;
     if (parentW === 0) return;
     // 当文本宽度大于容器宽度两倍时，代表文本显示超过两行
-    childW > line.value * parentW ? (showTip.value = true) : (showTip.value = false);
+    childW > parentW ? (showTip.value = true) : (showTip.value = false);
   }
 };
 

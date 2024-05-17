@@ -1,8 +1,10 @@
-.tabs-nav {
+$prefix-class: #{$namespace}-tabs-nav;
+
+.#{$prefix-class} {
   position: relative;
   background-color: #ffffff;
 
-  :deep(.tabs-content) {
+  :deep(.#{$prefix-class}__content) {
     position: relative;
     width: 100%;
 
@@ -12,7 +14,7 @@
       right: 13px;
     }
 
-    .tab-icon {
+    .#{$prefix-class}__content--icon {
       top: 2px;
       margin-right: 5px;
       font-size: 15px;

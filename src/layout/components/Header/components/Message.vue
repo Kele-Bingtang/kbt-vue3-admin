@@ -1,67 +1,67 @@
 <template>
   <!-- 三个 tab：通知、消息、代办。三个的 DOM 结构基本一样，所以可以写一个 Item 组件进行封装，然后循环传入即可 -->
-  <div class="message-container">
+  <div :class="prefixClass">
     <el-popover placement="bottom" :width="330" trigger="click" popper-class="message-popover">
       <template #reference>
-        <el-badge :value="messageLength" class="item">
+        <el-badge :value="messageLength" :class="`${prefixClass}__badge-item`">
           <Icon name="bell" width="25px" height="25px" :icon-style="{ cursor: 'pointer' }" />
         </el-badge>
       </template>
       <el-tabs v-model="activeName">
         <el-tab-pane :label="`通知(${noticeList.length})`" name="first">
           <el-scrollbar max-height="365px" v-if="noticeList.length > 0">
-            <div class="message-list">
-              <div class="message-item" v-for="notice in noticeList" :key="notice.id">
-                <img :src="notice.image" alt="" class="message-icon" />
-                <div class="message-content">
-                  <div class="message-title">
+            <div :class="`${prefixClass}__list`">
+              <div :class="`${prefixClass}__list-item`" v-for="notice in noticeList" :key="notice.id">
+                <img :src="notice.image" alt="" :class="`${prefixClass}__list-item__icon`" />
+                <div :class="`${prefixClass}__list-item__content`">
+                  <div :class="`${prefixClass}__list-item__content--header`">
                     <Tooltip :effect="settings.tooltipEffect" :line="1" :try="1">
-                      <span class="title">{{ notice.title }}</span>
+                      <span>{{ notice.title }}</span>
                     </Tooltip>
                   </div>
-                  <span class="message-date">{{ notice.createTime }}</span>
+                  <span :class="`${prefixClass}__list-item__content--date`">{{ notice.createTime }}</span>
                 </div>
               </div>
             </div>
           </el-scrollbar>
-          <div class="message-empty" v-else>
+          <div :class="`${prefixClass}__empty`" v-else>
             <img src="@/assets/images/notData.png" alt="notData" />
             <div>暂无消息</div>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="`消息(${messageList.length})`" name="second">
           <el-scrollbar max-height="365px" v-if="messageList.length > 0">
-            <div class="message-list">
+            <div :class="`${prefixClass}__list`">
               <el-button @click="$router.push('/message-center')">详情</el-button>
-              <div class="message-item" v-for="message in messageList" :key="message.id">
-                <img src="@/assets/images/msg/msg02.png" alt="" class="message-icon" />
-                <div class="message-content">
-                  <div class="message-title">
+              <div :class="`${prefixClass}__list-item`" v-for="message in messageList" :key="message.id">
+                <img src="@/assets/images/msg/msg02.png" alt="" :class="`${prefixClass}__list-item__icon`" />
+                <div :class="`${prefixClass}__list-item__content`">
+                  <div :class="`${prefixClass}__list-item__content--header`">
                     <Tooltip :effect="settings.tooltipEffect" :line="1" :try="1">
-                      <span class="title">{{ message.title }}</span>
+                      <span>{{ message.title }}</span>
                     </Tooltip>
                   </div>
                   <Tooltip :effect="settings.tooltipEffect" :line="2" :try="1">
-                    <span class="message-desc">{{ message.description }}</span>
+                    <span :class="`${prefixClass}__list-item__content--desc`">{{ message.description }}</span>
                   </Tooltip>
-                  <span class="message-date">{{ message.createTime }}</span>
+                  <span :class="`${prefixClass}__list-item__content--date`">{{ message.createTime }}</span>
                 </div>
               </div>
             </div>
           </el-scrollbar>
-          <div class="message-empty" v-else>
+          <div :class="`${prefixClass}__empty`" v-else>
             <img src="@/assets/images/notData.png" alt="notData" />
             <div>暂无消息</div>
           </div>
         </el-tab-pane>
         <el-tab-pane :label="`代办(${arList.length})`" name="third">
           <el-scrollbar max-height="365px" v-if="arList.length > 0">
-            <div class="message-list">
-              <div class="message-item" v-for="ar in arList" :key="ar.id">
-                <div class="message-content">
-                  <div class="message-title">
+            <div :class="`${prefixClass}__list`">
+              <div :class="`${prefixClass}__list-item`" v-for="ar in arList" :key="ar.id">
+                <div :class="`${prefixClass}__list-item__content`">
+                  <div :class="`${prefixClass}__list-item__content--header`">
                     <Tooltip :line="1" :try="1">
-                      <span class="title">{{ ar.title }}</span>
+                      <span>{{ ar.title }}</span>
                     </Tooltip>
                     <el-tag v-if="ar.priority.name" style="margin-right: 2px" :type="ar.priority.type" size="small">
                       {{ ar.priority.name }}
@@ -71,14 +71,14 @@
                     </el-tag>
                   </div>
                   <Tooltip :line="2" :try="1">
-                    <span class="message-desc">{{ ar.description }}</span>
+                    <span :class="`${prefixClass}__list-item__content--desc`">{{ ar.description }}</span>
                   </Tooltip>
-                  <span class="message-date">{{ ar.closeTime }}</span>
+                  <span :class="`${prefixClass}__list-item__content--date`">{{ ar.closeTime }}</span>
                 </div>
               </div>
             </div>
           </el-scrollbar>
-          <div class="message-empty" v-else>
+          <div :class="`${prefixClass}__empty`" v-else>
             <img src="@/assets/images/notData.png" alt="notData" />
             <div>暂无代办</div>
           </div>
@@ -89,9 +89,15 @@
 </template>
 
 <script setup lang="ts">
+import { computed, ref, onMounted } from "vue";
+import { ElPopover, ElTabs, ElTabPane, ElScrollbar, ElButton, ElBadge } from "element-plus";
 import { useMessageStore } from "@/stores";
 import settings from "@/config/settings";
 import { Tooltip } from "@/components";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("message");
 
 interface Notice {
   id: string;
@@ -220,60 +226,64 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.message-empty {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 260px;
-  line-height: 45px;
-}
+$prefix-class: #{$namespace}-message;
 
-.message-list {
-  display: flex;
-  flex-direction: column;
-  padding: 10px 24px;
-
-  .message-item {
+.#{$prefix-class} {
+  &__list {
     display: flex;
-    align-items: center;
-    padding: 13px 0;
-    border-bottom: 1px solid var(--el-border-color-light);
+    flex-direction: column;
+    padding: 10px 24px;
 
-    &:last-child {
-      border: none;
-    }
-
-    .message-icon {
-      width: 40px;
-      height: 40px;
-      margin: 0 20px 0 5px;
-    }
-
-    .message-content {
+    &-item {
       display: flex;
-      flex: 1;
-      flex-direction: column;
+      align-items: center;
+      padding: 13px 0;
+      border-bottom: 1px solid var(--el-border-color-light);
 
-      .message-title {
+      &:last-child {
+        border: none;
+      }
+
+      &__icon {
+        width: 40px;
+        height: 40px;
+        margin: 0 20px 0 5px;
+      }
+
+      &__content {
         display: flex;
         flex: 1;
-        width: 220px;
-        margin-bottom: 5px;
-        color: rgb(0 0 0 / 85%);
-      }
+        flex-direction: column;
 
-      .message-desc {
-        margin-bottom: 5px;
-        font-size: 12px;
-        color: #000000;
-      }
+        &--header {
+          display: flex;
+          flex: 1;
+          width: 220px;
+          margin-bottom: 5px;
+          color: rgb(0 0 0 / 85%);
+        }
 
-      .message-date {
-        font-size: 12px;
-        color: var(--el-text-color-secondary);
+        &--desc {
+          margin-bottom: 5px;
+          font-size: 12px;
+          color: #000000;
+        }
+
+        &--date {
+          font-size: 12px;
+          color: var(--el-text-color-secondary);
+        }
       }
     }
+  }
+
+  &__empty {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 260px;
+    line-height: 45px;
   }
 }
 </style>
@@ -290,9 +300,5 @@ onMounted(() => {
     display: flex;
     justify-content: center;
   }
-}
-
-.message-tooltip {
-  max-width: 240px;
 }
 </style>

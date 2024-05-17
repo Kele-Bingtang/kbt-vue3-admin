@@ -1,13 +1,13 @@
 <template>
-  <div class="upload-excel-component">
+  <div :class="prefixClass">
     <input
       ref="excelUploadInputRef"
-      class="excel-upload-input"
+      :class="`${prefixClass}__input`"
       type="file"
       accept=".xlsx, .xls"
       @change="handleClick"
     />
-    <div class="drop" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
+    <div :class="`${prefixClass}__drop`" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
       上传 Excel 文件
       <el-button :loading="loading" style="margin-left: 16px" type="primary" @click="handleUpload">浏览</el-button>
     </div>
@@ -15,11 +15,15 @@
 </template>
 
 <script setup lang="ts">
-import { ElMessage } from "element-plus";
+import { ElButton, ElMessage } from "element-plus";
 import { ref, reactive, shallowRef, defineOptions, defineProps, unref } from "vue";
 import { read, utils } from "xlsx";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "UploadExcel" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("excel-upload");
 
 export type ExcelData = { results: any; header: string[] };
 
@@ -137,13 +141,15 @@ const isExcel = (file: File) => {
 </script>
 
 <style lang="scss" scoped>
-.upload-excel-component {
-  .excel-upload-input {
+$prefix-class: #{$namespace}-excel-upload;
+
+.#{$prefix-class} {
+  &__input {
     z-index: -9999;
     display: none;
   }
 
-  .drop {
+  &__drop {
     position: relative;
     width: 600px;
     height: 160px;

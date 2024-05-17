@@ -2,17 +2,17 @@
   <ElDialog
     ref="elDialogRef"
     :fullscreen="isFullscreen"
-    :modelValue="dialogVisible"
+    v-model="dialogVisible"
     :title="title"
     size="30%"
     v-bind="$attrs"
-    class="work-drawer"
+    :class="prefixClass"
   >
     <template #header="scope">
       <slot name="header" v-bind="scope">
         <div style="display: flex">
           <slot name="title">
-            <span class="el-dialog__title" style="flex: 1">{{ title }}</span>
+            <span :class="`${variables.elNamespace}-dialog__title`" style="flex: 1">{{ title }}</span>
           </slot>
           <Icon
             :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
@@ -38,10 +38,27 @@
   </ElDialog>
 </template>
 
-<script setup lang="ts" name="Dialog">
+<script setup lang="ts">
 import { ElDialog, ElScrollbar, ElButton, type DialogProps } from "element-plus";
-import { computed, nextTick, ref, unref, watch, useSlots, shallowRef, defineEmits, defineProps } from "vue";
+import {
+  computed,
+  nextTick,
+  ref,
+  unref,
+  watch,
+  useSlots,
+  shallowRef,
+  defineEmits,
+  defineProps,
+  defineExpose,
+} from "vue";
 import { getPx } from "@/utils";
+import { useDesign } from "@/hooks";
+
+defineOptions({ name: "WorkDialog" });
+
+const { getPrefixClass, variables } = useDesign();
+const prefixClass = getPrefixClass("work-dialog");
 
 interface Dialog {
   modelValue: boolean;

@@ -1,12 +1,14 @@
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
-.filter {
+$prefix-class: #{$namespace}-tree-filter;
+
+.#{$prefix-class} {
   box-sizing: border-box;
   width: 220px;
   height: 100%;
   padding: 18px;
   margin-right: 10px;
 
-  .title {
+  &__title {
     margin: 0 0 15px;
     font-size: 18px;
     font-weight: bold;

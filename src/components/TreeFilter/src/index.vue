@@ -1,7 +1,7 @@
 <template>
-  <div class="card filter">
+  <div :class="`${prefixClass} card`">
     <slot name="title">
-      <h4 class="title sle" v-if="title">{{ title }}</h4>
+      <h4 :class="`${prefixClass}__title sle`" v-if="title">{{ title }}</h4>
     </slot>
     <el-input v-model="filterText" placeholder="输入关键字进行过滤" clearable />
     <el-scrollbar :style="{ height: title ? `calc(100% - 95px)` : `calc(100% - 56px)` }">
@@ -23,7 +23,7 @@
         @check="handleCheckChange"
       >
         <template #default="scope">
-          <span class="el-tree-node__label">
+          <span :class="`${variables.elNamespace}-tree-node__label`">
             <slot :row="scope">
               {{ scope.node.label }}
             </slot>
@@ -35,10 +35,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onBeforeMount, defineOptions, defineEmits, defineProps, unref } from "vue";
-import { ElTree } from "element-plus";
+import { ref, watch, onBeforeMount, defineOptions, defineEmits, defineProps, unref, defineExpose } from "vue";
+import { ElInput, ElScrollbar, ElTree } from "element-plus";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "TreeFilter" });
+
+const { getPrefixClass, variables } = useDesign();
+const prefixClass = getPrefixClass("tree-filter");
 
 // 接收父组件参数并设置默认值
 interface TreeFilterProps {
@@ -123,6 +127,6 @@ const handleCheckChange = () => {
 defineExpose({ treeData, treeAllData });
 </script>
 
-<style scoped lang="scss">
+<style lang="scss" scoped>
 @import "./index";
 </style>

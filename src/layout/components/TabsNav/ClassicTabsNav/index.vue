@@ -1,9 +1,9 @@
 <template>
-  <div class="tabs-nav" ref="tabsNavRef">
+  <div :class="prefixClass" ref="tabsNavRef">
     <div style="height: 39px">
-      <div class="scroll-container" ref="scrollContainerDom">
+      <div :class="`${prefixClass}__scroll`" ref="scrollContainerDom">
         <div
-          class="scroll-body"
+          :class="`${prefixClass}__scroll__body`"
           ref="scrollBodyDom"
           :style="{ left: tabBodyLeft + 'px' }"
           @DOMMouseScroll="handleScrollOnDom"
@@ -13,14 +13,17 @@
             v-for="tab in tabNavList"
             :key="tab.path"
             :to="tab.path"
-            :class="isActive(tab) ? 'active' : ''"
+            :class="[`${prefixClass}__tab--link`, { active: isActive(tab) }]"
             :style="activeStyle(tab)"
-            class="tabs-link"
             ref="tabsDom"
             @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
           >
             <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
-            <Icon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
+            <Icon
+              v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
+              :icon="tab.meta.icon"
+              :class="`${prefixClass}__tab--icon`"
+            />
             <span>{{ tab.title }}</span>
             <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
               <Close />
@@ -28,17 +31,17 @@
           </router-link>
         </div>
       </div>
-      <div class="btn-icon left-btn">
+      <div :class="`${prefixClass}__btn left-btn`">
         <el-button plain @click="handleScroll(240)">
           <el-icon><ArrowLeft /></el-icon>
         </el-button>
       </div>
-      <div class="btn-icon right-btn">
+      <div :class="`${prefixClass}__btn right-btn`">
         <el-button plain @click="handleScroll(-240)">
           <el-icon><ArrowRight /></el-icon>
         </el-button>
       </div>
-      <MenuDropdown class="menu-dropdown"></MenuDropdown>
+      <MenuDropdown :class="`${prefixClass}__menu-dropdown`"></MenuDropdown>
     </div>
     <transition name="el-zoom-in-top">
       <RightMenu
@@ -53,11 +56,17 @@
 </template>
 
 <script setup lang="ts" name="TabsNav">
+import { ref, onMounted, watch, nextTick } from "vue";
+import { ElButton, ElIcon } from "element-plus";
 import { useLayoutStore, useSettingsStore, type TabProp } from "@/stores";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuDropdown from "../components/MenuDropdown.vue";
 import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("tabs-nav");
 
 const route = useRoute();
 const layoutStore = useLayoutStore();
@@ -86,7 +95,7 @@ const {
 } = useTabsNav();
 
 onMounted(() => {
-  tabsDrop(".scroll-body", ".tabs-link");
+  tabsDrop(`.${prefixClass}__scroll__body`, `.${prefixClass}__tab--link`);
   initTabs();
   addOneTab();
 });

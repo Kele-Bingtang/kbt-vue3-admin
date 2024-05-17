@@ -1,6 +1,6 @@
 <template>
-  <div class="tabs-nav" ref="tabsNavRef">
-    <div class="tabs-content">
+  <div :class="prefixClass" ref="tabsNavRef">
+    <div :class="`${prefixClass}__content`">
       <el-tabs v-model="tabsNavValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
         <el-tab-pane
           v-for="tab in tabNavList"
@@ -11,7 +11,11 @@
         >
           <template #label>
             <div style="display: inline-block" @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)">
-              <Icon v-if="tab.meta.icon && settingsStore.showTabsNavIcon" :icon="tab.meta.icon" class="tab-icon" />
+              <Icon
+                v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
+                :icon="tab.meta.icon"
+                :class="`${prefixClass}__content--icon`"
+              />
               <span>{{ tab.title }}</span>
             </div>
           </template>
@@ -32,14 +36,17 @@
 </template>
 
 <script setup lang="ts" name="ElTabsNav">
+import { ref, onMounted, watch } from "vue";
+import { ElTabs, ElTabPane, type TabPaneName, type TabsPaneContext } from "element-plus";
 import { useSettingsStore } from "@/stores";
-import type { TabPaneName, TabsPaneContext } from "element-plus";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuButton from "../components/MenuDropdown.vue";
 import { useDesign } from "@/hooks";
 
-const { variables } = useDesign();
+const { getPrefixClass, variables } = useDesign();
+const prefixClass = getPrefixClass("tabs-nav");
+
 const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();

@@ -1,4 +1,6 @@
-.login-container {
+$prefix-class: #{$namespace}-login;
+
+.#{$prefix-class} {
   position: relative;
   min-width: 520px;
   height: 100%;
@@ -14,19 +16,19 @@
     right: 3.2%;
   }
 
-  .login-box {
+  &__box {
     box-sizing: border-box;
     display: flex;
     align-items: center;
     justify-content: space-around;
-    width: 96%;
-    height: 94%;
+    width: 99%;
+    height: 98%;
     padding: 0 50px;
     background-color: hsl(0deg 0% 100% / 80%);
     border-radius: 10px;
 
-    .login-left {
-      width: 800px;
+    &--left {
+      width: 900px;
 
       img {
         width: 100%;
@@ -34,25 +36,25 @@
       }
     }
 
-    .login-form {
+    &__form {
       width: 450px;
       padding: 50px 40px 45px;
       background-color: #ffffff;
       border-radius: 10px;
       box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
 
-      .login-logo {
+      &--logo {
         display: flex;
         align-items: center;
         justify-content: center;
         margin-bottom: 45px;
 
-        .login-icon {
+        &__img {
           width: 60px;
           height: 52px;
         }
 
-        .logo-text {
+        &__text {
           padding: 0 0 0 25px;
           margin: 0;
           font-size: 42px;
@@ -65,14 +67,14 @@
       .#{$el-namespace}-form-item {
         margin-bottom: 20px;
 
-        .custom-item {
+        .#{$prefix-class}__item {
           display: flex;
           align-items: center;
           justify-content: space-between;
           width: 100%;
         }
 
-        .third-item {
+        .#{$prefix-class}__third--item {
           display: flex;
           align-items: center;
           justify-content: space-evenly;
@@ -92,7 +94,7 @@
   }
 
   /* 多个登录表单需要，所以放到外面 */
-  .login-btn {
+  &__btn {
     display: flex;
     justify-content: space-between;
     width: 100%;

@@ -1,5 +1,5 @@
 <template>
-  <ul v-show="visible" :style="{ left: `${left}px`, top: `${top}px` }" class="context-menu">
+  <ul v-show="visible" :style="{ left: `${left}px`, top: `${top}px` }" :class="prefixClass">
     <li v-if="condition.refresh" @click="refreshSelectedTab(selectedTab)">
       <el-icon><Refresh /></el-icon>
       {{ $t("_tabsNav.refresh") }}
@@ -31,6 +31,10 @@
 import type { TabProp } from "@/stores";
 import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
 import { Refresh, Close, ArrowLeft, ArrowRight, SemiSelect, FolderDelete } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("right-menu");
 
 const { refreshSelectedTab, closeCurrentTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } =
   useTabsNav();
@@ -52,7 +56,9 @@ withDefaults(defineProps<RightMenuProps>(), {
 </script>
 
 <style lang="scss" scoped>
-.context-menu {
+$prefix-class: #{$namespace}-right-menu;
+
+.#{$prefix-class} {
   position: absolute;
   z-index: 4000;
   padding: 5px 0;

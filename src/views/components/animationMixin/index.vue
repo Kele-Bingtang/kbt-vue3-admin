@@ -94,15 +94,6 @@ const validateLength = (rule: any, value: string, callback: Function) => {
 const demoRules = {
   title: [{ validator: validateLength, trigger: "change" }],
 };
-
-const articleList = [
-  { title: "文章 1", href: "javascript:;" },
-  { title: "文章 2", href: "javascript:;" },
-  { title: "文章 3", href: "javascript:;" },
-  { title: "文章 4", href: "javascript:;" },
-  { title: "文章 5", href: "javascript:;" },
-  { title: "文章 6", href: "javascript:;" },
-];
 </script>
 
 <style lang="scss" scoped>

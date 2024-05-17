@@ -1,14 +1,14 @@
 <template>
-  <div class="login-container">
+  <div :class="prefixClass">
     <SwitchDark class="dark" />
-    <div class="login-box">
-      <div class="login-left">
+    <div :class="`${prefixClass}__box`">
+      <div :class="`${prefixClass}__box--left`">
         <img src="@/assets/images/login/login_left.png" alt="login" />
       </div>
-      <div class="login-form">
-        <div class="login-logo">
-          <img class="login-icon" src="@/assets/images/logo.png" alt="" />
-          <h2 class="logo-text">{{ settings.title }}</h2>
+      <div :class="`${prefixClass}__box__form`">
+        <div :class="`${prefixClass}__box__form--logo`">
+          <img :class="`${prefixClass}__box__form--logo__img`" src="@/assets/images/logo.png" alt="" />
+          <h2 :class="`${prefixClass}__box__form--logo__text`">{{ settings.title }}</h2>
         </div>
         <component :is="formComponents[formMode]" />
       </div>
@@ -24,6 +24,10 @@ import Phone from "./components/phone.vue";
 import QrCode from "./components/qrCode.vue";
 import Register from "./components/register.vue";
 import Forget from "./components/forget.vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("login");
 
 const formComponents: { [key: string]: Component } = {
   login: LoginForm,

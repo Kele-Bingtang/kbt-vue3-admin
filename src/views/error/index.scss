@@ -1,15 +1,17 @@
-.not-container {
+$prefix-class: #{$namespace}-error-page;
+
+.#{$prefix-class} {
   display: flex;
   align-items: center;
   justify-content: center;
   width: 100%;
   height: 100%;
 
-  .not-img {
+  &__img {
     margin-right: 120px;
   }
 
-  .not-detail {
+  &__detail {
     display: flex;
     flex-direction: column;
 

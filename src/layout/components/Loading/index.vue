@@ -1,6 +1,6 @@
 <template>
-  <div class="loading-box">
-    <div class="loading-wrap">
+  <div :class="prefixClass">
+    <div :class="`${prefixClass}__wrap`">
       <span class="dot dot-spin">
         <i></i>
         <i></i>
@@ -11,7 +11,12 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Loading"></script>
+<script setup lang="ts" name="Loading">
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("layout-loading");
+</script>
 
 <style lang="scss" scoped>
 @import "./index";

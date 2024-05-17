@@ -1,12 +1,17 @@
 <template>
-  <div class="maximize" @click="exitMaximize">
+  <div :class="prefixClass" @click="exitMaximize">
     <el-icon><Close /></el-icon>
   </div>
 </template>
 
 <script setup lang="ts" name="Maximize">
+import { ElIcon } from "element-plus";
 import { useSettingsStore } from "@/stores";
 import { Close } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("maximize");
 
 const settingsStore = useSettingsStore();
 
@@ -16,7 +21,9 @@ const exitMaximize = () => {
 </script>
 
 <style lang="scss" scoped>
-.maximize {
+$prefix-class: #{$namespace}-maximize;
+
+.#{$prefix-class} {
   position: fixed;
   top: -25px;
   right: -25px;

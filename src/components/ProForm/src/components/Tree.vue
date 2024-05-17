@@ -8,7 +8,7 @@
     v-if="search"
     v-model="filterText"
     :style="{ width: $attrs.searchWidth || '98.5%' }"
-    :placeholder="$attrs.searchPlaceholder || '请输入关键词进行筛选'"
+    :placeholder="($attrs.searchPlaceholder as string) || '请输入关键词进行筛选'"
   />
   <el-tree
     ref="treeRef"
@@ -27,7 +27,7 @@
   </el-tree>
 </template>
 <script setup lang="ts">
-import { ElTree } from "element-plus";
+import { ElCheckbox, ElInput, ElTree } from "element-plus";
 import { nextTick, ref, watch, defineEmits, defineProps, unref } from "vue";
 
 defineOptions({ name: "Tree" });

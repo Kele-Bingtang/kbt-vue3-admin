@@ -2,7 +2,7 @@
   "editor.formatOnSave": true,
   "stylelint.enable": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.stylelint": true
+    "source.fixAll.stylelint": "explicit"
   },
   "editor.tabSize": 2,
   "stylelint.validate": ["css", "less", "postcss", "scss", "vue", "sass", "html"],

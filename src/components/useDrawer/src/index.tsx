@@ -4,7 +4,9 @@ import { Icon } from "@/components";
 import "./index.scss";
 import { useDesign } from "@/hooks";
 
-const { variables } = useDesign();
+const { getPrefixClass, variables } = useDesign();
+const prefixClass = getPrefixClass("work-drawer");
+
 let id = 0;
 let thisAppContext: any = null;
 
@@ -24,7 +26,7 @@ interface Drawer extends Partial<DrawerProps> {
 }
 
 export const closeDrawer = () => {
-  const vm = document.querySelector(`#work-drawer-${id--}`) as HTMLElement;
+  const vm = document.querySelector(`#${prefixClass}-${id--}`) as HTMLElement;
   vm && getFather().removeChild(vm);
 };
 
@@ -57,7 +59,7 @@ export const showDrawer = (
 
   const toggleFull = () => {
     const elDrawerEl = document.querySelector(
-      `${`#work-drawer-${id}`} .work-drawer.${variables.elNamespace}-drawer`
+      `${`#${prefixClass}-${id}`} .${prefixClass}.${variables.elNamespace}-drawer`
     ) as HTMLElement;
     if (elDrawerEl) elDrawerEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !unref(isFullscreen);
@@ -73,7 +75,7 @@ export const showDrawer = (
       render
       headerRender
       footerRender
-      class="work-drawer"
+      class={prefixClass}
     >
       {{
         default: () => {
@@ -84,7 +86,7 @@ export const showDrawer = (
           if (drawerProps.headerRender) return drawerProps.headerRender();
           return (
             <>
-              <span class="el-drawer__title">{drawerProps.title}</span>
+              <span class={`${variables.elNamespace}-drawer__title`}>{drawerProps.title}</span>
               {drawerProps.fullscreen === true ||
                 (drawerProps.fullscreen === undefined && (
                   <Icon
@@ -120,7 +122,7 @@ export const showDrawer = (
   vm.children?.length && (vm.children[0].appContext = thisAppContext);
 
   const container = document.createElement("div");
-  container.id = `work-drawer-${++id}`;
+  container.id = `${prefixClass}-${++id}`;
   getFather().appendChild(container);
   render(vm, container);
 };

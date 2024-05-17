@@ -1,11 +1,11 @@
 <template>
-  <el-card style="margin-bottom: 20px" class="user-card-container">
+  <el-card style="margin-bottom: 20px" :class="prefixClass">
     <template #header>
       <span>个人中心</span>
     </template>
 
-    <div class="user-card-header">
-      <div class="header-content">
+    <div :class="`${prefixClass}__header`">
+      <div :class="`${prefixClass}__header--content`">
         <slot>
           <el-image :src="user.avatar" class="user-avatar" alt="头像">
             <template #error>
@@ -14,7 +14,7 @@
           </el-image>
         </slot>
       </div>
-      <div class="header-content">
+      <div :class="`${prefixClass}__header--content`">
         <div class="user-name">
           {{ user.username }}
         </div>
@@ -24,12 +24,12 @@
       </div>
     </div>
 
-    <div class="user-card-info">
-      <div class="user-card-info-section">
-        <div class="user-card-info-section-header">
+    <div :class="`${prefixClass}__info`">
+      <div :class="`${prefixClass}__info--section`">
+        <div :class="`${prefixClass}__info--section__header`">
           <span>基本信息</span>
         </div>
-        <div class="user-card-info-section-body">
+        <div :class="`${prefixClass}__info--section__body`">
           <div class="basic-info">
             <div class="basic-info-item">
               <span>用户名称</span>
@@ -59,11 +59,11 @@
         </div>
       </div>
 
-      <div class="user-skills user-card-info-section">
-        <div class="user-card-info-section-header">
+      <div :class="`${prefixClass}__info--section user-skills`">
+        <div :class="`${prefixClass}__info--section__header`">
           <span>核心技术栈</span>
         </div>
-        <div class="user-card-info-section-body">
+        <div :class="`${prefixClass}__info--section__body`">
           <div class="progress-item">
             <span>Java（希望）</span>
             <el-progress :percentage="100" class="progress-content" />
@@ -105,9 +105,15 @@
 <script setup lang="ts" name="UserCard">
 import type { UserInfo } from "@/stores";
 import defaultAvatar from "@/assets/images/default.png";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("user-card");
 
 const props = defineProps<{ user: UserInfo }>();
+
 const { user } = toRefs(props);
+
 const getUserRoles = (userRoles: string[]) => {
   let userRole = "";
   const separator = " | ";
@@ -119,11 +125,13 @@ const getUserRoles = (userRoles: string[]) => {
 </script>
 
 <style lang="scss" scoped>
-.user-card-container {
-  .user-card-header {
+$prefix-class: #{$namespace}-user-card;
+
+.#{$prefix-class} {
+  &__header {
     text-align: center;
 
-    .header-content {
+    &--content {
       .user-avatar {
         width: 100px;
         height: 100px;
@@ -143,7 +151,7 @@ const getUserRoles = (userRoles: string[]) => {
     }
   }
 
-  .user-card-info {
+  &__info {
     margin-top: 20px;
     color: #000000;
 
@@ -151,22 +159,22 @@ const getUserRoles = (userRoles: string[]) => {
       padding-left: 4px;
     }
 
-    .user-card-info-section:first-child {
-      padding-top: 0;
-    }
-
-    .user-card-info-section {
+    &--section {
       padding: 15px 0;
       font-size: 14px;
 
-      .user-card-info-section-header {
+      &:first-child {
+        padding-top: 0;
+      }
+
+      &__header {
         padding-bottom: 10px;
         margin-bottom: 10px;
         font-weight: bold;
         border-bottom: 1px solid #dcdfe6;
       }
 
-      .user-card-info-section-body {
+      &__body {
         .basic-info {
           padding-right: 0;
           padding-left: 0;

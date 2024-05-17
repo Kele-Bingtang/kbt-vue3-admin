@@ -1,24 +1,24 @@
 <template>
-  <el-drawer v-model="drawerVisible" title="布局设置" size="300px" class="theme-drawer">
+  <el-drawer v-model="drawerVisible" title="布局设置" size="300px" :class="prefixClass">
     <template v-if="!isMobile">
-      <el-divider class="divider" content-position="center">
+      <el-divider :class="`${prefixClass}__divider`" content-position="center">
         <el-icon><Notification /></el-icon>
         {{ $t("_settings.layoutSwitch") }}
       </el-divider>
 
-      <div class="layout-box">
+      <div :class="`${prefixClass}__layout`">
         <el-tooltip effect="dark" content="纵向" placement="top" :show-after="200">
           <div
             :class="[
-              'layout-item layout-vertical',
+              `${prefixClass}__layout-item ${prefixClass}__layout-vertical`,
               settingsStore.layoutMode == LayoutModeType.Vertical ? 'is-active' : '',
             ]"
             @click="changeLayout(LayoutModeType.Vertical)"
           >
-            <div class="layout-dark"></div>
-            <div class="layout-container">
-              <div class="layout-light"></div>
-              <div class="layout-content"></div>
+            <div :class="`${prefixClass}__layout-item__dark`"></div>
+            <div :class="`${prefixClass}__layout-item__container`">
+              <div :class="`${prefixClass}__layout-item__light`"></div>
+              <div :class="`${prefixClass}__layout-item__content`"></div>
             </div>
             <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Vertical"><CircleCheckFilled /></el-icon>
           </div>
@@ -26,15 +26,15 @@
         <el-tooltip effect="dark" content="经典" placement="top" :show-after="200">
           <div
             :class="[
-              'layout-item layout-classic',
+              `${prefixClass}__layout-item ${prefixClass}__layout-classic`,
               settingsStore.layoutMode === LayoutModeType.Classic ? 'is-active' : '',
             ]"
             @click="changeLayout(LayoutModeType.Classic)"
           >
-            <div class="layout-dark"></div>
-            <div class="layout-container">
-              <div class="layout-light"></div>
-              <div class="layout-content"></div>
+            <div :class="`${prefixClass}__layout-item__dark`"></div>
+            <div :class="`${prefixClass}__layout-item__container`">
+              <div :class="`${prefixClass}__layout-item__light`"></div>
+              <div :class="`${prefixClass}__layout-item__content`"></div>
             </div>
             <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Classic"><CircleCheckFilled /></el-icon>
           </div>
@@ -42,39 +42,42 @@
         <el-tooltip effect="dark" content="横向" placement="top" :show-after="200">
           <div
             :class="[
-              'layout-item layout-transverse',
+              `${prefixClass}__layout-item ${prefixClass}__layout-transverse`,
               settingsStore.layoutMode === LayoutModeType.Transverse ? 'is-active' : '',
             ]"
             @click="changeLayout(LayoutModeType.Transverse)"
           >
-            <div class="layout-dark"></div>
-            <div class="layout-content"></div>
+            <div :class="`${prefixClass}__layout-item__dark`"></div>
+            <div :class="`${prefixClass}__layout-item__content`"></div>
             <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Transverse"><CircleCheckFilled /></el-icon>
           </div>
         </el-tooltip>
         <el-tooltip effect="dark" content="分栏" placement="top" :show-after="200">
           <div
             :class="[
-              'layout-item layout-columns',
+              `${prefixClass}__layout-item ${prefixClass}__layout-columns`,
               settingsStore.layoutMode === LayoutModeType.Columns ? 'is-active' : '',
             ]"
             @click="changeLayout(LayoutModeType.Columns)"
           >
-            <div class="layout-dark"></div>
-            <div class="layout-light"></div>
-            <div class="layout-content"></div>
+            <div :class="`${prefixClass}__layout-item__dark`"></div>
+            <div :class="`${prefixClass}__layout-item__light`"></div>
+            <div :class="`${prefixClass}__layout-item__content`"></div>
             <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Columns"><CircleCheckFilled /></el-icon>
           </div>
         </el-tooltip>
         <el-tooltip effect="dark" content="混合" placement="top" :show-after="200">
           <div
-            :class="['layout-item layout-mixins', settingsStore.layoutMode == LayoutModeType.Mixins ? 'is-active' : '']"
+            :class="[
+              `${prefixClass}__layout-item ${prefixClass}__layout-mixins`,
+              settingsStore.layoutMode == LayoutModeType.Mixins ? 'is-active' : '',
+            ]"
             @click="changeLayout(LayoutModeType.Mixins)"
           >
-            <div class="layout-dark"></div>
-            <div class="layout-container">
-              <div class="layout-dark"></div>
-              <div class="layout-content"></div>
+            <div :class="`${prefixClass}__layout-item__dark`"></div>
+            <div :class="`${prefixClass}__layout-item__container`">
+              <div :class="`${prefixClass}__layout-item__dark`"></div>
+              <div :class="`${prefixClass}__layout-item__content`"></div>
             </div>
             <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Mixins"><CircleCheckFilled /></el-icon>
           </div>
@@ -82,13 +85,13 @@
         <el-tooltip effect="dark" content="子系统" placement="top" :show-after="200">
           <div
             :class="[
-              'layout-item layout-subsystem',
+              `${prefixClass}__layout-item ${prefixClass}__layout-subsystem`,
               settingsStore.layoutMode === LayoutModeType.Subsystem ? 'is-active' : '',
             ]"
             @click="changeLayout(LayoutModeType.Subsystem)"
           >
-            <div class="layout-dark"></div>
-            <div class="layout-content"></div>
+            <div :class="`${prefixClass}__layout-item__dark`"></div>
+            <div :class="`${prefixClass}__layout-item__content`"></div>
             <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Subsystem"><CircleCheckFilled /></el-icon>
           </div>
         </el-tooltip>
@@ -101,14 +104,14 @@
           settingsStore.layoutMode === LayoutModeType.Subsystem
         "
       >
-        <el-divider class="divider" content-position="center">
+        <el-divider :class="`${prefixClass}__divider`" content-position="center">
           <el-icon><Menu /></el-icon>
           {{ $t("_settings.menuSwitch") }}
         </el-divider>
-        <div class="menu-box">
+        <div :class="`${prefixClass}__menu`">
           <el-tooltip effect="dark" content="亮色" placement="top" :show-after="200">
             <div :class="{ 'is-dark': settingsStore.isDark }">
-              <div class="menu-box-item" @click="handleMenuTheme(LayoutThemeType.Light)">
+              <div :class="`${prefixClass}__menu-item`" @click="handleMenuTheme(LayoutThemeType.Light)">
                 <img src="@/assets/svg/menu-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
                 <el-icon v-if="settingsStore.menuTheme === LayoutThemeType.Light"><CircleCheckFilled /></el-icon>
               </div>
@@ -116,7 +119,7 @@
           </el-tooltip>
           <el-tooltip effect="dark" content="暗色" placement="top" :show-after="200">
             <div :class="{ 'is-dark': settingsStore.isDark }">
-              <div class="menu-box-item" @click="handleMenuTheme(LayoutThemeType.Dark)">
+              <div :class="`${prefixClass}__menu-item`" @click="handleMenuTheme(LayoutThemeType.Dark)">
                 <img src="@/assets/svg/menu-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
                 <el-icon v-if="settingsStore.menuTheme === LayoutThemeType.Dark"><CircleCheckFilled /></el-icon>
               </div>
@@ -132,14 +135,14 @@
           settingsStore.layoutMode === LayoutModeType.Mixins
         "
       >
-        <el-divider class="divider" content-position="center">
+        <el-divider :class="`${prefixClass}__divider`" content-position="center">
           <el-icon><Menu /></el-icon>
           {{ $t("_settings.headerSwitch") }}
         </el-divider>
-        <div class="menu-box">
+        <div :class="`${prefixClass}__menu`">
           <el-tooltip effect="dark" content="亮色" placement="top" :show-after="200">
             <div :class="{ 'is-dark': settingsStore.isDark }">
-              <div class="menu-box-item" @click="handleHeaderTheme(LayoutThemeType.Light)">
+              <div :class="`${prefixClass}__menu-item`" @click="handleHeaderTheme(LayoutThemeType.Light)">
                 <img src="@/assets/svg/header-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
                 <el-icon v-if="settingsStore.headerTheme === LayoutThemeType.Light"><CircleCheckFilled /></el-icon>
               </div>
@@ -147,7 +150,7 @@
           </el-tooltip>
           <el-tooltip effect="dark" content="暗色" placement="top" :show-after="200">
             <div :class="{ 'is-dark': settingsStore.isDark }">
-              <div class="menu-box-item" @click="handleHeaderTheme(LayoutThemeType.Dark)">
+              <div :class="`${prefixClass}__menu-item`" @click="handleHeaderTheme(LayoutThemeType.Dark)">
                 <img src="@/assets/svg/header-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
                 <el-icon v-if="settingsStore.headerTheme === LayoutThemeType.Dark"><CircleCheckFilled /></el-icon>
               </div>
@@ -157,59 +160,61 @@
       </template>
     </template>
 
-    <el-divider class="divider" content-position="center">
+    <el-divider :class="`${prefixClass}__divider`" content-position="center">
       <el-icon><Menu /></el-icon>
       {{ $t("_settings.tabsNavSwitch") }}
     </el-divider>
 
-    <div class="tab-box">
-      <div class="tab-item">
+    <div :class="`${prefixClass}__tab`">
+      <div :class="`${prefixClass}__tab-item`">
         <el-tooltip effect="dark" content="经典" placement="left" :show-after="200">
-          <div class="tabs-nav-theme" @click="handleTabsNav(TabsNavModeType.Classic)">
-            <div class="tas-nav-classic-item">
+          <div :class="`${prefixClass}__tab-item__theme`" @click="handleTabsNav(TabsNavModeType.Classic)">
+            <div :class="`${prefixClass}__tab-item__theme-classic`">
               <div class="dot"></div>
               <span class="title">首页</span>
               <el-icon><Close /></el-icon>
             </div>
-            <div class="tas-nav-classic-item active">
+            <div :class="`${prefixClass}__tab-item__theme-classic active`">
               <div class="dot"></div>
               <span class="title">其他</span>
               <el-icon><Close /></el-icon>
             </div>
           </div>
         </el-tooltip>
-        <el-icon class="check-icon" v-if="settingsStore.tabsNavMode === 'classic'"><CircleCheckFilled /></el-icon>
+        <el-icon :class="`${prefixClass}__tab-item__icon`" v-if="settingsStore.tabsNavMode === 'classic'">
+          <CircleCheckFilled />
+        </el-icon>
       </div>
-      <div class="tab-item">
+      <div :class="`${prefixClass}__tab-item`">
         <el-tooltip effect="dark" content="流行" placement="left" :show-after="200">
-          <div class="tabs-nav-theme" @click="handleTabsNav(TabsNavModeType.Popular)">
-            <div class="tas-nav-el-item active">
+          <div :class="`${prefixClass}__tab-item__theme`" @click="handleTabsNav(TabsNavModeType.Popular)">
+            <div :class="`${prefixClass}__tab-item__theme-el active`">
               <el-icon><HomeFilled /></el-icon>
               <span class="title">首页</span>
             </div>
-            <div class="tas-nav-el-item">
+            <div :class="`${prefixClass}__tab-item__theme-el`">
               <el-icon><Menu /></el-icon>
               <span class="title">其他</span>
             </div>
           </div>
         </el-tooltip>
-        <el-icon class="check-icon" v-if="settingsStore.tabsNavMode === TabsNavModeType.Popular">
+        <el-icon :class="`${prefixClass}__tab-item__icon`" v-if="settingsStore.tabsNavMode === TabsNavModeType.Popular">
           <CircleCheckFilled />
         </el-icon>
       </div>
     </div>
 
     <!-- 全局主题 -->
-    <el-divider class="divider" content-position="center">
+    <el-divider :class="`${prefixClass}__divider`" content-position="center">
       <el-icon><ColdDrink /></el-icon>
       {{ $t("_settings.globalTheme") }}
     </el-divider>
 
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.theme") }}</span>
       <el-color-picker v-model="settingsStore.primaryTheme" :predefine="colorList" @change="changePrimary" />
     </div>
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.darkMode") }}</span>
       <el-switch
         v-model="settingsStore.isDark"
@@ -219,50 +224,50 @@
         :inactive-icon="Moon"
       />
     </div>
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.greyMode") }}</span>
       <el-switch v-model="settingsStore.isGrey" @change="changeGreyOrWeak($event as boolean, 'grey')" />
     </div>
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.weakMode") }}</span>
       <el-switch v-model="settingsStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />
     </div>
 
     <!-- 界面设置 -->
-    <el-divider class="divider" content-position="center">
+    <el-divider :class="`${prefixClass}__divider`" content-position="center">
       <el-icon><Setting /></el-icon>
       {{ $t("_settings.interfaceSettings") }}
     </el-divider>
 
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.collapseMenu") }}</span>
       <el-switch v-model="settingsStore.isCollapse" />
     </div>
-    <div class="drawer-item" v-if="!isMobile">
+    <div :class="`${prefixClass}__list`" v-if="!isMobile">
       <span>{{ $t("_settings.showBreadcrumb") }}</span>
       <el-switch v-model="settingsStore.showBreadcrumb" />
     </div>
-    <div class="drawer-item" v-if="!isMobile">
+    <div :class="`${prefixClass}__list`" v-if="!isMobile">
       <span>{{ $t("_settings.showBreadcrumbIcon") }}</span>
       <el-switch v-model="settingsStore.showBreadcrumbIcon" />
     </div>
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.showTagsNav") }}</span>
       <el-switch v-model="settingsStore.showTabsNav" />
     </div>
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.showTabsNavIcon") }}</span>
       <el-switch v-model="settingsStore.showTabsNavIcon" />
     </div>
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.recordTagsNav") }}</span>
       <el-switch v-model="settingsStore.recordTabsNav" />
     </div>
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.showLayoutLogo") }}</span>
       <el-switch v-model="settingsStore.showLayoutLogo" />
     </div>
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <span>{{ $t("_tabsNav.maximize") }}</span>
       <el-switch v-model="settingsStore.maximize" />
     </div>
@@ -277,12 +282,12 @@
       <el-slider v-model="settingsStore.menuWidth" :min="100" :max="400" />
     </div>
 
-    <el-divider class="divider" content-position="center">
+    <el-divider :class="`${prefixClass}__divider`" content-position="center">
       <el-icon><Box /></el-icon>
       {{ $t("_settings.titleSwitch") }}
     </el-divider>
 
-    <div class="drawer-item">
+    <div :class="`${prefixClass}__list`">
       <el-select
         v-model="settingsStore.titleMode"
         :placeholder="$t('_settings.titlePlaceholder')"
@@ -307,6 +312,19 @@
 </template>
 
 <script setup lang="ts" name="ThemeDrawer">
+import { ref, computed, watch } from "vue";
+import {
+  ElButton,
+  ElSelect,
+  ElOption,
+  ElDivider,
+  ElTooltip,
+  ElSwitch,
+  ElColorPicker,
+  ElDrawer,
+  ElIcon,
+  ElSlider,
+} from "element-plus";
 import { useTheme, useLayout } from "@/hooks";
 import settings from "@/config/settings";
 import {
@@ -333,6 +351,10 @@ import {
   Box,
   Refresh,
 } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("theme-drawer");
 
 const layoutStore = useLayoutStore();
 
@@ -381,11 +403,13 @@ const handleMenuTheme = (value: LayoutThemeType) => {
     menuTheme: value,
   });
 };
+
 const handleHeaderTheme = (value: LayoutThemeType) => {
   settingsStore.$patch({
     headerTheme: value,
   });
 };
+
 const handleTabsNav = (value: TabsNavModeType) => {
   settingsStore.$patch({
     tabsNavMode: value,
@@ -400,22 +424,26 @@ const handleTabsNav = (value: TabsNavModeType) => {
     });
   }
 };
+
 // 切换布局方式
 const changeLayout = (value: LayoutModeType) => {
   settingsStore.$patch({
     layoutMode: value,
   });
 };
+
 const handleSwitchDark = () => {
   const isDark = switchDark();
   const theme = isDark ? LayoutThemeType.Dark : LayoutThemeType.Light;
   handleMenuTheme(theme);
   handleHeaderTheme(theme);
 };
+
 const handleTitleModeSelect = () => {
   // 根据选择的标题模式，重新渲染浏览器标题
   setBrowserTitle(route);
 };
+
 // 重置缓存
 const resetSettings = () => {
   let message = t("_settings.resetSettings");
@@ -428,9 +456,11 @@ const resetSettings = () => {
   settingsStore.resetSettings();
   setTimeout(() => window.location.reload(), 1000);
 };
+
 // 打开主题设置
 const drawerVisible = ref(false);
 mittBus.on("openThemeDrawer", () => (drawerVisible.value = true));
+
 // 监听布局变化，在 body 上添加相对应的 layout class
 watch(
   () => settingsStore.layoutMode,
@@ -455,6 +485,7 @@ watch(
   },
   { immediate: true }
 );
+
 // 监听头部主题的切换
 watch(
   () => settingsStore.headerTheme,
@@ -479,6 +510,7 @@ watch(
     immediate: true,
   }
 );
+
 // 监听亮、暗色主题的切换
 watchEffect(() => {
   if (settingsStore.menuTheme === LayoutThemeType.Dark) {

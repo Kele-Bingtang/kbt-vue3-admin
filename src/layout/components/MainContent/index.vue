@@ -5,7 +5,7 @@
     <router-view v-slot="{ Component, route }">
       <CustomTransition name="fade-transform">
         <keep-alive :include="layoutStore.keepAliveName">
-          <component :is="Component" :key="route.path" v-if="isRouterShow" class="content-container" />
+          <component :is="Component" :key="route.path" v-if="isRouterShow" class="main-content" />
         </keep-alive>
       </CustomTransition>
     </router-view>
@@ -14,6 +14,8 @@
 </template>
 
 <script setup lang="ts" name="MainContent">
+import { computed, ref, nextTick, provide, watchEffect } from "vue";
+import { ElMain } from "element-plus";
 import { useLayoutStore, useSettingsStore } from "@/stores";
 import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";
 import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
@@ -72,7 +74,7 @@ watchEffect(() => {
   overflow-x: hidden;
   background-color: #f0f2f5;
 
-  .content-container {
+  .main-content {
     padding: 10px 12px;
   }
 

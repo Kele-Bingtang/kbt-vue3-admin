@@ -1,7 +1,7 @@
 <template>
-  <div class="message-center-container">
-    <el-card class="message-center-card">
-      <div class="message-page message-category">
+  <div :class="prefixClass">
+    <el-card :class="`${prefixClass}__card`">
+      <div :class="`${prefixClass}__card--page ${prefixClass}__card--category`">
         <el-menu default-active="unread" @select="handleCategorySelect">
           <el-menu-item index="unread">
             <span class="category">
@@ -24,7 +24,7 @@
         </el-menu>
       </div>
 
-      <div class="message-page message-list" v-loading="listLoading">
+      <div :class="`${prefixClass}__card--page ${prefixClass}__card--list`" v-loading="listLoading">
         <el-menu
           default-active="1"
           @select="handleListSelect"
@@ -51,10 +51,14 @@
         </el-menu>
       </div>
 
-      <div class="message-page message-content" v-loading="contentLoading" element-loading-text="拼命加载中 ...">
-        <div class="message-content-header">
-          <h2 class="message-content-title">{{ selectedMessageItem.title }}</h2>
-          <time class="message-content-time">{{ selectedMessageItem.createTime }}</time>
+      <div
+        :class="`${prefixClass}__card--page ${prefixClass}__card--content`"
+        v-loading="contentLoading"
+        element-loading-text="拼命加载中 ..."
+      >
+        <div :class="`${prefixClass}__card--content__header`">
+          <h2 :class="`${prefixClass}__card--content__header--title`">{{ selectedMessageItem.title }}</h2>
+          <time :class="`${prefixClass}__card--content__header--time`">{{ selectedMessageItem.createTime }}</time>
         </div>
         <div v-html="selectedMessageItem.content"></div>
       </div>
@@ -66,6 +70,10 @@
 import { useMessageStore, type MessageItem } from "@/stores";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Delete, RefreshLeft } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("message-center");
 
 type MessageType = "unread" | "hasRead" | "recycle";
 
@@ -180,13 +188,21 @@ const handleOperate = (message: MessageItem) => {
 </script>
 
 <style lang="scss" scoped>
-.message-center-container {
+$prefix-class: #{$namespace}-message-center;
+
+.#{$prefix-class} {
   height: 100%;
 
-  .message-center-card {
+  &__card {
     height: 100%;
 
-    .message-page {
+    :deep(.#{$el-namespace}-card__body) {
+      height: 100%;
+      overflow: auto;
+      white-space: nowrap;
+    }
+
+    &--page {
       position: relative;
       display: inline-block;
       height: 100%;
@@ -224,97 +240,97 @@ const handleOperate = (message: MessageItem) => {
           }
         }
       }
+    }
 
-      &.message-category {
-        width: 200px;
-      }
+    &--category {
+      width: 200px;
+    }
 
-      &.message-list {
-        width: 230px;
+    &--list {
+      width: 230px;
 
-        .#{$el-namespace}-menu-item {
-          display: block;
-          height: auto;
-          padding: 14px 20px;
-          line-height: 21px;
-          white-space: normal;
+      .#{$el-namespace}-menu-item {
+        display: block;
+        height: auto;
+        padding: 14px 20px;
+        line-height: 21px;
+        white-space: normal;
 
-          .list-title {
-            padding: 0;
-            margin: 0;
-          }
-
-          .list-time {
-            display: inline-block;
-
-            .list-dot {
-              position: relative;
-              top: -1px;
-              display: inline-block;
-              width: 6px;
-              height: 6px;
-              vertical-align: middle;
-              background-color: #e6e8f1;
-              border-radius: 50%;
-            }
-
-            .list-text {
-              display: inline-block;
-              margin-left: 6px;
-              font-size: 12px;
-              color: #515a6e;
-            }
-          }
-
-          .list-operate {
-            align-items: normal;
-            float: right;
-            padding-top: 3px;
-            margin-right: 17px;
-          }
-
-          :deep(.#{$el-namespace}-icon) {
-            display: none;
-            font-size: 13px;
-            color: #909399;
-
-            &:hover {
-              color: var(--el-color-primary);
-            }
-          }
-
-          &:hover {
-            :deep(.#{$el-namespace}-icon) {
-              display: inline-block;
-            }
-          }
+        .list-title {
+          padding: 0;
+          margin: 0;
         }
 
-        .unread-list {
-          .#{$el-namespace}-menu-item:not(.is-active) {
-            color: #aaa9a9;
-          }
-        }
-      }
+        .list-time {
+          display: inline-block;
 
-      &.message-content {
-        width: calc(100% - 450px);
-        padding: 12px 20px 0;
-        overflow: auto;
-
-        .message-content-header {
-          margin-bottom: 20px;
-
-          .message-content-title {
+          .list-dot {
+            position: relative;
+            top: -1px;
             display: inline-block;
-            padding: 0;
-            margin: 0;
+            width: 6px;
+            height: 6px;
+            vertical-align: middle;
+            background-color: #e6e8f1;
+            border-radius: 50%;
+          }
+
+          .list-text {
+            display: inline-block;
+            margin-left: 6px;
+            font-size: 12px;
             color: #515a6e;
           }
+        }
 
-          .message-content-time {
-            margin-left: 20px;
+        .list-operate {
+          align-items: normal;
+          float: right;
+          padding-top: 3px;
+          margin-right: 17px;
+        }
+
+        :deep(.#{$el-namespace}-icon) {
+          display: none;
+          font-size: 13px;
+          color: #909399;
+
+          &:hover {
+            color: var(--el-color-primary);
           }
+        }
+
+        &:hover {
+          :deep(.#{$el-namespace}-icon) {
+            display: inline-block;
+          }
+        }
+      }
+
+      .unread-list {
+        .#{$el-namespace}-menu-item:not(.is-active) {
+          color: #aaa9a9;
+        }
+      }
+    }
+
+    &--content {
+      width: calc(100% - 450px);
+      padding: 12px 20px 0;
+      overflow: auto;
+
+      &__header {
+        margin-bottom: 20px;
+
+        &--title {
+          display: inline-block;
+          padding: 0;
+          margin: 0;
+          color: #515a6e;
+        }
+
+        &--time {
+          margin-left: 20px;
         }
       }
     }
@@ -322,20 +338,10 @@ const handleOperate = (message: MessageItem) => {
 }
 </style>
 <style lang="scss">
-.message-center-container {
-  height: 100%;
-
-  .message-center-card {
-    .#{$el-namespace}-card__body {
-      height: 100%;
-      overflow: auto;
-      white-space: nowrap;
-    }
-  }
-}
+$prefix-class: #{$namespace}-message-center;
 
 .mobile {
-  .message-center-container {
+  .#{$prefix-class} {
     .message-content {
       width: 100% !important;
     }

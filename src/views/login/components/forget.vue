@@ -22,7 +22,7 @@
     </el-form-item>
 
     <el-form-item>
-      <div class="login-btn">
+      <div :class="`${prefixClass}__btn`">
         <el-button
           icon="UserFilled"
           round
@@ -44,6 +44,10 @@ import { ElMessage, type FormInstance } from "element-plus";
 import { useVerifyCode } from "../verifyCode";
 import { updateRules } from "../rules";
 import { Phone, Lock, WarnTriangleFilled } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("login");
 
 const loading = ref(false);
 const ruleForm = reactive({
@@ -82,7 +86,7 @@ const onUpdate = async (formEl: FormInstance | undefined) => {
       }, 2000);
     } else {
       loading.value = false;
-      return fields;
+      Promise.resolve(fields);
     }
   });
 };

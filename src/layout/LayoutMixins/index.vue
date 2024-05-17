@@ -1,21 +1,15 @@
 <template>
-  <el-container class="layout-container" :class="{ 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }">
+  <el-container :class="[prefixClass, { 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
     <el-header class="flx-justify-between">
-      <div class="logo flx-center" @click="router.push(HOME_URL)">
+      <div :class="`${prefixClass}__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span>{{ settings.title }}</span>
       </div>
       <CollapseTrigger />
-      <Menu
-        :menu-list="parentMenu"
-        :active-menu="activeMenu"
-        mode="horizontal"
-        :is-collapse="false"
-        class="mixins-header-menu"
-      />
+      <Menu :menu-list="parentMenu" :active-menu="activeMenu" mode="horizontal" :is-collapse="false" />
       <HeaderRight />
     </el-header>
-    <el-container class="mixins-container">
+    <el-container :class="`${prefixClass}__aside`">
       <el-aside :class="{ 'not-aside': !childrenMenu.length }">
         <Menu :menu-list="childrenMenu" />
       </el-aside>
@@ -24,6 +18,8 @@
   </el-container>
 </template>
 <script setup lang="ts" name="LayoutMixins">
+import { computed, watch, ref, unref } from "vue";
+import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import { useLayout, useRoutes } from "@/hooks";
@@ -32,6 +28,10 @@ import Menu from "@/layout/components/Menu/index.vue";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 import { HOME_URL } from "@/router/routesConfig";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("layout");
 
 const route = useRoute();
 const router = useRouter();
@@ -62,12 +62,11 @@ const parentMenu = computed(() => {
 });
 
 watch(
-  () => [menuList, route],
+  route,
   () => {
     // 当前菜单没有数据直接 return
-    if (!menuList.value.length) return;
-
-    const item = menuList.value.filter(
+    if (!unref(menuList).length) return;
+    const item = unref(menuList).filter(
       item =>
         route.path === item.path ||
         `/${route.path.split("/")[1]}` === item.path ||
@@ -78,7 +77,7 @@ watch(
 
     activeMenu.value = item[0].path;
 
-    if (item[0].children?.length) return (childrenMenu.value = item[0].children);
+    if (item[0] && item[0].children?.length) return (childrenMenu.value = item[0].children);
     childrenMenu.value = [];
   },
   {
@@ -87,6 +86,7 @@ watch(
   }
 );
 </script>
+
 <style lang="scss" scoped>
 @import "./index-scoped";
 </style>

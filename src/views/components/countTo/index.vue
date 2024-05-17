@@ -1,5 +1,5 @@
 <template>
-  <div class="count-to-container">
+  <div :class="prefixClass">
     <el-row :gutter="20">
       <el-col :span="4">
         <el-card shadow="hover">
@@ -200,6 +200,10 @@
 
 <script setup lang="ts" name="CountToDemo">
 import { CountTo } from "@/components";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("count-to-demo");
 
 const customUnit = [
   { value: 3, label: "千多" },
@@ -295,7 +299,9 @@ const reset = () => {
 </script>
 
 <style lang="scss" scoped>
-.count-to-container {
+$prefix-class: #{$namespace}-count-to-demo;
+
+.#{$prefix-class} {
   .count-to-row {
     margin-top: 20px;
   }
@@ -312,17 +318,10 @@ const reset = () => {
     color: var(--el-color-primary);
     text-align: center;
   }
-}
-</style>
-<style lang="scss">
-.count-to-container {
-  .count-text {
-    font-size: 50px;
-    color: var(--el-color-primary);
-  }
 
-  .unit-class {
-    font-size: 30px;
+  :deep(.count-text),
+  :deep(.unit-class) {
+    font-size: 50px;
     color: var(--el-color-primary);
   }
 }

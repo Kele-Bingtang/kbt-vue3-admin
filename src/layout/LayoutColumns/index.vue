@@ -1,14 +1,17 @@
 <template>
-  <el-container class="layout-container" :class="{ 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }">
-    <div class="aside-split">
-      <div class="logo flx-center" @click="router.push(HOME_URL)">
+  <el-container :class="[prefixClass, { 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
+    <div :class="`${prefixClass}__aside`">
+      <div :class="`${prefixClass}__aside__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
       </div>
       <el-scrollbar>
-        <div class="split-list">
+        <div :class="`${prefixClass}__aside__list`">
           <div
-            class="split-item flx-center"
-            :class="{ 'split-active': splitActive === item.path || `/${splitActive.split('/')[1]}` === item.path }"
+            class="flx-center"
+            :class="[
+              `${prefixClass}__aside__list-item`,
+              { 'split-active': splitActive === item.path || `/${splitActive.split('/')[1]}` === item.path },
+            ]"
             v-for="item in menuList"
             :key="item.path"
             @click="changeMenuItem(item)"
@@ -16,7 +19,7 @@
             <Icon v-if="item.meta.icon" :icon="item.meta.icon" />
             <div class="flx-center" style="width: 100%">
               <Tooltip :effect="settings.tooltipEffect">
-                <span class="title">{{ item.meta.title }}</span>
+                <span :class="`${prefixClass}__aside__list-item__title`">{{ item.meta.title }}</span>
               </Tooltip>
             </div>
           </div>
@@ -24,7 +27,7 @@
       </el-scrollbar>
     </div>
     <el-aside :class="{ 'not-aside': !menuItem.length }">
-      <div class="logo flx-center">
+      <div :class="`${prefixClass}__aside__logo flx-center`">
         <span v-show="menuItem.length">{{ isCollapse ? "K" : settings.title }}</span>
       </div>
       <el-scrollbar>
@@ -41,6 +44,8 @@
 </template>
 
 <script setup lang="ts" name="LayoutVertical">
+import { computed, watch, ref, unref } from "vue";
+import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
@@ -49,6 +54,10 @@ import settings from "@/config/settings";
 import Menu from "@/layout/components/Menu/index.vue";
 import { Tooltip } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("layout");
 
 const route = useRoute();
 const router = useRouter();
@@ -70,15 +79,15 @@ const menuList = computed(() => {
 });
 
 watch(
-  () => [menuList, route],
+  route,
   () => {
     // 当前菜单没有数据直接 return
-    if (!menuList.value.length) return;
+    if (!unref(menuList).length) return;
     splitActive.value = route.path;
-    const item = menuList.value.filter(
+    const item = unref(menuList).filter(
       item => route.path === item.path || `/${route.path.split("/")[1]}` === item.path
     );
-    if (item[0].children?.length) return (menuItem.value = item[0].children);
+    if (item[0] && item[0].children?.length) return (menuItem.value = item[0].children);
     menuItem.value = [];
   },
   {

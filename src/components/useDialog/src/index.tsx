@@ -5,7 +5,9 @@ import { Icon } from "@/components";
 import "./index.scss";
 import { useDesign } from "@/hooks";
 
-const { variables } = useDesign();
+const { getPrefixClass, variables } = useDesign();
+const prefixClass = getPrefixClass("work-dialog");
+
 let id = 0;
 let thisAppContext: any = null;
 
@@ -30,7 +32,7 @@ export interface UseDialogProps extends Partial<DialogProps> {
  * @description 关闭弹框
  */
 export const closeDialog = () => {
-  const vm = document.querySelector(`#work-dialog-${id--}`) as HTMLElement;
+  const vm = document.querySelector(`#${prefixClass}-${id--}`) as HTMLElement;
   vm && getFather().removeChild(vm);
 };
 
@@ -63,7 +65,7 @@ export const showDialog = (
 
   const toggleFull = () => {
     const elDialogEl = document.querySelector(
-      `${`#work-dialog-${id}`} .work-dialog.${variables.elNamespace}-dialog`
+      `${`#${prefixClass}-${id}`} .${prefixClass}.${variables.elNamespace}-dialog`
     ) as HTMLElement;
     if (elDialogEl) elDialogEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !isFullscreen.value;
@@ -100,7 +102,7 @@ export const showDialog = (
       render
       headerRender
       footerRender
-      class="work-dialog"
+      class={prefixClass}
     >
       {{
         default: () => {
@@ -117,7 +119,7 @@ export const showDialog = (
           if (dialogProps?.headerRender) return dialogProps.headerRender(scope);
           return (
             <div style="display: flex">
-              <span class="el-dialog__title" style="flex: 1">
+              <span class={`${variables.elNamespace}-dialog__title`} style="flex: 1">
                 {dialogProps.title}
               </span>
               {dialogProps.fullscreen === true ||
@@ -155,7 +157,7 @@ export const showDialog = (
   vm.children?.length && (vm.children[0].appContext = thisAppContext);
 
   const container = document.createElement("div");
-  container.id = `work-dialog-${++id}`;
+  container.id = `${prefixClass}-${++id}`;
   getFather().appendChild(container);
   render(vm, container);
 };

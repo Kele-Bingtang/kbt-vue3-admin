@@ -1,5 +1,5 @@
 <template>
-  <div class="tinymce-component" :class="{ fullscreen: fullscreen }">
+  <div :class="[prefixClass, { fullscreen: fullscreen }]">
     <TinymceEditor :id="id" v-model="tinymceContent" :init="initOptions" />
   </div>
 </template>
@@ -56,8 +56,12 @@ import "tinymce/plugins/wordcount"; // 右下角统计字数，https://www.tiny.
 import "tinymce/models/dom";
 import { plugins, toolbar as toolbarConfig } from "./config";
 import "/public/tinymce/plugins/axupimgs/plugin";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "Tinymce" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("tinymce");
 
 export type UITheme = "default" | "dark" | "tinymce-5" | "tinymce-5-dark";
 export type ContentTheme = "" | "default" | "dark" | "document" | "tinymce-5" | "tinymce-5-dark";
@@ -252,12 +256,14 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-.tinymce-component {
+$prefix-class: #{$namespace}-tinymce;
+
+.#{$prefix-class} {
   position: relative;
   line-height: normal;
-}
 
-:deep(.tox) {
-  z-index: 2000 !important;
+  :deep(.tox) {
+    z-index: 2000 !important;
+  }
 }
 </style>

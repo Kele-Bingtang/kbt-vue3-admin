@@ -1,13 +1,13 @@
 <template>
-  <el-dropdown trigger="click" class="user-dropdown">
-    <div class="avatar-wrapper">
+  <el-dropdown trigger="click" :class="prefixClass">
+    <div :class="`${prefixClass}__avatar`">
       <template v-if="prop.showAvatar">
-        <el-image :src="user.avatar" class="user-avatar" alt="头像">
+        <el-image :src="user.avatar" :class="`${prefixClass}__avatar--user`" alt="头像">
           <template #error>
             <el-image :src="defaultAvatar" alt="头像" />
           </template>
         </el-image>
-        <span class="username">{{ user.username }}</span>
+        <span :class="`${prefixClass}__avatar--username`">{{ user.username }}</span>
       </template>
 
       <el-icon><ArrowDownBold /></el-icon>
@@ -42,13 +42,18 @@
 </template>
 
 <script setup lang="ts" name="User">
+import { computed, withDefaults, defineProps } from "vue";
 import { useSettingsStore, useUserStore } from "@/stores";
 import { useI18n } from "vue-i18n";
 import defaultAvatar from "@/assets/images/default.png";
 import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
 import { mittBus } from "@/utils";
-import { ElMessage, ElMessageBox } from "element-plus";
+import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox } from "element-plus";
 import { LOGIN_URL } from "@/router/routesConfig";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("user-dropdown");
 
 const prop = withDefaults(defineProps<{ showAvatar?: boolean }>(), {
   showAvatar: true,
@@ -99,31 +104,35 @@ const logout = async () => {
 </script>
 
 <style lang="scss" scoped>
-.avatar-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  height: 100%;
+$prefix-class: #{$namespace}-user-dropdown;
 
-  .user-avatar {
-    width: 35px;
-    height: 35px;
-    cursor: pointer;
-    border-radius: 50%;
-  }
+.#{$prefix-class} {
+  &__avatar {
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
 
-  .username {
-    display: inline-block;
-    margin: 0 7px 0 9px;
-    font-size: 14px;
-    line-height: 0px;
-    cursor: pointer;
-    user-select: none;
-  }
+    &--user {
+      width: 35px;
+      height: 35px;
+      cursor: pointer;
+      border-radius: 50%;
+    }
 
-  .#{$el-namespace}-icon-caret-bottom {
-    font-size: 12px;
-    cursor: pointer;
+    &--username {
+      display: inline-block;
+      margin: 0 7px 0 9px;
+      font-size: 14px;
+      line-height: 0px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .#{$el-namespace}-icon-caret-bottom {
+      font-size: 12px;
+      cursor: pointer;
+    }
   }
 }
 </style>

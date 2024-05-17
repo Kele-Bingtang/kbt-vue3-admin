@@ -1,9 +1,9 @@
 <template>
-  <div class="user-avatar-container">
-    <div class="user-avatar-header" @click="openDialog">
-      <el-image :src="user.avatar" title="点击上传头像" class="user-avatar" alt="头像">
+  <div :class="prefixClass">
+    <div :class="`${prefixClass}__header`" @click="openDialog">
+      <el-image :src="user.avatar" title="点击上传头像" :class="`${prefixClass}__header--avatar`" alt="头像">
         <template #error>
-          <el-image :src="defaultAvatar" class="user-avatar" alt="头像" />
+          <el-image :src="defaultAvatar" :class="`${prefixClass}__header--avatar`" alt="头像" />
         </template>
       </el-image>
     </div>
@@ -14,7 +14,6 @@
       width="800px"
       append-to-body
       @close="handleClose"
-      class="user-avatar-dialog"
       destroy-on-close
       :close-on-click-modal="false"
     >
@@ -34,6 +33,10 @@
 import type { UserInfo } from "@/stores";
 import { Cropper } from "@/components";
 import defaultAvatar from "@/assets/images/default.png";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("user-avatar");
 
 const props = defineProps<{ user: UserInfo }>();
 const { user } = toRefs(props);
@@ -52,30 +55,34 @@ const uploadImage = (imgData: FormData) => {
 </script>
 
 <style lang="scss" scoped>
-.user-avatar-container {
+$prefix-class: #{$namespace}-user-avatar;
+
+.#{$prefix-class} {
   position: relative;
   display: inline-block;
   height: 100%;
 
-  .user-avatar-header:hover::after {
-    position: absolute;
-    inset: 0;
-    font-size: 24px;
-    font-style: normal;
-    line-height: 110px;
-    color: #eeeeee;
-    cursor: pointer;
-    content: "+";
-    background: rgb(0 0 0 / 50%);
-    border-radius: 50%;
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
-  }
+  &__header {
+    &--avatar {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
 
-  .user-avatar {
-    width: 100px;
-    height: 100px;
-    border-radius: 50%;
+    &:hover::after {
+      position: absolute;
+      inset: 0;
+      font-size: 24px;
+      font-style: normal;
+      line-height: 110px;
+      color: #eeeeee;
+      cursor: pointer;
+      content: "+";
+      background: rgb(0 0 0 / 50%);
+      border-radius: 50%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
   }
 }
 </style>

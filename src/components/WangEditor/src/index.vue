@@ -1,14 +1,14 @@
 <template>
-  <div :class="['editor-component', disabled ? 'editor-disabled' : '']">
+  <div :class="[prefixClass, { disabled }]">
     <Toolbar
-      class="editor-toolbar"
+      :class="`${prefixClass}__toolbar`"
       :editor="editorRef"
       :defaultConfig="toolbarConfig"
       :mode="mode"
       v-if="!hideToolBar"
     />
     <Editor
-      class="editor-content"
+      :class="`${prefixClass}__content`"
       :style="{ height: typeof height == 'string' ? height : `${height}px`, overflowY: 'hidden' }"
       v-model="content"
       :defaultConfig="editorConfig"
@@ -37,8 +37,12 @@ import {
   defineEmits,
   unref,
 } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "WangEditor" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("wang-editor");
 
 export type ImageInsertFnType = (url: string, alt: string) => void;
 export type VideoInsertFnType = (url: string, poster: string) => void;
@@ -221,30 +225,32 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
+$prefix-class: #{$namespace}-wang-editor;
+
 /* 富文本组件校验失败样式 */
 .is-error {
-  .editor-component {
+  .#{$prefix-class} {
     border-color: var(--el-color-danger);
   }
 }
 
-/* 富文本组件禁用样式 */
-.editor-disabled {
-  cursor: not-allowed !important;
-}
-
 /* 富文本组件样式 */
-.editor-component {
+.#{$prefix-class} {
   /* 防止富文本编辑器全屏时 tabs组件 在其层级之上 */
   z-index: 1100;
   width: 100%;
   border: 1px solid #cccccc;
 
-  .editor-toolbar {
+  /* 富文本组件禁用样式 */
+  &.disabled {
+    cursor: not-allowed !important;
+  }
+
+  &__toolbar {
     border-bottom: 1px solid #cccccc;
   }
 
-  .editor-content {
+  &__content {
     overflow-y: hidden;
   }
 }

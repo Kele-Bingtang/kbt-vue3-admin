@@ -1,5 +1,5 @@
 <template>
-  <div class="fullscreen-container">
+  <div :class="prefixClass">
     <Icon
       :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
       @click.stop="toggle"
@@ -12,5 +12,10 @@
 
 <script lang="ts" setup>
 import { useFullscreen } from "@vueuse/core";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("fullscreen");
+
 const { toggle, isFullscreen } = useFullscreen();
 </script>

@@ -17,6 +17,8 @@
 </template>
 
 <script setup lang="ts" name="LanguageSelect">
+import { computed } from "vue";
+import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus";
 import { useLayout } from "@/hooks";
 import { useLayoutStore, type LanguageType } from "@/stores";
 import { ElMessage } from "element-plus";

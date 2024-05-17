@@ -1,9 +1,9 @@
 <template>
-  <div class="upload-box">
+  <div :class="prefixClass">
     <el-upload
       action="#"
       list-type="picture-card"
-      :class="['upload', self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
+      :class="[`${prefixClass}__upload`, self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
       v-model:file-list="fileList"
       :multiple="true"
       :disabled="self_disabled"
@@ -16,27 +16,27 @@
       :drag="drag"
       :accept="fileType.join(',')"
     >
-      <div class="upload-empty">
+      <div :class="`${prefixClass}__empty`">
         <slot name="empty">
           <el-icon><Plus /></el-icon>
           <!-- <span>请上传图片</span> -->
         </slot>
       </div>
       <template #file="{ file }">
-        <img :src="file.url" class="upload-image" />
-        <div class="upload-handle" @click.stop>
-          <div class="handle-icon" @click="handlePictureCardPreview(file)">
+        <img :src="file.url" :class="`${prefixClass}__image`" />
+        <div :class="`${prefixClass}__handle`" @click.stop>
+          <div :class="`${prefixClass}__handle--icon`" @click="handlePictureCardPreview(file)">
             <el-icon><ZoomIn /></el-icon>
             <span>查看</span>
           </div>
-          <div class="handle-icon" @click="handleRemove(file)" v-if="!self_disabled">
+          <div :class="`${prefixClass}__handle--icon`" @click="handleRemove(file)" v-if="!self_disabled">
             <el-icon><Delete /></el-icon>
             <span>删除</span>
           </div>
         </div>
       </template>
     </el-upload>
-    <div class="el-upload__tip">
+    <div :class="`${variables.elNamespace}-upload__tip`">
       <slot name="tip"></slot>
     </div>
     <el-image-viewer v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[viewImageUrl]" />
@@ -45,11 +45,23 @@
 
 <script setup lang="ts">
 import { Plus, ZoomIn, Delete } from "@element-plus/icons-vue";
-import type { UploadProps, UploadFile, UploadUserFile, UploadRequestOptions } from "element-plus";
+import {
+  ElUpload,
+  ElImageViewer,
+  ElIcon,
+  type UploadProps,
+  type UploadFile,
+  type UploadUserFile,
+  type UploadRequestOptions,
+} from "element-plus";
 import { ElNotification, formContextKey, formItemContextKey } from "element-plus";
 import { inject, computed, ref, defineOptions, defineProps, defineEmits } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "UploadImgs" });
+
+const { getPrefixClass, variables } = useDesign();
+const prefixClass = getPrefixClass("images-upload");
 
 export type SuccessFun = (response: string) => void;
 
@@ -196,6 +208,8 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
 </script>
 
 <style scoped lang="scss">
+$prefix-class: #{$namespace}-images-upload;
+
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
 .is-error {
   .upload {
@@ -210,7 +224,7 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
   }
 }
 
-:deep(.disabled) {
+:deep(.#{$prefix-class}__upload.disabled) {
   .#{$el-namespace}-upload--picture-card,
   .#{$el-namespace}-upload-dragger {
     cursor: not-allowed;
@@ -223,14 +237,14 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
   }
 }
 
-.upload-box {
+.#{$prefix-class} {
   .no-border {
     :deep(.#{$el-namespace}-upload--picture-card) {
       border: none !important;
     }
   }
 
-  :deep(.upload) {
+  :deep(.#{$prefix-class}__upload) {
     .#{$el-namespace}-upload-dragger {
       display: flex;
       align-items: center;
@@ -260,13 +274,13 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
       border-radius: v-bind(borderRadius);
     }
 
-    .upload-image {
+    .#{$prefix-class}__image {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
 
-    .upload-handle {
+    .#{$prefix-class}__handle {
       position: absolute;
       top: 0;
       right: 0;
@@ -281,7 +295,7 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
       opacity: 0;
       transition: var(--el-transition-duration-fast);
 
-      .handle-icon {
+      &--icon {
         display: flex;
         flex-direction: column;
         align-items: center;
@@ -308,7 +322,7 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
       }
     }
 
-    .upload-empty {
+    .#{$prefix-class}__empty {
       display: flex;
       flex-direction: column;
       align-items: center;

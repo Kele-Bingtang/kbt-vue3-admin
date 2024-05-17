@@ -1,5 +1,5 @@
 <template>
-  <div :class="{ show: isShowSearch }" class="header-search">
+  <div :class="[prefixClass, { show: isShowSearch }]">
     <Icon
       name="search"
       width="20px"
@@ -18,7 +18,7 @@
     >
       <template #prefix>
         <el-tooltip effect="dark" content="切换查询模式" placement="left" :show-after="100">
-          <el-icon class="search-icon" @click.stop="handleSwitchMode"><Search /></el-icon>
+          <el-icon :class="`${prefixClass}__icon`" @click.stop="handleSwitchMode"><Search /></el-icon>
         </el-tooltip>
       </template>
       <template #default="{ item }">
@@ -32,11 +32,17 @@
 </template>
 
 <script setup lang="ts" name="MenuSearch">
+import { computed, ref, onUnmounted } from "vue";
+import { ElAutocomplete, ElTooltip, ElIcon } from "element-plus";
 import { useLayout } from "@/hooks";
 import { usePermissionStore } from "@/stores";
 import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils";
 import { Search } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("menu-search");
 
 const router = useRouter();
 const permissionStore = usePermissionStore();
@@ -147,7 +153,9 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-.header-search {
+$prefix-class: #{$namespace}-menu-search;
+
+.#{$prefix-class} {
   &:not(.show) {
     :deep(.#{$el-namespace}-autocomplete) {
       width: 0;
@@ -171,7 +179,7 @@ onUnmounted(() => {
     }
   }
 
-  .search-icon {
+  &__icon {
     cursor: pointer;
 
     &:hover {

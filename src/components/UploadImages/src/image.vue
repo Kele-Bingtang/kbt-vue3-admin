@@ -1,9 +1,9 @@
 <template>
-  <div class="upload-box">
+  <div :class="prefixClass">
     <el-upload
       action="#"
       :id="uuid"
-      :class="['upload', self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
+      :class="[`${prefixClass}__upload`, self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
       :multiple="false"
       :disabled="self_disabled"
       :show-file-list="false"
@@ -15,24 +15,24 @@
       :accept="fileType.join(',')"
     >
       <template v-if="imageUrl">
-        <img :src="imageUrl" class="upload-image" />
-        <div class="upload-handle" @click.stop>
-          <div class="handle-icon" @click="editImg" v-if="!self_disabled">
+        <img :src="imageUrl" :class="`${prefixClass}__image`" />
+        <div :class="`${prefixClass}__handle`" @click.stop>
+          <div :class="`${prefixClass}__handle--icon`" @click="editImg" v-if="!self_disabled">
             <el-icon><Edit /></el-icon>
             <span>编辑</span>
           </div>
-          <div class="handle-icon" @click="imgViewVisible = true">
+          <div :class="`${prefixClass}__handle--icon`" @click="imgViewVisible = true">
             <el-icon><ZoomIn /></el-icon>
             <span>查看</span>
           </div>
-          <div class="handle-icon" @click="deleteImg" v-if="!self_disabled">
+          <div :class="`${prefixClass}__handle--icon`" @click="deleteImg" v-if="!self_disabled">
             <el-icon><Delete /></el-icon>
             <span>删除</span>
           </div>
         </div>
       </template>
       <template v-else>
-        <div class="upload-empty">
+        <div :class="`${prefixClass}__empty`">
           <slot name="empty">
             <el-icon><Plus /></el-icon>
             <!-- <span>请上传图片</span> -->
@@ -50,11 +50,15 @@
 <script setup lang="ts">
 import { generateUUID } from "@/utils";
 import { ElNotification, formContextKey, formItemContextKey } from "element-plus";
-import type { UploadProps, UploadRequestOptions } from "element-plus";
+import { ElUpload, ElImageViewer, ElIcon, type UploadProps, type UploadRequestOptions } from "element-plus";
 import { Edit, ZoomIn, Delete, Plus } from "@element-plus/icons-vue";
 import { ref, inject, computed, defineOptions, defineProps, defineEmits } from "vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "UploadImg" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("image-upload");
 
 export type SuccessFun = (response: string) => void;
 
@@ -196,6 +200,8 @@ const uploadError = () => {
 </script>
 
 <style lang="scss" scoped>
+$prefix-class: #{$namespace}-image-upload;
+
 .is-error {
   .upload {
     :deep(.#{$el-namespace}-upload),
@@ -210,7 +216,7 @@ const uploadError = () => {
 }
 
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
-:deep(.disabled) {
+:deep(.#{$prefix-class}__upload.disabled) {
   .#{$el-namespace}-upload,
   .#{$el-namespace}-upload-dragger {
     cursor: not-allowed !important;
@@ -223,14 +229,14 @@ const uploadError = () => {
   }
 }
 
-.upload-box {
-  .no-border {
+.#{$prefix-class} {
+  .#{$prefix-class}__upload.no-border {
     :deep(.#{$el-namespace}-upload) {
       border: none !important;
     }
   }
 
-  :deep(.upload) {
+  :deep(.#{$prefix-class}__upload) {
     .#{$el-namespace}-upload {
       position: relative;
       display: flex;
@@ -273,29 +279,13 @@ const uploadError = () => {
         border: 2px dashed var(--el-color-primary) !important;
       }
 
-      .upload-image {
+      .#{$prefix-class}__image {
         width: 100%;
         height: 100%;
         object-fit: contain;
       }
 
-      .upload-empty {
-        position: relative;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: center;
-        font-size: 12px;
-        line-height: 30px;
-        color: var(--el-color-info);
-
-        .#{$el-namespace}-icon {
-          font-size: 28px;
-          color: var(--el-text-color-secondary);
-        }
-      }
-
-      .upload-handle {
+      .#{$prefix-class}__handle {
         position: absolute;
         top: 0;
         right: 0;
@@ -310,7 +300,7 @@ const uploadError = () => {
         opacity: 0;
         transition: var(--el-transition-duration-fast);
 
-        .handle-icon {
+        &--icon {
           display: flex;
           flex-direction: column;
           align-items: center;
@@ -330,6 +320,22 @@ const uploadError = () => {
           }
         }
       }
+    }
+  }
+
+  .#{$prefix-class}__empty {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    line-height: 30px;
+    color: var(--el-color-info);
+
+    .#{$el-namespace}-icon {
+      font-size: 28px;
+      color: var(--el-text-color-secondary);
     }
   }
 

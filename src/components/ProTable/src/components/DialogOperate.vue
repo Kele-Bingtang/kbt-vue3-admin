@@ -1,5 +1,5 @@
 <template>
-  <el-dialog v-model="dialogFormVisible" destroy-on-close draggable v-bind="dialog" :title="dialogTitle">
+  <BasicDialog v-model="dialogFormVisible" destroy-on-close draggable v-bind="dialog" :title="dialogTitle">
     <slot name="form">
       <ProForm v-if="options" ref="formElementRef" :options="formOptions" v-model="form">
         <template #footer v-if="$slots.formFooter">
@@ -22,13 +22,13 @@
         <el-button type="primary" @click="handleFormConfirm(form, status)">保存</el-button>
       </slot>
     </template>
-  </el-dialog>
+  </BasicDialog>
 </template>
 
 <script setup lang="ts">
-import { type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
-import { ProForm, type FormOptionsProps } from "@/components";
-import { shallowRef, ref, computed, defineOptions, defineProps } from "vue";
+import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
+import { ProForm, BasicDialog, type FormOptionsProps } from "@/components";
+import { shallowRef, ref, computed, defineOptions, defineProps, defineExpose } from "vue";
 import { deepCloneTableRow } from "../utils";
 
 defineOptions({ name: "DialogOperate" });
@@ -38,7 +38,11 @@ export type DialogStatus = "" | "edit" | "add" | "read";
 export interface DialogFormProps {
   options: FormOptionsProps; // 表单配置项
   dialog: Partial<
-    Omit<DialogProps, "modelValue" | "title"> & { title: string | ((form: any, status: DialogStatus) => string) }
+    Omit<DialogProps, "modelValue" | "title"> & {
+      title: string | ((form: any, status: DialogStatus) => string);
+      fullscreen: boolean;
+      height: string | number;
+    }
   >; // el-dialog 配置项
   addApi?: (params: any) => Promise<any>; // 新增接口
   addCarryParams?: any; // 额外添加的函数, valueEquals

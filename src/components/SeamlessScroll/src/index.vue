@@ -25,7 +25,17 @@
 </template>
 
 <script setup lang="ts">
-import { computed, nextTick, ref, defineOptions, defineProps, defineEmits, unref, type CSSProperties } from "vue";
+import {
+  computed,
+  nextTick,
+  ref,
+  defineOptions,
+  defineProps,
+  defineEmits,
+  defineExpose,
+  unref,
+  type CSSProperties,
+} from "vue";
 import { tryOnMounted, tryOnUnmounted, templateRef, useDebounceFn } from "@vueuse/core";
 import * as utilsMethods from "./utils";
 

@@ -1,5 +1,8 @@
-<script setup lang="ts" name="Redirect">
+<script setup lang="ts">
 import { useRouter } from "vue-router";
+import { defineOptions, unref } from "vue";
+
+defineOptions({ name: "Redirect" });
 
 const { currentRoute, replace } = useRouter();
 

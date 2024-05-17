@@ -1,4 +1,6 @@
-.tabs-nav {
+$prefix-class: #{$namespace}-tabs-nav;
+
+.#{$prefix-class} {
   position: relative;
   width: 100%;
   height: 38px;
@@ -10,19 +12,19 @@
   box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
   transition: left 0.3s ease;
 
-  .scroll-container {
+  &__scroll {
     position: absolute;
     inset: 0 88px 0 28px;
     overflow: hidden;
 
-    .scroll-body {
+    &__body {
       position: absolute;
       display: inline-block;
       padding: 2px 4px 0;
       white-space: nowrap;
       transition: left 0.3s ease;
 
-      .tabs-link {
+      .#{$prefix-class}__tab--link {
         display: inline-block;
         height: 28px;
         padding: 0 10px;
@@ -56,7 +58,7 @@
           transition: background 0.2s ease;
         }
 
-        .tab-icon {
+        .#{$prefix-class}__tab--icon {
           position: relative;
           top: 2px;
           margin-right: 4px;
@@ -90,7 +92,7 @@
     }
   }
 
-  .btn-icon {
+  &__btn {
     position: absolute;
     top: 0;
     z-index: 10;
@@ -125,7 +127,7 @@
     }
   }
 
-  .menu-dropdown {
+  &__menu-dropdown {
     position: absolute;
     top: 7px;
     right: 0;

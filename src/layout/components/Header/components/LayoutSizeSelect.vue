@@ -19,6 +19,8 @@
 </template>
 
 <script setup lang="ts" name="LayoutSizeSelect">
+import { computed } from "vue";
+import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus";
 import { useLayoutStore, type LayoutSizeType } from "@/stores";
 import { ElMessage } from "element-plus";
 import { useI18n } from "vue-i18n";

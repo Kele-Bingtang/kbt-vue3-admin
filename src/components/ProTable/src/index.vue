@@ -1,5 +1,5 @@
 <template>
-  <div class="pro-table-container">
+  <div :class="prefixClass">
     <!-- 查询表单 card -->
     <SearchForm
       v-show="isShowSearchProp"
@@ -9,10 +9,10 @@
       :search-param="searchParam"
       :search-cols="searchCols"
     />
-    <div class="card table-main">
+    <div :class="`card ${prefixClass}__main`">
       <!-- 表格头部 操作按钮 -->
-      <div class="table-header">
-        <div class="header-button-lf">
+      <div :class="`${prefixClass}__main__header`">
+        <div :class="`${prefixClass}__main__header--button-lf`">
           <slot
             name="tableHeader"
             :selected-list-ids="selectedListIds"
@@ -51,7 +51,7 @@
             ></slot>
           </slot>
         </div>
-        <div v-if="toolButton" class="header-button-ri">
+        <div v-if="toolButton" :class="`${prefixClass}__main__header--button-ri`">
           <slot name="toolButton">
             <el-tooltip effect="light" content="刷新" placement="top">
               <el-button :icon="Refresh" circle @click="getTableList" />
@@ -171,7 +171,7 @@
 
         <!-- 无数据 -->
         <template #empty>
-          <div class="table-empty">
+          <div :class="`${prefixClass}__empty`">
             <slot name="empty">
               <img src="@/assets/images/notData.png" alt="notData" />
               <div>暂无数据</div>
@@ -232,9 +232,19 @@ import {
   shallowRef,
   defineOptions,
   defineProps,
+  defineExpose,
   unref,
 } from "vue";
-import { ElTable } from "element-plus";
+import {
+  ElTable,
+  ElTooltip,
+  ElDropdown,
+  ElDropdownMenu,
+  ElDropdownItem,
+  ElButton,
+  ElTableColumn,
+  ElPopconfirm,
+} from "element-plus";
 import { useTable, type Table } from "./hooks/useTable";
 import { useSelection } from "./hooks/useSelection";
 import { SearchForm, Pagination, type BreakPoint } from "@/components";
@@ -245,8 +255,14 @@ import ColSetting from "./components/ColSetting.vue";
 import TableColumn from "./components/TableColumn.vue";
 import DialogOperate from "./components/DialogOperate.vue";
 import type { DialogFormProps } from "./components/DialogOperate.vue";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "ProTable" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("pro-table");
+
+provide("proTablePrefixClass", prefixClass);
 
 export type DialogForm = DialogFormProps;
 

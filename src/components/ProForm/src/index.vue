@@ -1,23 +1,23 @@
 <template>
-  <component class="pro-form-container" :is="'el-form'" v-bind="options.form" ref="formRef" :model="form">
-    <component :is="`el-row`" v-bind="options.row" style="width: 100%">
+  <component ref="formRef" :class="prefixClass" :is="ElForm" v-bind="options.form" :model="form">
+    <component :is="ElRow" v-bind="options.row" style="width: 100%">
       <template v-for="item in options.columns" :key="item.formItem.prop || item.formItem.title">
         <template v-if="item.formItem.title && !isDestroy(item)">
-          <el-col :span="24" class="title-col">
+          <el-col :span="24" :class="`${prefixClass}__title`">
             <el-divider direction="vertical" />
             <span :style="getTitleFontStyle(item)">{{ item.formItem.title }}</span>
           </el-col>
         </template>
 
         <component
-          :is="`el-col`"
+          :is="ElCol"
           v-bind="item.formItem.col || options.row?.col"
           :span="item.formItem.br ? 24 : item.formItem?.col?.span || options.row?.col?.span || 24"
           v-else-if="!isDestroy(item)"
           v-show="!isHidden(item)"
         >
           <component
-            :is="'el-form-item'"
+            :is="ElFormItem"
             v-bind="item.formItem"
             :label="parseLabel(item.formItem.label)"
             :style="{
@@ -30,20 +30,23 @@
       </template>
     </component>
 
-    <el-form-item class="form-footer" v-if="$slots.footer"><slot name="footer"></slot></el-form-item>
-    <el-form-item class="form-operation" v-if="$slots.operation"><slot name="operation"></slot></el-form-item>
+    <el-form-item v-if="$slots.operation"><slot name="operation"></slot></el-form-item>
   </component>
 </template>
 
 <script setup lang="ts">
-import { computed, shallowRef, ref, provide, watch, defineProps, unref, type Ref } from "vue";
+import { computed, shallowRef, ref, provide, watch, defineProps, defineExpose, unref, type Ref } from "vue";
 import type { FormColumnProps, FormEnumProps, FormOptionsProps } from "./interface";
 import ProFormItem from "./components/ProFormItem.vue";
 import { getPx } from "@/utils";
-import type { FormInstance } from "element-plus";
+import { ElRow, ElCol, ElForm, ElFormItem, type FormInstance } from "element-plus";
 import { isResponsive, getFormProp, setFormProp } from "./utils";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "ProForm" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("pro-form");
 
 export interface ProFormProps {
   options: FormOptionsProps;

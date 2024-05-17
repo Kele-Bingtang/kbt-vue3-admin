@@ -1,21 +1,24 @@
 <template>
-  <el-breadcrumb class="breadcrumb" :separator-icon="ArrowRight">
+  <el-breadcrumb :class="prefixClass" :separator-icon="ArrowRight">
     <transition-group name="breadcrumb">
       <el-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbList" :key="breadcrumb.path">
-        <span v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1" class="no-click-bread">
+        <span
+          v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1"
+          :class="`${prefixClass}__no-click`"
+        >
           <Icon
             v-if="breadcrumb.meta.icon && settingsStore.showBreadcrumbIcon"
             :icon="breadcrumb.meta.icon"
-            class="breadcrumb-icon"
+            :class="`${prefixClass}__icon`"
           />
           <span>{{ getTitle(breadcrumb) }}</span>
         </span>
-        <a v-else @click.prevent="handleBreadcrumbClick(breadcrumb)" class="breadcrumb-link">
+        <a v-else @click.prevent="handleBreadcrumbClick(breadcrumb)" :class="`${prefixClass}__link`">
           <template v-if="breadcrumb.meta && breadcrumb.meta.icon">
             <Icon
               v-if="breadcrumb.meta.icon && settingsStore.showBreadcrumbIcon"
               :icon="breadcrumb.meta.icon"
-              class="breadcrumb-icon"
+              :class="`${prefixClass}__icon`"
             />
           </template>
           <span>{{ breadcrumb.meta.title }}</span>
@@ -26,10 +29,16 @@
 </template>
 
 <script setup lang="ts" name="Breadcrumb">
+import { ref, watch } from "vue";
+import { ElBreadcrumb, ElBreadcrumbItem } from "element-plus";
 import { useLayout } from "@/hooks";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { compile } from "path-to-regexp";
 import { useSettingsStore } from "@/stores";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("breadcrumb");
 
 const route = useRoute();
 const router = useRouter();
@@ -76,7 +85,9 @@ const handleBreadcrumbClick = (item: RouteConfig) => {
 </script>
 
 <style lang="scss" scoped>
-.breadcrumb {
+$prefix-class: #{$namespace}-breadcrumb;
+
+.#{$prefix-class} {
   display: flex;
   align-items: center;
   padding-right: 50px;
@@ -84,12 +95,12 @@ const handleBreadcrumbClick = (item: RouteConfig) => {
   white-space: nowrap;
   mask-image: linear-gradient(90deg, #000000 0%, #000000 calc(100% - 50px), transparent);
 
-  .breadcrumb-link {
+  &__link {
     display: inline-flex;
     align-items: center;
   }
 
-  .breadcrumb-icon {
+  &__icon {
     margin-right: 6px;
     font-size: 16px;
 
@@ -98,7 +109,7 @@ const handleBreadcrumbClick = (item: RouteConfig) => {
     }
   }
 
-  .no-click-bread {
+  &__no-click {
     display: inline-flex;
     align-items: center;
     color: #97a8be;

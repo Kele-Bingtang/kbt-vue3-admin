@@ -28,6 +28,8 @@
 </template>
 
 <script setup lang="ts" name="MenuItem">
+import { ref, defineProps, watch, nextTick } from "vue";
+import { ElMenuItem, ElSubMenu } from "element-plus";
 import { useLayout } from "@/hooks";
 import { isExternal } from "@/utils";
 import { Tooltip } from "@/components";
