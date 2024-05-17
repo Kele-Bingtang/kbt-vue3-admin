@@ -4,12 +4,12 @@
 
     <el-button @Click="visible = true">通过 modelValue 打开 Dialog 组件</el-button>
 
-    <Dialog v-model="visible">我是通过 modelValue 打开的 Dialog 组件</Dialog>
+    <BasicDialog v-model="visible">我是通过 modelValue 打开的 Dialog 组件</BasicDialog>
   </el-card>
 </template>
 
 <script setup lang="tsx" name="UseDialogDemo">
-import { useDialog, Dialog } from "@/components";
+import { useDialog, BasicDialog } from "@/components";
 
 const visible = ref(false);
 
