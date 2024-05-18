@@ -1,6 +1,6 @@
 {
   "name": "kbt-vue3-admin",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "private": true,
   "description": "Kbt Admin 后台管理系统",
   "author": "YoungKbt <2456019588@qq.com>",
@@ -23,6 +23,11 @@
     "lint:eslint": "eslint --max-warnings 0  \"{src,mock,build}/**/*.{vue,js,ts,tsx}\" --fix",
     "lint": "yarn lint:eslint && yarn lint:prettier && yarn lint:stylelint",
     "release": "standard-version",
+    "release-major": "standard-version --release-as major",
+    "release-minor": "standard-version --release-as minor",
+    "release-patch": "standard-version --release-as patch",
+    "release-as": "standard-version --release-as",
+    "release-prerelease": "standard-version --prerelease",
     "commit": "git add . && git-cz",
     "cp": "git add . && git-cz && git push"
   },
