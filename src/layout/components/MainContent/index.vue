@@ -5,13 +5,7 @@
     <router-view v-slot="{ Component, route }">
       <CustomTransition name="fade-transform">
         <keep-alive :include="layoutStore.keepAliveName">
-          <component
-            :is="Component"
-            :key="route.path"
-            v-if="isRouterShow"
-            class="main-content"
-            :style="{ overflow: settingsStore.fixTabsNav ? 'scroll' : 'initial' }"
-          />
+          <component :is="Component" :key="route.path" v-if="isRouterShow" class="main-content" />
         </keep-alive>
       </CustomTransition>
     </router-view>
@@ -69,6 +63,11 @@ watchEffect(() => {
     else app?.classList.remove("main-maximize");
   }
 });
+
+const isFixTabsNav = computed(() => {
+  if (settingsStore.fixTabsNav) return "auto";
+  return "";
+});
 </script>
 
 <style lang="scss" scoped>
@@ -82,6 +81,7 @@ watchEffect(() => {
 
   .main-content {
     padding: 10px 12px;
+    overflow: v-bind(isFixTabsNav);
   }
 
   &::-webkit-scrollbar {

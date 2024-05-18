@@ -4,10 +4,6 @@ All notable changes to this project will be documented in this file. See [standa
 
 ## [0.1.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v0.0.2...v0.1.0) (2024-05-18)
 
-### ⚠ BREAKING CHANGES
-
-- 、
-
 ### Features
 
 - 支持 pnpm、新增 Icon 组件、ElementPlus Icon 去掉全局注入 ([9241b1c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/9241b1c544d7818f9cac6ad2bdfbcb2038295ea2))

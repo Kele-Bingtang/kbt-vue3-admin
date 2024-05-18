@@ -28,8 +28,8 @@
     "release-patch": "standard-version --release-as patch",
     "release-as": "standard-version --release-as",
     "release-prerelease": "standard-version --prerelease",
-    "commit": "git add . && git-cz",
-    "cp": "git add . && git-cz && git push"
+    "cz": "git add . && git-cz",
+    "czp": "git add . && git-cz && git push"
   },
   "browserslist": [
     "> 1%",
