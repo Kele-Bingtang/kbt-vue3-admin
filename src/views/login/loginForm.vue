@@ -27,7 +27,7 @@
       </div>
     </el-form-item>
     <el-form-item>
-      <div :class="`${prefixClass}__login--btn`">
+      <div :class="`${prefixClass}__btn`">
         <el-button :icon="CircleClose" round @click="resetForm()" size="large">重置</el-button>
         <el-button :icon="UserFilled" round @click="startLogin()" size="large" type="primary" :loading="loading">
           登录

@@ -1,7 +1,7 @@
 <template>
   <el-container :class="[prefixClass, { mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
     <el-aside>
-      <div :class="`${prefixClass}__logo flx-center`" @click="router.push(HOME_URL)">
+      <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ settings.title }}</span>
       </div>
@@ -45,7 +45,7 @@ import { useDesign } from "@/hooks";
 import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("layout");
+const prefixClass = getPrefixClass("subsystem-layout");
 
 const route = useRoute();
 const router = useRouter();

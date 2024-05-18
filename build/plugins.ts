@@ -19,7 +19,11 @@ export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
     vueJsx(),
     eslintPlugin({ cache: false }), // EsLint 报错信息显示在浏览器界面上
     VueSetupExtend(), // script setup 标签支持 name 命名组件
-    ServerUrlCopy(),
+    ServerUrlCopy({
+      qrcode: {
+        disabled: true, // 是否生成二维码
+      },
+    }),
     progress(),
     !viteEnv.VITE_LOAD_ALL_EP_STYLE
       ? createStyleImportPlugin({

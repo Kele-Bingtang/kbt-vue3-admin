@@ -1,3 +1,7 @@
+$login-prefix-class: #{$namespace}-login;
+$columns-prefix-class: #{$namespace}-columns-layout;
+$tabs-nav-prefix-class: #{$namespace}-tabs-nav;
+
 /* 自定义 element 暗黑模式样式 */
 html.dark {
   /* kbt-admin */
@@ -6,18 +10,18 @@ html.dark {
   --kbt-border-light: 1px solid #4c4c4d;
 
   /* 以下为自定义暗黑模式内容 */
-  .login-container {
-    background-color: var(--el-fill-color-extra-light) !important;
+  .#{$login-prefix-class} {
+    background-color: var(--el-fill-color-extra-light);
 
-    .login-box {
-      background-color: var(--el-mask-color) !important;
+    &__box {
+      background-color: var(--el-mask-color);
 
-      .login-form {
-        background-color: var(--el-bg-color) !important;
-        box-shadow: 5px 5px 15px rgb(161 161 161 / 20%) !important;
+      &__form {
+        background-color: var(--el-bg-color);
+        box-shadow: 5px 5px 15px rgb(161 161 161 / 20%);
 
-        .logo-text {
-          color: var(--el-text-color-primary) !important;
+        &__text {
+          color: var(--el-text-color-primary);
         }
       }
     }
@@ -25,38 +29,45 @@ html.dark {
 
   /* scroll-bar */
   ::-webkit-scrollbar {
-    background-color: var(--el-scrollbar-bg-color) !important;
+    background-color: var(--el-scrollbar-bg-color);
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: var(--el-border-color-darker) !important;
+    background-color: var(--el-border-color-darker);
   }
 
   .columns {
     .#{$el-namespace}-aside {
       .#{$el-namespace}-menu-item:not(.is-active) > * {
-        color: var(--menu-text-color) !important;
+        color: var(--menu-text-color);
       }
+    }
+
+    .layout__logo {
+      border-right: var(--kbt-border-light);
+      border-bottom: var(--kbt-border-light);
+    }
+  }
+
+  .mixins {
+    .#{$el-namespace}-header {
+      border-bottom: var(--kbt-border-light);
     }
   }
 
   /* layout */
   .#{$el-namespace}-container {
     .#{$el-namespace}-aside {
-      background-color: var(--kbt-bg-color) !important;
-      border-right: var(--kbt-border-light) !important;
+      background-color: var(--kbt-bg-color);
+      border-right: var(--kbt-border-light);
 
-      .logo {
-        border-bottom: var(--kbt-border-light) !important;
+      .layout__logo {
+        border-bottom: var(--kbt-border-light);
       }
     }
 
-    .aside-split {
+    .#{$columns-prefix-class}__aside__list {
       border-right: var(--kbt-border-light) !important;
-
-      .logo {
-        background-color: var(--kbt-bg-color) !important;
-      }
     }
 
     .not-aside {
@@ -66,13 +77,7 @@ html.dark {
     .#{$el-namespace}-header {
       color: var(--el-text-color-regular) !important;
       background-color: var(--kbt-bg-color) !important;
-      border-bottom-color: var(--el-border-color-light) !important;
-
-      .header-left {
-        .#{$el-namespace}-breadcrumb__inner {
-          color: var(--el-text-color-regular) !important;
-        }
-      }
+      border-bottom-color: var(--el-border-color-light);
     }
 
     .#{$el-namespace}-main,
@@ -80,14 +85,14 @@ html.dark {
       background-color: var(--kbt-main-bg-color) !important;
     }
 
-    .tabs-nav {
+    .#{$tabs-nav-prefix-class} {
       border-bottom: 1px solid var(--el-border-color-light);
 
       .#{$el-namespace}-tabs {
         background-color: var(--kbt-bg-color) !important;
         border-bottom: 1px solid var(--el-border-color-light);
 
-        .btn-icon .#{$el-namespace}-button {
+        .#{$tabs-nav-prefix-class}__btn .#{$el-namespace}-button {
           border-color: var(--el-border-color-light) !important;
         }
       }
@@ -96,23 +101,12 @@ html.dark {
     .#{$el-namespace}-dropdown {
       color: var(--el-text-color-regular) !important;
     }
-
-    .#{$el-namespace}-footer {
-      .footer {
-        background-color: var(--kbt-bg-color) !important;
-        border-top-color: var(--el-border-color-light) !important;
-
-        a {
-          color: var(--el-text-color-regular) !important;
-        }
-      }
-    }
   }
 
   .#{$el-namespace}-menu,
   .#{$el-namespace}-menu-item,
   .#{$el-namespace}-sub-menu__title {
-    background-color: var(--kbt-bg-color) !important;
+    background-color: var(--kbt-bg-color);
   }
 
   /* 克隆并自定义 ElMessage 样式，不会影响 ElMessage 原本样式，在 src/utils/message.ts 中调用自定义样式 ElMessage 方法即可，非暗黑模式在 src/style/element-plus.scss 文件进行了适配 */
@@ -140,5 +134,5 @@ html.dark {
 }
 
 .#{$el-namespace}-sub-menu__title:hover {
-  background-color: var(--menu-active-bg-color);
+  background-color: var(--el-color-primary-light-9) !important;
 }

@@ -31,9 +31,10 @@ module.exports = {
   ignores: [commit => commit.includes("init")],
   extends: ["@commitlint/config-conventional"],
   rules: {
+    // 参数 1：0 为 disable，1 为 warning，2 为 error，参数 2：always 开启 never 禁用，参数 3，自定义规则值
     "body-leading-blank": [2, "always"], // body 换行
     "footer-leading-blank": [1, "always"], // footer 以空行开头
-    "header-max-length": [2, "always", 108], // header 最长 108
+    "header-max-length": [2, "always", 150], // header 最长 150
     "subject-empty": [2, "never"], // subject 不能为空
     "type-empty": [2, "never"], // type 不能为空
     "type-enum": [
@@ -65,9 +66,11 @@ module.exports = {
       // subject: "Write a SHORT, IMPERATIVE tense description of the change:\n",
       // body: 'Provide a LONGER description of the change (optional). Use "|" to break new line:\n',
       // breaking: 'List any BREAKING CHANGES (optional). Use "|" to break new line:\n',
-      // footerPrefixsSelect: "Select the ISSUES type of changeList by this change (optional):",
-      // customFooterPrefixs: "Input ISSUES prefix:",
+      // footerPrefixesSelect: "Select the ISSUES type of changeList by this change (optional):",
+      // customFooterPrefix: "Input ISSUES prefix:",
       // footer: "List any ISSUES by this change. E.g.: #31, #34:\n",
+      // generatingByAI: "Generating your AI commit subject...",
+      // generatedSelectByAI: "Select suitable subject by AI generated:",
       // confirmCommit: "Are you sure you want to proceed with the commit above?",
       // 中文版
       type: "选择你要提交的类型 :",
@@ -76,10 +79,12 @@ module.exports = {
       subject: "填写简短精炼的变更描述 :\n",
       body: '填写更加详细的变更描述（可选）。使用 "|" 换行 :\n',
       breaking: '列举非兼容性重大的变更（可选）。使用 "|" 换行 :\n',
-      footerPrefixsSelect: "选择关联 issue 前缀（可选）:",
-      customFooterPrefixs: "输入自定义 issue 前缀 :",
+      footerPrefixesSelect: "选择关联issue前缀（可选）:",
+      customFooterPrefix: "输入自定义issue前缀 :",
       footer: "列举关联issue (可选) 例如: #31, #I3244 :\n",
-      confirmCommit: "是否提交或修改 commit ?",
+      generatingByAI: "正在通过 AI 生成你的提交简短描述...",
+      generatedSelectByAI: "选择一个 AI 生成的简短描述:",
+      confirmCommit: "是否提交或修改commit ?",
     },
     types: [
       // { value: "feat", name: "feat:     🚀  A new feature", emoji: "🚀" },
@@ -137,6 +142,9 @@ module.exports = {
       //   { value: "类型", name: "类型:   💎  类型定义文件更改", emoji: "💎" },
     ],
     useEmoji: true,
+    emojiAlign: "center",
+    useAI: false,
+    aiNumber: 1,
     themeColorCode: "",
     scopes: [],
     allowCustomScopes: true,
@@ -145,16 +153,20 @@ module.exports = {
     customScopesAlias: "custom",
     emptyScopesAlias: "empty",
     upperCaseSubject: false,
+    markBreakingChangeMode: false,
     allowBreakingChanges: ["feat", "fix"],
     breaklineNumber: 100,
     breaklineChar: "|",
     skipQuestions: [],
-    issuePrefixs: [{ value: "closed", name: "closed:   ISSUES has been processed" }],
-    customIssuePrefixsAlign: "top",
-    emptyIssuePrefixsAlias: "skip",
-    customIssuePrefixsAlias: "custom",
-    allowCustomIssuePrefixs: true,
-    allowEmptyIssuePrefixs: true,
+    issuePrefixes: [
+      { value: "link", name: "link:     链接 ISSUES 进行中" },
+      { value: "closed", name: "closed： 标记 ISSUES 已完成" },
+    ],
+    customIssuePrefixAlign: "top",
+    emptyIssuePrefixAlias: "skip",
+    customIssuePrefixAlias: "custom",
+    allowCustomIssuePrefix: true,
+    allowEmptyIssuePrefix: true,
     confirmColorize: true,
     maxHeaderLength: Infinity,
     maxSubjectLength: Infinity,

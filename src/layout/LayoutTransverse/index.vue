@@ -1,7 +1,7 @@
 <template>
   <el-container :class="prefixClass">
     <el-header class="flx-justify-between">
-      <div :class="`${prefixClass}__logo flx-center`" @click="router.push(HOME_URL)">
+      <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span>{{ settings.title }}</span>
       </div>
@@ -24,7 +24,7 @@ import { useDesign } from "@/hooks";
 import { useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("layout");
+const prefixClass = getPrefixClass("transverse-layout");
 
 const router = useRouter();
 const settingsStore = useSettingsStore();

@@ -1,7 +1,7 @@
 <template>
   <el-container :class="[prefixClass, { 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
     <el-header class="flx-justify-between">
-      <div :class="`${prefixClass}__logo flx-center`" @click="router.push(HOME_URL)">
+      <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span>{{ settings.title }}</span>
       </div>
@@ -32,7 +32,7 @@ import { useDesign } from "@/hooks";
 import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("layout");
+const prefixClass = getPrefixClass("mixins-layout");
 
 const route = useRoute();
 const router = useRouter();
@@ -43,7 +43,7 @@ const { findParentRoutesByPath } = useRoutes();
 
 // 子菜单
 const activeMenu = ref("");
-const childrenMenu = ref<RouterConfigRaw[]>([]);
+const childrenMenu = ref<RouterConfig[]>([]);
 const isCollapse = computed(() => settingsStore.isCollapse);
 const menuList = computed(() => {
   if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {
@@ -53,7 +53,7 @@ const menuList = computed(() => {
 });
 
 const parentMenu = computed(() => {
-  const parentMenu: RouterConfigRaw[] = [];
+  const parentMenu: RouterConfig[] = [];
   menuList.value.forEach(menuItem => {
     const item = { ...menuItem };
     item.children ? (item.children = []) : "";

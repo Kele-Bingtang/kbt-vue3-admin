@@ -1,7 +1,7 @@
 <template>
   <el-container :class="[prefixClass, { 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
     <div :class="`${prefixClass}__aside`">
-      <div :class="`${prefixClass}__aside__logo flx-center`" @click="router.push(HOME_URL)">
+      <div :class="`${prefixClass}__aside__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
       </div>
       <el-scrollbar>
@@ -27,7 +27,7 @@
       </el-scrollbar>
     </div>
     <el-aside :class="{ 'not-aside': !menuItem.length }">
-      <div :class="`${prefixClass}__aside__logo flx-center`">
+      <div :class="`${prefixClass}__aside__logo layout__logo flx-center`">
         <span v-show="menuItem.length">{{ isCollapse ? "K" : settings.title }}</span>
       </div>
       <el-scrollbar>
@@ -58,7 +58,7 @@ import { useDesign } from "@/hooks";
 import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("layout");
+const prefixClass = getPrefixClass("columns-layout");
 
 const route = useRoute();
 const router = useRouter();
@@ -67,7 +67,7 @@ const permissionStore = usePermissionStore();
 const { getMenuListByRouter } = useLayout();
 
 // 子菜单
-const menuItem = ref<RouterConfigRaw[]>([]);
+const menuItem = ref<RouterConfig[]>([]);
 const splitActive = ref<string>(""); // 菜单是否激活
 
 const isCollapse = computed(() => settingsStore.isCollapse);
@@ -97,7 +97,7 @@ watch(
   }
 );
 
-const changeMenuItem = (item: RouterConfigRaw) => {
+const changeMenuItem = (item: RouterConfig) => {
   splitActive.value = item.path;
   if (item.children?.length) return (menuItem.value = item.children);
   menuItem.value = [];
