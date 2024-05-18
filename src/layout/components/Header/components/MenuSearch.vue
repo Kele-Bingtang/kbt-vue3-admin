@@ -32,7 +32,7 @@
 </template>
 
 <script setup lang="ts" name="MenuSearch">
-import { computed, ref, onUnmounted } from "vue";
+import { computed, ref, onUnmounted, nextTick } from "vue";
 import { ElAutocomplete, ElTooltip, ElIcon } from "element-plus";
 import { useLayout } from "@/hooks";
 import { usePermissionStore } from "@/stores";
@@ -40,6 +40,7 @@ import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils";
 import { Search } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
+import { useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("menu-search");
@@ -108,7 +109,7 @@ const handleSwitchMode = () => {
 
 // 筛选菜单
 const filterNodeMethod = (queryString: string) => {
-  return (restaurant: RouteConfig) => {
+  return (restaurant: RouteLocationNormalizedLoaded) => {
     return (
       restaurant.meta._fullPath.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
       getTitle(restaurant)?.toLowerCase().indexOf(queryString.toLowerCase()) > -1
@@ -129,7 +130,7 @@ const handleClickMenu = (menuItem: Record<string, any>) => {
  * @param menuList 嵌套菜单列表
  */
 const createNestMenuSearchList = (menuList: RouterConfig[]) => {
-  const res: (RouterConfig & { title: string[] })[] = [];
+  const res: (RouterConfigRaw & { title: string[] })[] = [];
   menuList.forEach(menu => {
     if (menu.meta.hideInMenu) return res;
     const item = { ...menu, title: [getTitle(menu)] };

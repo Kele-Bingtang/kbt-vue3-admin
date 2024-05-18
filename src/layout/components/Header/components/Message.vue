@@ -90,7 +90,7 @@
 
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
-import { ElPopover, ElTabs, ElTabPane, ElScrollbar, ElButton, ElBadge } from "element-plus";
+import { ElPopover, ElTabs, ElTabPane, ElScrollbar, ElButton, ElBadge, ElTag } from "element-plus";
 import { useMessageStore } from "@/stores";
 import settings from "@/config/settings";
 import { Tooltip } from "@/components";

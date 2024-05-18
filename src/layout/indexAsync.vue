@@ -16,6 +16,7 @@ import { useLayout } from "@/hooks";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
 import { getPx, setStyleVar } from "@/utils";
+import { type Component, defineAsyncComponent, computed, watch, watchEffect } from "vue";
 
 const LayoutComponents: { [key: string]: Component } = {
   vertical: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),

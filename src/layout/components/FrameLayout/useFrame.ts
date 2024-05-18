@@ -1,5 +1,7 @@
 import { useLayoutStore } from "@/stores";
 import { useTabsNav } from "../TabsNav/useTabsNav";
+import { unref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 
 const FrameView = () => import("./FrameView.vue");
 const FrameBlank = () => import("./BlankFrame.vue");

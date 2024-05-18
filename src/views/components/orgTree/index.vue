@@ -52,7 +52,7 @@
       />
     </div>
     <div style="height: calc(100% - 139px)">
-      <vue3-tree-org
+      <vue3TreeOrg
         ref="treeRef"
         :data="data"
         :center="center"
@@ -83,7 +83,7 @@
         <template #expand="{ node }">
           <div>{{ node.children.length }}</div>
         </template>
-      </vue3-tree-org>
+      </vue3TreeOrg>
     </div>
   </div>
 </template>

@@ -14,6 +14,8 @@ import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import { useSettingsStore } from "@/stores";
 import { useLayout } from "@/hooks";
 import { getPx, setStyleVar } from "@/utils";
+import { type Component, computed, watch, watchEffect } from "vue";
+import { useRoute } from "vue-router";
 
 const LayoutComponents: { [key: string]: Component } = {
   vertical: LayoutVertical,

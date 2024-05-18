@@ -252,7 +252,7 @@
       <el-switch v-model="settingsStore.showBreadcrumbIcon" />
     </div>
     <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.showTagsNav") }}</span>
+      <span>{{ $t("_settings.showTabsNav") }}</span>
       <el-switch v-model="settingsStore.showTabsNav" />
     </div>
     <div :class="`${prefixClass}__list`">
@@ -260,8 +260,12 @@
       <el-switch v-model="settingsStore.showTabsNavIcon" />
     </div>
     <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.recordTagsNav") }}</span>
+      <span>{{ $t("_settings.recordTabsNav") }}</span>
       <el-switch v-model="settingsStore.recordTabsNav" />
+    </div>
+    <div :class="`${prefixClass}__list`">
+      <span>{{ $t("_settings.fixTabsNav") }}</span>
+      <el-switch v-model="settingsStore.fixTabsNav" />
     </div>
     <div :class="`${prefixClass}__list`">
       <span>{{ $t("_settings.showLayoutLogo") }}</span>
@@ -312,7 +316,7 @@
 </template>
 
 <script setup lang="ts" name="ThemeDrawer">
-import { ref, computed, watch } from "vue";
+import { ref, computed, watch, watchEffect } from "vue";
 import {
   ElButton,
   ElSelect,
@@ -339,7 +343,7 @@ import { mittBus } from "@/utils";
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useI18n } from "vue-i18n";
 import { ElMessage } from "element-plus";
-import variables from "@/styles/variables.module.scss";
+import variables from "@/styles/module/variables.module.scss";
 import {
   Notification,
   CircleCheckFilled,
@@ -352,6 +356,7 @@ import {
   Refresh,
 } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
+import { useRoute } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("theme-drawer");

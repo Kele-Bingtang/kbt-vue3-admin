@@ -40,18 +40,7 @@
 
 <script setup lang="ts">
 import { ElDialog, ElScrollbar, ElButton, type DialogProps } from "element-plus";
-import {
-  computed,
-  nextTick,
-  ref,
-  unref,
-  watch,
-  useSlots,
-  shallowRef,
-  defineEmits,
-  defineProps,
-  defineExpose,
-} from "vue";
+import { computed, nextTick, ref, unref, watch, useSlots, shallowRef } from "vue";
 import { getPx } from "@/utils";
 import { useDesign } from "@/hooks";
 

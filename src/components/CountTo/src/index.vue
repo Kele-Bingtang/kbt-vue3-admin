@@ -15,7 +15,7 @@
 
 <script setup lang="ts">
 import CountUp from "countup";
-import { ref, watch, onMounted, onUnmounted, defineOptions, defineEmits, defineProps, unref, defineExpose } from "vue";
+import { ref, watch, onMounted, onUnmounted, defineOptions, unref } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "CountTo" });

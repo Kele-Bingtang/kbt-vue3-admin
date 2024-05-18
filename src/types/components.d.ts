@@ -2,12 +2,12 @@
 declare module "vue" {
   export interface GlobalComponents {
     Role: (typeof import("./components/Permission/role.vue"))["default"];
-    Auth: (typeof import("./components/Permission/src/auth"))["default"];
+    Auth: (typeof import("../components/Permission/src/auth"))["default"];
     Icon: (typeof import("./components/Icon/index.vue"))["default"];
   }
 
   interface ComponentCustomProperties {
-    // element ui 的变量
+    // element plus 的变量
     scope: any;
     $index: number;
   }

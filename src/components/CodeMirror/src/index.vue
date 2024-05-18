@@ -17,7 +17,7 @@ import "codemirror/addon/display/autorefresh";
 import "./config";
 import "./theme";
 import "./mode";
-import { withDefaults, shallowRef, defineEmits, computed, onMounted, defineOptions, defineProps, unref } from "vue";
+import { withDefaults, shallowRef, computed, onMounted, defineOptions, unref } from "vue";
 
 defineOptions({ name: "CodeMirror" });
 

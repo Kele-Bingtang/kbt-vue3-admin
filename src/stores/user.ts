@@ -1,9 +1,9 @@
 import { defineStore } from "pinia";
 import type { UserInfo } from ".";
-import { removeCacheToken, setCacheToken } from "@/utils";
 import { useRoutes } from "@/hooks";
 import { resetRouter } from "@/router";
 import { useLayoutStore } from "./layout";
+import { ref } from "vue";
 
 export const useUserStore = defineStore(
   "userStore",
@@ -25,14 +25,12 @@ export const useUserStore = defineStore(
       // 调用登录接口，拿到 token，这里直接模拟 token
       console.log(username, password);
       const token = "admin-token";
-      setCacheToken(token);
       setToken(token);
       return true;
     };
 
     const logout = async () => {
       if (token.value === "") throw Error("LogOut: token is undefined!");
-      removeCacheToken();
       resetRouter();
       setToken("");
       setRoles([]);
@@ -59,7 +57,6 @@ export const useUserStore = defineStore(
     };
 
     const resetToken = () => {
-      removeCacheToken();
       setToken("");
       setRoles([]);
     };
@@ -68,7 +65,6 @@ export const useUserStore = defineStore(
       // 模拟新的 token
       const token = rolesParam[0] + "-token";
       setToken(token);
-      setCacheToken(token);
       setRoles(rolesParam); // 正常不是直接赋予角色，而是调用 this.getUserInfo(token)，根据 token 重新获取对应的角色
       // await this.getUserInfo(token);
       resetRouter();
@@ -104,8 +100,6 @@ export const useUserStore = defineStore(
   },
   {
     persist: {
-      key: "kbt_userStore",
-      storage: localStorage,
       paths: ["token"],
     },
   }

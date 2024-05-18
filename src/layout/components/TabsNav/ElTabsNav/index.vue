@@ -43,6 +43,7 @@ import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuButton from "../components/MenuDropdown.vue";
 import { useDesign } from "@/hooks";
+import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("tabs-nav");

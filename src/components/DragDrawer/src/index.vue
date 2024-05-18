@@ -33,18 +33,7 @@
 
 <script setup lang="ts">
 import DragDrawerTrigger from "./DragDrawerTrigger.vue";
-import {
-  computed,
-  onBeforeUnmount,
-  onMounted,
-  ref,
-  watch,
-  defineOptions,
-  defineEmits,
-  defineProps,
-  unref,
-  type StyleValue,
-} from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, watch, defineOptions, unref, type StyleValue } from "vue";
 import { ElDrawer } from "element-plus";
 import { useDesign } from "@/hooks";
 

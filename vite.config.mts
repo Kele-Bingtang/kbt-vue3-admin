@@ -18,6 +18,7 @@ const __APP_INFO__ = {
 export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
   const env = loadEnv(mode, process.cwd());
   const viteEnv = wrapperEnv(env);
+
   return {
     base: env.VITE_PUBLIC_PATH,
     resolve: {
@@ -55,19 +56,21 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
     },
     // 打包去除 console.log && debugger
     esbuild: {
-      pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log", "debugger"] : [],
+      pure: viteEnv.VITE_DROP_CONSOLE ? ["console.log"] : [],
+      drop: viteEnv.VITE_DROP_DEBUGGER ? ["debugger"] : [],
     },
     build: {
-      // esbuild 打包更快，但是不能去除 console.log，terser 打包慢，但能去除 console.log
+      // esbuild 打包更快，terser 打包慢
       minify: "esbuild",
       // minify: "terser",
       // terserOptions: {
       //   compress: {
       //     drop_console: viteEnv.VITE_DROP_CONSOLE,
-      //     drop_debugger: true,
+      //     drop_debugger: viteEnv.VITE_DROP_DEBUGGER,
       //   },
       // },
-      sourcemap: false,
+      outDir: env.VITE_OUT_DIR || "dist",
+      sourcemap: viteEnv.VITE_SOURCEMAP,
       // 消除打包大小超过 500kb 警告
       chunkSizeWarningLimit: 4000,
       rollupOptions: {
@@ -76,11 +79,19 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         },
         // 静态资源分类打包
         output: {
+          manualChunks: {
+            "vue-chunks": ["vue", "vue-router", "pinia", "vue-i18n"],
+            "element-plus": ["element-plus"],
+            "wang-editor": ["@wangeditor/editor", "@wangeditor/editor-for-vue"],
+            tinymce: ["tinymce", "@tinymce/tinymce-vue"],
+            echarts: ["echarts", "echarts-wordcloud"],
+          },
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",
           assetFileNames: "static/[ext]/[name]-[hash].[ext]",
         },
       },
+      cssCodeSplit: !env.VITE_USE_CSS_SPLIT,
     },
     define: {
       __APP_INFO__: JSON.stringify(__APP_INFO__),

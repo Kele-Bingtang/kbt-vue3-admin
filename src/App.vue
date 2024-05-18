@@ -7,16 +7,17 @@
 </template>
 
 <script setup lang="ts" name="App">
+import { ElConfigProvider } from "element-plus";
 import { useLayoutStore } from "./stores/layout";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import { getBrowserLang } from "./utils";
 import { useTheme } from "./hooks/useTheme";
 import { useFrame } from "./layout/components/FrameLayout/useFrame";
-import { getCacheVersion, removeProjectsCache, setCacheVersion } from "./utils/layout/cache";
 import settings from "@/config/settings";
 import { useSettingsStore } from "@/stores";
-import { useDesign } from "@/hooks";
+import { useDesign, useCache } from "@/hooks";
+import { reactive, computed, provide, onMounted } from "vue";
 
 const { variables } = useDesign();
 
@@ -66,7 +67,7 @@ const handleMsgFromFrame = () => {
  */
 const versionCache = () => {
   const { version } = __APP_INFO__.pkg;
-  const cacheVersion = getCacheVersion();
+  const cacheVersion = useCache().getCacheVersion();
   if (version && cacheVersion !== version) {
     const { layoutSize, language } = settings;
     settingsStore.$patch({ ...(settings as any), menuTheme: settings.layoutTheme });
@@ -75,8 +76,8 @@ const versionCache = () => {
       language,
     });
     layoutStore.removeAllTabs();
-    removeProjectsCache();
-    setCacheVersion(version);
+    useCache().removeProjectsCache();
+    useCache().setCacheVersion(version);
   }
 };
 </script>

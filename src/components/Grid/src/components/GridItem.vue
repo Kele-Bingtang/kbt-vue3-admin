@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, type Ref, ref, useAttrs, watch, defineOptions, defineProps, unref } from "vue";
+import { computed, inject, type Ref, ref, useAttrs, watch, defineOptions, unref } from "vue";
 import type { BreakPoint } from "../index.vue";
 
 defineOptions({ name: "GridItem" });

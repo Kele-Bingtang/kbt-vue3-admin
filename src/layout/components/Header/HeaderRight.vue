@@ -27,6 +27,7 @@ import ErrorLog from "./components/ErrorLog.vue";
 import settings from "@/config/settings";
 import { useErrorLogStore, useLayoutStore, DeviceType } from "@/stores";
 import { useDesign } from "@/hooks";
+import { computed } from "vue";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("header-right");

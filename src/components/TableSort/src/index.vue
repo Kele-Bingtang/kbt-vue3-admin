@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { isNumber } from "@/utils";
 import { ElTable, type TableInstance } from "element-plus";
-import { useSlots, ref, computed, defineOptions, defineProps, unref, defineExpose } from "vue";
+import { useSlots, ref, computed, defineOptions, unref } from "vue";
 import TableSort from "./index.vue";
 
 defineOptions({ name: "TableSort" });

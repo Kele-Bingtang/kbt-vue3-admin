@@ -10,6 +10,7 @@ import CollapseTrigger from "./components/CollapseTrigger.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
 import { useSettingsStore, useLayoutStore, DeviceType } from "@/stores";
 import { useDesign } from "@/hooks";
+import { computed } from "vue";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("header-left");

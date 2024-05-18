@@ -8,6 +8,7 @@ import { ElIcon } from "element-plus";
 import { useSettingsStore } from "@/stores";
 import { Expand, Fold } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
+import { computed } from "vue";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("menu-collapse");

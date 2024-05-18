@@ -11,6 +11,9 @@
 </template>
 
 <script setup lang="ts" name="CustomTransition">
+import { computed } from "vue";
+import { useRoute } from "vue-router";
+
 const route = useRoute();
 
 const name = computed(() => {

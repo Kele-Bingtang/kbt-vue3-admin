@@ -5,7 +5,13 @@
     <router-view v-slot="{ Component, route }">
       <CustomTransition name="fade-transform">
         <keep-alive :include="layoutStore.keepAliveName">
-          <component :is="Component" :key="route.path" v-if="isRouterShow" class="main-content" />
+          <component
+            :is="Component"
+            :key="route.path"
+            v-if="isRouterShow"
+            class="main-content"
+            :style="{ overflow: settingsStore.fixTabsNav ? 'scroll' : 'initial' }"
+          />
         </keep-alive>
       </CustomTransition>
     </router-view>
@@ -14,7 +20,7 @@
 </template>
 
 <script setup lang="ts" name="MainContent">
-import { computed, ref, nextTick, provide, watchEffect } from "vue";
+import { computed, ref, nextTick, provide, watchEffect, type Component } from "vue";
 import { ElMain } from "element-plus";
 import { useLayoutStore, useSettingsStore } from "@/stores";
 import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";

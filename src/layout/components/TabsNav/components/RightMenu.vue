@@ -28,6 +28,8 @@
 </template>
 
 <script setup lang="ts" name="RightMenu">
+import { withDefaults } from "vue";
+import { ElIcon } from "element-plus";
 import type { TabProp } from "@/stores";
 import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
 import { Refresh, Close, ArrowLeft, ArrowRight, SemiSelect, FolderDelete } from "@element-plus/icons-vue";

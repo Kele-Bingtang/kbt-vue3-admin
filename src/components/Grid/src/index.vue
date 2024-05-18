@@ -17,8 +17,6 @@ import {
   onDeactivated,
   onActivated,
   defineOptions,
-  defineProps,
-  defineExpose,
   unref,
   type VNodeArrayChildren,
   type VNode,

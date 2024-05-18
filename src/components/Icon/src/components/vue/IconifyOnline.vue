@@ -8,7 +8,7 @@
 
 <script setup lang="ts">
 import { Icon as IconifyIcon } from "@iconify/vue";
-import { defineOptions, defineProps, type CSSProperties } from "vue";
+import { defineOptions, type CSSProperties } from "vue";
 
 defineOptions({ name: "IconifyOnline" });
 

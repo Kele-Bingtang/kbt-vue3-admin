@@ -1,5 +1,5 @@
 import type { IconifyIcon } from "@iconify/vue";
-import type { Component } from "vue";
+import type { Component, ComponentPublicInstance } from "vue";
 
 // LayoutState
 export interface TabProp {
@@ -29,9 +29,9 @@ export interface LayoutState {
 
 // PermissionState
 export interface PermissionState {
-  loadedRouteList: RouterConfig[]; // 当前用户所有的权限路由表（包含基础路由）
-  homeRoute: RouterConfig; // 首页的路由
-  flatRouteList: RouterConfig[]; // 扁平化路由
+  loadedRouteList: RouterConfigRaw[]; // 当前用户所有的权限路由表（包含基础路由）
+  homeRoute: RouterConfigRaw; // 首页的路由
+  flatRouteList: RouterConfigRaw[]; // 扁平化路由
 }
 
 // SettingsState

@@ -5,6 +5,7 @@ import settings from "@/config/settings";
 import { transformI18n } from "@/languages";
 import { isFunction, isString } from "@/utils";
 import { useRoutes } from "./useRoutes";
+import type { RouteLocationNormalizedLoaded } from "vue-router";
 
 export const useLayout = () => {
   const layoutStore = useLayoutStore();
@@ -37,7 +38,7 @@ export const useLayout = () => {
    * @description 根据当前跳转的路由设置显示在浏览器标签的 title
    * @param route 当前路由
    */
-  const setBrowserTitle = (route: RouteConfig) => {
+  const setBrowserTitle = (route: RouteLocationNormalizedLoaded) => {
     const { title } = settings;
     const pageTitle = getTitle(route);
 
@@ -62,11 +63,11 @@ export const useLayout = () => {
    * @param start 是否从头开始解析出 title，因为路由在编译阶段已经解析了一部分，所以涉及路由里的配置不需要从头开始解析，具体看 ./useRoutes.ts 的 processRouteMeta 函数
    * @returns 路由的 title
    */
-  const getTitle = (route: RouteConfig | RouterConfig, start = false) => {
-    if (start) return getLayoutTitle(route as RouteConfig);
+  const getTitle = (route: RouteLocationNormalizedLoaded | RouterConfigRaw, start = false) => {
+    if (start) return getLayoutTitle(route);
     // 虽然 handleFunctionTitle 函数内部会对 title 是否是函数进行判断，但是因为 title 是函数的场景相比较小，所以这里先判断，减少往下执行的性能消耗
-    if (route.meta.title && !isFunction(route.meta.title)) return route.meta.title + "";
-    const { title, titleIsFunction } = handleFunctionTitle(route as RouteConfig);
+    if (route.meta?.title && !isFunction(route.meta.title)) return route.meta.title + "";
+    const { title, titleIsFunction } = handleFunctionTitle(route);
     if (titleIsFunction) return handleI18nTitle(route.name as string | undefined, title, true, route.meta?.useI18n);
     return title;
   };
@@ -76,7 +77,7 @@ export const useLayout = () => {
    * @param route 当前路由
    * @returns 路由的 title
    */
-  const getLayoutTitle = (route: RouteConfig) => {
+  const getLayoutTitle = (route: RouteLocationNormalizedLoaded | RouterConfigRaw) => {
     const name = route.name as string | undefined;
     if (!route.meta?.title && !route.meta?.useI18n) return name || "no-name";
     const { title, titleIsFunction } = handleFunctionTitle(route);
@@ -110,8 +111,8 @@ export const useLayout = () => {
    * @param route 当前路由
    * @returns
    */
-  function handleFunctionTitle(route: RouteConfig) {
-    const meta = { ...route.meta }; // 取消 meta 响应式
+  function handleFunctionTitle(route: RouteLocationNormalizedLoaded | RouterConfigRaw) {
+    const meta = { ...(route.meta as MetaProp) }; // 取消 meta 响应式
     const title = meta?.title || "";
     if (title && isFunction(title)) return { title: title({ ...route }), titleIsFunction: true };
     return { title: title + "", titleIsFunction: false };
@@ -121,7 +122,7 @@ export const useLayout = () => {
    * @description 获取面包屑列表
    * @returns 面包屑列表
    */
-  const getBreadcrumbs = (route: RouteConfig): RouteConfig[] => {
+  const getBreadcrumbs = (route: RouteLocationNormalizedLoaded): RouteLocationNormalizedLoaded[] => {
     // 首页不存在
     if (!homeRoute?.path || !homeRoute?.name) {
       ElMessage({
@@ -133,13 +134,18 @@ export const useLayout = () => {
     }
 
     // 如果是首页，直接返回
-    if (route.path === homeRoute?.path || route.name === homeRoute?.name) return [homeRoute] as RouteConfig[];
-
+    if (route.path === homeRoute?.path || route.name === homeRoute?.name) {
+      return [homeRoute] as RouteLocationNormalizedLoaded[];
+    }
     // 当前路由的父级路由组成的数组
-    let matched = useRoutes().findParentRoutesByPath(route.meta._fullPath, loadedRouteList) as RouteConfig[];
-    matched.push(toRaw(route));
+    let matched = useRoutes().findParentRoutesByPath(
+      route.meta._fullPath,
+      loadedRouteList
+    ) as RouteLocationNormalizedLoaded[];
+    route.meta.title = getTitle(route);
+    matched.push(route);
     // 首页加上其他页面
-    matched = [homeRoute as RouteConfig, ...matched];
+    matched = [homeRoute as RouteLocationNormalizedLoaded, ...matched];
     // 过滤掉 hideInBread 的配置
     return matched.filter(item => (item.name || item.meta?.title) && !item.meta?.hideInBread);
   };
@@ -186,9 +192,9 @@ export const useLayoutNoSetup = () => {
    * @param route 当前路由
    * @returns 路由的 title
    */
-  const getLayoutTitle = (route: RouteConfig) => {
+  const getLayoutTitle = (route: RouteLocationNormalizedLoaded | RouterConfigRaw) => {
     // 不处理为函数的 title
-    if (isFunction(route.meta.title)) return route.meta.title;
+    if (isFunction(route.meta?.title)) return route.meta.title;
     const name = route.name as string | undefined;
     if (!route.meta?.title && !route.meta?.useI18n) return name || "no-name";
     const title = route.meta?.title || name || "no-name";

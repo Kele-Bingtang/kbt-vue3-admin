@@ -28,6 +28,7 @@ import Menu from "@/layout/components/Menu/index.vue";
 import settings from "@/config/settings";
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
+import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("layout");

@@ -1,5 +1,6 @@
 public
 dist
+node_modules
 *.d.ts
 /src/assets
 package.json

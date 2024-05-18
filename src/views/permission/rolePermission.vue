@@ -55,12 +55,13 @@ import { useLayout, useRoutes } from "@/hooks";
 import { ElMessage, ElMessageBox, ElNotification, ElTree } from "element-plus";
 import type { TreeKey } from "element-plus/es/components/tree/src/tree.type";
 import router, { resetRouter } from "@/router";
+import { ref, reactive, shallowRef, computed, onMounted, nextTick } from "vue";
 
 interface Role {
   key: number; // 角色 id
   name: string; // 角色姓名
   description: string; // 角色描述
-  routes: RouterConfig[]; // 角色路由
+  routes: RouterConfigRaw[]; // 角色路由
 }
 
 interface RoutesTreeData {
@@ -156,8 +157,8 @@ const handleEdit = (row: any) => {
   checkStrictly.value = true;
   role.value = { ...row };
   nextTick(() => {
-    const routes = filterFlatRoutes(getMenuListByRouter(role.value.routes) as RouterConfigRaw[]);
-    const treeData = generateTreeData(routes as RouterConfig[]);
+    const routes = filterFlatRoutes(getMenuListByRouter(role.value.routes as RouterConfig[]));
+    const treeData = generateTreeData(routes);
     const treeDataKeys = treeData.map(t => t.path);
     treeRef.value?.setCheckedKeys(treeDataKeys);
     // 设置节点的已检查状态不会影响其父节点和子节点
@@ -198,7 +199,7 @@ const confirmRole = () => {
   // 更新路由
   if (userStore.roles.includes(role.value.name)) {
     resetRouter();
-    loadDynamicRouters(role.value.routes as RouterConfigRaw[], [role.value.name], router);
+    loadDynamicRouters(role.value.routes, [role.value.name], router);
   }
 
   const { description, key, name } = role.value;
@@ -222,7 +223,7 @@ const generateTree = (routes: RouterConfig[], checkedKeys: TreeKey[]) => {
     const r = { ...route };
     // 递归子路由
     if (r.children) r.children = generateTree(r.children, checkedKeys);
-    if (checkedKeys.includes(r.meta._fullPath) || (r.children && r.children.length >= 1)) {
+    if (checkedKeys.includes(r.meta._fullPath || "") || (r.children && r.children.length >= 1)) {
       res.push(r);
     }
   }

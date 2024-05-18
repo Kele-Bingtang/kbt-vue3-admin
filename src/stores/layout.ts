@@ -1,19 +1,20 @@
 import { defineStore } from "pinia";
-import { setCacheTabNavList, getCacheTabNavList, removeCacheTabNavList } from "@/utils";
 import { DeviceType, type LanguageType, type LayoutSizeType, type TabProp } from "./interface";
 import { useSettingsStore } from "./settings";
 import defaultSettings from "@/config/settings";
 import type { Frame } from "@/layout/components/FrameLayout/useFrame";
+import { ref, watch } from "vue";
+import { useCache } from "@/hooks";
 
 export const useLayoutStore = defineStore(
   "layoutStore",
   () => {
-    const tabNavList = ref<TabProp[]>(getCacheTabNavList() || []);
+    const tabNavList = ref<TabProp[]>(useCache().getCacheTabNavList() || []);
     const keepAliveName = ref<string[]>([]);
     const device = ref(DeviceType.Desktop);
     const layoutSize = ref<LayoutSizeType>(defaultSettings.layoutSize);
     const language = ref(defaultSettings.language);
-    const frameList = ref<Array<Frame>>([]);
+    const frameList = ref<Frame[]>([]);
 
     const toggleDevice = (deviceParam: DeviceType) => {
       device.value = deviceParam;
@@ -141,8 +142,8 @@ export const useLayoutStore = defineStore(
     );
 
     const handleRecordTabsNav = (value: boolean) => {
-      if (value) setCacheTabNavList(tabNavList.value);
-      else removeCacheTabNavList();
+      if (value) useCache().setCacheTabNavList(tabNavList.value);
+      else useCache().removeCacheTabNavList();
     };
 
     return {
@@ -172,9 +173,7 @@ export const useLayoutStore = defineStore(
   },
   {
     persist: {
-      key: defaultSettings.layoutCacheKey,
-      storage: localStorage,
-      paths: ["layoutSize", "language"],
+      paths: ["layoutSize", "language", "device"],
     },
   }
 );

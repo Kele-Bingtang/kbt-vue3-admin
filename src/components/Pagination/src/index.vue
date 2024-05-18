@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { scrollTo } from "@/utils";
-import { reactive, toRef, nextTick, defineOptions, defineEmits, defineProps, unref, defineExpose } from "vue";
+import { reactive, toRef, nextTick, defineOptions, unref } from "vue";
 import { ElPagination } from "element-plus";
 
 export const pageSetting = { pageNum: 1, pageSizes: [10, 20, 50, 100, 200], pageSize: 20 };

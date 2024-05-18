@@ -13,7 +13,7 @@
       </Tooltip>
     </template>
   </el-menu-item>
-  <el-sub-menu v-else :index="menuItem.meta._fullPath" class="sub-menu">
+  <el-sub-menu v-else :index="menuItem.meta._fullPath || menuItem.path" class="sub-menu">
     <template #title>
       <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
       <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
@@ -28,13 +28,14 @@
 </template>
 
 <script setup lang="ts" name="MenuItem">
-import { ref, defineProps, watch, nextTick } from "vue";
+import { ref, watch, nextTick } from "vue";
 import { ElMenuItem, ElSubMenu } from "element-plus";
 import { useLayout } from "@/hooks";
 import { isExternal } from "@/utils";
 import { Tooltip } from "@/components";
 import settings from "@/config/settings";
 import { useLayoutStore } from "@/stores";
+import { useRouter } from "vue-router";
 
 defineProps<{
   menuItem: RouterConfig;
@@ -48,7 +49,7 @@ const isSwitchLanguage = ref(false);
 
 const handleMenuClick = (menuItem: RouterConfig) => {
   if (isExternal(menuItem.path)) return window.open(menuItem.path, "_blank");
-  router.push(menuItem.meta._fullPath);
+  router.push(menuItem.meta._fullPath || "");
 };
 
 const title = (menuItem: RouterConfig) => {

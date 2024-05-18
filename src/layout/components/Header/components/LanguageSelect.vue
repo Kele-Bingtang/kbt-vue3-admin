@@ -23,6 +23,7 @@ import { useLayout } from "@/hooks";
 import { useLayoutStore, type LanguageType } from "@/stores";
 import { ElMessage } from "element-plus";
 import { useI18n } from "vue-i18n";
+import { useRoute } from "vue-router";
 
 const localList = [
   { label: "中文简体", value: "zh-CN" },

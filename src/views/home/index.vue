@@ -38,6 +38,7 @@
 </template>
 
 <script setup lang="ts" name="Home">
+import { ElRow, ElCol, ElCard } from "element-plus";
 import CardItem from "./components/cardItem.vue";
 import { CountTo } from "@/components";
 import ChartPie from "./components/chartPie.vue";

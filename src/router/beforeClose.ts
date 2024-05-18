@@ -1,14 +1,15 @@
 import { ElMessageBox } from "element-plus";
+import type { RouteLocationNormalizedLoaded } from "vue-router";
 
 type BeforeCloseType = (value: unknown) => void;
 
 interface BeforeClose {
-  [key: string]: (resolve: BeforeCloseType, route: RouteConfig) => void;
-  before_close_normal: (resolve: BeforeCloseType, route: RouteConfig) => void;
+  [key: string]: (resolve: BeforeCloseType, route: RouteLocationNormalizedLoaded) => void;
+  before_close_normal: (resolve: BeforeCloseType, route: RouteLocationNormalizedLoaded) => void;
 }
 
 const beforeClose: BeforeClose = {
-  before_close_normal: (resolve: any, route: RouteConfig) => {
+  before_close_normal: (resolve: any, route: RouteLocationNormalizedLoaded) => {
     if (route.query.noBeforeClose) return resolve(true);
     ElMessageBox.confirm("确定要关闭这一页吗", "提示", {
       confirmButtonText: "确定",

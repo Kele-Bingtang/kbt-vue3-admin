@@ -5,6 +5,7 @@
 <script setup lang="ts" name="ChartLineBar">
 import * as echarts from "echarts";
 import { useEcharts } from "@/hooks";
+import { shallowRef, onMounted } from "vue";
 
 interface LineBarData {
   lineData: string;

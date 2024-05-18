@@ -16,7 +16,8 @@
 </template>
 
 <script setup lang="ts" name="CardItem">
-import type { Component } from "vue";
+import { computed, type Component } from "vue";
+import { ElIcon } from "element-plus";
 
 interface CardItemProps {
   shadow?: string;

@@ -28,7 +28,7 @@
 </template>
 <script setup lang="ts">
 import { ElCheckbox, ElInput, ElTree } from "element-plus";
-import { nextTick, ref, watch, defineEmits, defineProps, unref } from "vue";
+import { nextTick, ref, watch, unref } from "vue";
 
 defineOptions({ name: "Tree" });
 

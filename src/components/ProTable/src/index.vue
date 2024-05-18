@@ -231,8 +231,6 @@ import {
   useAttrs,
   shallowRef,
   defineOptions,
-  defineProps,
-  defineExpose,
   unref,
 } from "vue";
 import {

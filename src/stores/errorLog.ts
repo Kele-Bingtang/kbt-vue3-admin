@@ -1,6 +1,7 @@
 import { defineStore } from "pinia";
 import type { ErrorLog } from ".";
 import { useUserStore } from "./user";
+import { ref } from "vue";
 
 export const useErrorLogStore = defineStore("errorLogStore", () => {
   const errorLogs = ref<ErrorLog[]>([]);

@@ -7,7 +7,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineOptions, useAttrs, defineProps } from "vue";
+import { defineOptions, useAttrs } from "vue";
 
 defineOptions({ name: "FontIcon" });
 

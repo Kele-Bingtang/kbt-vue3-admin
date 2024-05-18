@@ -6,6 +6,8 @@ import Sortable from "sortablejs";
 import type { RefreshFunction } from "../MainContent/index.vue";
 import settings from "@/config/settings";
 import { HOME_URL } from "@/router/routesConfig";
+import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
+import { inject, ref, reactive, computed, nextTick, watchEffect } from "vue";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";
 
@@ -73,9 +75,9 @@ export const useTabsNav = () => {
   };
 
   // 判断当前激活的 tab
-  const getOneTab = (route: RouteConfig | RouterConfig) => {
+  const getOneTab = (route: RouteLocationNormalizedLoaded) => {
     return {
-      path: resolveFullPath(route as RouteConfig),
+      path: resolveFullPath(route),
       name: (route.name as string) || route.path,
       title: getTitle(route),
       icon: route.meta.icon || "",
@@ -85,7 +87,7 @@ export const useTabsNav = () => {
   };
 
   // 判断 tab 的地址，因为携带不同的参数可以引起多个重复的标签，这里可以设置当同一个 path 携带参数不一样，只渲染一个 tab，原理就是去掉 ? 后面的参数
-  const resolveFullPath = (r: RouteConfig) => {
+  const resolveFullPath = (r: RouteLocationNormalizedLoaded) => {
     if (r.path !== route.path || r.path === HOME_URL) return r.meta._fullPath;
     const url = window.location.href;
     const urlKey = Object.keys(getUrlParams(url));
@@ -94,10 +96,10 @@ export const useTabsNav = () => {
     if (index !== -1) {
       if (urlKey.length) {
         // 如果存在 key=value，则判断是否完全匹配 key
-        for (const item of urlKey) if (settings.tabActiveExcludes.includes(item)) return r.meta._fullPath;
+        for (const item of urlKey) if (settings.tabActiveExcludes.includes(item)) return r.meta?._fullPath;
       } else {
         // 如果不存在 key=value ，则模糊匹配 ? 后的参数
-        for (const item of settings.tabActiveExcludes) if (url.slice(index).includes(item)) return r.meta._fullPath;
+        for (const item of settings.tabActiveExcludes) if (url.slice(index).includes(item)) return r.meta?._fullPath;
       }
     }
     return r.fullPath || r.meta._fullPath;
@@ -105,8 +107,8 @@ export const useTabsNav = () => {
   // 初始化固定在标签栏的 tabs
   const initTabs = () => {
     permissionStore.flatRouteList.forEach(item => {
-      if (item.meta.isAffix && !item.meta.isFull) {
-        const tabParam = getOneTab(item);
+      if (item.meta?.isAffix && !item.meta?.isFull) {
+        const tabParam = getOneTab(item as unknown as RouteLocationNormalizedLoaded);
         layoutStore.addTab(tabParam);
         item.meta.isKeepAlive && layoutStore.addKeepAliveName(item.name as string);
       }
@@ -243,7 +245,7 @@ export const useTabsNav = () => {
   const toLastTab = () => {
     // 获取最后一个 tab 数据
     const lastTab = layoutStore.tabNavList.slice(-1)[0];
-    const path = lastTab ? lastTab.path : permissionStore.homeRoute?.meta._fullPath;
+    const path = lastTab ? lastTab.path : permissionStore.homeRoute?.meta?._fullPath;
     path && router.push(path).catch(err => console.warn(err));
   };
 

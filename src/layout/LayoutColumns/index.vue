@@ -16,10 +16,10 @@
             :key="item.path"
             @click="changeMenuItem(item)"
           >
-            <Icon v-if="item.meta.icon" :icon="item.meta.icon" />
+            <Icon v-if="item.meta?.icon" :icon="item.meta.icon" />
             <div class="flx-center" style="width: 100%">
               <Tooltip :effect="settings.tooltipEffect">
-                <span :class="`${prefixClass}__aside__list-item__title`">{{ item.meta.title }}</span>
+                <span :class="`${prefixClass}__aside__list-item__title`">{{ item.meta?.title }}</span>
               </Tooltip>
             </div>
           </div>
@@ -45,7 +45,7 @@
 
 <script setup lang="ts" name="LayoutVertical">
 import { computed, watch, ref, unref } from "vue";
-import { ElContainer, ElAside, ElHeader } from "element-plus";
+import { ElContainer, ElAside, ElHeader, ElScrollbar } from "element-plus";
 import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
@@ -55,6 +55,7 @@ import Menu from "@/layout/components/Menu/index.vue";
 import { Tooltip } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
+import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("layout");
@@ -66,7 +67,7 @@ const permissionStore = usePermissionStore();
 const { getMenuListByRouter } = useLayout();
 
 // 子菜单
-const menuItem = ref<RouterConfig[]>([]);
+const menuItem = ref<RouterConfigRaw[]>([]);
 const splitActive = ref<string>(""); // 菜单是否激活
 
 const isCollapse = computed(() => settingsStore.isCollapse);
@@ -96,7 +97,7 @@ watch(
   }
 );
 
-const changeMenuItem = (item: RouterConfig) => {
+const changeMenuItem = (item: RouterConfigRaw) => {
   splitActive.value = item.path;
   if (item.children?.length) return (menuItem.value = item.children);
   menuItem.value = [];

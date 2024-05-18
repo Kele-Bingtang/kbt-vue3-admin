@@ -12,7 +12,7 @@
 <script setup lang="ts">
 import VideoPlayer from "./index.vue";
 import { ElOverlay } from "element-plus";
-import { ref, nextTick, withDefaults, defineOptions, defineProps } from "vue";
+import { ref, nextTick, withDefaults, defineOptions } from "vue";
 import { Icon } from "@/components";
 
 defineOptions({ name: "VideoPlayerViewer" });

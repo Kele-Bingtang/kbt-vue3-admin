@@ -37,7 +37,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, ref, defineOptions, defineProps, unref } from "vue";
+import { computed, inject, ref, defineOptions, unref } from "vue";
 import { lastProp, type TableColumnProps } from "@/components";
 
 defineOptions({ name: "SearchFormItem" });

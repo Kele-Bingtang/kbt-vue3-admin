@@ -49,10 +49,18 @@
 
 <script setup lang="ts">
 import { generateUUID } from "@/utils";
-import { ElNotification, formContextKey, formItemContextKey } from "element-plus";
-import { ElUpload, ElImageViewer, ElIcon, type UploadProps, type UploadRequestOptions } from "element-plus";
+import {
+  ElUpload,
+  ElImageViewer,
+  ElIcon,
+  ElNotification,
+  formContextKey,
+  formItemContextKey,
+  type UploadProps,
+  type UploadRequestOptions,
+} from "element-plus";
 import { Edit, ZoomIn, Delete, Plus } from "@element-plus/icons-vue";
-import { ref, inject, computed, defineOptions, defineProps, defineEmits } from "vue";
+import { ref, inject, computed, defineOptions } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "UploadImg" });

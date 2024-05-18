@@ -49,13 +49,15 @@ import {
   ElUpload,
   ElImageViewer,
   ElIcon,
+  ElNotification,
+  formContextKey,
+  formItemContextKey,
   type UploadProps,
   type UploadFile,
   type UploadUserFile,
   type UploadRequestOptions,
 } from "element-plus";
-import { ElNotification, formContextKey, formItemContextKey } from "element-plus";
-import { inject, computed, ref, defineOptions, defineProps, defineEmits } from "vue";
+import { inject, computed, ref, defineOptions } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "UploadImgs" });

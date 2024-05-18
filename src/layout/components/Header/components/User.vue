@@ -42,15 +42,16 @@
 </template>
 
 <script setup lang="ts" name="User">
-import { computed, withDefaults, defineProps } from "vue";
+import { computed, withDefaults } from "vue";
 import { useSettingsStore, useUserStore } from "@/stores";
 import { useI18n } from "vue-i18n";
 import defaultAvatar from "@/assets/images/default.png";
 import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
 import { mittBus } from "@/utils";
-import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox } from "element-plus";
+import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox, ElIcon } from "element-plus";
 import { LOGIN_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
+import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("user-dropdown");

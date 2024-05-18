@@ -1,4 +1,4 @@
-import variables from "@/styles/namespace.module.scss";
+import variables from "@/styles/module/namespace.module.scss";
 
 export const useDesign = () => {
   /**

@@ -21,6 +21,7 @@ import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 import { useSettingsStore } from "@/stores";
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
+import { useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("layout");

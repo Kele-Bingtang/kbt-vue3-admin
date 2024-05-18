@@ -4,6 +4,13 @@ import type { Component } from "vue";
 
 export {}; // 扩展 global 而不是覆盖
 
+type MetaNeedKey = "_fullPath" | "_dynamic";
+
+declare module "vue-router" {
+  // 扩展路由 Meta 类型
+  interface RouteMeta extends RequiredKey<MetaProp, MetaNeedKey> {}
+}
+
 declare global {
   interface Navigator {
     browserLanguage: string;
@@ -19,30 +26,25 @@ declare global {
     msRequestAnimationFrame;
   }
 
-  type MetaNeedKey = "_fullPath" | "_dynamic";
-  // 自定义 useRoute 类型
-  type RouteConfig = RouteLocationNormalizedLoaded & {
-    redirect?: string;
-    meta: RequiredKey<MetaProp, MetaNeedKey>;
-  };
-  // 自定义路由处理过程类型
-  type RouterConfig = RouteRecordRaw & {
-    meta: RequiredKey<MetaProp, MetaNeedKey>;
-    children?: RouterConfig[];
-  };
-  // 自定义路由表配置类型
-  type RouterConfigRaw = Omit<RouteRecordRaw, "component" | "children"> & {
-    meta?: Omit<MetaProp, MetaNeedKey>;
+  // 路由表初始化配置类型
+  type RouterConfigRaw = Omit<RouteRecordRaw, "meta" | "component" | "children"> & {
+    meta?: MetaProp;
     component?: string | RouteComponent | (() => Promise<RouteComponent>);
     children?: RouterConfigRaw[];
   };
 
+  // 路由表加工后的类型
+  type RouterConfig = Omit<RouterConfigRaw, "meta" | "children"> & {
+    meta: RequiredKey<MetaProp, MetaNeedKey>;
+    children?: RouterConfig[];
+  };
+
   interface MetaProp {
-    readonly _fullPath?: string; // 路由的完整路径，在编译阶段自动生成
-    readonly _dynamic?: boolean; // 是否是动态路由，在编译阶段自动生成
+    _fullPath?: string; // 路由的完整路径，在编译阶段自动生成
+    _dynamic?: boolean; // 是否是动态路由，在编译阶段自动生成
     roles?: string[]; // 可访问该页面的权限数组，当前路由设置的权限会影响子路由
     auths?: string[]; // 路由内的按钮权限
-    title?: string | number | ((route: RouteConfig) => string); // 显示在侧边栏、面包屑和标签栏的文字，使用 '{{ 多语言字段 }}' 形式结合「多语言」使用，可以传入一个回调函数，参数是当前路由对象 to
+    title?: string | number | ((route: RouteMeta) => string); // 显示在侧边栏、面包屑和标签栏的文字，使用 '{{ 多语言字段 }}' 形式结合「多语言」使用，可以传入一个回调函数，参数是当前路由对象 to
     icon?: string | IconifyIcon | Component; // 菜单图标，该页面在左侧菜单、面包屑显示的图标，无默认值
     notClickBread?: boolean; // 是否允许点击面包屑，如果为 true，则该路由无法在面包屑中被点击，默认为 false
     hideInBread?: boolean; // 是否不添加到面包屑，如果为 true，则该路由将不会出现在面包屑中，默认为 false

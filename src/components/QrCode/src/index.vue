@@ -15,7 +15,7 @@
 import QRCode, { type QRCodeRenderersOptions } from "qrcode";
 import { isString } from "@/utils";
 import { RefreshRight } from "@element-plus/icons-vue";
-import { ref, computed, nextTick, unref, watch, defineOptions, defineEmits, defineProps } from "vue";
+import { ref, computed, nextTick, unref, watch, defineOptions } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "QrCode" });

@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineOptions, ref, defineProps, defineExpose } from "vue";
+import { defineOptions, ref } from "vue";
 import { ElDrawer, ElSwitch, ElTable, ElTableColumn } from "element-plus";
 import type { TableColumnProps } from "../interface";
 

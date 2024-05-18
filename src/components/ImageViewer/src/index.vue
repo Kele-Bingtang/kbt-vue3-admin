@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { ElImageViewer } from "element-plus";
-import { computed, ref, withDefaults, defineProps } from "vue";
+import { computed, ref, withDefaults } from "vue";
 
 defineOptions({ name: "ImageViewer" });
 

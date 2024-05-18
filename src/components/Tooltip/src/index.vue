@@ -22,7 +22,7 @@
 
 <script setup lang="ts">
 import { isArray } from "@/utils";
-import { useSlots, ref, computed, onMounted, onUpdated, onBeforeMount, defineOptions, defineProps, unref } from "vue";
+import { useSlots, ref, computed, onMounted, onUpdated, onBeforeMount, defineOptions, unref } from "vue";
 import { ElTooltip } from "element-plus";
 
 defineOptions({ name: "Tooltip" });

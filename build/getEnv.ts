@@ -4,14 +4,6 @@ import dotenv from "dotenv";
 
 export type Recordable<T = any> = Record<string, T>;
 
-export interface ViteEnv extends ImportMetaEnv {
-  VITE_PORT: number;
-  VITE_OPEN: boolean;
-  VITE_REPORT: boolean;
-  VITE_BUILD_GZIP: boolean;
-  VITE_DROP_CONSOLE: boolean;
-}
-
 export function isDevFn(mode: string): boolean {
   return mode === "development";
 }
@@ -27,8 +19,8 @@ export function isReportMode(): boolean {
   return process.env.VITE_REPORT === "true";
 }
 
-// Read all environment variable configuration files to process.env
-export function wrapperEnv(envConf: Recordable): ViteEnv {
+// 重新解析 .env 的内容，重新封装类型，比如 .env 定义了 true，false，默认为字符串类型，需要转换为 boolean 类型
+export function wrapperEnv(envConf: Recordable): ImportMetaEnv {
   const ret: any = {};
 
   for (const envName of Object.keys(envConf)) {

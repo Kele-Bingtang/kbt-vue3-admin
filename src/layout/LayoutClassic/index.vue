@@ -34,6 +34,7 @@ import settings from "@/config/settings";
 import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
+import { useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("layout");

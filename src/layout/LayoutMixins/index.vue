@@ -29,6 +29,7 @@ import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigg
 import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
+import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("layout");
@@ -42,7 +43,7 @@ const { findParentRoutesByPath } = useRoutes();
 
 // 子菜单
 const activeMenu = ref("");
-const childrenMenu = ref<RouterConfig[]>([]);
+const childrenMenu = ref<RouterConfigRaw[]>([]);
 const isCollapse = computed(() => settingsStore.isCollapse);
 const menuList = computed(() => {
   if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {
@@ -52,7 +53,7 @@ const menuList = computed(() => {
 });
 
 const parentMenu = computed(() => {
-  const parentMenu: RouterConfig[] = [];
+  const parentMenu: RouterConfigRaw[] = [];
   menuList.value.forEach(menuItem => {
     const item = { ...menuItem };
     item.children ? (item.children = []) : "";

@@ -13,7 +13,7 @@ const componentRoutes: RouterConfigRaw = {
       path: "message",
       name: "MessageDemo",
       component: () => import("@/views/components/message/index.vue"),
-      meta: { title: "消息组件", icon: StarFilled },
+      meta: { title: () => "消息组件", icon: StarFilled },
     },
     {
       path: "icon",

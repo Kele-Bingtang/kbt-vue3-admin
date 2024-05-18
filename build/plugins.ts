@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import vue from "@vitejs/plugin-vue";
 import vueJsx from "@vitejs/plugin-vue-jsx";
 import AutoImport from "unplugin-auto-import/vite";
@@ -6,16 +7,35 @@ import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import eslintPlugin from "vite-plugin-eslint";
 import VueSetupExtend from "vite-plugin-vue-setup-extend";
 import { configCompressPlugin } from "./compress";
-import type { ViteEnv } from "./getEnv";
 import { visualizer } from "rollup-plugin-visualizer";
+import ServerUrlCopy from "vite-plugin-url-copy";
+import progress from "vite-plugin-progress";
+import { createStyleImportPlugin, ElementPlusResolve } from "vite-plugin-style-import";
 
-export function getPluginsList(command: string, viteEnv: ViteEnv) {
+export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
   const lifecycle = process.env.npm_lifecycle_event;
   return [
     vue(),
     vueJsx(),
-    eslintPlugin(), // EsLint 报错信息显示在浏览器界面上
+    eslintPlugin({ cache: false }), // EsLint 报错信息显示在浏览器界面上
     VueSetupExtend(), // script setup 标签支持 name 命名组件
+    ServerUrlCopy(),
+    progress(),
+    !viteEnv.VITE_LOAD_ALL_EP_STYLE
+      ? createStyleImportPlugin({
+          resolves: [ElementPlusResolve()],
+          libs: [
+            {
+              libraryName: "element-plus",
+              esModule: true,
+              resolveStyle: name => {
+                if (!name.startsWith("el-")) return "";
+                return `element-plus/es/components/${name.replace(/^el-/, "")}/style/css`;
+              },
+            },
+          ],
+        })
+      : undefined,
     AutoImport({
       imports: ["vue", "vue-router"], // 自动引入 vue 的 ref、toRefs、onMounted 等，无需在页面中再次引入
       dts: "src/auto-import.d.ts", // 生成在 src 路径下名为 auto-import.d.ts 的声明文件

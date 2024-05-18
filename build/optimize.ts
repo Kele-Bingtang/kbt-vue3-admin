@@ -19,12 +19,17 @@ const include = [
   "@wangeditor/plugin-upload-attachment",
   "countup",
   "file-saver",
-  "path-to-regexp",
   "pinia-plugin-persistedstate",
   "vue-clipboard3",
   "vue-cropper",
   "vue3-tree-org",
   "vuedraggable",
+  "xgplayer",
+  "v-contextmenu",
+  "codemirror",
+  "codemirror-editor-vue3",
+  "tinymce",
+  "@tinymce/tinymce-vue",
 ];
 
 /**

@@ -5,6 +5,7 @@
 <script setup lang="ts" name="ChartLine">
 import * as echarts from "echarts";
 import { useEcharts } from "@/hooks";
+import { onMounted, shallowRef } from "vue";
 
 interface ChartBarProps {
   width?: string;

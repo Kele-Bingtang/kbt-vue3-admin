@@ -8,3 +8,5 @@ export * from "./useTheme";
 export * from "./useValidator";
 export * from "./useClipboard";
 export * from "./useDesign";
+export * from "./useStorage";
+export * from "./useCache";

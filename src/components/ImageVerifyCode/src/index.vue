@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import { useImageVerify } from "./hooks";
-import { withDefaults, defineOptions, defineProps, defineEmits, defineExpose, watch } from "vue";
+import { withDefaults, defineOptions, watch } from "vue";
 
 defineOptions({ name: "ImageVerifyCode" });
 

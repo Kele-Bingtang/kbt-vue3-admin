@@ -4,18 +4,7 @@
 
 <script setup lang="ts">
 import Player from "xgplayer";
-import {
-  ref,
-  unref,
-  onMounted,
-  watch,
-  onBeforeUnmount,
-  nextTick,
-  withDefaults,
-  defineOptions,
-  defineProps,
-  defineExpose,
-} from "vue";
+import { ref, unref, onMounted, watch, onBeforeUnmount, nextTick, withDefaults, defineOptions } from "vue";
 import "xgplayer/dist/index.min.css";
 
 defineOptions({ name: "VideoPlayer" });

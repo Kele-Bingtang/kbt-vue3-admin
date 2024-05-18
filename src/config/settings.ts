@@ -18,6 +18,7 @@ interface Settings {
   showBreadcrumbIcon: boolean; // 面包屑 Icon 是否显示
   showTabsNavIcon: boolean; // 标签栏 Icon 是否显示
   isCollapse: boolean; // 是否折叠菜单栏
+  fixTabsNav: boolean; // 是否固定标签页
   isDark: boolean; // 是否开启暗色主题
   isWeak: boolean; // 是否开启灰色主题
   isGrey: boolean; // 是否开启色弱主题
@@ -49,8 +50,6 @@ interface Settings {
   moreRouteChildrenHideInMenuThenOnlyOne: boolean;
   layoutSize: LayoutSizeType;
   language: LanguageType;
-  settingCacheKey: string; // 缓存配置的 key
-  layoutCacheKey: string; // 缓存布局的 key
   tabsNavCacheKey: string; // 缓存标签页的 key
   versionCacheKey: string; // 缓存版本号的 key
   tabActiveExcludes: string[]; // 当 URL 携带 ? 的参数时，标签页的 path 也会携带参数，当 recordTabsNav 为 true 时，会造成多个重复的只是 ? 参数不一样的标签页，该选项指定当出现指定参数不会加载到 path，即该标签的 path 只保留 ? 前面的链接。当存在多个条件，满足任意一个即可
@@ -72,9 +71,10 @@ const themeSettings: Partial<Settings> = {
   showTabsNav: true,
   showLayoutLogo: true,
   showBreadcrumbIcon: true,
-  showTabsNavIcon: false,
+  showTabsNavIcon: true,
   recordTabsNav: false,
   isCollapse: false,
+  fixTabsNav: true,
   isDark: false,
   isWeak: false,
   isGrey: false,
@@ -108,8 +108,6 @@ const routerSettings: Partial<Settings> = {
 };
 
 const keySetting: Partial<Settings> = {
-  settingCacheKey: "kbt_settingsStore",
-  layoutCacheKey: "kbt_layoutStore",
   tabsNavCacheKey: "kbt_tabsNav",
   cacheDynamicRoutesKey: "kbt_dynamic_routes",
   versionCacheKey: "kbt_version",

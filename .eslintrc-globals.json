@@ -64,7 +64,6 @@
     "watchPostEffect": true,
     "watchSyncEffect": true,
     "MetaProp": true,
-    "RouteConfig": true,
     "RouterConfig": true,
     "RouterConfigRaw": true,
     "process": true,

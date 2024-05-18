@@ -42,6 +42,7 @@ import User from "@/layout/components/Header/components/User.vue";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
+import { useRoute, useRouter } from "vue-router";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("layout");
@@ -51,10 +52,10 @@ const router = useRouter();
 const settingsStore = useSettingsStore();
 const layoutStore = useLayoutStore();
 const { resizeHandler, isMobile } = useLayout();
-const errorLogStore = useErrorLogStore();
+const { errorLogs } = useErrorLogStore();
 
 const errorCount = computed(() => {
-  const noReadErrorLogs = errorLogStore.errorLogs.filter(errorLog => {
+  const noReadErrorLogs = errorLogs.filter(errorLog => {
     return !errorLog.hasRead;
   });
   return noReadErrorLogs.length;

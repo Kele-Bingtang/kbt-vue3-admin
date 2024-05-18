@@ -3,7 +3,6 @@ export * from "./download";
 export * from "./excel";
 export * from "./helper";
 export * from "./tree";
-export * from "./layout/cache";
 export * from "./layout/errorHandler";
 export * from "./layout/message";
 export * from "./layout/scrollTo";

@@ -5,16 +5,16 @@
 </template>
 
 <script setup lang="ts" name="ErrorLog">
-import { defineProps } from "vue";
 import { ElBadge } from "element-plus";
+import { useDesign } from "@/hooks";
+import { useRoute, useRouter } from "vue-router";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("error-badge");
 
 const route = useRoute();
 const router = useRouter();
 const props = defineProps<{ errorCount: number }>();
-import { useDesign } from "@/hooks";
-
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("error-badge");
 
 // 打开错误日志页面
 const openErrorLogger = () => {
