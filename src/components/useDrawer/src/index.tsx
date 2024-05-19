@@ -16,7 +16,7 @@ const getFather = (): Element => {
   return document.querySelector("body") as HTMLBodyElement;
 };
 
-interface Drawer extends Partial<DrawerProps> {
+export interface WorkDrawerProps extends Partial<DrawerProps> {
   render?: () => VNode;
   headerRender?: () => VNode;
   showFooter?: boolean;
@@ -30,12 +30,12 @@ export const closeDrawer = () => {
   vm && getFather().removeChild(vm);
 };
 
-const handleClose = (drawerProps: Drawer) => {
+const handleClose = (drawerProps: WorkDrawerProps) => {
   if (drawerProps.onClose) drawerProps.onClose(closeDrawer);
   return closeDrawer();
 };
 
-const handleConfirm = (drawerProps: Drawer) => {
+const handleConfirm = (drawerProps: WorkDrawerProps) => {
   if (drawerProps.onConfirm) drawerProps.onConfirm(closeDrawer);
   return closeDrawer();
 };
@@ -48,7 +48,7 @@ const handleConfirm = (drawerProps: Drawer) => {
  * 在第一个参数里写 headerRender 和 footerRender，可以自定义 el-drawer 的 header 和 footer
  */
 export const showDrawer = (
-  drawerProps: Drawer,
+  drawerProps: WorkDrawerProps,
   component?: Component,
   componentsProps?: any,
   ctx?: ComponentInternalInstance

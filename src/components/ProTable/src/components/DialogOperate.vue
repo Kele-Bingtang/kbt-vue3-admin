@@ -1,5 +1,5 @@
 <template>
-  <BasicDialog v-model="dialogFormVisible" destroy-on-close draggable v-bind="dialog" :title="dialogTitle">
+  <WorkDialog v-model="dialogFormVisible" destroy-on-close draggable v-bind="dialog" :title="dialogTitle">
     <slot name="form">
       <ProForm v-if="options" ref="formElementRef" :options="formOptions" v-model="form">
         <template #footer v-if="$slots.formFooter">
@@ -22,12 +22,12 @@
         <el-button type="primary" @click="handleFormConfirm(form, status)">保存</el-button>
       </slot>
     </template>
-  </BasicDialog>
+  </WorkDialog>
 </template>
 
 <script setup lang="ts">
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
-import { ProForm, BasicDialog, type FormOptionsProps } from "@/components";
+import { ProForm, WorkDialog, type FormOptionsProps } from "@/components";
 import { shallowRef, ref, computed, defineOptions } from "vue";
 import { deepCloneTableRow } from "../utils";
 

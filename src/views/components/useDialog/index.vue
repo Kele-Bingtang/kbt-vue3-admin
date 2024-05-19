@@ -4,12 +4,12 @@
 
     <el-button @Click="visible = true">通过 modelValue 打开 Dialog 组件</el-button>
 
-    <BasicDialog v-model="visible">我是通过 modelValue 打开的 Dialog 组件</BasicDialog>
+    <WorkDialog v-model="visible">我是通过 modelValue 打开的 Dialog 组件</WorkDialog>
   </el-card>
 </template>
 
 <script setup lang="tsx" name="UseDialogDemo">
-import { useDialog, BasicDialog } from "@/components";
+import { useDialog, WorkDialog } from "@/components";
 
 const visible = ref(false);
 
@@ -20,7 +20,6 @@ const openDialog = () => {
     title: "useDialog 弹框",
     render: () => <el-button onClick={() => aginOpenDialog()}>使用函数打开 Dialog</el-button>,
   });
-  // visible.value = true;
 };
 
 const aginOpenDialog = () => {

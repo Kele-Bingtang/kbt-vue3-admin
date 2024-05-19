@@ -1,5 +1,8 @@
-import { initDrawer, closeDrawer } from "./src/index";
+import { initDrawer, closeDrawer, type WorkDrawerProps } from "./src/index";
 import { getCurrentInstance, type ComponentInternalInstance } from "vue";
+import WorkDrawer from "./src/index.vue";
+
+export { WorkDrawer, type WorkDrawerProps };
 
 export const useDrawer = (ctx?: any) => {
   const thisAppContext = ctx || (getCurrentInstance() as ComponentInternalInstance);

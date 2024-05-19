@@ -1,8 +1,8 @@
-import { initDialog, closeDialog, type UseDialogProps } from "./src/index";
+import { initDialog, closeDialog, type WorkDialogProps } from "./src/index";
 import { getCurrentInstance, type ComponentInternalInstance } from "vue";
-import Dialog from "./src/index.vue";
+import WorkDialog from "./src/index.vue";
 
-export { Dialog as BasicDialog, type UseDialogProps };
+export { WorkDialog, type WorkDialogProps };
 
 export const useDialog = (ctx?: any) => {
   const thisAppContext = ctx || (getCurrentInstance() as ComponentInternalInstance);

@@ -17,7 +17,7 @@ const getFather = (): Element => {
   return document.querySelector("body") as HTMLBodyElement;
 };
 
-export interface UseDialogProps extends Partial<DialogProps> {
+export interface WorkDialogProps extends Partial<DialogProps> {
   render?: () => VNode; // 内容渲染
   headerRender?: (scope: any) => VNode; // 头部渲染
   footerRender?: () => VNode; // 底部渲染
@@ -36,12 +36,12 @@ export const closeDialog = () => {
   vm && getFather().removeChild(vm);
 };
 
-const handleClose = (dialogProps?: UseDialogProps) => {
+const handleClose = (dialogProps?: WorkDialogProps) => {
   if (dialogProps?.onClose) dialogProps?.onClose(closeDialog);
   return closeDialog();
 };
 
-const handleConfirm = (dialogProps?: UseDialogProps) => {
+const handleConfirm = (dialogProps?: WorkDialogProps) => {
   if (dialogProps?.onConfirm) dialogProps?.onConfirm(closeDialog);
   return closeDialog();
 };
@@ -54,7 +54,7 @@ const handleConfirm = (dialogProps?: UseDialogProps) => {
  * 在第一个参数里写 headerRender 和 footerRender，可以自定义 el-dialog 的 header 和 footer
  */
 export const showDialog = (
-  dialogProps: UseDialogProps,
+  dialogProps: WorkDialogProps,
   component?: Component,
   componentsProps?: any,
   ctx?: ComponentInternalInstance

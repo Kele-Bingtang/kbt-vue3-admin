@@ -1,10 +1,13 @@
 <template>
   <ElDialog
     ref="elDialogRef"
-    :fullscreen="isFullscreen"
     v-model="dialogVisible"
     :title="title"
-    size="30%"
+    :fullscreen="isFullscreen"
+    top="2vh"
+    width="50%"
+    :close-on-click-modal="false"
+    draggable
     v-bind="$attrs"
     :class="prefixClass"
   >
@@ -49,14 +52,14 @@ defineOptions({ name: "WorkDialog" });
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-dialog");
 
-interface Dialog {
+interface WorkDialogProps {
   modelValue: boolean;
   title?: string;
   fullscreen?: boolean;
   height?: string | number;
 }
 
-const props = withDefaults(defineProps<Dialog>(), {
+const props = withDefaults(defineProps<WorkDialogProps>(), {
   title: "弹框",
   fullscreen: false,
   height: 400,
@@ -122,3 +125,7 @@ const handleConfirm = () => {
 
 defineExpose({ elDialogRef });
 </script>
+
+<style lang="scss" scoped>
+@import "./index";
+</style>
