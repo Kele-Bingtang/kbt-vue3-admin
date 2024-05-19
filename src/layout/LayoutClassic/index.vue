@@ -46,9 +46,9 @@ const isCollapse = computed(() => settingsStore.isCollapse);
 </script>
 
 <style lang="scss" scoped>
-@import "./index-scoped";
+@import "./index";
 </style>
 
 <style lang="scss">
-@import "./index-unlimited";
+@import "./menu";
 </style>
