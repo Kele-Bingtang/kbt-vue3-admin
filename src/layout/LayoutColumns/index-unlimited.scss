@@ -1,50 +1,59 @@
-.columns {
-  .#{$el-namespace}-menu,
-  .#{$el-namespace}-menu--popup {
-    .menu-item {
-      &.is-active {
-        background: var(--el-color-primary-light-9);
+$prefix-class: #{$namespace}-columns-layout;
 
-        &::before {
-          position: absolute;
-          top: 0;
-          right: 0;
-          bottom: 0;
-          width: 4px;
-          content: "";
-          background: var(--el-color-primary);
-        }
-      }
-
-      &:hover {
-        background: var(--el-color-primary-light-9);
-      }
-    }
-
-    .sub-menu,
-    .menu-item {
-      &:not(.is-active) {
-        .#{$el-namespace}-icon,
-        .svg-icon {
-          color: var(--menu-icon-color);
-        }
-      }
-    }
-  }
-
-  /* 菜单折叠的样式 */
-  .#{$el-namespace}-popper {
+.#{$prefix-class} {
+  &__menu {
     .#{$el-namespace}-menu,
     .#{$el-namespace}-menu--popup {
-      background: #ffffff;
-
       .menu-item {
         &.is-active {
-          background: #ecf5ff;
+          background: var(--el-color-primary-light-9);
+
+          &::before {
+            position: absolute;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            width: 4px;
+            content: "";
+            background: var(--el-color-primary);
+          }
         }
 
         &:hover {
-          background: #ecf5ff;
+          background: var(--el-color-primary-light-9);
+        }
+      }
+
+      /* 父级菜单鼠标悬停样式 */
+      .#{$el-namespace}-sub-menu__title:hover {
+        background-color: var(--el-color-primary-light-9);
+      }
+
+      .sub-menu,
+      .menu-item {
+        &:not(.is-active) {
+          .#{$el-namespace}-icon,
+          .svg-icon {
+            color: var(--menu-icon-color);
+          }
+        }
+      }
+    }
+
+    /* 菜单折叠的样式 */
+    .#{$el-namespace}-popper {
+      .#{$el-namespace}-menu,
+      .#{$el-namespace}-menu--popup {
+        background: #ffffff;
+
+        .menu-item {
+          &.is-active {
+            background: #ecf5ff;
+          }
+
+          &:hover {
+            background: #ecf5ff;
+          }
         }
       }
     }

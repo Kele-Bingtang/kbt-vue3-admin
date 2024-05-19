@@ -1,56 +1,95 @@
-.mixins {
-  .#{$el-namespace}-menu--horizontal {
-    border-bottom: none;
+$prefix-class: #{$namespace}-mixins-layout;
 
-    .menu-item {
-      &.is-active {
-        color: var(--menu-text-color) !important;
-        background: var(--split-menu-active-bg-color);
+.#{$prefix-class} {
+  &__menu {
+    .#{$el-namespace}-scrollbar__bar.is-vertical {
+      visibility: hidden;
+    }
+
+    .#{$el-namespace}-menu {
+      border-bottom: none;
+
+      .menu-item {
+        &.is-active {
+          color: var(--menu-text-color);
+          background: var(--menu-active-bg-color);
+
+          &:hover {
+            color: var(--el-color-primary);
+          }
+        }
 
         &:hover {
-          color: var(--el-color-primary);
+          background: var(--menu-hover-bg-color);
         }
       }
+    }
 
-      &:hover {
-        background: var(--split-menu-active-bg-color);
+    /* 父级菜单鼠标悬停样式 */
+    .#{$el-namespace}-sub-menu .#{$el-namespace}-sub-menu__title:hover {
+      background-color: var(--el-color-primary-light-9);
+    }
+
+    .#{$el-namespace}-menu--horizontal:not(.#{$el-namespace}-menu--popup-container) {
+      height: calc(var(--header-height) - 1px);
+      border-bottom: none;
+
+      .#{$el-namespace}-sub-menu__hide-arrow {
+        width: 54px;
+        height: calc(var(--header-height) - 1px);
       }
     }
 
-    /* 菜单高度 */
-    .sub-menu,
-    .menu-item {
-      height: 54px !important;
-
-      .#{$el-namespace}-sub-menu__title {
-        height: 100%;
+    .#{$el-namespace}-menu--vertical,
+    .#{$el-namespace}-menu--popup {
+      .menu-item.is-active::before {
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        width: 4px;
+        content: "";
+        background: var(--el-color-primary);
       }
     }
 
-    .#{$el-namespace}-sub-menu__hide-arrow {
-      width: 54px !important;
+    .menu-collapse .sub-menu.is-active .#{$el-namespace}-sub-menu__title {
+      background-color: var(--sub-menu-active-bg-color);
     }
-  }
 
-  .#{$el-namespace}-menu--vertical,
-  .#{$el-namespace}-menu--popup {
-    .menu-item {
-      &.is-active {
-        background: var(--menu-active-bg-color);
+    /* 菜单折叠的样式 */
+    .#{$el-namespace}-menu--vertical .#{$el-namespace}-menu--popup {
+      background: var(--sub-menu-bg-color);
 
-        &::before {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          width: 4px;
-          content: "";
-          background: var(--el-color-primary);
+      .menu-item {
+        &.is-active {
+          background: var(--sub-menu-active-bg-color);
+        }
+
+        &:hover {
+          background: var(--sub-menu-hover-bg-color);
         }
       }
+    }
 
-      &:hover {
-        background: var(--menu-hover-bg-color);
+    .sub-menu {
+      /* 子级高亮，父级也高亮 */
+      &.is-active > .#{$el-namespace}-sub-menu__title {
+        color: var(--el-color-primary);
+      }
+
+      .#{$el-namespace}-menu {
+        background-color: var(--sub-menu-bg-color);
+
+        .menu-item {
+          &.is-active {
+            background-color: var(--sub-menu-active-bg-color);
+          }
+
+          &:hover {
+            background-color: var(--sub-menu-hover-bg-color);
+          }
+        }
       }
     }
 
@@ -61,56 +100,6 @@
         .svg-icon {
           color: var(--menu-icon-color);
         }
-      }
-    }
-  }
-
-  .menu-collapse .sub-menu.is-active .#{$el-namespace}-sub-menu__title {
-    background-color: var(--sub-menu-active-bg-color) !important;
-  }
-
-  /* 菜单折叠的样式 */
-  .#{$el-namespace}-menu--vertical .#{$el-namespace}-menu--popup {
-    background: var(--sub-menu-bg-color);
-
-    .menu-item {
-      &.is-active {
-        background: var(--sub-menu-active-bg-color);
-      }
-
-      &:hover {
-        background: var(--sub-menu-hover-bg-color);
-      }
-    }
-  }
-
-  .sub-menu {
-    /* 子级高亮，父级也高亮 */
-    &.is-active > .#{$el-namespace}-sub-menu__title {
-      color: var(--el-color-primary) !important;
-    }
-
-    .#{$el-namespace}-menu {
-      background-color: var(--sub-menu-bg-color) !important;
-
-      .menu-item {
-        &.is-active {
-          background-color: var(--sub-menu-active-bg-color) !important;
-        }
-
-        &:hover {
-          background-color: var(--sub-menu-hover-bg-color) !important;
-        }
-      }
-    }
-  }
-
-  .sub-menu,
-  .menu-item {
-    &:not(.is-active) {
-      .#{$el-namespace}-icon,
-      .svg-icon {
-        color: var(--menu-icon-color);
       }
     }
   }

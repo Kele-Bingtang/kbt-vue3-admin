@@ -6,10 +6,11 @@ $prefix-class: #{$namespace}-mixins-layout;
 
   .#{$el-namespace}-header {
     box-sizing: border-box;
-    height: var(--el-menu-horizontal-height);
+    height: var(--header-height);
     padding: 0;
     color: var(--header-text-color);
     background-color: var(--header-bg-color);
+    border-bottom: 1px solid var(--header-line-color);
 
     .#{$prefix-class}__logo {
       width: 210px;
@@ -60,7 +61,7 @@ $prefix-class: #{$namespace}-mixins-layout;
   }
 
   &__aside {
-    height: calc(100% - var(--el-menu-horizontal-height)); /* 减去头部高度 */
+    height: calc(100% - var(--header-height)); /* 减去头部高度 */
 
     .#{$el-namespace}-aside.not-aside {
       width: 0 !important;

@@ -56,7 +56,7 @@ interface IconProps {
   attrs?: IconType;
 }
 
-const props = defineProps<IconProps>();
+const props = withDefaults(defineProps<IconProps>(), { hoverColor: "" });
 const attrsProp = useAttrs();
 
 const attrsComputed = computed(() => Object.assign({}, attrsProp, props.attrs));

@@ -29,5 +29,27 @@ $prefix-class: #{$namespace}-header-left;
   justify-content: center;
   overflow: hidden;
   white-space: nowrap;
+
+  & > * {
+    &:hover {
+      color: var(--el-color-primary);
+    }
+
+    :deep(.#{$el-namespace}-breadcrumb__inner) {
+      color: var(--header-text-color);
+
+      &:hover {
+        color: var(--el-color-primary);
+      }
+    }
+
+    // 最后一个面包屑 item
+    :deep(
+        .#{$el-namespace}-breadcrumb__item:last-child .#{$el-namespace}-breadcrumb__inner,
+        .#{$el-namespace}-breadcrumb__item:last-child .#{$el-namespace}-breadcrumb__inner:hover
+      ) {
+      color: #cfd3dc;
+    }
+  }
 }
 </style>

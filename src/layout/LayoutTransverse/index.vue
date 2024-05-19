@@ -5,7 +5,13 @@
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span>{{ settings.title }}</span>
       </div>
-      <Menu mode="horizontal" />
+      <Menu
+        mode="horizontal"
+        :is-collapse="false"
+        :wrap-style="{ overflow: 'hidden' }"
+        :class="`${prefixClass}__menu`"
+        :popper-class="`${prefixClass}__menu`"
+      />
       <HeaderRight />
     </el-header>
     <MainContent />

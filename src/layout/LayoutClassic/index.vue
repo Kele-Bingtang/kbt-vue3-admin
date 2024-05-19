@@ -1,6 +1,6 @@
 <template>
   <!-- 布局：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧 -->
-  <el-container :class="[prefixClass, { 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
+  <el-container :class="[prefixClass, isCollapse ? 'menu-collapse' : 'menu-expand']">
     <el-header class="flx-justify-between">
       <Header>
         <template #left>
@@ -16,7 +16,7 @@
     </el-header>
     <el-container :class="`${prefixClass}__aside`">
       <el-aside>
-        <Menu />
+        <Menu :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
       </el-aside>
       <MainContent />
     </el-container>

@@ -1,5 +1,5 @@
 <template>
-  <el-container :class="[prefixClass, { mobile: isMobile(), 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
+  <el-container :class="[prefixClass, isCollapse ? 'menu-collapse' : 'menu-expand']">
     <el-aside>
       <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
@@ -16,9 +16,8 @@
           <User id="user" :show-avatar="false" />
         </template>
       </div>
-      <Menu />
+      <Menu :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
     </el-aside>
-    <div v-if="isMobile() && !isCollapse" :class="`${prefixClass}__drawer-bg`" @click="handleClickOutSide" />
     <el-container>
       <MainContent />
     </el-container>
@@ -51,7 +50,7 @@ const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
 const layoutStore = useLayoutStore();
-const { resizeHandler, isMobile } = useLayout();
+const { resizeHandler } = useLayout();
 const { errorLogs } = useErrorLogStore();
 
 const errorCount = computed(() => {
@@ -80,10 +79,6 @@ onBeforeMount(() => {
 onBeforeUnmount(() => {
   window.removeEventListener("resize", resizeHandler);
 });
-
-const handleClickOutSide = () => {
-  settingsStore.closeSideMenu();
-};
 </script>
 
 <style lang="scss" scoped>

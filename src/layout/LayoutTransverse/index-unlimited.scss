@@ -1,39 +1,48 @@
-.transverse {
-  .#{$el-namespace}-menu {
-    border: none;
+$prefix-class: #{$namespace}-transverse-layout;
 
-    .menu-item {
-      &.is-active {
-        color: var(--menu-text-color) !important;
-        background: var(--split-menu-active-bg-color);
+.#{$prefix-class} {
+  &__menu {
+    .#{$el-namespace}-scrollbar__bar.is-vertical {
+      visibility: hidden;
+    }
+
+    .#{$el-namespace}-menu {
+      border-bottom: none;
+
+      .menu-item {
+        &.is-active {
+          color: var(--menu-text-color);
+          background: var(--menu-active-bg-color);
+
+          &:hover {
+            color: var(--el-color-primary);
+          }
+        }
 
         &:hover {
-          color: var(--el-color-primary);
+          background: var(--menu-hover-bg-color);
         }
       }
+    }
 
-      &:hover {
-        background: var(--split-menu-active-bg-color);
+    /* 父级菜单鼠标悬停样式 */
+    .#{$el-namespace}-sub-menu .#{$el-namespace}-sub-menu__title:hover {
+      background-color: var(--el-color-primary-light-9);
+    }
+
+    .sub-menu,
+    .menu-item {
+      &:not(.is-active) {
+        .#{$el-namespace}-icon,
+        .svg-icon {
+          color: var(--menu-icon-color);
+        }
       }
     }
-  }
 
-  .sub-menu,
-  .menu-item {
-    &:not(.is-active) {
-      .#{$el-namespace}-icon,
-      .svg-icon {
-        color: var(--menu-icon-color);
-      }
-    }
-  }
-
-  /* 下拉菜单 */
-  .#{$el-namespace}-menu--popup .menu-item {
-    &.is-active {
-      background: var(--menu-active-bg-color);
-
-      &::before {
+    /* 下拉菜单 */
+    .#{$el-namespace}-menu--popup .menu-item {
+      &.is-active::before {
         position: absolute;
         top: 0;
         bottom: 0;
@@ -44,25 +53,14 @@
       }
     }
 
-    &:hover {
-      background: var(--menu-hover-bg-color);
-    }
-  }
+    /* 横向菜单 */
+    .#{$el-namespace}-menu--horizontal:not(.#{$el-namespace}-menu--popup-container) {
+      height: calc(var(--header-height) - 1px);
 
-  /* 横向菜单 */
-  .#{$el-namespace}-menu--horizontal {
-    /* 菜单高度 */
-    .sub-menu,
-    .menu-item {
-      height: 54px !important;
-
-      .#{$el-namespace}-sub-menu__title {
-        height: 100%;
+      .#{$el-namespace}-sub-menu__hide-arrow {
+        width: 54px;
+        height: calc(var(--header-height) - 1px);
       }
-    }
-
-    .#{$el-namespace}-sub-menu__hide-arrow {
-      width: 54px !important;
     }
   }
 }

@@ -1,11 +1,11 @@
 <template>
-  <el-container :class="[prefixClass, { mobile: isMobile, 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
+  <el-container :class="[prefixClass, isCollapse ? 'menu-collapse' : 'menu-expand', { mobile: isMobile }]">
     <el-aside>
       <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ settings.title }}</span>
       </div>
-      <Menu />
+      <Menu :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
     </el-aside>
     <div v-if="isMobile && !isCollapse" :class="`${prefixClass}__drawer-bg`" @click="handleClickOutSide" />
     <el-container>
@@ -40,14 +40,13 @@ const layoutStore = useLayoutStore();
 const { resizeHandler } = useLayout();
 
 const isCollapse = computed(() => settingsStore.isCollapse);
-const device = computed(() => layoutStore.device);
-const isMobile = computed(() => device.value === DeviceType.Mobile);
+const isMobile = computed(() => layoutStore.device === DeviceType.Mobile);
 
 // 监听路由的变化，判断是移动端还是桌面端
 watch(
   () => route.fullPath,
   () => {
-    if (device.value === DeviceType.Mobile && !unref(isCollapse)) {
+    if (layoutStore.device === DeviceType.Mobile && !unref(isCollapse)) {
       settingsStore.closeSideMenu();
     }
   }

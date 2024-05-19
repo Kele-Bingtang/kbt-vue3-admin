@@ -1,5 +1,5 @@
 <template>
-  <el-container :class="[prefixClass, { 'menu-collapse': isCollapse, 'menu-expand': !isCollapse }]">
+  <el-container :class="[prefixClass, isCollapse ? 'menu-collapse' : 'menu-expand']">
     <div :class="`${prefixClass}__aside`">
       <div :class="`${prefixClass}__aside__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
@@ -31,7 +31,7 @@
         <span v-show="menuItem.length">{{ isCollapse ? "K" : settings.title }}</span>
       </div>
       <el-scrollbar>
-        <Menu :menu-list="menuItem" />
+        <Menu :menu-list="menuItem" :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
       </el-scrollbar>
     </el-aside>
     <el-container>

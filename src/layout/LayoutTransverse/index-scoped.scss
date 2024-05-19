@@ -7,7 +7,7 @@ $prefix-class: #{$namespace}-transverse-layout;
 
   .#{$el-namespace}-header {
     box-sizing: border-box;
-    height: var(--el-menu-horizontal-height);
+    height: var(--header-height);
     padding: 0;
     color: var(--header-text-color);
     background-color: var(--header-bg-color);

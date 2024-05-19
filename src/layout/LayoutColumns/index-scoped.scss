@@ -15,7 +15,7 @@ $prefix-class: #{$namespace}-columns-layout;
 
     &__logo {
       box-sizing: border-box;
-      height: var(--el-menu-horizontal-height);
+      height: var(--header-height);
       cursor: pointer;
       border-bottom: 1px solid var(--menu-logo-line-color);
 
@@ -26,7 +26,7 @@ $prefix-class: #{$namespace}-columns-layout;
     }
 
     .#{$el-namespace}-scrollbar {
-      height: calc(100% - var(--el-menu-horizontal-height));
+      height: calc(100% - var(--header-height));
 
       .#{$prefix-class}__aside__list {
         flex: 1;
@@ -78,7 +78,7 @@ $prefix-class: #{$namespace}-columns-layout;
     transition: all 0.3s ease;
 
     .#{$el-namespace}-scrollbar {
-      height: calc(100% - var(--el-menu-horizontal-height));
+      height: calc(100% - var(--header-height));
 
       .#{$el-namespace}-menu {
         overflow-x: hidden;
@@ -88,7 +88,7 @@ $prefix-class: #{$namespace}-columns-layout;
 
     .#{$prefix-class}__aside__logo {
       box-sizing: border-box;
-      height: var(--el-menu-horizontal-height);
+      height: var(--header-height);
       border-bottom: 1px solid var(--menu-logo-line-color);
 
       span {
@@ -116,7 +116,7 @@ $prefix-class: #{$namespace}-columns-layout;
 
   .#{$el-namespace}-header {
     box-sizing: border-box;
-    height: var(--el-menu-horizontal-height);
+    height: var(--header-height);
     padding: 0 15px;
     background-color: #ffffff;
     border-bottom: 1px solid #f1f1f1;

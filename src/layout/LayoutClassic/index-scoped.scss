@@ -6,7 +6,7 @@ $prefix-class: #{$namespace}-classic-layout;
 
   .#{$el-namespace}-header {
     box-sizing: border-box;
-    height: var(--el-menu-horizontal-height);
+    height: var(--header-height);
     padding: 0;
     color: var(--header-text-color);
     background-color: var(--header-bg-color);
@@ -65,6 +65,6 @@ $prefix-class: #{$namespace}-classic-layout;
   }
 
   &__aside {
-    height: calc(100% - var(--el-menu-horizontal-height)); /* 减去头部高度 */
+    height: calc(100% - var(--header-height)); /* 减去头部高度 */
   }
 }

@@ -1,81 +1,90 @@
-.subsystem {
-  .#{$el-namespace}-menu,
-  .#{$el-namespace}-menu--popup {
-    .menu-item {
-      &.is-active {
-        background: var(--menu-active-bg-color);
+$prefix-class: #{$namespace}-subsystem-layout;
 
-        &::before {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          width: 4px;
-          content: "";
-          background: var(--el-color-primary);
-        }
-      }
+.#{$prefix-class} {
+  &__menu {
+    .#{$el-namespace}-menu,
+    .#{$el-namespace}-menu--popup {
+      .menu-item {
+        &.is-active {
+          background: var(--menu-active-bg-color);
 
-      &:hover {
-        background: var(--menu-hover-bg-color);
-      }
-    }
-
-    .sub-menu,
-    .menu-item {
-      &:not(.is-active) {
-        .#{$el-namespace}-icon,
-        .svg-icon {
-          color: var(--menu-icon-color);
-        }
-      }
-    }
-
-    .sub-menu {
-      /* 子级高亮，父级也高亮 */
-      &.is-active > .#{$el-namespace}-sub-menu__title {
-        color: var(--el-color-primary) !important;
-      }
-
-      .#{$el-namespace}-menu {
-        background-color: var(--sub-menu-bg-color) !important;
-
-        .menu-item {
-          &.is-active {
-            background-color: var(--sub-menu-active-bg-color) !important;
+          &::before {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 0;
+            width: 4px;
+            content: "";
+            background: var(--el-color-primary);
           }
+        }
 
-          &:hover {
-            background-color: var(--sub-menu-hover-bg-color) !important;
+        &:hover {
+          background: var(--menu-hover-bg-color);
+        }
+      }
+
+      /* 父级菜单鼠标悬停样式 */
+      .#{$el-namespace}-sub-menu__title:hover {
+        background-color: var(--el-color-primary-light-9);
+      }
+
+      .sub-menu,
+      .menu-item {
+        &:not(.is-active) {
+          .#{$el-namespace}-icon,
+          .svg-icon {
+            color: var(--menu-icon-color);
           }
         }
       }
-    }
-  }
 
-  /* 菜单折叠的样式 */
-  .#{$el-namespace}-menu--popup {
-    background: var(--sub-menu-bg-color);
+      .sub-menu {
+        /* 子级高亮，父级也高亮 */
+        &.is-active > .#{$el-namespace}-sub-menu__title {
+          color: var(--el-color-primary);
+        }
 
-    /* 不用 .el-menu-item 为防止全局菜单样式污染 */
-    .menu-item {
-      &.is-active {
-        background: var(--sub-menu-active-bg-color);
+        .#{$el-namespace}-menu {
+          background-color: var(--sub-menu-bg-color);
+
+          .menu-item {
+            &.is-active {
+              background-color: var(--sub-menu-active-bg-color);
+            }
+
+            &:hover {
+              background-color: var(--sub-menu-hover-bg-color);
+            }
+          }
+        }
       }
+    }
 
-      &:hover {
-        background: var(--sub-menu-hover-bg-color);
+    /* 菜单折叠的样式 */
+    .#{$el-namespace}-menu--popup {
+      background: var(--sub-menu-bg-color);
+
+      /* 不用 .el-menu-item 为防止全局菜单样式污染 */
+      .menu-item {
+        &.is-active {
+          background: var(--sub-menu-active-bg-color);
+        }
+
+        &:hover {
+          background: var(--sub-menu-hover-bg-color);
+        }
       }
     }
-  }
 
-  .menu-header,
-  .menu-header .#{$el-namespace}-dropdown {
-    color: var(--el-text-color-primary);
-  }
+    .menu-header,
+    .menu-header .#{$el-namespace}-dropdown {
+      color: var(--el-text-color-primary);
+    }
 
-  /* Header 不存在，需要重新设置 flex-direction */
-  .layout-container > .#{$el-namespace}-container {
-    flex-direction: column;
+    /* Header 不存在，需要重新设置 flex-direction */
+    .layout-container > .#{$el-namespace}-container {
+      flex-direction: column;
+    }
   }
 }
