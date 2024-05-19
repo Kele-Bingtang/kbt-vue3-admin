@@ -12,20 +12,6 @@ declare module "vue-router" {
 }
 
 declare global {
-  interface Navigator {
-    browserLanguage: string;
-  }
-  interface Window {
-    webkitCancelAnimationFrame;
-    mozCancelAnimationFrame;
-    oCancelAnimationFrame;
-    msCancelAnimationFrame;
-    webkitRequestAnimationFrame;
-    mozRequestAnimationFrame;
-    oRequestAnimationFrame;
-    msRequestAnimationFrame;
-  }
-
   // 路由表初始化配置类型
   type RouterConfigRaw = Omit<RouteRecordRaw, "meta" | "component" | "children"> & {
     meta?: MetaProp;
@@ -75,19 +61,4 @@ declare global {
     useI18n?: boolean; // 是否开启 i18n，默认读取全局的 routeUseI18n（src/config/settings.ts）
     useTooltip?: boolean; // 菜单的文字超出后，是否使用 el-toolTip 提示，默认读取全局的 routeUseTooltip（src/config/settings.ts）
   }
-}
-
-declare global {
-  /**
-   * 平台的名称、版本、依赖、最后构建时间的类型提示
-   */
-  const __APP_INFO__: {
-    pkg: {
-      name: string;
-      version: string;
-      dependencies: Record<string, string>;
-      devDependencies: Record<string, string>;
-    };
-    lastBuildTime: string;
-  };
 }
