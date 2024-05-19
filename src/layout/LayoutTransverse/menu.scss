@@ -27,7 +27,7 @@ $prefix-class: #{$namespace}-transverse-layout;
 
     /* 父级菜单鼠标悬停样式 */
     .#{$el-namespace}-sub-menu .#{$el-namespace}-sub-menu__title:hover {
-      background-color: var(--el-color-primary-light-9);
+      background-color: var(--menu-hover-bg-color);
     }
 
     .sub-menu,
@@ -42,6 +42,11 @@ $prefix-class: #{$namespace}-transverse-layout;
 
     /* 下拉菜单 */
     .#{$el-namespace}-menu--popup .menu-item {
+      /* 子级高亮，父级也高亮 */
+      &.is-active {
+        color: var(--el-color-primary);
+      }
+
       &.is-active::before {
         position: absolute;
         top: 0;

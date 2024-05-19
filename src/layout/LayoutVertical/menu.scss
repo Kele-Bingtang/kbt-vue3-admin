@@ -26,7 +26,7 @@ $prefix-class: #{$namespace}-vertical-layout;
 
       /* 父级菜单鼠标悬停样式 */
       .#{$el-namespace}-sub-menu__title:hover {
-        background-color: var(--el-color-primary-light-9);
+        background-color: var(--menu-hover-bg-color);
       }
 
       .sub-menu,

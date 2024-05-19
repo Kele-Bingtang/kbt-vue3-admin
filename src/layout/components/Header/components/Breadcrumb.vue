@@ -3,12 +3,21 @@
     <transition-group name="breadcrumb">
       <template v-for="(breadcrumb, index) in breadcrumbList" :key="breadcrumb.path">
         <el-breadcrumb-item>
+          <div
+            v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1"
+            :class="`${prefixClass}__link no-click`"
+          >
+            <Icon
+              v-if="breadcrumb.meta?.icon && settingsStore.showBreadcrumbIcon"
+              :icon="breadcrumb.meta.icon"
+              :class="`${prefixClass}__icon`"
+            />
+            <span>{{ breadcrumb.meta.title }}</span>
+          </div>
           <router-link
+            v-else
             :to="{ path: breadcrumb.meta._fullPath || breadcrumb.path }"
-            :class="[
-              `${prefixClass}__link`,
-              { 'no-click': breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1 },
-            ]"
+            :class="`${prefixClass}__link`"
           >
             <Icon
               v-if="breadcrumb.meta?.icon && settingsStore.showBreadcrumbIcon"

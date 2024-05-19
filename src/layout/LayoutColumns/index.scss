@@ -60,9 +60,12 @@ $prefix-class: #{$namespace}-columns-layout;
       .split-active {
         background-color: var(--split-menu-active-bg-color);
 
+        .#{$prefix-class}__aside__list-item__title {
+          color: var(--el-menu-active-color);
+        }
         .#{$el-namespace}-icon,
         .svg-icon {
-          color: var(--menu-icon-color);
+          color: var(--el-menu-active-color);
         }
       }
     }
@@ -117,8 +120,10 @@ $prefix-class: #{$namespace}-columns-layout;
   .#{$el-namespace}-header {
     box-sizing: border-box;
     height: var(--header-height);
-    padding: 0 15px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #f1f1f1;
+    padding: 0;
+    padding-left: 15px;
+    color: var(--header-text-color);
+    background-color: var(--header-bg-color);
+    border-bottom: 1px solid var(--header-line-color);
   }
 }

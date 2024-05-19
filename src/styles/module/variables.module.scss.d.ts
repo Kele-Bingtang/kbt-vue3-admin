@@ -25,6 +25,18 @@ export interface ScssVariables {
   logoLineLight: string;
   logoTitleLight: string;
   splitMenuActiveBgLight: string;
+
+  /* 暗色头部主题 */
+  headerBgDark: string;
+  headerTextDark: string;
+  headerLineDark: string;
+  headerLogoTitleDark: string;
+
+  /* 白色头部主题 */
+  headerBgLight: string;
+  headerTextLight: string;
+  headerLineLight: string;
+  headerLogoTitleLight: string;
 }
 
 export const variables: ScssVariables;

@@ -123,44 +123,57 @@ export const useTabsNav = () => {
     }
   };
 
+  // 初始化标签页的右键菜单
   const initContextMenu = (tab: TabProp) => {
     const t = tabNavList.value;
     const tabLength = t.length;
     const currentIndex = t.findIndex(t => t.path === tab.path);
     // 如果选择的是固定在标签栏的标签
-    if (!tab.close && currentIndex > 0) {
-      // 如果左右都是固定的或者最后一个标签，则只显示刷新
-      if (tabLength - 1 === currentIndex || (!t[currentIndex - 1].close && !t[currentIndex + 1].close)) {
-        multiMenuChange(["current", "left", "right", "other", "all"], false);
+    if (!tab.close) {
+      console.log(currentIndex);
+      if (currentIndex === 0) {
+        // 如果只有一个固定标签，则判断右边是否有标签
+        if (tabLength === 1) {
+          multiMenuChange(["current", "left", "right", "other", "all"], false);
+          multiMenuChange(["refresh"], true);
+        } else {
+          multiMenuChange(["all"], true);
+          multiMenuChange(["current", "left", "right", "other"], false);
+        }
       } else {
-        multiMenuChange(["current", "left"], false);
-        multiMenuChange(["refresh", "right", "other", "all"], true);
+        // 如果左右都是固定的或者最后一个标签，则只显示刷新
+        if (tabLength - 1 === currentIndex || (!t[currentIndex - 1].close && !t[currentIndex + 1].close)) {
+          multiMenuChange(["current", "left", "right", "other", "all"], false);
+          multiMenuChange(["refresh"], true);
+        } else {
+          multiMenuChange(["current", "left"], false);
+          multiMenuChange(["refresh", "right", "other", "all"], true);
+        }
       }
     } else {
       // 不是固定的标签
       if (currentIndex === 0) {
         // 如果是第一个标签页，且只有一个标签页
         multiMenuChange(["current", "left", "right", "other", "all"], false);
+        multiMenuChange(["refresh"], true);
       } else if (currentIndex === 1 && tabLength === 2) {
         // 左侧的菜单是首页，右侧不存在别的菜单
         multiMenuChange(["left", "right", "other"], false);
         multiMenuChange(["current", "all"], true);
       } else if (currentIndex === 1 && tabLength !== 2) {
         // 左侧的菜单是首页，右侧存在别的菜单
-        contextMenuCondition.left = false;
+        multiMenuChange(["left"], false);
         multiMenuChange(["refresh", "current", "right", "other", "all"], true);
       } else if (tabLength - 1 === currentIndex && currentIndex !== 0) {
         // 当前 tab 是所有 tab 中的最后一个
-        contextMenuCondition.right = false;
+        multiMenuChange(["right"], false);
         multiMenuChange(["refresh", "current", "left", "other", "all"], true);
       } else multiMenuChange(["refresh", "current", "left", "right", "other", "all"], true);
     }
+
     // 如果没有选择当前的标签，则不允许刷新
-    if (tab.path !== route.fullPath && currentIndex !== 0) {
-      contextMenuCondition.refresh = false;
-    } else {
-      contextMenuCondition.refresh = true;
-    }
+    if (tab.path !== route.fullPath && currentIndex !== 0) contextMenuCondition.refresh = false;
+    else contextMenuCondition.refresh = true;
   };
 
   const multiMenuChange = (menuList: Partial<ContextMenu>[], status: boolean) => {

@@ -85,7 +85,7 @@ watch(
         findParentRoutesByPath(`/${route.path.split("/")[1]}`, permissionStore.loadedRouteList, "path")[0] === item.path
     );
 
-    activeMenu.value = item[0].path;
+    activeMenu.value = item[0]?.path || "";
 
     if (item[0] && item[0].children?.length) return (childrenMenu.value = item[0].children);
     childrenMenu.value = [];

@@ -30,7 +30,7 @@
       <div :class="`${prefixClass}__aside__logo layout__logo flx-center`">
         <span v-show="menuItem.length">{{ isCollapse ? "K" : settings.title }}</span>
       </div>
-      <el-scrollbar>
+      <el-scrollbar v-if="menuItem?.length">
         <Menu :menu-list="menuItem" :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
       </el-scrollbar>
     </el-aside>
@@ -88,6 +88,7 @@ watch(
     const item = unref(menuList).filter(
       item => route.path === item.path || `/${route.path.split("/")[1]}` === item.path
     );
+
     if (item[0] && item[0].children?.length) return (menuItem.value = item[0].children);
     menuItem.value = [];
   },

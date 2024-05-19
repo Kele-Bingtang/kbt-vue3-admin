@@ -27,7 +27,7 @@ $prefix-class: #{$namespace}-mixins-layout;
 
     /* 父级菜单鼠标悬停样式 */
     .#{$el-namespace}-sub-menu .#{$el-namespace}-sub-menu__title:hover {
-      background-color: var(--el-color-primary-light-9);
+      background-color: var(--menu-hover-bg-color);
     }
 
     .#{$el-namespace}-menu--horizontal:not(.#{$el-namespace}-menu--popup-container) {
@@ -74,7 +74,8 @@ $prefix-class: #{$namespace}-mixins-layout;
 
     .sub-menu {
       /* 子级高亮，父级也高亮 */
-      &.is-active > .#{$el-namespace}-sub-menu__title {
+      &.is-active > .#{$el-namespace}-sub-menu__title,
+      .is-active.menu-item {
         color: var(--el-color-primary);
       }
 

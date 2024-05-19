@@ -45,10 +45,10 @@ $prefix-class: #{$namespace}-header-left;
 
     // 最后一个面包屑 item
     :deep(
-        .#{$el-namespace}-breadcrumb__item:last-child .#{$el-namespace}-breadcrumb__inner,
-        .#{$el-namespace}-breadcrumb__item:last-child .#{$el-namespace}-breadcrumb__inner:hover
+        .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click,
+        .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click:hover
       ) {
-      color: #cfd3dc;
+      color: #a8abb0;
     }
   }
 }

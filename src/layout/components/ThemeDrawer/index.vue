@@ -1,311 +1,87 @@
 <template>
   <el-drawer v-model="drawerVisible" title="布局设置" size="300px" :class="prefixClass">
+    <!-- 布局切换 -->
     <template v-if="!isMobile">
-      <el-divider :class="`${prefixClass}__divider`" content-position="center">
-        <el-icon><Notification /></el-icon>
-        {{ $t("_settings.layoutSwitch") }}
-      </el-divider>
-
-      <div :class="`${prefixClass}__layout`">
-        <el-tooltip effect="dark" content="纵向" placement="top" :show-after="200">
-          <div
-            :class="[
-              `${prefixClass}__layout-item ${prefixClass}__layout-vertical`,
-              settingsStore.layoutMode == LayoutModeType.Vertical ? 'is-active' : '',
-            ]"
-            @click="changeLayout(LayoutModeType.Vertical)"
-          >
-            <div :class="`${prefixClass}__layout-item__dark`"></div>
-            <div :class="`${prefixClass}__layout-item__container`">
-              <div :class="`${prefixClass}__layout-item__light`"></div>
-              <div :class="`${prefixClass}__layout-item__content`"></div>
-            </div>
-            <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Vertical"><CircleCheckFilled /></el-icon>
-          </div>
-        </el-tooltip>
-        <el-tooltip effect="dark" content="经典" placement="top" :show-after="200">
-          <div
-            :class="[
-              `${prefixClass}__layout-item ${prefixClass}__layout-classic`,
-              settingsStore.layoutMode === LayoutModeType.Classic ? 'is-active' : '',
-            ]"
-            @click="changeLayout(LayoutModeType.Classic)"
-          >
-            <div :class="`${prefixClass}__layout-item__dark`"></div>
-            <div :class="`${prefixClass}__layout-item__container`">
-              <div :class="`${prefixClass}__layout-item__light`"></div>
-              <div :class="`${prefixClass}__layout-item__content`"></div>
-            </div>
-            <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Classic"><CircleCheckFilled /></el-icon>
-          </div>
-        </el-tooltip>
-        <el-tooltip effect="dark" content="横向" placement="top" :show-after="200">
-          <div
-            :class="[
-              `${prefixClass}__layout-item ${prefixClass}__layout-transverse`,
-              settingsStore.layoutMode === LayoutModeType.Transverse ? 'is-active' : '',
-            ]"
-            @click="changeLayout(LayoutModeType.Transverse)"
-          >
-            <div :class="`${prefixClass}__layout-item__dark`"></div>
-            <div :class="`${prefixClass}__layout-item__content`"></div>
-            <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Transverse"><CircleCheckFilled /></el-icon>
-          </div>
-        </el-tooltip>
-        <el-tooltip effect="dark" content="分栏" placement="top" :show-after="200">
-          <div
-            :class="[
-              `${prefixClass}__layout-item ${prefixClass}__layout-columns`,
-              settingsStore.layoutMode === LayoutModeType.Columns ? 'is-active' : '',
-            ]"
-            @click="changeLayout(LayoutModeType.Columns)"
-          >
-            <div :class="`${prefixClass}__layout-item__dark`"></div>
-            <div :class="`${prefixClass}__layout-item__light`"></div>
-            <div :class="`${prefixClass}__layout-item__content`"></div>
-            <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Columns"><CircleCheckFilled /></el-icon>
-          </div>
-        </el-tooltip>
-        <el-tooltip effect="dark" content="混合" placement="top" :show-after="200">
-          <div
-            :class="[
-              `${prefixClass}__layout-item ${prefixClass}__layout-mixins`,
-              settingsStore.layoutMode == LayoutModeType.Mixins ? 'is-active' : '',
-            ]"
-            @click="changeLayout(LayoutModeType.Mixins)"
-          >
-            <div :class="`${prefixClass}__layout-item__dark`"></div>
-            <div :class="`${prefixClass}__layout-item__container`">
-              <div :class="`${prefixClass}__layout-item__dark`"></div>
-              <div :class="`${prefixClass}__layout-item__content`"></div>
-            </div>
-            <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Mixins"><CircleCheckFilled /></el-icon>
-          </div>
-        </el-tooltip>
-        <el-tooltip effect="dark" content="子系统" placement="top" :show-after="200">
-          <div
-            :class="[
-              `${prefixClass}__layout-item ${prefixClass}__layout-subsystem`,
-              settingsStore.layoutMode === LayoutModeType.Subsystem ? 'is-active' : '',
-            ]"
-            @click="changeLayout(LayoutModeType.Subsystem)"
-          >
-            <div :class="`${prefixClass}__layout-item__dark`"></div>
-            <div :class="`${prefixClass}__layout-item__content`"></div>
-            <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Subsystem"><CircleCheckFilled /></el-icon>
-          </div>
-        </el-tooltip>
-      </div>
-      <template
-        v-if="
-          settingsStore.layoutMode === LayoutModeType.Vertical ||
-          settingsStore.layoutMode === LayoutModeType.Columns ||
-          settingsStore.layoutMode === LayoutModeType.Mixins ||
-          settingsStore.layoutMode === LayoutModeType.Subsystem
-        "
-      >
+      <LayoutSwitch>
         <el-divider :class="`${prefixClass}__divider`" content-position="center">
-          <el-icon><Menu /></el-icon>
-          {{ $t("_settings.menuSwitch") }}
+          <el-icon><Notification /></el-icon>
+          {{ $t("_settings.layoutSwitch") }}
         </el-divider>
-        <div :class="`${prefixClass}__menu`">
-          <el-tooltip effect="dark" content="亮色" placement="top" :show-after="200">
-            <div :class="{ 'is-dark': settingsStore.isDark }">
-              <div :class="`${prefixClass}__menu-item`" @click="handleMenuTheme(LayoutThemeType.Light)">
-                <img src="@/assets/svg/menu-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
-                <el-icon v-if="settingsStore.menuTheme === LayoutThemeType.Light"><CircleCheckFilled /></el-icon>
-              </div>
-            </div>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="暗色" placement="top" :show-after="200">
-            <div :class="{ 'is-dark': settingsStore.isDark }">
-              <div :class="`${prefixClass}__menu-item`" @click="handleMenuTheme(LayoutThemeType.Dark)">
-                <img src="@/assets/svg/menu-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
-                <el-icon v-if="settingsStore.menuTheme === LayoutThemeType.Dark"><CircleCheckFilled /></el-icon>
-              </div>
-            </div>
-          </el-tooltip>
-        </div>
+      </LayoutSwitch>
+
+      <template v-if="[LayoutModeType.Subsystem].includes(settingsStore.layoutMode)">
+        <!-- 菜单主题切换 -->
+        <AsideHeaderSwitch useAside>
+          <el-divider :class="`${prefixClass}__divider`" content-position="center">
+            <el-icon><Menu /></el-icon>
+            {{ $t("_settings.menuSwitch") }}
+          </el-divider>
+        </AsideHeaderSwitch>
+      </template>
+
+      <template v-if="[LayoutModeType.Transverse, LayoutModeType.Mixins].includes(settingsStore.layoutMode)">
+        <!-- 头部主题切换 -->
+        <AsideHeaderSwitch useHeader>
+          <el-divider :class="`${prefixClass}__divider`" content-position="center">
+            <el-icon><Menu /></el-icon>
+            {{ $t("_settings.headerSwitch") }}
+          </el-divider>
+        </AsideHeaderSwitch>
       </template>
 
       <template
         v-if="
-          settingsStore.layoutMode === LayoutModeType.Classic ||
-          settingsStore.layoutMode === LayoutModeType.Transverse ||
-          settingsStore.layoutMode === LayoutModeType.Mixins
+          [LayoutModeType.Vertical, LayoutModeType.Classic, LayoutModeType.Columns].includes(settingsStore.layoutMode)
         "
       >
-        <el-divider :class="`${prefixClass}__divider`" content-position="center">
-          <el-icon><Menu /></el-icon>
-          {{ $t("_settings.headerSwitch") }}
-        </el-divider>
-        <div :class="`${prefixClass}__menu`">
-          <el-tooltip effect="dark" content="亮色" placement="top" :show-after="200">
-            <div :class="{ 'is-dark': settingsStore.isDark }">
-              <div :class="`${prefixClass}__menu-item`" @click="handleHeaderTheme(LayoutThemeType.Light)">
-                <img src="@/assets/svg/header-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
-                <el-icon v-if="settingsStore.headerTheme === LayoutThemeType.Light"><CircleCheckFilled /></el-icon>
-              </div>
-            </div>
-          </el-tooltip>
-          <el-tooltip effect="dark" content="暗色" placement="top" :show-after="200">
-            <div :class="{ 'is-dark': settingsStore.isDark }">
-              <div :class="`${prefixClass}__menu-item`" @click="handleHeaderTheme(LayoutThemeType.Dark)">
-                <img src="@/assets/svg/header-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
-                <el-icon v-if="settingsStore.headerTheme === LayoutThemeType.Dark"><CircleCheckFilled /></el-icon>
-              </div>
-            </div>
-          </el-tooltip>
-        </div>
+        <!-- 菜单主题 & 头部主题切换 -->
+        <AsideHeaderSwitch useAll>
+          <template #aside>
+            <el-divider :class="`${prefixClass}__divider`" content-position="center">
+              <el-icon><Menu /></el-icon>
+              {{ $t("_settings.menuSwitch") }}
+            </el-divider>
+          </template>
+          <template #header>
+            <el-divider :class="`${prefixClass}__divider`" content-position="center">
+              <el-icon><Menu /></el-icon>
+              {{ $t("_settings.headerSwitch") }}
+            </el-divider>
+          </template>
+        </AsideHeaderSwitch>
       </template>
     </template>
 
-    <el-divider :class="`${prefixClass}__divider`" content-position="center">
-      <el-icon><Menu /></el-icon>
-      {{ $t("_settings.tabsNavSwitch") }}
-    </el-divider>
-
-    <div :class="`${prefixClass}__tab`">
-      <div :class="`${prefixClass}__tab-item`">
-        <el-tooltip effect="dark" content="经典" placement="left" :show-after="200">
-          <div :class="`${prefixClass}__tab-item__theme`" @click="handleTabsNav(TabsNavModeType.Classic)">
-            <div :class="`${prefixClass}__tab-item__theme-classic`">
-              <div class="dot"></div>
-              <span class="title">首页</span>
-              <el-icon><Close /></el-icon>
-            </div>
-            <div :class="`${prefixClass}__tab-item__theme-classic active`">
-              <div class="dot"></div>
-              <span class="title">其他</span>
-              <el-icon><Close /></el-icon>
-            </div>
-          </div>
-        </el-tooltip>
-        <el-icon :class="`${prefixClass}__tab-item__icon`" v-if="settingsStore.tabsNavMode === 'classic'">
-          <CircleCheckFilled />
-        </el-icon>
-      </div>
-      <div :class="`${prefixClass}__tab-item`">
-        <el-tooltip effect="dark" content="流行" placement="left" :show-after="200">
-          <div :class="`${prefixClass}__tab-item__theme`" @click="handleTabsNav(TabsNavModeType.Popular)">
-            <div :class="`${prefixClass}__tab-item__theme-el active`">
-              <el-icon><HomeFilled /></el-icon>
-              <span class="title">首页</span>
-            </div>
-            <div :class="`${prefixClass}__tab-item__theme-el`">
-              <el-icon><Menu /></el-icon>
-              <span class="title">其他</span>
-            </div>
-          </div>
-        </el-tooltip>
-        <el-icon :class="`${prefixClass}__tab-item__icon`" v-if="settingsStore.tabsNavMode === TabsNavModeType.Popular">
-          <CircleCheckFilled />
-        </el-icon>
-      </div>
-    </div>
+    <!-- 标签页切换 -->
+    <TabsNavSwitch>
+      <el-divider :class="`${prefixClass}__divider`" content-position="center">
+        <el-icon><Menu /></el-icon>
+        {{ $t("_settings.tabsNavSwitch") }}
+      </el-divider>
+    </TabsNavSwitch>
 
     <!-- 全局主题 -->
-    <el-divider :class="`${prefixClass}__divider`" content-position="center">
-      <el-icon><ColdDrink /></el-icon>
-      {{ $t("_settings.globalTheme") }}
-    </el-divider>
-
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.theme") }}</span>
-      <el-color-picker v-model="settingsStore.primaryTheme" :predefine="colorList" @change="changePrimary" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.darkMode") }}</span>
-      <el-switch
-        v-model="settingsStore.isDark"
-        @change="handleSwitchDark"
-        inline-prompt
-        :active-icon="Sunny"
-        :inactive-icon="Moon"
-      />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.greyMode") }}</span>
-      <el-switch v-model="settingsStore.isGrey" @change="changeGreyOrWeak($event as boolean, 'grey')" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.weakMode") }}</span>
-      <el-switch v-model="settingsStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />
-    </div>
+    <ThemeSelect>
+      <el-divider :class="`${prefixClass}__divider`" content-position="center">
+        <el-icon><ColdDrink /></el-icon>
+        {{ $t("_settings.globalTheme") }}
+      </el-divider>
+    </ThemeSelect>
 
     <!-- 界面设置 -->
-    <el-divider :class="`${prefixClass}__divider`" content-position="center">
-      <el-icon><Setting /></el-icon>
-      {{ $t("_settings.interfaceSettings") }}
-    </el-divider>
+    <LayoutSelect>
+      <el-divider :class="`${prefixClass}__divider`" content-position="center">
+        <el-icon><Setting /></el-icon>
+        {{ $t("_settings.interfaceSettings") }}
+      </el-divider>
+    </LayoutSelect>
 
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.collapseMenu") }}</span>
-      <el-switch v-model="settingsStore.isCollapse" />
-    </div>
-    <div :class="`${prefixClass}__list`" v-if="!isMobile">
-      <span>{{ $t("_settings.showBreadcrumb") }}</span>
-      <el-switch v-model="settingsStore.showBreadcrumb" />
-    </div>
-    <div :class="`${prefixClass}__list`" v-if="!isMobile">
-      <span>{{ $t("_settings.showBreadcrumbIcon") }}</span>
-      <el-switch v-model="settingsStore.showBreadcrumbIcon" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.showTabsNav") }}</span>
-      <el-switch v-model="settingsStore.showTabsNav" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.showTabsNavIcon") }}</span>
-      <el-switch v-model="settingsStore.showTabsNavIcon" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.recordTabsNav") }}</span>
-      <el-switch v-model="settingsStore.recordTabsNav" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.fixTabsNav") }}</span>
-      <el-switch v-model="settingsStore.fixTabsNav" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.showLayoutLogo") }}</span>
-      <el-switch v-model="settingsStore.showLayoutLogo" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_tabsNav.maximize") }}</span>
-      <el-switch v-model="settingsStore.maximize" />
-    </div>
-
-    <div>
-      <span style="font-size: 14px">{{ $t("_settings.headerHeight") }}</span>
-      <el-slider v-model="settingsStore.headerHeight" :min="30" :max="70" />
-    </div>
-
-    <div>
-      <span style="font-size: 14px">{{ $t("_settings.menuWidth") }}</span>
-      <el-slider v-model="settingsStore.menuWidth" :min="100" :max="400" />
-    </div>
-
-    <el-divider :class="`${prefixClass}__divider`" content-position="center">
-      <el-icon><Box /></el-icon>
-      {{ $t("_settings.titleSwitch") }}
-    </el-divider>
-
-    <div :class="`${prefixClass}__list`">
-      <el-select
-        v-model="settingsStore.titleMode"
-        :placeholder="$t('_settings.titlePlaceholder')"
-        @change="handleTitleModeSelect"
-      >
-        <el-option
-          v-for="item in titleModeOptions"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-          :disabled="item.value === settingsStore.titleMode"
-        ></el-option>
-      </el-select>
-    </div>
+    <BrowserTitleSwitch>
+      <el-divider :class="`${prefixClass}__divider`" content-position="center">
+        <el-icon><Box /></el-icon>
+        {{ $t("_settings.titleSwitch") }}
+      </el-divider>
+    </BrowserTitleSwitch>
 
     <el-divider />
 
@@ -317,137 +93,32 @@
 
 <script setup lang="ts" name="ThemeDrawer">
 import { ref, computed, watch, watchEffect } from "vue";
-import {
-  ElButton,
-  ElSelect,
-  ElOption,
-  ElDivider,
-  ElTooltip,
-  ElSwitch,
-  ElColorPicker,
-  ElDrawer,
-  ElIcon,
-  ElSlider,
-} from "element-plus";
-import { useTheme, useLayout } from "@/hooks";
-import settings from "@/config/settings";
-import {
-  useSettingsStore,
-  useLayoutStore,
-  LayoutModeType,
-  LayoutThemeType,
-  TabsNavModeType,
-  DeviceType,
-} from "@/stores";
-import { mittBus } from "@/utils";
-import { Sunny, Moon } from "@element-plus/icons-vue";
+import { ElButton, ElDivider, ElDrawer, ElIcon } from "element-plus";
+import { useSettingsStore, useLayoutStore, LayoutModeType, LayoutThemeType, DeviceType } from "@/stores";
+import { mittBus, setStyleVar } from "@/utils";
 import { useI18n } from "vue-i18n";
 import { ElMessage } from "element-plus";
 import variables from "@/styles/module/variables.module.scss";
-import {
-  Notification,
-  CircleCheckFilled,
-  Menu,
-  Close,
-  HomeFilled,
-  ColdDrink,
-  Setting,
-  Box,
-  Refresh,
-} from "@element-plus/icons-vue";
+import { Notification, Menu, ColdDrink, Setting, Box, Refresh } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
-import { useRoute } from "vue-router";
+import {
+  LayoutSwitch,
+  AsideHeaderSwitch,
+  TabsNavSwitch,
+  ThemeSelect,
+  LayoutSelect,
+  BrowserTitleSwitch,
+} from "./components";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("theme-drawer");
 
 const layoutStore = useLayoutStore();
 
-const { changePrimary, changeGreyOrWeak, switchDark } = useTheme();
-
-// 预定义主题颜色
-const colorList = [
-  settings.primaryTheme,
-  "#DAA96E",
-  "#0C819F",
-  "#409EFF",
-  "#27ae60",
-  "#ff5c93",
-  "#e74c3c",
-  "#fd726d",
-  "#f39c12",
-  "#9b59b6",
-];
 const { t } = useI18n();
-const titleModeOptions = [
-  {
-    value: "0",
-    label: t("_settings.titleModeOne"),
-  },
-  {
-    value: "1",
-    label: t("_settings.titleModeTwo"),
-  },
-  {
-    value: "2",
-    label: t("_settings.titleModeThree"),
-  },
-  {
-    value: "3",
-    label: t("_settings.titleModeFour"),
-  },
-];
-const route = useRoute();
 const settingsStore = useSettingsStore();
-const { setBrowserTitle } = useLayout();
 
 const isMobile = computed(() => layoutStore.device === DeviceType.Mobile);
-
-const handleMenuTheme = (value: LayoutThemeType) => {
-  settingsStore.$patch({
-    menuTheme: value,
-  });
-};
-
-const handleHeaderTheme = (value: LayoutThemeType) => {
-  settingsStore.$patch({
-    headerTheme: value,
-  });
-};
-
-const handleTabsNav = (value: TabsNavModeType) => {
-  settingsStore.$patch({
-    tabsNavMode: value,
-  });
-  if (value === TabsNavModeType.Classic) {
-    settingsStore.$patch({
-      showTabsNavIcon: false,
-    });
-  } else if (value === TabsNavModeType.Popular) {
-    settingsStore.$patch({
-      showTabsNavIcon: true,
-    });
-  }
-};
-
-// 切换布局方式
-const changeLayout = (value: LayoutModeType) => {
-  settingsStore.$patch({
-    layoutMode: value,
-  });
-};
-
-const handleSwitchDark = () => {
-  const isDark = switchDark();
-  const theme = isDark ? LayoutThemeType.Dark : LayoutThemeType.Light;
-  handleMenuTheme(theme);
-  handleHeaderTheme(theme);
-};
-
-const handleTitleModeSelect = () => {
-  // 根据选择的标题模式，重新渲染浏览器标题
-  setBrowserTitle(route);
-};
 
 // 重置缓存
 const resetSettings = () => {
@@ -470,22 +141,19 @@ mittBus.on("openThemeDrawer", () => (drawerVisible.value = true));
 watch(
   () => settingsStore.layoutMode,
   () => {
-    const body = document.body as HTMLElement;
     const { layoutMode, headerTheme, isDark } = settingsStore;
-    const { Vertical, Columns, Subsystem, Classic, Transverse, Mixins } = LayoutModeType;
+    const { Subsystem, Transverse, Mixins } = LayoutModeType;
     const { Light, Dark } = LayoutThemeType;
+
+    const body = document.body as HTMLElement;
     body.setAttribute("class", layoutMode);
+
     if (!isDark) {
-      if (layoutMode === Vertical || layoutMode === Columns || layoutMode === Subsystem) {
-        settingsStore.$patch({ headerTheme: Light });
-      }
-      if (layoutMode === Classic) settingsStore.$patch({ menuTheme: Light });
-      if (layoutMode === Transverse) {
+      if ([Transverse, Mixins].includes(layoutMode)) {
         if (headerTheme === Light) settingsStore.$patch({ menuTheme: Light, isCollapse: false });
         else settingsStore.$patch({ menuTheme: Dark, isCollapse: false });
       }
-      // 进入 Mixins 布局，则默认全改成暗色主题
-      if (layoutMode === Mixins) settingsStore.$patch({ headerTheme: Light, menuTheme: Light });
+      if (layoutMode === Subsystem) settingsStore.$patch({ headerTheme: Light });
     }
   },
   { immediate: true }
@@ -495,58 +163,80 @@ watch(
 watch(
   () => settingsStore.headerTheme,
   () => {
-    if (settingsStore.layoutMode === LayoutModeType.Transverse) {
-      settingsStore.$patch({ menuTheme: settingsStore.headerTheme }); // 菜单栏亮色
+    if ([LayoutModeType.Transverse, LayoutModeType.Mixins].includes(settingsStore.layoutMode)) {
+      settingsStore.$patch({ menuTheme: settingsStore.headerTheme });
     }
     // TODO：制作强大的颜色系统，在 store 添加多个变量存储用户选择的颜色，而不是写死颜色
     if (settingsStore.headerTheme === LayoutThemeType.Dark) {
-      document.documentElement.style.setProperty("--header-bg-color", "#191a20");
-      document.documentElement.style.setProperty("--header-text-color", "#cfd3d4");
-      document.documentElement.style.setProperty("--header-line-color", "#f1f1f1");
-      document.documentElement.style.setProperty("--header-logo-title-color", "#dadada");
+      setStyleVar("--header-bg-color", variables.headerBgDark);
+      setStyleVar("--header-text-color", variables.headerTextDark);
+      setStyleVar("--header-line-color", variables.headerLineDark);
+      setStyleVar("--header-logo-title-color", variables.headerLogoTitleDark);
     } else if (settingsStore.headerTheme === LayoutThemeType.Light) {
-      document.documentElement.style.setProperty("--header-bg-color", "#fff");
-      document.documentElement.style.setProperty("--header-text-color", "#303133");
-      document.documentElement.style.setProperty("--header-line-color", "#3c3c3c1f");
-      document.documentElement.style.setProperty("--header-logo-title-color", "#423e3e");
+      setStyleVar("--header-bg-color", variables.headerBgLight);
+      setStyleVar("--header-text-color", variables.headerTextLight);
+      setStyleVar("--header-line-color", variables.headerLineLight);
+      setStyleVar("--header-logo-title-color", variables.headerLogoTitleLight);
     }
   },
-  {
-    immediate: true,
-  }
+  { immediate: true }
 );
 
 // 监听亮、暗色主题的切换
 watchEffect(() => {
   if (settingsStore.menuTheme === LayoutThemeType.Dark) {
     // TODO：制作强大的颜色系统，在 store 添加多个变量存储用户选择的颜色，而不是写死颜色
-    document.documentElement.style.setProperty("--menu-bg-color", variables.menuBgDark);
-    document.documentElement.style.setProperty("--menu-text-color", variables.menuTextDark);
-    document.documentElement.style.setProperty("--menu-hover-bg-color", variables.menuHoverBgDark);
-    document.documentElement.style.setProperty("--menu-active-bg-color", variables.menuActiveBgDark);
-    document.documentElement.style.setProperty("--sub-menu-bg-color", variables.subMenuBgDark);
-    document.documentElement.style.setProperty("--sub-menu-hover-bg-color", variables.subMenuHoverBgDark);
-    document.documentElement.style.setProperty("--sub-menu-active-bg-color", variables.subMenuActiveBgDark);
-    document.documentElement.style.setProperty("--menu-icon-color", variables.iconDark);
-    document.documentElement.style.setProperty("--menu-logo-line-color", variables.logoLineDark);
-    document.documentElement.style.setProperty("--menu-logo-title-color", variables.logoTitleDark);
-    document.documentElement.style.setProperty("--split-menu-active-bg-color", variables.splitMenuActiveBgDark);
+    setStyleVar("--menu-bg-color", variables.menuBgDark);
+    setStyleVar("--menu-text-color", variables.menuTextDark);
+    setStyleVar("--menu-hover-bg-color", variables.menuHoverBgDark);
+    setStyleVar("--menu-active-bg-color", variables.menuActiveBgDark);
+    setStyleVar("--sub-menu-bg-color", variables.subMenuBgDark);
+    setStyleVar("--sub-menu-hover-bg-color", variables.subMenuHoverBgDark);
+    setStyleVar("--sub-menu-active-bg-color", variables.subMenuActiveBgDark);
+    setStyleVar("--menu-icon-color", variables.iconDark);
+    setStyleVar("--menu-logo-line-color", variables.logoLineDark);
+    setStyleVar("--menu-logo-title-color", variables.logoTitleDark);
+    setStyleVar("--split-menu-active-bg-color", variables.splitMenuActiveBgDark);
   } else if (settingsStore.menuTheme === LayoutThemeType.Light) {
-    document.documentElement.style.setProperty("--menu-bg-color", variables.menuBgLight);
-    document.documentElement.style.setProperty("--menu-text-color", variables.menuTextLight);
-    document.documentElement.style.setProperty("--menu-hover-bg-color", variables.menuHoverBgLight);
-    document.documentElement.style.setProperty("--menu-active-bg-color", variables.menuActiveBgLight);
-    document.documentElement.style.setProperty("--sub-menu-bg-color", variables.subMenuBgLight);
-    document.documentElement.style.setProperty("--sub-menu-hover-bg-color", variables.subMenuHoverBgLight);
-    document.documentElement.style.setProperty("--sub-menu-active-bg-color", variables.subMenuActiveBgLight);
-    document.documentElement.style.setProperty("--menu-icon-color", variables.iconLight);
-    document.documentElement.style.setProperty("--menu-logo-line-color", variables.logoLineLight);
-    document.documentElement.style.setProperty("--menu-logo-title-color", variables.logoTitleLight);
-    document.documentElement.style.setProperty("--split-menu-active-bg-color", variables.splitMenuActiveBgLight);
+    setStyleVar("--menu-bg-color", variables.menuBgLight);
+    setStyleVar("--menu-text-color", variables.menuTextLight);
+    setStyleVar("--menu-hover-bg-color", variables.menuHoverBgLight);
+    setStyleVar("--menu-active-bg-color", variables.menuActiveBgLight);
+    setStyleVar("--sub-menu-bg-color", variables.subMenuBgLight);
+    setStyleVar("--sub-menu-hover-bg-color", variables.subMenuHoverBgLight);
+    setStyleVar("--sub-menu-active-bg-color", variables.subMenuActiveBgLight);
+    setStyleVar("--menu-icon-color", variables.iconLight);
+    setStyleVar("--menu-logo-line-color", variables.logoLineLight);
+    setStyleVar("--menu-logo-title-color", variables.logoTitleLight);
+    setStyleVar("--split-menu-active-bg-color", variables.splitMenuActiveBgLight);
   }
 });
 </script>
 
 <style lang="scss" scoped>
-@import "./index";
+$prefix-class: #{$namespace}-theme-drawer;
+
+.#{$prefix-class} {
+  &__divider {
+    margin-top: 15px;
+
+    .#{$el-namespace}-icon {
+      position: relative;
+      top: 2px;
+      right: 5px;
+      font-size: 15px;
+    }
+  }
+
+  &__list {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 14px 0;
+
+    span {
+      font-size: 14px;
+    }
+  }
+}
 </style>
