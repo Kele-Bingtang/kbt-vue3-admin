@@ -67,7 +67,7 @@
     <Pagination
       v-show="tableData.length > 0"
       :total="tableData.length"
-      :paging="paging"
+      v-model="paging"
       @pagination="handleSizeChange"
     />
 

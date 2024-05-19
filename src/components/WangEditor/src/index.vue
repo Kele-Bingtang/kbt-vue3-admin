@@ -39,7 +39,6 @@ export type VideoInsertFnType = (url: string, poster: string) => void;
 export type FileInsertFnType = (fileName: string, url: string) => void;
 
 interface WangEditorProp {
-  modelValue: string; // 编辑器内容 ==> 必传
   toolbarKeys?: string[]; // 工具栏内容 ==> 非必传（默认为空）
   excludeKeys?: string[]; // 去除掉指定的工具类内容 ==> 非必传（默认为空）
   height?: string; // 富文本高度 ==> 非必传（默认为 500px）
@@ -48,18 +47,17 @@ interface WangEditorProp {
   hideToolBar?: boolean; // 是否隐藏工具栏 ==> 非必传（默认为false）
 }
 type WangEditorEmits = {
-  "update:modelValue": [value: string];
-  "image-upload": [file: File, insertFn: ImageInsertFnType];
-  "image-before-upload": [file: File];
-  "image-progress": [progress: number];
-  "image-success": [file: File, res: any];
-  "image-failed": [file: File, res: any];
-  "image-error": [file: File, err: any, res: any];
-  "video-upload": [file: File, insertFn: VideoInsertFnType];
-  "file-before-upload": [file: File];
-  "file-upload": [file: File, insertFn: FileInsertFnType];
-  "on-paste": [editor: IDomEditor, event: ClipboardEvent];
-  "on-created": [editor: IDomEditor];
+  imageUpload: [file: File, insertFn: ImageInsertFnType];
+  imageBeforeUpload: [file: File];
+  imageProgress: [progress: number];
+  imageSuccess: [file: File, res: any];
+  imageFailed: [file: File, res: any];
+  imageError: [file: File, err: any, res: any];
+  videoUpload: [file: File, insertFn: VideoInsertFnType];
+  fileBeforeUpload: [file: File];
+  fileUpload: [file: File, insertFn: FileInsertFnType];
+  onPaste: [editor: IDomEditor, event: ClipboardEvent];
+  onCreated: [editor: IDomEditor];
 };
 
 const props = withDefaults(defineProps<WangEditorProp>(), {
@@ -73,6 +71,8 @@ const props = withDefaults(defineProps<WangEditorProp>(), {
 });
 
 const emits = defineEmits<WangEditorEmits>();
+
+const content = defineModel<string>({ required: true });
 
 // 富文本 DOM 元素
 const editorRef = shallowRef();
@@ -114,22 +114,22 @@ const editorConfig = reactive<Partial<IEditorConfig>>({
       allowedFileTypes: ["image/*"],
       // 自定义上传
       customUpload: (file: File, insertFn: ImageInsertFnType) => {
-        emits("image-upload", file, insertFn);
+        emits("imageUpload", file, insertFn);
       },
       onBeforeUpload: (file: File) => {
-        emits("image-before-upload", file);
+        emits("imageBeforeUpload", file);
       },
       onProgress: (progress: number) => {
-        emits("image-progress", progress);
+        emits("imageProgress", progress);
       },
       onSuccess: (file: File, res: any) => {
-        emits("image-success", file, res);
+        emits("imageSuccess", file, res);
       },
       onFailed: (file: File, res: any) => {
-        emits("image-failed", file, res);
+        emits("imageFailed", file, res);
       },
       onError: (file: File, err: any, res: any) => {
-        emits("image-error", file, err, res);
+        emits("imageError", file, err, res);
       },
     },
     uploadVideo: {
@@ -137,17 +137,17 @@ const editorConfig = reactive<Partial<IEditorConfig>>({
       maxFileSize: 300 * 1024 * 1024,
       allowedFileTypes: ["video/*"],
       customUpload: (file: File, insertFn: VideoInsertFnType) => {
-        emits("video-upload", file, insertFn);
+        emits("videoUpload", file, insertFn);
       },
     },
     uploadAttachment: {
       // 10M
       maxFileSize: 10 * 1024 * 1024,
       onBeforeUpload: (file: File) => {
-        emits("file-before-upload", file);
+        emits("fileBeforeUpload", file);
       },
       customUpload: (file: File, insertFn: VideoInsertFnType) => {
-        emits("file-upload", file, insertFn);
+        emits("fileUpload", file, insertFn);
       },
     },
   },
@@ -164,17 +164,6 @@ const toolbarConfig = computed(() => {
     },
     // excludeKeys: ["group-video", "insertImage"],
   };
-});
-
-const content = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(value) {
-    // 防止富文本内容为空时，校验失败
-    if (unref(editorRef).isEmpty()) value = "";
-    emits("update:modelValue", value);
-  },
 });
 
 watch(
@@ -197,11 +186,11 @@ onMounted(() => {
 const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor;
   props.disabled ? unref(editorRef).disable() : unref(editorRef).enable();
-  emits("on-created", editor);
+  emits("onCreated", editor);
 };
 
 const handlePaste = (editor: IDomEditor, event: ClipboardEvent) => {
-  emits("on-paste", editor, event);
+  emits("onPaste", editor, event);
 };
 
 onBeforeUnmount(() => {

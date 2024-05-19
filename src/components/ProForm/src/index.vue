@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, shallowRef, ref, provide, watch, unref, type Ref } from "vue";
+import { shallowRef, ref, provide, watch, unref, type Ref } from "vue";
 import type { FormColumnProps, FormEnumProps, FormOptionsProps } from "./interface";
 import ProFormItem from "./components/ProFormItem.vue";
 import { getPx } from "@/utils";
@@ -50,14 +50,13 @@ const prefixClass = getPrefixClass("pro-form");
 
 export interface ProFormProps {
   options: FormOptionsProps;
-  modelValue: { [key: string]: any };
   disabled?: boolean;
 }
 
-const props = withDefaults(defineProps<ProFormProps>(), { disabled: false, modelValue: () => ({}) });
+const props = withDefaults(defineProps<ProFormProps>(), { disabled: false });
 
 const formRef = shallowRef<FormInstance>();
-const form = computed(() => props.modelValue);
+const form = defineModel<Record<string, any>>({ required: true });
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>());

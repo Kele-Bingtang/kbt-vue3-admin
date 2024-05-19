@@ -29,7 +29,9 @@ import { ElMessage, type FormInstance } from "element-plus";
 const props = defineProps<{ user: UserInfo }>();
 
 const { user } = toRefs(props);
-const emit = defineEmits(["reset-user"]);
+
+const emit = defineEmits<{ resetUser: [] }>();
+
 const userStore = useUserStore();
 const formRef = ref();
 const rules = {
@@ -62,6 +64,6 @@ const submit = (formRef: FormInstance) => {
 };
 const reset = (formRef: FormInstance) => {
   formRef.clearValidate();
-  emit("reset-user");
+  emit("resetUser");
 };
 </script>

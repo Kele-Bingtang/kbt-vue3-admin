@@ -52,7 +52,13 @@ const props = withDefaults(defineProps<QrCodeProps>(), {
   disabledText: "",
 });
 
-const emits = defineEmits(["done", "click", "disabled-click"]);
+type QrCodeEmits = {
+  done: [url: string];
+  click: [];
+  disabledClick: [];
+};
+
+const emits = defineEmits<QrCodeEmits>();
 
 const { toCanvas, toDataURL } = QRCode;
 const loading = ref(true);
@@ -64,6 +70,7 @@ const wrapStyle = computed(() => {
     height: props.width + "px",
   };
 });
+
 const initQrCode = async () => {
   await nextTick();
   const options = JSON.parse(JSON.stringify(props.options) || "{}");
@@ -73,8 +80,9 @@ const initQrCode = async () => {
     const _width: number = await getOriginWidth(unref(renderText), options);
     options.scale = props.width === 0 ? undefined : (props.width / _width) * 4;
     const canvasRef: any = await toCanvas(unref(wrapRef) as HTMLCanvasElement, unref(renderText), options);
+
     if (props.logo) {
-      const url = await createLogoCode(canvasRef);
+      const url = (await createLogoCode(canvasRef)) as string;
       emits("done", url);
       loading.value = false;
     } else {
@@ -87,11 +95,13 @@ const initQrCode = async () => {
       width: props.width,
       ...options,
     });
+
     (unref(wrapRef) as any).src = url;
-    emits("done", url);
+    emits("done", url as unknown as string);
     loading.value = false;
   }
 };
+
 watch(
   () => renderText.value,
   val => {
@@ -103,6 +113,7 @@ watch(
     immediate: true,
   }
 );
+
 const createLogoCode = (canvasRef: HTMLCanvasElement) => {
   const canvasWidth = canvasRef.width;
   const logoOptions: QrCodeLogo = Object.assign(
@@ -116,6 +127,7 @@ const createLogoCode = (canvasRef: HTMLCanvasElement) => {
     },
     isString(props.logo) ? {} : props.logo
   );
+
   const {
     logoSize = 0.15,
     bgColor = "#ffffff",
@@ -124,6 +136,7 @@ const createLogoCode = (canvasRef: HTMLCanvasElement) => {
     borderRadius = 8,
     logoRadius = 0,
   } = logoOptions;
+
   const logoSrc = isString(props.logo) ? props.logo : props.logo.src;
   const logoWidth = canvasWidth * logoSize;
   const logoXY = (canvasWidth * (1 - logoSize)) / 2;
@@ -131,36 +144,46 @@ const createLogoCode = (canvasRef: HTMLCanvasElement) => {
   const logoBgXY = (canvasWidth * (1 - logoSize - borderSize)) / 2;
   const ctx = canvasRef.getContext("2d");
   if (!ctx) return;
+
   // logo 底色
   canvasRoundRect(ctx)(logoBgXY, logoBgXY, logoBgWidth, logoBgWidth, borderRadius);
   ctx.fillStyle = bgColor;
   ctx.fill();
+
   // logo
   const image = new Image();
   if (crossOrigin || logoRadius) {
     image.setAttribute("crossOrigin", crossOrigin);
   }
   (image as any).src = logoSrc;
+
   // 使用image绘制可以避免某些跨域情况
   const drawLogoWithImage = (image: HTMLImageElement) => {
     ctx.drawImage(image, logoXY, logoXY, logoWidth, logoWidth);
   };
+
   // 使用canvas绘制以获得更多的功能
   const drawLogoWithCanvas = (image: HTMLImageElement) => {
     const canvasImage = document.createElement("canvas");
     canvasImage.width = logoXY + logoWidth;
     canvasImage.height = logoXY + logoWidth;
     const imageCanvas = canvasImage.getContext("2d");
+
     if (!imageCanvas || !ctx) return;
+
     imageCanvas.drawImage(image, logoXY, logoXY, logoWidth, logoWidth);
     canvasRoundRect(ctx)(logoXY, logoXY, logoWidth, logoWidth, logoRadius);
+
     if (!ctx) return;
+
     const fillStyle = ctx.createPattern(canvasImage, "no-repeat");
+
     if (fillStyle) {
       ctx.fillStyle = fillStyle;
       ctx.fill();
     }
   };
+
   // 将 logo绘制到 canvas上
   return new Promise((resolve: any) => {
     image.onload = () => {
@@ -169,12 +192,14 @@ const createLogoCode = (canvasRef: HTMLCanvasElement) => {
     };
   });
 };
+
 // 得到原QrCode的大小，以便缩放得到正确的QrCode大小
 const getOriginWidth = async (content: string, options: QRCodeRenderersOptions) => {
   const _canvas = document.createElement("canvas");
   await toCanvas(_canvas, content, options);
   return _canvas.width;
 };
+
 // 对于内容少的QrCode，增大容错率
 const getErrorCorrectionLevel = (content: string) => {
   if (content.length > 36) {
@@ -185,6 +210,7 @@ const getErrorCorrectionLevel = (content: string) => {
     return "H";
   }
 };
+
 // 用于绘制圆角
 const canvasRoundRect = (ctx: CanvasRenderingContext2D) => {
   return (x: number, y: number, w: number, h: number, r: number) => {
@@ -202,11 +228,13 @@ const canvasRoundRect = (ctx: CanvasRenderingContext2D) => {
     return ctx;
   };
 };
+
 const clickCode = () => {
   emits("click");
 };
+
 const disabledClick = () => {
-  emits("disabled-click");
+  emits("disabledClick");
 };
 </script>
 

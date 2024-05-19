@@ -9,7 +9,7 @@
 
 <script setup lang="ts" name="UploadExcel">
 import { UploadExcel } from "@/components";
-import type { ExcelData } from "@/components/UploadExcel/src/index.vue";
+import type { ExcelData } from "@/components/ExcelUpload/src/index.vue";
 import { ElMessage } from "element-plus";
 
 const tableData = ref([]);

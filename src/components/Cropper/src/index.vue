@@ -18,8 +18,8 @@
         :enlarge="options.enlarge"
         @real-time="realTime"
         @img-load="imgLoad"
-        @img-moving="emits('img-moving')"
-        @crop-moving="emits('crop-moving')"
+        @img-moving="emits('imgMoving')"
+        @crop-moving="emits('cropMoving')"
       />
     </div>
     <div :class="`${prefixClass}__img ${prefixClass}__img--previews`" v-if="previews.url">
@@ -82,9 +82,9 @@ const props = withDefaults(defineProps<CropperProps>(), {
 });
 
 type CropperEmitProps = {
-  "upload-image": [formData: FormData];
-  "img-moving": [];
-  "crop-moving": [];
+  uploadImage: [formData: FormData];
+  imgMoving: [];
+  cropMoving: [];
 };
 
 const emits = defineEmits<CropperEmitProps>();
@@ -164,12 +164,12 @@ const uploadImage = () => {
     unref(cropperRef).getCropBlob((data: Blob) => {
       const timer = new Date().getTime();
       formData.append("file", data, timer + ".png");
-      emits("upload-image", formData);
+      emits("uploadImage", formData);
     });
   } else if (imageType.value === "base64") {
     unref(cropperRef).getCropData((data: string) => {
       formData.append("images", data);
-      emits("upload-image", formData);
+      emits("uploadImage", formData);
     });
   } else {
     ElMessage.error("图片类型错误！请传入 blob 或者 base64");

@@ -55,7 +55,6 @@ export type UITheme = "default" | "dark" | "tinymce-5" | "tinymce-5-dark";
 export type ContentTheme = "" | "default" | "dark" | "document" | "tinymce-5" | "tinymce-5-dark";
 
 interface TinymceProps {
-  modelValue: string | undefined; // 内容
   disabled?: boolean; // 编辑器是否禁用
   theme?: UITheme; // UI 主题
   contentTheme?: ContentTheme; // 内容区主题，如果不传，默认等于 UI 主题
@@ -83,18 +82,18 @@ const props = withDefaults(defineProps<TinymceProps>(), {
 });
 
 type TinymceEmitProps = {
-  (e: "update:modelValue", value: string): void;
-  (
-    e: "img-upload",
+  imgUpload: [
     blobInfo: Function,
     resolve: (value: unknown) => void,
     reject: (value: unknown) => void,
-    progress: Function
-  ): void;
-  (e: "file-upload", file: File, filetype: "image" | "media" | "file", callback: Function): void;
+    progress: Function,
+  ];
+  fileUpload: [file: File, filetype: "image" | "media" | "file", callback: Function];
 };
 
 const emits = defineEmits<TinymceEmitProps>();
+
+const tinymceContent = defineModel<string>({ required: true });
 
 const fullscreen = ref(false);
 
@@ -103,14 +102,6 @@ const languageTypeList = reactive<{ [key: string]: string }>({
 });
 
 const language = computed(() => languageTypeList[props.lang]);
-const tinymceContent = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(value) {
-    emits("update:modelValue", value || "");
-  },
-});
 
 const skinTheme = computed(() => {
   if (props.theme === "default") {
@@ -179,7 +170,7 @@ const initOptions = computed(() => ({
   // 图片上传回调
   images_upload_handler: (blobInfo: Function, progress: Function) =>
     new Promise((resolve, reject) => {
-      emits("img-upload", blobInfo, resolve, reject, progress);
+      emits("imgUpload", blobInfo, resolve, reject, progress);
     }),
   // 附件上传回调
   file_picker_callback: (callback: Function, value: any, meta: any) => {
@@ -190,7 +181,7 @@ const initOptions = computed(() => ({
     input.setAttribute("accept", filetype);
     input.onchange = function () {
       const file = (this as any).files[0];
-      emits("file-upload", file, meta.filetype, callback);
+      emits("fileUpload", file, meta.filetype, callback);
     };
     input.click();
   },
@@ -203,7 +194,6 @@ const initOptions = computed(() => ({
 }));
 
 onMounted(() => {
-  // tinymce.init({ promotion: false });
   onDisabledChange();
 });
 
@@ -250,8 +240,9 @@ $prefix-class: #{$namespace}-tinymce;
   position: relative;
   line-height: normal;
 
-  :deep(.tox) {
-    z-index: 2000 !important;
-  }
+  // 内容区
+  // :deep(.tox) {
+  //   z-index: 2000 !important;
+  // }
 }
 </style>

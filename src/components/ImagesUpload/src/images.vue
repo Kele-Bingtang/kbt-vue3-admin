@@ -4,7 +4,7 @@
       action="#"
       list-type="picture-card"
       :class="[`${prefixClass}__upload`, self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
-      v-model:file-list="fileList"
+      v-model:file-list="imagesList"
       :multiple="true"
       :disabled="self_disabled"
       :limit="limit"
@@ -60,7 +60,7 @@ import {
 import { inject, computed, ref, defineOptions } from "vue";
 import { useDesign } from "@/hooks";
 
-defineOptions({ name: "UploadImgs" });
+defineOptions({ name: "ImagesUpload" });
 
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("images-upload");
@@ -79,8 +79,7 @@ type FileTypes =
   | "image/webp"
   | "image/x-icon";
 
-interface UploadFileProps {
-  fileList: UploadUserFile[];
+interface ImagesUploadProps {
   api?: (params: any) => Promise<any>; // 上传图片的 api 方法，一般项目上传都是同一个 api 方法，在组件里直接引入即可 ==> 非必传
   drag?: boolean; // 是否支持拖拽上传 ==> 非必传（默认为 true）
   disabled?: boolean; // 是否禁用上传组件 ==> 非必传（默认为 false）
@@ -92,8 +91,7 @@ interface UploadFileProps {
   borderRadius?: string; // 组件边框圆角 ==> 非必传（默认为 8px）
 }
 
-const props = withDefaults(defineProps<UploadFileProps>(), {
-  fileList: () => [],
+const props = withDefaults(defineProps<ImagesUploadProps>(), {
   drag: true,
   disabled: false,
   limit: 5,
@@ -113,7 +111,7 @@ const self_disabled = computed(() => {
   return props.disabled || formContext?.disabled;
 });
 
-const fileList = ref<UploadUserFile[]>(props.fileList);
+const imagesList = defineModel<UploadUserFile[]>({ required: true });
 
 /**
  * @description 文件上传之前判断
@@ -139,12 +137,9 @@ const beforeUpload: UploadProps["beforeUpload"] = rawFile => {
   return imgType.includes(rawFile.type as FileTypes) && imgSize;
 };
 
-// 图片上传成功
-interface UploadEmits {
-  (e: "upload-img", file: File, callback: SuccessFun): void; // callback 接收的参数是文件的 url
-  (e: "update:fileList", value: UploadUserFile[]): void;
-}
-const emits = defineEmits<UploadEmits>();
+// callback 接收的参数是文件的 url
+const emits = defineEmits<{ uploadImg: [file: File, callback: SuccessFun] }>();
+
 /**
  * @description 图片上传
  * @param options 上传的文件
@@ -156,8 +151,8 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
       const formData = new FormData();
       formData.append("file", options.file);
       const res = await props.api(formData);
-      emits("upload-img", res, options.onSuccess); // 父组件调用 options.onSuccess(fileUrl) 即可传回文件的 url
-    } else emits("upload-img", options.file, options.onSuccess);
+      emits("uploadImg", res, options.onSuccess); // 父组件调用 options.onSuccess(fileUrl) 即可传回文件的 url
+    } else emits("uploadImg", options.file, options.onSuccess);
   } catch (error) {
     options.onError(error as any);
   }
@@ -166,7 +161,6 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
 const uploadSuccess = (fileUrl: string, uploadFile: UploadFile) => {
   if (!fileUrl) return;
   uploadFile.url = fileUrl; // 传回的 url 交给 ElUpload 组件
-  emits("update:fileList", fileList.value);
   // 调用 el-form 内部的校验方法（可自动校验）
   formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);
   ElNotification({
@@ -178,8 +172,7 @@ const uploadSuccess = (fileUrl: string, uploadFile: UploadFile) => {
 
 // 删除图片
 const handleRemove = (uploadFile: UploadFile) => {
-  fileList.value = fileList.value.filter(item => item.url !== uploadFile.url || item.name !== uploadFile.name);
-  emits("update:fileList", fileList.value);
+  imagesList.value = imagesList.value.filter(item => item.url !== uploadFile.url || item.name !== uploadFile.name);
 };
 
 // 图片上传错误提示

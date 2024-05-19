@@ -4,35 +4,20 @@
 
 <script setup lang="ts">
 import { useImageVerify } from "./hooks";
-import { withDefaults, defineOptions, watch } from "vue";
+import { defineOptions, watch } from "vue";
 
 defineOptions({ name: "ImageVerifyCode" });
 
-interface Props {
-  code?: string;
-}
-
-type ImageVerifyCodeEmits = {
-  "update:code": [code: string];
-};
-
-const props = withDefaults(defineProps<Props>(), {
-  code: "",
-});
-
-const emit = defineEmits<ImageVerifyCodeEmits>();
-
 const { domRef, imgCode, setImgCode, getImgCode } = useImageVerify();
 
-watch(
-  () => props.code,
-  newValue => {
-    setImgCode(newValue);
-  }
-);
+const code = defineModel<string>({ required: true });
+
+watch(code, newValue => {
+  setImgCode(newValue);
+});
 
 watch(imgCode, newValue => {
-  emit("update:code", newValue);
+  code.value = newValue;
 });
 
 defineExpose({ getImgCode });

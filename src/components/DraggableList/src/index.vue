@@ -86,7 +86,12 @@ const props = withDefaults(defineProps<DraggableListProps>(), {
   dragClass: () => ({ left: [], right: [] }),
 });
 
-const emits = defineEmits(["on-change", "item-click"]);
+type DraggableListEmits = {
+  onChange: [value: { src: string; target: string; oldIndex: number; newIndex: number }];
+  itemClick: [id: string, type: string];
+};
+
+const emits = defineEmits<DraggableListEmits>();
 
 const group = ref("drag_list");
 
@@ -112,7 +117,7 @@ const handleEnd = (e: Event, type: string) => {
       target = "left";
     }
   }
-  emits("on-change", {
+  emits("onChange", {
     src: src,
     target: target,
     oldIndex: (e as any).oldIndex,
@@ -121,7 +126,7 @@ const handleEnd = (e: Event, type: string) => {
 };
 
 const handleClick = (id: string, type: string) => {
-  emits("item-click", id, type);
+  emits("itemClick", id, type);
 };
 
 const pushList = (list: DragList, type: string) => {

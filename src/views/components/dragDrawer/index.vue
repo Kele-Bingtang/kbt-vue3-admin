@@ -16,7 +16,7 @@
 
     <div class="drag-drawer-inner-box">
       <DragDrawer
-        v-model:visible="visible1"
+        v-model="visible1"
         :placement="placement"
         v-model:width="width1"
         :draggable="draggable"
@@ -27,7 +27,7 @@
     </div>
 
     <DragDrawer
-      v-model:visible="visible2"
+      v-model="visible2"
       :placement="placement"
       v-model:width="width2"
       :draggable="draggable"

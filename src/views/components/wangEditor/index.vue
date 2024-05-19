@@ -4,6 +4,7 @@
     <el-button type="primary" @click="disabled = !disabled" style="margin-bottom: 20px">
       {{ disabled ? "启动编辑器" : "禁用编辑器" }}
     </el-button>
+
     <WangEditor
       v-model="content"
       height="400px"
@@ -12,8 +13,11 @@
       @video-upload="videoUpload"
       @file-upload="fileUpload"
     ></WangEditor>
+
     <h3>实时预览</h3>
     <div class="editor-content" v-html="content"></div>
+
+    <h3>源代码</h3>
     {{ content }}
   </div>
 </template>

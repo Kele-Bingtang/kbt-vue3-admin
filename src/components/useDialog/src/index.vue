@@ -53,7 +53,6 @@ const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-dialog");
 
 interface WorkDialogProps {
-  modelValue: boolean;
   title?: string;
   fullscreen?: boolean;
   height?: string | number;
@@ -66,19 +65,11 @@ const props = withDefaults(defineProps<WorkDialogProps>(), {
 });
 
 const emits = defineEmits<{
-  "update:modelValue": [value: boolean];
   close: [value: DialogProps | null];
   confirm: [value: DialogProps | null];
 }>();
 
-const dialogVisible = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(value) {
-    emits("update:modelValue", value);
-  },
-});
+const dialogVisible = defineModel<boolean>({ required: true });
 
 const slots = useSlots();
 

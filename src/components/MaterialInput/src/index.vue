@@ -123,7 +123,6 @@ import { computed, getCurrentInstance, onMounted, ref, watch, defineOptions, unr
 defineOptions({ name: "MaterialInput" });
 
 interface MaterialInputProps {
-  modelValue: any;
   type?: string;
   id?: string;
   icon?: string | IconifyIcon | Component;
@@ -142,6 +141,7 @@ interface MaterialInputProps {
   activeColor?: string;
   theme?: string;
 }
+
 const props = withDefaults(defineProps<MaterialInputProps>(), {
   type: "text",
   id: "",
@@ -161,10 +161,15 @@ const props = withDefaults(defineProps<MaterialInputProps>(), {
   activeColor: "#2196f3",
   theme: "",
 });
-const emits = defineEmits(["update:value", "focus", "blur"]);
+
+type MaterialInputEmits = {
+  focus: [event: FocusEvent];
+  blur: [event: FocusEvent];
+};
+const emits = defineEmits<MaterialInputEmits>();
 
 const focus = ref(false);
-const valueCopy = ref("");
+const valueCopy = defineModel<string>({ required: true });
 
 const themeColor = computed(() => {
   const theme = props.theme;
@@ -192,15 +197,7 @@ const filledPlaceholder = computed(() => {
   return "";
 });
 
-watch(
-  () => props.modelValue,
-  () => {
-    valueCopy.value = props.modelValue;
-  }
-);
-
 onMounted(() => {
-  valueCopy.value = props.modelValue;
   const activeColor = unref(themeColor) ? unref(themeColor) : props.activeColor;
   document.styleSheets[0].insertRule(
     `.material-input-component.material--active .material-label { color: ${activeColor} !important}`,
@@ -210,7 +207,7 @@ onMounted(() => {
 
 const handleInput = (event: Event) => {
   const value = (event.target as HTMLInputElement).value;
-  emits("update:value", value);
+  valueCopy.value = value;
   const instance = getCurrentInstance();
   if ((instance?.parent as any).type.name === "ElFormItem") {
     if (props.validateEvent) {

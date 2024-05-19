@@ -16,7 +16,7 @@
     <el-form-item prop="verifyCode">
       <el-input clearable v-model="loginForm.verifyCode" placeholder="验证码" :prefix-icon="WarnTriangleFilled">
         <template #append>
-          <ImageVerifyCode v-model:code="imgCode" />
+          <ImageVerifyCode v-model="imgCode" />
         </template>
       </el-input>
     </el-form-item>

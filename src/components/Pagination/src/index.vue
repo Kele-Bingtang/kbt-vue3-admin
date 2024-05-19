@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { scrollTo } from "@/utils";
-import { reactive, toRef, nextTick, defineOptions, unref } from "vue";
+import { nextTick, defineOptions, unref } from "vue";
 import { ElPagination } from "element-plus";
 
 export const pageSetting = { pageNum: 1, pageSizes: [10, 20, 50, 100, 200], pageSize: 20 };
@@ -33,7 +33,6 @@ export interface Paging {
 }
 
 export interface PaginationProps {
-  modelValue?: Paging; // 分页信息
   layout?: string; // 布局
   background?: boolean; // 是否开启背景色
   autoScroll?: boolean; // 切换页数，是否自动滚动到最上面
@@ -47,7 +46,6 @@ const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("pagination");
 
 const props = withDefaults(defineProps<PaginationProps>(), {
-  modelValue: () => reactive(pageSetting),
   layout: "total, sizes, prev, pager, next, jumper",
   background: true,
   autoScroll: true,
@@ -56,13 +54,12 @@ const props = withDefaults(defineProps<PaginationProps>(), {
 });
 
 type PaginationEmits = {
-  "update:modelValue": [value: Paging];
   pagination: [value: Paging];
 };
 
 const emits = defineEmits<PaginationEmits>();
 
-const pageObj = toRef(props, "modelValue");
+const pageObj = defineModel<Paging>({ required: true });
 
 if (!unref(pageObj).pageNum) pageObj.value.pageNum = pageSetting.pageNum;
 if (!unref(pageObj).pageSizes) pageObj.value.pageSizes = pageSetting.pageSizes;
@@ -80,7 +77,7 @@ const handleCurrentChange = (value: number) => {
 };
 
 const afterChange = () => {
-  emits("update:modelValue", unref(pageObj));
+  pageObj.value = unref(pageObj);
   emits("pagination", unref(pageObj));
   if (props.autoScroll) {
     nextTick(() => {

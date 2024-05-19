@@ -63,7 +63,7 @@ import { Edit, ZoomIn, Delete, Plus } from "@element-plus/icons-vue";
 import { ref, inject, computed, defineOptions } from "vue";
 import { useDesign } from "@/hooks";
 
-defineOptions({ name: "UploadImg" });
+defineOptions({ name: "ImgUpload" });
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("image-upload");
@@ -82,8 +82,7 @@ type FileTypes =
   | "image/webp"
   | "image/x-icon";
 
-interface UploadFileProps {
-  imageUrl: string; // 图片地址 ==> 必传
+interface ImageUploadProps {
   api?: (params: any) => Promise<any>; // 上传图片的 api 方法，一般项目上传都是同一个 api 方法，在组件里直接引入即可 ==> 非必传
   drag?: boolean; // 是否支持拖拽上传 ==> 非必传（默认为 true）
   disabled?: boolean; // 是否禁用上传组件 ==> 非必传（默认为 false）
@@ -95,8 +94,7 @@ interface UploadFileProps {
 }
 
 // 接受父组件参数
-const props = withDefaults(defineProps<UploadFileProps>(), {
-  imageUrl: "",
+const props = withDefaults(defineProps<ImageUploadProps>(), {
   drag: true,
   disabled: false,
   fileSize: 5,
@@ -120,16 +118,17 @@ const self_disabled = computed(() => {
   return props.disabled || formContext?.disabled;
 });
 
+const emits = defineEmits<{
+  uploadImg: [file: File, callback: SuccessFun];
+  checkValidate: [];
+}>();
+
+const imageUrl = defineModel<string>({ required: true });
+
 /**
  * @description 图片上传
  * @param options 上传的文件
  * */
-interface UploadEmits {
-  (e: "upload-img", file: File, callback: SuccessFun): void;
-  (e: "check-validate"): void;
-  (e: "update:imageUrl", value: string): void;
-}
-const emits = defineEmits<UploadEmits>();
 const handleHttpUpload = async (options: UploadRequestOptions) => {
   try {
     // 如果父组件传入 api，则走该 api，否则走 @upload-img
@@ -137,8 +136,8 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
       const formData = new FormData();
       formData.append("file", options.file);
       const res = await props.api(formData);
-      emits("upload-img", res, options.onSuccess);
-    } else emits("upload-img", options.file, options.onSuccess);
+      emits("uploadImg", res, options.onSuccess);
+    } else emits("uploadImg", options.file, options.onSuccess);
   } catch (error) {
     options.onError(error as any);
   }
@@ -146,10 +145,10 @@ const handleHttpUpload = async (options: UploadRequestOptions) => {
 
 const uploadSuccess = (fileUrl: string) => {
   if (!fileUrl) return;
-  emits("update:imageUrl", fileUrl);
+  imageUrl.value = fileUrl;
   // 调用 el-form 内部的校验方法（可自动校验）
   formItemContext?.prop && formContext?.validateField([formItemContext.prop as string]);
-  emits("check-validate");
+  emits("checkValidate");
   ElNotification({
     title: "温馨提示",
     message: "图片上传成功！",
@@ -161,7 +160,7 @@ const uploadSuccess = (fileUrl: string) => {
  * @description 删除图片
  * */
 const deleteImg = () => {
-  emits("update:imageUrl", "");
+  imageUrl.value = "";
 };
 
 /**

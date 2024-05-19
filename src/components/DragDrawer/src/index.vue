@@ -33,7 +33,7 @@
 
 <script setup lang="ts">
 import DragDrawerTrigger from "./DragDrawerTrigger.vue";
-import { computed, onBeforeUnmount, onMounted, ref, watch, defineOptions, unref, type StyleValue } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, defineOptions, unref, type StyleValue } from "vue";
 import { ElDrawer } from "element-plus";
 import { useDesign } from "@/hooks";
 
@@ -43,8 +43,6 @@ const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("drag-drawer");
 
 interface DragDrawerProps {
-  visible?: boolean;
-  width?: string | number;
   placement?: string;
   draggable?: boolean;
   minWidth?: string | number;
@@ -63,28 +61,19 @@ const props = withDefaults(defineProps<DragDrawerProps>(), {
 });
 
 type DragDrawerEmits = {
-  "update:visible": [visible: boolean];
-  "on-resize-start": [];
-  "update:width": [width: number];
-  "on-resize": [event: MouseEvent];
-  "on-resize-end": [];
+  onResizeStart: [];
+  onResize: [event: MouseEvent];
+  onResizeEnd: [];
 };
 
 const emits = defineEmits<DragDrawerEmits>();
 
+const drawerVisible = defineModel<boolean>({ required: true });
+const drawerWidth = defineModel<number>("width", { default: 200 });
 const drawerRef = ref();
 const canMove = ref(false);
 const wrapperWidth = ref(0);
 const wrapperLeft = ref(0);
-const drawerVisible = ref(false);
-
-watch(
-  () => props.visible,
-  () => {
-    drawerVisible.value = props.visible;
-  },
-  { immediate: true }
-);
 
 const outerClasses = computed(() => {
   const classesArray = [props.inner ? `${prefixClass}__inner` : "", unref(canMove) ? "no-select" : ""];
@@ -140,13 +129,13 @@ onBeforeUnmount(() => {
 });
 
 const handleBeforeClose = () => {
-  emits("update:visible", false);
+  drawerVisible.value = false;
 };
 
 const handleTriggerMousedown = (event: Event) => {
   event.preventDefault();
   canMove.value = true;
-  emits("on-resize-start");
+  emits("onResizeStart");
   // 防止鼠标选中抽屉中文字，造成拖动 trigger 触发浏览器原生拖动行为
   (window as any).getSelection().removeAllRanges();
 };
@@ -163,13 +152,13 @@ const handleMousemove = (event: any) => {
   event.atMin = width === parseFloat(props.minWidth as string);
   // 如果当前 width 不大于 100，视为百分比
   if (width <= 100) width = (width / unref(wrapperWidth)) * 100;
-  emits("update:width", width);
-  emits("on-resize", event);
+  drawerWidth.value = width;
+  emits("onResize", event);
 };
 
 const handleMouseup = () => {
   canMove.value = false;
-  emits("on-resize-end");
+  emits("onResizeEnd");
 };
 
 const setWrapperWidth = () => {

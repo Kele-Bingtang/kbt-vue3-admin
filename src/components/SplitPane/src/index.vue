@@ -27,6 +27,7 @@
 import { shallowRef, ref, computed, watch, onMounted, nextTick, defineOptions, unref } from "vue";
 import SplitLine from "./SplitLine.vue";
 import { useDesign } from "@/hooks";
+import type { MoveEvent } from "sortablejs";
 
 defineOptions({ name: "SplitPane" });
 
@@ -36,20 +37,26 @@ const prefixClass = getPrefixClass("split-pane");
 type NumOrStr = number | string;
 
 interface SplitPaneProps {
-  modelValue?: NumOrStr;
   mode?: "horizontal" | "vertical";
   min?: NumOrStr;
   max?: NumOrStr;
 }
 
 const props = withDefaults(defineProps<SplitPaneProps>(), {
-  modelValue: 0.5,
   mode: "horizontal",
   min: "40px",
   max: "40px",
 });
 
-const emits = defineEmits(["update:modelValue", "on-moving", "on-move-end", "on-move-start"]);
+type SplitPaneEmits = {
+  moving: [event: MouseEvent];
+  moveEnd: [];
+  moveStart: [];
+};
+
+const emits = defineEmits<SplitPaneEmits>();
+
+const modelValue = defineModel<NumOrStr>({ default: 0.5 });
 
 const splitPaneRef = shallowRef();
 const offset = ref(0);
@@ -59,15 +66,12 @@ const isMoving = ref(false);
 
 const isHorizontal = computed(() => props.mode === "horizontal");
 const anotherOffset = computed(() => 100 - unref(offset));
-const valueIsString = computed(() => typeof props.modelValue === "string");
+const valueIsString = computed(() => typeof unref(modelValue) === "string");
 const offsetSize = computed(() => (unref(isHorizontal) ? "offsetHeight" : "offsetWidth"));
 const computedMin = computed(() => getComputedThresholdValue("min"));
 const computedMax = computed(() => getComputedThresholdValue("max"));
 
-watch(
-  () => props.modelValue,
-  () => init()
-);
+watch(modelValue, () => init());
 
 onMounted(() => {
   nextTick(() => {
@@ -77,8 +81,8 @@ onMounted(() => {
 
 const init = () => {
   const value = unref(valueIsString)
-    ? px2percent(props.modelValue as string, unref(splitPaneRef)[unref(offsetSize)])
-    : props.modelValue;
+    ? px2percent(unref(modelValue) as string, unref(splitPaneRef)[unref(offsetSize)])
+    : unref(modelValue);
   offset.value = ((value as number) * 10000) / 100;
 };
 
@@ -113,7 +117,7 @@ const getAnotherOffset = (value: NumOrStr) => {
   return res;
 };
 
-const handleMove = (e: any) => {
+const handleMove = (e: MouseEvent) => {
   const pageOffset = unref(isHorizontal) ? e.pageY : e.pageX;
   const offset = pageOffset - unref(initOffset);
   const outerWidth = unref(splitPaneRef)[unref(offsetSize)];
@@ -126,28 +130,28 @@ const handleMove = (e: any) => {
   if (parseFloat(anotherValue + "") <= parseFloat(unref(computedMax) + "")) {
     value = getAnotherOffset(getMax(anotherValue, unref(computedMax)));
   }
-  e.atMin = props.modelValue === unref(computedMin);
-  e.atMax = unref(valueIsString)
-    ? getAnotherOffset(props.modelValue) === unref(computedMax)
-    : (getAnotherOffset(props.modelValue) as number).toFixed(5) === (unref(computedMax) as number).toFixed(5);
-  emits("update:modelValue", value);
-  emits("on-moving", e);
+  (e as any).atMin = modelValue.value === unref(computedMin);
+  (e as any).atMax = unref(valueIsString)
+    ? getAnotherOffset(unref(modelValue)) === unref(computedMax)
+    : (getAnotherOffset(unref(modelValue)) as number).toFixed(5) === (unref(computedMax) as number).toFixed(5);
+  modelValue.value = value;
+  emits("moving", e);
 };
 
 const handleUp = () => {
   isMoving.value = false;
   document.removeEventListener("mousemove", handleMove);
   document.removeEventListener("mouseup", handleUp);
-  emits("on-move-end");
+  emits("moveEnd");
 };
 
 const handleMousedown = (e: MouseEvent) => {
   initOffset.value = unref(isHorizontal) ? e.pageY : e.pageX;
-  oldOffset.value = props.modelValue;
+  oldOffset.value = unref(modelValue);
   isMoving.value = true;
   document.addEventListener("mousemove", handleMove);
   document.addEventListener("mouseup", handleUp);
-  emits("on-move-start");
+  emits("moveStart");
 };
 </script>
 

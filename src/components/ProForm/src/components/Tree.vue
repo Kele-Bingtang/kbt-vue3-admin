@@ -33,7 +33,6 @@ import { nextTick, ref, watch, unref } from "vue";
 defineOptions({ name: "Tree" });
 
 export interface TreeProps {
-  modelValue?: any[];
   data: any[]; // 树数据
   nodeKey?: string; // 每一个树节点 id
   checkValueType?: "keys" | "nodes"; // v-model 返回的格式，keys 返回选中的节点 nodeKey，nodes 为返回选中的节点
@@ -44,7 +43,6 @@ export interface TreeProps {
 }
 
 const props = withDefaults(defineProps<TreeProps>(), {
-  modelValue: () => [],
   nodeKey: " id",
   checkValueType: "keys",
   expandSelected: true,
@@ -53,8 +51,8 @@ const props = withDefaults(defineProps<TreeProps>(), {
   select: true,
 });
 
-type EmitProps = { (e: "update:modelValue", value: string[]): void };
-const emits = defineEmits<EmitProps>();
+const checkedList = defineModel<any[]>();
+
 const defaultExpandAll = ref(false); // 展开/折叠状态
 const isSelectAll = ref(false); // 全选/全不选状态
 const indeterminate = ref(false); // 处于全选和全不选期间的状态
@@ -88,9 +86,9 @@ const filterNode = (value: string, data: Record<string, any>) => {
   return data.label.includes(value);
 };
 
-const handleCheck = (_: any, selected: any) => {
-  if (props.checkValueType === "nodes") emits("update:modelValue", selected.checkedNodes);
-  else emits("update:modelValue", selected.checkedKeys);
+const handleCheck = (_: any, selected: { checkedKeys: string[]; checkedNodes: Record<string, any>[] }) => {
+  if (props.checkValueType === "nodes") checkedList.value = selected.checkedNodes;
+  else checkedList.value = selected.checkedKeys;
 
   // 如果都没选择任何节点，则状态关闭
   if (!selected.checkedKeys?.length) {
@@ -117,9 +115,5 @@ const setChecked = (val: any[]) => {
   });
 };
 
-watch(
-  () => props.modelValue,
-  val => val && setChecked(val),
-  { immediate: true }
-);
+watch(checkedList, val => val?.length && setChecked(val), { immediate: true });
 </script>

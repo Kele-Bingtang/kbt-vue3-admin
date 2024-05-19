@@ -38,7 +38,7 @@
 
 <script setup lang="ts">
 import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
-import { computed, ref, unref, shallowRef } from "vue";
+import { ref, unref, shallowRef } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "WorkDrawer" });
@@ -47,32 +47,23 @@ const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-drawer");
 
 interface WorkDrawerProps {
-  modelValue: boolean;
   title?: string;
   fullscreen?: boolean;
   height?: string | number;
 }
 
-const props = withDefaults(defineProps<WorkDrawerProps>(), {
+withDefaults(defineProps<WorkDrawerProps>(), {
   title: "弹框",
   fullscreen: false,
   height: 400,
 });
 
 const emits = defineEmits<{
-  "update:modelValue": [value: boolean];
   close: [value: DrawerProps | null];
   confirm: [value: DrawerProps | null];
 }>();
 
-const drawerVisible = computed({
-  get() {
-    return props.modelValue;
-  },
-  set(value) {
-    emits("update:modelValue", value);
-  },
-});
+const drawerVisible = defineModel<boolean>({ required: true });
 
 const isFullscreen = ref(false);
 const elDrawerRef = shallowRef<DrawerProps | null>(null);
