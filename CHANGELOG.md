@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.2.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v0.1.0...v0.2.0) (2024-05-19)
+
+### Features
+
+- 🚀 新增 vue 3.4 的 defineModel 语法，优化 defineEmits 类型 ([5162f5a](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/5162f5ac6010430c3626388a099dcca375a98ebd))
+- 🚀 新增 WorkDrawer 组件，优化 UseDialog、UseWrawer 函数 ([af572ac](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/af572ac04f6084a247dd7cc20ba626da68e63006))
+
+### Styling
+
+- 🎨 样式位置切换 ([64d10d1](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/64d10d173c170bdfccc7383a2221d3e7f74b64ae))
+
+### TypeScript File
+
+- 💎 types 类型文件重构 ([2511929](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/2511929cbcd62a406c4232e19bc1a518fd68c8f4))
+
+### Code Refactoring
+
+- ♻️ 六个 Layout 布局样式重构，解决遗留样式问题，添加部分新交互样式 ([ab04528](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/ab04528f1ffa71d4ec2cb45acf58445bc1c40653))
+- ♻️ 重构 ThemeDrawer 全局配置组件。重构菜单、头部主题切换样式、交互。重构暗黑模式展示样式，重构面包屑样式。修复标签页第一个固定标签的右键内容显示问题 ([8152a56](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/8152a56ba78efd25c52de52b131f798bad1ea927))
+- ♻️ layout 样式文件重命名 ([28022ae](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/28022ae119e3ba6847e4fe82308ad3f402828e41))
+
 ## [0.1.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v0.0.2...v0.1.0) (2024-05-18)
 
 ### Features
