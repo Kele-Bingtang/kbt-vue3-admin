@@ -27,7 +27,6 @@
 import { shallowRef, ref, computed, watch, onMounted, nextTick, defineOptions, unref } from "vue";
 import SplitLine from "./SplitLine.vue";
 import { useDesign } from "@/hooks";
-import type { MoveEvent } from "sortablejs";
 
 defineOptions({ name: "SplitPane" });
 

@@ -7,7 +7,7 @@ All notable changes to this project will be documented in this file. See [standa
 ### Features
 
 - 🚀 新增 vue 3.4 的 defineModel 语法，优化 defineEmits 类型 ([5162f5a](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/5162f5ac6010430c3626388a099dcca375a98ebd))
-- 🚀 新增 WorkDrawer 组件，优化 UseDialog、UseWrawer 函数 ([af572ac](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/af572ac04f6084a247dd7cc20ba626da68e63006))
+- 🚀 新增 WorkDrawer 组件，优化 UseDialog、UseWDrawer 函数 ([af572ac](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/af572ac04f6084a247dd7cc20ba626da68e63006))
 
 ### Styling
 

@@ -79,12 +79,25 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
         },
         // 静态资源分类打包
         output: {
+          // 拆包
           manualChunks: {
             "vue-chunks": ["vue", "vue-router", "pinia", "vue-i18n"],
             "element-plus": ["element-plus"],
             "wang-editor": ["@wangeditor/editor", "@wangeditor/editor-for-vue"],
             tinymce: ["tinymce", "@tinymce/tinymce-vue"],
-            echarts: ["echarts", "echarts-wordcloud"],
+            echarts: ["echarts"],
+            // codemirror: [
+            //   "vue-codemirror6",
+            //   "codemirror",
+            //   "@codemirror/autocomplete",
+            //   "@codemirror/commands",
+            //   "@codemirror/language",
+            //   "@codemirror/lint",
+            //   "@codemirror/search",
+            //   "@codemirror/state",
+            //   "@codemirror/view",
+            // ],
+            // "codemirror-lang": ["@codemirror/lang-html", "@codemirror/lang-javascript", "@codemirror/lang-markdown"],
           },
           chunkFileNames: "static/js/[name]-[hash].js",
           entryFileNames: "static/js/[name]-[hash].js",
