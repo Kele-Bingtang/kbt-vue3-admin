@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [0.3.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v0.2.0...v0.3.0) (2024-05-20)
+
+### Features
+
+- 🚀 新增 CodeMirror 代码编辑器组件（Demo 版） ([8370c7d](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/8370c7d3e6e74d04e29a7b2c075c5848e25b2d77))
+- 🚀 新增 CodeMirror 组件，提高多种代码语言和主题 ([e2d00f5](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/e2d00f5f840b6a03db9229d4a8a00549b365c43b))
+
+### Bug Fixes
+
+- 🐞 修复打包失败 ([404e61f](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/404e61f109f9b674c2b41f708acb781261e0c1a5))
+
 ## [0.2.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v0.1.0...v0.2.0) (2024-05-19)
 
 ### Features
