@@ -49,7 +49,7 @@ const isSwitchLanguage = ref(false);
 
 const handleMenuClick = (menuItem: RouterConfig) => {
   if (isExternal(menuItem.path)) return window.open(menuItem.path, "_blank");
-  router.push(menuItem.meta._fullPath || "");
+  router.push(menuItem.meta._fullPath || menuItem.path || "");
 };
 
 const title = (menuItem: RouterConfig) => {

@@ -37,7 +37,6 @@
     "not op_mini all"
   ],
   "dependencies": {
-    "@codemirror/theme-one-dark": "^6.1.2",
     "@element-plus/icons-vue": "^2.3.1",
     "@tinymce/tinymce-vue": "^5.1.1",
     "@vueuse/core": "^10.9.0",
@@ -73,7 +72,16 @@
     "xlsx": "^0.18.5"
   },
   "devDependencies": {
+    "@codemirror/lang-html": "^6.4.9",
+    "@codemirror/lang-java": "^6.0.1",
+    "@codemirror/lang-javascript": "^6.2.2",
     "@codemirror/lang-json": "^6.0.1",
+    "@codemirror/lang-markdown": "^6.2.5",
+    "@codemirror/lang-php": "^6.0.1",
+    "@codemirror/lang-python": "^6.1.6",
+    "@codemirror/lang-sql": "^6.6.4",
+    "@codemirror/lang-xml": "^6.1.0",
+    "@codemirror/theme-one-dark": "^6.1.2",
     "@commitlint/cli": "^19.3.0",
     "@commitlint/config-conventional": "^19.2.2",
     "@iconify-icons/ant-design": "^1.2.7",
@@ -83,6 +91,8 @@
     "@types/node": "^20.12.12",
     "@types/qrcode": "^1.5.5",
     "@types/sortablejs": "^1.15.8",
+    "@uiw/codemirror-theme-dracula": "^4.22.1",
+    "@uiw/codemirror-theme-xcode": "^4.22.1",
     "@vitejs/plugin-vue": "^5.0.4",
     "@vitejs/plugin-vue-jsx": "^3.1.0",
     "@vue/eslint-config-prettier": "^9.0.0",
@@ -95,7 +105,9 @@
     "cz-git": "^1.9.1",
     "dotenv": "^16.4.5",
     "eslint": "^8.56.0",
+    "eslint-linter-browserify": "^8.57.0",
     "eslint-plugin-vue": "^9.26.0",
+    "globals": "^15.3.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.2",
     "npm-run-all": "^4.1.5",

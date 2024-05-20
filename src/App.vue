@@ -11,7 +11,7 @@ import { ElConfigProvider } from "element-plus";
 import { useLayoutStore } from "./stores/layout";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
-import { getBrowserLang } from "./utils";
+import { getBrowserLang } from "@/utils";
 import { useTheme } from "./hooks/useTheme";
 import { useFrame } from "./layout/components/FrameLayout/useFrame";
 import settings from "@/config/settings";
