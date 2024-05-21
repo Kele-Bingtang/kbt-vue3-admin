@@ -1,36 +1,47 @@
 <template>
-  <CodeMirror ref="codeMirrorRef" class="code-mirror" v-model="code" v-bind="bindValue" forceLinting></CodeMirror>
+  <component :is="tag" ref="editorRef" :class="prefixClass">
+    <aside v-if="$slots.default" style="display: none" aria-hidden><slot /></aside>
+  </component>
 </template>
 
-<script setup lang="ts" name="CodeMirror6">
-import { computed, useAttrs, ref } from "vue";
+<script setup lang="ts">
+import { indentWithTab } from "@codemirror/commands";
+import { indentUnit as indentUnitConfig, type LanguageSupport } from "@codemirror/language";
+import {
+  diagnosticCount as linterDagnosticCount,
+  forceLinting as forceLintingFun,
+  linter as linterFun,
+  lintGutter,
+  type Diagnostic,
+  type LintSource,
+} from "@codemirror/lint";
+import {
+  Compartment,
+  EditorSelection,
+  EditorState,
+  StateEffect,
+  type Transaction,
+  type Extension,
+  type SelectionRange,
+  type StateField,
+  type Text,
+} from "@codemirror/state";
+import { EditorView, keymap, placeholder as placeholderFun, type ViewUpdate } from "@codemirror/view";
+import { basicSetup, minimalSetup } from "codemirror";
+import { useDesign } from "@/hooks";
 import { getPx } from "@/utils";
-// 组件官网 See https://github.com/logue/vue-codemirror6
-import CodeMirror from "vue-codemirror6";
-// 如果需要更多主题，可以查看开源项目 https://uiwjs.github.io/react-codemirror/#/theme/home，或者自行搜索其他开源项目，或者自定义主题
-import { oneDark } from "@codemirror/theme-one-dark";
-import { dracula } from "@uiw/codemirror-theme-dracula";
-import { xcodeLight, xcodeDark } from "@uiw/codemirror-theme-xcode";
 
-// 组件为了 Demo，下载并引入了多种语言，实际根据自己的选择移出依赖
-import { json, jsonParseLinter } from "@codemirror/lang-json";
-import { html } from "@codemirror/lang-html";
-import { javascript, esLint } from "@codemirror/lang-javascript";
-// 搭配 lang-javascript 使用
-import * as eslintLinter from "eslint-linter-browserify";
-import globals from "globals";
-import { markdown } from "@codemirror/lang-markdown";
-import { php } from "@codemirror/lang-php";
-import { python } from "@codemirror/lang-python";
-import { sql } from "@codemirror/lang-sql";
-import { xml } from "@codemirror/lang-xml";
+defineOptions({ name: "CodeMirror6" });
 
-export interface CodeMirrorProps {
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("code-mirror");
+
+interface CodeMirrorProps {
   width?: string | number; // 代码编辑器宽度，默认 auto
   height?: string | number; // 代码编辑器高度，默认 400
   fontSize?: string | number; // 字体大小，默认 14px
-  theme?: string; // 官方支持的主题
-  lang?: string; // 官方支持的代码语言
+  localTheme?: Extension; // 本地主题包
+  lang?: LanguageSupport; // 本地代码语言包
   basic?: boolean; // 是否导入代码编辑器常用功能，See https://codemirror.net/docs/ref/#codemirror.basicSetup
   minimal?: boolean; // 是否导入代码编辑器 Mini 功能，See https://codemirror.net/docs/ref/#codemirror.minimalSetup
   dark?: boolean; // 是否切换为暗黑主题（前提是主题切换），默认不切换 false
@@ -39,109 +50,416 @@ export interface CodeMirrorProps {
   tab?: boolean; // 是否启用 Tab 键缩进，默认开启 true
   tabSize?: number; // Tab 键缩进单位，默认 2
   multiple?: boolean; // 是否开启允许多选，默认不开启 false，See https://codemirror.net/docs/ref/#state.EditorState^allowMultipleSelections
-  lineSeparator?: string; // 换行符，默认 \n
+  lineSeparator?: string; // 换行符，默认 '\n'
   customTheme?: Record<string, any>; // 自定义主题，See https://codemirror.net/docs/ref/#view.EditorView^theme
   readonly?: boolean; // 是否只读代码编辑器，默认不开启 false
   disabled?: boolean; // 是否禁用代码编辑器，默认不开启 false
   phrases?: Record<string, string>; // 自定义代码编辑器的国际化语言内容，See https://codemirror.net/6/examples/translate/
+  linter?: LintSource | any; // 代码校验器，See https://codemirror.net/docs/ref/#lint.linter
   linterConfig?: Record<string, any>; // See https://codemirror.net/docs/ref/#lint.linter^config
   forceLinting?: boolean; // 是否在输入过程开始校验语法，false 则在输入完成后校验，默认不开启 false
   gutter?: boolean; // 当代码语法出错，开头是否红色圆圈 🔴 提示，前提开启 linter 属性，默认不开启 false
   gutterConfig?: Record<string, any>; // See https://codemirror.net/docs/ref/#lint.lintGutter^config
   tag?: string; // 代码编辑器跟标签，默认是 div
+  indentUnit?: string; // 缩进单位，如 "  "，缩进两个空格，"    " 代表缩进四个空格
+  extensions?: Extension[]; // 额外扩展
 }
 
 const props = withDefaults(defineProps<CodeMirrorProps>(), {
   width: "auto",
   height: 400,
   fontSize: 14,
-  theme: "oneDark",
   basic: true,
   minimal: false,
-  dark: false,
   wrap: true,
   tab: true,
-  tabSize: 2,
   multiple: false,
-  lineSeparator: "\n",
   readonly: false,
   disabled: false,
-  phrases: () => defaultPhrases,
+  extensions: () => [],
+  customTheme: () => ({}),
+  linterConfig: () => defaultPhrases,
   forceLinting: false,
   gutter: false,
   tag: "div",
 });
 
-// v-model 值
-const code = defineModel<string>({ required: true });
+type CodeMirror6Emits = {
+  update: [_value: ViewUpdate];
+  /** CodeMirror onReady */
+  ready: [_value: { view: EditorView; state: EditorState; container: HTMLElement }];
+  /** CodeMirror onFocus */
+  focus: [_value: boolean];
+  /** State Changed */
+  change: [_value: EditorState];
+  /** CodeMirror onDestroy */
+  destroy: [];
+};
+
+const emits = defineEmits<CodeMirror6Emits>();
+
+// 编辑器 DOM 元素引用
+const editorRef = ref<HTMLElement | undefined>();
+
+// v-model
+const doc = defineModel<string | Text>({ required: true });
 
 /**
- * 传递给 CodeMirror 组件的 props
+ * CodeMirror 的 EditorEditorView
+ *
+ * @see {@link https://codemirror.net/docs/ref/#view.EditorView}
  */
-const bindValue = computed(() => {
-  const { multiple: allowMultipleSelections, customTheme: theme, ...surplusProps } = props;
-  const bindValue = { ...surplusProps, ...useAttrs(), allowMultipleSelections, theme } as Record<string, any>;
+const view = shallowRef<EditorView>(new EditorView());
 
-  return { ...bindValue, extensions: [themeValue.value], ...getLang() };
+/**
+ * 是否获得焦点
+ *
+ * @see {@link https://codemirror.net/docs/ref/#view.EditorView.hasFocus}
+ */
+const focus = computed<boolean>({
+  get: () => view.value.hasFocus,
+  set: f => {
+    if (f) {
+      view.value.focus();
+    }
+  },
 });
 
 /**
- * 主题
+ * 选择范围
+ *
+ * @see {@link https://codemirror.net/docs/ref/#state.EditorSelection}
  */
-const themeValue = computed(() => {
-  if (props.theme === "oneDark") return oneDark;
-  if (props.theme === "dracula") return dracula;
-  if (props.theme === "xcodeLight") return xcodeLight;
-  if (props.theme === "xcodeDark") return xcodeDark;
-  return undefined;
+const selection = computed<EditorSelection>({
+  get: () => view.value.state.selection,
+  set: s => view.value.dispatch({ selection: s }),
 });
 
-// Config Demo See https://github.com/UziTech/eslint-linter-browserify/blob/2f6d96e7cbe9f3d565bb5c9462ab78a9394c3189/example/script.js
-const config = {
-  languageOptions: {
-    globals: { ...globals.node },
-    parserOptions: { ecmaVersion: "latest", sourceType: "module" },
+/** 光标位置 */
+const cursor = computed<number>({
+  get: () => view.value.state.selection.main.head,
+  set: a => view.value.dispatch({ selection: { anchor: a } }),
+});
+
+/** JSON */
+const json = computed<Record<string, StateField<any>>>({
+  get: () => view.value.state.toJSON(),
+  set: j => view.value.setState(EditorState.fromJSON(j)),
+});
+
+/** 文本长度 */
+const length: Ref<number> = ref(0);
+
+/**
+ * 语法检查的诊断代码数量
+ *
+ * @see {@link https://codemirror.net/docs/ref/#lint.diagnosticCount}
+ */
+const diagnosticCount: Ref<number> = ref(0);
+
+/** 获取 CodeMirror 的扩展 */
+const extensions: ComputedRef<Extension[]> = computed(() => {
+  // 配置
+  // @see https://codemirror.net/examples/config/
+  const language = new Compartment();
+  const tabSize = new Compartment();
+
+  return [
+    // 切换基本设置
+    props.basic ? basicSetup : undefined,
+    // 切换最小设置
+    props.minimal && !props.basic ? minimalSetup : undefined,
+    // 添加监听器
+    EditorView.updateListener.of((update: ViewUpdate): void => {
+      // 触发焦点事件
+      emits("focus", view.value.hasFocus);
+
+      // 更新文本长度
+      length.value = view.value.state.doc?.length;
+
+      if (update.changes.empty || !update.docChanged) {
+        // 如果没有更改，则不触发
+        return;
+      }
+      if (props.linter) {
+        // 代码校验处理
+        if (props.forceLinting) {
+          // 如果 forceLinting 开启，第一次加载视图后校验。
+          forceLintingFun(view.value);
+        }
+        // 计算诊断数量
+        diagnosticCount.value = (props.linter(view.value) as readonly Diagnostic[]).length;
+      }
+      emits("update", update);
+    }),
+    // 切换浅色/深色模式
+    EditorView.theme(props.customTheme, { dark: props.dark }),
+    props.localTheme ? props.localTheme : undefined,
+    // 开启行宽换行
+    props.wrap ? EditorView.lineWrapping : undefined,
+    // 启用 Tab 键缩进
+    props.tab ? keymap.of([indentWithTab]) : undefined,
+    // Tab 键缩进单位
+    props.indentUnit ? indentUnitConfig.of(props.indentUnit) : undefined,
+    // 允许多选
+    EditorState.allowMultipleSelections.of(props.multiple),
+    // Tab 键缩进大小
+    props.tabSize ? tabSize.of(EditorState.tabSize.of(props.tabSize)) : undefined,
+    // 国际化设置
+    props.phrases ? EditorState.phrases.of(props.phrases) : undefined,
+    // 编辑器只读
+    EditorState.readOnly.of(props.readonly),
+    // 编辑器可编辑
+    EditorView.editable.of(!props.disabled),
+    // // 设置换行字符
+    props.lineSeparator ? EditorState.lineSeparator.of(props.lineSeparator) : undefined,
+    // 代码语言
+    props.lang ? language.of(props.lang) : undefined,
+    // 添加代码校验器
+    props.linter ? linterFun(props.linter, props.linterConfig) : undefined,
+    // 显示错误行的红色圆圈 🔴 提示
+    props.linter && props.gutter ? lintGutter(props.gutterConfig) : undefined,
+    // 编辑器占位符
+    props.placeholder ? placeholderFun(props.placeholder) : undefined,
+    // 添加 props 自定义扩展
+    ...(props.extensions || []),
+  ].filter((extension): extension is Extension => !!extension);
+});
+
+// 监听 extensions（主要是属性）变化
+watch(
+  extensions,
+  exts => {
+    view.value?.dispatch({
+      effects: StateEffect.reconfigure.of(exts),
+    });
   },
-  rules: {
-    semi: ["error", "never"],
+  { immediate: true }
+);
+
+// 监听文字输入变化
+watch(
+  doc,
+  async value => {
+    if (
+      view.value.composing || // IME 修复
+      view.value.state.doc.toJSON().join(props.lineSeparator ?? "\n") === value // don't need to update
+    ) {
+      // 不要提交 CodeMirror 的存储。
+      return;
+    }
+
+    view.value.dispatch({
+      changes: { from: 0, to: view.value.state.doc.length, insert: value },
+      selection: view.value.state.selection,
+      scrollIntoView: true,
+    });
   },
+  { immediate: true }
+);
+
+onMounted(async () => {
+  /** 初始化 Value */
+  let value: string | Text = doc.value;
+  if (!editorRef.value) return;
+  if (editorRef.value.children[0]) {
+    if (doc.value !== "") {
+      console.warn(
+        "[CodeMirror.vue] The <code-mirror> tag contains child elements that overwrite the `v-model` values."
+      );
+    }
+    value = (editorRef.value.childNodes[0] as HTMLElement).innerText?.trim();
+  }
+
+  // 注册 Codemirror
+  view.value = new EditorView({
+    parent: editorRef.value,
+    state: EditorState.create({ doc: value, extensions: extensions.value }),
+    dispatch: (tr: Transaction) => {
+      view.value.update([tr]);
+      if (tr.changes.empty || !tr.docChanged) {
+        return;
+      }
+
+      doc.value = tr.state.doc.toString() ?? "";
+      emits("change", tr.state);
+    },
+  });
+
+  await nextTick();
+
+  emits("ready", {
+    view: view.value,
+    state: view.value.state,
+    container: editorRef.value,
+  });
+});
+
+onUnmounted(() => {
+  view.value.destroy();
+  emits("destroy");
+});
+
+/**
+ * 手动触发语法检查
+ *
+ * @see {@link https://codemirror.net/docs/ref/#lint.forceLinting}
+ */
+const lint = (): void => {
+  if (!props.linter || !view.value) return;
+  if (props.forceLinting) forceLintingFun(view.value);
+  diagnosticCount.value = linterDagnosticCount(view.value.state);
 };
 
 /**
- * 代码语言
+ * 手动使配置重新生效
+ *
+ * @see {@link https://codemirror.net/examples/config/#top-level-reconfiguration}
  */
-const getLang = () => {
-  const { lang = "" } = props;
-  if (["js", "javascript"].includes(lang)) {
-    return { lang: javascript(), linter: esLint(new eslintLinter.Linter(), config) };
-  }
-
-  if (["ts", "typescript"].includes(lang)) {
-    return {
-      lang: javascript({ jsx: false, typescript: true }), // jsx 可以开启变成 tsx
-      linter: esLint(new eslintLinter.Linter(), config),
-    };
-  }
-
-  if (lang === "json") return { lang: json(), linter: jsonParseLinter() };
-  if (lang === "html") return { lang: html() };
-  if (["md", "markdown"].includes(lang)) return { lang: markdown() };
-  if (lang === "php") return { lang: php() };
-  if (lang === "python") return { lang: python() };
-  if (lang === "sql") return { lang: sql() };
-  if (lang === "xml") return { lang: xml() };
-  return {};
+const forceReconfigure = (): void => {
+  // 先清除配置
+  view.value?.dispatch({
+    effects: StateEffect.reconfigure.of([]),
+  });
+  // 重新注册配置
+  view.value?.dispatch({
+    effects: StateEffect.appendConfig.of(extensions.value),
+  });
 };
+
+/* ----- 实验性 ------ */
+
+/**
+ * 在编辑器中获取给定点之间的文本（下标位置而不是行号）
+ *
+ * @param from - 开始位置
+ * @param to - 结束位置
+ */
+const getRange = (from?: number, to?: number): string | undefined => view.value.state.sliceDoc(from, to);
+/**
+ * 获取指定行文本
+ *
+ * @param number - 行号
+ */
+const getLineText = (number: number): string => view.value.state.doc.line(number + 1).text;
+/** 获取行数 */
+const lineCount = (): number => view.value.state.doc.lines;
+/** 获取光标所在的下标位置 */
+const getCursor = (): number => view.value.state.selection.main.head;
+/** 获取所有当前选择的内容相关信息对象 */
+const listSelections = (): readonly SelectionRange[] => {
+  let _view$value$state$sel;
+  return (_view$value$state$sel = view.value.state.selection.ranges) !== null && _view$value$state$sel !== undefined
+    ? _view$value$state$sel
+    : [];
+};
+/** 获取当前选择的内容 */
+const getSelection = (): string => {
+  let _view$value$state$sli;
+  return (_view$value$state$sli = view.value.state.sliceDoc(
+    view.value.state.selection.main.from,
+    view.value.state.selection.main.to
+  )) !== null && _view$value$state$sli !== undefined
+    ? _view$value$state$sli
+    : "";
+};
+/**
+ * 获取当前选择的多行内容数组，一行占一个数组下标
+ */
+const getSelections = (): string[] => {
+  const s = view.value.state;
+  if (!s) {
+    return [];
+  }
+
+  return s.selection.ranges.map((r: { from: number; to: number }) => s.sliceDoc(r.from, r.to));
+};
+/** 如果有文本被选中，返回 `true`；否则返回 `false`，检查是否有任何选择范围不为空 */
+const somethingSelected = (): boolean => view.value.state.selection.ranges.some((r: { empty: boolean }) => !r.empty);
+
+/**
+ * 将文档中从 `from` 位置到 `to` 位置的文本替换为给定的 `replacement` 文本
+ *
+ * @param replacement - replacement text
+ * @param from - start string at position
+ * @param to -  insert the string at position
+ */
+const replaceRange = (replacement: string | Text, from: number, to: number): void =>
+  view.value.dispatch({
+    changes: { from, to, insert: replacement },
+  });
+/**
+ * 替换当前的选区（或选区）为给定的 `replacement` 文本。默认情况下，新选择会位于插入的文本之后
+ *
+ * @param replacement - replacement text
+ */
+const replaceSelection = (replacement: string | Text): void =>
+  view.value.dispatch(view.value.state.replaceSelection(replacement));
+/**
+ * 设置光标位置到指定的 `position`
+ *
+ * @param position - position.
+ */
+const setCursor = (position: number): void => view.value.dispatch({ selection: { anchor: position } });
+/**
+ * 设置单一的选取范围，其中 `anchor` 是锚点位置，`head` 是可选的头部位置。
+ *
+ * @param anchor - anchor position
+ * @param head -
+ */
+const setSelection = (anchor: number, head?: number): void => view.value.dispatch({ selection: { anchor, head } });
+/**
+ * 设置新的选取范围数组，至少需要一个选取。`ranges` 是选取范围数组，`primary` 是可选的主选取索引
+ *
+ * @param ranges - Selection range
+ * @param primary -
+ */
+const setSelections = (ranges: readonly SelectionRange[], primary?: number): void =>
+  view.value.dispatch({
+    selection: EditorSelection.create(ranges, primary),
+  });
+/**
+ * 应用提供的函数 `f` 到所有现有的选取上，并根据结果调用 `extendSelections` 方法。这允许动态扩展选取范围
+ *
+ * @param f - function
+ */
+const extendSelectionsBy = (f: any): void =>
+  view.value.dispatch({
+    selection: EditorSelection.create(selection.value.ranges.map((r: SelectionRange) => r.extend(f(r)))),
+  });
+
+defineExpose({
+  editor: editorRef,
+  view,
+  cursor,
+  selection,
+  focus,
+  length,
+  json,
+  diagnosticCount,
+  dom: view.value.contentDOM,
+  lint,
+  forceReconfigure,
+  // Bellow is CodeMirror5's function
+  getRange,
+  getLineText,
+  lineCount,
+  getCursor,
+  listSelections,
+  getSelection,
+  getSelections,
+  somethingSelected,
+  replaceRange,
+  replaceSelection,
+  setCursor,
+  setSelection,
+  setSelections,
+  extendSelectionsBy,
+});
 
 const codeMirrorWidth = computed(() => getPx(props.width));
 const codeMirrorHeight = computed(() => getPx(props.height));
 const codeMirrorFontSize = computed(() => getPx(props.fontSize));
-
-const codeMirrorRef = ref<InstanceType<typeof CodeMirror>>();
-
-defineExpose({
-  cm: codeMirrorRef, // codeMirrorRef 暴露的方法，See https://github.com/logue/vue-codemirror6
-});
 </script>
 
 <script lang="ts">
@@ -185,7 +503,9 @@ const defaultPhrases = {
 </script>
 
 <style lang="scss" scoped>
-.code-mirror {
+$prefix-class: #{$namespace}-code-mirror;
+
+.#{$prefix-class} {
   width: v-bind(codeMirrorWidth);
   height: v-bind(codeMirrorHeight);
   font-size: v-bind(codeMirrorFontSize);
