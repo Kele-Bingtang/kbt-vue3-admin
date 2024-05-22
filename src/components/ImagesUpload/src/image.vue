@@ -48,7 +48,7 @@
 </template>
 
 <script setup lang="ts">
-import { generateUUID } from "@/utils";
+import { useSimpleUuid } from "@/utils";
 import {
   ElUpload,
   ElImageViewer,
@@ -105,7 +105,7 @@ const props = withDefaults(defineProps<ImageUploadProps>(), {
 });
 
 // 生成组件唯一id
-const uuid = ref("id-" + generateUUID());
+const uuid = ref("id-" + useSimpleUuid());
 
 // 查看图片
 const imgViewVisible = ref(false);

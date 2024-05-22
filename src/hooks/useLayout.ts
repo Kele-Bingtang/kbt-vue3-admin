@@ -114,7 +114,9 @@ export const useLayout = () => {
   function handleFunctionTitle(route: RouteLocationNormalizedLoaded | RouterConfigRaw) {
     const meta = { ...(route.meta as MetaProp) }; // 取消 meta 响应式
     const title = meta?.title || "";
-    if (title && isFunction(title)) return { title: title({ ...route }), titleIsFunction: true };
+    if (title && isFunction(title)) {
+      return { title: title({ ...route } as RouteLocationNormalizedLoaded), titleIsFunction: true };
+    }
     return { title: title + "", titleIsFunction: false };
   }
 
