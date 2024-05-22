@@ -1,34 +1,55 @@
 <template>
   <el-card shadow="never" header="CodeMirror 组件">
-    <div style="display: flex; margin-bottom: 10px">
-      <el-select v-model="theme" style="width: 200px">
-        <el-option v-for="item in themeOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
+    <el-space direction="vertical" alignment style="width: 100%" :size="30">
+      <div style="font-weight: bold">基本编辑器</div>
 
-      <el-select v-model="lang" style="width: 200px">
-        <el-option v-for="item in langOptions" :key="item.value" :label="item.label" :value="item.value" />
-      </el-select>
+      <el-space :size="20">
+        <el-select v-model="theme" style="width: 200px">
+          <el-option v-for="item in themeOptions" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
 
-      <el-checkbox v-model="disabled" label="是否禁用" style="margin-left: 10px" />
-      <el-checkbox v-model="readonly" label="是否只读" />
-      <el-checkbox v-model="wrap" label="超出屏幕宽度是否自动换行" />
-      <el-checkbox v-model="gutter" label="是否开启 🔴 语法错误提示" />
-    </div>
+        <el-select v-model="lang" style="width: 200px">
+          <el-option v-for="item in langOptions" :key="item.value" :label="item.label" :value="item.value" />
+        </el-select>
 
-    <CodeMirror
-      v-model="code"
-      :localTheme="themeValue"
-      :disabled="disabled"
-      :readonly="readonly"
-      :wrap="wrap"
-      :gutter="gutter"
-      v-bind="langValue"
-    />
+        <el-checkbox v-model="disabled" label="是否禁用" style="margin-left: 10px" />
+        <el-checkbox v-model="readonly" label="是否只读" />
+        <el-checkbox v-model="wrap" label="超出屏幕宽度是否自动换行" />
+        <el-checkbox v-model="gutter" label="是否开启 🔴 语法错误提示" />
+      </el-space>
+
+      <CodeMirror
+        v-model="code"
+        :localTheme="themeValue"
+        :disabled="disabled"
+        :readonly="readonly"
+        :wrap="wrap"
+        :gutter="gutter"
+        v-bind="langValue"
+      ></CodeMirror>
+
+      <div style="font-weight: bold">代码对比编辑器</div>
+      <el-space :size="20">
+        <el-checkbox v-model="revertControls" label="是否支持一键替换" style="margin-left: 10px" />
+        <el-checkbox v-model="highlight" label="是否下划线高亮" />
+        <el-checkbox v-model="gutter1" label="是否开启线条提示" />
+        <el-checkbox v-model="header" label="启用 Header" />
+        <el-switch v-model="orientation" active-text="a-b" inactive-text="b-a" />
+
+        <el-alert>
+          如果需要开启编辑功能，则传入 `
+          <span style="color: var(--el-color-primary)">enabled: ['a', 'b']</span>
+          ，代表 a、b 编辑器开启编辑功能，传入 a 则只有 a 开启编辑功能
+        </el-alert>
+      </el-space>
+
+      <CodeMirror :localTheme="themeValue" :wrap="wrap" :mergeConfig="mergeConfig" :height="200"></CodeMirror>
+    </el-space>
   </el-card>
 </template>
 
 <script setup lang="ts" name="CodeMirrorDemo">
-import { CodeMirror } from "@/components";
+import { CodeMirror, type MergeCodeMirrorProps } from "@/components";
 import { computed, ref } from "vue";
 // 如果需要更多主题，可以查看开源项目 https://uiwjs.github.io/react-codemirror/#/theme/home，或者自行搜索其他开源项目，或者自定义主题
 import { oneDark } from "@codemirror/theme-one-dark";
@@ -48,13 +69,31 @@ import { python } from "@codemirror/lang-python";
 import { sql } from "@codemirror/lang-sql";
 import { xml } from "@codemirror/lang-xml";
 
-const code = ref("11112");
+const code = ref('const a = "codeMirror"');
 const theme = ref("default");
 const lang = ref("javascript");
 const disabled = ref(false);
 const readonly = ref(false);
 const wrap = ref(true);
 const gutter = ref(false);
+
+const revertControls = ref(false);
+const highlight = ref(true);
+const gutter1 = ref(true);
+const orientation = ref(true);
+const header = ref(true);
+
+const mergeConfig = computed<MergeCodeMirrorProps>(() => {
+  return {
+    oldDoc: "111\n2222",
+    newDoc: "222\n3333",
+    revertControls: revertControls.value,
+    highlight: highlight.value,
+    gutter: gutter1.value,
+    orientation: orientation.value ? "a-b" : "b-a",
+    header: header.value,
+  };
+});
 
 /**
  * 主题
@@ -71,7 +110,7 @@ const themeValue = computed(() => {
 const config = {
   languageOptions: {
     globals: { ...globals.node },
-    parserOptions: { ecmaVersion: "latest", sourceType: "module" },
+    parserOptions: { ecmaVersion: "2024", sourceType: "module" },
   },
   rules: {
     semi: ["error", "never"],

@@ -1,5 +1,7 @@
 import { useInstall } from "@/utils";
-import index from "./src/index.vue";
+import index, { type MergeCodeMirrorProps, type CodeMirrorProps } from "./src/index.vue";
+
+export { type MergeCodeMirrorProps, type CodeMirrorProps };
 
 export const CodeMirror = useInstall(index);
 

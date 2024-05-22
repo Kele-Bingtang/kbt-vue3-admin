@@ -1,5 +1,22 @@
 <template>
   <component :is="tag" ref="editorRef" :class="prefixClass">
+    <template v-if="mergeConfig && mergeConfig.header">
+      <slot name="header">
+        <div :class="`${prefixClass}__merge--header`">
+          <slot name="headerLeft">
+            <div :class="`${prefixClass}__merge--header__left`">
+              <slot name="leftTitle">{{ mergeConfig.leftTitle || "Before" }}</slot>
+            </div>
+          </slot>
+          <slot name="headerRight">
+            <div :class="`${prefixClass}__merge--header__right`">
+              <slot name="rightTitle">{{ mergeConfig.rightTitle || "After" }}</slot>
+            </div>
+          </slot>
+        </div>
+      </slot>
+    </template>
+
     <aside v-if="$slots.default" style="display: none" aria-hidden><slot /></aside>
   </component>
 </template>
@@ -27,16 +44,28 @@ import {
   type Text,
 } from "@codemirror/state";
 import { EditorView, keymap, placeholder as placeholderFun, type ViewUpdate } from "@codemirror/view";
+import { MergeView } from "@codemirror/merge";
 import { basicSetup, minimalSetup } from "codemirror";
 import { useDesign } from "@/hooks";
 import { getPx } from "@/utils";
 
-defineOptions({ name: "CodeMirror6" });
+export interface MergeCodeMirrorProps {
+  [key: string]: any;
+  oldDoc?: string | Text; // 旧代码
+  newDoc?: string | Text; // 新代码
+  revertControls?: "a-to-b" | "b-to-a" | boolean; // 是否新旧代码支持一键替换
+  highlight?: boolean; // 新旧代码下划线对比高亮，默认开启 true
+  orientation?: "a-b" | "b-a"; // 左右编辑器顺序，默认 `a-b`
+  gutter?: boolean; // 使用高亮线条，默认使用 true
+  enabled?: ("a" | "b" | string)[]; // 是否禁用编辑功能，默认禁用 a、b
+  header?: boolean; // 是否启用 header，默认不启用 false
+  headerBgColor?: string; // header 背景色，默认 "#f6f8fa"，需要开启 header
+  headerBorderColor?: string; // header 边框色，默认 "#d0d7de"，需要开启 header
+  leftTitle?: string; // header 左侧标题，默认 "Before"
+  rightTitle?: string; // header 右侧标题，默认 "After"
+}
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("code-mirror");
-
-interface CodeMirrorProps {
+export interface CodeMirrorProps {
   width?: string | number; // 代码编辑器宽度，默认 auto
   height?: string | number; // 代码编辑器高度，默认 400
   fontSize?: string | number; // 字体大小，默认 14px
@@ -63,7 +92,13 @@ interface CodeMirrorProps {
   tag?: string; // 代码编辑器跟标签，默认是 div
   indentUnit?: string; // 缩进单位，如 "  "，缩进两个空格，"    " 代表缩进四个空格
   extensions?: Extension[]; // 额外扩展
+  mergeConfig?: MergeCodeMirrorProps; // 代码对比编辑器配置项，传入配置项即开启
 }
+
+defineOptions({ name: "CodeMirror6" });
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("code-mirror");
 
 const props = withDefaults(defineProps<CodeMirrorProps>(), {
   width: "auto",
@@ -87,7 +122,13 @@ const props = withDefaults(defineProps<CodeMirrorProps>(), {
 type CodeMirror6Emits = {
   update: [_value: ViewUpdate];
   /** CodeMirror onReady */
-  ready: [_value: { view: EditorView; state: EditorState; container: HTMLElement }];
+  ready: [
+    _value: {
+      view?: EditorView | MergeView;
+      state?: EditorState | { a: EditorState; b: EditorState };
+      container: HTMLElement;
+    },
+  ];
   /** CodeMirror onFocus */
   focus: [_value: boolean];
   /** State Changed */
@@ -102,7 +143,7 @@ const emits = defineEmits<CodeMirror6Emits>();
 const editorRef = ref<HTMLElement | undefined>();
 
 // v-model
-const doc = defineModel<string | Text>({ required: true });
+const doc = defineModel<string | Text>({ default: "" });
 
 /**
  * CodeMirror 的 EditorEditorView
@@ -110,6 +151,8 @@ const doc = defineModel<string | Text>({ required: true });
  * @see {@link https://codemirror.net/docs/ref/#view.EditorView}
  */
 const view = shallowRef<EditorView>(new EditorView());
+
+const mergeView = shallowRef<MergeView>(new MergeView({ a: {}, b: {} }));
 
 /**
  * 是否获得焦点
@@ -119,9 +162,7 @@ const view = shallowRef<EditorView>(new EditorView());
 const focus = computed<boolean>({
   get: () => view.value.hasFocus,
   set: f => {
-    if (f) {
-      view.value.focus();
-    }
+    if (f) view.value.focus();
   },
 });
 
@@ -177,16 +218,10 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
       // 更新文本长度
       length.value = view.value.state.doc?.length;
 
-      if (update.changes.empty || !update.docChanged) {
-        // 如果没有更改，则不触发
-        return;
-      }
+      if (update.changes.empty || !update.docChanged) return; // 如果没有更改，则不触发
       if (props.linter) {
         // 代码校验处理
-        if (props.forceLinting) {
-          // 如果 forceLinting 开启，第一次加载视图后校验。
-          forceLintingFun(view.value);
-        }
+        if (props.forceLinting) forceLintingFun(view.value); // 如果 forceLinting 开启，第一次加载视图后校验。
         // 计算诊断数量
         diagnosticCount.value = (props.linter(view.value) as readonly Diagnostic[]).length;
       }
@@ -230,8 +265,22 @@ const extensions: ComputedRef<Extension[]> = computed(() => {
 watch(
   extensions,
   exts => {
-    view.value?.dispatch({
+    // 重新更新 extensions
+    view.value.dispatch({
       effects: StateEffect.reconfigure.of(exts),
+    });
+  },
+  { immediate: true }
+);
+
+watch(
+  () => props.mergeConfig,
+  newConfig => {
+    mergeView.value.reconfigure({
+      orientation: newConfig?.orientation,
+      revertControls: newConfig?.revertControls === true ? "a-to-b" : newConfig?.revertControls || undefined,
+      highlightChanges: props.mergeConfig?.highlight,
+      gutter: newConfig?.gutter,
     });
   },
   { immediate: true }
@@ -262,7 +311,7 @@ onMounted(async () => {
   /** 初始化 Value */
   let value: string | Text = doc.value;
   if (!editorRef.value) return;
-  if (editorRef.value.children[0]) {
+  if (editorRef.value.children[0] && !props.mergeConfig) {
     if (doc.value !== "") {
       console.warn(
         "[CodeMirror.vue] The <code-mirror> tag contains child elements that overwrite the `v-model` values."
@@ -271,15 +320,55 @@ onMounted(async () => {
     value = (editorRef.value.childNodes[0] as HTMLElement).innerText?.trim();
   }
 
+  // 如果开启代码对比编辑器
+  if (props.mergeConfig) {
+    const { mergeConfig } = props;
+    mergeView.value = new MergeView({
+      a: {
+        doc: mergeConfig.oldDoc, // 旧代码
+        extensions: [
+          // 如果不启用 enabled，则只读，如果启用 enabled，则可以编辑，默认只读
+          !mergeConfig.enabled?.includes("a") ? EditorState.readOnly.of(true) : undefined,
+          EditorView.editable.of(mergeConfig.enabled?.includes("a") !== false),
+          ...extensions.value,
+        ].filter((extension): extension is Extension => !!extension),
+      },
+      b: {
+        doc: mergeConfig.newDoc, // 新代码
+        extensions: [
+          !mergeConfig.enabled?.includes("b") ? EditorState.readOnly.of(true) : undefined,
+          EditorView.editable.of(mergeConfig.enabled?.includes("b") !== false),
+          ...extensions.value,
+        ].filter((extension): extension is Extension => !!extension),
+      },
+      parent: editorRef.value,
+      ...mergeConfig,
+      // 左右编辑器顺序
+      orientation: mergeConfig.orientation,
+      // 使用高亮线条
+      gutter: mergeConfig.gutter !== false,
+      // 是否新旧代码支持一键替换
+      revertControls: mergeConfig.revertControls === true ? "a-to-b" : mergeConfig.revertControls || undefined,
+      // 新旧代码下划线对比高亮
+      highlightChanges: mergeConfig.highlight,
+    });
+
+    await nextTick();
+
+    return emits("ready", {
+      view: mergeView.value,
+      state: { a: mergeView.value.a.state, b: mergeView.value.b.state },
+      container: editorRef.value,
+    });
+  }
+
   // 注册 Codemirror
   view.value = new EditorView({
     parent: editorRef.value,
     state: EditorState.create({ doc: value, extensions: extensions.value }),
     dispatch: (tr: Transaction) => {
       view.value.update([tr]);
-      if (tr.changes.empty || !tr.docChanged) {
-        return;
-      }
+      if (tr.changes.empty || !tr.docChanged) return;
 
       doc.value = tr.state.doc.toString() ?? "";
       emits("change", tr.state);
@@ -297,6 +386,7 @@ onMounted(async () => {
 
 onUnmounted(() => {
   view.value.destroy();
+  mergeView.value.destroy();
   emits("destroy");
 });
 
@@ -368,9 +458,7 @@ const getSelection = (): string => {
  */
 const getSelections = (): string[] => {
   const s = view.value.state;
-  if (!s) {
-    return [];
-  }
+  if (!s) return [];
 
   return s.selection.ranges.map((r: { from: number; to: number }) => s.sliceDoc(r.from, r.to));
 };
@@ -460,6 +548,8 @@ defineExpose({
 const codeMirrorWidth = computed(() => getPx(props.width));
 const codeMirrorHeight = computed(() => getPx(props.height));
 const codeMirrorFontSize = computed(() => getPx(props.fontSize));
+const mergeMirrorBgColor = computed(() => props.mergeConfig?.headerBgColor || "#f6f8fa");
+const mergeMirrorBorderColor = computed(() => props.mergeConfig?.headerBorderColor || "#d0d7de");
 </script>
 
 <script lang="ts">
@@ -513,6 +603,21 @@ $prefix-class: #{$namespace}-code-mirror;
   // CodeMirror 实际高度
   :deep(.cm-editor) {
     height: 100%;
+  }
+
+  &__merge--header {
+    display: flex;
+    align-items: stretch;
+
+    &__left,
+    &__right {
+      flex-basis: 0;
+      flex-grow: 1;
+      padding: 8px 11px;
+      text-align: center;
+      background-color: v-bind(mergeMirrorBgColor);
+      border: 1px solid v-bind(mergeMirrorBorderColor);
+    }
   }
 }
 </style>
