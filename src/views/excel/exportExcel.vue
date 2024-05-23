@@ -93,9 +93,10 @@ const handleDownload = () => {
   downloadLoading.value = false;
 };
 </script>
+
 <style lang="scss" scoped>
 .export-excel-container {
-  padding: 20px;
+  margin: 10px 12px;
   background-color: #ffffff;
 
   .radio-label {

@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <el-space fill>
     <el-card shadow="never">
       <template #header>
         <span>使用 useIcon 函数</span>
@@ -62,8 +62,11 @@
       <template #header>
         <span>图标选择器</span>
       </template>
+      <div style="width: 600px">
+        <IconPicker v-model="currentIcon" />
+      </div>
     </el-card>
-  </div>
+  </el-space>
 </template>
 
 <script setup lang="ts" name="IconDemo">
@@ -73,4 +76,8 @@ import Upload from "@iconify-icons/ant-design/upload";
 
 import "@/assets/iconfont/iconfont.js";
 import "@/assets/iconfont/iconfont.css";
+
+import { IconPicker } from "@/components/IconPicker";
+
+const currentIcon = ref("");
 </script>

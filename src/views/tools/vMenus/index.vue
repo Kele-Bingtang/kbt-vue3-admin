@@ -1,58 +1,64 @@
 <template>
-  <el-card shadow="never" class="v-menus-container">
-    <template #header>
-      <span class="font-medium">
-        右键菜单组件：
-        <el-link href="https://www.npmjs.com/package/vue3-menus?activeTab=readme" target="_blank">vue3-menus</el-link>
-        插件
-      </span>
-    </template>
-    <el-row :gutter="24">
-      <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
-        <UseDirective :menus="menus" />
-      </el-col>
-      <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
-        <UseFunction :menus="menus" />
-      </el-col>
-      <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
-        <UseComponent :menus="menus" />
-      </el-col>
-    </el-row>
-    <h2>单个菜单项参数MenusItemOptions</h2>
-    <el-table :data="menusItemOptions" highlight-current-row border>
-      <el-table-column prop="field" label="属性"></el-table-column>
-      <el-table-column prop="desc" label="描述"></el-table-column>
-      <el-table-column prop="type" label="类型"></el-table-column>
-      <el-table-column prop="require" label="是否必填"></el-table-column>
-      <el-table-column prop="default" label="默认值"></el-table-column>
-    </el-table>
-    <h2>指令与方法使用参数</h2>
-    <el-table :data="directiveAndFunctions" highlight-current-row border>
-      <el-table-column prop="field" label="属性"></el-table-column>
-      <el-table-column prop="desc" label="描述"></el-table-column>
-      <el-table-column prop="type" label="类型"></el-table-column>
-      <el-table-column prop="require" label="是否必填"></el-table-column>
-      <el-table-column prop="default" label="默认值"></el-table-column>
-    </el-table>
-    <h2>组件使用参数</h2>
-    <el-table :data="components" highlight-current-row border>
-      <el-table-column prop="field" label="属性"></el-table-column>
-      <el-table-column prop="desc" label="描述"></el-table-column>
-      <el-table-column prop="type" label="类型"></el-table-column>
-      <el-table-column prop="require" label="是否必填"></el-table-column>
-      <el-table-column prop="default" label="默认值"></el-table-column>
-      <el-table-column prop="slot" label="插槽传入值"></el-table-column>
-    </el-table>
-    <h2>指令使用配置</h2>
-    <h4>配置参数与方法使用相同</h4>
-    <el-table :data="directives" highlight-current-row border>
-      <el-table-column prop="field" label="指令使用方式"></el-table-column>
-      <el-table-column prop="desc" label="描述"></el-table-column>
-      <el-table-column prop="type" label="类型"></el-table-column>
-      <el-table-column prop="require" label="是否必填"></el-table-column>
-      <el-table-column prop="default" label="默认值"></el-table-column>
-    </el-table>
-  </el-card>
+  <el-space fill>
+    <el-card shadow="never" class="v-menus-container">
+      <template #header>
+        <span class="font-medium">
+          <el-link
+            href="https://www.npmjs.com/package/vue3-menus?activeTab=readme"
+            target="_blank"
+            style="font-size: 20px"
+          >
+            vue3-menus 插件
+          </el-link>
+        </span>
+      </template>
+      <el-row :gutter="24">
+        <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
+          <UseDirective :menus="menus" />
+        </el-col>
+        <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
+          <UseFunction :menus="menus" />
+        </el-col>
+        <el-col :xs="24" :sm="10" :md="10" :lg="8" :xl="8">
+          <UseComponent :menus="menus" />
+        </el-col>
+      </el-row>
+      <h2>单个菜单项参数MenusItemOptions</h2>
+      <el-table :data="menusItemOptions" highlight-current-row border>
+        <el-table-column prop="field" label="属性"></el-table-column>
+        <el-table-column prop="desc" label="描述"></el-table-column>
+        <el-table-column prop="type" label="类型"></el-table-column>
+        <el-table-column prop="require" label="是否必填"></el-table-column>
+        <el-table-column prop="default" label="默认值"></el-table-column>
+      </el-table>
+      <h2>指令与方法使用参数</h2>
+      <el-table :data="directiveAndFunctions" highlight-current-row border>
+        <el-table-column prop="field" label="属性"></el-table-column>
+        <el-table-column prop="desc" label="描述"></el-table-column>
+        <el-table-column prop="type" label="类型"></el-table-column>
+        <el-table-column prop="require" label="是否必填"></el-table-column>
+        <el-table-column prop="default" label="默认值"></el-table-column>
+      </el-table>
+      <h2>组件使用参数</h2>
+      <el-table :data="components" highlight-current-row border>
+        <el-table-column prop="field" label="属性"></el-table-column>
+        <el-table-column prop="desc" label="描述"></el-table-column>
+        <el-table-column prop="type" label="类型"></el-table-column>
+        <el-table-column prop="require" label="是否必填"></el-table-column>
+        <el-table-column prop="default" label="默认值"></el-table-column>
+        <el-table-column prop="slot" label="插槽传入值"></el-table-column>
+      </el-table>
+      <h2>指令使用配置</h2>
+      <h4>配置参数与方法使用相同</h4>
+      <el-table :data="directives" highlight-current-row border>
+        <el-table-column prop="field" label="指令使用方式"></el-table-column>
+        <el-table-column prop="desc" label="描述"></el-table-column>
+        <el-table-column prop="type" label="类型"></el-table-column>
+        <el-table-column prop="require" label="是否必填"></el-table-column>
+        <el-table-column prop="default" label="默认值"></el-table-column>
+      </el-table>
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="ts" name="VMenus">

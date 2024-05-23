@@ -1,5 +1,5 @@
 <template>
-  <div class="draggable-item-container">
+  <div :class="prefixClass">
     <DraggableItem :key="1" :list="listData1" :group="group" title-bg-color="#4A9FF9" title="Todo">
       <template #content="{ item }">
         {{ item.name }}
@@ -23,6 +23,10 @@
 <script setup lang="ts" name="DraggableItemDemo">
 import { DraggableItem } from "@/components";
 import { list1, list2, list3 } from "@/mock/drag-item";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("draggable-item-demo");
 
 const group = ref("drag_item");
 const listData1 = ref(list1);
@@ -31,7 +35,9 @@ const listData3 = ref(list3);
 </script>
 
 <style lang="scss" scoped>
-.draggable-item-container {
+$prefix-class: #{$namespace}-draggable-item-demo;
+
+.#{$prefix-class} {
   display: flex;
   flex-direction: row;
   align-items: flex-start;

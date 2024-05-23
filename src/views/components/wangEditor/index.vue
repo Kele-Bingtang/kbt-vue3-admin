@@ -1,25 +1,33 @@
 <template>
-  <div class="wang-editor-container">
-    <el-alert title="官网地址：https://www.wangeditor.com/" type="success" style="margin-bottom: 10px" />
-    <el-button type="primary" @click="disabled = !disabled" style="margin-bottom: 20px">
-      {{ disabled ? "启动编辑器" : "禁用编辑器" }}
-    </el-button>
+  <el-space fill>
+    <el-card shadow="never">
+      <template #header>
+        <el-link href="https://www.wangeditor.com/" target="_blank" :underline="false" style="font-size: 20px">
+          WangEditor 富文本
+        </el-link>
+      </template>
+      <el-button type="primary" @click="disabled = !disabled" style="margin-bottom: 20px">
+        {{ disabled ? "启动编辑器" : "禁用编辑器" }}
+      </el-button>
 
-    <WangEditor
-      v-model="content"
-      height="400px"
-      :disabled="disabled"
-      @image-upload="imageUpload"
-      @video-upload="videoUpload"
-      @file-upload="fileUpload"
-    ></WangEditor>
+      <WangEditor
+        v-model="content"
+        height="400px"
+        :disabled="disabled"
+        @image-upload="imageUpload"
+        @video-upload="videoUpload"
+        @file-upload="fileUpload"
+      ></WangEditor>
+    </el-card>
 
-    <h3>实时预览</h3>
-    <div class="editor-content" v-html="content"></div>
+    <el-card shadow="never" header="实时预览">
+      <div class="editor-content" v-html="content"></div>
+    </el-card>
 
-    <h3>源代码</h3>
-    {{ content }}
-  </div>
+    <el-card shadow="never" header="源代码">
+      {{ content }}
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="ts" name="WangEditorDemo">
@@ -96,12 +104,3 @@ const fileUpload = async (file: File, insertFn: FileInsertFnType) => {
   //   });
 };
 </script>
-
-<style lang="scss" scoped>
-.wang-editor-container {
-  width: 100%;
-  height: 100%;
-  padding: 20px;
-  background-color: #ffffff;
-}
-</style>

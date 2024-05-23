@@ -1,5 +1,18 @@
 <template>
   <div :class="prefixClass">
+    <el-card shadow="never" style="margin-bottom: 10px">
+      <template #header>
+        <el-link
+          href="https://github.com/inorganik/countUp.js"
+          target="_blank"
+          :underline="false"
+          style="font-size: 20px"
+        >
+          CountUp.js
+        </el-link>
+      </template>
+    </el-card>
+
     <el-row :gutter="20">
       <el-col :span="4">
         <el-card shadow="hover">

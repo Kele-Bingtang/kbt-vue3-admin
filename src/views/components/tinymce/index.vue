@@ -1,25 +1,34 @@
 <template>
-  <div class="timymce-container">
-    <el-alert title="官网地址：https://www.tiny.cloud/" type="success" style="margin-bottom: 10px" />
-    <el-button type="primary" @click="handleDisabled" style="margin-bottom: 20px">
-      {{ disabled ? "启动编辑器" : "禁用编辑器" }}
-    </el-button>
-    <el-button type="primary" @click="handleTheme" style="margin-bottom: 20px">
-      {{ theme === "default" ? "暗色主题" : "默认主题" }}
-    </el-button>
-    <Tinymce
-      v-if="tinymceActive"
-      v-model="content"
-      :height="400"
-      :disabled="disabled"
-      :lang="lang"
-      :theme="theme"
-      @img-upload="handleImgUpload"
-      @file-upload="handleFileUpload"
-    />
-    <h3>实时预览</h3>
-    <div class="editor-content" v-html="content"></div>
-  </div>
+  <el-space fill>
+    <el-card shadow="never">
+      <template #header>
+        <el-link href="https://www.tiny.cloud/" target="_blank" :underline="false" style="font-size: 20px">
+          Tinymce 富文本
+        </el-link>
+      </template>
+
+      <el-button type="primary" @click="handleDisabled" style="margin-bottom: 20px">
+        {{ disabled ? "启动编辑器" : "禁用编辑器" }}
+      </el-button>
+      <el-button type="primary" @click="handleTheme" style="margin-bottom: 20px">
+        {{ theme === "default" ? "暗色主题" : "默认主题" }}
+      </el-button>
+      <Tinymce
+        v-if="tinymceActive"
+        v-model="content"
+        :height="400"
+        :disabled="disabled"
+        :lang="lang"
+        :theme="theme"
+        @img-upload="handleImgUpload"
+        @file-upload="handleFileUpload"
+      />
+    </el-card>
+
+    <el-card shadow="never" header="实时预览">
+      <div v-html="content"></div>
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="ts" name="TinymceDemo">
@@ -234,11 +243,3 @@ const getVideoDuration = (file: File): Promise<number> => {
 //   };
 // };
 </script>
-
-<style lang="scss" scoped>
-.timymce-container {
-  width: 100%;
-  padding: 20px;
-  background-color: #ffffff;
-}
-</style>

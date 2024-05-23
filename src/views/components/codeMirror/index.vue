@@ -8,7 +8,7 @@
           :underline="false"
           style="margin-bottom: 10px; font-size: 22px"
         >
-          CodeMirror
+          CodeMirror 代码编辑器
         </el-link>
         <el-alert :closable="false">
           如果对 CodeMirror
@@ -53,7 +53,7 @@
 
     <el-card shadow="never">
       <template #header>
-        <div style="font-weight: bold">代码对比编辑器</div>
+        <div style="font-weight: bold">代码对比器</div>
       </template>
       <el-space :size="20">
         <el-checkbox v-model="revertControls" label="是否支持一键替换" style="margin-left: 10px" />

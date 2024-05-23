@@ -17,7 +17,6 @@ export default {
     AnimationMixinDemo: "Animation Mixin",
     DraggableListDemo: "List Drag",
     DraggableItemDemo: "Item Drag",
-    DraggableDialogDemo: "Dialog Drag",
     DragDrawerDemo: "Drawer Drag",
     TreeFilterDemo: "Tree Filter",
     QrCodeDemo: "QrCode",

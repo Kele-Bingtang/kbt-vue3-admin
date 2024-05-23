@@ -17,29 +17,26 @@
       <ElScrollbar style="height: calc(100% - 50px)">
         <ElInput v-model="search" clearable placeholder="搜索图标" @clear="inputClear" />
         <ElTabs v-model="iconType" @tab-change="tabChange">
-          <ElTabPane label="在线图标" name="在线图标">
-            <ElTabs tab-position="left" v-model="iconName" @tab-change="tabChange">
-              <ElTabPane v-for="item in icons" :key="item.name" :label="item.name" :name="item.prefix">
-                <div :class="`${prefixClass}__icons`">
-                  <div
-                    v-for="icon in filterIcons(filterItemIcons(item.icons))"
-                    :key="icon"
-                    :style="{
-                      width: iconSize,
-                      height: iconSize,
-                      border: `1px solid ${icon === modelValue ? 'var(--el-color-primary)' : 'var(--el-border-color)'}`,
-                    }"
-                    :class="`${prefixClass}__icon`"
-                    @click="iconSelect(icon)"
-                    v-copy="modelValue"
-                  >
-                    <Icon :icon="icon" :color="icon === modelValue ? 'var(--el-color-primary)' : 'inherit'" />
-                  </div>
+          <ElTabs tab-position="left" v-model="iconName" @tab-change="tabChange">
+            <ElTabPane v-for="item in icons" :key="item.name" :label="item.name" :name="item.prefix">
+              <div :class="`${prefixClass}__icons`">
+                <div
+                  v-for="icon in filterIcons(filterItemIcons(item.icons))"
+                  :key="icon"
+                  :style="{
+                    width: iconSize,
+                    height: iconSize,
+                    border: `1px solid ${icon === modelValue ? 'var(--el-color-primary)' : 'var(--el-border-color)'}`,
+                  }"
+                  :class="`${prefixClass}__icon`"
+                  @click="iconSelect(icon)"
+                  v-copy="modelValue"
+                >
+                  <Icon :icon="icon" :color="icon === modelValue ? 'var(--el-color-primary)' : 'inherit'" />
                 </div>
-              </ElTabPane>
-            </ElTabs>
-          </ElTabPane>
-          <ElTabPane label="本地图标" name="本地图标"></ElTabPane>
+              </div>
+            </ElTabPane>
+          </ElTabs>
         </ElTabs>
       </ElScrollbar>
       <div :class="`${prefixClass}__pagination`">

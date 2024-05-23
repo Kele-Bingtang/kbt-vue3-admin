@@ -1,5 +1,5 @@
 <template>
-  <div class="button-component">
+  <div :class="prefixClass">
     <el-button class="btn java">JAVA攻城狮</el-button>
     <el-button class="btn golang">Golang工程师</el-button>
     <el-button class="btn js"><span>js攻城狮</span></el-button>
@@ -33,10 +33,17 @@
   </div>
 </template>
 
-<script setup lang="ts" name="Button"></script>
+<script setup lang="ts" name="CustomButton">
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("custom-button");
+</script>
 
 <style lang="scss" scoped>
-.button-component {
+$prefix-class: #{$namespace}-custom-button;
+
+.#{$prefix-class} {
   @keyframes sheen {
     0% {
       transform: skewY(-45deg) translateX(0);

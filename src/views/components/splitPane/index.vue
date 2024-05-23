@@ -1,14 +1,14 @@
 <template>
-  <div class="split-pane-container">
+  <div :class="prefixClass">
     <split-pane v-model="offset1" mode="vertical" @on-moving="handleMoving">
       <template #left>
-        <div class="pane left-pane">
+        <div :class="`${prefixClass}__pane left-pane`">
           <split-pane v-model="offset2" mode="horizontal" @on-moving="handleMoving">
             <template #top>
-              <div class="pane top-pane"></div>
+              <div :class="`${prefixClass}__pane top-pane`"></div>
             </template>
             <template #bottom>
-              <div class="pane bottom-pane"></div>
+              <div :class="`${prefixClass}__pane bottom-pane`"></div>
             </template>
           </split-pane>
         </div>
@@ -17,10 +17,10 @@
       <template #right>
         <split-pane v-model="offset3" class="pane right-pane" mode="vertical">
           <template #left>
-            <div class="pane left-pane"></div>
+            <div :class="`${prefixClass}__pane left-pane`"></div>
           </template>
           <template #right>
-            <div class="pane right-pane"></div>
+            <div :class="`${prefixClass}__pane right-pane`"></div>
           </template>
         </split-pane>
       </template>
@@ -30,6 +30,10 @@
 
 <script setup lang="ts" name="SplitPaneDemo">
 import { SplitPane } from "@/components";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("split-pane-demo");
 
 /**
  * SplitPane 接收的插槽位置为 left、right、top、bottom，即 <div slot="left/right/top/bottom">位置</div>
@@ -65,11 +69,13 @@ const handleMoving = (e: any) => {
 </script>
 
 <style lang="scss" scoped>
-.split-pane-container {
+$prefix-class: #{$namespace}-split-pane-demo;
+
+.#{$prefix-class} {
   height: 100%;
   padding: 20px;
 
-  .pane {
+  &__pane {
     width: 100%;
     height: 100%;
 

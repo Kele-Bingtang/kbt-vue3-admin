@@ -1,6 +1,6 @@
 <template>
   <el-space wrap>
-    <el-card class="box-card" shadow="never">
+    <el-card shadow="never">
       <template #header>
         <div class="card-header">
           <span>无缝滚动示例</span>

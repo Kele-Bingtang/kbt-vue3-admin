@@ -1,5 +1,5 @@
 <template>
-  <div class="tree-filter-container">
+  <div :class="prefixClass">
     <TreeFilter
       label="label"
       title="部门列表(单选)"
@@ -15,7 +15,7 @@
       :defaultValue="treeFilterValue1.departmentId"
       @change="changeTreeFilter1"
     />
-    <el-card class="descriptions-card">
+    <el-card :class="`${prefixClass}__descriptions`">
       <h2>树形筛选器 🍓🍇🍈🍉</h2>
       <el-descriptions title="配置项 📚" :column="1" border>
         <el-descriptions-item label="requestApi">请求分类数据的 api</el-descriptions-item>
@@ -33,6 +33,10 @@
 <script setup lang="ts" name="TreeFilterDemo">
 import { ElMessage } from "element-plus";
 import { TreeFilter } from "@/components";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("tree-filter-demo");
 
 interface Tree {
   id: number;
@@ -105,13 +109,15 @@ const data: Tree[] = [
 </script>
 
 <style lang="scss" scoped>
-.tree-filter-container {
+$prefix-class: #{$namespace}-tree-filter-demo;
+
+.#{$prefix-class} {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   height: 100%;
 
-  .descriptions-card {
+  &__descriptions {
     flex: 1;
     height: 100%;
   }

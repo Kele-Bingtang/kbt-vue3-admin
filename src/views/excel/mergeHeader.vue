@@ -58,7 +58,7 @@ const handleDownload = () => {
 
 <style lang="scss" scoped>
 .merge-header-container {
-  padding: 20px;
+  margin: 10px 12px;
   background-color: #ffffff;
 }
 </style>

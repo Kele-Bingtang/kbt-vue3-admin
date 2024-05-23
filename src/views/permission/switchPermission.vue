@@ -156,6 +156,8 @@ const authList = ref(getAuthList());
 
 <style lang="scss" scoped>
 .switch-permission-container {
+  margin: 10px 12px;
+
   .left-container,
   .right-container {
     display: inline-flex;

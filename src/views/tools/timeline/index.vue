@@ -1,41 +1,43 @@
 <template>
-  <el-card shadow="never">
-    <template #header>
-      <div class="card-header">
-        <span class="font-medium">时间线</span>
-      </div>
-    </template>
-    <div style="display: flex">
-      <el-timeline>
-        <el-timeline-item
-          v-for="(activity, index) in activities"
-          :key="index"
-          :icon="activity.icon"
-          :color="activity.color"
-          :timestamp="activity.timestamp"
-          :type="activity.type as any"
-        >
-          {{ activity.content }}
-        </el-timeline-item>
-      </el-timeline>
+  <el-space fill>
+    <el-card shadow="never">
+      <template #header>
+        <div class="card-header">
+          <span class="font-medium">时间线</span>
+        </div>
+      </template>
+      <div style="display: flex">
+        <el-timeline>
+          <el-timeline-item
+            v-for="(activity, index) in activities"
+            :key="index"
+            :icon="activity.icon"
+            :color="activity.color"
+            :timestamp="activity.timestamp"
+            :type="activity.type as any"
+          >
+            {{ activity.content }}
+          </el-timeline-item>
+        </el-timeline>
 
-      <el-timeline class="pl-40">
-        <el-timeline-item
-          v-for="(activity, index) in activities"
-          :key="index"
-          :icon="activity.icon"
-          :color="activity.color"
-          :timestamp="activity.timestamp"
-          placement="bottom"
-          :type="activity.type as any"
-        >
-          <div class="message">
-            kbt-vue3-admin 是基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 编写的一套后台管理系统
-          </div>
-        </el-timeline-item>
-      </el-timeline>
-    </div>
-  </el-card>
+        <el-timeline class="pl-40">
+          <el-timeline-item
+            v-for="(activity, index) in activities"
+            :key="index"
+            :icon="activity.icon"
+            :color="activity.color"
+            :timestamp="activity.timestamp"
+            placement="bottom"
+            :type="activity.type as any"
+          >
+            <div class="message">
+              kbt-vue3-admin 是基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 编写的一套后台管理系统
+            </div>
+          </el-timeline-item>
+        </el-timeline>
+      </div>
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="ts" name="TimeLine">

@@ -1,22 +1,24 @@
 <template>
-  <el-card shadow="never">
-    <template #header>
-      <span class="font-medium">文件下载功能</span>
-    </template>
-    <div>
-      <el-button @click="downloadByOnlineUrl(imgUrl, 'test-url.png')">下载在线图片</el-button>
+  <el-space fill>
+    <el-card shadow="never">
+      <template #header>
+        <span class="font-medium">文件下载功能</span>
+      </template>
+      <div>
+        <el-button @click="downloadByOnlineUrl(imgUrl, 'test-url.png')">下载在线图片</el-button>
 
-      <el-button @click="downloadByBase64(base64, 'test-base64.png')">基于 base64 下载图片</el-button>
+        <el-button @click="downloadByBase64(base64, 'test-base64.png')">基于 base64 下载图片</el-button>
 
-      <el-button
-        @click="downloadByUrl('https://youngkbt.cn/download/light/常用工具/FS-Capturev9.7.zip', 'FS-Capturev9.7.zip')"
-      >
-        根据文件地址下载文件
-      </el-button>
+        <el-button
+          @click="downloadByUrl('https://youngkbt.cn/download/light/常用工具/FS-Capturev9.7.zip', 'FS-Capturev9.7.zip')"
+        >
+          根据文件地址下载文件
+        </el-button>
 
-      <el-button @click="down">根据后台接口文件流下载</el-button>
-    </div>
-  </el-card>
+        <el-button @click="down">根据后台接口文件流下载</el-button>
+      </div>
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="ts" name="Download">

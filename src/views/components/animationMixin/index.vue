@@ -1,5 +1,5 @@
 <template>
-  <div class="animation-mixin-container">
+  <div :class="prefixClass">
     <el-card class="box-card">
       <template #header>
         <span>按钮</span>
@@ -79,6 +79,10 @@
 import { MaterialInput, TextHoverEffect } from "@/components";
 import Button from "./button.vue";
 import { Search } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("animation-mixin");
 
 const demo = reactive({
   title: "",
@@ -97,7 +101,9 @@ const demoRules = {
 </script>
 
 <style lang="scss" scoped>
-.animation-mixin-container {
+$prefix-class: #{$namespace}-animation-mixin;
+
+.#{$prefix-class} {
   @mixin color-btn($color) {
     background: $color;
 

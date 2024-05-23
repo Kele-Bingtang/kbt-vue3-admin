@@ -8,7 +8,7 @@
           :underline="false"
           style="margin-bottom: 10px; font-size: 22px"
         >
-          v-code-diff
+          v-code-diff 组件
         </el-link>
         <el-alert :closable="false">
           可以去代码编辑器（该菜单上方），它是利用 CodeMirror 实现代码对比功能，比 `v-code-diff` 多了

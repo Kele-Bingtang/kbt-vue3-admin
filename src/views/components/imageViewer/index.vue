@@ -1,10 +1,9 @@
 <template>
-  <el-card shadow="never">
-    <template #header>
-      <span>图片预览组件</span>
-    </template>
-    <el-button @click="open()">打开图片预览</el-button>
-  </el-card>
+  <el-space fill>
+    <el-card shadow="never" header="图片预览组件">
+      <el-button @click="open()">打开图片预览</el-button>
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="ts" name="ImageViewerDemo">

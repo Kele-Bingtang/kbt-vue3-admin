@@ -22,12 +22,6 @@ const componentRoutes: RouterConfigRaw = {
       meta: { title: "图标选择", icon: StarFilled },
     },
     {
-      path: "icon-picker",
-      name: "IconPickerDemo",
-      component: () => import("@/views/components/iconPicker/index.vue"),
-      meta: { title: "图标选择器", icon: StarFilled },
-    },
-    {
       path: "use-dialog",
       name: "UseDialogDemo",
       component: () => import("@/views/components/useDialog/index.vue"),

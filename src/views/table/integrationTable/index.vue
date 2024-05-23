@@ -460,7 +460,7 @@ const handleSizeChange = (pagingParam: Paging) => {
 
 <style lang="scss" scoped>
 .integrationTable-table-container {
-  padding: 20px;
+  margin: 10px 12px;
   background-color: #ffffff;
 
   .search-container {

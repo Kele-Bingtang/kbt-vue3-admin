@@ -13,7 +13,7 @@
   position: relative;
   width: 100%;
   height: 100%;
-  padding: 20px;
+  margin: 10px 12px;
   background-color: #ffffff;
 
   .drag-box {

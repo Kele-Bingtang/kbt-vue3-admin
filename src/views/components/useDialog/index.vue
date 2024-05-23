@@ -1,11 +1,13 @@
 <template>
-  <el-card shadow="never" header="useDialog 组件">
-    <el-button @click="openDialog()">使用函数打开 Dialog 组件</el-button>
+  <el-space fill>
+    <el-card shadow="never" header="useDialog 组件">
+      <el-button @click="openDialog()">使用函数打开 Dialog 组件</el-button>
 
-    <el-button @Click="visible = true">通过 modelValue 打开 Dialog 组件</el-button>
+      <el-button @Click="visible = true">通过 modelValue 打开 Dialog 组件</el-button>
 
-    <WorkDialog v-model="visible">我是通过 modelValue 打开的 Dialog 组件</WorkDialog>
-  </el-card>
+      <WorkDialog v-model="visible">我是通过 modelValue 打开的 Dialog 组件</WorkDialog>
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="tsx" name="UseDialogDemo">

@@ -1,9 +1,9 @@
 <template>
-  <div class="upload-images-container">
+  <div :class="prefixClass">
     <!-- 单图上传 -->
-    <div class="upload-card upload-box">
+    <div :class="`${prefixClass}__card ${prefixClass}__box`">
       <h2>单图片上传组件 🍓🍇🍈🍉</h2>
-      <div class="upload-list">
+      <div :class="`${prefixClass}__card--list`">
         <ImageUpload v-model="avatar1" @upload-img="uploadImg" :fileSize="3">
           <template #tip>上传图片最大为 3M</template>
         </ImageUpload>
@@ -59,9 +59,9 @@
       </el-descriptions>
     </div>
     <!-- 多图上传 -->
-    <div class="upload-card upload-box">
+    <div :class="`${prefixClass}__card ${prefixClass}__box`">
       <h2>多图片上传组件 🍓🍇🍈🍉</h2>
-      <div class="upload-list">
+      <div :class="`${prefixClass}__card--list`">
         <ImagesUpload v-model="fileList" @upload-img="uploadImg" :drag="false" borderRadius="50%">
           <template #empty>
             <el-icon><Picture /></el-icon>
@@ -93,8 +93,8 @@
       </el-descriptions>
     </div>
     <!-- 表单使用 -->
-    <div class="upload-form-box">
-      <div class="upload-card">
+    <div :class="`${prefixClass}__form`">
+      <div :class="`${prefixClass}__form--card`">
         <el-alert
           title="图片上传组件在 form 表单中使用，上传之后成功会自动重新校验"
           type="warning"
@@ -143,7 +143,7 @@
           </el-form-item>
         </el-form>
       </div>
-      <div class="upload-card">
+      <div :class="`${prefixClass}__form--card`">
         <el-alert
           title="图片上传组件在 form 表单中使用，如果该表单禁用，则上传组件会自动禁用"
           type="warning"
@@ -201,6 +201,10 @@ import { ImageUpload, ImagesUpload } from "@/components";
 import type { SuccessFun } from "@/components/ImagesUpload/src/images.vue";
 import { uploadLocal } from "@/utils";
 import { Avatar, Picture } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
+
+const { getPrefixClass } = useDesign();
+const prefixClass = getPrefixClass("images-upload-demo");
 
 const fileList = ref([{ name: "img", url: "https://i.imgtg.com/2023/01/16/QRBHS.jpg" }]);
 const fileList1 = ref([]);
@@ -249,10 +253,12 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
 </script>
 
 <style lang="scss" scoped>
-.upload-images-container {
+$prefix-class: #{$namespace}-images-upload-demo;
+
+.#{$prefix-class} {
   height: auto;
 
-  .upload-card {
+  &__card {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -260,7 +266,7 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
     padding: 20px;
     background-color: #ffffff;
 
-    .upload-list {
+    &--list {
       display: flex;
       flex-wrap: wrap;
       justify-content: space-around;
@@ -274,17 +280,23 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
     }
   }
 
-  .upload-box {
+  &__box {
     margin-bottom: 10px;
   }
 
-  .upload-form-box {
+  &__form {
     display: flex;
     justify-content: space-around;
     width: 100%;
 
-    .upload-card {
+    &--card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      width: 100%;
+      padding: 20px;
       margin-right: 10px;
+      background-color: #ffffff;
 
       &:last-child {
         margin-right: 0;
