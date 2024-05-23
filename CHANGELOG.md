@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.0.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v0.3.0...v1.0.0) (2024-05-23)
+
+### Features
+
+- 🚀 去掉 vue-codemirro6 组件依赖，利用 codemirror6 原生 API 搭建 codemirror 组件 ([655e8c7](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/655e8c74530ff203fa46a03d95afdbce1e0132e3))
+- 🚀 添加 id 生成器工具类，优化自定义 ts 类型 ([62d027d](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/62d027d4193ef57daa19aaa51ac673c377ca6db2))
+- 🚀 新增 v-code-diff 组件，优化 codeMirror 对比器样式以及添加部分 props ([caaa6b5](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/caaa6b52c694e51f062143ab734a7ec19910d6ad))
+- 🚀 优化 CodeMirror，新增代码对比的 CodeMirror 组件 ([c0d1602](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/c0d1602e98c5ec90eb3a84c8978513a312644410))
+
+### Code Refactoring
+
+- ♻️ 热门组件 Demo 添加 Props、Emits、Expose、Slot 配置项说明 ([de7c5c4](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/de7c5c4283af2a03e05fc21d42bf76b9155adaa7))
+- ♻️ 组件、表格、Excel、权限、工具、自定义指令、标签页操作等 Demo 的元素、样式重构，更有层次感 ([e90e202](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/e90e20292386158322d25c007b5a781a575c4073))
+
 ## [0.3.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v0.2.0...v0.3.0) (2024-05-20)
 
 ### Features
