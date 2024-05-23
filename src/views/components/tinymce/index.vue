@@ -28,6 +28,43 @@
     <el-card shadow="never" header="实时预览">
       <div v-html="content"></div>
     </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="配置项 📚" :column="1" border>
+        <el-descriptions-item label="disabled">编辑器是否禁用。`boolean` 类型，默认 `false`</el-descriptions-item>
+        <el-descriptions-item label="theme">UI 主题。`UITheme` 类型，默认 `default`</el-descriptions-item>
+        <el-descriptions-item label="contentTheme">
+          内容区主题，如果不传，默认等于 UI 主题。`ContentTheme` 类型，默认 `""`
+        </el-descriptions-item>
+        <el-descriptions-item label="id">
+          编辑器 id。`string` 类型。默认 `"vue3-tinymce-" + +new Date() + ((Math.random() * 1000).toFixed(0) + "")`
+        </el-descriptions-item>
+        <el-descriptions-item label="menubar">
+          菜单区配置项。`string` 类型，默认 `"file edit view insert format tools table help"`
+        </el-descriptions-item>
+        <el-descriptions-item label="toolbar">工具区配置项。`string[]` 类型，默认 `[]`</el-descriptions-item>
+        <el-descriptions-item label="height">编辑器高度。`string | number` 类型，默认 `360`</el-descriptions-item>
+        <el-descriptions-item label="width">编辑器宽度。`string | number` 类型，默认 `"auto"`</el-descriptions-item>
+        <el-descriptions-item label="lang">编辑器语言。`string` 类型，默认 `"zh-CN"`</el-descriptions-item>
+        <el-descriptions-item label="move">
+          true：编辑器可以垂直移动；false：编辑器无法移动；both：编辑器垂直和水平都可以移动。`true | false | "both"`
+          类型，默认 `true`
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="Emits 事件 📚" :column="1" border>
+        <el-descriptions-item label="imgUpload">
+          图片上传事件。 `(blobInfo: Function, resolve: (url: url) => void, reject: (value: unknown) => void, progress:
+          Function) => void` 类型。处理完图片上传后，需要调用 resolve 函数传入图片的链接到富文本里
+        </el-descriptions-item>
+        <el-descriptions-item label="fileUpload">
+          附件上传事件。 `(file: File, filetype: "image" | "media" | "file", callback: (url: string) => void) => void`
+          类型。处理完文件上传后，需要调用 callback 函数传入文件的链接到富文本里
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
   </el-space>
 </template>
 

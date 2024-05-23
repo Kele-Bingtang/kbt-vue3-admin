@@ -132,43 +132,45 @@
             查看全部支持语言
           </el-link>
         </el-descriptions-item>
-        <el-descriptions-item label="oldString">旧的字符串。string 类型</el-descriptions-item>
-        <el-descriptions-item label="newString">新的字符串。string 类型</el-descriptions-item>
-        <el-descriptions-item label="context">不同地方上下间隔多少行不隐藏。number 类型</el-descriptions-item>
+        <el-descriptions-item label="oldString">旧的字符串。`string` 类型</el-descriptions-item>
+        <el-descriptions-item label="newString">新的字符串。`string` 类型</el-descriptions-item>
+        <el-descriptions-item label="context">不同地方上下间隔多少行不隐藏。`number` 类型</el-descriptions-item>
         <el-descriptions-item label="outputFormat">
-          显展示方式。string 类型，默认为 `line-by-line`，可选 `line-by-line`、`side-by-side`
+          显展示方式。`string` 类型，默认为 `line-by-line`，可选 `line-by-line`、`side-by-side`
         </el-descriptions-item>
         <el-descriptions-item label="diffStyle">
-          差异风格, 单词级差异或字母级差异。string 类型，默认为 `word`，可选 `word`、`char`
+          差异风格, 单词级差异或字母级差异。`string` 类型，默认为 `word`，可选 `word`、`char`
         </el-descriptions-item>
         <el-descriptions-item label="forceInlineComparison">
-          细分差异；存在差异时，强制进行行内对比（word 或 char 级）。boolean 类型，默认为 false
+          细分差异；存在差异时，强制进行行内对比（word 或 char 级）。`boolean` 类型，默认为 `false`
         </el-descriptions-item>
-        <el-descriptions-item label="trim">移除字符串前后空白字符。boolean 类型，默认为 false</el-descriptions-item>
+        <el-descriptions-item label="trim">移除字符串前后空白字符。`boolean` 类型，默认为 `false`</el-descriptions-item>
         <el-descriptions-item label="noDiffLineFeed">
-          不 diff windows 换行符(CRLF)与 linux 换行符(LF)。boolean 类型，默认为 false
+          不 diff windows 换行符(CRLF)与 linux 换行符(LF)。`boolean` 类型，默认为 `false`
         </el-descriptions-item>
         <el-descriptions-item label="maxHeight">
-          组件最大高度，例如 300px。string 类型，默认为 undefined
+          组件最大高度，例如 300px。`string` 类型，默认为 `undefined`
         </el-descriptions-item>
-        <el-descriptions-item label="filename">文件名 。string 类型，默认为 undefined</el-descriptions-item>
-        <el-descriptions-item label="newFilename">新文件文件名 。string 类型，默认为 undefined</el-descriptions-item>
-        <el-descriptions-item label="maxHeight">新文件文件名。string 类型，默认为 undefined</el-descriptions-item>
-        <el-descriptions-item label="hideHeader">隐藏头部栏 。boolean 类型，默认为 false</el-descriptions-item>
+        <el-descriptions-item label="filename">文件名 。`string` 类型，默认为 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="newFilename">
+          新文件文件名 。`string` 类型，默认为 `undefined`
+        </el-descriptions-item>
+        <el-descriptions-item label="maxHeight">新文件文件名。`string` 类型，默认为 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="hideHeader">隐藏头部栏 。`boolean` 类型，默认为 `false`</el-descriptions-item>
         <el-descriptions-item label="hideStat">
-          隐藏头部栏中的统计信息 。boolean 类型，默认为 false
+          隐藏头部栏中的统计信息 。`boolean` 类型，默认为 `false`
         </el-descriptions-item>
         <el-descriptions-item label="theme">
-          用于切换日间模式/夜间模式 ThemeType 类型，默认为 `light`，可选 `light`、`dark`
+          用于切换日间模式/夜间模式 `ThemeType` 类型，默认为 `light`，可选 `light`、`dark`
         </el-descriptions-item>
         <el-descriptions-item label="ignoreMatchingLines">
-          给出一个模式来忽略匹配行，例如：'(time|token)'，string 类型
+          给出一个模式来忽略匹配行，例如：'(time|token)'。`string` 类型
         </el-descriptions-item>
       </el-descriptions>
     </el-card>
 
     <el-card shadow="never">
-      <el-descriptions title="事件 📚" :column="1" border>
+      <el-descriptions title="Emits 事件 📚" :column="1" border>
         <el-descriptions-item label="diff">
           diff 完成后触发，类型为 `(result: {stat: { isChanged: boolean, addNum: number, delNum: number}}) => void`
         </el-descriptions-item>

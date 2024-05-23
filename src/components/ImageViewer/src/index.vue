@@ -20,7 +20,7 @@ export interface ImageViewerProps {
 
 const props = withDefaults(defineProps<ImageViewerProps>(), {
   urlList: (): string[] => [],
-  zIndex: 200,
+  zIndex: 2000,
   initialIndex: 0,
   infinite: true,
   hideOnClickModal: false,

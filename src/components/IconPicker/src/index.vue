@@ -15,28 +15,26 @@
         </div>
       </template>
       <ElScrollbar style="height: calc(100% - 50px)">
-        <ElInput v-model="search" clearable placeholder="搜索图标" @clear="inputClear" />
-        <ElTabs v-model="iconType" @tab-change="tabChange">
-          <ElTabs tab-position="left" v-model="iconName" @tab-change="tabChange">
-            <ElTabPane v-for="item in icons" :key="item.name" :label="item.name" :name="item.prefix">
-              <div :class="`${prefixClass}__icons`">
-                <div
-                  v-for="icon in filterIcons(filterItemIcons(item.icons))"
-                  :key="icon"
-                  :style="{
-                    width: iconSize,
-                    height: iconSize,
-                    border: `1px solid ${icon === modelValue ? 'var(--el-color-primary)' : 'var(--el-border-color)'}`,
-                  }"
-                  :class="`${prefixClass}__icon`"
-                  @click="iconSelect(icon)"
-                  v-copy="modelValue"
-                >
-                  <Icon :icon="icon" :color="icon === modelValue ? 'var(--el-color-primary)' : 'inherit'" />
-                </div>
+        <ElInput v-model="search" clearable placeholder="搜索图标" @clear="inputClear" style="margin-bottom: 20px" />
+        <ElTabs tab-position="left" v-model="iconName" @tab-change="tabChange">
+          <ElTabPane v-for="item in icons" :key="item.name" :label="item.name" :name="item.prefix">
+            <div :class="`${prefixClass}__icons`">
+              <div
+                v-for="icon in filterIcons(filterItemIcons(item.icons))"
+                :key="icon"
+                :style="{
+                  width: iconSize,
+                  height: iconSize,
+                  border: `1px solid ${icon === modelValue ? 'var(--el-color-primary)' : 'var(--el-border-color)'}`,
+                }"
+                :class="`${prefixClass}__icon`"
+                @click="iconSelect(icon)"
+                v-copy="modelValue"
+              >
+                <Icon :icon="icon" :color="icon === modelValue ? 'var(--el-color-primary)' : 'inherit'" />
               </div>
-            </ElTabPane>
-          </ElTabs>
+            </div>
+          </ElTabPane>
         </ElTabs>
       </ElScrollbar>
       <div :class="`${prefixClass}__pagination`">

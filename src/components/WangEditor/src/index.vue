@@ -43,8 +43,8 @@ interface WangEditorProp {
   excludeKeys?: string[]; // 去除掉指定的工具类内容 ==> 非必传（默认为空）
   height?: string; // 富文本高度 ==> 非必传（默认为 500px）
   mode?: "default" | "simple"; // 富文本模式 ==> 非必传（默认为 default）
-  disabled?: boolean; // 是否禁用编辑器 ==> 非必传（默认为false）
-  hideToolBar?: boolean; // 是否隐藏工具栏 ==> 非必传（默认为false）
+  disabled?: boolean; // 是否禁用编辑器 ==> 非必传（默认为 false）
+  hideToolBar?: boolean; // 是否隐藏工具栏 ==> 非必传（默认为 false）
 }
 type WangEditorEmits = {
   imageUpload: [file: File, insertFn: ImageInsertFnType];

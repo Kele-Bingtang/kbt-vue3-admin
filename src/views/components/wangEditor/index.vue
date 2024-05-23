@@ -24,8 +24,65 @@
       <div class="editor-content" v-html="content"></div>
     </el-card>
 
-    <el-card shadow="never" header="源代码">
-      {{ content }}
+    <el-card shadow="never">
+      <el-descriptions title="配置项 📚" :column="1" border>
+        <el-descriptions-item label="toolbarKeys">工具栏内容。`string[]` 类型，默认为 `[]`</el-descriptions-item>
+        <el-descriptions-item label="excludeKeys">
+          去除掉指定的工具类内容。`string[]` 类型，默认 `[]`
+        </el-descriptions-item>
+        <el-descriptions-item label="height">富文本高度。`string` 类型，默认 `500px`</el-descriptions-item>
+        <el-descriptions-item label="mode">
+          富文本模式。`"default" | "simple"` 类型，默认 `"default"`
+        </el-descriptions-item>
+        <el-descriptions-item label="disabled">是否禁用编辑器。`boolean` 类型，默认 `false`</el-descriptions-item>
+        <el-descriptions-item label="hideToolBar">是否隐藏工具栏。`boolean` 类型，默认 `false`</el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="Emits 事件 📚" :column="1" border>
+        <el-descriptions-item label="imageUpload">
+          图片上传事件。`(file: File, insertFn: ImageInsertFnType) => void` 类型。需要调用 insertFn
+          函数传入图片的链接到富文本里
+        </el-descriptions-item>
+        <el-descriptions-item label="imageBeforeUpload">
+          图片上传前事件。(file: File) => void 类型。
+        </el-descriptions-item>
+        <el-descriptions-item label="imageProgress">
+          图片上传进度条事件。(progress: number) => void 类型。
+        </el-descriptions-item>
+        <el-descriptions-item label="imageSuccess">
+          图片上传成功事件。(file: File, res: any) => void 类型。
+        </el-descriptions-item>
+        <el-descriptions-item label="imageFailed">
+          图片上传失败事件。(file: File, res: any) => void 类型。
+        </el-descriptions-item>
+        <el-descriptions-item label="imageError">
+          图片上传错误事件。(file: File, err: any, res: any) => void 类型。
+        </el-descriptions-item>
+        <el-descriptions-item label="videoUpload">
+          视频上传错误事件。(file: File, insertFn: VideoInsertFnType) => void 类型。
+        </el-descriptions-item>
+        <el-descriptions-item label="fileBeforeUpload">
+          文件上传前事件。(file: File) => void 类型。
+        </el-descriptions-item>
+        <el-descriptions-item label="fileUpload">
+          文件上传事件。(file: File, insertFn: FileInsertFnType) => void 类型。需要调用 insertFn
+          函数传入文件的链接到富文本里
+        </el-descriptions-item>
+        <el-descriptions-item label="onPaste">
+          复制剪贴板内容到富文本事件。(editor: IDomEditor, event: ClipboardEvent) => void 类型
+        </el-descriptions-item>
+        <el-descriptions-item label="onCreated">
+          富文本初始化成功后事件。(editor: IDomEditor) => void 类型
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="expose 参数 📚" :column="1" border>
+        <el-descriptions-item label="editor">富文本 Ref 实例</el-descriptions-item>
+      </el-descriptions>
     </el-card>
   </el-space>
 </template>

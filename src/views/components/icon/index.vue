@@ -66,6 +66,12 @@
         <IconPicker v-model="currentIcon" />
       </div>
     </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="图标选择器 配置项 📚" :column="1" border>
+        <el-descriptions-item label="v-model/modelValue">接收图标名字的响应式</el-descriptions-item>
+      </el-descriptions>
+    </el-card>
   </el-space>
 </template>
 

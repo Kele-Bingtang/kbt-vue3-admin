@@ -59,11 +59,11 @@ interface TinymceProps {
   theme?: UITheme; // UI 主题
   contentTheme?: ContentTheme; // 内容区主题，如果不传，默认等于 UI 主题
   id?: string; // 编辑器 id
-  menubar?: string; // 菜单区
-  toolbar?: string[]; // 工具区
+  menubar?: string; // 菜单区配置项
+  toolbar?: string[]; // 工具区配置项
   toolbarMode?: "floating" | "sliding" | "scrolling" | "wrap"; // 工具区超出一行的显示模式，floating：鼠标悬浮显示；sliding：鼠标点击显示；scrolling：鼠标滚动显示；wrap：直接换行显示
-  height?: string | number; // 编辑器高度
   width?: string | number; // 编辑器宽度
+  height?: string | number; // 编辑器高度
   lang?: string; // 编辑器语言
   move?: true | false | "both"; // true：编辑器可以垂直移动；false：编辑器无法移动；both：编辑器垂直和水平都可以移动
 }
@@ -75,20 +75,20 @@ const props = withDefaults(defineProps<TinymceProps>(), {
   menubar: "file edit view insert format tools table help",
   toolbar: () => [],
   toolbarMode: "sliding",
-  height: 360,
   width: "auto",
+  height: 360,
   lang: "zh-CN",
   move: true,
 });
 
 type TinymceEmitProps = {
   imgUpload: [
-    blobInfo: Function,
+    blobInfo: () => void,
     resolve: (value: unknown) => void,
     reject: (value: unknown) => void,
-    progress: Function,
+    progress: () => void,
   ];
-  fileUpload: [file: File, filetype: "image" | "media" | "file", callback: Function];
+  fileUpload: [file: File, filetype: "image" | "media" | "file", callback: (url: string) => void];
 };
 
 const emits = defineEmits<TinymceEmitProps>();
@@ -168,12 +168,12 @@ const initOptions = computed(() => ({
     employeeNo: "100338",
   },
   // 图片上传回调
-  images_upload_handler: (blobInfo: Function, progress: Function) =>
+  images_upload_handler: (blobInfo: () => void, progress: () => void) =>
     new Promise((resolve, reject) => {
       emits("imgUpload", blobInfo, resolve, reject, progress);
     }),
   // 附件上传回调
-  file_picker_callback: (callback: Function, value: any, meta: any) => {
+  file_picker_callback: (callback: (url: string) => void, value: any, meta: any) => {
     const filetype =
       ".pdf, .txt, .zip, .rar, .7z, .doc, .docx, .xls, .xlsx, .ppt, .pptx, .mp3, .mp4,.mkv, .avi,.wmv, .rmvb,.mov,.mpg,.mpeg,.webm, .jpg, .jpeg, .png, .gif"; // 限制文件的上传类型
     const input = document.createElement("input");

@@ -17,12 +17,14 @@ const getFather = (): Element => {
 };
 
 export interface WorkDrawerProps extends Partial<DrawerProps> {
-  render?: () => VNode;
-  headerRender?: () => VNode;
-  showFooter?: boolean;
-  footerRender?: () => VNode;
-  onConfirm?: (closeDrawer: () => void) => void;
-  onClose?: (closeDrawer: () => void) => void;
+  render?: () => VNode; // 内容区渲染 TSX
+  headerRender?: () => VNode; // 顶部渲染 TSX
+  footerRender?: () => VNode; // 顶部渲染 TSX
+  showFooter?: boolean; // 是否渲染顶部
+  onConfirm?: (closeDrawer: () => void) => void; // 确认按钮点击事件
+  onClose?: (closeDrawer: () => void) => void; // 关闭按钮点击事件
+  fullscreen?: boolean; // 是否默认全屏，默认 false
+  fullscreenIcon?: boolean; // 是否渲染全屏图标，默认 true
 }
 
 export const closeDrawer = () => {
@@ -87,18 +89,17 @@ export const showDrawer = (
           return (
             <>
               <span class={`${variables.elNamespace}-drawer__title`}>{drawerProps.title}</span>
-              {drawerProps.fullscreen === true ||
-                (drawerProps.fullscreen === undefined && (
-                  <Icon
-                    name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
-                    onClick={() => toggleFull()}
-                    width="18px"
-                    height="18px"
-                    color="var(--el-color-info)"
-                    hover-color="var(--el-color-primary)"
-                    icon-style={{ cursor: "pointer" }}
-                  />
-                ))}
+              {drawerProps.fullscreenIcon !== false && (
+                <Icon
+                  name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
+                  onClick={() => toggleFull()}
+                  width="18px"
+                  height="18px"
+                  color="var(--el-color-info)"
+                  hover-color="var(--el-color-primary)"
+                  icon-style={{ cursor: "pointer" }}
+                />
+              )}
             </>
           );
         },
@@ -125,6 +126,10 @@ export const showDrawer = (
   container.id = `${prefixClass}-${++id}`;
   getFather().appendChild(container);
   render(vm, container);
+
+  nextTick(() => {
+    if (drawerProps.fullscreen) toggleFull();
+  });
 };
 
 export const initDrawer = (ctx?: ComponentInternalInstance) => {

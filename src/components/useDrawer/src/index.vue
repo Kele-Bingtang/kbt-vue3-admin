@@ -1,7 +1,6 @@
 <template>
   <ElDrawer
     ref="elDrawerRef"
-    :fullscreen="isFullscreen"
     v-model="drawerVisible"
     :title="title"
     size="30%"
@@ -15,6 +14,7 @@
             <span :class="`${variables.elNamespace}-drawer__title`" style="flex: 1">{{ title }}</span>
           </slot>
           <Icon
+            v-if="fullscreenIcon"
             :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
             @click="toggleFull"
             width="18px"
@@ -47,15 +47,15 @@ const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-drawer");
 
 interface WorkDrawerProps {
-  title?: string;
-  fullscreen?: boolean;
-  height?: string | number;
+  title?: string; // 顶部标题
+  fullscreen?: boolean; // 是否默认全屏，默认 false
+  fullscreenIcon?: boolean; // 是否渲染全屏图标，默认 true
 }
 
-withDefaults(defineProps<WorkDrawerProps>(), {
+const props = withDefaults(defineProps<WorkDrawerProps>(), {
   title: "弹框",
   fullscreen: false,
-  height: 400,
+  fullscreenIcon: true,
 });
 
 const emits = defineEmits<{
@@ -65,7 +65,7 @@ const emits = defineEmits<{
 
 const drawerVisible = defineModel<boolean>({ required: true });
 
-const isFullscreen = ref(false);
+const isFullscreen = ref(props.fullscreen);
 const elDrawerRef = shallowRef<DrawerProps | null>(null);
 
 const toggleFull = () => {

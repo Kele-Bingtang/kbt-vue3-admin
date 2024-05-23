@@ -18,6 +18,7 @@
             <span :class="`${variables.elNamespace}-dialog__title`" style="flex: 1">{{ title }}</span>
           </slot>
           <Icon
+            v-if="fullscreenIcon"
             :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
             @click="toggleFull"
             width="15px"
@@ -53,14 +54,16 @@ const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-dialog");
 
 interface WorkDialogProps {
-  title?: string;
-  fullscreen?: boolean;
-  height?: string | number;
+  title?: string; // 顶部标题
+  fullscreen?: boolean; // 是否默认全屏，默认 false
+  fullscreenIcon?: boolean; // 是否渲染全屏图标，默认 true
+  height?: string | number; // 内容高度，默认 400px
 }
 
 const props = withDefaults(defineProps<WorkDialogProps>(), {
   title: "弹框",
   fullscreen: false,
+  fullscreenIcon: true,
   height: 400,
 });
 
@@ -88,7 +91,7 @@ watch(
     await nextTick();
     if (val) {
       const windowHeight = document.documentElement.offsetHeight;
-      dialogHeight.value = `${windowHeight - 41 - 49 - (slots.footer ? 63 : 0)}px`;
+      dialogHeight.value = `${windowHeight - 41 - 49 - 47 - (slots.footer ? 63 : 0)}px`;
     } else {
       dialogHeight.value = getPx(props.height);
     }

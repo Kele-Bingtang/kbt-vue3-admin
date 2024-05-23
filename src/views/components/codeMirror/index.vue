@@ -72,6 +72,175 @@
 
       <CodeMirror :wrap="wrap" :merge-config="mergeConfig" :max-height="maxHeight2"></CodeMirror>
     </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="基本编辑器 配置项 📚" :column="1" border>
+        <el-descriptions-item label="width">
+          代码编辑器宽度。`string | Text` 类型，默认为 `undefined`
+        </el-descriptions-item>
+        <el-descriptions-item label="maxHeight">代码编辑器高度。`string` 类型，默认 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="fontSize">字体大小。`string` 类型，默认 `"14px"`</el-descriptions-item>
+        <el-descriptions-item label="localTheme">本地主题包。`Extension` 类型，默认 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="lang">
+          本地代码语言包。`LanguageSupport` 类型，默认 `undefined`
+        </el-descriptions-item>
+        <el-descriptions-item label="basic">
+          是否导入代码编辑器常用功能。`boolean` 类型，默认 `true`
+        </el-descriptions-item>
+        <el-descriptions-item label="minimal">
+          是否导入代码编辑器 Mini 功能。`boolean` 类型，默认 `false`。和 basic 互斥（basic 优先），导入功能少于 basic
+        </el-descriptions-item>
+        <el-descriptions-item label="dark">
+          是否切换为暗黑主题（前提是主题支持切换）。`boolean` 类型，默认 `false`
+        </el-descriptions-item>
+        <el-descriptions-item label="placeholder">代码编辑器占位符。`string` 类型，默认 `""`</el-descriptions-item>
+        <el-descriptions-item label="wrap">
+          header 内容宽度超出屏幕后，是否开启自动换行。`boolean` 类型，默认 `true`
+        </el-descriptions-item>
+        <el-descriptions-item label="tab">是否启用 Tab 键缩进。`boolean` 类型，默认 `true`</el-descriptions-item>
+        <el-descriptions-item label="tabSize">Tab 键缩进单位。`number` 类型，默认 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="multiple">是否开启允许多选。`boolean` 类型，默认 `false`</el-descriptions-item>
+        <el-descriptions-item label="lineSeparator">换行符。`string` 类型，默认 `"\n"`</el-descriptions-item>
+        <el-descriptions-item label="customTheme">自定义主题。`{}` 类型，默认 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="readonly">是否只读代码编辑器。`boolean` 类型，默认 `false`</el-descriptions-item>
+        <el-descriptions-item label="disabled">是否禁用代码编辑器。`boolean` 类型，默认 `false`</el-descriptions-item>
+        <el-descriptions-item label="phrases">
+          自定义代码编辑器的国际化语言内容。`{}` 类型，默认 `undefined`
+        </el-descriptions-item>
+        <el-descriptions-item label="linter">
+          代码校验器。`LintSource | any` 类型，默认 `undefined`
+        </el-descriptions-item>
+        <el-descriptions-item label="linterConfig">代码校验器配置项。`{}` 类型，默认 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="forceLinting">
+          是否在输入过程开始校验语法。`boolean` 类型，默认 `false`
+        </el-descriptions-item>
+        <el-descriptions-item label="gutter">
+          当代码语法出错，开头是否红色圆圈 🔴 提示，前提开启 linter 属性。`boolean` 类型，默认 `false`
+        </el-descriptions-item>
+        <el-descriptions-item label="gutterConfig">语法错误配置项。`{}` 类型，默认 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="tag">代码编辑器根标签。`string` 类型，默认 `"div"`</el-descriptions-item>
+        <el-descriptions-item label="indentUnit">
+          缩进单位，如 " "，缩进两个空格，" " 代表缩进四个空格。`string` 类型，默认 `undefined`
+        </el-descriptions-item>
+        <el-descriptions-item label="extensions">额外扩展。`Extension` 类型，默认 `undefined`</el-descriptions-item>
+        <el-descriptions-item label="mergeConfig">
+          代码对比编辑器配置项，传入配置项即开启。`MergeCodeMirrorProps` 类型，默认 `undefined`。详情请看「代码对比器
+          mergeConfig 配置项」
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="Emits 事件 📚" :column="1" border>
+        <el-descriptions-item label="update">
+          CodeMirror 内容修改后触发。`(_value: ViewUpdate) => void`
+        </el-descriptions-item>
+        <el-descriptions-item label="ready">
+          CodeMirror onReady 触发。`(_value: { view?: EditorView | MergeView; state?: EditorState | { a: EditorState; b:
+          EditorState }; container: HTMLElement; }) => void`
+        </el-descriptions-item>
+        <el-descriptions-item label="focus">CodeMirror 焦点激活触发。`(_value: boolean) => void`</el-descriptions-item>
+        <el-descriptions-item label="change">
+          CodeMirror 状态修改触发。`(_value: EditorState) => void`
+        </el-descriptions-item>
+        <el-descriptions-item label="destroy">CodeMirror 销毁时触发。`() => void`</el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="expose 参数 📚" :column="1" border>
+        <el-descriptions-item label="editor">CodeMirror 编辑器 Ref 实例</el-descriptions-item>
+        <el-descriptions-item label="view">EditorView 实例</el-descriptions-item>
+        <el-descriptions-item label="cursor">光标位置</el-descriptions-item>
+        <el-descriptions-item label="selection">选择的范围</el-descriptions-item>
+        <el-descriptions-item label="focus">是否获得焦点</el-descriptions-item>
+        <el-descriptions-item label="length">代码长度</el-descriptions-item>
+        <el-descriptions-item label="json">JSON 序列化器</el-descriptions-item>
+        <el-descriptions-item label="diagnosticCount">诊断字数</el-descriptions-item>
+        <el-descriptions-item label="dom">内容区 DOM 元素</el-descriptions-item>
+        <el-descriptions-item label="lint">语法检测函数</el-descriptions-item>
+        <el-descriptions-item label="forceReconfigure">手动使配置重新生效函数</el-descriptions-item>
+        <el-descriptions-item label="getRange">
+          在编辑器中获取给定点之间的文本函数（下标位置而不是行号）
+        </el-descriptions-item>
+        <el-descriptions-item label="getLineText">获取指定行文本函数</el-descriptions-item>
+        <el-descriptions-item label="lineCount">获取行数函数</el-descriptions-item>
+        <el-descriptions-item label="getCursor">获取光标所在的下标位置函数</el-descriptions-item>
+        <el-descriptions-item label="listSelections">获取所有当前选择的内容相关信息对象函数</el-descriptions-item>
+        <el-descriptions-item label="getSelection">获取当前选择的内容函数</el-descriptions-item>
+        <el-descriptions-item label="getSelections">
+          获取当前选择的多行内容数组函数，一行占一个数组下标
+        </el-descriptions-item>
+        <el-descriptions-item label="somethingSelected">
+          如果有文本被选中，返回 `true`；否则返回 `false`，检查是否有任何选择范围不为空
+        </el-descriptions-item>
+        <el-descriptions-item label="replaceRange">
+          将文档中从 `from` 位置到 `to` 位置的文本替换为给定的 `replacement` 文本
+        </el-descriptions-item>
+        <el-descriptions-item label="replaceSelection">
+          替换当前的选区（或选区）为给定的 `replacement` 文本。默认情况下，新选择会位于插入的文本之后
+        </el-descriptions-item>
+        <el-descriptions-item label="setCursor">设置光标位置到指定的 `position`</el-descriptions-item>
+        <el-descriptions-item label="setSelection">
+          设置单一的选取范围，其中 `anchor` 是锚点位置，`head` 是可选的头部位置。
+        </el-descriptions-item>
+        <el-descriptions-item label="setSelections">
+          设置新的选取范围数组，至少需要一个选取。`ranges` 是选取范围数组，`primary` 是可选的主选取索引
+        </el-descriptions-item>
+        <el-descriptions-item label="extendSelectionsBy">
+          应用提供的函数 `f` 到所有现有的选取上，并根据结果调用 `extendSelections` 方法。这允许动态扩展选取范围
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="代码对比器 mergeConfig 配置项 📚" :column="1" border>
+        <el-descriptions-item label="oldDoc">旧代码。`string | Text` 类型，默认为 `""`</el-descriptions-item>
+        <el-descriptions-item label="newDoc">新代码。`string | Text` 类型，默认 `""`</el-descriptions-item>
+        <el-descriptions-item label="revertControls">
+          新旧代码对比高亮。`boolean` 类型，默认 `true`
+        </el-descriptions-item>
+        <el-descriptions-item label="orientation">
+          左右编辑器顺序。`"a-b" | "b-a"` 类型，默认 `"a-b"`
+        </el-descriptions-item>
+        <el-descriptions-item label="gutter">行代码前使用高亮竖线条。`boolean` 类型，默认 `true`</el-descriptions-item>
+        <el-descriptions-item label="header">是否启用 header。`boolean` 类型，默认 `false`</el-descriptions-item>
+        <el-descriptions-item label="headerBgColor">
+          header 背景色。`string` 类型，默认 `"#f6f8fa"`
+        </el-descriptions-item>
+        <el-descriptions-item label="headerBorderColor">
+          header 边框色。`string` 类型，默认 `"#d0d7de"`
+        </el-descriptions-item>
+        <el-descriptions-item label="leftTitle">header 左侧标题。`string` 类型，默认 `"Before"`</el-descriptions-item>
+        <el-descriptions-item label="rightTitle">header 右侧标题。`string` 类型，默认 `"After"`</el-descriptions-item>
+        <el-descriptions-item label="margin">
+          与 minSize 互斥，指定多少个相同的代码行数不允许折叠。`number` 类型，默认 `3`
+        </el-descriptions-item>
+        <el-descriptions-item label="minSize">
+          多少行没有区别的代码行数可以折叠。`number` 类型，默认 `4`
+        </el-descriptions-item>
+        <el-descriptions-item label="highlightColor">
+          代码对比高亮颜色配置。详情看「highlightColor 配置项」
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="highlightColor 配置项 📚" :column="1" border>
+        <el-descriptions-item label="aHighlightLineBgColor">
+          a 编辑器高亮行背景色。`string` 类型，默认为 `#ffebe9`
+        </el-descriptions-item>
+        <el-descriptions-item label="aHighlightTextBgColor">
+          a 编辑器高亮文本背景色。`string` 类型，默认 `#ff818266"`
+        </el-descriptions-item>
+        <el-descriptions-item label="aHighlightLineBgColor">
+          b 编辑器高亮行背景色。`string` 类型，默认为 `#e6ffec`
+        </el-descriptions-item>
+        <el-descriptions-item label="aHighlightTextBgColor">
+          b 编辑器高亮文本背景色。`string` 类型，默认 `#abf2bc"`
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
   </el-space>
 </template>
 
