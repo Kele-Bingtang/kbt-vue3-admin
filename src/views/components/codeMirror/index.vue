@@ -1,9 +1,28 @@
 <template>
-  <el-card shadow="never" header="CodeMirror 组件">
-    <el-space direction="vertical" alignment style="width: 100%" :size="30">
-      <div style="font-weight: bold">基本编辑器</div>
+  <el-space fill>
+    <el-card shadow="never">
+      <template #header>
+        <el-link
+          href="https://codemirror.net/"
+          target="_blank"
+          :underline="false"
+          style="margin-bottom: 10px; font-size: 22px"
+        >
+          CodeMirror
+        </el-link>
+        <el-alert :closable="false">
+          如果对 CodeMirror
+          的对比功能不满意，可以去看代码对比器（该菜单下方），这组件专门针对代码的对比功能，多了如统计信息、更细节对比、空格去除等功能，但是少了代码替换功能
+        </el-alert>
+      </template>
+    </el-card>
 
-      <el-space :size="20">
+    <el-card shadow="never">
+      <template #header>
+        <div style="font-weight: bold">基本编辑器</div>
+      </template>
+
+      <el-space :size="30">
         <el-select v-model="theme" style="width: 200px">
           <el-option v-for="item in themeOptions" :key="item.value" :label="item.label" :value="item.value" />
         </el-select>
@@ -16,36 +35,44 @@
         <el-checkbox v-model="readonly" label="是否只读" />
         <el-checkbox v-model="wrap" label="超出屏幕宽度是否自动换行" />
         <el-checkbox v-model="gutter" label="是否开启 🔴 语法错误提示" />
+
+        <el-input v-model="maxHeight1" placeholder="输入编辑器最大高度" />
       </el-space>
 
       <CodeMirror
         v-model="code"
-        :localTheme="themeValue"
+        :local-theme="themeValue"
         :disabled="disabled"
         :readonly="readonly"
         :wrap="wrap"
         :gutter="gutter"
+        :max-height="maxHeight1"
         v-bind="langValue"
       ></CodeMirror>
+    </el-card>
 
-      <div style="font-weight: bold">代码对比编辑器</div>
+    <el-card shadow="never">
+      <template #header>
+        <div style="font-weight: bold">代码对比编辑器</div>
+      </template>
       <el-space :size="20">
         <el-checkbox v-model="revertControls" label="是否支持一键替换" style="margin-left: 10px" />
         <el-checkbox v-model="highlight" label="是否下划线高亮" />
         <el-checkbox v-model="gutter1" label="是否开启线条提示" />
         <el-checkbox v-model="header" label="启用 Header" />
         <el-switch v-model="orientation" active-text="a-b" inactive-text="b-a" />
+        <el-input v-model="maxHeight2" placeholder="输入编辑器最大高度" />
 
-        <el-alert>
+        <el-alert :closable="false">
           如果需要开启编辑功能，则传入 `
           <span style="color: var(--el-color-primary)">enabled: ['a', 'b']</span>
-          ，代表 a、b 编辑器开启编辑功能，传入 a 则只有 a 开启编辑功能
+          ，代表 a、b 编辑器开启编辑功能，传入 a 则 a 开启编辑功能
         </el-alert>
       </el-space>
 
-      <CodeMirror :localTheme="themeValue" :wrap="wrap" :mergeConfig="mergeConfig" :height="200"></CodeMirror>
-    </el-space>
-  </el-card>
+      <CodeMirror :wrap="wrap" :merge-config="mergeConfig" :max-height="maxHeight2"></CodeMirror>
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="ts" name="CodeMirrorDemo">
@@ -68,8 +95,10 @@ import { php } from "@codemirror/lang-php";
 import { python } from "@codemirror/lang-python";
 import { sql } from "@codemirror/lang-sql";
 import { xml } from "@codemirror/lang-xml";
+import oldDoc from "../codeDiffEditor/oldDoc.json";
+import newDoc from "../codeDiffEditor/newDoc.json";
 
-const code = ref('const a = "codeMirror"');
+const code = ref('const a = "codeMirror"\nconst b = "kbt"\n\n\n\n\n\n\n\n\n\nconst getCode = () => "useCodeMirror"');
 const theme = ref("default");
 const lang = ref("javascript");
 const disabled = ref(false);
@@ -82,11 +111,13 @@ const highlight = ref(true);
 const gutter1 = ref(true);
 const orientation = ref(true);
 const header = ref(true);
+const maxHeight1 = ref("");
+const maxHeight2 = ref("");
 
 const mergeConfig = computed<MergeCodeMirrorProps>(() => {
   return {
-    oldDoc: "111\n2222",
-    newDoc: "222\n3333",
+    oldDoc: JSON.stringify(oldDoc, null, 2),
+    newDoc: JSON.stringify(newDoc, null, 2),
     revertControls: revertControls.value,
     highlight: highlight.value,
     gutter: gutter1.value,

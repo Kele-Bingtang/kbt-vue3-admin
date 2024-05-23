@@ -63,6 +63,7 @@
     "qs": "^6.12.1",
     "sortablejs": "^1.15.2",
     "tinymce": "^6.8.2",
+    "v-code-diff": "^1.12.0",
     "v-contextmenu": "^3.1.1",
     "vue": "^3.4.27",
     "vue-clipboard3": "^2.0.0",

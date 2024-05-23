@@ -25,6 +25,7 @@ export default {
     TinymceDemo: "Tinymce 富文本",
     WangEditorDemo: "Wang 富文本",
     CodeMirrorDemo: "代码编辑器",
+    CodeDiffEditorDemo: "代码对比器",
     SeamlessScrollDemo: "无限滚动",
     ImageViewerDemo: "图片预览",
     UseDialogDemo: "UseDialog 弹窗",

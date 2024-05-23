@@ -224,7 +224,8 @@ export const getCssVar = (prop: string, dom = document.documentElement) => {
  * @param val 值
  * @returns 补 px 单位的 string
  */
-export const getPx = (val: number | string) => {
+export const getPx = (val: number | string | undefined) => {
+  if (!val) return "";
   if (isString(val)) {
     if (isNumber(val)) return `${val}px`;
     return val;

@@ -54,20 +54,28 @@ export interface MergeCodeMirrorProps {
   oldDoc?: string | Text; // 旧代码
   newDoc?: string | Text; // 新代码
   revertControls?: "a-to-b" | "b-to-a" | boolean; // 是否新旧代码支持一键替换
-  highlight?: boolean; // 新旧代码下划线对比高亮，默认开启 true
+  highlight?: boolean; // 新旧代码对比高亮，默认开启 true
   orientation?: "a-b" | "b-a"; // 左右编辑器顺序，默认 `a-b`
-  gutter?: boolean; // 使用高亮线条，默认使用 true
+  gutter?: boolean; // 每行代码前使用高亮竖线条，默认使用 true
   enabled?: ("a" | "b" | string)[]; // 是否禁用编辑功能，默认禁用 a、b
   header?: boolean; // 是否启用 header，默认不启用 false
   headerBgColor?: string; // header 背景色，默认 "#f6f8fa"，需要开启 header
   headerBorderColor?: string; // header 边框色，默认 "#d0d7de"，需要开启 header
   leftTitle?: string; // header 左侧标题，默认 "Before"
   rightTitle?: string; // header 右侧标题，默认 "After"
+  minSize?: number; // 相同的代码行数可以折叠，默认折叠超过 3 行的代码行
+  margin?: number; // 与 minSize 互斥，指定多少个相同的代码行数不允许折叠
+  highlightColor?: {
+    aHighlightLineBgColor?: string; // a 编辑器高亮行背景色，默认 #ffebe9
+    aHighlightTextBgColor?: string; // a 编辑器高亮文本背景色，默认 #e6ffec
+    bHighlightLineBgColor?: string; // a 编辑器高亮行背景色，默认 #e6ffec
+    bHighlightTextBgColor?: string; // a 编辑器高亮文本背景色，默认 #abf2bc
+  };
 }
 
 export interface CodeMirrorProps {
-  width?: string | number; // 代码编辑器宽度，默认 auto
-  height?: string | number; // 代码编辑器高度，默认 400
+  width?: string | number; // 代码编辑器宽度，默认 undefined
+  maxHeight?: string | number; // 代码编辑器高度，默认 undefined
   fontSize?: string | number; // 字体大小，默认 14px
   localTheme?: Extension; // 本地主题包
   lang?: LanguageSupport; // 本地代码语言包
@@ -101,8 +109,6 @@ const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("code-mirror");
 
 const props = withDefaults(defineProps<CodeMirrorProps>(), {
-  width: "auto",
-  height: 400,
   fontSize: 14,
   basic: true,
   minimal: false,
@@ -342,6 +348,10 @@ onMounted(async () => {
         ].filter((extension): extension is Extension => !!extension),
       },
       parent: editorRef.value,
+      collapseUnchanged: {
+        margin: mergeConfig.margin || 3,
+        minSize: mergeConfig.minSize || 4,
+      },
       ...mergeConfig,
       // 左右编辑器顺序
       orientation: mergeConfig.orientation,
@@ -546,10 +556,22 @@ defineExpose({
 });
 
 const codeMirrorWidth = computed(() => getPx(props.width));
-const codeMirrorHeight = computed(() => getPx(props.height));
+const codeMirrorMaxHeight = computed(() => getPx(props.maxHeight));
 const codeMirrorFontSize = computed(() => getPx(props.fontSize));
-const mergeMirrorBgColor = computed(() => props.mergeConfig?.headerBgColor || "#f6f8fa");
-const mergeMirrorBorderColor = computed(() => props.mergeConfig?.headerBorderColor || "#d0d7de");
+const mergeCmBgColor = computed(() => props.mergeConfig?.headerBgColor || "#f6f8fa");
+const mergeCmBorderColor = computed(() => props.mergeConfig?.headerBorderColor || "#d0d7de");
+const mergeCmAHighlightLineBgColor = computed(
+  () => props.mergeConfig?.highlightColor?.aHighlightLineBgColor || "#ffebe9"
+);
+const mergeCmAHighlightTextBgColor = computed(
+  () => props.mergeConfig?.highlightColor?.aHighlightTextBgColor || "#ff818266"
+);
+const mergeCmBHighlightLineBgColor = computed(
+  () => props.mergeConfig?.highlightColor?.bHighlightLineBgColor || "#e6ffec"
+);
+const mergeCmBHighlightTextBgColor = computed(
+  () => props.mergeConfig?.highlightColor?.bHighlightTextBgColor || "#abf2bc"
+);
 </script>
 
 <script lang="ts">
@@ -597,12 +619,33 @@ $prefix-class: #{$namespace}-code-mirror;
 
 .#{$prefix-class} {
   width: v-bind(codeMirrorWidth);
-  height: v-bind(codeMirrorHeight);
+  max-height: v-bind(codeMirrorMaxHeight);
+  overflow: auto;
   font-size: v-bind(codeMirrorFontSize);
 
   // CodeMirror 实际高度
   :deep(.cm-editor) {
     height: 100%;
+  }
+
+  /* a 编辑器高亮行背景色 */
+  :deep(.ͼ1.cm-merge-a .cm-changedLine, .ͼ1 .cm-deletedChunk) {
+    background-color: v-bind(mergeCmAHighlightLineBgColor);
+  }
+
+  /* b 编辑器高亮行背景色 */
+  :deep(.ͼ1.cm-merge-b .cm-changedLine) {
+    background-color: v-bind(mergeCmBHighlightLineBgColor);
+  }
+
+  /* a 编辑器高亮文字背景色 */
+  :deep(.ͼ2.cm-merge-a .cm-changedText, .ͼ2 .cm-deletedChunk .cm-deletedText) {
+    background-color: v-bind(mergeCmAHighlightTextBgColor);
+  }
+
+  /* b 编辑器高亮文字背景色 */
+  :deep(.ͼ2.cm-merge-b .cm-changedText) {
+    background-color: v-bind(mergeCmBHighlightTextBgColor);
   }
 
   &__merge--header {
@@ -615,8 +658,8 @@ $prefix-class: #{$namespace}-code-mirror;
       flex-grow: 1;
       padding: 8px 11px;
       text-align: center;
-      background-color: v-bind(mergeMirrorBgColor);
-      border: 1px solid v-bind(mergeMirrorBorderColor);
+      background-color: v-bind(mergeCmBgColor);
+      border: 1px solid v-bind(mergeCmBorderColor);
     }
   }
 }

@@ -83,6 +83,9 @@ dependencies:
   tinymce:
     specifier: ^6.8.2
     version: registry.npmmirror.com/tinymce@6.8.2
+  v-code-diff:
+    specifier: ^1.12.0
+    version: 1.12.0(vue@3.4.27)
   v-contextmenu:
     specifier: ^3.1.1
     version: registry.npmmirror.com/v-contextmenu@3.1.1(vue@3.4.27)
@@ -2610,6 +2613,15 @@ packages:
     dev: false
     optional: true
 
+  /diff-match-patch@1.0.5:
+    resolution: {integrity: sha512-IayShXAgj/QMXgB0IWmKx+rOPuGMhqm5w6jvFxmVenXKIzRqTAAsbBPT3kWQeGANj3jGgvcvv4yK6SxqYmikgw==}
+    dev: false
+
+  /diff@5.2.0:
+    resolution: {integrity: sha512-uIFDxqpRZGZ6ThOk84hEfqWoHx2devRFvpTZcTHur85vImfaxUbTW9Ryh4CpCuDnToOP1CEtXKIgytHBPVff5A==}
+    engines: {node: '>=0.3.1'}
+    dev: false
+
   /dir-glob@3.0.1:
     resolution: {integrity: sha512-WkrWp9GR4KXfKGYzOLmTuGVi1UWFfws377n9cc55/tb6DuqyF6pcQ5AbiHEshaDpY9v6oaSr2XCDidGmMwdzIA==}
     engines: {node: '>=8'}
@@ -3415,6 +3427,11 @@ packages:
       capital-case: 1.0.4
       tslib: 2.6.1
     dev: true
+
+  /highlight.js@11.9.0:
+    resolution: {integrity: sha512-fJ7cW7fQGCYAkgv4CPfwFHrfd/cLS4Hau96JuJ+ZTOWhjnhoeN1ub1tFmALm/+lW5z4WCAuAV9bm05AP0mS6Gw==}
+    engines: {node: '>=12.0.0'}
+    dev: false
 
   /html-tags@3.3.1:
     resolution: {integrity: sha512-ztqyC3kLto0e9WbNp0aeP+M3kTt+nbaIveGmUxAtZa+8iFgKLUOD4YKM5j+f3QD89bra7UeumolZHKuOXnTmeQ==}
@@ -5604,6 +5621,24 @@ packages:
 
   /util-deprecate@1.0.2:
     resolution: {integrity: sha512-EPD5q1uXyFxJpCrLnCc1nHnq3gOa6DZBocAIiI2TaSCA7VCJ1UJDMagCzIkXNsUYfD1daK//LTEQ8xiIbrHtcw==}
+
+  /v-code-diff@1.12.0(vue@3.4.27):
+    resolution: {integrity: sha512-vvdCBG02mIIiW6Gx6jF119hzxELt+6TlJIwchglR1JYzboHePNxIkVBjR/aoAOVlsGa+5Vtb77cd/N84nrXWPA==}
+    requiresBuild: true
+    peerDependencies:
+      '@vue/composition-api': ^1.4.9
+      vue: ^2.6.0 || >=3.0.0
+    peerDependenciesMeta:
+      '@vue/composition-api':
+        optional: true
+    dependencies:
+      diff: 5.2.0
+      diff-match-patch: 1.0.5
+      highlight.js: 11.9.0
+      vue: 3.4.27(typescript@5.4.5)
+      vue-demi: 0.14.7(vue@3.4.27)
+      vue-i18n: 9.13.1(vue@3.4.27)
+    dev: false
 
   /vite-plugin-progress@0.0.7(vite@5.2.11):
     resolution: {integrity: sha512-zyvKdcc/X+6hnw3J1HVV1TKrlFKC4Rh8GnDnWG/2qhRXjqytTcM++xZ+SAPnoDsSyWl8O93ymK0wZRgHAoglEQ==}
