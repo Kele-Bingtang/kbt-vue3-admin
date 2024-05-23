@@ -87,16 +87,14 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
             tinymce: ["tinymce", "@tinymce/tinymce-vue"],
             echarts: ["echarts"],
             codemirror: [
-              "vue-codemirror6",
               "codemirror",
-              // pnpm 安装 vue-codemirror6 和 codemirror 不会自动安装如下依赖（解决幽灵依赖）
               // "@codemirror/autocomplete",
-              // "@codemirror/commands",
-              // "@codemirror/language",
-              // "@codemirror/lint",
+              "@codemirror/commands",
+              "@codemirror/language",
+              "@codemirror/lint",
               // "@codemirror/search",
-              // "@codemirror/state",
-              // "@codemirror/view",
+              "@codemirror/state",
+              "@codemirror/view",
             ],
             // 如果项目只需要一种代码语言，则把其他去掉
             "codemirror-lang": [

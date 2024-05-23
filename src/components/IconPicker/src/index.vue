@@ -108,7 +108,6 @@ const iconWrapStyle = computed((): CSSProperties => {
 
 const icons = [epIcons, antIcons, tIcons];
 
-const iconType = ref("在线图标");
 const iconName = ref(icons[0].prefix);
 
 const currentIconNameIndex = computed(() => {

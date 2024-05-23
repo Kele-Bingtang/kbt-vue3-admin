@@ -48,6 +48,7 @@ import { MergeView } from "@codemirror/merge";
 import { basicSetup, minimalSetup } from "codemirror";
 import { useDesign } from "@/hooks";
 import { getPx } from "@/utils";
+import { ref, shallowRef, computed, type Ref, type ComputedRef, watch, onMounted, nextTick, onUnmounted } from "vue";
 
 export interface MergeCodeMirrorProps {
   [key: string]: any;
