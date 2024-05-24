@@ -76,7 +76,8 @@ export interface MergeCodeMirrorProps {
 
 export interface CodeMirrorProps {
   width?: string | number; // 代码编辑器宽度，默认 undefined
-  maxHeight?: string | number; // 代码编辑器高度，默认 undefined
+  height?: string | number; // 代码编辑器高度，默认 undefined
+  maxHeight?: string | number; // 代码编辑器最大高度，默认 undefined
   fontSize?: string | number; // 字体大小，默认 14px
   localTheme?: Extension; // 本地主题包
   lang?: LanguageSupport; // 本地代码语言包
@@ -558,6 +559,7 @@ defineExpose({
 });
 
 const codeMirrorWidth = computed(() => getPx(props.width));
+const codeMirrorHeight = computed(() => getPx(props.height));
 const codeMirrorMaxHeight = computed(() => getPx(props.maxHeight));
 const codeMirrorFontSize = computed(() => getPx(props.fontSize));
 const mergeCmBgColor = computed(() => props.mergeConfig?.headerBgColor || "#f6f8fa");
@@ -621,8 +623,8 @@ $prefix-class: #{$namespace}-code-mirror;
 
 .#{$prefix-class} {
   width: v-bind(codeMirrorWidth);
+  height: v-bind(codeMirrorHeight);
   max-height: v-bind(codeMirrorMaxHeight);
-  overflow: auto;
   font-size: v-bind(codeMirrorFontSize);
 
   // CodeMirror 实际高度
@@ -663,6 +665,10 @@ $prefix-class: #{$namespace}-code-mirror;
       background-color: v-bind(mergeCmBgColor);
       border: 1px solid v-bind(mergeCmBorderColor);
     }
+  }
+
+  :deep(.cm-mergeView) {
+    height: 100%;
   }
 }
 </style>

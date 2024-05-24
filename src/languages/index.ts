@@ -2,7 +2,6 @@ import { createI18n } from "vue-i18n";
 import zhCN from "./modules/zh-CN";
 import enUS from "./modules/en-US";
 import { getBrowserLang } from "@/utils";
-import settings from "@/config/settings";
 import type { WritableComputedRef } from "vue";
 
 const messages = {
@@ -11,9 +10,9 @@ const messages = {
 };
 
 export const getLocale = () => {
-  const layoutCache = localStorage.getItem(settings.layoutCacheKey);
+  const layoutCache = localStorage.getItem("kbt_layoutStore");
   const layoutStore = layoutCache ? JSON.parse(layoutCache) : "";
-  const cookieLanguage = layoutStore ? layoutStore.language : layoutStore;
+  const cookieLanguage = layoutStore ? layoutStore.value.language : layoutStore;
   if (cookieLanguage) {
     document.documentElement.lang = cookieLanguage;
     return cookieLanguage;

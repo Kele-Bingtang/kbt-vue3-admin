@@ -64,12 +64,13 @@ export interface DragList {
 }
 
 interface DraggableListProps {
-  leftList?: DragList[];
-  rightList?: DragList[];
-  leftTitle?: string;
-  rightTitle?: string;
-  leftWidth?: string;
-  rightWidth?: string;
+  leftList?: DragList[]; // 左侧数据
+  rightList?: DragList[]; // 右侧数据
+  leftTitle?: string; // 左侧标题
+  rightTitle?: string; // 右侧标题
+  leftWidth?: string; // 左侧宽度
+  rightWidth?: string; // 右侧宽度
+  // 拖拽元素 class
   dragClass?: {
     left: string[];
     right: string[];

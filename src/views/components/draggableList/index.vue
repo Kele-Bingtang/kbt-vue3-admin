@@ -46,6 +46,31 @@
         <pre>{{ listData2 }}</pre>
       </el-card>
     </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="配置项 📚" :column="1" border>
+        <el-descriptions-item label="leftList">左侧宽度侧数据。`DragList[]` 类型，默认为 `[]`</el-descriptions-item>
+        <el-descriptions-item label="rightList">右侧数据。`DragList[]` 类型，默认为 `[]`</el-descriptions-item>
+        <el-descriptions-item label="leftTitle">左侧标题。`string` 类型，默认为 `""`</el-descriptions-item>
+        <el-descriptions-item label="rightTitle">有侧标题。`string` 类型，默认为 `""`</el-descriptions-item>
+        <el-descriptions-item label="leftWidth">左侧宽度。`string` 类型，默认为 `"48%"`</el-descriptions-item>
+        <el-descriptions-item label="rightWidth">右侧宽度。`string` 类型，默认为 `"48%"`</el-descriptions-item>
+        <el-descriptions-item label="dragClass">
+          拖拽元素 class。`{ left: string[]; right: string[]; }` 类型，默认为 `{ left: [], right: [] }`
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never">
+      <el-descriptions title="Emits 事件 📚" :column="1" border>
+        <el-descriptions-item label="onChange">
+          拖拽改变事件。`(value: { src: string; target: string; oldIndex: number; newIndex: number }) => void` 类型
+        </el-descriptions-item>
+        <el-descriptions-item label="itemClick">
+          数据 Item 点击事件。`(id: string, type: string) => void` 类型
+        </el-descriptions-item>
+      </el-descriptions>
+    </el-card>
   </div>
 </template>
 

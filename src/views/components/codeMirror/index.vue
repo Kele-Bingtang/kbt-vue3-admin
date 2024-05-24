@@ -16,7 +16,6 @@
         </el-alert>
       </template>
     </el-card>
-
     <el-card shadow="never">
       <template #header>
         <div style="font-weight: bold">基本编辑器</div>
@@ -36,6 +35,7 @@
         <el-checkbox v-model="wrap" label="超出屏幕宽度是否自动换行" />
         <el-checkbox v-model="gutter" label="是否开启 🔴 语法错误提示" />
 
+        <el-input v-model="height1" placeholder="输入编辑器高度" />
         <el-input v-model="maxHeight1" placeholder="输入编辑器最大高度" />
       </el-space>
 
@@ -46,6 +46,7 @@
         :readonly="readonly"
         :wrap="wrap"
         :gutter="gutter"
+        :height="height1"
         :max-height="maxHeight1"
         v-bind="langValue"
       ></CodeMirror>
@@ -61,6 +62,7 @@
         <el-checkbox v-model="gutter1" label="是否开启线条提示" />
         <el-checkbox v-model="header" label="启用 Header" />
         <el-switch v-model="orientation" active-text="a-b" inactive-text="b-a" />
+        <el-input v-model="height2" placeholder="输入编辑器高度" />
         <el-input v-model="maxHeight2" placeholder="输入编辑器最大高度" />
 
         <el-alert :closable="false">
@@ -70,11 +72,12 @@
         </el-alert>
       </el-space>
 
-      <CodeMirror :wrap="wrap" :merge-config="mergeConfig" :max-height="maxHeight2"></CodeMirror>
+      <CodeMirror :wrap="wrap" :merge-config="mergeConfig" :height="height2" :max-height="maxHeight2"></CodeMirror>
     </el-card>
 
     <el-card shadow="never">
       <el-descriptions title="基本编辑器 配置项 📚" :column="1" border>
+        <el-descriptions-item label="v-model">代码内容。`string | Text` 类型，默认为 `""`</el-descriptions-item>
         <el-descriptions-item label="width">
           代码编辑器宽度。`string | Text` 类型，默认为 `undefined`
         </el-descriptions-item>
@@ -280,6 +283,8 @@ const highlight = ref(true);
 const gutter1 = ref(true);
 const orientation = ref(true);
 const header = ref(true);
+const height1 = ref("");
+const height2 = ref("");
 const maxHeight1 = ref("");
 const maxHeight2 = ref("");
 

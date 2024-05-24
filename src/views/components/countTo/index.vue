@@ -208,6 +208,71 @@
         </div>
       </el-card>
     </el-row>
+
+    <el-card shadow="never" style="margin-top: 10px">
+      <el-descriptions title="配置项 📚" :column="1" border>
+        <el-descriptions-item label="init">
+          初始值，后面会被 startVal 覆盖。`number` 类型，默认为 `0`
+        </el-descriptions-item>
+        <el-descriptions-item label="startVal">
+          起始值，即动画开始前显示的数值。`number` 类型，默认为 `0`
+        </el-descriptions-item>
+        <el-descriptions-item label="endVal">
+          结束值，即动画结束后显示的数值。`number` 类型，默认为 `undefined`
+        </el-descriptions-item>
+        <el-descriptions-item label="prefix">数值的前缀。`string` 类型，默认为 `""`</el-descriptions-item>
+        <el-descriptions-item label="suffix">数值的后缀。`string` 类型，默认为 `""`</el-descriptions-item>
+        <el-descriptions-item label="decimals">保留几位小数。`number` 类型，默认为 `0`</el-descriptions-item>
+        <el-descriptions-item label="decimal">
+          分隔整数和小数的符号，默认是小数点。`string` 类型，默认为 `"."`
+        </el-descriptions-item>
+        <el-descriptions-item label="duration">
+          动画持续的时间，单位是秒。`number` 类型，默认为 `3`
+        </el-descriptions-item>
+        <el-descriptions-item label="delay">
+          动画延迟开始的时间，单位是秒。`number` 类型，默认为 `0`
+        </el-descriptions-item>
+        <el-descriptions-item label="autoplay">
+          是否自动播放，单位是秒。`boolean` 类型，默认为 `true`
+        </el-descriptions-item>
+        <el-descriptions-item label="useEasing">
+          是否使用 easing 动画效果。`boolean` 类型，默认为 `true`
+        </el-descriptions-item>
+        <el-descriptions-item label="useGroup">
+          是否使用分组，分组后每三位会用一个符号分隔，即 1000 位 1,000。`boolean` 类型，默认为 `true`
+        </el-descriptions-item>
+        <el-descriptions-item label="separator">
+          用于分组（useGroup）的符号。`string` 类型，默认为 `","`
+        </el-descriptions-item>
+        <el-descriptions-item label="simplify">
+          是否简化显示，设为 true 后会使用 unit 单位来做相关省略。`boolean` 类型，默认为 `false`
+        </el-descriptions-item>
+        <el-descriptions-item label="unit">
+          自定义单位，如 { value: 3, label: "K+" }, { value: 6, label: "M+" } 即大于 3 位数小于 6 位数的用 k+ 来做省略
+          1000 即显示为 1K+。`Unit[]` 类型，默认为 `[ { value: 3, label: "K+" }, { value: 6, label: "M+" }, { value: 9,
+          label: "B+" }, ]`
+        </el-descriptions-item>
+        <el-descriptions-item label="countClass">count 数字的 class。`string` 类型，默认为 `""`</el-descriptions-item>
+        <el-descriptions-item label="unitClass">单位的 class。`string` 类型，默认为 `""`</el-descriptions-item>
+        <el-descriptions-item label="loop">循环次数。`number` 类型，默认为 `1`</el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never" style="margin-top: 10px">
+      <el-descriptions title="Emits 事件 📚" :column="1" border>
+        <el-descriptions-item label="init">初始化后事件。`(counter: CountUp) => void` 类型</el-descriptions-item>
+        <el-descriptions-item label="finished">数字渐变结束事件。`() => void` 类型</el-descriptions-item>
+      </el-descriptions>
+    </el-card>
+
+    <el-card shadow="never" style="margin-top: 10px">
+      <el-descriptions title="Expose 参数 📚" :column="1" border>
+        <el-descriptions-item label="restart">重启数字渐变函数。`(counter: CountUp) => void` 类型</el-descriptions-item>
+        <el-descriptions-item label="pause">暂停数字渐变函数。`() => void` 类型</el-descriptions-item>
+        <el-descriptions-item label="reset">重置数字渐变函数。`() => void` 类型</el-descriptions-item>
+        <el-descriptions-item label="init">初始化数字渐变函数。`() => void` 类型</el-descriptions-item>
+      </el-descriptions>
+    </el-card>
   </div>
 </template>
 

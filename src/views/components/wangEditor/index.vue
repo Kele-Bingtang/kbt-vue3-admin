@@ -26,6 +26,7 @@
 
     <el-card shadow="never">
       <el-descriptions title="配置项 📚" :column="1" border>
+        <el-descriptions-item label="v-model">编辑器内容。`string` 类型，必传</el-descriptions-item>
         <el-descriptions-item label="toolbarKeys">工具栏内容。`string[]` 类型，默认为 `[]`</el-descriptions-item>
         <el-descriptions-item label="excludeKeys">
           去除掉指定的工具类内容。`string[]` 类型，默认 `[]`

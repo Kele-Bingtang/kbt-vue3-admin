@@ -31,6 +31,7 @@
 
     <el-card shadow="never">
       <el-descriptions title="配置项 📚" :column="1" border>
+        <el-descriptions-item label="v-model">编辑器内容。`string` 类型，必传</el-descriptions-item>
         <el-descriptions-item label="disabled">编辑器是否禁用。`boolean` 类型，默认 `false`</el-descriptions-item>
         <el-descriptions-item label="theme">UI 主题。`UITheme` 类型，默认 `default`</el-descriptions-item>
         <el-descriptions-item label="contentTheme">

@@ -34,15 +34,34 @@ defineOptions({ name: "SeamlessScroll" });
 const { animationFrame } = utilsMethods;
 animationFrame();
 
+interface ClassOption {
+  key?: number; // ref key
+  step?: number; // 步长
+  limitMoveNum?: number; // 启动无缝滚动最小数据数
+  hoverStop?: boolean; // 是否启用鼠标hover控制
+  direction?: string; // bottom 往下 top 往上(默认) left 向左 right 向右
+  openTouch?: boolean; // 开启移动端 touch
+  singleHeight?: number; // 单条数据高度有值 hoverStop 关闭
+  singleWidth?: number; // 单条数据宽度有值 hoverStop 关闭
+  waitTime?: number; // 单步停止等待时间
+  switchOffset?: number; // 偏移量
+  autoPlay?: boolean; // 是否自动播放
+  navigation?: boolean; // 是否暂停播放
+  switchSingleStep?: number; // 单步距离
+  switchDelay?: number; // 切换模式延迟
+  switchDisabledClass?: string; // 滚动元素的 class
+  isSingleRemUnit?: boolean; // singleWidth/singleHeight 是否开启 rem 度量
+}
+
 interface SeamlessScrollProps {
   data: any[];
-  classOption: { [key: string]: any };
+  classOption: ClassOption;
 }
 
 const props = defineProps<SeamlessScrollProps>();
 
 type SeamlessScrollEmits = {
-  scrollEnd: [];
+  scrollEnd: []; // 滚动结束事件
 };
 
 const emits = defineEmits<SeamlessScrollEmits>();
@@ -70,7 +89,6 @@ let startPosX = -1;
 let isHover = false;
 let ease = "ease-in";
 
-// eslint-disable-next-line vue/no-setup-props-destructure
 const { classOption } = props;
 
 if (classOption["key"] === undefined) {
@@ -95,25 +113,31 @@ const defaultOption = computed(() => {
     step: 1,
     // 启动无缝滚动最小数据数
     limitMoveNum: 5,
-    // 是否启用鼠标hover控制
+    // 是否启用鼠标 hover 控制
     hoverStop: true,
     // bottom 往下 top 往上(默认) left 向左 right 向右
     direction: "top",
     // 开启移动端touch
     openTouch: true,
-    // 单条数据高度有值hoverStop关闭
+    // 单条数据高度有值 hoverStop 关闭
     singleHeight: 0,
-    // 单条数据宽度有值hoverStop关闭
+    // 单条数据宽度有值 hoverStop 关闭
     singleWidth: 0,
     // 单步停止等待时间
     waitTime: 1000,
+    // 偏移量
     switchOffset: 30,
+    // 是否自动播放
     autoPlay: true,
+    // 是否暂停播放
     navigation: false,
+    // 单步距离
     switchSingleStep: 134,
+    // 切换模式延迟
     switchDelay: 400,
+    // 滚动元素的 class
     switchDisabledClass: "disabled",
-    // singleWidth/singleHeight 是否开启rem度量
+    // singleWidth/singleHeight 是否开启 rem 度量
     isSingleRemUnit: false,
   };
 });

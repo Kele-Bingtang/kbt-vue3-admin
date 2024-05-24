@@ -1,6 +1,7 @@
 export default {
   _route: {
     Home: "首页",
+    HomeFull: "全屏首页",
     Login: "登录",
     Layout: "布局",
     ErrorLog: "错误日志",

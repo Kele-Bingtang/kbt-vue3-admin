@@ -29,11 +29,11 @@ export interface DragItemList {
 }
 
 interface DraggableItemProps {
-  title?: string;
-  list?: Array<DragItemList>;
-  titleBgColor?: string;
-  titleClass?: string;
-  dragClass?: string;
+  title?: string; // 标题
+  list?: DragItemList[]; // 数据列表
+  titleBgColor?: string; // 标题背景色
+  titleClass?: string; // 标题元素 class
+  dragClass?: string; // 拖拽元素 class
 }
 
 withDefaults(defineProps<DraggableItemProps>(), {

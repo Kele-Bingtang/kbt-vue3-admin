@@ -23,6 +23,11 @@ defineOptions({ name: "CountTo" });
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("count-to");
 
+interface Unit {
+  value: number;
+  label: string;
+}
+
 interface CountToProps {
   init?: number; // 初始值，后面会被 startVal 覆盖
   startVal?: number; // 起始值，即动画开始前显示的数值
@@ -38,15 +43,10 @@ interface CountToProps {
   useGroup?: boolean; // 是否使用分组，分组后每三位会用一个符号分隔，即 1000 位 1,000
   separator?: string; // 用于分组（useGroup）的符号
   simplify?: boolean; // 是否简化显示，设为 true 后会使用 unit 单位来做相关省略
-  unit?: Array<Unit>; // 自定义单位，如 { value: 3, label: "K+" }, { value: 6, label: "M+" } 即大于 3 位数小于 6 位数的用 k+ 来做省略 1000 即显示为 1K+
+  unit?: Unit[]; // 自定义单位，如 { value: 3, label: "K+" }, { value: 6, label: "M+" } 即大于 3 位数小于 6 位数的用 k+ 来做省略 1000 即显示为 1K+
   countClass?: string; // count 数字的 class
   unitClass?: string; // 单位的 class
   loop?: number; // 循环次数
-}
-
-interface Unit {
-  value: number;
-  label: string;
 }
 
 const props = withDefaults(defineProps<CountToProps>(), {
@@ -202,18 +202,22 @@ watch(finished, flag => {
     emits("finished");
   }
 });
+
 const restart = () => {
   initCountUp();
   setTimeout(() => {
     loopAnim();
   }, props.delay);
 };
+
 const pause = () => {
   counter.value.pauseResume();
 };
+
 const reset = () => {
   counter.value.reset();
 };
+
 defineExpose({
   restart,
   pause,

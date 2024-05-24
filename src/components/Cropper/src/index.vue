@@ -66,7 +66,7 @@ const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("cropper");
 
 interface CropperProps {
-  imgLink?: string;
+  imgLink?: string; // 图片链接
   imageType?: "blob" | "base64"; // 图片类型
   cropWidth?: number; // 截图框宽度
   cropHeight?: number; // 截图框高度
@@ -82,9 +82,9 @@ const props = withDefaults(defineProps<CropperProps>(), {
 });
 
 type CropperEmitProps = {
-  uploadImage: [formData: FormData];
-  imgMoving: [];
-  cropMoving: [];
+  uploadImage: [formData: FormData]; // 图片上传回调
+  imgMoving: []; // 图片移动事件
+  cropMoving: []; // 图片剪切事件
 };
 
 const emits = defineEmits<CropperEmitProps>();
@@ -227,7 +227,6 @@ $prefix-class: #{$namespace}-cropper;
 
     &--previews {
       display: flex;
-      display: --webkit-flex;
       align-items: center;
       justify-content: center;
       padding-left: 10px;

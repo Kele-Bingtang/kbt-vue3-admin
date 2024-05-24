@@ -59,6 +59,7 @@
 
     <el-card shadow="never">
       <el-descriptions title="WorkDialog 组件配置项 📚" :column="1" border>
+        <el-descriptions-item label="v-model">是否显示 Dialog。`boolean` 类型，必传</el-descriptions-item>
         <el-descriptions-item label="title">Dialog 标题。`string` 类型</el-descriptions-item>
         <el-descriptions-item label="fullscreen">
           是否以全屏进入 Dialog。`boolean` 类型，默认 `false`

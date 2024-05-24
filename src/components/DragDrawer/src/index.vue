@@ -2,7 +2,6 @@
   <div :class="prefixClass">
     <el-drawer
       ref="drawerRef"
-      :title="title"
       v-model="drawerVisible"
       :size="width"
       :direction="direction"
@@ -43,21 +42,17 @@ const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("drag-drawer");
 
 interface DragDrawerProps {
-  placement?: string;
-  draggable?: boolean;
-  minWidth?: string | number;
-  inner?: boolean;
-  title?: string;
+  placement?: string; // 抽屉打开位置
+  draggable?: boolean; // 是否开启拖拽功能
+  minWidth?: string | number; // 抽屉最小宽度
+  inner?: boolean; // 是否在容器内使用抽屉
 }
 
 const props = withDefaults(defineProps<DragDrawerProps>(), {
-  visible: false,
-  width: 200,
   placement: "right",
   draggable: false,
   minWidth: 200,
   inner: false,
-  title: "",
 });
 
 type DragDrawerEmits = {

@@ -24,7 +24,6 @@ const customStorage = {
 };
 
 const pinia = createPinia();
-// pinia.use(piniaPluginPersistedstate);
 pinia.use(
   createPersistedState({
     key: key => `kbt_${key}`,
