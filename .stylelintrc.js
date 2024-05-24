@@ -1,6 +1,8 @@
 module.exports = {
   root: true,
+  customSyntax: "postcss-html",
   extends: [
+    "stylelint-config-recommended-scss",
     "stylelint-config-standard", // 配置stylelint拓展插件
     "stylelint-config-html/vue", // 配置 vue 中 template 样式格式化
     "stylelint-config-standard-scss", // 配置stylelint scss插件
@@ -49,6 +51,8 @@ module.exports = {
           "mixin",
           "extend",
           "for",
+          "forward",
+          "use",
         ],
       },
     ],
