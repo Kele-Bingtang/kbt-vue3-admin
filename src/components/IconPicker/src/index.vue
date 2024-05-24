@@ -60,13 +60,14 @@ import { ElInput, ElPopover, ElScrollbar, ElTabs, ElTabPane, ElPagination } from
 import { computed, type CSSProperties, ref, unref, watch, inject, defineOptions } from "vue";
 import { nextTick } from "vue";
 import { useDesign } from "@/hooks";
+import { ConfigGlobalKey } from "@/config/symbols";
 
 defineOptions({ name: "IconPicker" });
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("icon-picker");
 
-const configGlobal = inject("configGlobal") as Record<string, any>;
+const configGlobal = inject(ConfigGlobalKey);
 
 const init = async (icon?: string) => {
   if (!icon) return;
@@ -82,7 +83,7 @@ const init = async (icon?: string) => {
 
 const modelValue = defineModel<string>();
 
-const size = computed(() => configGlobal?.size || "default");
+const size = computed(() => configGlobal?.size.value || "default");
 
 const iconSize = computed(() => {
   return unref(size) === "small"

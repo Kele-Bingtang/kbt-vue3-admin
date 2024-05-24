@@ -18,6 +18,7 @@ import settings from "@/config/settings";
 import { useSettingsStore } from "@/stores";
 import { useDesign, useCache } from "@/hooks";
 import { reactive, computed, provide, onMounted } from "vue";
+import { ConfigGlobalKey } from "@/config/symbols";
 
 const { variables } = useDesign();
 
@@ -44,7 +45,7 @@ const i18nLocale = computed(() => {
 const layoutSize = computed(() => layoutStore.layoutSize);
 
 // 注入全局参数
-provide("configGlobal", {
+provide(ConfigGlobalKey, {
   size: layoutSize,
 });
 

@@ -116,13 +116,13 @@
 </template>
 
 <script setup lang="ts" name="SwitchPermission">
-import type { RefreshFunction } from "@/layout/components/MainContent/index.vue";
 import { useUserStore } from "@/stores";
 import { usePermission } from "@/hooks";
+import { RefreshKey } from "@/config/symbols";
 
 const userStore = useUserStore();
 const { getRoleList, getAuthList, hasRole, hasAuth } = usePermission();
-const refreshCurrentPage = inject("refresh", () => {}) as RefreshFunction;
+const refreshCurrentPage = inject(RefreshKey, (value?: boolean) => value);
 
 const roleList = computed(() => getRoleList());
 const switchRole = computed({

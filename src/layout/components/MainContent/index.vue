@@ -23,8 +23,7 @@ import CustomTransition from "./components/CustomTransition.vue";
 import Maximize from "./components/Maximize.vue";
 import FrameLayout from "../FrameLayout/index.vue";
 import { getUrlParams } from "@/utils";
-
-export type RefreshFunction = (value?: boolean) => boolean;
+import { RefreshKey } from "@/config/symbols";
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
@@ -38,8 +37,8 @@ const TabsNavComponents: { [key: string]: Component } = {
 
 // 刷新当前页面
 const isRouterShow = ref(true);
-const refreshCurrentPage: RefreshFunction = (value?: boolean) => {
-  if (value) {
+const refreshCurrentPage = (value?: boolean) => {
+  if (value !== undefined) {
     isRouterShow.value = value;
     return true;
   }
@@ -49,7 +48,7 @@ const refreshCurrentPage: RefreshFunction = (value?: boolean) => {
   });
   return true;
 };
-provide("refresh", refreshCurrentPage);
+provide(RefreshKey, refreshCurrentPage);
 
 // 监听当前页是否最大化，动态添加 class
 watchEffect(() => {

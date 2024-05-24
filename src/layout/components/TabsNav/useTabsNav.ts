@@ -3,11 +3,11 @@ import beforeClose from "@/router/beforeClose";
 import { useLayoutStore, usePermissionStore, type TabProp } from "@/stores";
 import { getUrlParams, mittBus } from "@/utils";
 import Sortable from "sortablejs";
-import type { RefreshFunction } from "../MainContent/index.vue";
 import settings from "@/config/settings";
 import { HOME_URL } from "@/router/routesConfig";
 import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 import { inject, ref, reactive, computed, nextTick, watchEffect } from "vue";
+import { RefreshKey } from "@/config/symbols";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";
 
@@ -26,7 +26,7 @@ export const useTabsNav = () => {
   const layoutStore = useLayoutStore();
   const permissionStore = usePermissionStore();
   const { getTitle } = useLayout();
-  const refreshCurrentPage = inject("refresh", () => {}) as RefreshFunction;
+  const refreshCurrentPage = inject(RefreshKey, (value?: boolean) => value);
 
   const { bool: rightMenuVisible, setFalse } = useBoolean(); // 右键菜单显示
 
@@ -130,7 +130,6 @@ export const useTabsNav = () => {
     const currentIndex = t.findIndex(t => t.path === tab.path);
     // 如果选择的是固定在标签栏的标签
     if (!tab.close) {
-      console.log(currentIndex);
       if (currentIndex === 0) {
         // 如果只有一个固定标签，则判断右边是否有标签
         if (tabLength === 1) {
