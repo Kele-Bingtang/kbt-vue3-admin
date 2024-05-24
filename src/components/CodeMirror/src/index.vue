@@ -632,6 +632,11 @@ $prefix-class: #{$namespace}-code-mirror;
     height: 100%;
   }
 
+  :deep(.cm-editor.cm-focused) {
+    outline: none;
+    box-shadow: 0 0 0 1px var(--el-color-primary);
+  }
+
   /* a 编辑器高亮行背景色 */
   :deep(.ͼ1.cm-merge-a .cm-changedLine, .ͼ1 .cm-deletedChunk) {
     background-color: v-bind(mergeCmAHighlightLineBgColor);
