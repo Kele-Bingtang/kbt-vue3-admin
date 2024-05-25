@@ -1,5 +1,9 @@
 // 命名空间
-$namespace: k;
+$admin-namespace: k;
 
 // el 命名空间
-$el-namespace: el;
+$el-namespace: ep;
+
+@forward "element-plus/theme-chalk/src/mixins/config.scss" with (
+  $namespace: #{$el-namespace}
+);

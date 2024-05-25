@@ -58,7 +58,7 @@ withDefaults(defineProps<RightMenuProps>(), {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-right-menu;
+$prefix-class: #{$admin-namespace}-right-menu;
 
 .#{$prefix-class} {
   position: absolute;
@@ -82,7 +82,7 @@ $prefix-class: #{$namespace}-right-menu;
     cursor: pointer;
 
     &:hover {
-      color: var(--el-color-primary);
+      color: var(--#{$el-namespace}-color-primary);
     }
 
     .#{$el-namespace}-icon {

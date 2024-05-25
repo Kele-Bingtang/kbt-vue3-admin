@@ -52,7 +52,9 @@
       <el-descriptions title="事件项 📚" :column="1" border>
         <el-descriptions-item label="upload-img">
           上传文件时的回调，接收的参数：
-          <el-link style="color: var(--el-color-primary)">file: File, callback: SuccessFun</el-link>
+          <el-link :style="`color: var(--${variables.elNamespace}-color-primary)`">
+            file: File, callback: SuccessFun
+          </el-link>
           。file 是上传的文件，callback 是个必须的回调函数，参数只有一个，为文件的 url。
         </el-descriptions-item>
         <el-descriptions-item label="check-validate">上传文件成功的校验回调</el-descriptions-item>
@@ -87,7 +89,9 @@
       <el-descriptions title="事件项 📚" :column="1" border>
         <el-descriptions-item label="upload-img">
           上传文件时的回调，接收的参数：
-          <el-link style="color: var(--el-color-primary)">file: File, callback: SuccessFun</el-link>
+          <el-link :style="`color: var(--${variables.elNamespace}-color-primary)`">
+            file: File, callback: SuccessFun
+          </el-link>
           。file 是上传的文件，callback 是个必须的回调函数，参数只有一个，为文件的 url。
         </el-descriptions-item>
       </el-descriptions>
@@ -203,7 +207,7 @@ import { uploadLocal } from "@/utils";
 import { Avatar, Picture } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
 
-const { getPrefixClass } = useDesign();
+const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("images-upload-demo");
 
 const fileList = ref([{ name: "img", url: "https://i.imgtg.com/2023/01/16/QRBHS.jpg" }]);
@@ -253,7 +257,7 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-images-upload-demo;
+$prefix-class: #{$admin-namespace}-images-upload-demo;
 
 .#{$prefix-class} {
   height: auto;

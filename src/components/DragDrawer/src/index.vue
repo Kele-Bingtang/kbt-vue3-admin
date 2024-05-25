@@ -164,7 +164,7 @@ const setWrapperWidth = () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-drag-drawer;
+$prefix-class: #{$admin-namespace}-drag-drawer;
 
 .#{$prefix-class} {
   .no-select {

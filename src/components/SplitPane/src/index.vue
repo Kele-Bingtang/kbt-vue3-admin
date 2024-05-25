@@ -155,7 +155,7 @@ const handleMousedown = (e: MouseEvent) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-split-pane;
+$prefix-class: #{$admin-namespace}-split-pane;
 
 .#{$prefix-class} {
   position: relative;

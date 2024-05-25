@@ -234,7 +234,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-tinymce;
+$prefix-class: #{$admin-namespace}-tinymce;
 
 .#{$prefix-class} {
   position: relative;

@@ -1,6 +1,6 @@
-$login-prefix-class: #{$namespace}-login;
-$columns-prefix-class: #{$namespace}-columns-layout;
-$tabs-nav-prefix-class: #{$namespace}-tabs-nav;
+$login-prefix-class: #{$admin-namespace}-login;
+$columns-prefix-class: #{$admin-namespace}-columns-layout;
+$tabs-nav-prefix-class: #{$admin-namespace}-tabs-nav;
 
 /* 自定义 element 暗黑模式样式 */
 html.dark {
@@ -11,17 +11,17 @@ html.dark {
 
   /* 以下为自定义暗黑模式内容 */
   .#{$login-prefix-class} {
-    background-color: var(--el-fill-color-extra-light);
+    background-color: var(--#{$el-namespace}-fill-color-extra-light);
 
     &__box {
-      background-color: var(--el-mask-color);
+      background-color: var(--#{$el-namespace}-mask-color);
 
       &__form {
-        background-color: var(--el-bg-color);
+        background-color: var(--#{$el-namespace}-bg-color);
         box-shadow: 5px 5px 15px rgb(161 161 161 / 20%);
 
         &__text {
-          color: var(--el-text-color-primary);
+          color: var(--#{$el-namespace}-text-color-primary);
         }
       }
     }
@@ -29,11 +29,11 @@ html.dark {
 
   /* scroll-bar */
   ::-webkit-scrollbar {
-    background-color: var(--el-scrollbar-bg-color);
+    background-color: var(--#{$el-namespace}-scrollbar-bg-color);
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: var(--el-border-color-darker);
+    background-color: var(--#{$el-namespace}-border-color-darker);
   }
 
   .columns {
@@ -75,9 +75,9 @@ html.dark {
     }
 
     .#{$el-namespace}-header {
-      color: var(--el-text-color-regular) !important;
+      color: var(--#{$el-namespace}-text-color-regular) !important;
       background-color: var(--kbt-bg-color) !important;
-      border-bottom-color: var(--el-border-color-light);
+      border-bottom-color: var(--#{$el-namespace}-border-color-light);
     }
 
     .#{$el-namespace}-main,
@@ -86,20 +86,20 @@ html.dark {
     }
 
     .#{$tabs-nav-prefix-class} {
-      border-bottom: 1px solid var(--el-border-color-light);
+      border-bottom: 1px solid var(--#{$el-namespace}-border-color-light);
 
       .#{$el-namespace}-tabs {
         background-color: var(--kbt-bg-color) !important;
-        border-bottom: 1px solid var(--el-border-color-light);
+        border-bottom: 1px solid var(--#{$el-namespace}-border-color-light);
 
         .#{$tabs-nav-prefix-class}__btn .#{$el-namespace}-button {
-          border-color: var(--el-border-color-light) !important;
+          border-color: var(--#{$el-namespace}-border-color-light) !important;
         }
       }
     }
 
     .#{$el-namespace}-dropdown {
-      color: var(--el-text-color-regular) !important;
+      color: var(--#{$el-namespace}-text-color-regular) !important;
     }
   }
 

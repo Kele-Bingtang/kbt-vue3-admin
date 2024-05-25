@@ -66,7 +66,7 @@ const isMobile = computed(() => layoutStore.device === DeviceType.Mobile);
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-layout-select;
+$prefix-class: #{$admin-namespace}-layout-select;
 
 .#{$prefix-class} {
   &__list {

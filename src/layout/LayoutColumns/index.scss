@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-columns-layout;
+$prefix-class: #{$admin-namespace}-columns-layout;
 
 .#{$prefix-class} {
   width: 100%;
@@ -61,11 +61,11 @@ $prefix-class: #{$namespace}-columns-layout;
         background-color: var(--split-menu-active-bg-color);
 
         .#{$prefix-class}__aside__list-item__title {
-          color: var(--el-menu-active-color);
+          color: var(--#{$el-namespace}-menu-active-color);
         }
         .#{$el-namespace}-icon,
         .svg-icon {
-          color: var(--el-menu-active-color);
+          color: var(--#{$el-namespace}-menu-active-color);
         }
       }
     }

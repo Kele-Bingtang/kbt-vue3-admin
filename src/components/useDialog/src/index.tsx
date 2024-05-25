@@ -1,9 +1,10 @@
-import { render, getCurrentInstance, type Component, type ComponentInternalInstance, type VNode } from "vue";
-import { ElDialog, ElButton, type DialogProps, ElScrollbar } from "element-plus";
+import { render, getCurrentInstance, computed, type Component, type ComponentInternalInstance, type VNode } from "vue";
+import { ElDialog, ElButton, type DialogProps, ElScrollbar, ElConfigProvider } from "element-plus";
 import { getPx } from "@/utils";
 import { Icon } from "@/components";
 import "./index.scss";
 import { useDesign } from "@/hooks";
+import { useLayoutStore } from "@/stores";
 
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-dialog");
@@ -62,6 +63,8 @@ export const showDialog = (
 ) => {
   ctx && (thisAppContext = ctx?.appContext);
 
+  const layoutSize = computed(() => useLayoutStore().layoutSize);
+
   const isFullscreen = ref(dialogProps.fullscreen || false);
 
   const toggleFull = () => {
@@ -91,74 +94,76 @@ export const showDialog = (
   );
 
   const vm = (
-    <ElDialog
-      modelValue
-      title="弹框"
-      top="2vh"
-      width="50%"
-      before-close={() => handleClose(dialogProps)}
-      close-on-click-modal={false}
-      draggable
-      {...dialogProps}
-      render
-      headerRender
-      footerRender
-      class={prefixClass}
-    >
-      {{
-        default: () => {
-          if (dialogProps.render) {
+    <ElConfigProvider namespace={variables.elNamespace} size={layoutSize.value}>
+      <ElDialog
+        modelValue
+        title="弹框"
+        top="2vh"
+        width="50%"
+        before-close={() => handleClose(dialogProps)}
+        close-on-click-modal={false}
+        draggable
+        {...dialogProps}
+        render
+        headerRender
+        footerRender
+        class={prefixClass}
+      >
+        {{
+          default: () => {
+            if (dialogProps.render) {
+              return (
+                <ElScrollbar
+                  style={{
+                    height: contentHeight.value,
+                  }}
+                >
+                  {dialogProps.render()}
+                </ElScrollbar>
+              );
+            }
             return (
-              <ElScrollbar
-                style={{
-                  height: contentHeight.value,
-                }}
-              >
-                {dialogProps.render()}
+              <ElScrollbar style={{ height: contentHeight.value }}>
+                <component is={component} {...componentsProps}></component>
               </ElScrollbar>
             );
-          }
-          return (
-            <ElScrollbar style={{ height: contentHeight.value }}>
-              <component is={component} {...componentsProps}></component>
-            </ElScrollbar>
-          );
-        },
-        header: (scope: any) => {
-          if (dialogProps?.headerRender) return dialogProps.headerRender(scope);
-          return (
-            <div style="display: flex">
-              <span class={`${variables.elNamespace}-dialog__title`} style="flex: 1">
-                {dialogProps.title}
-              </span>
-              {dialogProps.fullscreenIcon !== false && (
-                <Icon
-                  name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
-                  onClick={() => toggleFull()}
-                  width="15px"
-                  height="15px"
-                  color="var(--el-color-info)"
-                  hover-color="var(--el-color-primary)"
-                  icon-style={{ cursor: "pointer" }}
-                />
-              )}
-            </div>
-          );
-        },
-        footer: () => {
-          if (dialogProps.footerRender) return dialogProps.footerRender();
-          if (dialogProps.showFooter === false) return;
-          return (
-            <>
-              <ElButton onClick={() => handleClose(dialogProps)}>取 消</ElButton>
-              <ElButton type="primary" onClick={() => handleConfirm(dialogProps)}>
-                确 定
-              </ElButton>
-            </>
-          );
-        },
-      }}
-    </ElDialog>
+          },
+          header: (scope: any) => {
+            if (dialogProps?.headerRender) return dialogProps.headerRender(scope);
+            return (
+              <div style="display: flex">
+                <span class={`${variables.elNamespace}-dialog__title`} style="flex: 1">
+                  {dialogProps.title}
+                </span>
+                {dialogProps.fullscreenIcon !== false && (
+                  <Icon
+                    name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
+                    onClick={() => toggleFull()}
+                    width="15px"
+                    height="15px"
+                    color={`var(--${variables.elNamespace}-color-info)`}
+                    hover-color={`var(--${variables.elNamespace}-color-primary)`}
+                    icon-style={{ cursor: "pointer" }}
+                  />
+                )}
+              </div>
+            );
+          },
+          footer: () => {
+            if (dialogProps.footerRender) return dialogProps.footerRender();
+            if (dialogProps.showFooter === false) return;
+            return (
+              <>
+                <ElButton onClick={() => handleClose(dialogProps)}>取 消</ElButton>
+                <ElButton type="primary" onClick={() => handleConfirm(dialogProps)}>
+                  确 定
+                </ElButton>
+              </>
+            );
+          },
+        }}
+      </ElDialog>
+    </ElConfigProvider>
   );
 
   vm.appContext = thisAppContext;

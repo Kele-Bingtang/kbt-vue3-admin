@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-vertical-layout;
+$prefix-class: #{$admin-namespace}-vertical-layout;
 
 .#{$prefix-class} {
   position: relative;
@@ -21,7 +21,7 @@ $prefix-class: #{$namespace}-vertical-layout;
     z-index: 999;
     width: 100%;
     height: 100%;
-    background: var(--el-color-black);
+    background: var(--#{$el-namespace}-color-black);
     opacity: 0.3;
   }
 

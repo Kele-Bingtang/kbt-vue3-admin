@@ -21,7 +21,7 @@ const showBreadcrumb = computed(() => settingsStore.showBreadcrumb);
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-header-left;
+$prefix-class: #{$admin-namespace}-header-left;
 
 .#{$prefix-class} {
   display: flex;
@@ -32,14 +32,14 @@ $prefix-class: #{$namespace}-header-left;
 
   & > * {
     &:hover {
-      color: var(--el-color-primary);
+      color: var(--#{$el-namespace}-color-primary);
     }
 
     :deep(.#{$el-namespace}-breadcrumb__inner) {
       color: var(--header-text-color);
 
       &:hover {
-        color: var(--el-color-primary);
+        color: var(--#{$el-namespace}-color-primary);
       }
     }
 

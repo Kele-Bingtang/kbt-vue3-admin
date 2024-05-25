@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-pro-form;
+$prefix-class: #{$admin-namespace}-pro-form;
 
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
 .#{$prefix-class} {

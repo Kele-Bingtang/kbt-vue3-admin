@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-subsystem-layout;
+$prefix-class: #{$admin-namespace}-subsystem-layout;
 
 .#{$prefix-class} {
   &__menu {
@@ -15,7 +15,7 @@ $prefix-class: #{$namespace}-subsystem-layout;
             left: 0;
             width: 4px;
             content: "";
-            background: var(--el-color-primary);
+            background: var(--#{$el-namespace}-color-primary);
           }
         }
 
@@ -42,7 +42,7 @@ $prefix-class: #{$namespace}-subsystem-layout;
       .sub-menu {
         /* 子级高亮，父级也高亮 */
         &.is-active > .#{$el-namespace}-sub-menu__title {
-          color: var(--el-color-primary);
+          color: var(--#{$el-namespace}-color-primary);
         }
 
         .#{$el-namespace}-menu {
@@ -79,7 +79,7 @@ $prefix-class: #{$namespace}-subsystem-layout;
 
     .menu-header,
     .menu-header .#{$el-namespace}-dropdown {
-      color: var(--el-text-color-primary);
+      color: var(--#{$el-namespace}-text-color-primary);
     }
 
     /* Header 不存在，需要重新设置 flex-direction */

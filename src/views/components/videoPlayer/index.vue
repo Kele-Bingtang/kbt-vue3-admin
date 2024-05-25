@@ -18,18 +18,25 @@
 
       <el-divider />
 
-      <el-button @Click="showVideo">视频播放器预览</el-button>
+      <el-button @Click="showVideo">函数式打开视频播放器预览</el-button>
+
+      <el-button @Click="visible = true">组件式打开视频播放器预览</el-button>
+      <VideoPlayerViewer v-model="visible" v-bind="videoInfo" />
     </el-card>
   </el-space>
 </template>
 
 <script setup lang="ts" name="VideoPlayerDemo">
-import { VideoPlayer, createVideoViewer } from "@/components";
+import { VideoPlayer, createVideoViewer, VideoPlayerViewer } from "@/components";
+
+const videoInfo = {
+  url: "//sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-720p.mp4",
+  poster: "//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/poster.jpg",
+};
 
 const showVideo = () => {
-  createVideoViewer({
-    url: "//sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-720p.mp4",
-    poster: "//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/poster.jpg",
-  });
+  createVideoViewer(videoInfo);
 };
+
+const visible = ref(false);
 </script>

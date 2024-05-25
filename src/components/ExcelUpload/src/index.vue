@@ -141,7 +141,7 @@ const isExcel = (file: File) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-excel-upload;
+$prefix-class: #{$admin-namespace}-excel-upload;
 
 .#{$prefix-class} {
   &__input {

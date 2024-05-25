@@ -226,7 +226,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-message;
+$prefix-class: #{$admin-namespace}-message;
 
 .#{$prefix-class} {
   &__list {
@@ -238,7 +238,7 @@ $prefix-class: #{$namespace}-message;
       display: flex;
       align-items: center;
       padding: 13px 0;
-      border-bottom: 1px solid var(--el-border-color-light);
+      border-bottom: 1px solid var(--#{$el-namespace}-border-color-light);
 
       &:last-child {
         border: none;
@@ -271,7 +271,7 @@ $prefix-class: #{$namespace}-message;
 
         &--date {
           font-size: 12px;
-          color: var(--el-text-color-secondary);
+          color: var(--#{$el-namespace}-text-color-secondary);
         }
       }
     }

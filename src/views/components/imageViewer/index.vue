@@ -1,7 +1,10 @@
 <template>
   <el-space fill>
     <el-card shadow="never" header="图片预览组件">
-      <el-button @click="open()">打开图片预览</el-button>
+      <el-button @click="open()">函数式打开图片预览</el-button>
+
+      <el-button @click="visible = true">组件式打开图片预览</el-button>
+      <ImageViewer v-model="visible" :urlList="urlList" />
     </el-card>
 
     <el-card shadow="never">
@@ -23,15 +26,19 @@
 </template>
 
 <script setup lang="ts" name="ImageViewerDemo">
-import { createImageViewer } from "@/components";
+import { createImageViewer, ImageViewer } from "@/components";
+
+const urlList = [
+  "https://i.imgtg.com/2023/01/16/QRBHS.jpg",
+  "https://i.imgtg.com/2023/01/16/QRqMK.jpg",
+  "https://i.imgtg.com/2023/01/16/QR57a.jpg",
+];
 
 const open = () => {
   createImageViewer({
-    urlList: [
-      "https://i.imgtg.com/2023/01/16/QRBHS.jpg",
-      "https://i.imgtg.com/2023/01/16/QRqMK.jpg",
-      "https://i.imgtg.com/2023/01/16/QR57a.jpg",
-    ],
+    urlList: urlList,
   });
 };
+
+const visible = ref(false);
 </script>

@@ -25,13 +25,16 @@
                 :style="{
                   width: iconSize,
                   height: iconSize,
-                  border: `1px solid ${icon === modelValue ? 'var(--el-color-primary)' : 'var(--el-border-color)'}`,
+                  border: `1px solid ${icon === modelValue ? `var(--${variables.elNamespace}-color-primary)` : `var(--${variables.elNamespace}-border-color)`}`,
                 }"
                 :class="`${prefixClass}__icon`"
                 @click="iconSelect(icon)"
                 v-copy="modelValue"
               >
-                <Icon :icon="icon" :color="icon === modelValue ? 'var(--el-color-primary)' : 'inherit'" />
+                <Icon
+                  :icon="icon"
+                  :color="icon === modelValue ? `var(--${variables.elNamespace}-color-primary)` : 'inherit'"
+                />
               </div>
             </div>
           </ElTabPane>
@@ -64,7 +67,7 @@ import { ConfigGlobalKey } from "@/config/symbols";
 
 defineOptions({ name: "IconPicker" });
 
-const { getPrefixClass } = useDesign();
+const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("icon-picker");
 
 const configGlobal = inject(ConfigGlobalKey);
@@ -87,10 +90,10 @@ const size = computed(() => configGlobal?.size.value || "default");
 
 const iconSize = computed(() => {
   return unref(size) === "small"
-    ? "var(--el-component-size-small)"
+    ? `var(--${variables.elNamespace}-component-size-small)`
     : unref(size) === "large"
-      ? "var(--el-component-size-large)"
-      : "var(--el-component-size)";
+      ? `var(--${variables.elNamespace}-component-size-large)`
+      : `var(--${variables.elNamespace}-component-size)`;
 });
 
 const iconWrapStyle = computed((): CSSProperties => {
@@ -100,7 +103,7 @@ const iconWrapStyle = computed((): CSSProperties => {
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: "0 0 0 1px var(--el-input-border-color,var(--el-border-color)) inset",
+    boxShadow: `0 0 0 1px var(--${variables.elNamespace}-input-border-color,var(--${variables.elNamespace}-border-color)) inset`,
     position: "relative",
     left: "-1px",
     cursor: "pointer",

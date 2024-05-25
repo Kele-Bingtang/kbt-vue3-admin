@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-vertical-layout;
+$prefix-class: #{$admin-namespace}-vertical-layout;
 
 .#{$prefix-class} {
   &__menu {
@@ -15,7 +15,7 @@ $prefix-class: #{$namespace}-vertical-layout;
             left: 0;
             width: 4px;
             content: "";
-            background: var(--el-color-primary);
+            background: var(--#{$el-namespace}-color-primary);
           }
         }
 
@@ -42,7 +42,7 @@ $prefix-class: #{$namespace}-vertical-layout;
       .sub-menu {
         /* 子级高亮，父级也高亮 */
         &.is-active > .#{$el-namespace}-sub-menu__title {
-          color: var(--el-color-primary);
+          color: var(--#{$el-namespace}-color-primary);
         }
 
         .#{$el-namespace}-menu {

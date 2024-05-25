@@ -171,7 +171,7 @@ const authList = ref(getAuthList());
     padding: 8px 16px;
     margin-top: 15px;
     color: #ecf5ff;
-    background-color: var(--el-color-primary);
+    background-color: var(--#{$el-namespace}-color-primary);
     border-radius: 4px;
   }
 

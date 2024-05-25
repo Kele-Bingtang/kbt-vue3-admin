@@ -3,12 +3,14 @@ import settings from "@/config/settings";
 import { ElMessage } from "element-plus";
 import { useSettingsStore } from "@/stores";
 import { toRaw } from "vue";
+import { useDesign } from "@/hooks";
 
 /**
  * @description 切换主题
  * */
 export const useTheme = () => {
   const settingsStore = useSettingsStore();
+  const { variables } = useDesign();
 
   // 切换暗黑模式
   const switchDark = () => {
@@ -29,9 +31,9 @@ export const useTheme = () => {
       primaryTheme: value,
     });
     // 为了兼容暗黑模式下主题颜色也正常，以下方法计算主题颜色 由深到浅 的具体颜色
-    document.documentElement.style.setProperty("--el-color-primary", settingsStore.primaryTheme);
+    document.documentElement.style.setProperty(`--${variables.elNamespace}-color-primary`, settingsStore.primaryTheme);
     document.documentElement.style.setProperty(
-      "--el-color-primary-dark-2",
+      `--${variables.elNamespace}-color-primary-dark-2`,
       settingsStore.isDark
         ? `${getLightColor(settingsStore.primaryTheme, 0.2)}`
         : `${getDarkColor(settingsStore.primaryTheme, 0.3)}`
@@ -39,7 +41,7 @@ export const useTheme = () => {
     // 颜色加深或变浅
     for (let i = 1; i <= 9; i++) {
       document.documentElement.style.setProperty(
-        `--el-color-primary-light-${i}`,
+        `--${variables.elNamespace}-color-primary-light-${i}`,
         settingsStore.isDark
           ? `${getDarkColor(settingsStore.primaryTheme, i / 10)}`
           : `${getLightColor(settingsStore.primaryTheme, i / 10)}`

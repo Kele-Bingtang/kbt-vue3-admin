@@ -207,16 +207,16 @@ const uploadError = () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-image-upload;
+$prefix-class: #{$admin-namespace}-image-upload;
 
 .is-error {
   .upload {
     :deep(.#{$el-namespace}-upload),
     :deep(.#{$el-namespace}-upload-dragger) {
-      border: 1px dashed var(--el-color-danger) !important;
+      border: 1px dashed var(--#{$el-namespace}-color-danger) !important;
 
       &:hover {
-        border-color: var(--el-color-primary) !important;
+        border-color: var(--#{$el-namespace}-color-primary) !important;
       }
     }
   }
@@ -227,11 +227,11 @@ $prefix-class: #{$namespace}-image-upload;
   .#{$el-namespace}-upload,
   .#{$el-namespace}-upload-dragger {
     cursor: not-allowed !important;
-    background: var(--el-disabled-bg-color);
-    border: 1px dashed var(--el-border-color-darker) !important;
+    background: var(--#{$el-namespace}-disabled-bg-color);
+    border: 1px dashed var(--#{$el-namespace}-border-color-darker) !important;
 
     &:hover {
-      border: 1px dashed var(--el-border-color-darker) !important;
+      border: 1px dashed var(--#{$el-namespace}-border-color-darker) !important;
     }
   }
 }
@@ -252,12 +252,12 @@ $prefix-class: #{$namespace}-image-upload;
       width: v-bind(width);
       height: v-bind(height);
       overflow: hidden;
-      border: 1px dashed var(--el-border-color-darker);
+      border: 1px dashed var(--#{$el-namespace}-border-color-darker);
       border-radius: v-bind(borderRadius);
-      transition: var(--el-transition-duration-fast);
+      transition: var(--#{$el-namespace}-transition-duration-fast);
 
       &:hover {
-        border-color: var(--el-color-primary);
+        border-color: var(--#{$el-namespace}-color-primary);
 
         .upload-handle {
           opacity: 1;
@@ -273,17 +273,17 @@ $prefix-class: #{$namespace}-image-upload;
         padding: 0;
         overflow: hidden;
         background-color: transparent;
-        border: 1px dashed var(--el-border-color-darker);
+        border: 1px dashed var(--#{$el-namespace}-border-color-darker);
         border-radius: v-bind(borderRadius);
 
         &:hover {
-          border: 1px dashed var(--el-color-primary);
+          border: 1px dashed var(--#{$el-namespace}-color-primary);
         }
       }
 
       .#{$el-namespace}-upload-dragger.is-dragover {
-        background-color: var(--el-color-primary-light-9);
-        border: 2px dashed var(--el-color-primary) !important;
+        background-color: var(--#{$el-namespace}-color-primary-light-9);
+        border: 2px dashed var(--#{$el-namespace}-color-primary) !important;
       }
 
       .#{$prefix-class}__image {
@@ -305,7 +305,7 @@ $prefix-class: #{$namespace}-image-upload;
         cursor: pointer;
         background: rgb(0 0 0 / 60%);
         opacity: 0;
-        transition: var(--el-transition-duration-fast);
+        transition: var(--#{$el-namespace}-transition-duration-fast);
 
         &--icon {
           display: flex;
@@ -338,11 +338,11 @@ $prefix-class: #{$namespace}-image-upload;
     justify-content: center;
     font-size: 12px;
     line-height: 30px;
-    color: var(--el-color-info);
+    color: var(--#{$el-namespace}-color-info);
 
     .#{$el-namespace}-icon {
       font-size: 28px;
-      color: var(--el-text-color-secondary);
+      color: var(--#{$el-namespace}-text-color-secondary);
     }
   }
 

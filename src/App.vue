@@ -44,7 +44,7 @@ const i18nLocale = computed(() => {
 // 配置全局组件大小
 const layoutSize = computed(() => layoutStore.layoutSize);
 
-// 注入全局参数
+// 自定义注入全局参数。ElConfigProvider 会自动使用 provide 全局注入它的 props 到项目里，可以通过 configProviderContextKey 来 inject 获取（先从 element-plus 引入，然后 const config = inject(configProviderContextKey)）
 provide(ConfigGlobalKey, {
   size: layoutSize,
 });

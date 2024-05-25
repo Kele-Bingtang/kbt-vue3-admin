@@ -26,8 +26,8 @@
     height: 300px;
     font-size: 23px;
     font-weight: bold;
-    color: var(--el-color-primary-light-3);
-    background: var(--el-color-primary-light-9);
+    color: var(--#{$el-namespace}-color-primary-light-3);
+    background: var(--#{$el-namespace}-color-primary-light-9);
     border-radius: 50%;
   }
 }

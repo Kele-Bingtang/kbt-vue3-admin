@@ -84,7 +84,7 @@ const handleResize = (event: any) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-darg-drawer-demo;
+$prefix-class: #{$admin-namespace}-darg-drawer-demo;
 
 .#{$prefix-class} {
   &__header {
@@ -99,8 +99,8 @@ $prefix-class: #{$namespace}-darg-drawer-demo;
     position: relative;
     width: 500px;
     height: 400px;
-    background: var(--el-color-primary);
-    border: 1px solid var(--el-color-primary);
+    background: var(--#{$el-namespace}-color-primary);
+    border: 1px solid var(--#{$el-namespace}-color-primary);
 
     :deep(.#{$el-namespace}-overlay) {
       position: absolute;

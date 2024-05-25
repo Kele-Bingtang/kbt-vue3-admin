@@ -154,7 +154,7 @@ onUnmounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-menu-search;
+$prefix-class: #{$admin-namespace}-menu-search;
 
 .#{$prefix-class} {
   &:not(.show) {
@@ -184,7 +184,7 @@ $prefix-class: #{$namespace}-menu-search;
     cursor: pointer;
 
     &:hover {
-      color: var(--el-color-primary);
+      color: var(--#{$el-namespace}-color-primary);
     }
   }
 }

@@ -41,7 +41,7 @@ const prefixClass = getPrefixClass("custom-button");
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-custom-button;
+$prefix-class: #{$admin-namespace}-custom-button;
 
 .#{$prefix-class} {
   @keyframes sheen {

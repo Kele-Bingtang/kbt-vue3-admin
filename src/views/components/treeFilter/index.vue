@@ -109,7 +109,7 @@ const data: Tree[] = [
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-tree-filter-demo;
+$prefix-class: #{$admin-namespace}-tree-filter-demo;
 
 .#{$prefix-class} {
   display: flex;

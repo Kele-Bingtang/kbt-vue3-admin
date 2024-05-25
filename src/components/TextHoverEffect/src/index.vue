@@ -37,7 +37,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-link-hover;
+$prefix-class: #{$admin-namespace}-link-hover;
 
 /* hover */
 .#{$prefix-class} {

@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-icon-picker;
+$prefix-class: #{$admin-namespace}-icon-picker;
 
 .#{$prefix-class} {
   display: flex;
@@ -22,7 +22,7 @@ $prefix-class: #{$namespace}-icon-picker;
       transition: all 0.3s ease 0s;
 
       &:hover {
-        border-color: var(--el-color-primary) !important;
+        border-color: var(--#{$el-namespace}-color-primary) !important;
       }
     }
   }
@@ -34,7 +34,7 @@ $prefix-class: #{$namespace}-icon-picker;
     display: flex;
     align-items: center;
     height: 50px;
-    padding-right: var(--el-popover-padding);
-    padding-left: var(--el-popover-padding);
+    padding-right: var(--#{$el-namespace}-popover-padding);
+    padding-left: var(--#{$el-namespace}-popover-padding);
   }
 }

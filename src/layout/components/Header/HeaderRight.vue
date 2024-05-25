@@ -46,7 +46,7 @@ const isMobile = computed(() => layoutStore.device === DeviceType.Mobile);
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-header-right;
+$prefix-class: #{$admin-namespace}-header-right;
 
 .#{$prefix-class} {
   display: flex;
@@ -68,7 +68,7 @@ $prefix-class: #{$namespace}-header-right;
     }
 
     :deep(.svg-icon:hover use) {
-      fill: var(--el-color-primary) !important;
+      fill: var(--#{$el-namespace}-color-primary) !important;
     }
   }
 }

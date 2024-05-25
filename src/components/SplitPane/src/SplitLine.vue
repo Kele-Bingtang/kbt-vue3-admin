@@ -21,7 +21,7 @@ const barConClasses = computed(() => (isVertical.value ? "vertical" : "horizonta
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-split-trigger;
+$prefix-class: #{$admin-namespace}-split-trigger;
 $trigger-background: #f8f8f9;
 
 .#{$prefix-class} {

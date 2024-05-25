@@ -1,5 +1,5 @@
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
-$prefix-class: #{$namespace}-tree-filter;
+$prefix-class: #{$admin-namespace}-tree-filter;
 
 .#{$prefix-class} {
   box-sizing: border-box;
@@ -12,7 +12,7 @@ $prefix-class: #{$namespace}-tree-filter;
     margin: 0 0 15px;
     font-size: 18px;
     font-weight: bold;
-    color: var(--el-color-info-dark-2);
+    color: var(--#{$el-namespace}-color-info-dark-2);
     letter-spacing: 0.5px;
   }
 
@@ -32,7 +32,7 @@ $prefix-class: #{$namespace}-tree-filter;
 
     :deep(.#{$el-namespace}-tree--highlight-current) {
       .#{$el-namespace}-tree-node.is-current > .#{$el-namespace}-tree-node__content {
-        background-color: var(--el-color-primary);
+        background-color: var(--#{$el-namespace}-color-primary);
 
         .#{$el-namespace}-tree-node__label,
         .#{$el-namespace}-tree-node__expand-icon {

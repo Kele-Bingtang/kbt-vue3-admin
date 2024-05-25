@@ -215,7 +215,7 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-cropper;
+$prefix-class: #{$admin-namespace}-cropper;
 
 .#{$prefix-class} {
   display: flex;

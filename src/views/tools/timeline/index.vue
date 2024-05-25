@@ -14,7 +14,7 @@
             :icon="activity.icon"
             :color="activity.color"
             :timestamp="activity.timestamp"
-            :type="activity.type as any"
+            :type="activity.type"
           >
             {{ activity.content }}
           </el-timeline-item>
@@ -28,7 +28,7 @@
             :color="activity.color"
             :timestamp="activity.timestamp"
             placement="bottom"
-            :type="activity.type as any"
+            :type="activity.type"
           >
             <div class="message">
               kbt-vue3-admin 是基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 编写的一套后台管理系统
@@ -74,7 +74,7 @@ const activities = [
 ];
 </script>
 
-<style scoped>
+<style lang="scss" scoped>
 .message {
   position: relative;
   box-sizing: border-box;
@@ -83,8 +83,8 @@ const activities = [
   line-height: 18px;
   color: #ffffff;
   word-break: break-all;
-  background-color: var(--el-color-primary);
-  border-color: var(--el-color-primary);
+  background-color: var(--#{$el-namespace}-color-primary);
+  border-color: var(--#{$el-namespace}-color-primary);
   border-radius: 6px;
 }
 
@@ -96,7 +96,7 @@ const activities = [
   height: 0;
   overflow: hidden;
   content: "";
-  border-color: var(--el-color-primary) transparent transparent;
+  border-color: var(--#{$el-namespace}-color-primary) transparent transparent;
   border-style: solid dashed dashed;
   border-width: 10px;
 }

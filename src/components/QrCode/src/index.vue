@@ -3,7 +3,7 @@
     <canvas ref="wrapRef" @click="clickCode" v-if="props.tag === 'canvas'"></canvas>
     <img v-else ref="wrapRef" @click="clickCode" />
     <div v-if="props.disabled" :class="`${prefixClass}--disabled`" @click="disabledClick">
-      <div :class="`${prefixClass}__icon`" color="var(--el-color-primary)">
+      <div :class="`${prefixClass}__icon`" :color="`var(--${variables.elNamespace}-color-primary)`">
         <el-icon style="cursor: pointer" :size="30"><RefreshRight /></el-icon>
         <div>{{ props.disabledText }}</div>
       </div>
@@ -20,7 +20,7 @@ import { useDesign } from "@/hooks";
 
 defineOptions({ name: "QrCode" });
 
-const { getPrefixClass } = useDesign();
+const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("qrcode");
 
 interface QrCodeLogo {
@@ -239,7 +239,7 @@ const disabledClick = () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-qrcode;
+$prefix-class: #{$admin-namespace}-qrcode;
 
 .#{$prefix-class} {
   position: relative;

@@ -25,8 +25,8 @@ app.use(Vue3TreeOrg);
 
 // 是否全部注册 Element Plus 的样式
 if (import.meta.env.VITE_LOAD_ALL_EP_STYLE) {
-  // import("element-plus/theme-chalk/src/index.scss");
-  import("element-plus/dist/index.css");
+  import("element-plus/theme-chalk/src/index.scss");
+  // import("element-plus/dist/index.css");
 }
 // 是否全部注册 Element Plus 的组件
 if (import.meta.env.VITE_LOAD_ALL_EP_COMPONENTS) {

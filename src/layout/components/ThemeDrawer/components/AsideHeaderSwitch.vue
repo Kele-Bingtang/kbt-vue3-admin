@@ -78,7 +78,7 @@ const handleHeaderTheme = (value: LayoutThemeType) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-aside-header-switch;
+$prefix-class: #{$admin-namespace}-aside-header-switch;
 
 .#{$prefix-class} {
   display: flex;
@@ -105,7 +105,7 @@ $prefix-class: #{$namespace}-aside-header-switch;
       position: absolute;
       right: 15px;
       bottom: 15px;
-      color: var(--el-color-primary);
+      color: var(--#{$el-namespace}-color-primary);
       transition: all 0.2s;
     }
   }

@@ -12,7 +12,7 @@
         </el-link>
         <el-alert :closable="false">
           可以去代码编辑器（该菜单上方），它是利用 CodeMirror 实现代码对比功能，比 `v-code-diff` 多了
-          <span style="color: var(--el-color-primary)">代码替换功能</span>
+          <span :style="`color: var(--${variables.elNamespace}-color-primary)`">代码替换功能</span>
           ，但是少了部分功能，如统计信息、更细节对比、空格去除等功能
         </el-alert>
       </template>
@@ -189,6 +189,9 @@
 import { CodeDiff } from "v-code-diff";
 import oldDoc from "./oldDoc.json";
 import newDOc from "./newDoc.json";
+import { useDesign } from "@/hooks";
+
+const { variables } = useDesign();
 
 const oldString = ref(JSON.stringify(oldDoc, null, 2));
 const newString = ref(JSON.stringify(newDOc, null, 2));

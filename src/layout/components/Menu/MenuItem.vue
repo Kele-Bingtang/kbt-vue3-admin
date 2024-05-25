@@ -76,7 +76,7 @@ watch(
 
   :deep(.svg-icon) {
     width: 1.5rem !important;
-    width: var(--el-menu-icon-width) !important;
+    width: var(--#{$el-namespace}-menu-icon-width) !important;
     margin-right: 5px;
     overflow: visible;
     text-align: center;

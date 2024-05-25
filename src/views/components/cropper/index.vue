@@ -61,7 +61,7 @@ const uploadImage = (imgData: FormData) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-cropper-demo;
+$prefix-class: #{$admin-namespace}-cropper-demo;
 
 .#{$prefix-class} {
   width: 1000px;

@@ -1,12 +1,18 @@
 <template>
-  <ElImageViewer v-if="show" v-bind="bindValue" @close="close" />
+  <ElConfigProvider :namespace="variables.elNamespace" :size="layoutSize">
+    <ElImageViewer v-if="visible" v-bind="bindValue" @close="close" />
+  </ElConfigProvider>
 </template>
 
 <script setup lang="ts">
-import { ElImageViewer } from "element-plus";
-import { computed, ref, withDefaults } from "vue";
+import { ElImageViewer, ElConfigProvider } from "element-plus";
+import { computed, withDefaults } from "vue";
+import { useDesign } from "@/hooks";
+import { useLayoutStore } from "@/stores";
 
 defineOptions({ name: "ImageViewer" });
+
+const { variables } = useDesign();
 
 export interface ImageViewerProps {
   urlList?: string[];
@@ -15,7 +21,7 @@ export interface ImageViewerProps {
   infinite?: boolean;
   hideOnClickModal?: boolean;
   teleported?: boolean;
-  show?: boolean;
+  modelValue?: boolean;
 }
 
 const props = withDefaults(defineProps<ImageViewerProps>(), {
@@ -25,18 +31,22 @@ const props = withDefaults(defineProps<ImageViewerProps>(), {
   infinite: true,
   hideOnClickModal: false,
   teleported: false,
-  show: false,
+  modelValue: false,
 });
 
 const bindValue = computed(() => {
   const propsData: Record<string, any> = { ...props };
-  delete propsData.show;
+  delete propsData.visible;
+  delete propsData.modelValue;
+  delete propsData.modelModifiers;
   return propsData;
 });
 
-const show = ref(props.show);
+const layoutSize = computed(() => useLayoutStore().layoutSize);
+
+const visible = defineModel({ default: false });
 
 const close = () => {
-  show.value = false;
+  visible.value = false;
 };
 </script>

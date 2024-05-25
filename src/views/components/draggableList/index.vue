@@ -14,7 +14,7 @@
             </el-card>
           </template>
           <template #leftIcon>
-            <el-icon style="color: var(--el-color-primary)"><ArrowRight /></el-icon>
+            <el-icon :style="`color: var(--${variables.elNamespace}-color-primary)`"><ArrowRight /></el-icon>
           </template>
 
           <template #rightTitle>
@@ -26,7 +26,7 @@
             </el-card>
           </template>
           <template #rightIcon>
-            <el-icon style="color: var(--el-color-primary)"><ArrowLeft /></el-icon>
+            <el-icon :style="`color: var(--${variables.elNamespace}-color-primary)`"><ArrowLeft /></el-icon>
           </template>
         </DraggableList>
       </div>
@@ -81,7 +81,7 @@ import { list1, list2 } from "@/mock/drag-list";
 import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
 
-const { getPrefixClass } = useDesign();
+const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("draggable-list-demo");
 
 const listData1 = ref(list1);
@@ -100,7 +100,7 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-draggable-list-demo;
+$prefix-class: #{$admin-namespace}-draggable-list-demo;
 
 .#{$prefix-class} {
   width: 100%;
@@ -141,7 +141,7 @@ $prefix-class: #{$namespace}-draggable-list-demo;
 }
 </style>
 <style lang="scss">
-$prefix-class: #{$namespace}-draggable-list-demo;
+$prefix-class: #{$admin-namespace}-draggable-list-demo;
 
 .#{$prefix-class} {
   &__card {

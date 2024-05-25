@@ -21,7 +21,7 @@ const exitMaximize = () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-maximize;
+$prefix-class: #{$admin-namespace}-maximize;
 
 .#{$prefix-class} {
   position: fixed;
@@ -31,13 +31,13 @@ $prefix-class: #{$namespace}-maximize;
   width: 52px;
   height: 52px;
   cursor: pointer;
-  background-color: var(--el-color-info);
+  background-color: var(--#{$el-namespace}-color-info);
   border-radius: 50%;
   opacity: 0.7;
 
   &:hover {
-    // background-color: var(--el-color-info-dark-2);
-    background-color: var(--el-color-primary);
+    // background-color: var(--#{$el-namespace}-color-info-dark-2);
+    background-color: var(--#{$el-namespace}-color-primary);
   }
 
   .#{$el-namespace}-icon {

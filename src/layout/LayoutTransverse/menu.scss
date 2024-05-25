@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-transverse-layout;
+$prefix-class: #{$admin-namespace}-transverse-layout;
 
 .#{$prefix-class} {
   &__menu {
@@ -15,7 +15,7 @@ $prefix-class: #{$namespace}-transverse-layout;
           background: var(--menu-active-bg-color);
 
           &:hover {
-            color: var(--el-color-primary);
+            color: var(--#{$el-namespace}-color-primary);
           }
         }
 
@@ -44,7 +44,7 @@ $prefix-class: #{$namespace}-transverse-layout;
     .#{$el-namespace}-menu--popup .menu-item {
       /* 子级高亮，父级也高亮 */
       &.is-active {
-        color: var(--el-color-primary);
+        color: var(--#{$el-namespace}-color-primary);
       }
 
       &.is-active::before {
@@ -54,7 +54,7 @@ $prefix-class: #{$namespace}-transverse-layout;
         left: 0;
         width: 4px;
         content: "";
-        background: var(--el-color-primary);
+        background: var(--#{$el-namespace}-color-primary);
       }
     }
 

@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-layout-loading;
+$prefix-class: #{$admin-namespace}-layout-loading;
 
 .#{$prefix-class} {
   display: flex;
@@ -42,7 +42,7 @@ $prefix-class: #{$namespace}-layout-loading;
       display: block;
       width: 14px;
       height: 14px;
-      background-color: var(--el-color-primary);
+      background-color: var(--#{$el-namespace}-color-primary);
       border-radius: 100%;
       opacity: 0.3;
       transform: scale(0.75);

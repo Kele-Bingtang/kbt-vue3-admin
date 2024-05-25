@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-tabs-nav;
+$prefix-class: #{$admin-namespace}-tabs-nav;
 
 .#{$prefix-class} {
   position: relative;
@@ -42,8 +42,8 @@ $prefix-class: #{$namespace}-tabs-nav;
     }
 
     .#{$el-namespace}-tabs--card > .#{$el-namespace}-tabs__header .#{$el-namespace}-tabs__item.is-active {
-      color: var(--el-color-primary);
-      border-bottom: 2px solid var(--el-color-primary);
+      color: var(--#{$el-namespace}-color-primary);
+      border-bottom: 2px solid var(--#{$el-namespace}-color-primary);
     }
 
     .#{$el-namespace}-tabs__item .is-icon-close svg {

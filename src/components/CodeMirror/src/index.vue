@@ -619,7 +619,7 @@ const defaultPhrases = {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-code-mirror;
+$prefix-class: #{$admin-namespace}-code-mirror;
 
 .#{$prefix-class} {
   width: v-bind(codeMirrorWidth);
@@ -634,7 +634,7 @@ $prefix-class: #{$namespace}-code-mirror;
 
   :deep(.cm-editor.cm-focused) {
     outline: none;
-    box-shadow: 0 0 0 1px var(--el-color-primary);
+    box-shadow: 0 0 0 1px var(--#{$el-namespace}-color-primary);
   }
 
   /* a 编辑器高亮行背景色 */

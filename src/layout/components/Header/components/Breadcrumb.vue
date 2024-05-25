@@ -57,7 +57,7 @@ watch(
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-breadcrumb;
+$prefix-class: #{$admin-namespace}-breadcrumb;
 
 .#{$prefix-class} {
   display: flex;

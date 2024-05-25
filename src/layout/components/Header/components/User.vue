@@ -105,7 +105,7 @@ const logout = async () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-user-dropdown;
+$prefix-class: #{$admin-namespace}-user-dropdown;
 
 .#{$prefix-class} {
   &__avatar {

@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-tabs-nav;
+$prefix-class: #{$admin-namespace}-tabs-nav;
 
 .#{$prefix-class} {
   position: relative;
@@ -34,7 +34,7 @@ $prefix-class: #{$namespace}-tabs-nav;
         line-height: 27px;
         vertical-align: middle;
         cursor: pointer;
-        border: 1px solid var(--el-border-color-light);
+        border: 1px solid var(--#{$el-namespace}-border-color-light);
         border-radius: 3px;
 
         &.active {
@@ -53,7 +53,7 @@ $prefix-class: #{$namespace}-tabs-nav;
           width: 12px;
           height: 12px;
           margin-right: 7px;
-          background-color: var(--el-border-color-light);
+          background-color: var(--#{$el-namespace}-border-color-light);
           border-radius: 50%;
           transition: background 0.2s ease;
         }
@@ -112,7 +112,7 @@ $prefix-class: #{$namespace}-tabs-nav;
       padding: 6px 4px;
       line-height: 14px;
       text-align: center;
-      border-color: var(--el-border-color-light);
+      border-color: var(--#{$el-namespace}-border-color-light);
       border-top: none;
       border-bottom: none;
 

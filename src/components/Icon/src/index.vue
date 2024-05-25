@@ -102,7 +102,7 @@ const isString = (icon: Undefined<IconTypes>): icon is string => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-icon;
+$prefix-class: #{$admin-namespace}-icon;
 
 .#{$prefix-class} {
   &:hover {
@@ -118,7 +118,7 @@ $prefix-class: #{$namespace}-icon;
 </style>
 
 <style lang="scss">
-$prefix-class: #{$namespace}-icon;
+$prefix-class: #{$admin-namespace}-icon;
 
 .#{$prefix-class}.iconfont {
   &:hover {

@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-mixins-layout;
+$prefix-class: #{$admin-namespace}-mixins-layout;
 
 .#{$prefix-class} {
   &__menu {
@@ -15,7 +15,7 @@ $prefix-class: #{$namespace}-mixins-layout;
           background: var(--menu-active-bg-color);
 
           &:hover {
-            color: var(--el-color-primary);
+            color: var(--#{$el-namespace}-color-primary);
           }
         }
 
@@ -49,7 +49,7 @@ $prefix-class: #{$namespace}-mixins-layout;
         left: 0;
         width: 4px;
         content: "";
-        background: var(--el-color-primary);
+        background: var(--#{$el-namespace}-color-primary);
       }
     }
 
@@ -76,7 +76,7 @@ $prefix-class: #{$namespace}-mixins-layout;
       /* 子级高亮，父级也高亮 */
       &.is-active > .#{$el-namespace}-sub-menu__title,
       .is-active.menu-item {
-        color: var(--el-color-primary);
+        color: var(--#{$el-namespace}-color-primary);
       }
 
       .#{$el-namespace}-menu {

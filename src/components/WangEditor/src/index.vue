@@ -204,12 +204,12 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-wang-editor;
+$prefix-class: #{$admin-namespace}-wang-editor;
 
 /* 富文本组件校验失败样式 */
 .is-error {
   .#{$prefix-class} {
-    border-color: var(--el-color-danger);
+    border-color: var(--#{$el-namespace}-color-danger);
   }
 }
 

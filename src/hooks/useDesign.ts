@@ -10,7 +10,7 @@ export const useDesign = () => {
   };
 
   return {
-    variables: variables,
+    variables,
     getPrefixClass,
   };
 };

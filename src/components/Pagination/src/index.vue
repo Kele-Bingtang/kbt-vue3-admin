@@ -91,7 +91,7 @@ defineExpose({ paging: pageSetting });
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-pagination;
+$prefix-class: #{$admin-namespace}-pagination;
 
 .#{$prefix-class} {
   padding: 32px 16px;

@@ -46,7 +46,7 @@ withDefaults(defineProps<DraggableItemProps>(), {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-drag-item;
+$prefix-class: #{$admin-namespace}-drag-item;
 
 .#{$prefix-class} {
   min-width: 300px;

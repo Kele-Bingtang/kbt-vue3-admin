@@ -227,7 +227,7 @@ defineExpose({
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-count-to;
+$prefix-class: #{$admin-namespace}-count-to;
 
 .#{$prefix-class} {
   &__content--outer {

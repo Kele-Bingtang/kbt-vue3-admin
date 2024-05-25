@@ -19,8 +19,8 @@
             @click="toggleFull"
             width="18px"
             height="18px"
-            color="var(--el-color-info)"
-            hover-color="var(--el-color-primary)"
+            :color="`var(--${variables.elNamespace}-color-info)`"
+            :hover-color="`var(--${variables.elNamespace}-color-primary)`"
             :icon-style="{ cursor: 'pointer' }"
           />
         </div>

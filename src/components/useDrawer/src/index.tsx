@@ -1,8 +1,17 @@
-import { render, getCurrentInstance, unref, type Component, type ComponentInternalInstance, type VNode } from "vue";
-import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
+import {
+  render,
+  getCurrentInstance,
+  computed,
+  unref,
+  type Component,
+  type ComponentInternalInstance,
+  type VNode,
+} from "vue";
+import { ElDrawer, ElButton, type DrawerProps, ElConfigProvider } from "element-plus";
 import { Icon } from "@/components";
 import "./index.scss";
 import { useDesign } from "@/hooks";
+import { useLayoutStore } from "@/stores";
 
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-drawer");
@@ -57,6 +66,8 @@ export const showDrawer = (
 ) => {
   ctx && (thisAppContext = ctx?.appContext);
 
+  const layoutSize = computed(() => useLayoutStore().layoutSize);
+
   const isFullscreen = ref(false);
 
   const toggleFull = () => {
@@ -68,55 +79,57 @@ export const showDrawer = (
   };
 
   const vm = (
-    <ElDrawer
-      modelValue
-      title="弹框"
-      size="30%"
-      before-close={() => handleClose(drawerProps)}
-      {...drawerProps}
-      render
-      headerRender
-      footerRender
-      class={prefixClass}
-    >
-      {{
-        default: () => {
-          if (drawerProps.render) return drawerProps.render();
-          return <component is={component} {...componentsProps}></component>;
-        },
-        header: () => {
-          if (drawerProps.headerRender) return drawerProps.headerRender();
-          return (
-            <>
-              <span class={`${variables.elNamespace}-drawer__title`}>{drawerProps.title}</span>
-              {drawerProps.fullscreenIcon !== false && (
-                <Icon
-                  name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
-                  onClick={() => toggleFull()}
-                  width="18px"
-                  height="18px"
-                  color="var(--el-color-info)"
-                  hover-color="var(--el-color-primary)"
-                  icon-style={{ cursor: "pointer" }}
-                />
-              )}
-            </>
-          );
-        },
-        footer: () => {
-          if (drawerProps.footerRender) return drawerProps.footerRender();
-          if (drawerProps.showFooter === false) return;
-          return (
-            <>
-              <ElButton onClick={() => handleClose(drawerProps)}>取 消</ElButton>
-              <ElButton type="primary" onClick={() => handleConfirm(drawerProps)}>
-                确 定
-              </ElButton>
-            </>
-          );
-        },
-      }}
-    </ElDrawer>
+    <ElConfigProvider namespace={variables.elNamespace} size={layoutSize.value}>
+      <ElDrawer
+        modelValue
+        title="弹框"
+        size="30%"
+        before-close={() => handleClose(drawerProps)}
+        {...drawerProps}
+        render
+        headerRender
+        footerRender
+        class={prefixClass}
+      >
+        {{
+          default: () => {
+            if (drawerProps.render) return drawerProps.render();
+            return <component is={component} {...componentsProps}></component>;
+          },
+          header: () => {
+            if (drawerProps.headerRender) return drawerProps.headerRender();
+            return (
+              <>
+                <span class={`${variables.elNamespace}-drawer__title`}>{drawerProps.title}</span>
+                {drawerProps.fullscreenIcon !== false && (
+                  <Icon
+                    name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
+                    onClick={() => toggleFull()}
+                    width="18px"
+                    height="18px"
+                    color={`var(--${variables.elNamespace}-color-info)`}
+                    hover-color={`var(--${variables.elNamespace}-color-primary)`}
+                    icon-style={{ cursor: "pointer" }}
+                  />
+                )}
+              </>
+            );
+          },
+          footer: () => {
+            if (drawerProps.footerRender) return drawerProps.footerRender();
+            if (drawerProps.showFooter === false) return;
+            return (
+              <>
+                <ElButton onClick={() => handleClose(drawerProps)}>取 消</ElButton>
+                <ElButton type="primary" onClick={() => handleConfirm(drawerProps)}>
+                  确 定
+                </ElButton>
+              </>
+            );
+          },
+        }}
+      </ElDrawer>
+    </ElConfigProvider>
   );
 
   vm.appContext = thisAppContext;

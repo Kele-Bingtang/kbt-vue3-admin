@@ -188,7 +188,7 @@ const handleOperate = (message: MessageItem) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-message-center;
+$prefix-class: #{$admin-namespace}-message-center;
 
 .#{$prefix-class} {
   height: 100%;
@@ -223,11 +223,11 @@ $prefix-class: #{$namespace}-message-center;
             display: block;
             width: 2px;
             content: "";
-            background: var(--el-color-primary);
+            background: var(--#{$el-namespace}-color-primary);
           }
 
           .list-dot {
-            background-color: var(--el-color-primary) !important;
+            background-color: var(--#{$el-namespace}-color-primary) !important;
           }
         }
 
@@ -296,7 +296,7 @@ $prefix-class: #{$namespace}-message-center;
           color: #909399;
 
           &:hover {
-            color: var(--el-color-primary);
+            color: var(--#{$el-namespace}-color-primary);
           }
         }
 
@@ -338,7 +338,7 @@ $prefix-class: #{$namespace}-message-center;
 }
 </style>
 <style lang="scss">
-$prefix-class: #{$namespace}-message-center;
+$prefix-class: #{$admin-namespace}-message-center;
 
 .mobile {
   .#{$prefix-class} {

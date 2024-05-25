@@ -65,7 +65,7 @@ const handleSwitchDark = () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-theme-select;
+$prefix-class: #{$admin-namespace}-theme-select;
 
 .#{$prefix-class} {
   &__list {

@@ -1,37 +1,46 @@
 <template>
-  <ElOverlay v-show="visible" @click="close">
-    <div class="video-player-viewer" @click="close">
-      <div class="video-player-viewer-close" @click="close">
-        <Icon icon="ep:close" :size="24" />
+  <ElConfigProvider :namespace="variables.elNamespace" :size="layoutSize">
+    <ElOverlay v-show="visible" @click="close">
+      <div class="video-player-viewer" @click="close">
+        <div class="video-player-viewer-close" @click="close">
+          <Icon :icon="Close" :size="24" />
+        </div>
+        <VideoPlayer :url="url" :poster="poster" />
       </div>
-      <VideoPlayer :url="url" :poster="poster" />
-    </div>
-  </ElOverlay>
+    </ElOverlay>
+  </ElConfigProvider>
 </template>
 
 <script setup lang="ts">
 import VideoPlayer from "./index.vue";
-import { ElOverlay } from "element-plus";
+import { ElOverlay, ElConfigProvider } from "element-plus";
+import { Close } from "@element-plus/icons-vue";
 import { ref, nextTick, withDefaults, defineOptions } from "vue";
 import { Icon } from "@/components";
+import { useDesign } from "@/hooks";
+import { useLayoutStore } from "@/stores";
 
 defineOptions({ name: "VideoPlayerViewer" });
 
-interface VideoPlayerViewerProps {
-  show?: boolean;
+const { variables } = useDesign();
+
+export interface VideoPlayerViewerProps {
+  modelValue?: boolean;
   url?: string;
   poster?: string;
   id?: string;
 }
 
 const props = withDefaults(defineProps<VideoPlayerViewerProps>(), {
-  show: false,
+  modelValue: false,
   url: "",
   poster: "",
   id: "",
 });
 
-const visible = ref(props.show);
+const layoutSize = computed(() => useLayoutStore().layoutSize);
+
+const visible = defineModel({ default: false });
 
 const close = async () => {
   visible.value = false;
@@ -62,7 +71,7 @@ const close = async () => {
     height: 44px;
     color: #ffffff;
     cursor: pointer;
-    background: var(--el-text-color-regular);
+    background: var(--#{$el-namespace}-text-color-regular);
     border: #ffffff;
     border-radius: 9999px;
   }

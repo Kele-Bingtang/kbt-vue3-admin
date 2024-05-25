@@ -55,7 +55,7 @@ const uploadImage = (imgData: FormData) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-user-avatar;
+$prefix-class: #{$admin-namespace}-user-avatar;
 
 .#{$prefix-class} {
   position: relative;

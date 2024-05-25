@@ -377,7 +377,7 @@ const reset = () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-count-to-demo;
+$prefix-class: #{$admin-namespace}-count-to-demo;
 
 .#{$prefix-class} {
   .count-to-row {
@@ -393,14 +393,14 @@ $prefix-class: #{$namespace}-count-to-demo;
     margin-bottom: 20px;
     font-size: 80px;
     font-weight: 500;
-    color: var(--el-color-primary);
+    color: var(--#{$el-namespace}-color-primary);
     text-align: center;
   }
 
   :deep(.count-text),
   :deep(.unit-class) {
     font-size: 50px;
-    color: var(--el-color-primary);
+    color: var(--#{$el-namespace}-color-primary);
   }
 }
 </style>

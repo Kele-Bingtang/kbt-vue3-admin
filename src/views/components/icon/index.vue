@@ -76,14 +76,12 @@
 </template>
 
 <script setup lang="ts" name="IconDemo">
-import { useIcon } from "@/components";
+import { useIcon, IconPicker } from "@/components";
 import UpOutlined from "@iconify-icons/ant-design/up-outlined";
 import Upload from "@iconify-icons/ant-design/upload";
 
 import "@/assets/iconfont/iconfont.js";
 import "@/assets/iconfont/iconfont.css";
-
-import { IconPicker } from "@/components/IconPicker";
 
 const currentIcon = ref("");
 </script>

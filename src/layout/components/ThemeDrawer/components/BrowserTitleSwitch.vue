@@ -48,7 +48,7 @@ const titleModeOptions = [
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-browser-title-switch;
+$prefix-class: #{$admin-namespace}-browser-title-switch;
 
 .#{$prefix-class} {
   display: flex;

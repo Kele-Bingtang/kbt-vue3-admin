@@ -2,9 +2,11 @@ import ImageViewer from "./src/index.vue";
 import { createVNode, render, type VNode } from "vue";
 import type { ImageViewerProps } from "./src/index.vue";
 
+export { ImageViewer };
+
 let instance: VNode | null = null;
 
-export const createImageViewer = (options: ImageViewerProps) => {
+export const createImageViewer = (options: ImageViewerProps & { show?: boolean }) => {
   if (typeof window === "undefined") return;
   const {
     urlList,
@@ -24,7 +26,7 @@ export const createImageViewer = (options: ImageViewerProps) => {
   propsData.hideOnClickModal = hideOnClickModal;
   propsData.teleported = teleported;
   propsData.zIndex = zIndex;
-  propsData.show = show;
+  propsData.modelValue = show;
 
   document.body.appendChild(container);
   instance = createVNode(ImageViewer, propsData);

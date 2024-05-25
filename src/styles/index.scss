@@ -118,18 +118,18 @@ div:focus {
 
 /* nprogress 样式 */
 #nprogress .bar {
-  background: var(--el-color-primary) !important;
+  background: var(--#{$el-namespace}-color-primary) !important;
 }
 
 #nprogress .spinner-icon {
-  border-top-color: var(--el-color-primary) !important;
-  border-left-color: var(--el-color-primary) !important;
+  border-top-color: var(--#{$el-namespace}-color-primary) !important;
+  border-left-color: var(--#{$el-namespace}-color-primary) !important;
 }
 
 #nprogress .peg {
   box-shadow:
-    0 0 10px var(--el-color-primary),
-    0 0 5px var(--el-color-primary) !important;
+    0 0 10px var(--#{$el-namespace}-color-primary),
+    0 0 5px var(--#{$el-namespace}-color-primary) !important;
 }
 
 /* 当前页面最大化 css */
@@ -186,8 +186,8 @@ div:focus {
   box-sizing: border-box;
   padding: 20px;
   overflow-x: hidden;
-  background-color: var(--el-fill-color-blank);
-  border: 1px solid var(--el-border-color-light);
+  background-color: var(--#{$el-namespace}-fill-color-blank);
+  border: 1px solid var(--#{$el-namespace}-border-color-light);
   border-radius: 4px;
   box-shadow: 0 0 12px rgb(0 0 0 / 5%);
 }
@@ -197,17 +197,17 @@ div:focus {
   .#{$el-namespace}-drawer__header {
     padding: 15px 20px 14px;
     margin-bottom: 0;
-    border-bottom: 1px solid var(--el-border-color-lighter);
+    border-bottom: 1px solid var(--#{$el-namespace}-border-color-lighter);
 
     // 统一 Dialog、Drawer 字体大小可以打开
     // span {
     //   font-size: 17px;
-    //   color: var(--el-text-color-primary) !important;
+    //   color: var(--#{$el-namespace}-text-color-primary) !important;
     // }
   }
 
   .#{$el-namespace}-drawer__footer {
-    border-top: 1px solid var(--el-border-color-lighter);
+    border-top: 1px solid var(--#{$el-namespace}-border-color-lighter);
   }
 
   /* drawer select 样式 */
@@ -233,12 +233,12 @@ div:focus {
 /* 自定义 el-dialog 样式 */
 .#{$el-namespace}-dialog {
   .#{$el-namespace}-dialog__header {
-    border-bottom: 1px solid var(--el-border-color-lighter);
+    border-bottom: 1px solid var(--#{$el-namespace}-border-color-lighter);
 
     // 统一 Dialog、Drawer 字体大小可以打开
     // span {
     //   font-size: 17px;
-    //   color: var(--el-text-color-primary) !important;
+    //   color: var(--#{$el-namespace}-text-color-primary) !important;
     // }
   }
 
@@ -247,6 +247,6 @@ div:focus {
   }
 
   .#{$el-namespace}-dialog__footer {
-    border-top: 1px solid var(--el-border-color-lighter);
+    border-top: 1px solid var(--#{$el-namespace}-border-color-lighter);
   }
 }

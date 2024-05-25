@@ -25,7 +25,7 @@ const openErrorLogger = () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-error-badge;
+$prefix-class: #{$admin-namespace}-error-badge;
 
 .#{$prefix-class} {
   :deep(.#{$el-namespace}-badge__content.is-fixed) {

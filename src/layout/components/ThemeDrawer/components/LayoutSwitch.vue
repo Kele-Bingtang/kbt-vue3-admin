@@ -112,7 +112,7 @@ const changeLayout = (value: LayoutModeType) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-layout-switch;
+$prefix-class: #{$admin-namespace}-layout-switch;
 
 .#{$prefix-class} {
   position: relative;
@@ -129,22 +129,22 @@ $prefix-class: #{$namespace}-layout-switch;
     margin-bottom: 20px;
     cursor: pointer;
     border-radius: 5px;
-    box-shadow: 0 0 5px 1px var(--el-border-color-lighter);
+    box-shadow: 0 0 5px 1px var(--#{$el-namespace}-border-color-lighter);
     transition: all 0.2s;
 
     &__dark {
-      background-color: var(--el-color-primary);
+      background-color: var(--#{$el-namespace}-color-primary);
       border-radius: 3px;
     }
 
     &__light {
-      background-color: var(--el-color-primary-light-5);
+      background-color: var(--#{$el-namespace}-color-primary-light-5);
       border-radius: 3px;
     }
 
     &__content {
-      background-color: var(--el-color-primary-light-8);
-      border: 1px dashed var(--el-color-primary);
+      background-color: var(--#{$el-namespace}-color-primary-light-8);
+      border: 1px dashed var(--#{$el-namespace}-color-primary);
       border-radius: 3px;
     }
 
@@ -152,17 +152,17 @@ $prefix-class: #{$namespace}-layout-switch;
       position: absolute;
       right: 10px;
       bottom: 10px;
-      color: var(--el-color-primary);
+      color: var(--#{$el-namespace}-color-primary);
       transition: all 0.2s;
     }
 
     &:hover {
-      box-shadow: 0 0 5px 1px var(--el-border-color-darker);
+      box-shadow: 0 0 5px 1px var(--#{$el-namespace}-border-color-darker);
     }
   }
 
   .is-active {
-    box-shadow: 0 0 0 2px var(--el-color-primary) !important;
+    box-shadow: 0 0 0 2px var(--#{$el-namespace}-color-primary) !important;
   }
 
   &-vertical {

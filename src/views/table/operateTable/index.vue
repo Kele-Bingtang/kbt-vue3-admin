@@ -36,7 +36,11 @@
               @click="confirmEdit(row)"
             ></el-button>
           </template>
-          <span v-else style="color: var(--el-color-primary); cursor: pointer" @click="handleEdit(row)">
+          <span
+            v-else
+            :style="`color: var(--${variables.elNamespace}-color-primary); cursor: pointer`"
+            @click="handleEdit(row)"
+          >
             {{ row.title }}
           </span>
         </template>
@@ -143,7 +147,9 @@ import { largeData } from "@/mock/table";
 import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
 import { Search, Refresh, Plus, Check, EditPen, Delete } from "@element-plus/icons-vue";
+import { useDesign } from "@/hooks";
 
+const { variables } = useDesign();
 const defaultTableData = {
   id: "",
   name: "",

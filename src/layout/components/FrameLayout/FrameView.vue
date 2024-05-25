@@ -66,7 +66,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-frame;
+$prefix-class: #{$admin-namespace}-frame;
 
 .#{$prefix-class} {
   z-index: 998;

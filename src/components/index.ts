@@ -8,6 +8,7 @@ export * from "./Flicker";
 export * from "./Grid";
 export * from "./Highlight";
 export * from "./Icon";
+export * from "./IconPicker";
 export * from "./ImageVerifyCode";
 export * from "./ImageViewer";
 export * from "./MaterialInput";

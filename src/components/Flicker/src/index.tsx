@@ -2,7 +2,7 @@ import { defineComponent, h } from "vue";
 import "./index.scss";
 import { useDesign } from "@/hooks";
 
-const { getPrefixClass } = useDesign();
+const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("point-flicker");
 
 export interface attrsType {
@@ -27,7 +27,7 @@ export const useFlicker = (attrs?: attrsType): Component => {
           style: {
             "--point-width": attrs?.width ?? "12px",
             "--point-height": attrs?.height ?? "12px",
-            "--point-background": attrs?.background ?? "var(--el-color-primary)",
+            "--point-background": attrs?.background ?? `var(--${variables.elNamespace}-color-primary)`,
             "--point-border-radius": attrs?.borderRadius ?? "50%",
             "--point-scale": attrs?.scale ?? "2",
           },

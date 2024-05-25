@@ -1,4 +1,4 @@
-$prefix-class: #{$namespace}-login;
+$prefix-class: #{$admin-namespace}-login;
 
 .#{$prefix-class} {
   position: relative;
@@ -82,7 +82,7 @@ $prefix-class: #{$namespace}-login;
           cursor: pointer;
 
           .svg-icon:hover {
-            color: var(--el-color-primary);
+            color: var(--#{$el-namespace}-color-primary);
           }
         }
 

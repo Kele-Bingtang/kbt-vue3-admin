@@ -69,7 +69,7 @@ const handleMoving = (e: any) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-split-pane-demo;
+$prefix-class: #{$admin-namespace}-split-pane-demo;
 
 .#{$prefix-class} {
   height: 100%;

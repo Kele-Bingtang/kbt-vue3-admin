@@ -66,7 +66,7 @@ const handleTabsNav = (value: TabsNavModeType) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-tabs-nav-switch;
+$prefix-class: #{$admin-namespace}-tabs-nav-switch;
 
 .#{$prefix-class} {
   text-align: center;
@@ -116,7 +116,7 @@ $prefix-class: #{$namespace}-tabs-nav-switch;
         }
 
         &.active {
-          background-color: var(--el-color-primary);
+          background-color: var(--#{$el-namespace}-color-primary);
 
           .dot {
             background-color: #ffffff;
@@ -140,11 +140,11 @@ $prefix-class: #{$namespace}-tabs-nav-switch;
         color: #cccccc;
 
         &.active {
-          color: var(--el-color-primary);
-          border-bottom: 1px solid var(--el-color-primary);
+          color: var(--#{$el-namespace}-color-primary);
+          border-bottom: 1px solid var(--#{$el-namespace}-color-primary);
 
           .#{$el-namespace}-icon {
-            color: var(--el-color-primary);
+            color: var(--#{$el-namespace}-color-primary);
           }
         }
 
@@ -172,7 +172,7 @@ $prefix-class: #{$namespace}-tabs-nav-switch;
       position: absolute;
       top: 6px;
       right: 15px;
-      color: var(--el-color-primary);
+      color: var(--#{$el-namespace}-color-primary);
       transition: all 0.2s;
     }
   }

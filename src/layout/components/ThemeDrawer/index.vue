@@ -214,7 +214,7 @@ watchEffect(() => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-theme-drawer;
+$prefix-class: #{$admin-namespace}-theme-drawer;
 
 .#{$prefix-class} {
   &__divider {

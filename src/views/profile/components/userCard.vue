@@ -125,7 +125,7 @@ const getUserRoles = (userRoles: string[]) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-user-card;
+$prefix-class: #{$admin-namespace}-user-card;
 
 .#{$prefix-class} {
   &__header {

@@ -37,7 +37,7 @@
         <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
       </template>
       <template #append>
-        <span style="color: var(--el-color-primary)">
+        <span :style="`color: var(--${variables.elNamespace}-color-primary)`">
           我是插入在表格最后的内容。若表格有合计行，该内容会位于合计行之上。
         </span>
       </template>
@@ -52,7 +52,9 @@ import { ElButton, ElMessage, type TableColumnCtx } from "element-plus";
 import { genderType, tableData, userStatus } from "@/mock/pro-table";
 import { CirclePlus, Delete, Pointer, Refresh } from "@element-plus/icons-vue";
 import type { ResUserList } from "../simpleProTable/index.vue";
+import { useDesign } from "@/hooks";
 
+const { variables } = useDesign();
 const proTable = ref<ProTableInstance>();
 const data = ref(tableData);
 
@@ -179,13 +181,13 @@ const resetPass = async (params: ResUserList) => {
 .#{$el-namespace}-table .warning-row,
 .#{$el-namespace}-table .warning-row .#{$el-namespace}-table-fixed-column--right,
 .#{$el-namespace}-table .warning-row .#{$el-namespace}-table-fixed-column--left {
-  background-color: var(--el-color-warning-light-9);
+  background-color: var(--#{$el-namespace}-color-warning-light-9);
 }
 
 .#{$el-namespace}-table .success-row,
 .#{$el-namespace}-table .success-row .#{$el-namespace}-table-fixed-column--right,
 .#{$el-namespace}-table .success-row .#{$el-namespace}-table-fixed-column--left {
-  background-color: var(--el-color-success-light-9);
+  background-color: var(--#{$el-namespace}-color-success-light-9);
 }
 </style>
 

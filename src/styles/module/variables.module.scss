@@ -15,15 +15,15 @@ $splitMenuActiveBg-dark: $menuActiveBg-dark; /* Column 布局的菜单那文字�
 /* 白色菜单主题 */
 $menuText-light: #303133;
 $menuBg-light: #fff;
-$menuHoverBg-light: var(--el-color-primary-light-9);
-$menuActiveBg-light: var(--el-color-primary-light-9);
+$menuHoverBg-light: var(--#{$el-namespace}-color-primary-light-9);
+$menuActiveBg-light: var(--#{$el-namespace}-color-primary-light-9);
 $subMenuBg-light: $menuBg-light;
 $subMenuHoverBg-light: $menuHoverBg-light;
 $subMenuActiveBg-light: $menuActiveBg-light;
 $icon-light: $menuText-light;
 $logo-line-light: #3c3c3c1f;
 $logo-title-light: $menuText-light;
-$splitMenuActiveBg-light: var(--el-color-primary-light-9);
+$splitMenuActiveBg-light: var(--#{$el-namespace}-color-primary-light-9);
 
 /* 暗色头部主题 */
 $headerBg-dark: #191a20;

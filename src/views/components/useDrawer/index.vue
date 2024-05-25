@@ -1,9 +1,9 @@
 <template>
   <el-space fill>
     <el-card shadow="never" header="useDrawer 组件">
-      <el-button @click="openDrawer()">使用函数打开 Drawer</el-button>
+      <el-button @click="openDrawer()">函数式打开 Drawer</el-button>
 
-      <el-button @Click="visible = true">通过 modelValue 打开 Drawer 组件</el-button>
+      <el-button @Click="visible = true">组件式打开 Drawer 组件</el-button>
 
       <WorkDrawer v-model="visible">我是通过 modelValue 打开的 Drawer 组件</WorkDrawer>
     </el-card>

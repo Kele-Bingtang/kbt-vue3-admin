@@ -67,7 +67,11 @@
             <span>悬停文本</span>
           </template>
           <div class="component-item">
-            <TextHoverEffect init-color="#4dd9d5" hover-color="var(--el-color-primary)" text="kbt-vue-admin" />
+            <TextHoverEffect
+              init-color="#4dd9d5"
+              :hover-color="`var(--${variables.elNamespace}-color-primary)`"
+              text="kbt-vue-admin"
+            />
           </div>
         </el-card>
       </el-col>
@@ -81,7 +85,7 @@ import Button from "./button.vue";
 import { Search } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
 
-const { getPrefixClass } = useDesign();
+const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("animation-mixin");
 
 const demo = reactive({
@@ -101,7 +105,7 @@ const demoRules = {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-animation-mixin;
+$prefix-class: #{$admin-namespace}-animation-mixin;
 
 .#{$prefix-class} {
   @mixin color-btn($color) {

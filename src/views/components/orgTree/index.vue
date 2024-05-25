@@ -200,7 +200,7 @@ const onNodeClick = (e: MouseEvent, data: any) => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-org-tree-demo;
+$prefix-class: #{$admin-namespace}-org-tree-demo;
 
 .#{$prefix-class} {
   .tree-org-node__text {

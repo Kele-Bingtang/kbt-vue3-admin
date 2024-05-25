@@ -22,7 +22,7 @@ const toggleTrigger = () => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$namespace}-menu-collapse;
+$prefix-class: #{$admin-namespace}-menu-collapse;
 
 .#{$prefix-class} {
   margin-right: 20px;
