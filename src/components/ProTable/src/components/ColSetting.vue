@@ -1,7 +1,7 @@
 <template>
   <!-- 列设置 -->
   <el-drawer v-model="drawerVisible" title="列设置" size="450px">
-    <div :class="`${proTablePrefixClass}__main`">
+    <div :class="`${prefixClass}__main`">
       <el-table
         :data="colSetting"
         :border="true"
@@ -17,7 +17,7 @@
           <el-switch v-model="row.sortable"></el-switch>
         </el-table-column>
         <template #empty>
-          <div :class="`${proTablePrefixClass}__empty`">
+          <div :class="`${prefixClass}__empty`">
             <img src="@/assets/images/notData.png" alt="notData" />
             <div>暂无可配置列</div>
           </div>
@@ -34,7 +34,7 @@ import type { TableColumnProps } from "../interface";
 
 defineOptions({ name: "ColSetting" });
 
-const proTablePrefixClass = inject("proTablePrefixClass") as string;
+const prefixClass = inject("proTablePrefixClass") as string;
 
 defineProps<{ colSetting: TableColumnProps[] }>();
 

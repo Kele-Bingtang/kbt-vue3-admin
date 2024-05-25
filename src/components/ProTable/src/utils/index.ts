@@ -170,3 +170,9 @@ export const deepCloneTableRow = (obj: any, hash = new WeakMap()): Record<string
 
   return newObj;
 };
+
+export const visibleButton = (api: any, flag: boolean | undefined) => {
+  // flag 为 undefined 时，判断 api 是否存在
+  if (flag === undefined) return api;
+  return flag;
+};

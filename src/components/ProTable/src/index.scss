@@ -93,7 +93,7 @@ $prefix-class: #{$admin-namespace}-pro-table;
     }
   }
 
-  /* ProTable 不需要 card 样式（在组件内使用 ProTable 会使用到） */
+  /* card 样式 */
   .no-card {
     .card {
       padding: 0;
@@ -108,14 +108,14 @@ $prefix-class: #{$admin-namespace}-pro-table;
       margin-bottom: 0 !important;
     }
   }
-}
 
-.card {
-  box-sizing: border-box;
-  padding: 20px;
-  overflow-x: hidden;
-  background-color: var(--#{$el-namespace}-fill-color-blank);
-  border: 1px solid var(--#{$el-namespace}-border-color-light);
-  border-radius: 4px;
-  box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+  .card {
+    box-sizing: border-box;
+    padding: 20px;
+    overflow-x: hidden;
+    background-color: var(--#{$el-namespace}-fill-color-blank);
+    border: 1px solid var(--#{$el-namespace}-border-color-light);
+    border-radius: 4px;
+    box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+  }
 }

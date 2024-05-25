@@ -2,7 +2,7 @@ import type { VNode, ComponentPublicInstance, ComputedRef, Ref } from "vue";
 import type { BreakPoint, Responsive, FormColumnProps } from "@/components";
 import type { TableColumnCtx } from "element-plus";
 import ProTable, { type ProTableProps } from "../index.vue";
-import DialogOperate, { type DialogFormProps } from "../components/DialogOperate.vue";
+import DialogForm, { type DialogFormProps } from "../components/DialogForm.vue";
 
 type ValueType = string | number | boolean | any[];
 
@@ -84,8 +84,19 @@ export interface TableColumnProps<T = any>
   handleDelete?: (scope: any, expose: any) => void;
 }
 
-export type DialogOperateInstance = Omit<
-  InstanceType<typeof DialogOperate>,
+export type DialogFormInstance = Omit<
+  InstanceType<typeof DialogForm>,
   keyof ComponentPublicInstance | keyof DialogFormProps
 >;
+
 export type ProTableInstance = Omit<InstanceType<typeof ProTable>, keyof ComponentPublicInstance | keyof ProTableProps>;
+
+export type ToolButton = "refresh" | "size" | "setting" | "export" | "search";
+
+// 表格大小样式
+export enum TableSizeEnum {
+  Large = "large",
+  Default = "default",
+  Small = "small",
+  Mini = "mini",
+}

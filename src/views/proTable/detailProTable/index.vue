@@ -8,7 +8,7 @@
       :default-expand-all="expandAll"
       :expand-row-keys="expandKeys"
       rowKey="id"
-      :detailForm="detailForm"
+      :dialogForm="dialogForm"
     >
       <template #expandHeader>
         <el-button link :icon="expandAll ? ArrowUp : ArrowDown" @click="handleExpandAll" />
@@ -191,7 +191,7 @@ const columns: TableColumnProps<ProblemData>[] = [
   { prop: "operation", label: "操作", fixed: "right", width: 140 },
 ];
 
-const detailForm = {
+const dialogForm = {
   options: options,
   useAdd: true,
   useEdit: true,

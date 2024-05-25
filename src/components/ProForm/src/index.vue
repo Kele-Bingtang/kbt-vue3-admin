@@ -36,11 +36,11 @@
 
 <script setup lang="ts">
 import { shallowRef, ref, provide, watch, unref, type Ref } from "vue";
-import type { FormColumnProps, FormEnumProps, FormOptionsProps } from "./interface";
+import type { FormColumnProps, FormOptionsProps } from "./interface";
 import ProFormItem from "./components/ProFormItem.vue";
 import { getPx } from "@/utils";
 import { ElRow, ElCol, ElForm, ElFormItem, type FormInstance } from "element-plus";
-import { isResponsive, getFormProp, setFormProp } from "./utils";
+import { getFormProp, setFormProp } from "./utils";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "ProForm" });
@@ -60,81 +60,87 @@ const form = defineModel<Record<string, any>>({ required: true });
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>());
-provide("enumMap", enumMap);
-const setEnumMap = async (column: FormColumnProps) => {
-  const { attrs, formItem } = column;
-  if (!attrs.enum) return;
+
+const setEnumMap = async ({ attrs, formItem }: FormColumnProps) => {
+  const { enum: enumValue } = attrs;
+  const { prop } = formItem;
+
+  if (!enumValue) return;
+
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
-  if (isResponsive(attrs.enum)) return unref(enumMap).set(formItem.prop, unref(attrs.enum as Ref)!);
-  if (typeof attrs.enum !== "function") return unref(enumMap).set(formItem.prop, (attrs.enum as FormEnumProps[])!);
-  const { data } = await attrs.enum(unref(form));
-  unref(enumMap).set(formItem.prop, data);
+  if (typeof enumValue !== "function") return unref(enumMap).set(prop, unref(enumValue)!);
+
+  // 如果当前 enumMap 存在相同的值 return
+  if (enumMap.value.has(prop!) && (typeof enumValue === "function" || enumMap.value.get(prop!) === enumValue)) return;
+
+  // 为了防止接口执行慢，而存储慢，导致重复请求，所以预先存储为[]，接口返回后再二次存储
+  enumMap.value.set(prop!, []);
+
+  const { data } = await enumValue(unref(form));
+  unref(enumMap).set(prop, data);
 };
+provide("enumMap", enumMap);
 
 // 初始化默认值
-const initDefaultValue = async (column: FormColumnProps) => {
-  const { attrs, formItem } = column;
+const initDefaultValue = async ({ attrs: { defaultValue, fieldNames }, formItem: { prop } }: FormColumnProps) => {
   const formConst = unref(form);
-  const value = getFormProp(formConst, formItem.prop);
+  const value = getFormProp(formConst, prop);
+
   if (value || value === false || value === 0) return;
 
-  const defaultValue = attrs.defaultValue;
-  // 设置表单项的默认值
+  // 设置表单项的默认值，如果存在值，则不需要赋默认值
   if (defaultValue !== undefined && defaultValue !== null) {
-    // 如果存在值，则不需要赋默认值
-    if (isResponsive(defaultValue)) return setFormProp(formConst, formItem.prop, unref(defaultValue as Ref));
-    if (typeof defaultValue === "function") {
-      return setFormProp(formConst, formItem.prop, await defaultValue(formConst, unref(enumMap)));
-    }
-    return setFormProp(formConst, formItem.prop, defaultValue);
+    if (typeof defaultValue !== "function") return setFormProp(formConst, prop, unref(defaultValue));
+
+    return setFormProp(formConst, prop, await defaultValue(formConst, unref(enumMap)));
   }
 
   // 如果没有设置默认值，则判断后台是否返回 isDefault 为 Y 的枚举
-  const enumData = unref(enumMap).get(formItem.prop);
-  if (enumData && enumData.length) {
+  const enumData = unref(enumMap).get(prop);
+  if (enumData?.length) {
     // 找出 isDefault 为 Y 的 value
     const data = enumData.filter(item => item.isDefault === "Y");
 
-    return data.length && setFormProp(formConst, formItem.prop, data[0][attrs.fieldNames?.value ?? "value"]);
+    return data.length && setFormProp(formConst, prop, data[0][fieldNames?.value ?? "value"]);
   }
 };
 
 /**
  * 多个 Select 框级联下拉
  */
-const cascadeEnum = (column: FormColumnProps) => {
-  const { formItem, attrs } = column;
-  if (attrs?.el === "el-select") {
-    if (typeof attrs.subProp !== "string") return;
+const cascadeEnum = ({ formItem, attrs: { el, subProp, subEnum } }: FormColumnProps) => {
+  if (el === "el-select") {
+    if (typeof subProp !== "string") return;
     // 监听级联下拉变化
     watch(
       () => getFormProp(unref(form), formItem.prop),
       async (newVal: string) => {
         const enumMapConst = unref(enumMap);
 
-        if (!newVal) return enumMapConst.set(attrs.subProp!, []);
-        const { subEnum } = attrs;
         if (!subEnum) return;
 
-        let subEnumData;
-        if (enumMapConst.get(`${attrs.subProp!}-${newVal}`)) {
+        if (!newVal) return enumMapConst.set(subProp!, []);
+
+        if (enumMapConst.get(`${subProp!}-${newVal}`)) {
           // 存在缓存字典数据，则取出来赋值
-          enumMapConst.set(attrs.subProp!, enumMapConst.get(`${attrs.subProp!}-${newVal}`) || []);
+          enumMapConst.set(subProp!, enumMapConst.get(`${subProp!}-${newVal}`) || []);
         } else {
           if (typeof subEnum === "function") {
-            subEnumData = await subEnum(newVal, enumMapConst.get(formItem.prop));
-            enumMapConst.set(attrs.subProp!, subEnumData);
+            const subEnumData = await subEnum(newVal, enumMapConst.get(formItem.prop));
+            // 缓存字典数据
+            enumMapConst.set(`${subProp!}-${newVal}`, subEnumData);
+            enumMapConst.set(subProp!, subEnumData);
           } else if (Array.isArray(subEnum)) {
-            subEnumData = subEnum;
-            enumMapConst.set(attrs.subProp!, subEnumData);
+            // 缓存字典数据
+            enumMapConst.set(`${subProp!}-${newVal}`, subEnum);
+            enumMapConst.set(subProp!, subEnum);
           }
-          // 缓存字典数据
-          enumMapConst.set(`${attrs.subProp!}-${newVal}`, subEnumData);
         }
+
         const formEnum = enumMapConst.get(formItem.prop) || [];
-        const e = formEnum.filter(item => item.value === newVal);
+        const [enumValue] = formEnum.filter(item => item.value === newVal);
         // 如果选中的字典有 subValue，则直接赋值给 subProp
-        if (e[0]?.subValue) unref(form)[attrs.subProp!] = e[0].subValue;
+        if (enumValue?.subValue) unref(form)[subProp!] = enumValue.subValue;
       },
       { immediate: true }
     );
@@ -182,20 +188,19 @@ props.options.columns.forEach((item, index) => {
 props.options.columns.sort((a, b) => a.attrs.order! - b.attrs.order!);
 
 // 获取每个表单的宽度
-const formWidth = (column: FormColumnProps) => {
+const formWidth = ({ attrs, formItem: { br } }: FormColumnProps) => {
   const { form } = props.options;
-  const { attrs } = column;
   const style = attrs?.style || {};
-  if (column.formItem.br) return { ...style, width: "100%" };
+  if (br) return { ...style, width: "100%" };
   if (attrs.width) return { ...style, width: getPx(attrs.width) };
   if (form?.fixWidth) return { ...style, width: getPx(form?.width || "220px") };
   return style;
 };
 
-const getTitleFontStyle = (column: FormColumnProps) => {
-  if (!column.formItem.size || column.formItem.size === "default") return { fontSize: "16px", fontWeight: 600 };
-  if (column.formItem.size === "small") return { fontSize: "14px", fontWeight: 600 };
-  if (column.formItem.size === "large") return { fontSize: "18px", fontWeight: 600 };
+const getTitleFontStyle = ({ formItem: { size } }: FormColumnProps) => {
+  if (!size || size === "default") return { fontSize: "16px", fontWeight: 600 };
+  if (size === "small") return { fontSize: "14px", fontWeight: 600 };
+  if (size === "large") return { fontSize: "18px", fontWeight: 600 };
   return {};
 };
 

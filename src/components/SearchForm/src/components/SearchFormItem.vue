@@ -44,7 +44,7 @@ defineOptions({ name: "SearchFormItem" });
 
 interface SearchFormItemProps {
   column: TableColumnProps;
-  searchParam: { [key: string]: any };
+  searchParam: Record<string, any>;
 }
 
 const props = defineProps<SearchFormItemProps>();
@@ -64,10 +64,9 @@ const enumMap = inject("enumMap", ref(new Map()));
 const columnEnum = computed(() => {
   const column = props.column;
 
+  // 如果搜索项要使用现有的 EnumMap
   if (column.useEnumMap) {
-    if (typeof column.useEnumMap === "function") {
-      return column.useEnumMap(unref(enumMap));
-    }
+    if (typeof column.useEnumMap === "function") return column.useEnumMap(unref(enumMap));
 
     const data = unref(enumMap).get(column.useEnumMap);
     if (!data) return [];
@@ -78,7 +77,7 @@ const columnEnum = computed(() => {
   let enumData = unref(enumMap).get(props.column.prop);
   if (!enumData) return [];
   if (props.column.search?.el === "el-select-v2" && props.column.fieldNames) {
-    enumData = enumData.map((item: { [key: string]: any }) => {
+    enumData = enumData.map((item: Record<string, any>) => {
       return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
   }
