@@ -75,9 +75,10 @@ const proTable = ref<ProTableInstance>();
 const data = ref(tableData);
 
 const columns: TableColumnProps<ResUserList>[] = [
-  { type: "selection", fixed: "left", width: 80 },
-  { type: "index", label: "index", width: 80 },
-  { type: "expand", label: "Expand", width: 100 },
+  { type: "selection", fixed: "left", width: 60 },
+  { type: "index", label: "#", width: 60 },
+  { type: "sort", label: "Sort", width: 80 },
+  { type: "expand", label: "Expand", width: 80 },
   {
     prop: "username",
     label: "用户姓名",
