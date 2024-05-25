@@ -6,6 +6,10 @@
       <span>{{ $t("_settings.collapseMenu") }}</span>
       <el-switch v-model="settingsStore.isCollapse" />
     </div>
+    <div :class="`${prefixClass}__list`">
+      <span>{{ $t("_settings.menuAccordion") }}</span>
+      <el-switch v-model="settingsStore.menuAccordion" />
+    </div>
     <div :class="`${prefixClass}__list`" v-if="!isMobile">
       <span>{{ $t("_settings.showBreadcrumb") }}</span>
       <el-switch v-model="settingsStore.showBreadcrumb" />

@@ -18,6 +18,7 @@ const {
   showBreadcrumbIcon: showBreadcrumbIconSetting,
   showTabsNavIcon: tabsNavSetting,
   isCollapse: isCollapseSetting,
+  menuAccordion: menuAccordionSetting,
   fixTabsNav: fixTabsNavSetting,
   isDark: isDarkSetting,
   isWeak: isWeakSetting,
@@ -43,6 +44,7 @@ export const useSettingsStore = defineStore(
     const showBreadcrumbIcon = ref(showBreadcrumbIconSetting);
     const showTabsNavIcon = ref(tabsNavSetting);
     const isCollapse = ref(isCollapseSetting);
+    const menuAccordion = ref(menuAccordionSetting);
     const fixTabsNav = ref(fixTabsNavSetting);
     const isDark = ref(isDarkSetting);
     const isWeak = ref(isWeakSetting);
@@ -80,6 +82,7 @@ export const useSettingsStore = defineStore(
       showBreadcrumbIcon,
       showTabsNavIcon,
       isCollapse,
+      menuAccordion,
       fixTabsNav,
       isDark,
       isWeak,

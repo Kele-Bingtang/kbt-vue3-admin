@@ -133,6 +133,7 @@ export default {
     greyMode: "Grey Mode",
     weakMode: "Weak Mode",
     collapseMenu: "Collapse Menu",
+    menuAccordion: "Accordion Menu",
     showBreadcrumb: "Show Breadcrumb",
     showBreadcrumbIcon: "Show Breadcrumb Icon",
     showTabsNav: "Show TabsNav",

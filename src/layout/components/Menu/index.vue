@@ -6,7 +6,7 @@
       background-color="var(--menu-bg-color)"
       text-color="var(--menu-text-color)"
       :active-text-color="primaryTheme"
-      unique-opened
+      :unique-opened="settingsStore.menuAccordion"
       :collapse-transition="false"
       v-bind="$attrs"
     >

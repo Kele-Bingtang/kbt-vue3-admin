@@ -18,6 +18,7 @@ interface Settings {
   showBreadcrumbIcon: boolean; // 面包屑 Icon 是否显示
   showTabsNavIcon: boolean; // 标签栏 Icon 是否显示
   isCollapse: boolean; // 是否折叠菜单栏
+  menuAccordion: boolean; // 是否开启菜单手风琴
   fixTabsNav: boolean; // 是否固定标签页
   isDark: boolean; // 是否开启暗色主题
   isWeak: boolean; // 是否开启灰色主题
@@ -74,6 +75,7 @@ const themeSettings: Partial<Settings> = {
   showTabsNavIcon: true,
   recordTabsNav: false,
   isCollapse: false,
+  menuAccordion: false,
   fixTabsNav: true,
   isDark: false,
   isWeak: false,

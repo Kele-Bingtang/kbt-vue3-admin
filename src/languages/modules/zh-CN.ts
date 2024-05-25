@@ -132,6 +132,7 @@ export default {
     greyMode: "灰色模式",
     weakMode: "色弱模式",
     collapseMenu: "折叠菜单",
+    menuAccordion: "菜单手风琴",
     showBreadcrumb: "显示面包屑",
     showBreadcrumbIcon: "显示面包屑图标",
     showTabsNav: "显示标签栏",
