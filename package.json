@@ -13,7 +13,6 @@
     "build:test": "rimraf dist && vite build --mode test",
     "preview": "vite preview",
     "build:preview": "pnpm build && vite preview",
-    "report": "rimraf dist && vite build",
     "cloc": "NODE_OPTIONS=--max-old-space-size=4096 cloc . --exclude-dir=node_modules",
     "clean:cache": "rm -rf node_modules && rm -rf .eslintcache && pnpm install",
     "prepare": "husky install",

@@ -55,6 +55,7 @@ export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
           resolvers: [ElementPlusResolver({ importStyle: "sass" })],
           dirs: "src/components", // 自定引入需要扫描的组件路径
           dts: "src/auto-components.d.ts", // 生成在 src 路径下名为 auto-components.d.ts 的声明文件
+          directoryAsNamespace: true,
         })
       : undefined,
     // 使用 svg 图标
