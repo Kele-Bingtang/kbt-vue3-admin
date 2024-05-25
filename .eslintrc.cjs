@@ -3,6 +3,11 @@ require("@rushstack/eslint-patch/modern-module-resolution");
 
 module.exports = {
   root: true,
+  env: {
+    browser: true,
+    node: true,
+    es6: true,
+  },
   extends: [
     "plugin:vue/vue3-essential",
     "eslint:recommended",
@@ -10,8 +15,16 @@ module.exports = {
     "@vue/eslint-config-prettier",
     "./.eslintrc-globals.json",
   ],
+  // 指定如何解析语法
+  parser: "vue-eslint-parser",
   parserOptions: {
     ecmaVersion: "latest",
+    parser: "@typescript-eslint/parser",
+    sourceType: "module",
+    jsxPragma: "React",
+    ecmaFeatures: {
+      jsx: true,
+    },
   },
   rules: {
     // typeScript (https://typescript-eslint.io/rules)
