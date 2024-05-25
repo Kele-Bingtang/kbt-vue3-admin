@@ -15,7 +15,7 @@
 import VideoPlayer from "./index.vue";
 import { ElOverlay, ElConfigProvider } from "element-plus";
 import { Close } from "@element-plus/icons-vue";
-import { ref, nextTick, withDefaults, defineOptions } from "vue";
+import { computed, nextTick, withDefaults, defineOptions } from "vue";
 import { Icon } from "@/components";
 import { useDesign } from "@/hooks";
 import { useLayoutStore } from "@/stores";
@@ -25,10 +25,10 @@ defineOptions({ name: "VideoPlayerViewer" });
 const { variables } = useDesign();
 
 export interface VideoPlayerViewerProps {
-  modelValue?: boolean;
-  url?: string;
-  poster?: string;
-  id?: string;
+  modelValue?: boolean; // 是否打开视频播放器预览
+  url?: string; // 视频链接
+  poster?: string; // 视频预览图片
+  id?: string; // 预览容器 id
 }
 
 const props = withDefaults(defineProps<VideoPlayerViewerProps>(), {
