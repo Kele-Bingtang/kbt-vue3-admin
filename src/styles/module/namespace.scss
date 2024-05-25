@@ -2,8 +2,9 @@
 $admin-namespace: k;
 
 // el 命名空间
-$el-namespace: ep;
+$el-namespace: kbt;
 
+// 自定义 EP 样式命名空间
 @forward "element-plus/theme-chalk/src/mixins/config.scss" with (
   $namespace: #{$el-namespace}
 );

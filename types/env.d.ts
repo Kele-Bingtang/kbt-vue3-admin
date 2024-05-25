@@ -23,8 +23,8 @@ interface ImportMetaEnv {
   VITE_SOURCEMAP: boolean; // 是否生成 sourcemap 文件
   VITE_OUT_DIR: string; // 打包输出目录，默认 dist
   VITE_CSS_SPLIT: boolean; // 是否将 css 切割
-  VITE_LOAD_ALL_EP_STYLE: boolean; // 是否加载所有 element-plus 样式
-  VITE_LOAD_ALL_EP_COMPONENTS: boolean; // 是否加载所有 element-plus 组件
+  VITE_LOAD_ALL_EP_STYLE: boolean | string; // 是否加载所有 element-plus 样式，false 则为按需加载
+  VITE_LOAD_ALL_EP_COMPONENTS: boolean | string; // 是否加载所有 element-plus 组件，false 则为按需加载
   VITE_NODE_ENV: string; // 当前环境
   VITE_API_URL: string; // 接口跟地址
   VITE_PUBLIC_PATH: string; // 静态资源路径

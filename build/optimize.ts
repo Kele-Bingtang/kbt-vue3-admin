@@ -25,9 +25,9 @@ const include = [
   "vue3-tree-org",
   "vuedraggable",
   "xgplayer",
+  "vue3-menus",
   "v-contextmenu",
   "codemirror",
-  "codemirror-editor-vue3",
   "tinymce",
   "@tinymce/tinymce-vue",
 ];

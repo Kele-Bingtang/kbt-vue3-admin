@@ -97,7 +97,7 @@ import { Tooltip } from "@/components";
 import { useDesign } from "@/hooks";
 
 const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("message");
+const prefixClass = getPrefixClass("message-notice");
 
 interface Notice {
   id: string;
@@ -226,7 +226,7 @@ onMounted(() => {
 </script>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-message;
+$prefix-class: #{$admin-namespace}-message-notice;
 
 .#{$prefix-class} {
   &__list {

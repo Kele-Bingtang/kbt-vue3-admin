@@ -60,18 +60,20 @@ export const useTabsNav = () => {
   };
   // 标签拖拽排序
   const tabsDrop = (className: string, draggable: string) => {
-    Sortable.create(document.querySelector(className) as HTMLElement, {
-      draggable: draggable,
-      animation: 300,
-      onEnd({ newIndex, oldIndex }) {
-        const tabsList = [...tabNavList.value];
-        const currRow = tabsList.splice(oldIndex as number, 1)[0];
-        tabsList.splice(newIndex as number, 0, currRow);
-        layoutStore.$patch({
-          tabNavList: tabsList,
-        });
-      },
-    });
+    const tabDom = document.querySelector(className) as HTMLElement;
+    tabDom &&
+      Sortable.create(tabDom, {
+        draggable: draggable,
+        animation: 300,
+        onEnd({ newIndex, oldIndex }) {
+          const tabsList = [...tabNavList.value];
+          const currRow = tabsList.splice(oldIndex as number, 1)[0];
+          tabsList.splice(newIndex as number, 0, currRow);
+          layoutStore.$patch({
+            tabNavList: tabsList,
+          });
+        },
+      });
   };
 
   // 判断当前激活的 tab

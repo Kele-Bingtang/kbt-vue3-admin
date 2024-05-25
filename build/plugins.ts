@@ -11,6 +11,8 @@ import { visualizer } from "rollup-plugin-visualizer";
 import ServerUrlCopy from "vite-plugin-url-copy";
 import progress from "vite-plugin-progress";
 import { createStyleImportPlugin, ElementPlusResolve } from "vite-plugin-style-import";
+import Components from "unplugin-vue-components/vite";
+import { ElementPlusResolver } from "unplugin-vue-components/resolvers";
 
 export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
   const lifecycle = process.env.npm_lifecycle_event;
@@ -34,7 +36,7 @@ export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
               esModule: true,
               resolveStyle: name => {
                 if (!name.startsWith("el-")) return "";
-                return `element-plus/es/components/${name.replace(/^el-/, "")}/style/css`;
+                return `element-plus/theme-chalk/src/${name.replace(/^el-/, "")}.scss`;
               },
             },
           ],
@@ -46,7 +48,15 @@ export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
       eslintrc: {
         enabled: false, // 改为 true 用于生成 eslint 配置。生成后改回 false，避免重复生成消耗
       },
+      resolvers: !viteEnv.VITE_LOAD_ALL_EP_COMPONENTS ? [ElementPlusResolver()] : [],
     }),
+    !viteEnv.VITE_LOAD_ALL_EP_COMPONENTS
+      ? Components({
+          resolvers: [ElementPlusResolver({ importStyle: "sass" })],
+          dirs: "src/components", // 自定引入需要扫描的组件路径
+          dts: "src/auto-components.d.ts", // 生成在 src 路径下名为 auto-components.d.ts 的声明文件
+        })
+      : undefined,
     // 使用 svg 图标
     createSvgIconsPlugin({
       iconDirs: [resolve(process.cwd(), "src/assets/svg")],
