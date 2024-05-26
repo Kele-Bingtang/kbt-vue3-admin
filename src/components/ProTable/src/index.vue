@@ -1,12 +1,12 @@
 <template>
   <div :class="prefixClass">
     <!-- 查询表单 card -->
-    <SearchForm
+    <ProSearch
       v-show="isShowSearchProp"
+      v-model="searchParam"
       :search="_search"
       :reset="_reset"
-      :columns="searchColumns"
-      :search-param="searchParam"
+      :schema="searchColumns"
       :search-cols="searchCols"
     />
 
@@ -98,7 +98,7 @@ import {
 } from "vue";
 import { useTable, type Table } from "./hooks/useTable";
 import { useSelection } from "./hooks/useSelection";
-import { SearchForm, Pagination, type BreakPoint } from "@/components";
+import { ProSearch, Pagination, type BreakPoint, type ProSearchSchemaProps } from "@/components";
 import {
   type TableColumnProps,
   type DialogFormInstance,
@@ -106,7 +106,7 @@ import {
   TableSizeEnum,
   type ToolButton,
 } from "./interface";
-import { lastProp, filterEnum, filterEnumLabel, handleRowAccordingToProp } from "./utils";
+import { filterEnum, filterEnumLabel, handleRowAccordingToProp } from "./utils";
 import ColSetting from "./components/ColSetting.vue";
 import TableMain from "./components/TableMain.vue";
 import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./components/TableMainHeader.vue";
@@ -121,7 +121,7 @@ const prefixClass = getPrefixClass("pro-table");
 
 provide("proTablePrefixClass", prefixClass);
 
-export type DialogFormT = DialogFormProps;
+export type DialogForm = DialogFormProps;
 
 export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
@@ -272,7 +272,7 @@ const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
   // 为了防止接口执行慢，而存储慢，导致重复请求，所以预先存储为[]，接口返回后再二次存储
   enumMap.value.set(prop!, []);
 
-  const { data } = await enumValue(enumMap);
+  const { data } = await enumValue(enumMap.value);
   unref(enumMap).set(prop!, data);
 };
 provide("enumMap", enumMap);
@@ -296,23 +296,26 @@ const flatColumnsFunc = (columns: TableColumnProps[], flatArr: TableColumnProps[
 const flatColumns = ref<TableColumnProps[]>();
 flatColumns.value = flatColumnsFunc(unref(tableColumns));
 
-// 过滤需要搜索的配置项
+// 过滤需要搜索的配置项 & 组装搜索表单配置项
 const searchColumns = computed(() => {
-  return flatColumns.value
-    ?.filter(item => item.search?.el || item.search?.render)
-    .sort((a, b) => a.search!.order! - b.search!.order!);
-});
+  const column = flatColumns.value?.filter(item => item.search?.el || item.search?.render);
 
-// 设置搜索表单排序默认值 && 设置搜索表单项的默认值
-searchColumns.value?.forEach((column, index) => {
-  column.search!.order = column.search!.order ?? index + 2;
-  const key = column.search?.key ?? lastProp(column.prop!);
-  const defaultValue = column.search?.defaultValue;
+  const searchColumns: ProSearchSchemaProps[] = [];
 
-  if (defaultValue !== undefined && defaultValue !== null) {
-    unref(searchInitParam)[key] = defaultValue;
-    unref(searchParam)[key] = defaultValue;
-  }
+  column?.forEach(item => {
+    const searchColumn: any = {
+      ...item.search,
+      label: item.label || "",
+      prop: item.prop || "",
+      enum: item.enum as any,
+      useEnumMap: item.useEnumMap,
+      enumKey: item.enumKey,
+      fieldNames: item.fieldNames,
+    };
+    searchColumns.push(searchColumn);
+  });
+
+  return searchColumns;
 });
 
 // 列设置 ==> 过滤掉不需要设置的列

@@ -1,167 +1,74 @@
 <template>
-  <Tinymce
-    v-if="column.attrs?.el === 'tinymce'"
-    :model-value="getFormProp(_form, column.formItem.prop)"
-    @update:model-value="v => setFormProp(_form, column.formItem.prop, v)"
-    v-bind="{ ...handleFormProps }"
-  ></Tinymce>
-
-  <WangEditor
-    v-else-if="column.attrs?.el === 'wang-editor'"
-    :model-value="getFormProp(_form, column.formItem.prop)"
-    @update:model-value="v => setFormProp(_form, column.formItem.prop, v)"
-    v-bind="{ ...handleFormProps }"
-  ></WangEditor>
+  <RenderSlots v-if="column?.render" />
 
   <Tree
-    v-else-if="!column.attrs?.render && column.attrs?.el === 'el-tree'"
+    v-else-if="column?.el === 'el-tree'"
     :data="columnEnum"
-    :model-value="getFormProp(_form, column.formItem.prop)"
-    @update:model-value="v => setFormProp(_form, column.formItem.prop, v)"
+    :model-value="getFormProp(model, column.prop)"
+    @update:model-value="v => setFormProp(model, column.prop, v)"
     v-bind="{ ...handleFormProps }"
-  ></Tree>
+  />
 
-  <component
-    v-else
-    :is="column.attrs?.render ?? column.attrs?.el ?? ''"
-    :disabled="isDisabled()"
-    v-bind="{
-      ...handleFormProps,
-      ...placeholder,
-      scope: { form: _form, data: getFormProp(_form, column.formItem.prop), enumData: columnEnum },
-      clearable,
-    }"
-    :model-value="getFormProp(_form, column.formItem.prop, column.attrs.valueFormat)"
-    @update:model-value="(v: any) => setFormProp(_form, column.formItem.prop, v)"
-    :data="column.attrs?.el === 'el-tree-select' ? columnEnum : []"
-    :options="['el-cascader', 'el-select-v2'].includes(column.attrs?.el!) ? columnEnum : []"
-    :style="style"
-  >
-    <template v-if="column.attrs?.el === 'el-cascader'" #default="{ data }">
-      <span>{{ data[fieldNames.label] }}</span>
-    </template>
+  <RenderElComponents v-else-if="column?.el?.startsWith('el-')" />
 
-    <template v-if="column.attrs?.el === 'el-select'">
-      <template v-if="column.attrs?.type === 'el-select-group'">
-        <component :is="`el-option-group`" v-for="(colGroup, index) in columnEnum" :key="index" :label="colGroup.label">
-          <component
-            :is="`el-option`"
-            v-for="(col, index) in colGroup.options"
-            :key="index"
-            :label="col[fieldNames.label]"
-            :value="col[fieldNames.value]"
-          ></component>
-        </component>
-      </template>
-
-      <template v-else>
-        <component
-          :is="`el-option`"
-          v-for="(col, index) in columnEnum"
-          :key="index"
-          :label="col[fieldNames.label]"
-          :value="col[fieldNames.value]"
-        ></component>
-      </template>
-    </template>
-
-    <template v-if="column.attrs?.el === 'el-radio-group'">
-      <template v-if="column.attrs?.type === 'el-radio-button'">
-        <component
-          :is="`el-radio-button`"
-          v-for="(col, index) in columnEnum"
-          :key="index"
-          :value="col[fieldNames.value]"
-          :label="col[fieldNames.label]"
-        ></component>
-      </template>
-
-      <template v-else>
-        <component :is="`el-radio`" v-for="(col, index) in columnEnum" :key="index" :value="col[fieldNames.value]">
-          {{ col[fieldNames.label] }}
-        </component>
-      </template>
-    </template>
-
-    <template v-if="column.attrs?.el === 'el-checkbox-group'">
-      <template v-if="column.attrs?.type === 'el-checkbox-button'">
-        <component
-          :is="`el-checkbox-button`"
-          v-for="(col, index) in columnEnum"
-          :key="index"
-          :value="col[fieldNames.value]"
-        >
-          {{ col[fieldNames.label] }}
-        </component>
-      </template>
-
-      <template v-else>
-        <component
-          :is="`el-checkbox`"
-          v-for="(col, index) in columnEnum"
-          :key="index"
-          :value="col[fieldNames.value]"
-          :label="col[fieldNames.label]"
-        ></component>
-      </template>
-    </template>
-    <slot v-else></slot>
-  </component>
+  <RenderComponent v-else />
 </template>
 
-<script setup lang="ts">
-import { computed, inject, ref, unref } from "vue";
-import type { FormColumnProps } from "../interface";
-import { WangEditor, Tinymce } from "@/components";
+<script setup lang="tsx">
+import { computed, inject, ref, unref, resolveDynamicComponent } from "vue";
+import type { FormSchemaProps } from "../interface";
 import Tree from "./Tree.vue";
 import { getFormProp, setFormProp } from "../utils";
+import { useRenderSelect } from "./useRenderSelect";
+import { useRenderRadio } from "./useRenderRadio";
+import { useRenderCheckbox } from "./useRenderCheckbox";
+import { useRenderComponent } from "./useRenderComponent";
 
 defineOptions({ name: "ProFormItem" });
 
 interface ProFormItemProps {
-  column: FormColumnProps;
-  form: { [key: string]: any };
-  style: CSSStyleDeclaration;
+  column: FormSchemaProps;
+  style?: CSSStyleDeclaration;
 }
 
 const props = defineProps<ProFormItemProps>();
 
-const _form = computed(() => props.form);
+const model = defineModel<Record<string, any>>({ required: true });
 
 // 判断 fieldNames 设置 label && value && children 的 key 值
 const fieldNames = computed(() => {
   return {
-    label: props.column.attrs.fieldNames?.label ?? "label",
-    value: props.column.attrs.fieldNames?.value ?? "value",
-    children: props.column.attrs.fieldNames?.children ?? "children",
+    label: props.column.fieldNames?.label ?? "label",
+    value: props.column.fieldNames?.value ?? "value",
+    children: props.column.fieldNames?.children ?? "children",
   };
 });
 
 // 接收 enumMap (el 为 select-v 2 需单独处理 enumData)
 const enumMap = inject("enumMap", ref(new Map()));
 const columnEnum = computed(() => {
-  const attrs = props.column.attrs;
+  const { useEnumMap, enumKey } = props.column;
 
-  if (attrs.useEnumMap) {
-    if (typeof attrs.useEnumMap === "function") {
-      return attrs.useEnumMap(unref(enumMap));
+  if (useEnumMap) {
+    if (typeof useEnumMap === "function") {
+      return useEnumMap(unref(enumMap));
     }
 
-    const data = unref(enumMap).get(attrs.useEnumMap);
+    const data = unref(enumMap).get(useEnumMap);
     if (!data) return [];
-    if (attrs.enumKey) return data[attrs.enumKey] || [];
+    if (enumKey) return data[enumKey] || [];
     return data;
   }
 
-  let enumData = unref(enumMap).get(props.column.formItem.prop);
+  let enumData = unref(enumMap).get(props.column.prop);
 
   if (!enumData) return [];
-  if (props.column.attrs?.el === "el-select-v2") {
+  if (props.column?.el === "el-select-v2") {
     enumData = enumData.map((item: { [key: string]: any }) => {
       return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
   }
-  if (attrs.enumKey) return enumData[attrs.enumKey];
+  if (enumKey) return enumData[enumKey];
   return enumData;
 });
 
@@ -170,8 +77,8 @@ const handleFormProps = computed(() => {
   const label = unref(fieldNames).label;
   const value = unref(fieldNames).value;
   const children = unref(fieldNames).children;
-  const formEl = props.column.attrs?.el;
-  let formProps = props.column.attrs.props ?? {};
+  const formEl = props.column?.el;
+  let formProps = props.column.props ?? {};
 
   if (formEl === "el-tree-select") {
     formProps = { ...formProps, props: { ...formProps.props, label, children }, nodeKey: value };
@@ -194,22 +101,72 @@ const handleFormProps = computed(() => {
 
 // 处理默认 placeholder
 const placeholder = computed(() => {
-  const attrs = props.column.attrs;
-  if (["el-datetimerange", "el-daterange", "el-monthrange"].includes(attrs?.props?.type) || attrs?.props?.isRange) {
+  const { props: { type, isRange, placeholder } = {}, el } = props.column;
+  if (["el-datetimerange", "el-daterange", "el-monthrange"].includes(type) || isRange) {
     return { rangeSeparator: "至", startPlaceholder: "开始时间", endPlaceholder: "结束时间" };
   }
-  const placeholder = attrs?.props?.placeholder ?? (attrs?.el?.includes("el-input") ? "请输入" : "请选择");
-  return { placeholder };
+  const placeholderConst = placeholder ?? (el?.includes("el-input") ? "请输入" : "请选择");
+  return { placeholderConst };
 });
 
 // 是否有清除按钮 (当有默认值时，清除按钮不显示)
 const clearable = computed(() => {
-  const attrs = props.column.attrs;
-  return attrs?.props?.clearable ?? (attrs?.defaultValue === null || attrs?.defaultValue === undefined);
+  const { props: { clearable } = {}, defaultValue } = props.column;
+  return clearable ?? (defaultValue === null || defaultValue === undefined);
 });
 
 const isDisabled = () => {
-  if (typeof props.column.attrs.isDisabled === "function") return props.column.attrs.isDisabled(unref(_form));
-  return props.column.attrs.isDisabled;
+  if (typeof props.column.isDisabled === "function") return props.column.isDisabled(unref(model));
+  return props.column.isDisabled;
+};
+
+const { renderComponent: RenderComponent } = useRenderComponent(model, handleFormProps, props.column);
+const { renderSelectOptions } = useRenderSelect();
+const { renderRadioOptions } = useRenderRadio();
+const { renderCheckboxOptions } = useRenderCheckbox();
+
+// 渲染插槽
+const RenderSlots = () => {
+  const { column } = props;
+  return column.render!({
+    model: unref(model),
+    data: getFormProp(model.value, column.prop),
+    enumData: unref(columnEnum),
+  });
+};
+
+// 渲染 Element Plus 的组件
+const RenderElComponents = () => {
+  const { column, style } = props;
+  const { el } = column;
+  let defaultSlot: any = () => {};
+
+  if (el === "el-cascader") defaultSlot = ({ data }) => <span>{data[unref(fieldNames).label]}</span>;
+  if (el === "el-select") defaultSlot = () => renderSelectOptions(columnEnum, unref(fieldNames));
+  if (el === "el-radio-group") defaultSlot = () => renderRadioOptions(columnEnum, unref(fieldNames), column);
+  if (el === "el-checkbox-group") defaultSlot = () => renderCheckboxOptions(columnEnum, unref(fieldNames), column);
+
+  // TSX 不能直接使用 Vue3 内置组件 <component></component>，因此通过内置 resolveDynamicComponent 函数获取
+  const DynamicComponent = resolveDynamicComponent(el) as any;
+  return (
+    <DynamicComponent
+      is={el}
+      disabled={isDisabled()}
+      clearable={unref(clearable)}
+      {...unref(handleFormProps)}
+      {...unref(placeholder)}
+      model-value={getFormProp(model.value, column.prop, column.valueFormat)}
+      onUpdate:modelValue={(v: any) => setFormProp(model.value, column.prop, v)}
+      data={el === "el-tree-select" ? unref(columnEnum) : []}
+      options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
+      style={style}
+    >
+      {{
+        default: () => defaultSlot(),
+      }}
+    </DynamicComponent>
+  );
 };
 </script>
+
+<style lang="scss" scoped></style>

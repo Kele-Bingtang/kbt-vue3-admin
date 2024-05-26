@@ -107,12 +107,12 @@ const columns: TableColumnProps<ResUserList>[] = [
     label: "年龄",
     search: {
       // 自定义 search 显示内容
-      render: ({ searchParam }) => {
+      render: ({ model }) => {
         return (
           <div class="flx-center">
-            <ElInput vModel_trim={searchParam.minAge} placeholder="最小年龄" />
+            <ElInput vModel_trim={model.minAge} placeholder="最小年龄" />
             <span style="margin: 0 10px">-</span>
-            <ElInput vModel_trim={searchParam.maxAge} placeholder="最大年龄" />
+            <ElInput vModel_trim={model.maxAge} placeholder="最大年龄" />
           </div>
         );
       },

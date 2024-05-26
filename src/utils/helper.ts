@@ -227,6 +227,7 @@ export const getCssVar = (prop: string, dom = document.documentElement) => {
 export const getPx = (val: number | string | undefined) => {
   if (!val) return "";
   if (isString(val)) {
+    if (val.endsWith("%")) return val;
     if (isNumber(val)) return `${val}px`;
     return val;
   }

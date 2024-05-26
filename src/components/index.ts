@@ -18,7 +18,7 @@ export * from "./ProForm";
 export * from "./ProTable";
 export * from "./QrCode";
 export * from "./SeamlessScroll";
-export * from "./SearchForm";
+export * from "./ProSearch";
 export * from "./SplitPane";
 export * from "./SwitchDark";
 export * from "./TableSort";

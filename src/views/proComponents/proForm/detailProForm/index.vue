@@ -4,14 +4,16 @@
       <template #header>
         <div>超级表单详情页</div>
       </template>
-      <ProForm :options="options" v-model="form"></ProForm>
+      <ProForm :formProps="formProps" :rowProps="{ col: { span: 12 } }" :schema="schema" v-model="model"></ProForm>
     </el-card>
+
+    {{ model }}
   </div>
 </template>
 
 <script setup lang="ts" name="DetailProForm">
 import { ProForm } from "@/components";
-import { options } from "./options";
+import { schema, formProps } from "./options";
 
-const form = ref({});
+const model = ref({});
 </script>

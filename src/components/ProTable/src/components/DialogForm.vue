@@ -1,7 +1,15 @@
 <template>
   <WorkDialog v-model="dialogFormVisible" destroy-on-close draggable v-bind="dialog" :title="dialogTitle">
     <slot name="form">
-      <ProForm v-if="options" ref="formElementRef" :options="formOptions" v-model="form">
+      <ProForm
+        v-if="proFormProps.schema"
+        ref="formElementRef"
+        :schema="newSchema"
+        :form-props="proFormProps.formProps"
+        :use-col="proFormProps.useCol"
+        :row="proFormProps.row"
+        v-model="form"
+      >
         <template #footer v-if="$slots.formFooter">
           <slot name="formFooter" v-bind="form"></slot>
         </template>
@@ -27,7 +35,7 @@
 
 <script setup lang="ts">
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
-import { ProForm, WorkDialog, type FormOptionsProps } from "@/components";
+import { ProForm, WorkDialog, type ProFormProps } from "@/components";
 import { shallowRef, ref, computed, defineOptions } from "vue";
 import { deepCloneTableRow } from "../utils";
 
@@ -35,8 +43,9 @@ defineOptions({ name: "DialogOperate" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
+/* @vue-ignore */
 export interface DialogFormProps {
-  options: FormOptionsProps; // 表单配置项
+  proFormProps: ProFormProps;
   dialog: Partial<
     Omit<DialogProps, "modelValue" | "title"> & {
       title: string | ((form: any, status: DialogStatus) => string);
@@ -91,28 +100,28 @@ const dialogTitle = computed(() =>
   typeof props?.dialog?.title === "function" ? props?.dialog?.title(unref(form), unref(status)) : props?.dialog?.title
 );
 
-const formOptions = computed(() => {
+const newSchema = computed(() => {
   // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 isHidden 设置为 true
-  props.options.columns.forEach(column => {
-    if (!column.attrs) return;
-    const { destroy, hidden, disabled } = column.attrs;
+  props.proFormProps.schema.forEach(column => {
+    if (!column) return;
+    const { destroy, hidden, disabled } = column;
 
     if (Array.isArray(destroy)) {
-      if (destroy.includes("add")) column.attrs.isDestroy = status.value === "add";
-      else if (destroy.includes("edit")) column.attrs.isDestroy = status.value === "edit";
+      if (destroy.includes("add")) column.isDestroy = status.value === "add";
+      else if (destroy.includes("edit")) column.isDestroy = status.value === "edit";
     }
     if (Array.isArray(hidden)) {
-      if (hidden.includes("add")) column.attrs.isHidden = status.value === "add";
-      else if (hidden.includes("edit")) column.attrs.isHidden = status.value === "edit";
+      if (hidden.includes("add")) column.isHidden = status.value === "add";
+      else if (hidden.includes("edit")) column.isHidden = status.value === "edit";
     }
 
     if (Array.isArray(disabled)) {
-      if (disabled.includes("add")) column.attrs.isDisabled = status.value === "add";
-      else if (disabled.includes("edit")) column.attrs.isDisabled = status.value === "edit";
+      if (disabled.includes("add")) column.isDisabled = status.value === "add";
+      else if (disabled.includes("edit")) column.isDisabled = status.value === "edit";
     }
   });
 
-  return props.options;
+  return props.proFormProps.schema;
 });
 
 const handleAdd = async () => {

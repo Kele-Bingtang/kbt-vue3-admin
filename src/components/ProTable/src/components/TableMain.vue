@@ -1,5 +1,5 @@
 <template>
-  <el-table ref="tableRef" v-bind="$attrs" size>
+  <el-table ref="tableRef" v-bind="$attrs">
     <!-- 默认插槽 -->
     <slot />
 
@@ -7,7 +7,7 @@
       <!-- selection || index || expand -->
       <el-table-column
         v-if="item.type && columnTypes.includes(item.type)"
-        v-bind="item"
+        v-bind="setTableColumn(item)"
         :align="item.align ?? 'center'"
         :reserve-selection="item.type == 'selection'"
       >
@@ -91,7 +91,7 @@
 
 <script setup lang="ts">
 import { inject } from "vue";
-import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon } from "element-plus";
+import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon, type TableColumnCtx } from "element-plus";
 import { Edit, Delete, DCaret } from "@element-plus/icons-vue";
 import TableColumn from "./TableColumn.vue";
 import type { DialogFormInstance, TableColumnProps, TypeProps } from "../interface";
@@ -133,6 +133,10 @@ const handleEdit = (scope: any, item: TableColumnProps) => {
 // 删除回调
 const handleDelete = (scope: any, item: TableColumnProps) => {
   emits("delete", scope, item);
+};
+
+const setTableColumn = (item: TableColumnProps) => {
+  return item as TableColumnCtx<any>;
 };
 
 defineExpose({ table: tableRef });

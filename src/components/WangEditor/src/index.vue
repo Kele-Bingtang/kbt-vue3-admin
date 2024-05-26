@@ -215,7 +215,7 @@ $prefix-class: #{$admin-namespace}-wang-editor;
 
 /* 富文本组件样式 */
 .#{$prefix-class} {
-  /* 防止富文本编辑器全屏时 tabs组件 在其层级之上 */
+  /* 防止富文本编辑器全屏时 tabs 组件 在其层级之上 */
   z-index: 1100;
   width: 100%;
   border: 1px solid #cccccc;
