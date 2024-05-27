@@ -176,3 +176,20 @@ export const visibleButton = (api: any, flag: boolean | undefined) => {
   if (flag === undefined) return api;
   return flag;
 };
+
+/**
+ * @description 对 form 对象的 pro 赋值
+ */
+export const setColumnProp = (column: { [key: string]: any }, prop: string, value: any) => {
+  if (!column) return;
+  const props = prop.split(".");
+  let current = column;
+
+  for (let i = 0; i < props.length - 1; i++) {
+    const prop = props[i];
+    if (!current[prop]) current[prop] = {};
+    current = current[prop];
+  }
+
+  current[props[props.length - 1]] = value;
+};

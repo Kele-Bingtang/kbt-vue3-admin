@@ -18,11 +18,12 @@
 import { computed, inject, ref, unref, resolveDynamicComponent } from "vue";
 import type { FormSchemaProps } from "../interface";
 import Tree from "./Tree.vue";
-import { getFormProp, setFormProp } from "../utils";
+import { getFormProp, setFormProp } from "../helper";
 import { useRenderSelect } from "./useRenderSelect";
 import { useRenderRadio } from "./useRenderRadio";
 import { useRenderCheckbox } from "./useRenderCheckbox";
 import { useRenderComponent } from "./useRenderComponent";
+import type { Component } from "vue";
 
 defineOptions({ name: "ProFormItem" });
 
@@ -47,7 +48,7 @@ const fieldNames = computed(() => {
 // 接收 enumMap (el 为 select-v 2 需单独处理 enumData)
 const enumMap = inject("enumMap", ref(new Map()));
 const columnEnum = computed(() => {
-  const { useEnumMap, enumKey } = props.column;
+  const { useEnumMap, enumKey, prop, el } = props.column;
 
   if (useEnumMap) {
     if (typeof useEnumMap === "function") {
@@ -60,10 +61,10 @@ const columnEnum = computed(() => {
     return data;
   }
 
-  let enumData = unref(enumMap).get(props.column.prop);
+  let enumData = unref(enumMap).get(prop);
 
   if (!enumData) return [];
-  if (props.column?.el === "el-select-v2") {
+  if (el === "el-select-v2") {
     enumData = enumData.map((item: { [key: string]: any }) => {
       return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
@@ -106,7 +107,8 @@ const placeholder = computed(() => {
     return { rangeSeparator: "至", startPlaceholder: "开始时间", endPlaceholder: "结束时间" };
   }
   const placeholderConst = placeholder ?? (el?.includes("el-input") ? "请输入" : "请选择");
-  return { placeholderConst };
+
+  return { placeholder: placeholderConst };
 });
 
 // 是否有清除按钮 (当有默认值时，清除按钮不显示)
@@ -135,10 +137,13 @@ const RenderSlots = () => {
   });
 };
 
+// 存储组件实例
+const formComponentRef = ref<Component>();
+
 // 渲染 Element Plus 的组件
 const RenderElComponents = () => {
   const { column, style } = props;
-  const { el } = column;
+  const { el, prop, valueFormat } = column;
   let defaultSlot: any = () => {};
 
   if (el === "el-cascader") defaultSlot = ({ data }) => <span>{data[unref(fieldNames).label]}</span>;
@@ -148,15 +153,16 @@ const RenderElComponents = () => {
 
   // TSX 不能直接使用 Vue3 内置组件 <component></component>，因此通过内置 resolveDynamicComponent 函数获取
   const DynamicComponent = resolveDynamicComponent(el) as any;
+
   return (
     <DynamicComponent
-      is={el}
+      ref={formComponentRef}
       disabled={isDisabled()}
       clearable={unref(clearable)}
       {...unref(handleFormProps)}
       {...unref(placeholder)}
-      model-value={getFormProp(model.value, column.prop, column.valueFormat)}
-      onUpdate:modelValue={(v: any) => setFormProp(model.value, column.prop, v)}
+      model-value={getFormProp(model.value, prop, valueFormat)}
+      onUpdate:modelValue={(v: any) => setFormProp(model.value, prop, v)}
       data={el === "el-tree-select" ? unref(columnEnum) : []}
       options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
       style={style}
@@ -167,6 +173,8 @@ const RenderElComponents = () => {
     </DynamicComponent>
   );
 };
-</script>
 
-<style lang="scss" scoped></style>
+defineExpose({
+  formComponentRef,
+});
+</script>

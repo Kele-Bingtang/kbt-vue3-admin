@@ -1,5 +1,5 @@
 import { WangEditor, Tinymce, type FormSchemaProps } from "@/components";
-import { getFormProp, setFormProp } from "../utils";
+import { getFormProp, setFormProp } from "../helper";
 import type { ModelRef } from "vue";
 
 export const useRenderComponent = (

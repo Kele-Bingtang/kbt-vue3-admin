@@ -53,6 +53,13 @@ export type RenderScope<T> = { row: T; $index: number; column: TableColumnCtx<T>
 
 export type HeaderRenderScope<T> = { $index: number; column: TableColumnCtx<T>; [key: string]: any };
 
+// setColumn 函数的参数类型
+export interface TableSetProps {
+  prop: string;
+  field: string;
+  value: ValueType;
+}
+
 /**
  * 表字段属性配置
  * 在 Element Plus 的类型基础增强

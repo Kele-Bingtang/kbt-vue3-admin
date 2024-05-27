@@ -4,10 +4,10 @@
     <ProSearch
       v-show="isShowSearchProp"
       v-model="searchParam"
-      :search="_search"
-      :reset="_reset"
       :schema="searchColumns"
       :search-cols="searchCols"
+      @search="_search"
+      @reset="_reset"
     />
 
     <div :class="`card ${prefixClass}__main`">
@@ -105,14 +105,16 @@ import {
   type TypeProps,
   TableSizeEnum,
   type ToolButton,
+  type TableSetProps,
 } from "./interface";
-import { filterEnum, filterEnumLabel, handleRowAccordingToProp } from "./utils";
+import { filterEnum, filterEnumLabel, handleRowAccordingToProp, setColumnProp } from "./helper";
 import ColSetting from "./components/ColSetting.vue";
 import TableMain from "./components/TableMain.vue";
 import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./components/TableMainHeader.vue";
 import DialogFormComponent, { type DialogFormProps } from "./components/DialogForm.vue";
 import Sortable from "sortablejs";
 import { useDesign } from "@/hooks";
+import type { TableInstance } from "element-plus";
 
 defineOptions({ name: "ProTable" });
 
@@ -124,7 +126,7 @@ provide("proTablePrefixClass", prefixClass);
 export type DialogForm = DialogFormProps;
 
 export interface ProTableProps {
-  columns: TableColumnProps[]; // 列配置项 ==> 必传
+  columns?: TableColumnProps[]; // 列配置项 ==> 必传
   data?: any[]; // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
   requestApi?: (params: any) => Promise<any>; // 请求表格数据的 api ==> 非必传
   requestAuto?: boolean; // 是否自动执行请求 api ==> 非必传（默认为 true）
@@ -159,6 +161,26 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
 });
 
+// 表格 DOM 元素
+const tableMainRef = ref<InstanceType<typeof TableMain>>();
+
+// column 列类型
+const columnTypes: TypeProps[] = ["selection", "radio", "index", "expand", "sort"];
+
+const mergeProps = ref<ProTableProps>({});
+
+const getProps = computed(() => {
+  const propsObj = { ...props };
+  Object.assign(propsObj, unref(mergeProps));
+  return propsObj;
+});
+
+// 是否显示搜索模块
+const isShowSearchProp = computed(() => unref(getProps).isShowSearch);
+
+// 表格多选 Hooks
+const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(unref(getProps).rowKey);
+
 // 配置 _enum 字典信息
 const enumCallback = (data: Record<string, any>[]) => {
   unref(tableColumns).forEach(async col => {
@@ -179,17 +201,6 @@ const enumCallback = (data: Record<string, any>[]) => {
   return data;
 };
 
-// 表格 DOM 元素
-const tableMainRef = ref<InstanceType<typeof TableMain>>();
-
-// 是否显示搜索模块
-const isShowSearchProp = ref(props.isShowSearch);
-
-// column 列类型
-const columnTypes: TypeProps[] = ["selection", "radio", "index", "expand", "sort"];
-
-// 表格多选 Hooks
-const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(props.rowKey);
 // 表格操作 Hooks
 const {
   tableData,
@@ -204,21 +215,21 @@ const {
   isBackPage,
   isFrontPage,
 } = useTable(
-  props.requestApi,
-  props.initRequestParam,
-  props.pagination,
-  props.beforeSearch,
+  unref(getProps).requestApi,
+  unref(getProps).initRequestParam,
+  unref(getProps).pagination,
+  unref(getProps).beforeSearch,
   data => {
     if (!data) return;
     // 配置 _enum 字典信息
     if (isBackPage()) data.list = enumCallback(data.list) || data.list;
     else data = enumCallback(data) || data;
-
-    props.dataCallback && (data = props.dataCallback(data) || data);
+    const { dataCallback } = unref(getProps);
+    dataCallback && (data = dataCallback(data) || data);
     return data;
   },
-  props.requestError,
-  props.columns
+  unref(getProps).requestError,
+  unref(getProps).columns
 );
 
 // 清空选中数据列表
@@ -226,37 +237,40 @@ const clearSelection = () => unref(tableMainRef.value?.table)?.clearSelection();
 
 // 静态数据分页
 const processTableData = computed(() => {
-  let data = unref(tableData);
-  if (props.data?.length) data = props.data;
-  if (!isFrontPage(props.pagination)) return data;
-  return data?.slice(
-    (unref(paging).pageNum - 1) * unref(paging).pageSize,
-    unref(paging).pageNum * unref(paging).pageSize
-  );
+  const { data, pagination } = unref(getProps);
+  const { pageNum, pageSize } = unref(paging);
+
+  let tableDataConst = unref(tableData);
+  if (data?.length) tableDataConst = data;
+  if (!isFrontPage(pagination)) return tableDataConst;
+
+  return tableDataConst?.slice((pageNum - 1) * pageSize, pageNum * pageSize);
 });
 
 const pageTotal = computed(() => {
-  if (props.data?.length) return props.data?.length;
-  if (isFrontPage(props.pagination)) return props.data?.length || unref(tableData)?.length;
-  if (isBackPage(props.pagination)) return unref(paging)?.total || unref(tableData)?.length;
+  const { data, pagination } = unref(getProps);
+
+  if (data?.length) return data?.length;
+  if (isFrontPage(pagination)) return data?.length || unref(tableData)?.length;
+  if (isBackPage(pagination)) return unref(paging)?.total || unref(tableData)?.length;
   return 0;
 });
 
 // 初始化请求
 onMounted(() => {
   dragSort();
-  props.requestAuto && getTableList();
+  unref(getProps).requestAuto && getTableList();
 });
 
 // 监听页面 initRequestParam 改化，重新获取表格数据
 watch(
-  () => props.initRequestParam,
-  () => getTableList(props.initRequestParam),
+  () => unref(getProps).initRequestParam,
+  () => getTableList(unref(getProps).initRequestParam),
   { deep: true }
 );
 
 // 接收 columns 并设置为响应式
-const tableColumns = ref<TableColumnProps[]>(props.columns);
+const tableColumns = ref<TableColumnProps[]>(unref(getProps).columns);
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>());
@@ -390,19 +404,26 @@ const handleDeleteBatch = () => {
 
 // 定义 emit 事件
 const emits = defineEmits<{
-  search: [];
-  reset: [];
+  register: [proTableRef?: ComponentPublicInstance | null, elTableRef?: TableInstance];
+  search: [model: Record<string, any>];
+  reset: [model: Record<string, any>];
   dargSort: [{ newIndex?: number; oldIndex?: number }];
 }>();
 
-const _search = () => {
+onMounted(() => {
+  const tableMain = unref(tableMainRef);
+  // 注册实例
+  emits("register", tableMain?.$parent, unref(tableMain?.table));
+});
+
+const _search = (model: Record<string, any>) => {
   search();
-  emits("search");
+  emits("search", model);
 };
 
-const _reset = () => {
+const _reset = (model: Record<string, any>) => {
   reset();
-  emits("reset");
+  emits("reset", model);
 };
 
 // 拖拽排序
@@ -422,6 +443,45 @@ const dragSort = () => {
     });
 };
 
+// 设置 proTable 组件的 props
+const setProps = (props: ProTableProps = {}) => {
+  mergeProps.value = Object.assign(unref(mergeProps), props);
+};
+
+// 修改 Column
+const setColumn = (columnSet: TableSetProps[], columnsChildren?: TableColumnProps[]) => {
+  const { columns } = unref(getProps);
+  for (const column of columnsChildren || columns) {
+    for (const item of columnSet) {
+      if (column.prop === item.prop) {
+        setColumnProp(column, item.field, item.value);
+      } else if (column._children?.length) {
+        setColumn(columnSet, column._children);
+      }
+    }
+  }
+};
+
+// 添加 Column
+const addColumn = (column: TableColumnProps, prop?: number | string, position: "before" | "after" = "after") => {
+  const { columns } = unref(getProps);
+
+  if (Object.prototype.toString.call(prop) === "[object String]") {
+    return columns.forEach((column, i) => {
+      if (column.prop === prop) position === "after" ? columns.splice(i + 1, 0, column) : columns.splice(i, 0, column);
+    });
+  }
+  if (prop !== undefined) return columns.splice(prop as number, 0, column);
+  return columns.push(column);
+};
+
+// 删除 Column
+const delColumn = (prop: string) => {
+  const { columns } = unref(getProps);
+  const index = columns.findIndex(item => item.prop === prop);
+  if (index > -1) columns.splice(index, 1);
+};
+
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 const expose = {
   element: tableMainRef.value?.table,
@@ -430,15 +490,19 @@ const expose = {
   paging,
   searchParam,
   searchInitParam,
+  enumMap,
+  isSelected,
+  selectedList,
+  selectedListIds,
   getTableList,
   search,
   reset,
   handlePagination,
   clearSelection,
-  enumMap,
-  isSelected,
-  selectedList,
-  selectedListIds,
+  setProps,
+  setColumn,
+  addColumn,
+  delColumn,
 };
 
 defineExpose(expose);

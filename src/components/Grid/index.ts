@@ -6,4 +6,6 @@ export { type BreakPoint, type Responsive } from "./src/index.vue";
 export const Grid = useInstall(index);
 export const GridItem = useInstall(gridItem);
 
+export type GridInstance = InstanceType<typeof index>;
+
 export default index;

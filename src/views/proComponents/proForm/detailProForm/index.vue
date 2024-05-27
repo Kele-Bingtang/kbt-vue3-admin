@@ -4,7 +4,7 @@
       <template #header>
         <div>超级表单详情页</div>
       </template>
-      <ProForm :formProps="formProps" :rowProps="{ col: { span: 12 } }" :schema="schema" v-model="model"></ProForm>
+      <ProForm :elFormProps="elFormProps" :rowProps="{ col: { span: 12 } }" :schema="schema" v-model="model"></ProForm>
     </el-card>
 
     {{ model }}
@@ -13,7 +13,7 @@
 
 <script setup lang="ts" name="DetailProForm">
 import { ProForm } from "@/components";
-import { schema, formProps } from "./options";
+import { schema, elFormProps } from "./options";
 
 const model = ref({});
 </script>

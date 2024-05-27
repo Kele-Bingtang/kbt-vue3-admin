@@ -2,12 +2,12 @@
   <WorkDialog v-model="dialogFormVisible" destroy-on-close draggable v-bind="dialog" :title="dialogTitle">
     <slot name="form">
       <ProForm
-        v-if="proFormProps.schema"
+        v-if="formProps.schema"
         ref="formElementRef"
         :schema="newSchema"
-        :form-props="proFormProps.formProps"
-        :use-col="proFormProps.useCol"
-        :row="proFormProps.row"
+        :el-form-props="formProps.elFormProps"
+        :use-col="formProps.useCol"
+        :rowProps="formProps.rowProps"
         v-model="form"
       >
         <template #footer v-if="$slots.formFooter">
@@ -37,15 +37,14 @@
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
 import { ProForm, WorkDialog, type ProFormProps } from "@/components";
 import { shallowRef, ref, computed, defineOptions } from "vue";
-import { deepCloneTableRow } from "../utils";
+import { deepCloneTableRow } from "../helper";
 
 defineOptions({ name: "DialogOperate" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
-/* @vue-ignore */
 export interface DialogFormProps {
-  proFormProps: ProFormProps;
+  formProps: ProFormProps;
   dialog: Partial<
     Omit<DialogProps, "modelValue" | "title"> & {
       title: string | ((form: any, status: DialogStatus) => string);
@@ -102,7 +101,7 @@ const dialogTitle = computed(() =>
 
 const newSchema = computed(() => {
   // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 isHidden 设置为 true
-  props.proFormProps.schema.forEach(column => {
+  props.formProps.schema?.forEach(column => {
     if (!column) return;
     const { destroy, hidden, disabled } = column;
 
@@ -121,7 +120,7 @@ const newSchema = computed(() => {
     }
   });
 
-  return props.proFormProps.schema;
+  return props.formProps?.schema;
 });
 
 const handleAdd = async () => {

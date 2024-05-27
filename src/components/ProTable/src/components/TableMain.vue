@@ -95,7 +95,7 @@ import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon, type Tab
 import { Edit, Delete, DCaret } from "@element-plus/icons-vue";
 import TableColumn from "./TableColumn.vue";
 import type { DialogFormInstance, TableColumnProps, TypeProps } from "../interface";
-import { visibleButton } from "../utils";
+import { visibleButton } from "../helper";
 import type { DialogFormProps } from "./DialogForm.vue";
 
 defineOptions({ name: "ProTableMain" });
@@ -141,5 +141,3 @@ const setTableColumn = (item: TableColumnProps) => {
 
 defineExpose({ table: tableRef });
 </script>
-
-<style lang="scss" scoped></style>

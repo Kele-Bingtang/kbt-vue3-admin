@@ -5,7 +5,7 @@
 <script setup lang="tsx">
 import { inject, ref, useSlots, defineOptions, unref } from "vue";
 import type { TableColumnProps, RenderScope, HeaderRenderScope } from "../interface";
-import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../utils";
+import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
 import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
 
 defineOptions({ name: "TableColumn" });

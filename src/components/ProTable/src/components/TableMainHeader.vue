@@ -79,9 +79,9 @@
 
 <script setup lang="ts">
 import { inject, type CSSProperties } from "vue";
-import { ElTooltip, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from "element-plus";
+import { ElTooltip, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, type ComponentSize } from "element-plus";
 import { Refresh, Plus, Operation, Search, Delete, Coin, Download } from "@element-plus/icons-vue";
-import { downloadFile, visibleButton } from "../utils";
+import { downloadFile, visibleButton } from "../helper";
 import type { DialogFormProps } from "./DialogForm.vue";
 import { TableSizeEnum, type DialogFormInstance, type TableColumnProps, type ToolButton } from "../interface";
 
@@ -128,8 +128,8 @@ type TableMainHeaderEmits = {
 const emits = defineEmits<TableMainHeaderEmits>();
 
 // 表格大小样式
-export type ElTableSize = "" | "default" | "small" | "large";
-export type CustomTableSize = "" | "default" | "small" | "large" | "mini";
+export type ElTableSize = ComponentSize;
+export type CustomTableSize = ComponentSize | "mini";
 
 // 如果是 mini，则取 ElTableSize 为 default，反之默认
 let elTableSize: ElTableSize = TableSizeEnum.Default;
@@ -183,5 +183,3 @@ const changeStyle = (style: CSSProperties) => {
   headerCellStyle = { ...style, backgroundColor: "#ededed" }; // 表头背景色
 };
 </script>
-
-<style lang="scss" scoped></style>

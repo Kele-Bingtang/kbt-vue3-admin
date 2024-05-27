@@ -9,7 +9,7 @@ const rules = reactive<FormRules>({
   owner: [{ required: true, message: "请输入 Owner", trigger: "blur" }],
 });
 
-export const formProps = {
+export const elFormProps = {
   inline: false,
   labelPosition: "right",
   labelWidth: "120px",

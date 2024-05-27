@@ -40,6 +40,7 @@ export default {
     DetailProTable: "Detail ProTable",
     ProForm: "ProForm",
     SimpleProForm: "Simple ProForm",
+    UseProForm: "Use ProForm",
     DetailProForm: "Detail ProForm",
     ProSearch: "Pro Search",
     SimpleProSearch: "Simple ProSearch",

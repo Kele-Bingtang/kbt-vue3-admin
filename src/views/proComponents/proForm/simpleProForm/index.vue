@@ -1,7 +1,7 @@
 <template>
   <div style="padding: 10px">
     <div class="card">
-      <ProForm :formProps="formProps" :schema="schema" v-model="model" />
+      <ProForm :elFormProps="elFormProps" :schema="schema" v-model="model" />
     </div>
 
     {{ model }}
@@ -12,10 +12,10 @@
 import { ref } from "vue";
 import { ProForm, type FormSchemaProps, type ProElFormProps } from "@/components";
 
-const model = ref<any>({});
+const model = ref<Record<string, any>>({});
 
 // 表单整体配置项
-const formProps: ProElFormProps = {
+const elFormProps: ProElFormProps = {
   inline: false,
   labelPosition: "right",
   labelWidth: "80px",

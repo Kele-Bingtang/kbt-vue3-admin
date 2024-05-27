@@ -4,11 +4,19 @@
 
 <script setup lang="tsx">
 import { shallowRef, ref, provide, watch, unref } from "vue";
-import type { FormSchemaProps, ProElFormProps, ValueType } from "./interface";
+import type { FormSchemaProps, FormSetProps, ProElFormProps, ValueType } from "./interface";
 import ProFormItem from "./components/ProFormItem.vue";
-import { getPx } from "@/utils";
-import { ElRow, ElCol, ElForm, ElFormItem, type FormInstance, type RowProps, type ColProps } from "element-plus";
-import { getFormProp, setFormProp } from "./utils";
+import {
+  ElRow,
+  ElCol,
+  ElForm,
+  ElFormItem,
+  type FormInstance,
+  type RowProps,
+  type ColProps,
+  type FormItemInstance,
+} from "element-plus";
+import { getPx, getFormProp, isString, setFormProp } from "./helper";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "ProForm" });
@@ -17,8 +25,9 @@ const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("pro-form");
 
 export interface ProFormProps {
-  schema: FormSchemaProps[]; // 表单配置项
-  formProps?: ProElFormProps | Record<string, any>; // ElForm 的 props
+  modelValue?: Record<string, any>;
+  schema?: FormSchemaProps[]; // 表单配置项
+  elFormProps?: ProElFormProps | Record<string, any>; // ElForm 的 props
   useCol?: boolean; // 是否使用栅格布局
   // 栅格布局全局设置
   rowProps?: Partial<RowProps> & {
@@ -28,13 +37,24 @@ export interface ProFormProps {
 }
 
 const props = withDefaults(defineProps<ProFormProps>(), {
+  modelValue: () => ({}),
+  schema: () => [],
   useCol: true,
   disabled: false,
   formProps: () => ({}),
 });
 
-const formRef = shallowRef<FormInstance>();
-const model = defineModel<Record<string, any>>({ required: true });
+const model = defineModel<Record<string, any>>({ default: () => ({}) });
+// 存储 ElForm 实例
+const elFormRef = shallowRef<FormInstance>();
+
+const mergeProps = ref<ProFormProps>({});
+
+const getProps = computed(() => {
+  const propsObj = { ...props };
+  Object.assign(propsObj, unref(mergeProps));
+  return propsObj;
+});
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
 const enumMap = ref(new Map<string, { [key: string]: any }[]>());
@@ -150,25 +170,35 @@ const parseLabel = (label: ValueType | ((model: Record<string, any>) => ValueTyp
   return label;
 };
 
-props.schema.forEach((item, index) => {
-  // 设置枚举
-  setEnumMap(item);
-  // 级联下拉监听
-  cascadeEnum(item);
+// 监听表单结构化数组，重新组装 schema
+watch(
+  () => unref(getProps).schema,
+  (schema = []) => {
+    schema.forEach((item, index) => {
+      // 设置枚举
+      setEnumMap(item);
+      // 级联下拉监听
+      cascadeEnum(item);
 
-  // 设置表单排序默认值
-  item && (item.order = item.order ?? index + 2);
-});
+      // 设置表单排序默认值
+      item && (item.order = item.order ?? index + 2);
+    });
 
-// 排序表单项
-props.schema.sort((a, b) => a.order! - b.order!);
+    // 排序表单项
+    schema.sort((a, b) => a.order! - b.order!);
+  },
+  {
+    immediate: true,
+    deep: true,
+  }
+);
 
 // 获取每个表单的宽度
 const getComponentWidth = ({ width, props: componentProps }: FormSchemaProps) => {
-  const { formProps = {} } = props;
+  const { elFormProps = {} } = unref(getProps);
   const style = componentProps?.style || { width: "100%" }; // 默认宽度 100%
   if (width) return { ...style, width: getPx(width) };
-  if (formProps?.fixWidth) return { ...style, width: getPx(formProps.width || formProps.inline ? 220 : "100%") };
+  if (elFormProps?.fixWidth) return { ...style, width: getPx(elFormProps.width || elFormProps.inline ? 220 : "100%") };
   return style;
 };
 
@@ -195,7 +225,7 @@ const slots = useSlots();
 
 // 渲染 ELForm
 const RenderFormWrap = () => {
-  const { useCol, rowProps, formProps } = props;
+  const { useCol, rowProps, elFormProps } = unref(getProps);
   // 如果需要栅格，需要包裹 ElCol
   const content = useCol ? (
     // 默认 gutter 20，可以被传来的 rowProps 替换
@@ -207,7 +237,7 @@ const RenderFormWrap = () => {
   );
 
   return (
-    <ElForm ref={formRef} {...formProps} class={prefixClass} model={unref(model)}>
+    <ElForm ref={elFormRef} {...elFormProps} class={prefixClass} model={unref(model)}>
       {{
         default: () => {
           // 如果存在自定义插槽，则直接返回自定义插槽的 Render
@@ -226,7 +256,7 @@ const RenderFormWrap = () => {
 
 // 渲染 FormItem 上一层
 const renderFormItemWrap = () => {
-  const { schema = [], useCol, rowProps } = props;
+  const { schema = [], useCol, rowProps } = unref(getProps);
   return schema
     .filter(item => !isDestroy(item))
     .map(item => {
@@ -249,25 +279,105 @@ const renderFormItemWrap = () => {
     });
 };
 
+// 存储每一个 ElFormItem 实例
+const formItemComponentsRef = ref<Record<string, FormItemInstance>>({});
+
+// 存储表单组件实例
+const proFormItemRefs = shallowRef<Record<string, InstanceType<typeof ProFormItem>>>({});
+
 // 渲染 FormItem
 const renderFormItem = (item: FormSchemaProps) => {
   return (
     <ElFormItem
       v-show={!isHidden(item.isHidden || false)}
-      ref={(el: any) => (formItemComponents.value[item.field] = el)}
+      ref={el => (unref(formItemComponentsRef)[item.prop] = el)}
       {...(item.formItem || {})}
       prop={item.prop}
       label={parseLabel(item.label)}
     >
-      <ProFormItem column={item} v-model={model.value} style={getComponentWidth(item)} />
+      <ProFormItem
+        ref={el => (unref(proFormItemRefs)[item.prop] = el)}
+        column={item}
+        v-model={model.value}
+        style={getComponentWidth(item)}
+      />
     </ElFormItem>
   );
 };
 
-// 存储每一个 form-item 实例
-const formItemComponents = ref({});
+// 定义 emit 事件
+const emits = defineEmits<{
+  register: [proFormRef?: ComponentPublicInstance | null, elFormRef?: FormInstance];
+}>();
 
-defineExpose({ form: formRef, formItemComponents });
+onMounted(() => {
+  emits("register", unref(elFormRef)?.$parent, unref(elFormRef));
+});
+
+// 设置 form 的值
+const setValues = (data: Record<string, any> = {}) => {
+  model.value = Object.assign(unref(model), data);
+};
+
+// 设置 ProForm 组件的 props
+const setProps = (props: Partial<ProFormProps> = {}) => {
+  mergeProps.value = Object.assign(unref(mergeProps), props);
+};
+
+// 设置 schema
+const setSchema = (schemaSet: FormSetProps[]) => {
+  const { schema } = unref(getProps);
+  for (const v of schema) {
+    for (const item of schemaSet) {
+      if (v.prop === item.prop) {
+        setFormProp(v, item.field, item.value);
+      }
+    }
+  }
+};
+
+// 添加 schema
+const addSchema = (formSchema: FormSchemaProps, prop?: number | string, position: "before" | "after" = "after") => {
+  const { schema } = unref(getProps);
+
+  if (isString(prop)) {
+    return schema.forEach((s, i) => {
+      if (s.prop === prop) position === "after" ? formSchema.splice(i + 1, 0, s) : formSchema.splice(i, 0, s);
+    });
+  }
+  if (prop !== undefined) return schema.splice(prop, 0, formSchema);
+  return schema.push(formSchema);
+};
+
+// 删除 schema
+const delSchema = (prop: string) => {
+  const { schema } = unref(getProps);
+
+  const index = schema.findIndex(item => item.prop === prop);
+  if (index > -1) schema.splice(index, 1);
+};
+
+// 获取表单组件实例
+const getComponentExpose = (prop: string) => {
+  return unref(proFormItemRefs)[prop].formComponentRef;
+};
+
+// 获取 formItem 实例
+const getFormItemExpose = (prop: string) => {
+  return unref(formItemComponentsRef)[prop];
+};
+
+defineExpose({
+  form: elFormRef,
+  model,
+  setValues,
+  setProps,
+  setSchema,
+  addSchema,
+  delSchema,
+  getComponentExpose,
+  getFormItemExpose,
+});
 </script>
 
 <style lang="scss" scoped>

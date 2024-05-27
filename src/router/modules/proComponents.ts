@@ -21,7 +21,7 @@ const proComponents: RouterConfigRaw = {
           path: "simple",
           component: () => import("@/views/proComponents/proTable/simpleProTable/index.vue"),
           name: "SimpleProTable",
-          meta: { title: "使用 ProTable", icon: StarFilled, auths: ["add", "edit", "delete", "import", "export"] },
+          meta: { title: "简单 ProTable", icon: StarFilled, auths: ["add", "edit", "delete", "import", "export"] },
         },
         {
           path: "tree",
@@ -53,10 +53,16 @@ const proComponents: RouterConfigRaw = {
       },
       children: [
         {
-          path: "simple",
+          path: "simple-pro-form",
           component: () => import("@/views/proComponents/proForm/simpleProForm/index.vue"),
           name: "SimpleProForm",
-          meta: { title: "使用 ProForm", icon: StarFilled },
+          meta: { title: "简单 ProForm", icon: StarFilled },
+        },
+        {
+          path: "use-pro-form",
+          component: () => import("@/views/proComponents/proForm/useProForm/index.vue"),
+          name: "UseProForm",
+          meta: { title: "Use ProForm", icon: StarFilled },
         },
         {
           path: "detail",

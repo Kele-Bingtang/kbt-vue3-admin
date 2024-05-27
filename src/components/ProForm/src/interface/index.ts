@@ -2,6 +2,43 @@ import type { FormItemProps, ColProps, FormProps } from "element-plus";
 import type { VNode, ComputedRef, ComponentPublicInstance } from "vue";
 import ProForm, { type ProFormProps } from "../index.vue";
 
+// 组件内置导入需要，如果是按需导入则不需要
+export enum ComponentNameEnum {
+  INPUT = "Input",
+  INPUT_NUMBER = "InputNumber",
+  SELECT = "Select",
+  SELECT_V2 = "SelectV2",
+  TREE = "Tree",
+  TREE_SELECT = "TreeSelect",
+  CASCADER = "Cascader",
+  DATE_PICKER = "DatePicker",
+  TIME_PICKER = "TimePicker",
+  TIME_SELECT = "TimeSelect",
+  SWITCH = "Switch",
+  SLIDER = "Slider",
+  RADIO_GROUP = "RadioGroup",
+  RADIO_BUTTON = "RadioButton",
+  CHECKBOX_GROUP = "CheckboxGroup",
+  CHECKBOX_BUTTON = "CheckboxButton",
+  AUTOCOMPLETE = "Autocomplete",
+  RATE = "Rate",
+  COLOR_PICKER = "ColorPicker",
+  TRANSFER = "Transfer",
+  DIVIDER = "Divider",
+  WANG_EDITOR = "WangEditor",
+  TINYMCE = "Tinymce",
+}
+
+type CamelCaseComponentName = keyof typeof ComponentNameEnum extends infer K
+  ? K extends string
+    ? K extends `${infer A}_${infer B}`
+      ? `${Capitalize<Lowercase<A>>}${Capitalize<Lowercase<B>>}`
+      : Capitalize<Lowercase<K>>
+    : never
+  : never;
+
+export type ComponentName = CamelCaseComponentName;
+
 export type ValueType = string | number | boolean | any[];
 
 export interface FormEnumProps {
@@ -35,8 +72,7 @@ export type FormType =
   | "el-checkbox"
   | "el-checkbox-group"
   | "tinymce"
-  | "wang-editor"
-  | "user-select";
+  | "wang-editor";
 
 export type FormFieldNamesProps = {
   label: string;
@@ -50,6 +86,13 @@ export type FormRenderScope = {
   data: ValueType;
   enumData: Record<string, any>;
 };
+
+// setSchema 函数的参数类型
+export interface FormSetProps {
+  prop: string;
+  field: string;
+  value: ValueType;
+}
 
 export interface FormSchemaProps<T = Record<string, any>> {
   col?: Partial<ColProps>;
