@@ -6,7 +6,7 @@
     <template v-for="item in columns" :key="item">
       <!-- selection || index || expand -->
       <el-table-column
-        v-if="item.type && columnTypes.includes(item.type)"
+        v-if="item.type && item.isShow && columnTypes.includes(item.type)"
         v-bind="setTableColumn(item)"
         :align="item.align ?? 'center'"
         :reserve-selection="item.type == 'selection'"

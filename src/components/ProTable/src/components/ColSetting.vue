@@ -28,7 +28,7 @@
 </template>
 
 <script setup lang="ts">
-import { defineOptions, ref } from "vue";
+import { defineOptions } from "vue";
 import { ElDrawer, ElSwitch, ElTable, ElTableColumn } from "element-plus";
 import type { TableColumnProps } from "../interface";
 
@@ -38,7 +38,7 @@ const prefixClass = inject("proTablePrefixClass") as string;
 
 defineProps<{ colSetting: TableColumnProps[] }>();
 
-const drawerVisible = ref(false);
+const drawerVisible = defineModel({ default: false });
 
 const openColSetting = () => {
   drawerVisible.value = true;

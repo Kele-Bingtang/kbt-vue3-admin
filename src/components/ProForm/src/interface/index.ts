@@ -71,6 +71,7 @@ export type FormType =
   | "el-radio-group"
   | "el-checkbox"
   | "el-checkbox-group"
+  | "el-autocomplete"
   | "tinymce"
   | "wang-editor";
 

@@ -116,7 +116,7 @@ export function getTimeState() {
  * @param b 要比较的对象二
  * @returns 相同返回 true，反之则反
  */
-export function isObjectValueEqual(a: { [key: string]: any }, b: { [key: string]: any }) {
+export function isObjectValueEqual(a: Record<string, any>, b: Record<string, any>) {
   if (!a || !b) return false;
   const aProps = Object.getOwnPropertyNames(a);
   const bProps = Object.getOwnPropertyNames(b);
@@ -237,7 +237,7 @@ export const getPx = (val: number | string | undefined) => {
 /**
  * @description 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
  */
-export const get = (form: { [key: string]: any }, prop: string) => {
+export const get = (form: Record<string, any>, prop: string) => {
   if (!prop.includes(".")) return form[prop] ?? "";
   prop.split(".").forEach(item => (form = form[item] ?? ""));
   return form;
@@ -246,7 +246,7 @@ export const get = (form: { [key: string]: any }, prop: string) => {
 /**
  * @description 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
  */
-export const set = (form: { [key: string]: any }, prop: string, value: any) => {
+export const set = (form: Record<string, any>, prop: string, value: any) => {
   if (!form) return;
   const props = prop.split(".");
   let current = form;

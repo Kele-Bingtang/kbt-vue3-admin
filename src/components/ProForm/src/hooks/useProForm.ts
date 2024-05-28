@@ -14,7 +14,7 @@ export const useProForm = () => {
    * @param ref ProForm 实例
    * @param elRef ElForm 实例
    */
-  const register = (ref: ProFormInstance, elRef: FormInstance) => {
+  const register = (ref?: ProFormInstance, elRef?: FormInstance) => {
     formRef.value = ref;
     elFormRef.value = elRef;
   };

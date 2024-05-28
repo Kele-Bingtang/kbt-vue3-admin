@@ -2,6 +2,8 @@
   <el-space fill>
     <el-card shadow="never" header="UseForm 操作">
       <el-space wrap>
+        <el-button @click="changeCol(false)">禁用栅格</el-button>
+        <el-button @click="changeCol(true)">使用栅格</el-button>
         <el-button @click="changeLabelWidth(150)">更改 labelWidth</el-button>
         <el-button @click="changeLabelWidth('auto')">还原 labelWidth</el-button>
         <el-button @click="changeSize('large')">更改 size</el-button>
@@ -16,8 +18,8 @@
         <el-button @click="addFormItem">添加子项</el-button>
         <el-button @click="formValidation">表单验证</el-button>
         <el-button @click="verifyReset">表单重置</el-button>
-        <el-button @click="inoutFocus">输入框 聚焦</el-button>
-        <el-button @click="inoutValidation">输入框 表单验证</el-button>
+        <el-button @click="inoutFocus">输入框聚焦</el-button>
+        <el-button @click="inoutValidation">输入框表单验证</el-button>
       </el-space>
     </el-card>
 
@@ -142,6 +144,12 @@ const schema = reactive<FormSchemaProps[]>([
     enum: () => getTreeSelectData(), // 模拟远程获取数据
   },
 ]);
+
+const changeCol = (col: boolean) => {
+  setProps({
+    useCol: col,
+  });
+};
 
 const changeLabelWidth = (width: number | string) => {
   setProps({

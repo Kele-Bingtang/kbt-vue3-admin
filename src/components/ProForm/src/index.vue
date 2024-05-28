@@ -57,7 +57,7 @@ const getProps = computed(() => {
 });
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
-const enumMap = ref(new Map<string, { [key: string]: any }[]>());
+const enumMap = ref(new Map<string, Record<string, any>[]>());
 
 const setEnumMap = async ({ enum: enumValue, prop }: FormSchemaProps) => {
   if (!enumValue) return;
@@ -146,9 +146,9 @@ const cascadeEnum = ({ prop, el, subProp, subEnum }: FormSchemaProps) => {
 /**
  * 是否隐藏表单项
  */
-const isHidden = (isHidden: boolean | ((model: Record<string, any>) => boolean)) => {
-  if (typeof isHidden === "function") return isHidden(unref(model));
-  return isHidden;
+const isHidden = (column: FormSchemaProps) => {
+  if (typeof column.isHidden === "function") return column.isHidden(unref(model));
+  return column.isHidden;
 };
 /**
  * 是否销毁表单项 & 是否初始化表单项默认值
@@ -223,28 +223,17 @@ const setGridProp = (col: Partial<ColProps> = {}) => {
 
 const slots = useSlots();
 
-// 渲染 ELForm
 const RenderFormWrap = () => {
-  const { useCol, rowProps, elFormProps } = unref(getProps);
-  // 如果需要栅格，需要包裹 ElCol
-  const content = useCol ? (
-    // 默认 gutter 20，可以被传来的 rowProps 替换
-    <ElRow gutter={20} {...rowProps} style="width: 100%">
-      {renderFormItemWrap()}
-    </ElRow>
-  ) : (
-    renderFormItemWrap()
-  );
-
+  const { elFormProps } = unref(getProps);
   return (
     <ElForm ref={elFormRef} {...elFormProps} class={prefixClass} model={unref(model)}>
       {{
         default: () => {
           // 如果存在自定义插槽，则直接返回自定义插槽的 Render
-          if (slots.default) return slots.default({ getComponentWidth, parseLabel });
+          if (slots.default) return slots.default({ getComponentWidth, parseLabel, isDestroy, isHidden });
           return (
             <>
-              {content}
+              {RenderForm()}
               {slots.operation ? <ElFormItem>{slots.operation()}</ElFormItem> : undefined}
             </>
           );
@@ -254,9 +243,24 @@ const RenderFormWrap = () => {
   );
 };
 
+// 渲染 ELForm
+const RenderForm = () => {
+  const { useCol, rowProps } = unref(getProps);
+  // 如果需要栅格，需要包裹 ElCol
+  return useCol ? (
+    // 默认 gutter 20，可以被传来的 rowProps 替换
+    <ElRow gutter={20} {...rowProps} style="width: 100%">
+      {renderFormItemWrap()}
+    </ElRow>
+  ) : (
+    renderFormItemWrap()
+  );
+};
+
 // 渲染 FormItem 上一层
 const renderFormItemWrap = () => {
   const { schema = [], useCol, rowProps } = unref(getProps);
+
   return schema
     .filter(item => !isDestroy(item))
     .map(item => {
@@ -270,7 +274,7 @@ const renderFormItemWrap = () => {
         </>
       ) : useCol ? (
         // 如果需要栅格，需要包裹 ElCol
-        <ElCol {...setGridProp({ ...rowProps?.col, ...item.col })} v-show={!isHidden(item.isHidden || false)}>
+        <ElCol {...setGridProp({ ...rowProps?.col, ...item.col })} v-show={!isHidden(item)}>
           {renderFormItem(item)}
         </ElCol>
       ) : (
@@ -289,7 +293,7 @@ const proFormItemRefs = shallowRef<Record<string, InstanceType<typeof ProFormIte
 const renderFormItem = (item: FormSchemaProps) => {
   return (
     <ElFormItem
-      v-show={!isHidden(item.isHidden || false)}
+      v-show={!isHidden(item)}
       ref={el => (unref(formItemComponentsRef)[item.prop] = el)}
       {...(item.formItem || {})}
       prop={item.prop}
@@ -307,7 +311,7 @@ const renderFormItem = (item: FormSchemaProps) => {
 
 // 定义 emit 事件
 const emits = defineEmits<{
-  register: [proFormRef?: ComponentPublicInstance | null, elFormRef?: FormInstance];
+  register: [proFormRef?: ComponentPublicInstance | null | any, elFormRef?: FormInstance];
 }>();
 
 onMounted(() => {

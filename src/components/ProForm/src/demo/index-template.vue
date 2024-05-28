@@ -74,7 +74,7 @@ const formRef = shallowRef<FormInstance>();
 const form = defineModel<Record<string, any>>({ required: true });
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
-const enumMap = ref(new Map<string, { [key: string]: any }[]>());
+const enumMap = ref(new Map<string, Record<string, any>[]>());
 
 const setEnumMap = async ({ attrs, formItem }: FormSchemaProps) => {
   const { enum: enumValue } = attrs;

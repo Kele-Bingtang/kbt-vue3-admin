@@ -18,10 +18,10 @@ export namespace Table {
   export interface StateProps {
     tableData: any[];
     paging: Paging;
-    searchParam: { [key: string]: any };
-    searchInitParam: { [key: string]: any };
-    totalParam: { [key: string]: any };
-    icon?: { [key: string]: any };
+    searchParam: Record<string, any>;
+    searchInitParam: Record<string, any>;
+    totalParam: Record<string, any>;
+    icon?: Record<string, any>;
   }
 }
 
@@ -192,9 +192,10 @@ export const useTable = (
    * @param {Number} paging 当前分页信息
    * @return void
    * */
-  const handlePagination = (paging: Paging) => {
-    state.paging.pageNum = paging.pageNum;
-    state.paging.pageSize = paging.pageSize;
+  const handlePagination = (paging: Partial<Paging>) => {
+    if (paging.pageNum) state.paging.pageNum = paging.pageNum;
+    if (paging.pageSize) state.paging.pageSize = paging.pageSize;
+    if (paging.pageSizes) state.paging.pageSizes = paging.pageSizes;
     if (isBackPage()) getTableList();
   };
 

@@ -30,7 +30,7 @@ const settingsStore = useSettingsStore();
 const tabsNavMode = computed(() => settingsStore.tabsNavMode);
 const showTabsNav = computed(() => settingsStore.showTabsNav);
 
-const TabsNavComponents: { [key: string]: Component } = {
+const TabsNavComponents: Record<string, Component> = {
   classic: ClassicTabsNav,
   popular: ElTabsNav,
 };

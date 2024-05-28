@@ -92,13 +92,13 @@ const prefixClass = inject("proTablePrefixClass") as string;
 export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
   data: any[]; // 数据
-  toolButton: ToolButton[] | boolean;
-  selectedList: Record<string, any>[];
-  selectedListIds: string[];
-  isSelected: boolean;
-  size: CustomTableSize;
+  toolButton: ToolButton[] | boolean; // 按钮显示数组
+  selectedList: Record<string, any>[]; // 选择的数据
+  selectedListIds: string[]; // 选择的数据 ID
+  isSelected: boolean; // 是否选中过数据
+  size: CustomTableSize; // 表格大小
   exportKey: "props" | "label" | "dataKey"; // 导出时的表头配置（prop 为使用  columns 的 props，label 为使用 columns 的 label，dataKey 为使用 data 的 key），默认为 dataKey
-  showSearch: boolean;
+  showSearch: boolean; // 是否展示搜索按钮
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
 }
 

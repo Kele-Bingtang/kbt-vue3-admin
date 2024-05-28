@@ -29,7 +29,7 @@ export type Responsive = responsive;
 
 export type BreakPoint = "xs" | "sm" | "md" | "lg" | "xl";
 
-interface GridProps {
+export interface GridProps {
   cols: number | Record<BreakPoint, number>; // 响应式布局
   collapsed?: boolean; // 是否开启折叠功能
   collapsedRows?: number; // 可见的行数
@@ -150,7 +150,7 @@ const findHiddenIndex = () => {
 
 // 断点变化时 执行 findHiddenIndex
 watch(
-  () => breakPoint.value,
+  () => [unref(breakPoint), props.collapsedRows],
   () => {
     if (props.collapsed) findHiddenIndex();
   }

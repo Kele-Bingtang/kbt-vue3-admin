@@ -14,7 +14,7 @@ export const useProTable = () => {
    * @param ref ProTable 实例
    * @param elRef ElTable 实例
    */
-  const register = (ref: ProTableInstance, elRef: TableInstance) => {
+  const register = (ref?: ProTableInstance, elRef?: TableInstance) => {
     tableRef.value = ref;
     elTableRef.value = unref(elRef);
   };
@@ -93,7 +93,7 @@ export const useProTable = () => {
     /**
      * @description 更新表格分页信息，从而更新表格数据
      */
-    pagination: async (paging: Paging) => {
+    pagination: async (paging: Partial<Paging>) => {
       const table = await getTable();
       return table?.handlePagination(paging);
     },
@@ -112,6 +112,14 @@ export const useProTable = () => {
     reset: async () => {
       const table = await getTable();
       table?.reset();
+    },
+
+    /**
+     * @description 打开/隐藏列设置
+     */
+    toggleColSetting: async () => {
+      const table = await getTable();
+      table?.toggleColSetting();
     },
 
     /**

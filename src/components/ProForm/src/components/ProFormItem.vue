@@ -65,7 +65,7 @@ const columnEnum = computed(() => {
 
   if (!enumData) return [];
   if (el === "el-select-v2") {
-    enumData = enumData.map((item: { [key: string]: any }) => {
+    enumData = enumData.map((item: Record<string, any>) => {
       return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
   }
@@ -138,7 +138,7 @@ const RenderSlots = () => {
 };
 
 // 存储组件实例
-const formComponentRef = ref<Component>();
+const formComponentRef = ref<Component | any>();
 
 // 渲染 Element Plus 的组件
 const RenderElComponents = () => {
@@ -161,8 +161,8 @@ const RenderElComponents = () => {
       clearable={unref(clearable)}
       {...unref(handleFormProps)}
       {...unref(placeholder)}
-      model-value={getFormProp(model.value, prop, valueFormat)}
-      onUpdate:modelValue={(v: any) => setFormProp(model.value, prop, v)}
+      model-value={getFormProp(unref(model), prop, valueFormat)}
+      onUpdate:modelValue={(v: any) => setFormProp(unref(model), prop, v)}
       data={el === "el-tree-select" ? unref(columnEnum) : []}
       options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
       style={style}

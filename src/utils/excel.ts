@@ -73,7 +73,7 @@ const datenum = (date: Date) => {
 };
 
 const sheetFromDataArray = (data: any) => {
-  const ws: { [key: string]: any } = {};
+  const ws: Record<string, any> = {};
   const range = {
     s: {
       c: 10000000,

@@ -18,7 +18,7 @@ import Loading from "./components/Loading/index.vue";
 import { getPx, setStyleVar } from "@/utils";
 import { type Component, defineAsyncComponent, computed, watch, watchEffect } from "vue";
 
-const LayoutComponents: { [key: string]: Component } = {
+const LayoutComponents: Record<string, Component> = {
   vertical: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),
   classic: defineAsyncComponent(() => import("./LayoutClassic/index.vue")),
   transverse: defineAsyncComponent(() => import("./LayoutTransverse/index.vue")),

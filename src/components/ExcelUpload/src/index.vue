@@ -116,7 +116,7 @@ const readerData = (rawFile: File) => {
   reader.readAsArrayBuffer(rawFile);
 };
 
-const getHeaderRow = (sheet: { [key: string]: any }) => {
+const getHeaderRow = (sheet: Record<string, any>) => {
   const headers: string[] = [];
   const range = utils.decode_range(sheet["!ref"]);
   const R = range.s.r;

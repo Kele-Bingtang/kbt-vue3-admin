@@ -29,7 +29,7 @@ import { useDesign } from "@/hooks";
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("login");
 
-const formComponents: { [key: string]: Component } = {
+const formComponents: Record<string, Component> = {
   login: LoginForm,
   phone: Phone,
   qrCode: QrCode,

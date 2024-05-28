@@ -20,7 +20,7 @@ type AxiosRequestConfigProp<D = any> = AxiosRequestConfig<D> & {
  * @condition 接口在 header 填写 mapping: true 来开启 URL 映射功能，{ headers: { mapping: true } }
  * 详细请看 README.md 文档的 API 介绍
  */
-const mappingUrl: { [key: string]: string } = {
+const mappingUrl: Record<string, string> = {
   default: import.meta.env.VITE_API_URL,
   // test: "https://youngkbt.cn",
 };

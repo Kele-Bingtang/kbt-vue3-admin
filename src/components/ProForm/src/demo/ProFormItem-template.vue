@@ -156,7 +156,7 @@ const columnEnum = computed(() => {
 
   if (!enumData) return [];
   if (props.column.attrs?.el === "el-select-v2") {
-    enumData = enumData.map((item: { [key: string]: any }) => {
+    enumData = enumData.map((item: Record<string, any>) => {
       return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
   }

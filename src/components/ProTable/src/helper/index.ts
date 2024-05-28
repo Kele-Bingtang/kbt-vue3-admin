@@ -25,8 +25,8 @@ export function lastProp(prop: string) {
 export function filterEnum(callValue: any, enumData?: any, fieldNames?: FieldNamesProps) {
   const value = fieldNames?.value ?? "value";
   const children = fieldNames?.children ?? "children";
-  const filterDataArray: { [key: string]: any }[] = [];
-  let filterData: { [key: string]: any } = {};
+  const filterDataArray: Record<string, any>[] = [];
+  let filterData: Record<string, any> = {};
   // 判断 enumData 是否为数组
   if (Array.isArray(enumData)) {
     if (Array.isArray(callValue)) {
@@ -76,7 +76,7 @@ export function formatValue(callValue: any) {
  * @param {String} prop 当前 prop
  * @returns {*}
  * */
-export function handleRowAccordingToProp(row: { [key: string]: any }, prop: string) {
+export function handleRowAccordingToProp(row: Record<string, any>, prop: string) {
   if (!prop.includes(".")) return row[prop] ?? "--";
   prop.split(".").forEach(item => (row = row[item] ?? "--"));
   return row;
@@ -180,7 +180,7 @@ export const visibleButton = (api: any, flag: boolean | undefined) => {
 /**
  * @description 对 form 对象的 pro 赋值
  */
-export const setColumnProp = (column: { [key: string]: any }, prop: string, value: any) => {
+export const setColumnProp = (column: Record<string, any>, prop: string, value: any) => {
   if (!column) return;
   const props = prop.split(".");
   let current = column;

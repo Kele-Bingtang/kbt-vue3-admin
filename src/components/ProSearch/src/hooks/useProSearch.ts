@@ -1,16 +1,15 @@
 import type { FormSchemaProps, FormSetProps } from "@/components";
-import type { ProSearchInstance } from "../..";
-import type { ProSearchProps } from "../index.vue";
+import type { ProSearchExpose, ProSearchProps } from "../index.vue";
 
 export const useProSearch = () => {
   // ProSearch 实例
-  const searchRef = ref<ProSearchInstance>();
+  const searchRef = ref<ProSearchExpose>();
 
   /**
    * @param ref Search实例
    * @param elRef ElForm实例
    */
-  const register = (ref: ProSearchInstance) => {
+  const register = (ref: ProSearchExpose) => {
     searchRef.value = ref;
   };
 

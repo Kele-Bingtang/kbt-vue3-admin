@@ -42,7 +42,7 @@ export interface PaginationProps {
 
 defineOptions({ name: "Pagination" });
 
-const { getPrefixClass } = useDesign();
+const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("pagination");
 
 const props = withDefaults(defineProps<PaginationProps>(), {
@@ -81,8 +81,8 @@ const afterChange = () => {
   emits("pagination", unref(pageObj));
   if (props.autoScroll) {
     nextTick(() => {
-      scrollTo("el-table__body-wrapper", 0, 700);
-      scrollTo("el-main", 0, 700);
+      scrollTo(`${variables.elNamespace}-table__body-wrapper`, 0, 700);
+      scrollTo(`${variables.elNamespace}el-main`, 0, 700);
     });
   }
 };

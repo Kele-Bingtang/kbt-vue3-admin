@@ -212,7 +212,7 @@ export const api = () => {
 当开启 mapping 后，打开 `src/config/request.ts` 文件，然后在 mappingUrl 变量里添加一个键值对：
 
 ```typescript
-const mappingUrl: { [key: string]: string } = {
+const mappingUrl: Record<string, string> = {
   default: import.meta.env.VITE_API_URL,
   test: "https://youngkbt.cn",
 };

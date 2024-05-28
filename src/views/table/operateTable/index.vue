@@ -160,7 +160,7 @@ const defaultTableData = {
   title: "",
 };
 
-const dialogTitle: { [key: string]: string } = {
+const dialogTitle: Record<string, string> = {
   look: "查看",
   edit: "编辑",
   add: "创建",

@@ -17,7 +17,7 @@ import { getPx, setStyleVar } from "@/utils";
 import { type Component, computed, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 
-const LayoutComponents: { [key: string]: Component } = {
+const LayoutComponents: Record<string, Component> = {
   vertical: LayoutVertical,
   classic: LayoutClassic,
   transverse: LayoutTransverse,

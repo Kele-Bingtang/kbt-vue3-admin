@@ -42,7 +42,7 @@ export type SearchProps = {
     | ValueType
     | ((model: any, enumMap: Map<string, Record<string, any>>) => ValueType | any)
     | Ref<ValueType>; // 搜索项默认值
-  beforeSearch?: (val: ValueType, searchParams: { [key: string]: any }, col: TableColumnProps) => any; // 自定义搜索内容渲染（tsx 语法）
+  beforeSearch?: (val: ValueType, searchParams: Record<string, any>, col: TableColumnProps) => any; // 自定义搜索内容渲染（tsx 语法）
   type?: string; // el-select 有 el-select-group
   render?: (scope: FormRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
 } & Partial<Record<BreakPoint, Responsive>>;

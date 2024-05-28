@@ -77,7 +77,7 @@ const defaultRole: Role = {
   routes: [],
 };
 
-const dialogTitle: { [key: string]: string } = {
+const dialogTitle: Record<string, string> = {
   edit: "角色编辑",
   add: "角色创建",
 };

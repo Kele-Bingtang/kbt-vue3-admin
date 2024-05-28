@@ -32,8 +32,6 @@ export type TableSortInstance = Omit<
   keyof ComponentPublicInstance | keyof TableSortProps
 >;
 
-type Record = { [key: string]: string };
-
 const slots = useSlots();
 
 interface TableSortProps {
@@ -133,7 +131,7 @@ const multiSort = (data: any, sortSameArr: number[], orderArray: any) => {
  */
 const singleSort = (data: any, sortProp: string, sortOrder: string, sortSameArr: any) => {
   let newOrderArr = data.slice(sortSameArr[0], sortSameArr[1] + 1);
-  newOrderArr = newOrderArr.sort((x: Record, y: Record) => {
+  newOrderArr = newOrderArr.sort((x: Record<string, string>, y: Record<string, string>) => {
     // 数字
     if (isNumber(x[sortProp] + "")) {
       return sortOrder === "descending"

@@ -24,6 +24,12 @@ const proComponents: RouterConfigRaw = {
           meta: { title: "简单 ProTable", icon: StarFilled, auths: ["add", "edit", "delete", "import", "export"] },
         },
         {
+          path: "use",
+          component: () => import("@/views/proComponents/proTable/useProTable/index.vue"),
+          name: "UseProTable",
+          meta: { title: "Use ProTable", icon: StarFilled, auths: ["add", "edit", "delete", "import", "export"] },
+        },
+        {
           path: "tree",
           component: () => import("@/views/proComponents/proTable/treeFilterProTable/index.vue"),
           name: "TreeProTable",
@@ -53,13 +59,13 @@ const proComponents: RouterConfigRaw = {
       },
       children: [
         {
-          path: "simple-pro-form",
+          path: "simple",
           component: () => import("@/views/proComponents/proForm/simpleProForm/index.vue"),
           name: "SimpleProForm",
           meta: { title: "简单 ProForm", icon: StarFilled },
         },
         {
-          path: "use-pro-form",
+          path: "use",
           component: () => import("@/views/proComponents/proForm/useProForm/index.vue"),
           name: "UseProForm",
           meta: { title: "Use ProForm", icon: StarFilled },
@@ -82,9 +88,15 @@ const proComponents: RouterConfigRaw = {
       },
       children: [
         {
-          path: "simple-search",
+          path: "simple",
           name: "SimpleProSearch",
           component: () => import("@/views/proComponents/proSearch/simpleProSearch.vue"),
+          meta: { title: () => "简单 ProSearch", icon: StarFilled },
+        },
+        {
+          path: "use",
+          name: "UseProSearch",
+          component: () => import("@/views/proComponents/proSearch/useProSearch.vue"),
           meta: { title: () => "使用 ProSearch", icon: StarFilled },
         },
       ],

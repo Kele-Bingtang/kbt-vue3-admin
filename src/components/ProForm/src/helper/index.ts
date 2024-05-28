@@ -32,15 +32,16 @@ export const handleNestProp = (obj: Record<string, any>, delimiter = ".") => {
  * @description 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
  */
 export const getFormProp = (
-  form: { [key: string]: any },
+  form: Record<string, any>,
   prop: string,
   valueFormat: "default" | "string" | "number" | "boolean" = "default"
 ) => {
-  let value: any = "";
-  if (!prop.includes(".")) value = form[prop] ?? "";
+  let value: any;
+  if (!prop.includes(".")) value = form[prop] ?? undefined;
   else {
     prop.split(".").forEach(item => (form = form[item] ?? ""));
-    value = form;
+    // 如果是 ElInputNumber，则需要返回数字类型，因此这里 form 如果为 ""，则返回 undefined，这样字符串和数字类型的组件都支持
+    value = form || undefined;
   }
 
   if (valueFormat === "string") return value + "";
@@ -55,7 +56,7 @@ export const getFormProp = (
 /**
  * @description 对 form 对象的 pro 赋值
  */
-export const setFormProp = (form: { [key: string]: any }, prop: string, value: any) => {
+export const setFormProp = (form: Record<string, any>, prop: string, value: any) => {
   if (!form) return;
   const props = prop.split(".");
   let current = form;
@@ -65,7 +66,6 @@ export const setFormProp = (form: { [key: string]: any }, prop: string, value: a
     if (!current[prop]) current[prop] = {};
     current = current[prop];
   }
-
   current[props[props.length - 1]] = value;
 };
 

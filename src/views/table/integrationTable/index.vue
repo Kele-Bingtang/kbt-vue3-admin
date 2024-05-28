@@ -234,7 +234,7 @@ const statusOptions = [
 const priorityOptions = [1, 2, 3, 4, 5];
 
 const { variables } = useDesign();
-const dialogTitle: { [key: string]: string } = {
+const dialogTitle: Record<string, string> = {
   look: "查看",
   edit: "编辑",
   add: "创建",

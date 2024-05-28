@@ -2,10 +2,10 @@
   <div :class="prefixClass">
     <!-- 查询表单 card -->
     <ProSearch
-      v-show="isShowSearchProp"
+      v-show="getProps.isShowSearch"
       v-model="searchParam"
       :schema="searchColumns"
-      :search-cols="searchCols"
+      :search-cols="getProps.searchCols"
       @search="_search"
       @reset="_reset"
     />
@@ -13,22 +13,22 @@
     <div :class="`card ${prefixClass}__main`">
       <!-- 表格头部 操作按钮 -->
       <TableMainHeader
-        :columns="tableColumns"
-        :data="data ?? tableData"
-        :toolButton="toolButton"
-        :size="size"
-        :exportKey="exportKey"
+        :columns="getProps.columns"
+        :data="getProps.data ?? tableData"
+        :toolButton="getProps.toolButton"
+        :size="getProps.size"
+        :exportKey="getProps.exportKey"
         :showSearch="searchColumns ? searchColumns.length > 0 : false"
         :selectedList="selectedList"
         :selectedListIds="selectedListIds"
         :isSelected="isSelected"
-        :dialogForm="dialogForm"
+        :dialogForm="getProps.dialogForm"
         @add="dialogFormRef?.handleAdd"
         @deleteBatch="handleDeleteBatch"
         @refresh="getTableList"
         @size="handleSizeCommand"
-        @colSetting="openColSetting"
-        @search="isShowSearchProp = !isShowSearchProp"
+        @colSetting="toggleColSetting"
+        @search="() => setProps({ isShowSearch: !getProps.isShowSearch })"
       >
         <template v-for="slot in Object.keys($slots)" #[slot]="scope">
           <slot :name="slot" v-bind="scope" />
@@ -38,18 +38,18 @@
       <!-- 表格主体 -->
       <TableMain
         ref="tableMainRef"
+        v-bind="getProps"
         :size="elTableSize"
-        v-bind="$attrs"
         :data="processTableData ?? tableData"
-        :border="border"
-        :row-key="rowKey"
+        :border="getProps.border"
+        :row-key="getProps.rowKey"
         @selection-change="selectionChange"
         :row-style="getRowStyle"
         :cell-style="getCellStyle"
         :header-cell-style="getHeaderCellStyle"
-        :columns="tableColumns"
+        :columns="getProps.columns"
         :columnTypes="columnTypes"
-        :dialogForm="dialogForm"
+        :dialogForm="getProps.dialogForm"
         @edit="handleEdit"
         @delete="handleDelete"
       >
@@ -59,9 +59,9 @@
       </TableMain>
 
       <DialogFormComponent
-        ref="dialogFormRef"
         v-if="dialogForm"
-        v-bind="{ ...dialogForm, afterConfirm: () => getTableList() }"
+        ref="dialogFormRef"
+        v-bind="{ ...(getProps.dialogForm || { formProps: {}, dialog: {} }), afterConfirm: () => getTableList() }"
       >
         <template v-for="slot in Object.keys($slots)" #[slot]="scope">
           <slot :name="slot" v-bind="scope" />
@@ -79,7 +79,7 @@
       </slot>
     </div>
     <!-- 列设置 -->
-    <ColSetting v-if="toolButton" ref="colSettingRef" v-model:col-setting="colSetting" />
+    <ColSetting v-if="getProps.toolButton" v-model="colSettingVisible" :col-setting="colSetting" />
   </div>
 </template>
 
@@ -114,7 +114,7 @@ import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./compo
 import DialogFormComponent, { type DialogFormProps } from "./components/DialogForm.vue";
 import Sortable from "sortablejs";
 import { useDesign } from "@/hooks";
-import type { TableInstance } from "element-plus";
+import type { TableInstance, TableProps } from "element-plus";
 
 defineOptions({ name: "ProTable" });
 
@@ -125,7 +125,7 @@ provide("proTablePrefixClass", prefixClass);
 
 export type DialogForm = DialogFormProps;
 
-export interface ProTableProps {
+export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps<any>, "data" | "size">> {
   columns?: TableColumnProps[]; // 列配置项 ==> 必传
   data?: any[]; // 静态 table data 数据，若存在则不会使用 requestApi 返回的 data ==> 非必传
   requestApi?: (params: any) => Promise<any>; // 请求表格数据的 api ==> 非必传
@@ -175,31 +175,8 @@ const getProps = computed(() => {
   return propsObj;
 });
 
-// 是否显示搜索模块
-const isShowSearchProp = computed(() => unref(getProps).isShowSearch);
-
 // 表格多选 Hooks
 const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(unref(getProps).rowKey);
-
-// 配置 _enum 字典信息
-const enumCallback = (data: Record<string, any>[]) => {
-  unref(tableColumns).forEach(async col => {
-    const enumObj = unref(enumMap).get(col.prop!);
-    // 如果字段有配置枚举信息，则存放到 _enum[col.prop] 里
-    if (enumObj && col.isFilterEnum) {
-      data = data.map(row => {
-        const d = filterEnumLabel(
-          filterEnum(handleRowAccordingToProp(row, col.prop!), enumObj, col.fieldNames),
-          col.fieldNames
-        );
-        if (!row._enum) row._enum = {};
-        row._enum[col.prop!] = d;
-        return row;
-      });
-    }
-  });
-  return data;
-};
 
 // 表格操作 Hooks
 const {
@@ -232,8 +209,28 @@ const {
   unref(getProps).columns
 );
 
+// 配置 _enum 字典信息
+const enumCallback = (data: Record<string, any>[]) => {
+  unref(getProps).columns.forEach(async col => {
+    const enumObj = unref(enumMap).get(col.prop!);
+    // 如果字段有配置枚举信息，则存放到 _enum[col.prop] 里
+    if (enumObj && col.isFilterEnum) {
+      data = data.map(row => {
+        const d = filterEnumLabel(
+          filterEnum(handleRowAccordingToProp(row, col.prop!), enumObj, col.fieldNames),
+          col.fieldNames
+        );
+        if (!row._enum) row._enum = {};
+        row._enum[col.prop!] = d;
+        return row;
+      });
+    }
+  });
+  return data;
+};
+
 // 清空选中数据列表
-const clearSelection = () => unref(tableMainRef.value?.table)?.clearSelection();
+const clearSelection = () => unref(tableMainRef)?.table?.clearSelection();
 
 // 静态数据分页
 const processTableData = computed(() => {
@@ -269,11 +266,8 @@ watch(
   { deep: true }
 );
 
-// 接收 columns 并设置为响应式
-const tableColumns = ref<TableColumnProps[]>(unref(getProps).columns);
-
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
-const enumMap = ref(new Map<string, { [key: string]: any }[]>());
+const enumMap = ref(new Map<string, Record<string, any>[]>());
 const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
   if (!enumValue) return;
 
@@ -307,8 +301,7 @@ const flatColumnsFunc = (columns: TableColumnProps[], flatArr: TableColumnProps[
   return flatArr.filter(item => !item._children?.length);
 };
 
-const flatColumns = ref<TableColumnProps[]>();
-flatColumns.value = flatColumnsFunc(unref(tableColumns));
+const flatColumns = computed<TableColumnProps[]>(() => flatColumnsFunc(unref(getProps).columns));
 
 // 过滤需要搜索的配置项 & 组装搜索表单配置项
 const searchColumns = computed(() => {
@@ -333,12 +326,12 @@ const searchColumns = computed(() => {
 });
 
 // 列设置 ==> 过滤掉不需要设置的列
-const colSettingRef = ref();
-const colSetting = unref(tableColumns)?.filter(
-  item => !columnTypes.includes(item.type!) && item.prop !== "operation" && item.isShow
+const colSettingVisible = ref(false);
+const colSetting = computed(() =>
+  unref(getProps).columns?.filter(item => !columnTypes.includes(item.type!) && item.prop !== "operation" && item.isShow)
 );
 
-const openColSetting = () => unref(colSettingRef).openColSetting();
+const toggleColSetting = (show = !unref(colSettingVisible)) => (colSettingVisible.value = show);
 
 // 操作框
 const dialogFormRef = shallowRef<DialogFormInstance>();
@@ -359,14 +352,14 @@ const handleDelete = (scope: any, item: TableColumnProps) => {
 // ------- 表格样式 Start -------
 
 // 如果是 mini，则取 ElTableSize 为 default，反之默认
-const elTableSize = ref<ElTableSize>(TableSizeEnum.Default);
+const elTableSize = computed(() => (unref(getProps).size === TableSizeEnum.Mini ? "default" : unref(getProps).size));
 const rowStyle = ref<CSSProperties>({});
 const cellStyle = ref<CSSProperties>({});
 const headerCellStyle = ref<CSSProperties>({});
 const attrs = useAttrs();
 
 const handleSizeCommand = (size: ElTableSize, row: CSSProperties, cell: CSSProperties, headerCell: CSSProperties) => {
-  elTableSize.value = size;
+  setProps({ size });
   rowStyle.value = row;
   cellStyle.value = cell;
   headerCellStyle.value = headerCell;
@@ -404,16 +397,15 @@ const handleDeleteBatch = () => {
 
 // 定义 emit 事件
 const emits = defineEmits<{
-  register: [proTableRef?: ComponentPublicInstance | null, elTableRef?: TableInstance];
+  register: [proTableRef?: ComponentPublicInstance | null | any, elTableRef?: TableInstance];
   search: [model: Record<string, any>];
   reset: [model: Record<string, any>];
   dargSort: [{ newIndex?: number; oldIndex?: number }];
 }>();
 
 onMounted(() => {
-  const tableMain = unref(tableMainRef);
   // 注册实例
-  emits("register", tableMain?.$parent, unref(tableMain?.table));
+  emits("register", unref(tableMainRef)?.$parent, unref(tableMainRef)?.table);
 });
 
 const _search = (model: Record<string, any>) => {
@@ -494,6 +486,7 @@ const expose = {
   isSelected,
   selectedList,
   selectedListIds,
+  toggleColSetting,
   getTableList,
   search,
   reset,

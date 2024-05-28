@@ -1,22 +1,49 @@
 <template>
   <div v-if="schema.length" :class="`card ${prefixClass}`">
     <ProForm :schema="schemaForm" v-model="model" @register="formRegister" @validate="onFormValidate">
-      <template #default="{ parseLabel, getComponentWidth }">
-        <Grid ref="gridRef" :collapsed="collapsed" :gap="[20, 0]" :cols="searchCols">
-          <GridItem v-for="(item, index) in schemaForm" :key="item.prop" v-bind="getResponsive(item)" :index="index">
-            <el-form-item v-show="!item.isHidden" :label="parseLabel(item.label)">
-              <ProFormItem :column="item" v-model="model" :style="getComponentWidth(item)" />
-            </el-form-item>
-          </GridItem>
+      <template #default="{ parseLabel, getComponentWidth, isDestroy, isHidden }">
+        <Grid
+          ref="gridRef"
+          :collapsed="getProps.useCollapsed ? getProps.collapsed : false"
+          :cols="getProps.searchCols"
+          :gap="getProps.gap"
+          :collapsedRows="getProps.collapsedRows"
+        >
+          <template v-for="(item, index) in schemaForm" :key="item.prop">
+            <GridItem v-if="!isDestroy(item)" v-bind="getResponsive(item)" :index="index">
+              <el-form-item v-show="!isHidden(item)" :label="parseLabel(item.label)">
+                <ProFormItem :column="item" v-model="model" :style="getComponentWidth(item)" />
+              </el-form-item>
+            </GridItem>
+          </template>
 
-          <GridItem suffix>
-            <div :class="`${prefixClass}__operation`">
-              <el-button type="primary" :icon="Search" @click="emits('search', model)">搜索</el-button>
-              <el-button :icon="Delete" @click="emits('reset', model)">重置</el-button>
-              <el-button v-if="showCollapse" type="primary" link class="search-isOpen" @click="collapsed = !collapsed">
-                {{ collapsed ? "展开" : "折叠" }}
-                <el-icon class="el-icon--right"><component :is="collapsed ? ArrowDown : ArrowUp"></component></el-icon>
-              </el-button>
+          <GridItem v-if="getProps.useCollapsed" :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
+            <div :style="style">
+              <slot name="action" :model="model" :showCollapse="showCollapse" :toggleCollapsed="toggleCollapsed">
+                <el-button
+                  v-if="getProps.showSearch"
+                  type="primary"
+                  :icon="Search"
+                  @click="emits('search', model)"
+                  :loading="getProps.searchLoading"
+                >
+                  搜索
+                </el-button>
+                <el-button
+                  v-if="getProps.showReset"
+                  :icon="Delete"
+                  @click="emits('reset', model)"
+                  :loading="getProps.resetLoading"
+                >
+                  重置
+                </el-button>
+                <el-button v-if="showCollapse" type="primary" link class="search-isOpen" @click="toggleCollapsed()">
+                  {{ getProps.collapsed ? "展开" : "折叠" }}
+                  <el-icon class="el-icon--right">
+                    <component :is="getProps.collapsed ? ArrowDown : ArrowUp"></component>
+                  </el-icon>
+                </el-button>
+              </slot>
             </div>
           </GridItem>
         </Grid>
@@ -34,11 +61,11 @@ import {
   ProFormItem,
   type FormSchemaProps,
   type BreakPoint,
-  type Responsive,
   useProForm,
   type FormSetProps,
   setFormProp,
   type GridInstance,
+  type GridItemProps,
 } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
@@ -50,31 +77,50 @@ defineOptions({ name: "ProSearch" });
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("search-form");
 
+export type ProSearchExpose = typeof defaultExpose;
+
+export type ActionPosition = "left" | "right" | "block-left" | "block-center" | "block-right";
+
 export type ProSearchSchemaProps = FormSchemaProps & {
-  formItem?: Partial<FormItemProps>;
-  grid?: Partial<Record<BreakPoint, Responsive>> & {
-    span?: number; // 搜索项所占用的列数，默认为 1 列
-    offset?: number; // 搜索字段左侧偏移列数
-  };
+  formItem?: Partial<FormItemProps>; // ElFormItem 的 props
+  grid?: Partial<GridItemProps>; // GridItem 的 props
 };
 
 export interface ProSearchProps {
-  modeValue?: Record<string, any>;
+  modeValue?: Record<string, any>; // 搜索表单值
   schema?: ProSearchSchemaProps[]; // 搜索配置列
-  searchCols?: number | Record<BreakPoint, number>;
+  position?: ActionPosition; // Action 位置，block 代表换行
+  useCollapsed?: boolean; // 是否使用折叠功能
+  searchCols?: number | Record<BreakPoint, number>; // 响应式布局
+  collapsed?: boolean; // 是否默认折叠搜索项
+  collapsedRows?: number; // 可见的行数
+  gap?: [number, number] | number; // 行和列间距
+  showSearch?: boolean; // 是否展示搜索按钮
+  showReset?: boolean; // 是否展示重置按钮
+  searchLoading?: boolean; // 搜索按钮的 loading
+  resetLoading?: boolean; // 搜索按钮的 loading
 }
 
 // 默认值
 const props = withDefaults(defineProps<ProSearchProps>(), {
   modeValue: () => ({}),
   schema: () => [],
+  position: "right",
+  useCollapsed: true,
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
+  collapsed: true,
+  collapsedRows: 1,
+  gap: () => [20, 0],
+  showSearch: true,
+  showReset: true,
+  searchLoading: false,
+  resetLoading: false,
 });
 
 const emits = defineEmits<{
   search: [params: Record<string, any>]; // 搜索方法
   reset: [params: Record<string, any>]; // 重置方法
-  register: [expose: typeof defaultExpose]; // 注册方法
+  register: [expose: ProSearchExpose]; // 注册方法
   validate: [prop: FormItemProp, isValid: boolean, message: string]; // ElForm 触发验证事件
 }>();
 
@@ -107,12 +153,11 @@ const getResponsive = (item: ProSearchSchemaProps) => {
   };
 };
 
-// 是否默认折叠搜索项
-const collapsed = ref(true);
-
 // 获取响应式断点
 const gridRef = shallowRef<GridInstance>();
 const breakPoint = computed<BreakPoint>(() => unref(gridRef)?.breakPoint || "xl");
+
+const rowSpan = computed(() => unref(getProps).searchCols[unref(breakPoint)]);
 
 // 判断是否显示 展开/合并 按钮
 const showCollapse = computed(() => {
@@ -134,13 +179,39 @@ const showCollapse = computed(() => {
   return show;
 });
 
+const isRightPosition = computed(() => {
+  const { position } = unref(getProps);
+  return position === "right";
+});
+
+const isBlock = computed(() => {
+  const { position = "right" } = unref(getProps);
+  return ["block-left", "block-center", "block-right"].includes(position);
+});
+
+const style = computed(() => {
+  const { position = "right" } = unref(getProps);
+  const style = {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "flex-end",
+    marginBottom: "18px",
+  };
+  if (["block-left", "left"].includes(position)) return { ...style, justifyContent: "flex-start" };
+  if (["block-center"].includes(position)) return { ...style, justifyContent: "center" };
+  if (["block-right", "right"].includes(position)) return { ...style, justifyContent: "flex-end" };
+  return style;
+});
+
 const onFormValidate = (prop: FormItemProp, isValid: boolean, message: string) => {
   emits("validate", prop, isValid, message);
 };
 
 const toggleCollapsed = (isCollapsed?: boolean) => {
-  if (isCollapsed === undefined) return (collapsed.value = !unref(collapsed));
-  collapsed.value = isCollapsed;
+  const { collapsed } = unref(getProps);
+
+  if (isCollapsed === undefined) return setProps({ collapsed: !collapsed });
+  return setProps({ collapsed: isCollapsed });
 };
 
 // 设置 form 的值
@@ -214,12 +285,5 @@ $prefix-class: #{$admin-namespace}-search-form;
 .#{$prefix-class} {
   padding: 18px 18px 0;
   margin-bottom: 10px;
-
-  &__operation {
-    display: flex;
-    align-items: center;
-    justify-content: flex-end;
-    margin-bottom: 18px;
-  }
 }
 </style>

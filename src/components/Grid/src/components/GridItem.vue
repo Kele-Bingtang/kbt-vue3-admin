@@ -15,7 +15,7 @@ export type Responsive = {
   offset?: number; // 占位量
 };
 
-interface GridItemProps {
+export interface GridItemProps {
   offset?: number; // 偏移量
   span?: number; // 占位量
   suffix?: boolean; // 最后的元素
@@ -46,7 +46,7 @@ const breakPoint = inject<Ref<BreakPoint>>("breakPoint", ref("xl"));
 const shouldHiddenIndex = inject<Ref<number>>("shouldHiddenIndex", ref(-1));
 
 watch(
-  () => [shouldHiddenIndex.value, breakPoint.value],
+  () => [unref(shouldHiddenIndex), unref(breakPoint)],
   nv => {
     if (attrs.index) {
       isShow.value = !(nv[0] !== -1 && parseInt(attrs.index) >= Number(nv[0]));
