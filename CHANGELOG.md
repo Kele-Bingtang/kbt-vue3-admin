@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.1.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.0.1...v1.1.0) (2024-05-29)
+
+### Features
+
+- 🚀 新增 codeMirror focus 样式 ([f8bf581](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/f8bf581f8a2cb604692a6471bed4f5e7413b9bed))
+- 🚀 新增 EP 自定义命名空间功能，优化部分组件适配命名空间样式，图片预览、视频预览添加组件式打开方式 ([24aad15](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/24aad15be423d16bb45fa9a813bbf7d4b07f9280))
+- 🚀 新增 EP 组件、样式按需引入功能以及配置化管理 ([a00545d](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/a00545dbba4bd828138bb3d28e50d9eb3773da5a))
+- 🚀 新增菜单手风琴配置项 ([cb24a38](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/cb24a386c78f13a9b30a15c47b5a3f16f972f883))
+- 🚀 重构 ProForm 的代码，用 TSX 写法完成，SearchForm 改为 ProSearch，内置使用 ProForm 实现，ProTable 的内置搜索使用 ProSearch 实现 ([08681ff](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/08681ff22c54d374b551fda2cd31da0401f9437a))
+- 🚀 proTable 添加行拖拽功能 ([35bec55](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/35bec55ed5773127c600424f9531368189e6c7f6))
+- 🚀 proTable、ProForm、ProSearch 添加 hooks 函数动态操作配置项、props 参数等。编写 ProForm Demo ([5536d21](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/5536d213f42f2d0f0dabc193ceac2c000b4a8650))
+- 🚀 provide 和 inject 使用 InjectionKey、Symbol 处理类型 ([b4bbcfd](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/b4bbcfd2222f7068cc7f114f618d4853400062a0))
+
+### Bug Fixes
+
+- 🐞 解决 JSX 元素隐式具有类型 "any"，因为不存在接口 "JSX.IntrinsicElements" 问题 ([9884484](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/988448431b25c1e3ce1c64752c9ce79e6e78df25))
+- 🐞 新增其他组件的 Props、Emits、Expose 说明，修复 CodeMirror 问题。修复国际化切换英文刷新自动恢复中文问题 ([3b1c709](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/3b1c709c2eea409b925e9318430af0517971e9a0))
+- 🐞 修复 Pro 超级组件关联问题，修复 ProSearch 动态删除 schema 后 Grid 布局不自动补全问题 ([1e3ba29](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/1e3ba293a664321f35b6dd52c6dd54b78bff04de))
+- 🐞 修复 Pro 组件的 hook 函数兼容问题，添加 ProTable、ProSearch 的 hook 函数 Demo。对象类型修改为 Record ([64917e3](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/64917e34bdde443b2741f0e0a5ac3dbef4d6609d))
+- 🐞 修复打包失败问题 ([13616b7](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/13616b763215f71f3959f20600bf812560521346))
+- 🐞 修复打包样式丢失问题 ([539929b](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/539929bb4d09aad122ba2cb730c5f9cff8036e0e))
+
+### Docs
+
+- 📚 更新图片预览、视频预览参数说明文档 ([cdfcc3a](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/cdfcc3a756e9d9507cd613885a63d184eeffba8a))
+
+### Code Refactoring
+
+- ♻️ 对 ProTable 的表格按钮区、表格进行组件封装，减少 index.vue 的代码复杂度 ([ccc4d26](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/ccc4d268a1dc1de7f1e3899ebd7bd47be15b2cbd))
+- ♻️ 样式导入重构 ([aed7871](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/aed7871472c46b3986cf12a3c9f39ed6863e39a1))
+
+### Styling
+
+- 🎨 删除 ProForm、ProSearch 1.0 的组件，正式进入 2.0 组件 ([b5f0807](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/b5f0807626217b2b88b1273f52fb14178a5179d6))
+
 ### [1.0.1](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.0.0...v1.0.1) (2024-05-23)
 
 ### Bug Fixes
