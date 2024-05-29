@@ -7,14 +7,14 @@ export const useRenderCheckbox = () => {
     fieldNames: FormFieldNamesProps,
     column: FormSchemaProps
   ) => {
-    const Component = column.type === "el-checkbox-button" ? ElCheckboxButton : ElCheckbox;
-    return columnEnum.value.map(col => {
+    const Component = column.el === "el-checkbox-button" ? ElCheckboxButton : ElCheckbox;
+    return columnEnum.map(col => {
       return (
         <Component
-          disabled={col[unref(fieldNames).disabled || "disabled"]}
-          label={col[unref(fieldNames).label]}
-          value={col[unref(fieldNames).value]}
-          key={col[unref(fieldNames).value]}
+          disabled={col[fieldNames.disabled || "disabled"]}
+          label={col[fieldNames.label]}
+          value={col[fieldNames.value]}
+          key={col[fieldNames.value]}
         ></Component>
       );
     });

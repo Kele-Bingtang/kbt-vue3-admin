@@ -42,6 +42,7 @@ const fieldNames = computed(() => {
     label: props.column.fieldNames?.label ?? "label",
     value: props.column.fieldNames?.value ?? "value",
     children: props.column.fieldNames?.children ?? "children",
+    disabled: props.column.fieldNames?.disabled ?? "disabled",
   };
 });
 
@@ -146,13 +147,21 @@ const RenderElComponents = () => {
   const { el, prop, valueFormat } = column;
   let defaultSlot: any = () => {};
 
+  let rootEl = el;
+
   if (el === "el-cascader") defaultSlot = ({ data }) => <span>{data[unref(fieldNames).label]}</span>;
-  if (el === "el-select") defaultSlot = () => renderSelectOptions(columnEnum, unref(fieldNames));
-  if (el === "el-radio-group") defaultSlot = () => renderRadioOptions(columnEnum, unref(fieldNames), column);
-  if (el === "el-checkbox-group") defaultSlot = () => renderCheckboxOptions(columnEnum, unref(fieldNames), column);
+  if (el === "el-select") defaultSlot = () => renderSelectOptions(unref(columnEnum), unref(fieldNames));
+  if (["el-radio-group", "el-radio-button"].includes(el || "")) {
+    rootEl = "el-radio-group";
+    defaultSlot = () => renderRadioOptions(unref(columnEnum), unref(fieldNames), column);
+  }
+  if (["el-checkbox-group", "el-checkbox-button"].includes(el || "")) {
+    rootEl = "el-checkbox-group";
+    defaultSlot = () => renderCheckboxOptions(unref(columnEnum), unref(fieldNames), column);
+  }
 
   // TSX 不能直接使用 Vue3 内置组件 <component></component>，因此通过内置 resolveDynamicComponent 函数获取
-  const DynamicComponent = resolveDynamicComponent(el) as any;
+  const DynamicComponent = resolveDynamicComponent(rootEl) as any;
 
   return (
     <DynamicComponent

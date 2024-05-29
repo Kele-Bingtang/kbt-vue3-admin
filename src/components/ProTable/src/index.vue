@@ -2,12 +2,15 @@
   <div :class="prefixClass">
     <!-- 查询表单 card -->
     <ProSearch
+      ref="proSearchRef"
       v-show="getProps.isShowSearch"
       v-model="searchParam"
       :schema="searchColumns"
       :search-cols="getProps.searchCols"
+      v-bind="{ ...searchProps }"
       @search="_search"
       @reset="_reset"
+      @register="searchRegister"
     />
 
     <div :class="`card ${prefixClass}__main`">
@@ -59,9 +62,9 @@
       </TableMain>
 
       <DialogFormComponent
-        v-if="dialogForm"
         ref="dialogFormRef"
         v-bind="{ ...(getProps.dialogForm || { formProps: {}, dialog: {} }), afterConfirm: () => getTableList() }"
+        @register="formRegister"
       >
         <template v-for="slot in Object.keys($slots)" #[slot]="scope">
           <slot :name="slot" v-bind="scope" />
@@ -98,7 +101,16 @@ import {
 } from "vue";
 import { useTable, type Table } from "./hooks/useTable";
 import { useSelection } from "./hooks/useSelection";
-import { ProSearch, Pagination, type BreakPoint, type ProSearchSchemaProps } from "@/components";
+import {
+  ProSearch,
+  Pagination,
+  type BreakPoint,
+  type ProSearchSchemaProps,
+  type ProSearchInstance,
+  type ProFormInstance,
+  type ProSearchExpose,
+  type ProSearchProps,
+} from "@/components";
 import {
   type TableColumnProps,
   type DialogFormInstance,
@@ -107,14 +119,14 @@ import {
   type ToolButton,
   type TableSetProps,
 } from "./interface";
-import { filterEnum, filterEnumLabel, handleRowAccordingToProp, setColumnProp } from "./helper";
+import { filterEnum, filterEnumLabel, handleRowAccordingToProp, setColumnProp, lastProp } from "./helper";
 import ColSetting from "./components/ColSetting.vue";
 import TableMain from "./components/TableMain.vue";
 import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./components/TableMainHeader.vue";
 import DialogFormComponent, { type DialogFormProps } from "./components/DialogForm.vue";
 import Sortable from "sortablejs";
 import { useDesign } from "@/hooks";
-import type { TableInstance, TableProps } from "element-plus";
+import type { FormInstance, TableInstance, TableProps } from "element-plus";
 
 defineOptions({ name: "ProTable" });
 
@@ -140,9 +152,10 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   toolButton?: ToolButton[] | boolean; // 是否显示表格功能按钮 ==> 非必传（默认为 true）
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   size?: CustomTableSize; // 表格密度
-  searchCols?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
-  isShowSearch?: boolean; // 初始化时是否显示搜索模块
   exportKey?: "props" | "label" | "dataKey"; // 导出时的表头配置（prop 为使用  columns 的 props，label 为使用 columns 的 label，dataKey 为使用 data 的 key），默认为 dataKey
+  isShowSearch?: boolean; // 初始化时是否显示搜索模块
+  searchCols?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
+  searchProps?: Omit<ProSearchProps, "schema" | "searchCols" | "modeValue">; // ProSearch 配置项
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
 }
 
@@ -163,6 +176,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
 
 // 表格 DOM 元素
 const tableMainRef = ref<InstanceType<typeof TableMain>>();
+const proSearchRef = ref<ProSearchInstance>();
 
 // column 列类型
 const columnTypes: TypeProps[] = ["selection", "radio", "index", "expand", "sort"];
@@ -272,15 +286,15 @@ const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
   if (!enumValue) return;
 
   // 如果当前 enumMap 存在相同的值 return
-  if (enumMap.value.has(prop!) && (typeof enumValue === "function" || enumMap.value.get(prop!) === enumValue)) return;
+  if (unref(enumMap).has(prop!) && (typeof enumValue === "function" || unref(enumMap).get(prop!) === enumValue)) return;
 
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
   if (typeof enumValue !== "function") return unref(enumMap).set(prop!, unref(enumValue!));
 
   // 为了防止接口执行慢，而存储慢，导致重复请求，所以预先存储为[]，接口返回后再二次存储
-  enumMap.value.set(prop!, []);
+  unref(enumMap).set(prop!, []);
 
-  const { data } = await enumValue(enumMap.value);
+  const { data } = await enumValue(unref(enumMap));
   unref(enumMap).set(prop!, data);
 };
 provide("enumMap", enumMap);
@@ -305,11 +319,20 @@ const flatColumns = computed<TableColumnProps[]>(() => flatColumnsFunc(unref(get
 
 // 过滤需要搜索的配置项 & 组装搜索表单配置项
 const searchColumns = computed(() => {
-  const column = flatColumns.value?.filter(item => item.search?.el || item.search?.render);
+  const column = unref(flatColumns)?.filter(item => item.search?.el || item.search?.render);
 
   const searchColumns: ProSearchSchemaProps[] = [];
 
   column?.forEach(item => {
+    // Table 默认查询参数初始化
+    const key = item.search?.key ?? lastProp(item.prop!);
+    const defaultValue = item.search?.defaultValue;
+    if (defaultValue !== undefined && defaultValue !== null) {
+      unref(searchInitParam)[key] = defaultValue;
+      unref(searchParam)[key] = defaultValue;
+    }
+
+    // 组装搜索表单配置项
     const searchColumn: any = {
       ...item.search,
       label: item.label || "",
@@ -389,7 +412,7 @@ const getHeaderCellStyle = (tableInfo: any) => {
 // ------- 表格样式 End -------
 
 const handleDeleteBatch = () => {
-  dialogFormRef.value?.handleDeleteBatch(unref(selectedListIds), unref(selectedList), () => {
+  unref(dialogFormRef)?.handleDeleteBatch(unref(selectedListIds), unref(selectedList), () => {
     clearSelection();
     getTableList();
   });
@@ -397,24 +420,38 @@ const handleDeleteBatch = () => {
 
 // 定义 emit 事件
 const emits = defineEmits<{
-  register: [proTableRef?: ComponentPublicInstance | null | any, elTableRef?: TableInstance];
+  register: [
+    proTableRef?: ComponentPublicInstance | null | any,
+    elTableRef?: TableInstance,
+    proSearch?: ProSearchInstance,
+  ];
+  formRegister: [proFormRef?: ComponentPublicInstance | null | any, elFormRef?: FormInstance];
+  searchRegister: [proFormRef?: ProSearchExpose];
   search: [model: Record<string, any>];
   reset: [model: Record<string, any>];
   dargSort: [{ newIndex?: number; oldIndex?: number }];
 }>();
 
+const formRegister = (ref?: ProFormInstance, elRef?: FormInstance) => {
+  emits("formRegister", ref, elRef);
+};
+
+const searchRegister = (ref?: ProSearchExpose) => {
+  emits("searchRegister", ref);
+};
+
 onMounted(() => {
   // 注册实例
-  emits("register", unref(tableMainRef)?.$parent, unref(tableMainRef)?.table);
+  emits("register", unref(tableMainRef)?.$parent, unref(tableMainRef)?.table, unref(proSearchRef));
 });
 
 const _search = (model: Record<string, any>) => {
-  search();
+  search(model);
   emits("search", model);
 };
 
 const _reset = (model: Record<string, any>) => {
-  reset();
+  reset(model);
   emits("reset", model);
 };
 
@@ -427,8 +464,8 @@ const dragSort = () => {
       animation: 300,
       onEnd({ newIndex, oldIndex }) {
         if (typeof oldIndex !== "undefined" && typeof newIndex !== "undefined") {
-          const [removedItem] = processTableData.value.splice(oldIndex!, 1);
-          processTableData.value.splice(newIndex!, 0, removedItem);
+          const [removedItem] = unref(processTableData).splice(oldIndex!, 1);
+          unref(processTableData).splice(newIndex!, 0, removedItem);
           emits("dargSort", { newIndex, oldIndex });
         }
       },
@@ -476,8 +513,9 @@ const delColumn = (prop: string) => {
 
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 const expose = {
-  element: tableMainRef.value?.table,
-  dialogFormRef,
+  element: unref(tableMainRef)?.table,
+  searchEl: proSearchRef,
+  dialogFormEl: dialogFormRef,
   tableData,
   paging,
   searchParam,

@@ -4,10 +4,10 @@ import type { FormFieldNamesProps } from "../interface";
 export const useRenderSelect = () => {
   // 渲染 select options
   const renderSelectOptions = (columnEnum: Record<string, any>, fieldNames: FormFieldNamesProps) => {
-    return columnEnum.value.map(col => {
+    return unref(columnEnum).map(col => {
       if (col?.options?.length) {
         return (
-          <ElOptionGroup label={col[unref(fieldNames).label]} key={col[unref(fieldNames).value]}>
+          <ElOptionGroup label={col[fieldNames.label]} key={col[fieldNames.value]}>
             {{
               default: () => col.options.map(option => renderSelectOptionItem(option, fieldNames)),
             }}
@@ -20,13 +20,7 @@ export const useRenderSelect = () => {
   };
 
   const renderSelectOptionItem = (col: Record<string, any>, fieldNames: FormFieldNamesProps) => {
-    return (
-      <ElOption
-        label={col[unref(fieldNames).label]}
-        value={col[unref(fieldNames).value]}
-        key={col[unref(fieldNames).value]}
-      />
-    );
+    return <ElOption label={col[fieldNames.label]} value={col[fieldNames.value]} key={col[fieldNames.value]} />;
   };
 
   return {

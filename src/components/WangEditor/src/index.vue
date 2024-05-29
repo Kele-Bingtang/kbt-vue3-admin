@@ -61,7 +61,6 @@ type WangEditorEmits = {
 };
 
 const props = withDefaults(defineProps<WangEditorProp>(), {
-  value: "",
   toolbarKeys: () => [],
   excludeKeys: () => [],
   height: "400px",
@@ -72,7 +71,7 @@ const props = withDefaults(defineProps<WangEditorProp>(), {
 
 const emits = defineEmits<WangEditorEmits>();
 
-const content = defineModel<string>({ required: true });
+const content = defineModel<string>({ default: "" });
 
 // 富文本 DOM 元素
 const editorRef = shallowRef();

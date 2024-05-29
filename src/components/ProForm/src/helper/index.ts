@@ -70,7 +70,7 @@ export const setFormProp = (form: Record<string, any>, prop: string, value: any)
 };
 
 /**
- * 是否是有效的数字（包含正负整数，0以及正负浮点数）
+ * @description 是否是有效的数字（包含正负整数，0以及正负浮点数）
  */
 export const isNumber = (val: string) => {
   const regPos = /^\d+(\.\d+)?$/; // 非负浮点数
@@ -94,7 +94,7 @@ export const isObject = (val: any): val is Record<any, any> => {
 };
 
 /**
- * 补 px 单位
+ * @description 补 px 单位
  * @param val 值
  * @returns 补 px 单位的 string
  */
@@ -106,4 +106,11 @@ export const getPx = (val: number | string | undefined) => {
     return val;
   }
   return `${val}px`;
+};
+
+/**
+ * @description 是否为空值项
+ */
+export const isEmptyVal = (val: any): boolean => {
+  return val === "" || val === null || val === undefined;
 };

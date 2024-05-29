@@ -89,7 +89,10 @@ export const useProSearch = () => {
   };
 
   return {
-    searchRegister: register,
+    searchElState: {
+      searchRef: unref(searchRef),
+    },
     searchMethods: methods,
+    searchRegister: register,
   };
 };

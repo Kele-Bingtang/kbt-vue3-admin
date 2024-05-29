@@ -1,7 +1,7 @@
 <template>
   <div v-if="schema.length" :class="`card ${prefixClass}`">
-    <ProForm :schema="schemaForm" v-model="model" @register="formRegister" @validate="onFormValidate">
-      <template #default="{ parseLabel, getComponentWidth, isDestroy, isHidden }">
+    <ProForm :schema="schema" v-model="model" @register="formRegister" @validate="onFormValidate">
+      <template #default="{ parseLabel, getComponentWidth }">
         <Grid
           ref="gridRef"
           :collapsed="getProps.useCollapsed ? getProps.collapsed : false"
@@ -9,13 +9,11 @@
           :gap="getProps.gap"
           :collapsedRows="getProps.collapsedRows"
         >
-          <template v-for="(item, index) in schemaForm" :key="item.prop">
-            <GridItem v-if="!isDestroy(item)" v-bind="getResponsive(item)" :index="index">
-              <el-form-item v-show="!isHidden(item)" :label="parseLabel(item.label)">
-                <ProFormItem :column="item" v-model="model" :style="getComponentWidth(item)" />
-              </el-form-item>
-            </GridItem>
-          </template>
+          <GridItem v-for="item in schemaForm" :key="item.prop" v-bind="getResponsive(item)" :index="item._index">
+            <el-form-item :label="parseLabel(item.label)">
+              <ProFormItem :column="item" v-model="model" :style="getComponentWidth(item)" />
+            </el-form-item>
+          </GridItem>
 
           <GridItem v-if="getProps.useCollapsed" :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
             <div :style="style">
@@ -24,17 +22,12 @@
                   v-if="getProps.showSearch"
                   type="primary"
                   :icon="Search"
-                  @click="emits('search', model)"
+                  @click="search"
                   :loading="getProps.searchLoading"
                 >
                   搜索
                 </el-button>
-                <el-button
-                  v-if="getProps.showReset"
-                  :icon="Delete"
-                  @click="emits('reset', model)"
-                  :loading="getProps.resetLoading"
-                >
+                <el-button v-if="getProps.showReset" :icon="Delete" @click="reset" :loading="getProps.resetLoading">
                   重置
                 </el-button>
                 <el-button v-if="showCollapse" type="primary" link class="search-isOpen" @click="toggleCollapsed()">
@@ -66,6 +59,8 @@ import {
   setFormProp,
   type GridInstance,
   type GridItemProps,
+  isEmptyVal,
+  isObject,
 } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
@@ -99,6 +94,7 @@ export interface ProSearchProps {
   showReset?: boolean; // 是否展示重置按钮
   searchLoading?: boolean; // 搜索按钮的 loading
   resetLoading?: boolean; // 搜索按钮的 loading
+  removeNoValue?: boolean; // 是否去除空值项
 }
 
 // 默认值
@@ -115,6 +111,7 @@ const props = withDefaults(defineProps<ProSearchProps>(), {
   showReset: true,
   searchLoading: false,
   resetLoading: false,
+  removeNoValue: true,
 });
 
 const emits = defineEmits<{
@@ -124,12 +121,27 @@ const emits = defineEmits<{
   validate: [prop: FormItemProp, isValid: boolean, message: string]; // ElForm 触发验证事件
 }>();
 
-const schemaForm = computed(() => props.schema);
+const schemaForm = computed(() =>
+  props.schema
+    .filter(item => {
+      const { formRef } = formElState;
+      const destroy = formRef?.isDestroy(item) || item.destroy;
+      const hidden = formRef?.isHidden(item) || item.hidden;
+
+      if (destroy) delete unref(model)[item.prop];
+
+      return !(destroy || hidden);
+    })
+    .map((item, index) => {
+      item._index = index;
+      return item;
+    })
+);
 
 // 搜索参数
-const model = defineModel<Record<string, any>>({ required: true });
+const model = defineModel<Record<string, any>>({ default: {} });
 
-const { formRegister, formMethods } = useProForm();
+const { formRegister, formMethods, formElState } = useProForm();
 const { getElFormExpose, getFormData, getFormExpose } = formMethods;
 
 const mergeProps = ref<ProSearchProps>({});
@@ -203,6 +215,40 @@ const style = computed(() => {
   return style;
 });
 
+const filterModel = async () => {
+  const model = await getFormData();
+  if (unref(getProps).removeNoValue) {
+    // 使用 reduce 过滤空值，并返回一个新对象
+    return Object.keys(model).reduce((prev, next) => {
+      const value = model[next];
+      if (!isEmptyVal(value)) {
+        if (isObject(value)) {
+          if (Object.keys(value).length > 0) prev[next] = value;
+        } else prev[next] = value;
+      }
+      return prev;
+    }, {});
+  }
+  return model;
+};
+
+const search = async () => {
+  const elFormExpose = await getElFormExpose();
+  await elFormExpose?.validate(async isValid => {
+    if (isValid) {
+      const model = await filterModel();
+      emits("search", model);
+    }
+  });
+};
+
+const reset = async () => {
+  const elFormExpose = await getElFormExpose();
+  elFormExpose?.resetFields();
+  const model = await filterModel();
+  emits("reset", model);
+};
+
 const onFormValidate = (prop: FormItemProp, isValid: boolean, message: string) => {
   emits("validate", prop, isValid, message);
 };
@@ -263,6 +309,7 @@ const delSchema = (prop: string) => {
 
 const defaultExpose = {
   getElFormExpose,
+  getFormExpose,
   getFormData,
   toggleCollapsed,
   setProps,

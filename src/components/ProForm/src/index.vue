@@ -66,10 +66,10 @@ const setEnumMap = async ({ enum: enumValue, prop }: FormSchemaProps) => {
   if (typeof enumValue !== "function") return unref(enumMap).set(prop, unref(enumValue)!);
 
   // 如果当前 enumMap 存在相同的值 return
-  if (enumMap.value.has(prop!) && (typeof enumValue === "function" || enumMap.value.get(prop!) === enumValue)) return;
+  if (unref(enumMap).has(prop!) && (typeof enumValue === "function" || unref(enumMap).get(prop!) === enumValue)) return;
 
   // 为了防止接口执行慢，而存储慢，导致重复请求，所以预先存储为[]，接口返回后再二次存储
-  enumMap.value.set(prop!, []);
+  unref(enumMap).set(prop!, []);
 
   const { data } = await enumValue(unref(model), unref(enumMap));
   unref(enumMap).set(prop, data);
@@ -146,22 +146,18 @@ const cascadeEnum = ({ prop, el, subProp, subEnum }: FormSchemaProps) => {
 /**
  * 是否隐藏表单项
  */
-const isHidden = (column: FormSchemaProps) => {
-  if (typeof column.isHidden === "function") return column.isHidden(unref(model));
-  return column.isHidden;
+const isHidden = (item: FormSchemaProps) => {
+  const { hidden } = item;
+  if (typeof hidden === "function") return hidden(unref(model));
+  return hidden;
 };
+
 /**
  * 是否销毁表单项 & 是否初始化表单项默认值
  */
-const isDestroy = (column: FormSchemaProps) => {
-  let destroy;
-  if (typeof column.isDestroy === "function") destroy = column.isDestroy(unref(model));
-  else destroy = column.isDestroy;
-
-  // 如果不销毁，则初始化表单默认值，反之则重置为空
-  if (!destroy) initDefaultValue(column);
-  else delete unref(model)[column.prop];
-
+const isDestroy = (item: FormSchemaProps) => {
+  const { destroy } = item;
+  if (typeof destroy === "function") return destroy(unref(model));
   return destroy;
 };
 
@@ -182,10 +178,19 @@ watch(
 
       // 设置表单排序默认值
       item && (item.order = item.order ?? index + 2);
+
+      // 初始化值
+      initDefaultValue(item);
     });
 
     // 排序表单项
     schema.sort((a, b) => a.order! - b.order!);
+
+    // 如果 schema 对应的 prop 不存在，则删除 model 中的对应的 prop
+    Object.keys(unref(model)).forEach(key => {
+      const isExist = schema.some(item => item.prop === key);
+      if (!isExist) delete unref(model)[key];
+    });
   },
   {
     immediate: true,
@@ -381,6 +386,10 @@ defineExpose({
   delSchema,
   getComponentExpose,
   getFormItemExpose,
+  getComponentWidth,
+  parseLabel,
+  isDestroy,
+  isHidden,
 });
 </script>
 

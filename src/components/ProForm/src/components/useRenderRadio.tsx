@@ -7,14 +7,15 @@ export const useRenderRadio = () => {
     fieldNames: FormFieldNamesProps,
     column: FormSchemaProps
   ) => {
-    const Component = column.type === "el-radio-button" ? ElRadioButton : ElRadio;
-    columnEnum.value.map(col => {
+    const Component = column.el === "el-radio-button" ? ElRadioButton : ElRadio;
+
+    return columnEnum.map(col => {
       return (
         <Component
-          disabled={col[unref(fieldNames).disabled || "disabled"]}
-          label={col[unref(fieldNames).label]}
-          value={col[unref(fieldNames).value]}
-          key={col[unref(fieldNames).value]}
+          disabled={col[fieldNames.disabled || "disabled"]}
+          label={col[fieldNames.label]}
+          value={col[fieldNames.value]}
+          key={col[fieldNames.value]}
         ></Component>
       );
     });

@@ -93,7 +93,7 @@ type TinymceEmitProps = {
 
 const emits = defineEmits<TinymceEmitProps>();
 
-const tinymceContent = defineModel<string>({ required: true });
+const tinymceContent = defineModel<string>({ default: "" });
 
 const fullscreen = ref(false);
 

@@ -32,6 +32,7 @@
         @validate="formValidate"
       />
     </el-card>
+    {{ model }}
   </el-space>
 </template>
 
@@ -77,6 +78,7 @@ const schema = reactive<FormSchemaProps[]>([
     label: "选择器",
     prop: "select",
     el: "el-select",
+    defaultValue: "1",
     enum: [
       {
         label: "option1",
@@ -92,7 +94,6 @@ const schema = reactive<FormSchemaProps[]>([
     prop: "radio",
     label: "单选框",
     el: "el-radio-group",
-    isHidden: true,
     defaultValue: "1",
     enum: [
       {
@@ -108,9 +109,8 @@ const schema = reactive<FormSchemaProps[]>([
   {
     prop: "checkbox",
     label: "多选框",
-    el: "el-checkbox",
-    isDestroy: true,
-    defaultValue: "1",
+    el: "el-checkbox-group",
+    defaultValue: ["2"],
     enum: [
       {
         label: "option-1",
@@ -178,6 +178,7 @@ const changeSchema = (del: boolean) => {
         label: "选择器",
         prop: "select",
         el: "el-select",
+        defaultValue: "1",
         enum: [
           {
             label: "option1",

@@ -52,7 +52,7 @@ const changeSex = (del: boolean) => {
   setSchema([
     {
       prop: "sex",
-      field: "isDestroy",
+      field: "destroy",
       value: del,
     },
   ]);

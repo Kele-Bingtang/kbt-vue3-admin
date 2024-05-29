@@ -139,7 +139,11 @@ export const useProForm = () => {
   };
 
   return {
-    formRegister: register,
+    formElState: {
+      formRef: unref(formRef),
+      elFormRef: unref(elFormRef),
+    },
     formMethods: methods,
+    formRegister: register,
   };
 };

@@ -1,7 +1,7 @@
 import type { TableInstance } from "element-plus";
 import type { ProTableInstance, TableColumnProps, TableSetProps } from "../interface";
 import type { ProTableProps } from "../index.vue";
-import type { Paging } from "@/components";
+import type { Paging, ProSearchInstance } from "@/components";
 
 export const useProTable = () => {
   // ProTable 实例
@@ -10,13 +10,17 @@ export const useProTable = () => {
   // ElTable 实例
   const elTableRef = ref<TableInstance>();
 
+  // ElTable 实例
+  const searchRef = ref<ProSearchInstance>();
+
   /**
    * @param ref ProTable 实例
    * @param elRef ElTable 实例
    */
-  const register = (ref?: ProTableInstance, elRef?: TableInstance) => {
+  const register = (ref?: ProTableInstance, elRef?: TableInstance, proSearch?: ProSearchInstance) => {
     tableRef.value = ref;
-    elTableRef.value = unref(elRef);
+    elTableRef.value = elRef;
+    searchRef.value = proSearch;
   };
 
   const tableState = {
@@ -140,17 +144,31 @@ export const useProTable = () => {
     },
 
     /**
-     * @description 获取 ElTable 组件的实例
-     * @returns ElTable instance
+     * @description 获取 ProTable 组件的实例
+     * @returns ProTable instance
      */
     getTableExpose: async () => {
       await getTable();
       return unref(tableRef);
     },
+
+    /**
+     * @description 获取 ProSearch 组件的实例
+     * @returns ProSearch instance
+     */
+    getSearchRef: async () => {
+      await getTable();
+      return unref(searchRef);
+    },
   };
 
   return {
     tableRegister: register,
+    tableRefState: {
+      tableRef: unref(tableRef),
+      elTableRef: unref(elTableRef),
+      searchRef: unref(searchRef),
+    },
     tableState,
     searchState,
     selectState,

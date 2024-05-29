@@ -1,5 +1,5 @@
 import type { VNode, ComponentPublicInstance, ComputedRef, Ref } from "vue";
-import type { BreakPoint, Responsive, FormRenderScope } from "@/components";
+import type { BreakPoint, Responsive, FormRenderScope, FormType } from "@/components";
 import type { TableColumnCtx } from "element-plus";
 import ProTable, { type ProTableProps } from "../index.vue";
 import DialogForm, { type DialogFormProps } from "../components/DialogForm.vue";
@@ -17,19 +17,7 @@ export interface TableEnumProps {
 
 export type TypeProps = "index" | "selection" | "radio" | "expand" | "sort";
 
-export type SearchType =
-  | "el-input"
-  | "el-input-number"
-  | "el-select"
-  | "el-select-v2"
-  | "el-tree-select"
-  | "el-cascader"
-  | "el-date-picker"
-  | "el-time-picker"
-  | "el-time-select"
-  | "el-switch"
-  | "el-slider"
-  | "select-user";
+export type SearchType = FormType;
 
 export type SearchProps = {
   el?: SearchType; // 当前项搜索框的类型

@@ -9,6 +9,7 @@
         :use-col="formProps.useCol"
         :rowProps="formProps.rowProps"
         v-model="form"
+        v-bind="$attrs"
       >
         <template #footer v-if="$slots.formFooter">
           <slot name="formFooter" v-bind="form"></slot>
@@ -35,7 +36,7 @@
 
 <script setup lang="ts">
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
-import { ProForm, WorkDialog, type ProFormProps } from "@/components";
+import { ProForm, WorkDialog, type ProFormProps, type FormSchemaProps } from "@/components";
 import { shallowRef, ref, computed, defineOptions } from "vue";
 import { deepCloneTableRow } from "../helper";
 
@@ -43,8 +44,14 @@ defineOptions({ name: "DialogOperate" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
-export interface DialogFormProps {
-  formProps: ProFormProps;
+export type DialogProFormProps<T = any> = FormSchemaProps<T> & {
+  destroy?: Array<"add" | "edit">; // 是否销毁表单，类似于 v-if
+  hidden?: Array<"add" | "edit">; // 是否隐藏表单，类似于 v-show
+  disabled?: Array<"add" | "edit">; // 是否禁用表单
+};
+
+export interface DialogFormProps<T = any> {
+  formProps: Omit<ProFormProps, "schema"> & { schema?: DialogProFormProps<T>[] };
   dialog: Partial<
     Omit<DialogProps, "modelValue" | "title"> & {
       title: string | ((form: any, status: DialogStatus) => string);
@@ -100,23 +107,23 @@ const dialogTitle = computed(() =>
 );
 
 const newSchema = computed(() => {
-  // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 isHidden 设置为 true
+  // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 hidden 设置为 true
   props.formProps.schema?.forEach(column => {
     if (!column) return;
     const { destroy, hidden, disabled } = column;
 
     if (Array.isArray(destroy)) {
-      if (destroy.includes("add")) column.isDestroy = status.value === "add";
-      else if (destroy.includes("edit")) column.isDestroy = status.value === "edit";
+      if (destroy.includes("add")) (column.destroy as boolean) = status.value === "add";
+      else if (destroy.includes("edit")) (column.destroy as boolean) = status.value === "edit";
     }
     if (Array.isArray(hidden)) {
-      if (hidden.includes("add")) column.isHidden = status.value === "add";
-      else if (hidden.includes("edit")) column.isHidden = status.value === "edit";
+      if (hidden.includes("add")) (column.hidden as boolean) = status.value === "add";
+      else if (hidden.includes("edit")) (column.hidden as boolean) = status.value === "edit";
     }
 
     if (Array.isArray(disabled)) {
-      if (disabled.includes("add")) column.isDisabled = status.value === "add";
-      else if (disabled.includes("edit")) column.isDisabled = status.value === "edit";
+      if (disabled.includes("add")) (column.disabled as boolean) = status.value === "add";
+      else if (disabled.includes("edit")) (column.disabled as boolean) = status.value === "edit";
     }
   });
 
@@ -269,7 +276,6 @@ const executeApi = (
       return successCallBack && successCallBack(res);
     })
     .catch(err => {
-      // ElMessage.warning(failure + "错误：", err);
       return failureCallBack && failureCallBack(err);
     });
 };

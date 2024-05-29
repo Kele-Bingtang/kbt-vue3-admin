@@ -69,8 +69,10 @@ export type FormType =
   | "el-switch"
   | "el-slider"
   | "el-radio-group"
+  | "el-radio-button"
   | "el-checkbox"
   | "el-checkbox-group"
+  | "el-checkbox-button"
   | "el-autocomplete"
   | "tinymce"
   | "wang-editor";
@@ -119,12 +121,9 @@ export interface FormSchemaProps<T = Record<string, any>> {
   subProp?: string; // 级联表单的 prop
   subEnum?: FormEnumProps[] | ((params?: any, enumData?: any) => Promise<any> | FormEnumProps[]); // 级联表单的 enum
   render?: (scope: FormRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
-  isDestroy?: boolean | ((model: T) => boolean); // 是否销毁表单，true 销毁，false 不销毁
-  isHidden?: boolean | ((model: T) => boolean); // 是否隐藏表单，true 隐藏，false 不隐藏（isDestroy 是销毁元素，而 isHidden 是隐藏，也就是有 defaultValue 时，isDestroy 不会传给后台，isHidden 会）
-  isDisabled?: boolean | ((model: T) => boolean); // 是否禁用表单，true 禁用，false 不禁用
-  destroy?: Array<"add" | "edit">; // 是否销毁表单，给 ProTable 的 DialogOperate.vue 使用
-  hidden?: Array<"add" | "edit">; // 是否隐藏表单，给 ProTable 的 DialogOperate.vue 使用
-  disabled?: Array<"add" | "edit">; // 是否禁用表单，给 ProTable 的 DialogOperate.vue 使用
+  destroy?: boolean | ((model: T) => boolean); // 是否销毁表单，true 销毁，false 不销毁，类似于 v-if
+  hidden?: boolean | ((model: T) => boolean); // 是否隐藏表单，true 隐藏，false 不隐藏，类似于 v-show
+  disabled?: boolean | ((model: T) => boolean); // 是否禁用表单，true 禁用，false 不禁用
   valueFormat?: "default" | "string" | "number" | "boolean"; // 表单绑定的值格式，默认 default（针对 Enum Value 是 string "1"，而值是 number 1 导致编辑时无法匹配问题）
   labelSize?: "default" | "small" | "large"; // label 标题大小，默认 default。仅 el 为 divider 生效
   [key: string]: any;
