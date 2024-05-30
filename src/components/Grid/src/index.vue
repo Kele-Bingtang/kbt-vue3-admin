@@ -16,7 +16,6 @@ import {
   onUnmounted,
   onDeactivated,
   onActivated,
-  defineOptions,
   unref,
   type VNodeArrayChildren,
   type VNode,

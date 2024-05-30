@@ -13,8 +13,9 @@
     // This enables stricter inference for data properties on `this`.
     "noImplicitThis": true,
     "strict": true,
-		// 解决 JSX 元素隐式具有类型 "any"，因为不存在接口 "JSX.IntrinsicElements"
+    // 解决 JSX 元素隐式具有类型 "any"，因为不存在接口 "JSX.IntrinsicElements"
     "noImplicitAny": false,
+    // "jsxImportSource": "vue",
 
     // Required in Vite
     "isolatedModules": true,

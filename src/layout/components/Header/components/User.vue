@@ -42,7 +42,7 @@
 </template>
 
 <script setup lang="ts" name="User">
-import { computed, withDefaults } from "vue";
+import { computed } from "vue";
 import { useSettingsStore, useUserStore } from "@/stores";
 import { useI18n } from "vue-i18n";
 import defaultAvatar from "@/assets/images/default.png";

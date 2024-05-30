@@ -35,7 +35,7 @@ import IconifyOffline from "./components/vue/IconifyOffline.vue";
 import IconifyOnline from "./components/vue/IconifyOnline.vue";
 import type { IconType } from "./iconType";
 import type { IconifyIcon } from "@iconify/vue";
-import { defineOptions, useAttrs, computed, type Component, toRaw } from "vue";
+import { useAttrs, computed, type Component, toRaw } from "vue";
 import { ElIcon } from "element-plus";
 import { useDesign } from "@/hooks";
 

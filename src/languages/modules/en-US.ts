@@ -36,6 +36,7 @@ export default {
     ProTable: "ProTable",
     SimpleProTable: "Simple ProTable",
     UseProTable: "Use ProTable",
+    CreateTable: "Create ProTable",
     TreeProTable: "Tree ProTable",
     ComplexProTable: "Complex ProTable",
     DetailProTable: "Detail ProTable",

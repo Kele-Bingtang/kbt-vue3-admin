@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts" name="Role">
-import { withDefaults, Fragment, defineOptions } from "vue";
+import { Fragment } from "vue";
 import { usePermission } from "@/hooks";
 
 defineOptions({ name: "Role" });

@@ -44,7 +44,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, defineOptions } from "vue";
+import { ref } from "vue";
 import Draggable from "vuedraggable";
 import { useDesign } from "@/hooks";
 

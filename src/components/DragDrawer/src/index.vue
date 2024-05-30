@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import DragDrawerTrigger from "./DragDrawerTrigger.vue";
-import { computed, onBeforeUnmount, onMounted, ref, defineOptions, unref, type StyleValue } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, unref, type StyleValue } from "vue";
 import { ElDrawer } from "element-plus";
 import { useDesign } from "@/hooks";
 
@@ -89,7 +89,7 @@ const direction = computed(() => {
 });
 
 const innerWidth = computed(() => {
-  const width = props.width as number;
+  const width = props.minWidth as number;
   return width <= 100 ? (unref(wrapperWidth) * width) / 100 : width;
 });
 

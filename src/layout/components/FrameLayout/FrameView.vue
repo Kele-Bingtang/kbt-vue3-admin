@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts" name="FrameView">
-import { withDefaults, nextTick, ref, onMounted, computed, unref } from "vue";
+import { nextTick, ref, onMounted, computed, unref } from "vue";
 import { mittBus } from "@/utils";
 import { useRoute } from "vue-router";
 import { useDesign } from "@/hooks";

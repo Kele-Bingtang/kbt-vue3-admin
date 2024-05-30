@@ -6,7 +6,7 @@
 
 <script setup lang="ts">
 import { ElImageViewer, ElConfigProvider } from "element-plus";
-import { computed, withDefaults } from "vue";
+import { computed } from "vue";
 import { useDesign } from "@/hooks";
 import { useLayoutStore } from "@/stores";
 

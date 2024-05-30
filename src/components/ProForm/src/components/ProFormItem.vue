@@ -6,24 +6,25 @@
     :data="columnEnum"
     :model-value="getFormProp(model, column.prop)"
     @update:model-value="v => setFormProp(model, column.prop, v)"
-    v-bind="{ ...handleFormProps }"
+    v-bind="{ ...formProps }"
   />
 
-  <RenderElComponents v-else-if="column?.el?.startsWith('el-')" />
+  <RenderElComponents v-else-if="hyphenToCamelCase(column.el)?.startsWith('El')" />
 
   <RenderComponent v-else />
 </template>
 
 <script setup lang="tsx">
-import { computed, inject, ref, unref, resolveDynamicComponent } from "vue";
-import type { FormSchemaProps } from "../interface";
+import { computed, inject, ref, unref, resolveComponent } from "vue";
+import { ComponentNameEnum, type FormSchemaProps, type PascalCaseComponentName } from "../interface";
 import Tree from "./Tree.vue";
-import { getFormProp, setFormProp } from "../helper";
+import { getFormProp, hyphenToCamelCase, setComponentSlots, setFormProp } from "../helper";
 import { useRenderSelect } from "./useRenderSelect";
 import { useRenderRadio } from "./useRenderRadio";
 import { useRenderCheckbox } from "./useRenderCheckbox";
 import { useRenderComponent } from "./useRenderComponent";
 import type { Component } from "vue";
+import { componentMap } from "../helper/componentMap";
 
 defineOptions({ name: "ProFormItem" });
 
@@ -65,7 +66,7 @@ const columnEnum = computed(() => {
   let enumData = unref(enumMap).get(prop);
 
   if (!enumData) return [];
-  if (el === "el-select-v2") {
+  if (hyphenToCamelCase(el) === ComponentNameEnum.EL_SELECT_V2) {
     enumData = enumData.map((item: Record<string, any>) => {
       return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
@@ -75,28 +76,28 @@ const columnEnum = computed(() => {
 });
 
 // 处理透传的 formProps (el 为 tree-select、cascader 的时候需要给下默认 label && value && children)
-const handleFormProps = computed(() => {
+const formProps = computed(() => {
   const label = unref(fieldNames).label;
   const value = unref(fieldNames).value;
   const children = unref(fieldNames).children;
-  const formEl = props.column?.el;
+  const formEl = hyphenToCamelCase(props.column?.el);
   let formProps = props.column.props ?? {};
 
-  if (formEl === "el-tree-select") {
+  if (formEl === ComponentNameEnum.EL_TREE_SELECT) {
     formProps = { ...formProps, props: { ...formProps.props, label, children }, nodeKey: value };
   }
 
-  if (formEl === "el-cascader") {
+  if (formEl === ComponentNameEnum.EL_CASCADER) {
     formProps = { ...formProps, props: { ...formProps.props, label, value, children } };
   }
 
-  if (formEl === "el-date-picker") {
+  if (formEl === ComponentNameEnum.EL_DATE_PICKER) {
     if (formProps.type === "datetime") formProps = { valueFormat: "YYYY-MM-DD HH:mm:ss", ...formProps };
     if (formProps.type === "date") formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
     else formProps = { valueFormat: "YYYY-MM-DD", ...formProps };
   }
 
-  if (formEl === "el-time-picker") formProps = { valueFormat: "HH:mm:ss", ...formProps };
+  if (formEl === ComponentNameEnum.EL_TIME_PICKER) formProps = { valueFormat: "HH:mm:ss", ...formProps };
 
   return formProps;
 });
@@ -104,7 +105,7 @@ const handleFormProps = computed(() => {
 // 处理默认 placeholder
 const placeholder = computed(() => {
   const { props: { type, isRange, placeholder } = {}, el } = props.column;
-  if (["el-datetimerange", "el-daterange", "el-monthrange"].includes(type) || isRange) {
+  if (["datetimerange", "daterange", "monthrange"].includes(type) || isRange) {
     return { rangeSeparator: "至", startPlaceholder: "开始时间", endPlaceholder: "结束时间" };
   }
   const placeholderConst = placeholder ?? (el?.includes("el-input") ? "请输入" : "请选择");
@@ -123,7 +124,7 @@ const isDisabled = () => {
   return props.column.isDisabled;
 };
 
-const { renderComponent: RenderComponent } = useRenderComponent(model, handleFormProps, props.column);
+const { renderComponent: RenderComponent } = useRenderComponent(model, formProps, props.column);
 const { renderSelectOptions } = useRenderSelect();
 const { renderRadioOptions } = useRenderRadio();
 const { renderCheckboxOptions } = useRenderCheckbox();
@@ -144,43 +145,85 @@ const formComponentRef = ref<Component | any>();
 // 渲染 Element Plus 的组件
 const RenderElComponents = () => {
   const { column, style } = props;
-  const { el, prop, valueFormat } = column;
-  let defaultSlot: any = () => {};
+  const { el, prop, valueFormat, slots = {} } = column;
 
-  let rootEl = el;
+  const rootEl = hyphenToCamelCase(el) || "";
 
-  if (el === "el-cascader") defaultSlot = ({ data }) => <span>{data[unref(fieldNames).label]}</span>;
-  if (el === "el-select") defaultSlot = () => renderSelectOptions(unref(columnEnum), unref(fieldNames));
-  if (["el-radio-group", "el-radio-button"].includes(el || "")) {
-    rootEl = "el-radio-group";
-    defaultSlot = () => renderRadioOptions(unref(columnEnum), unref(fieldNames), column);
+  // 初始化组件的插槽（如果有自定义插槽）
+  const slotsMap = { ...setComponentSlots(slots) };
+  // 获取 default 默认插槽
+  const defaultSlot = getDefaultSlot(rootEl);
+
+  defaultSlot && (slotsMap.default = defaultSlot);
+
+  // TSX 不能直接使用 Vue3 内置组件 <component></component>，因此通过内置 resolveComponent 函数获取
+  const Component =
+    (componentMap[rootEl as PascalCaseComponentName] as ReturnType<typeof defineComponent>) || resolveComponent(rootEl);
+
+  return Component ? (
+    // EP 上传组件绑定的是 v-model:file-list 而不是 v-model
+    rootEl === ComponentNameEnum.EL_UPLOAD ? (
+      <Component
+        fileList={getFormProp(unref(model), prop, valueFormat)}
+        onUpdate:fileList={(v: any) => setFormProp(unref(model), prop, v)}
+        ref={formComponentRef}
+        disabled={isDisabled()}
+        clearable={unref(clearable)}
+        {...unref(formProps)}
+        {...unref(placeholder)}
+        data={el === "el-tree-select" ? unref(columnEnum) : []}
+        options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
+        style={style}
+      >
+        {{
+          ...slotsMap,
+        }}
+      </Component>
+    ) : (
+      <Component
+        modelValue={getFormProp(unref(model), prop, valueFormat)}
+        onUpdate:modelValue={(v: any) => setFormProp(unref(model), prop, v)}
+        ref={formComponentRef}
+        disabled={isDisabled()}
+        clearable={unref(clearable)}
+        {...unref(formProps)}
+        {...unref(placeholder)}
+        data={el === "el-tree-select" ? unref(columnEnum) : []}
+        options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
+        style={style}
+      >
+        {{
+          ...slotsMap,
+        }}
+      </Component>
+    )
+  ) : undefined;
+};
+
+const getDefaultSlot = (rootEl: string) => {
+  const { column } = props;
+  const { slots = {} } = column;
+
+  // 如果自定义插槽，则返回自定义插槽
+  if (slots.default) return () => slots.default(unref(columnEnum), unref(fieldNames));
+
+  // 下拉框
+  if (rootEl === ComponentNameEnum.EL_SELECT) return () => renderSelectOptions(unref(columnEnum), unref(fieldNames));
+
+  // 单选框组和按钮样式
+  if ([ComponentNameEnum.EL_RADIO_GROUP, ComponentNameEnum.EL_RADIO_BUTTON].includes(rootEl as ComponentNameEnum)) {
+    return () => renderRadioOptions(unref(columnEnum), unref(fieldNames), column);
   }
-  if (["el-checkbox-group", "el-checkbox-button"].includes(el || "")) {
-    rootEl = "el-checkbox-group";
-    defaultSlot = () => renderCheckboxOptions(unref(columnEnum), unref(fieldNames), column);
+
+  // 多选框组和按钮样式
+  if (
+    [ComponentNameEnum.EL_CHECKBOX_GROUP, ComponentNameEnum.EL_CHECKBOX_BUTTON].includes(rootEl as ComponentNameEnum)
+  ) {
+    return () => renderCheckboxOptions(unref(columnEnum), unref(fieldNames), column);
   }
 
-  // TSX 不能直接使用 Vue3 内置组件 <component></component>，因此通过内置 resolveDynamicComponent 函数获取
-  const DynamicComponent = resolveDynamicComponent(rootEl) as any;
-
-  return (
-    <DynamicComponent
-      ref={formComponentRef}
-      disabled={isDisabled()}
-      clearable={unref(clearable)}
-      {...unref(handleFormProps)}
-      {...unref(placeholder)}
-      model-value={getFormProp(unref(model), prop, valueFormat)}
-      onUpdate:modelValue={(v: any) => setFormProp(unref(model), prop, v)}
-      data={el === "el-tree-select" ? unref(columnEnum) : []}
-      options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
-      style={style}
-    >
-      {{
-        default: () => defaultSlot(),
-      }}
-    </DynamicComponent>
-  );
+  // 虚拟列表
+  if (rootEl === ComponentNameEnum.EL_SELECT_V2 && slots.default) return ({ item }) => slots.default(item);
 };
 
 defineExpose({

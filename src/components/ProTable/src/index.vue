@@ -87,18 +87,7 @@
 </template>
 
 <script setup lang="ts">
-import {
-  ref,
-  watch,
-  provide,
-  onMounted,
-  computed,
-  useAttrs,
-  shallowRef,
-  defineOptions,
-  unref,
-  type CSSProperties,
-} from "vue";
+import { ref, watch, provide, onMounted, computed, useAttrs, shallowRef, unref, type CSSProperties } from "vue";
 import { useTable, type Table } from "./hooks/useTable";
 import { useSelection } from "./hooks/useSelection";
 import {
@@ -351,7 +340,7 @@ const searchColumns = computed(() => {
 // 列设置 ==> 过滤掉不需要设置的列
 const colSettingVisible = ref(false);
 const colSetting = computed(() =>
-  unref(getProps).columns?.filter(item => !columnTypes.includes(item.type!) && item.prop !== "operation" && item.isShow)
+  unref(getProps).columns?.filter(item => !columnTypes.includes(item.type!) && item.prop !== "operation")
 );
 
 const toggleColSetting = (show = !unref(colSettingVisible)) => (colSettingVisible.value = show);

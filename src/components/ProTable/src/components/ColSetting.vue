@@ -28,7 +28,6 @@
 </template>
 
 <script setup lang="ts">
-import { defineOptions } from "vue";
 import { ElDrawer, ElSwitch, ElTable, ElTableColumn } from "element-plus";
 import type { TableColumnProps } from "../interface";
 

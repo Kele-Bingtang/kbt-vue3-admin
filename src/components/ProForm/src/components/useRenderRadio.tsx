@@ -1,5 +1,6 @@
 import { ElRadio, ElRadioButton } from "element-plus";
-import type { FormFieldNamesProps, FormSchemaProps } from "../interface";
+import { ComponentNameEnum, type FormFieldNamesProps, type FormSchemaProps } from "../interface";
+import { hyphenToCamelCase } from "../helper";
 
 export const useRenderRadio = () => {
   const renderRadioOptions = (
@@ -7,7 +8,7 @@ export const useRenderRadio = () => {
     fieldNames: FormFieldNamesProps,
     column: FormSchemaProps
   ) => {
-    const Component = column.el === "el-radio-button" ? ElRadioButton : ElRadio;
+    const Component = hyphenToCamelCase(column.el) === ComponentNameEnum.EL_RADIO_BUTTON ? ElRadioButton : ElRadio;
 
     return columnEnum.map(col => {
       return (

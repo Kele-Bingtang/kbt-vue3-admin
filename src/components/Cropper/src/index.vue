@@ -57,7 +57,7 @@ import { ElMessage, ElButton, type UploadRequestOptions } from "element-plus";
 import { VueCropper } from "vue-cropper";
 import "vue-cropper/dist/index.css";
 import { Upload, ZoomIn, ZoomOut, Download } from "@element-plus/icons-vue";
-import { toRefs, ref, reactive, shallowRef, onMounted, defineOptions, unref } from "vue";
+import { toRefs, ref, reactive, shallowRef, onMounted, unref } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "Cropper" });

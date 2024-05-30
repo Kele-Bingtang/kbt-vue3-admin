@@ -35,6 +35,7 @@ export default {
     ProTable: "超级表格",
     SimpleProTable: "简单 ProTable",
     UseProTable: "使用 ProTable",
+    CreateTable: "创建 ProTable",
     TreeProTable: "使用 TreeProTable",
     ComplexProTable: "复杂 ProTable",
     DetailProTable: "详情 ProTable",

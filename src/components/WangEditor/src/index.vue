@@ -26,7 +26,7 @@ import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import attachmentModule from "@wangeditor/plugin-upload-attachment"; // wangeditor 的附件插件
 import "@wangeditor/editor/dist/css/style.css";
 import { toolbarKeys as toolbarKeysConfig } from "./config";
-import { defineOptions, onMounted, watch, onBeforeUnmount, withDefaults, unref } from "vue";
+import { onMounted, watch, onBeforeUnmount, unref } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "WangEditor" });

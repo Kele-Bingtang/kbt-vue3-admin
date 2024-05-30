@@ -60,7 +60,7 @@ import epIcons from "./data/icons.ep";
 import antIcons from "./data/icons.ant-design";
 import tIcons from "./data/icons.tdesign";
 import { ElInput, ElPopover, ElScrollbar, ElTabs, ElTabPane, ElPagination } from "element-plus";
-import { computed, type CSSProperties, ref, unref, watch, inject, defineOptions } from "vue";
+import { computed, type CSSProperties, ref, unref, watch, inject } from "vue";
 import { nextTick } from "vue";
 import { useDesign } from "@/hooks";
 import { ConfigGlobalKey } from "@/config/symbols";

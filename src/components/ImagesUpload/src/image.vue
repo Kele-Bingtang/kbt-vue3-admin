@@ -60,7 +60,7 @@ import {
   type UploadRequestOptions,
 } from "element-plus";
 import { Edit, ZoomIn, Delete, Plus } from "@element-plus/icons-vue";
-import { ref, inject, computed, defineOptions } from "vue";
+import { ref, inject, computed } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "ImgUpload" });

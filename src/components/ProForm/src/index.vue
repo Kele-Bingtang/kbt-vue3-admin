@@ -4,7 +4,13 @@
 
 <script setup lang="tsx">
 import { shallowRef, ref, provide, watch, unref } from "vue";
-import type { FormSchemaProps, FormSetProps, ProElFormProps, ValueType } from "./interface";
+import {
+  ComponentNameEnum,
+  type FormSchemaProps,
+  type FormSetProps,
+  type ProElFormProps,
+  type ValueType,
+} from "./interface";
 import ProFormItem from "./components/ProFormItem.vue";
 import {
   ElRow,
@@ -16,8 +22,9 @@ import {
   type ColProps,
   type FormItemInstance,
 } from "element-plus";
-import { getPx, getFormProp, isString, setFormProp } from "./helper";
+import { getPx, getFormProp, isString, setFormProp, hyphenToCamelCase } from "./helper";
 import { useDesign } from "@/hooks";
+import { componentMap } from "./helper/componentMap";
 
 defineOptions({ name: "ProForm" });
 
@@ -104,7 +111,7 @@ const initDefaultValue = async ({ defaultValue, fieldNames, prop }: FormSchemaPr
  * 多个 Select 框级联下拉
  */
 const cascadeEnum = ({ prop, el, subProp, subEnum }: FormSchemaProps) => {
-  if (el === "el-select") {
+  if (hyphenToCamelCase(el) === ComponentNameEnum.EL_SELECT) {
     if (typeof subProp !== "string") return;
     // 监听级联下拉变化
     watch(
@@ -161,9 +168,9 @@ const isDestroy = (item: FormSchemaProps) => {
   return destroy;
 };
 
-const parseLabel = (label: ValueType | ((model: Record<string, any>) => ValueType)) => {
+const parseLabel = (label: ValueType | ((model: Record<string, any>) => string)) => {
   if (typeof label === "function") return label(unref(model));
-  return label;
+  return label + "";
 };
 
 // 监听表单结构化数组，重新组装 schema
@@ -270,12 +277,15 @@ const renderFormItemWrap = () => {
     .filter(item => !isDestroy(item))
     .map(item => {
       // 如果有 title
-      const useDivider = item.el === "divider";
+      const el = hyphenToCamelCase(item.el) || "";
+      const useDivider = el === ComponentNameEnum.EL_DIVIDER;
+      const Component = componentMap[el] as ReturnType<typeof defineComponent>;
+
       return useDivider ? (
         <>
-          <el-divider direction="vertical" {...item.props}>
+          <Component {...item.props}>
             <span style={getTitleFontStyle(item)}>{parseLabel(item.label)}</span>
-          </el-divider>
+          </Component>
         </>
       ) : useCol ? (
         // 如果需要栅格，需要包裹 ElCol
@@ -299,13 +309,13 @@ const renderFormItem = (item: FormSchemaProps) => {
   return (
     <ElFormItem
       v-show={!isHidden(item)}
-      ref={el => (unref(formItemComponentsRef)[item.prop] = el)}
+      ref={(el: any) => (unref(formItemComponentsRef)[item.prop] = el)}
       {...(item.formItem || {})}
       prop={item.prop}
       label={parseLabel(item.label)}
     >
       <ProFormItem
-        ref={el => (unref(proFormItemRefs)[item.prop] = el)}
+        ref={(el: any) => (unref(proFormItemRefs)[item.prop] = el)}
         column={item}
         v-model={model.value}
         style={getComponentWidth(item)}

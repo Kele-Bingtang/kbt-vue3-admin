@@ -36,10 +36,16 @@
   </el-space>
 </template>
 
-<script setup lang="ts" name="UseProForm">
+<script setup lang="tsx" name="UseProForm">
 import { ProForm, type FormSchemaProps, type ProElFormProps, useProForm } from "@/components";
-import type { ComponentSize, FormItemProp, InputInstance } from "element-plus";
-
+import {
+  ElRadio,
+  type ComponentSize,
+  type FormItemProp,
+  type InputInstance,
+  ElMessageBox,
+  ElMessage,
+} from "element-plus";
 const { formRegister, formMethods } = useProForm();
 const {
   setProps,
@@ -68,10 +74,15 @@ const elFormProps: ProElFormProps = {
 // 表单列配置项 (formItem 代表 item 配置项，attrs 代表 输入、选择框 配置项)
 const schema = reactive<FormSchemaProps[]>([
   {
+    label: "使用 ProForm",
+    prop: "input",
+    el: "ElDivider",
+  },
+  {
     formItem: { required: true },
     label: "输入框",
     prop: "input",
-    el: "el-input",
+    el: "ElInput",
   },
   {
     formItem: { required: true },
@@ -95,6 +106,20 @@ const schema = reactive<FormSchemaProps[]>([
     label: "单选框",
     el: "el-radio-group",
     defaultValue: "1",
+    slots: {
+      default: (columnEnum, fieldNames) => {
+        return columnEnum.map(col => {
+          return (
+            <ElRadio
+              disabled={col[fieldNames.disabled || "disabled"]}
+              label={col[fieldNames.label]}
+              value={col[fieldNames.value]}
+              key={col[fieldNames.value]}
+            ></ElRadio>
+          );
+        });
+      },
+    },
     enum: [
       {
         label: "option-1",
@@ -142,6 +167,49 @@ const schema = reactive<FormSchemaProps[]>([
     prop: "treeSelect",
     el: "el-tree-select",
     enum: () => getTreeSelectData(), // 模拟远程获取数据
+  },
+  {
+    label: "上传",
+    prop: "upload",
+    el: "el-upload",
+    defaultValue: [
+      {
+        name: "element-plus-logo.svg",
+        url: "https://element-plus.org/images/element-plus-logo.svg",
+      },
+      {
+        name: "element-plus-logo2.svg",
+        url: "https://element-plus.org/images/element-plus-logo.svg",
+      },
+    ],
+    props: {
+      limit: 3,
+      action: "https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15",
+      multiple: true,
+      onPreview: uploadFile => {
+        console.log(uploadFile);
+      },
+      onRemove: file => {
+        console.log(file);
+      },
+      beforeRemove: uploadFile => {
+        return ElMessageBox.confirm(`Cancel the transfer of ${uploadFile.name} ?`).then(
+          () => true,
+          () => false
+        );
+      },
+      onExceed: (files, uploadFiles) => {
+        ElMessage.warning(
+          `The limit is 3, you selected ${files.length} files this time, add up to ${
+            files.length + uploadFiles.length
+          } totally`
+        );
+      },
+    },
+    slots: {
+      default: () => <el-button type="primary">Click to upload</el-button>,
+      tip: () => <div class="el-upload__tip">jpg/png files with a size less than 500KB.</div>,
+    },
   },
 ]);
 

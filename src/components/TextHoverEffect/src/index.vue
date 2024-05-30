@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, defineOptions } from "vue";
+import { onMounted } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "TextHoverEffect" });

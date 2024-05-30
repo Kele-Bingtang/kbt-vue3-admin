@@ -57,7 +57,7 @@ import {
   type UploadUserFile,
   type UploadRequestOptions,
 } from "element-plus";
-import { inject, computed, ref, defineOptions } from "vue";
+import { inject, computed, ref } from "vue";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "ImagesUpload" });

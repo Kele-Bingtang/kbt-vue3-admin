@@ -1,7 +1,8 @@
-import type { TableInstance } from "element-plus";
+import { type TableInstance } from "element-plus";
 import type { ProTableInstance, TableColumnProps, TableSetProps } from "../interface";
 import type { ProTableProps } from "../index.vue";
-import type { Paging, ProSearchInstance } from "@/components";
+import { ProTable, type Paging, type ProSearchInstance } from "@/components";
+import { createVNode } from "vue";
 
 export const useProTable = () => {
   // ProTable 实例
@@ -162,6 +163,11 @@ export const useProTable = () => {
     },
   };
 
+  const createTable = (proTableProps?: ProTableProps & Partial<typeof ProTable.emits>, context?: any) => {
+    const instance = createVNode(ProTable, { ...proTableProps, onRegister: register }, context?.slots);
+    return instance;
+  };
+
   return {
     tableRegister: register,
     tableRefState: {
@@ -173,5 +179,6 @@ export const useProTable = () => {
     searchState,
     selectState,
     tableMethods: methods,
+    createTable,
   };
 };

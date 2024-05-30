@@ -12,7 +12,6 @@
 import { useTheme } from "@/hooks";
 import { useSettingsStore } from "@/stores";
 import { Sunny, Moon } from "@element-plus/icons-vue";
-import { defineOptions } from "vue";
 import { ElSwitch } from "element-plus";
 
 defineOptions({ name: "SwitchDark" });

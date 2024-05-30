@@ -1,11 +1,13 @@
 import type { Component } from "vue";
 import {
   ElCascader,
+  ElCheckbox,
   ElCheckboxGroup,
   ElColorPicker,
   ElDatePicker,
   ElInput,
   ElInputNumber,
+  ElRadio,
   ElRadioGroup,
   ElRate,
   ElSelect,
@@ -18,35 +20,40 @@ import {
   ElAutocomplete,
   ElDivider,
   ElTreeSelect,
+  ElUpload,
 } from "element-plus";
-import { WangEditor, Tinymce } from "@/components";
-import Tree from "./components/Tree.vue";
-import { type ComponentName } from "../interface";
+import WangEditor from "@/components/WangEditor/index";
+import Tinymce from "@/components/Tinymce/index";
+import Tree from "../components/Tree.vue";
+import { type PascalCaseComponentName } from "../interface";
 
-const componentMap: Record<ComponentName, Component> = {
-  Input: ElInput,
-  InputNumber: ElInputNumber,
-  Select: ElSelect,
-  SelectV2: ElSelectV2,
-  Tree: Tree,
-  TreeSelect: ElTreeSelect,
-  Cascader: ElCascader,
-  TimePicker: ElTimePicker,
-  DatePicker: ElDatePicker,
-  TimeSelect: ElTimeSelect,
-  Switch: ElSwitch,
-  Slider: ElSlider,
-  RadioGroup: ElRadioGroup,
-  RadioButton: ElRadioGroup,
-  CheckboxGroup: ElCheckboxGroup,
-  CheckboxButton: ElCheckboxGroup,
-  Autocomplete: ElAutocomplete,
-  Rate: ElRate,
-  ColorPicker: ElColorPicker,
-  Transfer: ElTransfer,
-  Divider: ElDivider,
-  WangEditor: WangEditor,
-  Tinymce: Tinymce,
+const componentMap: Record<PascalCaseComponentName, Component> = {
+  ElInput,
+  ElInputNumber,
+  ElSelect,
+  ElSelectV2,
+  ElTree: Tree,
+  ElTreeSelect,
+  ElCascader,
+  ElDatePicker,
+  ElTimePicker,
+  ElTimeSelect,
+  ElSwitch,
+  ElSlider,
+  ElRadio,
+  ElRadioGroup,
+  ElRadioButton: ElRadioGroup,
+  ElCheckbox,
+  ElCheckboxGroup,
+  ElCheckboxButton: ElCheckboxGroup,
+  ElAutocomplete,
+  ElRate,
+  ElColorPicker,
+  ElTransfer,
+  ElDivider,
+  ElUpload,
+  WangEditor,
+  Tinymce,
 };
 
 export { componentMap };

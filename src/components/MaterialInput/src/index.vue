@@ -118,7 +118,7 @@
 
 <script setup lang="ts">
 import type { IconifyIcon } from "@iconify/vue";
-import { computed, getCurrentInstance, onMounted, ref, defineOptions, unref, type Component } from "vue";
+import { computed, getCurrentInstance, onMounted, ref, unref, type Component } from "vue";
 
 defineOptions({ name: "MaterialInput" });
 

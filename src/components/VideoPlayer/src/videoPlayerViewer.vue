@@ -15,7 +15,7 @@
 import VideoPlayer from "./index.vue";
 import { ElOverlay, ElConfigProvider } from "element-plus";
 import { Close } from "@element-plus/icons-vue";
-import { computed, nextTick, withDefaults, defineOptions } from "vue";
+import { computed, nextTick } from "vue";
 import { Icon } from "@/components";
 import { useDesign } from "@/hooks";
 import { useLayoutStore } from "@/stores";

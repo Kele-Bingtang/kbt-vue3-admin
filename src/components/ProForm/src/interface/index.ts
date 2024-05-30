@@ -1,51 +1,112 @@
-import type { FormItemProps, ColProps, FormProps } from "element-plus";
+import type {
+  FormItemProps,
+  ColProps,
+  FormProps,
+  InputProps,
+  AutocompleteProps,
+  CascaderProps,
+  ColorPickerProps,
+  DatePickerProps,
+  DividerProps,
+  InputNumberProps,
+  RadioButtonProps,
+  RadioGroupProps,
+  RateProps,
+  SwitchProps,
+  TransferProps,
+  UploadProps,
+} from "element-plus";
 import type { VNode, ComputedRef, ComponentPublicInstance } from "vue";
 import ProForm, { type ProFormProps } from "../index.vue";
 
-// 组件内置导入需要，如果是按需导入则不需要
+/**
+ * 组件内置导入需要
+ */
 export enum ComponentNameEnum {
-  INPUT = "Input",
-  INPUT_NUMBER = "InputNumber",
-  SELECT = "Select",
-  SELECT_V2 = "SelectV2",
-  TREE = "Tree",
-  TREE_SELECT = "TreeSelect",
-  CASCADER = "Cascader",
-  DATE_PICKER = "DatePicker",
-  TIME_PICKER = "TimePicker",
-  TIME_SELECT = "TimeSelect",
-  SWITCH = "Switch",
-  SLIDER = "Slider",
-  RADIO_GROUP = "RadioGroup",
-  RADIO_BUTTON = "RadioButton",
-  CHECKBOX_GROUP = "CheckboxGroup",
-  CHECKBOX_BUTTON = "CheckboxButton",
-  AUTOCOMPLETE = "Autocomplete",
-  RATE = "Rate",
-  COLOR_PICKER = "ColorPicker",
-  TRANSFER = "Transfer",
-  DIVIDER = "Divider",
+  EL_INPUT = "ElInput",
+  EL_INPUT_NUMBER = "ElInputNumber",
+  EL_SELECT = "ElSelect",
+  EL_SELECT_V2 = "ElSelectV2",
+  EL_TREE = "ElTree",
+  EL_TREE_SELECT = "ElTreeSelect",
+  EL_CASCADER = "ElCascader",
+  EL_DATE_PICKER = "ElDatePicker",
+  EL_TIME_PICKER = "ElTimePicker",
+  EL_TIME_SELECT = "ElTimeSelect",
+  EL_SWITCH = "ElSwitch",
+  EL_SLIDER = "ElSlider",
+  EL_RADIO = "ElRadio",
+  EL_RADIO_GROUP = "ElRadioGroup",
+  EL_RADIO_BUTTON = "ElRadioButton",
+  EL_Checkbox = "ElCheckbox",
+  EL_CHECKBOX_GROUP = "ElCheckboxGroup",
+  EL_CHECKBOX_BUTTON = "ElCheckboxButton",
+  EL_AUTOCOMPLETE = "ElAutocomplete",
+  EL_RATE = "ElRate",
+  EL_COLOR_PICKER = "ElColorPicker",
+  EL_TRANSFER = "ElTransfer",
+  EL_DIVIDER = "ElDivider",
+  EL_UPLOAD = "ElUpload",
   WANG_EDITOR = "WangEditor",
   TINYMCE = "Tinymce",
 }
 
-type CamelCaseComponentName = keyof typeof ComponentNameEnum extends infer K
+/**
+ * el 字面量
+ */
+export type PascalCaseComponentName = keyof typeof ComponentNameEnum extends infer K
   ? K extends string
     ? K extends `${infer A}_${infer B}`
-      ? `${Capitalize<Lowercase<A>>}${Capitalize<Lowercase<B>>}`
+      ? K extends `${infer A}_${infer B}_${infer C}`
+        ? `${Capitalize<Lowercase<A>>}${Capitalize<Lowercase<B>>}${Capitalize<Lowercase<C>>}`
+        : `${Capitalize<Lowercase<A>>}${Capitalize<Lowercase<B>>}`
       : Capitalize<Lowercase<K>>
     : never
   : never;
 
-export type ComponentName = CamelCaseComponentName;
+/**
+ * el 字面量
+ */
+export type HyphenCaseComponentName = keyof typeof ComponentNameEnum extends infer K
+  ? K extends string
+    ? K extends `${infer A}_${infer B}`
+      ? K extends `${infer A}_${infer B}_${infer C}`
+        ? `${Lowercase<A>}-${Lowercase<B>}-${Lowercase<C>}`
+        : `${Lowercase<A>}-${Lowercase<B>}`
+      : Lowercase<K>
+    : never
+  : never;
 
+/**
+ * el 字面量
+ */
+export type FormType = PascalCaseComponentName | HyphenCaseComponentName;
+
+/**
+ * 基本类型
+ */
 export type ValueType = string | number | boolean | any[];
 
+/**
+ * 字典数据类型
+ */
 export interface FormEnumProps {
-  label?: string; // 选项框显示的文字
-  value?: ValueType; // 选项框值
-  disabled?: boolean; // 是否禁用此选项
-  children?: FormEnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
+  /**
+   * 选项框显示的文字
+   */
+  label?: string;
+  /**
+   * 选项框值
+   */
+  value?: ValueType;
+  /**
+   * 是否禁用此选项
+   */
+  disabled?: boolean;
+  /**
+   * 为树形选择时，可以通过 children 属性指定子选项
+   */
+  children?: FormEnumProps[];
   [key: string]: any;
 }
 
@@ -54,29 +115,9 @@ export interface ProElFormProps extends Partial<FormProps> {
   width?: number | string;
 }
 
-export type FormType =
-  | "divider"
-  | "el-input"
-  | "el-input-number"
-  | "el-select"
-  | "el-select-v2"
-  | "el-tree"
-  | "el-tree-select"
-  | "el-cascader"
-  | "el-date-picker"
-  | "el-time-picker"
-  | "el-time-select"
-  | "el-switch"
-  | "el-slider"
-  | "el-radio-group"
-  | "el-radio-button"
-  | "el-checkbox"
-  | "el-checkbox-group"
-  | "el-checkbox-button"
-  | "el-autocomplete"
-  | "tinymce"
-  | "wang-editor";
-
+/**
+ * 自定义字典的 key
+ */
 export type FormFieldNamesProps = {
   label: string;
   value: string;
@@ -84,48 +125,136 @@ export type FormFieldNamesProps = {
   children?: string;
 };
 
+/**
+ * 自定义 render 的参数类型
+ */
 export type FormRenderScope = {
   model: Record<string, any>;
   data: ValueType;
   enumData: Record<string, any>;
 };
 
-// setSchema 函数的参数类型
+/**
+ * setSchema 函数的参数类型
+ */
 export interface FormSetProps {
   prop: string;
   field: string;
   value: ValueType;
 }
 
+/**
+ * 表单配置项
+ */
 export interface FormSchemaProps<T = Record<string, any>> {
+  /**
+   * ElCol Props
+   */
   col?: Partial<ColProps>;
+  /**
+   * ElFormItem props
+   */
   formItem?: Partial<FormItemProps>;
+  /**
+   * 表单组件 Props
+   */
   prop: string;
+  /**
+   * ElFormItem 的 label 属性
+   */
   label: ValueType | ((model: T) => any);
+  /**
+   * 使用的表单组件名
+   */
   el?: FormType;
+  /**
+   * 字典数据，如果 enum 是接口调用，那么可以指定哪个 key 获取 enum 数据，默认返回的数据作为 enum
+   */
   enum?:
     | FormEnumProps[]
     | ((model: T, enumMap: Map<string, Record<string, any>>) => Promise<any>)
     | ComputedRef<FormEnumProps[]>;
-  enumKey?: string; // 如果 enum 是接口调用，那么可以指定哪个 key 获取 enum 数据，默认返回的数据作为 enum
-  useEnumMap?: string | ((enumMap: Map<string, Record<string, any>>) => Record<string, any>); // 从 enumMap 中获取其他的 enum 数据
-  // 枚举类型（字典）
-  fieldNames?: FormFieldNamesProps; // 字典指定 label && value && children 的 key 值
-  props?: any; // 根据 element plus 官方文档来传递，该属性所有值会透传到组件
-  order?: number; // 表单排序（从大到小）
+  enumKey?: string;
+  /**
+   * 从 enumMap 中获取其他的 enum 数据
+   */
+  useEnumMap?: string | ((enumMap: Map<string, Record<string, any>>) => Record<string, any>);
+  /**
+   * 字典指定 label && value && children 的 key 值
+   */
+  fieldNames?: FormFieldNamesProps;
+  /**
+   * 级联表单的 prop
+   */
+  subProp?: string;
+  /**
+   * 级联表单的 enum
+   */
+  subEnum?: FormEnumProps[] | ((params?: any, enumData?: any) => Promise<any> | FormEnumProps[]);
+  /**
+   * 根据 element plus 官方文档来传递，该属性所有值会透传到表单组件
+   */
+  props?:
+    | InputProps
+    | AutocompleteProps
+    | InputNumberProps
+    | CascaderProps
+    | SwitchProps
+    | RateProps
+    | ColorPickerProps
+    | TransferProps
+    | RadioGroupProps
+    | RadioButtonProps
+    | DividerProps
+    | DatePickerProps
+    | UploadProps
+    | any;
+  /**
+   * 表单排序（从大到小）
+   */
+  order?: number;
+  /**
+   *  表单属性的默认值
+   */
   defaultValue?:
     | ValueType
     | ((model: T, enumMap: Map<string, Record<string, any>>) => ValueType | any)
-    | ComputedRef<ValueType>; // 默认值
+    | ComputedRef<ValueType>;
+  /**
+   * 表单组件宽度
+   */
   width?: string | number;
-  subProp?: string; // 级联表单的 prop
-  subEnum?: FormEnumProps[] | ((params?: any, enumData?: any) => Promise<any> | FormEnumProps[]); // 级联表单的 enum
-  render?: (scope: FormRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
-  destroy?: boolean | ((model: T) => boolean); // 是否销毁表单，true 销毁，false 不销毁，类似于 v-if
-  hidden?: boolean | ((model: T) => boolean); // 是否隐藏表单，true 隐藏，false 不隐藏，类似于 v-show
-  disabled?: boolean | ((model: T) => boolean); // 是否禁用表单，true 禁用，false 不禁用
-  valueFormat?: "default" | "string" | "number" | "boolean"; // 表单绑定的值格式，默认 default（针对 Enum Value 是 string "1"，而值是 number 1 导致编辑时无法匹配问题）
-  labelSize?: "default" | "small" | "large"; // label 标题大小，默认 default。仅 el 为 divider 生效
+  /**
+   * 自定义搜索内容渲染（tsx 语法）
+   */
+  render?: (scope: FormRenderScope) => VNode;
+  /**
+   * 是否销毁表单，true 销毁，false 不销毁，类似于 v-if
+   */
+  destroy?: boolean | ((model: T) => boolean);
+  /**
+   * 是否隐藏表单，true 隐藏，false 不隐藏，类似于 v-show
+   */
+  hidden?: boolean | ((model: T) => boolean);
+  /**
+   * 是否禁用表单，true 禁用，false 不禁用
+   */
+  disabled?: boolean | ((model: T) => boolean);
+  /**
+   * 表单绑定的值格式，默认 default（针对 Enum Value 是 string "1"，而值是 number 1 导致编辑时无法匹配问题）
+   */
+  valueFormat?: "default" | "string" | "number" | "boolean";
+  /**
+   * label 标题大小，默认 default。仅 el 为 el-divider | ElDivider 生效
+   */
+  labelSize?: "default" | "small" | "large";
+  /**
+   * 表单组件的插槽
+   */
+  slots?: any;
+  /**
+   * 其他拓展
+   */
   [key: string]: any;
 }
 

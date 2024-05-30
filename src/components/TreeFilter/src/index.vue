@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onBeforeMount, defineOptions, unref } from "vue";
+import { ref, watch, onBeforeMount, unref } from "vue";
 import { ElInput, ElScrollbar, ElTree } from "element-plus";
 import { useDesign } from "@/hooks";
 

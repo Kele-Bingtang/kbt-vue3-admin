@@ -1,14 +1,16 @@
 import { ElCheckbox, ElCheckboxButton } from "element-plus";
-import type { FormFieldNamesProps, FormSchemaProps } from "../interface";
+import { ComponentNameEnum, type FormFieldNamesProps, type FormSchemaProps } from "../interface";
+import { hyphenToCamelCase } from "../helper";
 
 export const useRenderCheckbox = () => {
   const renderCheckboxOptions = (
-    columnEnum: Record<string, any>,
+    columnEnum: Record<string, any>[],
     fieldNames: FormFieldNamesProps,
     column: FormSchemaProps
   ) => {
-    const Component = column.el === "el-checkbox-button" ? ElCheckboxButton : ElCheckbox;
-    return columnEnum.map(col => {
+    const Component =
+      hyphenToCamelCase(column.el) === ComponentNameEnum.EL_CHECKBOX_BUTTON ? ElCheckboxButton : ElCheckbox;
+    return columnEnum.map((col: any) => {
       return (
         <Component
           disabled={col[fieldNames.disabled || "disabled"]}

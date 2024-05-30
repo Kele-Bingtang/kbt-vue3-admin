@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ElButton, ElMessage } from "element-plus";
-import { ref, reactive, shallowRef, defineOptions, unref } from "vue";
+import { ref, reactive, shallowRef, unref } from "vue";
 import { read, utils } from "xlsx";
 import { useDesign } from "@/hooks";
 

@@ -46,7 +46,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, ref, defineOptions, unref } from "vue";
+import { computed, ref, unref } from "vue";
 import {
   Grid,
   GridItem,
@@ -64,7 +64,7 @@ import {
 } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
-import type { FormItemProp, FormItemProps } from "element-plus";
+import { ElFormItem, ElButton, ElIcon, type FormItemProp, type FormItemProps } from "element-plus";
 import { isString } from "@/components/ProForm/src/helper";
 
 defineOptions({ name: "ProSearch" });
@@ -169,7 +169,11 @@ const getResponsive = (item: ProSearchSchemaProps) => {
 const gridRef = shallowRef<GridInstance>();
 const breakPoint = computed<BreakPoint>(() => unref(gridRef)?.breakPoint || "xl");
 
-const rowSpan = computed(() => unref(getProps).searchCols[unref(breakPoint)]);
+const rowSpan = computed(() => {
+  const { searchCols } = unref(getProps);
+  if (typeof searchCols === "number") return searchCols;
+  return searchCols[unref(breakPoint)];
+});
 
 // 判断是否显示 展开/合并 按钮
 const showCollapse = computed(() => {
@@ -219,7 +223,7 @@ const filterModel = async () => {
   const model = await getFormData();
   if (unref(getProps).removeNoValue) {
     // 使用 reduce 过滤空值，并返回一个新对象
-    return Object.keys(model).reduce((prev, next) => {
+    return Object.keys(model).reduce((prev: any, next: any) => {
       const value = model[next];
       if (!isEmptyVal(value)) {
         if (isObject(value)) {

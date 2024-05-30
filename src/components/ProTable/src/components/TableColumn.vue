@@ -3,8 +3,8 @@
 </template>
 
 <script setup lang="tsx">
-import { inject, ref, useSlots, defineOptions, unref } from "vue";
-import type { TableColumnProps, RenderScope, HeaderRenderScope } from "../interface";
+import { inject, ref, useSlots, unref } from "vue";
+import type { TableColumnProps, TableRenderScope, HeaderRenderScope } from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
 import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
 
@@ -16,13 +16,13 @@ const slots = useSlots();
 
 const enumMap = inject("enumMap", ref(new Map()));
 
-const getEnumData = (item: TableColumnProps, scope: RenderScope<any>) => {
+const getEnumData = (item: TableColumnProps, scope: TableRenderScope<any>) => {
   return unref(enumMap).get(item.prop) && item.isFilterEnum
     ? filterEnum(handleRowAccordingToProp(scope.row, item.prop!), unref(enumMap).get(item.prop)!, item.fieldNames)
     : "";
 };
 
-const renderCellData = (item: TableColumnProps, scope: RenderScope<any>, enumData: any) => {
+const renderCellData = (item: TableColumnProps, scope: TableRenderScope<any>, enumData: any) => {
   return unref(enumMap).get(item.prop) && item.isFilterEnum
     ? filterEnumLabel(enumData, item.fieldNames)
     : formatValue(handleRowAccordingToProp(scope.row, item.prop!));
@@ -63,7 +63,7 @@ const RenderTableColumn = (item: TableColumnProps) => {
           showOverflowTooltip={item.showOverflowTooltip ?? item.prop !== "operation"}
         >
           {{
-            default: (scope: RenderScope<any>) => {
+            default: (scope: TableRenderScope<any>) => {
               if (item._children) return item._children.map(child => RenderTableColumn(child));
               if (item.render) return item.render(scope);
               if (slots[lastProp(item.prop!)]) return slots[lastProp(item.prop!)]!(scope);

@@ -39,6 +39,28 @@ declare type RequiredKeyPartialOther<T, U extends keyof T> = Partial<Pick<T, Exc
  */
 declare type ReadOnlyKey<T, U extends keyof T> = Pick<T, Exclude<keyof T, U>> & Readonly<Pick<T, U>>;
 
-declare type Recordable<T = any, K = string> = Record<K extends null | undefined ? string : K, T>;
+/**
+ * 对象类型
+ */
+declare type Recordable<T = string, K = any> = Record<T extends null | undefined ? string : T, K>;
 
+/**
+ * 可空类型
+ */
 declare type Nullable<T> = T | null;
+
+/**
+ * 对象 key 转小写后返回字面量，
+ *
+ * 如 interface User = {NAME: string, AGE: string}
+ * keyLowercase<User> 返回 "name" | "name"
+ */
+declare type keyLowercase<T> = Lowercase<keyof T>;
+
+/**
+ * 对象 key 转大写后返回字面量
+ *
+ * 如 interface User = {name: string, age: string}
+ * keyLowercase<User> 返回 "NAME" | "AGE"
+ */
+declare type keyLowercase<T> = Uppercase<keyof T>;
