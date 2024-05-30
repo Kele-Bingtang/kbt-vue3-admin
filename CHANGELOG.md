@@ -2,6 +2,12 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.1.0...v1.2.0) (2024-05-30)
+
+### Features
+
+- 🚀 新增 createTable 函数快速创建 ProTable。修复重复依赖引入。添加两个全局 TS 类型。ProForm 新增表单组件自定义插槽功能，ProForm 通过组件名引入组件改为组件本身引入，添加 ElUpload、ElRadio、ElCheckbox 组件支持。 ([a0df495](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/a0df495015b31f3f10235316ee9ffe3025cf35bb))
+
 ## [1.1.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.0.1...v1.1.0) (2024-05-29)
 
 ### Features
