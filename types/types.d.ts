@@ -61,9 +61,9 @@ declare type keyLowercase<T> = Lowercase<keyof T>;
  * 对象 key 转大写后返回字面量
  *
  * 如 interface User = {name: string, age: string}
- * keyLowercase<User> 返回 "NAME" | "AGE"
+ * keyUppercase<User> 返回 "NAME" | "AGE"
  */
-declare type keyLowercase<T> = Uppercase<keyof T>;
+declare type keyUppercase<T> = Uppercase<keyof T>;
 
 /**
  * 创建一个类型，用于将键名添加 'on' 前缀

@@ -152,8 +152,6 @@ export const useProForm = () => {
      */
     createFormComponent: (proFormProps?: ProFormProps & Partial<ProFormOnEmits>, context: Record<string, any> = {}) => {
       const { attrs, slots } = context;
-      console.log(attrs);
-
       const instance = createVNode(ProForm, { ...attrs, ...proFormProps, onRegister: register }, { ...slots });
       return instance;
     },
