@@ -1,13 +1,21 @@
 <template>
-  <RenderProTable>
-    <template #tableHeader="scope">
-      <el-button type="primary">新增用户</el-button>
-      <el-button type="primary" plain>批量添加用户</el-button>
-      <el-button type="primary" plain>导出用户数据</el-button>
-      <el-button type="primary" plain>To 子集详情页面</el-button>
-      <el-button type="danger" plain :disabled="!scope.isSelected">批量删除用户</el-button>
-    </template>
-  </RenderProTable>
+  <el-space fill>
+    <el-card shadow="never" header="函数式创建 Template 组件">
+      <RenderProTable :isShowSearch="false">
+        <template #tableHeader="scope">
+          <el-button type="primary">新增用户</el-button>
+          <el-button type="primary" plain>批量添加用户</el-button>
+          <el-button type="primary" plain>导出用户数据</el-button>
+          <el-button type="primary" plain>To 子集详情页面</el-button>
+          <el-button type="danger" plain :disabled="!scope.isSelected">批量删除用户</el-button>
+        </template>
+      </RenderProTable>
+    </el-card>
+
+    <el-card shadow="never" header="函数式动态渲染组件到指定元素">
+      <div ref="proTableRef"></div>
+    </el-card>
+  </el-space>
 </template>
 
 <script setup lang="tsx" name="CreateTable">
@@ -15,19 +23,53 @@ import { useProTable, type TableColumnProps } from "@/components";
 import { tableData } from "@/mock/pro-table";
 import { ElButton, ElInput, ElMessage } from "element-plus";
 
-const { createTable } = useProTable();
+const {
+  createMethods: { createTable, createTableComponent },
+} = useProTable();
 
-const RenderProTable = (_, context) => {
-  return createTable(
-    {
-      pagination: { enabled: true, fake: true },
-      columns: columns,
-      requestApi: getTicketList,
-    },
+/**
+ * context 里有 slots 和 attrs，如果元素里有 slots 和 attrs，则必传
+ */
+const RenderProTable = (_: any, context: Record<string, any>) => {
+  // 函数式创建 Template 组件
+  return createTableComponent(
+    { pagination: { enabled: true, fake: true }, columns: columns, requestApi: getTicketList },
     context
   );
 };
 
+onMounted(() => {
+  // 函数式动态渲染组件到 proTableRef 元素
+  createTable(
+    "proTableRef",
+    { pagination: { enabled: true, fake: true }, columns: columns, requestApi: getTicketList },
+    tableSlots
+  );
+});
+
+const tableSlots = {
+  tableHeader: () => (
+    <>
+      <ElButton type="primary">新增用户</ElButton>
+      <ElButton type="primary" plain>
+        批量添加用户
+      </ElButton>
+      <ElButton type="primary" plain>
+        导出用户数据
+      </ElButton>
+      <ElButton type="primary" plain>
+        To 子集详情页面
+      </ElButton>
+      <ElButton type="danger" plain:disabled="!scope.isSelected">
+        批量删除用户
+      </ElButton>
+    </>
+  ),
+};
+
+/**
+ * 模拟获取数据
+ */
 const getTicketList = () => {
   return new Promise(resolve => {
     resolve({
@@ -36,22 +78,7 @@ const getTicketList = () => {
   });
 };
 
-export interface ResUserList {
-  id: string;
-  username: string;
-  gender: number;
-  user: { detail: { age: number } };
-  idCard: string;
-  email: string;
-  address: string;
-  createTime: string;
-  status: number;
-  avatar: string;
-  photo: any[];
-  children?: ResUserList[];
-}
-
-const columns: TableColumnProps<ResUserList>[] = reactive([
+const columns: TableColumnProps[] = reactive([
   { type: "selection", prop: "selection", fixed: "left", width: 60 },
   { type: "index", label: "#", width: 60 },
   { type: "sort", label: "Sort", width: 80 },
@@ -124,12 +151,12 @@ const columns: TableColumnProps<ResUserList>[] = reactive([
     render: () => {
       return (
         <>
-          <el-button plain type="primary">
+          <ElButton plain type="primary">
             编辑
-          </el-button>
-          <el-button plain type="danger">
+          </ElButton>
+          <ElButton plain type="danger">
             删除
-          </el-button>
+          </ElButton>
         </>
       );
     },

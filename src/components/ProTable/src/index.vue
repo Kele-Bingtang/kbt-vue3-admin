@@ -218,7 +218,7 @@ const enumCallback = (data: Record<string, any>[]) => {
     const enumObj = unref(enumMap).get(col.prop!);
     // 如果字段有配置枚举信息，则存放到 _enum[col.prop] 里
     if (enumObj && col.isFilterEnum) {
-      data = data.map(row => {
+      data = data?.map(row => {
         const d = filterEnumLabel(
           filterEnum(handleRowAccordingToProp(row, col.prop!), enumObj, col.fieldNames),
           col.fieldNames
@@ -407,8 +407,7 @@ const handleDeleteBatch = () => {
   });
 };
 
-// 定义 emit 事件
-const emits = defineEmits<{
+type ProTableEmits = {
   register: [
     proTableRef?: ComponentPublicInstance | null | any,
     elTableRef?: TableInstance,
@@ -419,7 +418,16 @@ const emits = defineEmits<{
   search: [model: Record<string, any>];
   reset: [model: Record<string, any>];
   dargSort: [{ newIndex?: number; oldIndex?: number }];
-}>();
+};
+
+/**
+ * 将 ProTableEmits 类型的 key 变为 on{key} 的形式
+ * @example 返回 ['onRegister', 'onFormRegister' ...]
+ */
+export type ProTableOnEmits = keyOnPrefix<ProTableEmits>;
+
+// 定义 emit 事件
+const emits = defineEmits<ProTableEmits>();
 
 const formRegister = (ref?: ProFormInstance, elRef?: FormInstance) => {
   emits("formRegister", ref, elRef);

@@ -8,6 +8,7 @@ import { AxiosCanceler } from "./axiosCancel";
 import { checkStatus } from "./checkStatus";
 import router from "@/router";
 import { LOGIN_URL } from "@/router/routesConfig";
+import { ElNotification } from "element-plus";
 
 const axiosCanceler = new AxiosCanceler();
 
@@ -232,3 +233,49 @@ function processError(error: AxiosError) {
     };
   }
 }
+
+/**
+ * h 手动渲染 ElNotification
+ */
+export const noPermission = () => {
+  ElNotification.closeAll();
+
+  const notify = ElNotification({
+    title: "身份异常",
+    dangerouslyUseHTMLString: true,
+    message: h("div", {}, [
+      h("div", [
+        "身份失效，您需要重新登录",
+        h("strong", { style: { color: "red" } }, ["，点击确定将重新登录，"]),
+        "建议登录之前，",
+        h("strong", { style: { color: "red" } }, ["保存好自己的数据！"]),
+      ]),
+      h("div", { style: { float: "right" } }, [
+        h(
+          "span",
+          {
+            style: { marginRight: "10px", cursor: "pointer", border: "var(--el-border)", padding: "2px 8px" },
+            onClick: () => closeNotify(),
+          },
+          ["取消"]
+        ),
+        h(
+          "span",
+          {
+            style: { cursor: "pointer", border: "var(--el-border)", padding: "2px 8px" },
+            onClick: () => confirmRefresh(),
+          },
+          ["确定"]
+        ),
+      ]),
+    ]),
+    type: "warning",
+    duration: 0,
+  });
+  function closeNotify() {
+    notify.close();
+  }
+  function confirmRefresh() {
+    window.location.reload();
+  }
+};

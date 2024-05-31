@@ -1,7 +1,11 @@
-import type { FormInstance } from "element-plus";
+import { ElConfigProvider, type FormInstance } from "element-plus";
 import type { FormSchemaProps, FormSetProps, ProFormInstance } from "../interface";
-import type { ProFormProps } from "../index.vue";
+import type { ProFormOnEmits, ProFormProps } from "../index.vue";
 import { isObject } from "../helper";
+import { createVNode, render } from "vue";
+import ProForm from "../index.vue";
+import { useDesign } from "@/hooks";
+import { useLayoutStore } from "@/stores";
 
 export const useProForm = () => {
   // ProFrom 实例
@@ -9,6 +13,10 @@ export const useProForm = () => {
 
   // ElForm 实例
   const elFormRef = ref<FormInstance>();
+
+  const { variables } = useDesign();
+
+  const layoutSize = computed(() => useLayoutStore().layoutSize);
 
   /**
    * @param ref ProForm 实例
@@ -138,6 +146,34 @@ export const useProForm = () => {
     },
   };
 
+  const createMethods = {
+    /**
+     * 返回 ProForm 组件的虚拟 DOM，直接在页面中渲染该虚拟 DOM 即可。可以理解为返回一个 Vue 组件
+     */
+    createFormComponent: (proFormProps?: ProFormProps & Partial<ProFormOnEmits>, context: Record<string, any> = {}) => {
+      const { attrs, slots } = context;
+      console.log(attrs);
+
+      const instance = createVNode(ProForm, { ...attrs, ...proFormProps, onRegister: register }, { ...slots });
+      return instance;
+    },
+
+    /**
+     * 动态创建表单。使用该函数，控制台会有 warning： Slot "XXX" invoked outside of the render function，可以忽略
+     */
+    createForm: async (el: string, proFormProps?: ProFormProps & Partial<ProFormOnEmits>, slots?: any) => {
+      const proFormInstance = createVNode(ProForm, { ...proFormProps, onRegister: register }, { ...slots });
+      const rootInstance = createVNode(
+        ElConfigProvider,
+        { namespace: variables.elNamespace, size: unref(layoutSize) },
+        { default: () => proFormInstance }
+      );
+      const currentInstance = getCurrentInstance();
+      const rootEl = currentInstance?.refs[el] as HTMLElement;
+      rootEl && render(rootInstance, rootEl);
+    },
+  };
+
   return {
     formElState: {
       formRef: unref(formRef),
@@ -145,5 +181,6 @@ export const useProForm = () => {
     },
     formMethods: methods,
     formRegister: register,
+    createMethods,
   };
 };

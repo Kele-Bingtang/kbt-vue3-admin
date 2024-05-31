@@ -134,7 +134,7 @@ const RenderSlots = () => {
   const { column } = props;
   return column.render!({
     model: unref(model),
-    data: getFormProp(model.value, column.prop),
+    data: getFormProp(unref(model), column.prop),
     enumData: unref(columnEnum),
   });
 };
@@ -160,12 +160,20 @@ const RenderElComponents = () => {
   const Component =
     (componentMap[rootEl as PascalCaseComponentName] as ReturnType<typeof defineComponent>) || resolveComponent(rootEl);
 
+  const componentModel = computed({
+    get: () => {
+      return getFormProp(unref(model), prop, valueFormat);
+    },
+    set: val => {
+      setFormProp(unref(model), prop, val);
+    },
+  });
+
   return Component ? (
     // EP 上传组件绑定的是 v-model:file-list 而不是 v-model
     rootEl === ComponentNameEnum.EL_UPLOAD ? (
       <Component
-        fileList={getFormProp(unref(model), prop, valueFormat)}
-        onUpdate:fileList={(v: any) => setFormProp(unref(model), prop, v)}
+        v-model:file-list={componentModel.value}
         ref={formComponentRef}
         disabled={isDisabled()}
         clearable={unref(clearable)}
@@ -175,14 +183,11 @@ const RenderElComponents = () => {
         options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
         style={style}
       >
-        {{
-          ...slotsMap,
-        }}
+        {{ ...slotsMap }}
       </Component>
     ) : (
       <Component
-        modelValue={getFormProp(unref(model), prop, valueFormat)}
-        onUpdate:modelValue={(v: any) => setFormProp(unref(model), prop, v)}
+        v-model={componentModel.value}
         ref={formComponentRef}
         disabled={isDisabled()}
         clearable={unref(clearable)}
@@ -192,9 +197,7 @@ const RenderElComponents = () => {
         options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
         style={style}
       >
-        {{
-          ...slotsMap,
-        }}
+        {{ ...slotsMap }}
       </Component>
     )
   ) : undefined;

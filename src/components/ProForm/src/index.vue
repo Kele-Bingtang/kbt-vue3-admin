@@ -52,6 +52,7 @@ const props = withDefaults(defineProps<ProFormProps>(), {
 });
 
 const model = defineModel<Record<string, any>>({ default: () => ({}) });
+
 // 存储 ElForm 实例
 const elFormRef = shallowRef<FormInstance>();
 
@@ -324,10 +325,14 @@ const renderFormItem = (item: FormSchemaProps) => {
   );
 };
 
-// 定义 emit 事件
-const emits = defineEmits<{
+type ProFormEmits = {
   register: [proFormRef?: ComponentPublicInstance | null | any, elFormRef?: FormInstance];
-}>();
+};
+
+export type ProFormOnEmits = keyOnPrefix<ProFormEmits>;
+
+// 定义 emit 事件
+const emits = defineEmits<ProFormEmits>();
 
 onMounted(() => {
   emits("register", unref(elFormRef)?.$parent, unref(elFormRef));

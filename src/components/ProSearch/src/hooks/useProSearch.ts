@@ -1,9 +1,17 @@
-import type { FormSchemaProps, FormSetProps } from "@/components";
-import type { ProSearchExpose, ProSearchProps } from "../index.vue";
+import { ProSearch, type FormSchemaProps, type FormSetProps } from "@/components";
+import type { ProSearchExpose, ProSearchOnEmits, ProSearchProps } from "../index.vue";
+import { useDesign } from "@/hooks";
+import { ElConfigProvider } from "element-plus";
+import { createVNode, render } from "vue";
+import { useLayoutStore } from "@/stores";
 
 export const useProSearch = () => {
   // ProSearch 实例
   const searchRef = ref<ProSearchExpose>();
+
+  const { variables } = useDesign();
+
+  const layoutSize = computed(() => useLayoutStore().layoutSize);
 
   /**
    * @param ref Search实例
@@ -88,11 +96,41 @@ export const useProSearch = () => {
     },
   };
 
+  const createMethods = {
+    /**
+     * 返回 ProSearch 组件的虚拟 DOM，直接在页面中渲染该虚拟 DOM 即可。可以理解为返回一个 Vue 组件
+     */
+    createSearchComponent: (
+      proSearchProps?: ProSearchProps & Partial<ProSearchOnEmits>,
+      context: Record<string, any> = {}
+    ) => {
+      const { attrs, slots } = context;
+      const instance = createVNode(ProSearch, { ...attrs, ...proSearchProps, onRegister: register }, { ...slots });
+      return instance;
+    },
+
+    /**
+     * 动态创建 Search。使用该函数，控制台会有 warning： Slot "XXX" invoked outside of the render function，可以忽略
+     */
+    createSearch: async (el: string, proSearchProps?: ProSearchProps & Partial<ProSearchOnEmits>, slots?: any) => {
+      const proSearchInstance = createVNode(ProSearch, { ...proSearchProps, onRegister: register }, { ...slots });
+      const rootInstance = createVNode(
+        ElConfigProvider,
+        { namespace: variables.elNamespace, size: unref(layoutSize) },
+        { default: () => proSearchInstance }
+      );
+      const currentInstance = getCurrentInstance();
+      const rootEl = currentInstance?.refs[el] as HTMLElement;
+      rootEl && render(rootInstance, rootEl);
+    },
+  };
+
   return {
     searchElState: {
       searchRef: unref(searchRef),
     },
     searchMethods: methods,
     searchRegister: register,
+    createMethods,
   };
 };

@@ -51,6 +51,7 @@ interface Settings {
   moreRouteChildrenHideInMenuThenOnlyOne: boolean;
   layoutSize: LayoutSizeType;
   language: LanguageType;
+  cacheKeyPrefix?: string; // 缓存 key 前缀
   tabsNavCacheKey: string; // 缓存标签页的 key
   versionCacheKey: string; // 缓存版本号的 key
   tabActiveExcludes: string[]; // 当 URL 携带 ? 的参数时，标签页的 path 也会携带参数，当 recordTabsNav 为 true 时，会造成多个重复的只是 ? 参数不一样的标签页，该选项指定当出现指定参数不会加载到 path，即该标签的 path 只保留 ? 前面的链接。当存在多个条件，满足任意一个即可
@@ -98,6 +99,7 @@ const layoutSettings: Partial<Settings> = {
   layoutSize: "default",
   language: "zh-CN",
   watchFrame: false,
+  cacheKeyPrefix: "kbt",
 };
 
 const routerSettings: Partial<Settings> = {
@@ -110,9 +112,9 @@ const routerSettings: Partial<Settings> = {
 };
 
 const keySetting: Partial<Settings> = {
-  tabsNavCacheKey: "kbt_tabsNav",
-  cacheDynamicRoutesKey: "kbt_dynamic_routes",
-  versionCacheKey: "kbt_version",
+  tabsNavCacheKey: `${layoutSettings.cacheKeyPrefix}_tabsNav`,
+  cacheDynamicRoutesKey: `${layoutSettings.cacheKeyPrefix}_dynamic_routes`,
+  versionCacheKey: `${layoutSettings.cacheKeyPrefix}_version`,
   tabActiveExcludes: ["layoutMode"],
 };
 

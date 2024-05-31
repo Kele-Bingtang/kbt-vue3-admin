@@ -64,3 +64,17 @@ declare type keyLowercase<T> = Lowercase<keyof T>;
  * keyLowercase<User> 返回 "NAME" | "AGE"
  */
 declare type keyLowercase<T> = Uppercase<keyof T>;
+
+/**
+ * 创建一个类型，用于将键名添加 'on' 前缀
+ * 如 type Search = {search: [params: string], reset: [params: string]}
+ *
+ * type SearchOn = keyOnPrefix<Search>
+ *
+ * SearchOn 为 {onSearch: (params: string) => void, onReset: (params: string) => void}
+ *
+ * 该类型可以用于 Emits 类型
+ */
+declare type keyOnPrefix<T> = {
+  [K in keyof T as `on${Capitalize<K>}`]: T[K] extends readonly any[] ? (...t: T[K]) => void : never;
+};

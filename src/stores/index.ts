@@ -1,3 +1,4 @@
+import settings from "@/config/settings";
 import { createPinia } from "pinia";
 import { createPersistedState } from "pinia-plugin-persistedstate";
 
@@ -26,7 +27,7 @@ const customStorage = {
 const pinia = createPinia();
 pinia.use(
   createPersistedState({
-    key: key => `kbt_${key}`,
+    key: key => `${settings.cacheKeyPrefix}_${key}`,
     storage: customStorage,
   })
 );

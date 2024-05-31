@@ -3,6 +3,7 @@ import zhCN from "./modules/zh-CN";
 import enUS from "./modules/en-US";
 import { getBrowserLang } from "@/utils";
 import type { WritableComputedRef } from "vue";
+import settings from "@/config/settings";
 
 const messages = {
   "zh-CN": zhCN,
@@ -10,7 +11,7 @@ const messages = {
 };
 
 export const getLocale = () => {
-  const layoutCache = localStorage.getItem("kbt_layoutStore");
+  const layoutCache = localStorage.getItem(`${settings.cacheKeyPrefix}_layoutStore`);
   const layoutStore = layoutCache ? JSON.parse(layoutCache) : "";
   const cookieLanguage = layoutStore ? layoutStore.value.language : layoutStore;
   if (cookieLanguage) {

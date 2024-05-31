@@ -6,6 +6,7 @@ import {
   type Component,
   type ComponentInternalInstance,
   type VNode,
+  type AppContext,
 } from "vue";
 import { ElDrawer, ElButton, type DrawerProps, ElConfigProvider } from "element-plus";
 import { Icon } from "@/components";
@@ -17,7 +18,8 @@ const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-drawer");
 
 let id = 0;
-let thisAppContext: any = null;
+
+let appContextConst: AppContext | undefined;
 
 const getFather = (): Element => {
   const fullScreen = document.querySelector(":not(:root):fullscreen");
@@ -58,14 +60,7 @@ const handleConfirm = (drawerProps: WorkDrawerProps) => {
  *
  * 在第一个参数里写 headerRender 和 footerRender，可以自定义 el-drawer 的 header 和 footer
  */
-export const showDrawer = (
-  drawerProps: WorkDrawerProps,
-  component?: Component,
-  componentsProps?: any,
-  ctx?: ComponentInternalInstance
-) => {
-  ctx && (thisAppContext = ctx?.appContext);
-
+export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, componentsProps?: any) => {
   const layoutSize = computed(() => useLayoutStore().layoutSize);
 
   const isFullscreen = ref(false);
@@ -79,7 +74,7 @@ export const showDrawer = (
   };
 
   const vm = (
-    <ElConfigProvider namespace={variables.elNamespace} size={layoutSize.value}>
+    <ElConfigProvider namespace={variables.elNamespace} size={unref(layoutSize)}>
       <ElDrawer
         modelValue
         title="弹框"
@@ -132,8 +127,8 @@ export const showDrawer = (
     </ElConfigProvider>
   );
 
-  vm.appContext = thisAppContext;
-  vm.children?.length && (vm.children[0].appContext = thisAppContext);
+  vm.appContext = appContextConst;
+  vm.children?.length && (vm.children[0].appContext = appContextConst);
 
   const container = document.createElement("div");
   container.id = `${prefixClass}-${++id}`;
@@ -146,7 +141,8 @@ export const showDrawer = (
 };
 
 export const initDrawer = (ctx?: ComponentInternalInstance) => {
-  const { appContext } = ctx || (getCurrentInstance() as ComponentInternalInstance);
-  thisAppContext = appContext;
+  const { appContext } = ctx || getCurrentInstance() || {};
+  appContextConst = appContext;
+
   return { showDrawer };
 };

@@ -1,4 +1,13 @@
-import { render, getCurrentInstance, computed, type Component, type ComponentInternalInstance, type VNode } from "vue";
+import {
+  render,
+  getCurrentInstance,
+  computed,
+  unref,
+  type Component,
+  type ComponentInternalInstance,
+  type VNode,
+  type AppContext,
+} from "vue";
 import { ElDialog, ElButton, type DialogProps, ElScrollbar, ElConfigProvider } from "element-plus";
 import { getPx } from "@/utils";
 import { Icon } from "@/components";
@@ -10,7 +19,8 @@ const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-dialog");
 
 let id = 0;
-let thisAppContext: any = null;
+
+let appContextConst: AppContext | undefined;
 
 const getFather = (): Element => {
   const fullScreen = document.querySelector(":not(:root):fullscreen");
@@ -55,14 +65,7 @@ const handleConfirm = (dialogProps?: WorkDialogProps) => {
  *
  * 在第一个参数里写 headerRender 和 footerRender，可以自定义 el-dialog 的 header 和 footer
  */
-export const showDialog = (
-  dialogProps: WorkDialogProps,
-  component?: Component,
-  componentsProps?: any,
-  ctx?: ComponentInternalInstance
-) => {
-  ctx && (thisAppContext = ctx?.appContext);
-
+export const showDialog = (dialogProps: WorkDialogProps, component?: Component, componentsProps?: any) => {
   const layoutSize = computed(() => useLayoutStore().layoutSize);
 
   const isFullscreen = ref(dialogProps.fullscreen || false);
@@ -72,13 +75,13 @@ export const showDialog = (
       `${`#${prefixClass}-${id}`} .${prefixClass}.${variables.elNamespace}-dialog`
     ) as HTMLElement;
     if (elDialogEl) elDialogEl.classList.toggle("is-fullscreen");
-    isFullscreen.value = !isFullscreen.value;
+    isFullscreen.value = !unref(isFullscreen);
   };
 
   const contentHeight = ref(getPx(dialogProps.height));
 
   watch(
-    () => isFullscreen.value,
+    () => unref(isFullscreen),
     async (val: boolean) => {
       await nextTick();
       if (val) {
@@ -94,7 +97,7 @@ export const showDialog = (
   );
 
   const vm = (
-    <ElConfigProvider namespace={variables.elNamespace} size={layoutSize.value}>
+    <ElConfigProvider namespace={variables.elNamespace} size={unref(layoutSize)}>
       <ElDialog
         modelValue
         title="弹框"
@@ -115,7 +118,7 @@ export const showDialog = (
               return (
                 <ElScrollbar
                   style={{
-                    height: contentHeight.value,
+                    height: unref(contentHeight),
                   }}
                 >
                   {dialogProps.render()}
@@ -123,7 +126,7 @@ export const showDialog = (
               );
             }
             return (
-              <ElScrollbar style={{ height: contentHeight.value }}>
+              <ElScrollbar style={{ height: unref(contentHeight) }}>
                 <component is={component} {...componentsProps}></component>
               </ElScrollbar>
             );
@@ -137,7 +140,7 @@ export const showDialog = (
                 </span>
                 {dialogProps.fullscreenIcon !== false && (
                   <Icon
-                    name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
+                    name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
                     onClick={() => toggleFull()}
                     width="15px"
                     height="15px"
@@ -166,8 +169,8 @@ export const showDialog = (
     </ElConfigProvider>
   );
 
-  vm.appContext = thisAppContext;
-  vm.children?.length && (vm.children[0].appContext = thisAppContext);
+  vm.appContext = appContextConst;
+  vm.children?.length && (vm.children[0].appContext = appContextConst);
 
   const container = document.createElement("div");
   container.id = `${prefixClass}-${++id}`;
@@ -176,7 +179,8 @@ export const showDialog = (
 };
 
 export const initDialog = (ctx?: ComponentInternalInstance) => {
-  const { appContext } = ctx || (getCurrentInstance() as ComponentInternalInstance);
-  thisAppContext = appContext;
+  const { appContext } = ctx || getCurrentInstance() || {};
+  appContextConst = appContext;
+
   return { showDialog };
 };

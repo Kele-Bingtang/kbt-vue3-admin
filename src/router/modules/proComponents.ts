@@ -77,6 +77,12 @@ const proComponents: RouterConfigRaw = {
           meta: { title: "使用 ProForm", icon: StarFilled },
         },
         {
+          path: "create",
+          component: () => import("@/views/proComponents/proForm/createProForm/index.vue"),
+          name: "CreateProForm",
+          meta: { title: "创建 ProForm", icon: StarFilled },
+        },
+        {
           path: "detail",
           component: () => import("@/views/proComponents/proForm/detailProForm/index.vue"),
           name: "DetailProForm",
@@ -104,6 +110,12 @@ const proComponents: RouterConfigRaw = {
           name: "UseProSearch",
           component: () => import("@/views/proComponents/proSearch/useProSearch.vue"),
           meta: { title: () => "使用 ProSearch", icon: StarFilled },
+        },
+        {
+          path: "create",
+          name: "CreateProSearch",
+          component: () => import("@/views/proComponents/proSearch/createProSearch.vue"),
+          meta: { title: () => "创建 ProSearch", icon: StarFilled },
         },
       ],
     },

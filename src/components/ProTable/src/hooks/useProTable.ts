@@ -1,8 +1,10 @@
-import { type TableInstance } from "element-plus";
+import { ElConfigProvider, type TableInstance } from "element-plus";
 import type { ProTableInstance, TableColumnProps, TableSetProps } from "../interface";
-import type { ProTableProps } from "../index.vue";
+import type { ProTableOnEmits, ProTableProps } from "../index.vue";
 import { ProTable, type Paging, type ProSearchInstance } from "@/components";
-import { createVNode } from "vue";
+import { createVNode, render } from "vue";
+import { useDesign } from "@/hooks";
+import { useLayoutStore } from "@/stores";
 
 export const useProTable = () => {
   // ProTable 实例
@@ -13,6 +15,10 @@ export const useProTable = () => {
 
   // ElTable 实例
   const searchRef = ref<ProSearchInstance>();
+
+  const { variables } = useDesign();
+
+  const layoutSize = computed(() => useLayoutStore().layoutSize);
 
   /**
    * @param ref ProTable 实例
@@ -163,9 +169,33 @@ export const useProTable = () => {
     },
   };
 
-  const createTable = (proTableProps?: ProTableProps & Partial<typeof ProTable.emits>, context?: any) => {
-    const instance = createVNode(ProTable, { ...proTableProps, onRegister: register }, context?.slots);
-    return instance;
+  const createMethods = {
+    /**
+     * 返回 ProTable 组件的虚拟 DOM，直接在页面中渲染该虚拟 DOM 即可。可以理解为返回一个 Vue 组件
+     */
+    createTableComponent: (
+      proTableProps?: ProTableProps & Partial<ProTableOnEmits>,
+      context: Record<string, any> = {}
+    ) => {
+      const { attrs, slots } = context;
+      const instance = createVNode(ProTable, { ...attrs, ...proTableProps, onRegister: register }, { ...slots });
+      return instance;
+    },
+
+    /**
+     * 动态创建表格。使用该函数，控制台会有 warning： Slot "XXX" invoked outside of the render function，可以忽略
+     */
+    createTable: async (el: string, proTableProps?: ProTableProps & Partial<ProTableOnEmits>, slots?: any) => {
+      const proTableInstance = createVNode(ProTable, { ...proTableProps, onRegister: register }, { ...slots });
+      const rootInstance = createVNode(
+        ElConfigProvider,
+        { namespace: variables.elNamespace, size: unref(layoutSize) },
+        { default: () => proTableInstance }
+      );
+      const currentInstance = getCurrentInstance();
+      const rootEl = currentInstance?.refs[el] as HTMLElement;
+      rootEl && render(rootInstance, rootEl);
+    },
   };
 
   return {
@@ -179,6 +209,6 @@ export const useProTable = () => {
     searchState,
     selectState,
     tableMethods: methods,
-    createTable,
+    createMethods,
   };
 };

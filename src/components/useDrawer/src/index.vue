@@ -39,6 +39,7 @@
 <script setup lang="ts">
 import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
 import { ref, unref, shallowRef } from "vue";
+import { Icon } from "@/components";
 import { useDesign } from "@/hooks";
 
 defineOptions({ name: "WorkDrawer" });

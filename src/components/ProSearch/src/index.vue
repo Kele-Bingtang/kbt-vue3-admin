@@ -114,12 +114,20 @@ const props = withDefaults(defineProps<ProSearchProps>(), {
   removeNoValue: true,
 });
 
-const emits = defineEmits<{
+type ProSearchEmits = {
   search: [params: Record<string, any>]; // 搜索方法
   reset: [params: Record<string, any>]; // 重置方法
   register: [expose: ProSearchExpose]; // 注册方法
   validate: [prop: FormItemProp, isValid: boolean, message: string]; // ElForm 触发验证事件
-}>();
+};
+
+/**
+ * 将 ProSearchEmits 类型的 key 变为 on{key} 的形式
+ * @example 返回 ['onSearch', 'onReset', 'onRegister', 'onValidate']
+ */
+export type ProSearchOnEmits = keyOnPrefix<ProSearchEmits>;
+
+const emits = defineEmits<ProSearchEmits>();
 
 const schemaForm = computed(() =>
   props.schema
