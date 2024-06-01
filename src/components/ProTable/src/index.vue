@@ -3,11 +3,12 @@
     <!-- 查询表单 card -->
     <ProSearch
       ref="proSearchRef"
-      v-show="getProps.isShowSearch"
+      v-if="['search', 'all', 'allAndUseFilter'].includes(getProps.searchModel!)"
+      v-show="getProps.initShowSearch"
       v-model="searchParam"
       :schema="searchColumns"
       :search-cols="getProps.searchCols"
-      v-bind="{ ...searchProps }"
+      v-bind="{ ...getProps.searchProps }"
       @search="_search"
       @reset="_reset"
       @register="searchRegister"
@@ -31,7 +32,7 @@
         @refresh="getTableList"
         @size="handleSizeCommand"
         @colSetting="toggleColSetting"
-        @search="() => setProps({ isShowSearch: !getProps.isShowSearch })"
+        @search="() => setProps({ initShowSearch: !getProps.initShowSearch })"
       >
         <template v-for="slot in Object.keys($slots)" #[slot]="scope">
           <slot :name="slot" v-bind="scope" />
@@ -52,6 +53,7 @@
         :header-cell-style="getHeaderCellStyle"
         :columns="getProps.columns"
         :columnTypes="columnTypes"
+        :searchParam="searchParam"
         :dialogForm="getProps.dialogForm"
         @edit="handleEdit"
         @delete="handleDelete"
@@ -82,7 +84,7 @@
       </slot>
     </div>
     <!-- 列设置 -->
-    <ColSetting v-if="getProps.toolButton" v-model="colSettingVisible" :col-setting="colSetting" />
+    <ColSetting v-if="getProps.toolButton" v-model="colSettingVisible" v-model:col-setting="colSetting" />
   </div>
 </template>
 
@@ -107,6 +109,10 @@ import {
   TableSizeEnum,
   type ToolButton,
   type TableSetProps,
+  proTablePrefixClassKey,
+  enumMapKey,
+  dialogFormInstanceKey,
+  filterKey,
 } from "./interface";
 import { filterEnum, filterEnumLabel, handleRowAccordingToProp, setColumnProp, lastProp } from "./helper";
 import ColSetting from "./components/ColSetting.vue";
@@ -122,7 +128,7 @@ defineOptions({ name: "ProTable" });
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("pro-table");
 
-provide("proTablePrefixClass", prefixClass);
+provide(proTablePrefixClassKey, prefixClass);
 
 export type DialogForm = DialogFormProps;
 
@@ -142,9 +148,11 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   size?: CustomTableSize; // 表格密度
   exportKey?: "props" | "label" | "dataKey"; // 导出时的表头配置（prop 为使用  columns 的 props，label 为使用 columns 的 label，dataKey 为使用 data 的 key），默认为 dataKey
-  isShowSearch?: boolean; // 初始化时是否显示搜索模块
+  initShowSearch?: boolean; // 初始化时是否显示搜索模块
   searchCols?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
   searchProps?: Omit<ProSearchProps, "schema" | "searchCols" | "modeValue">; // ProSearch 配置项
+  // 搜索模式，search 使用 ProSearch 组件，filter 开启表格筛选功能，useFilter 启用所有表格筛选功能，不管也没有配置 search。all 两个都使用。allAndUseFilter 两个都使用的同时，默认启用所有表格筛选功能
+  searchModel?: "search" | "filter" | "useFilter" | "all" | "allAndUseFilter";
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
 }
 
@@ -158,9 +166,10 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   toolButton: true,
   rowKey: "id",
   size: "default",
-  isShowSearch: true,
+  initShowSearch: true,
   exportKey: "dataKey",
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
+  searchModel: "search",
 });
 
 // 表格 DOM 元素
@@ -173,7 +182,8 @@ const columnTypes: TypeProps[] = ["selection", "radio", "index", "expand", "sort
 const mergeProps = ref<ProTableProps>({});
 
 const getProps = computed(() => {
-  const propsObj = { ...props };
+  // 将 columns 转为响应式对象
+  const propsObj = { ...props, columns: isReactive(props.columns) ? props.columns : reactive(props.columns) };
   Object.assign(propsObj, unref(mergeProps));
   return propsObj;
 });
@@ -232,6 +242,16 @@ const enumCallback = (data: Record<string, any>[]) => {
   return data;
 };
 
+const filterProps = {
+  filter: ["filter", "useFilter", "all", "allAndUseFilter"].includes(unref(getProps).searchModel!),
+  useFilter: ["useFilter", "allAndUseFilter"].includes(unref(getProps).searchModel!),
+  search,
+  reset,
+};
+
+// TableColumn 使用
+provide(filterKey, filterProps);
+
 // 清空选中数据列表
 const clearSelection = () => unref(tableMainRef)?.table?.clearSelection();
 
@@ -286,7 +306,7 @@ const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
   const { data } = await enumValue(unref(enumMap));
   unref(enumMap).set(prop!, data);
 };
-provide("enumMap", enumMap);
+provide(enumMapKey, enumMap);
 
 // 扁平化 columns，为了过滤需要搜索的配置项
 const flatColumnsFunc = (columns: TableColumnProps[], flatArr: TableColumnProps[] = []) => {
@@ -315,7 +335,7 @@ const searchColumns = computed(() => {
   column?.forEach(item => {
     // Table 默认查询参数初始化
     const key = item.search?.key ?? lastProp(item.prop!);
-    const defaultValue = item.search?.defaultValue;
+    const defaultValue = unref(item.search?.defaultValue);
     if (defaultValue !== undefined && defaultValue !== null) {
       unref(searchInitParam)[key] = defaultValue;
       unref(searchParam)[key] = defaultValue;
@@ -340,14 +360,23 @@ const searchColumns = computed(() => {
 // 列设置 ==> 过滤掉不需要设置的列
 const colSettingVisible = ref(false);
 const colSetting = computed(() =>
-  unref(getProps).columns?.filter(item => !columnTypes.includes(item.type!) && item.prop !== "operation")
+  unref(getProps)
+    .columns?.filter(item => !columnTypes.includes(item.type!) && item.prop !== "operation")
+    .map(item => {
+      // 初始化 filter 过滤器
+      !item.filterConfig ? (item.filterConfig = {}) : undefined;
+      if (filterProps.filter && filterProps.useFilter && item.filterConfig.enabled !== false) {
+        item.filterConfig.enabled = true;
+      }
+      return item;
+    })
 );
 
 const toggleColSetting = (show = !unref(colSettingVisible)) => (colSettingVisible.value = show);
 
 // 操作框
 const dialogFormRef = shallowRef<DialogFormInstance>();
-provide("dialogFormRef", dialogFormRef);
+provide(dialogFormInstanceKey, dialogFormRef);
 
 // 编辑回调
 const handleEdit = (scope: any, item: TableColumnProps) => {
@@ -443,12 +472,13 @@ onMounted(() => {
 });
 
 const _search = (model: Record<string, any>) => {
-  search(model);
+  // ProSearch 已经自动清除空值，因此传入 false
+  search(model, false);
   emits("search", model);
 };
 
 const _reset = (model: Record<string, any>) => {
-  reset(model);
+  reset(model, false);
   emits("reset", model);
 };
 
@@ -491,7 +521,6 @@ const setColumn = (columnSet: TableSetProps[], columnsChildren?: TableColumnProp
 // 添加 Column
 const addColumn = (column: TableColumnProps, prop?: number | string, position: "before" | "after" = "after") => {
   const { columns } = unref(getProps);
-
   if (Object.prototype.toString.call(prop) === "[object String]") {
     return columns.forEach((column, i) => {
       if (column.prop === prop) position === "after" ? columns.splice(i + 1, 0, column) : columns.splice(i, 0, column);

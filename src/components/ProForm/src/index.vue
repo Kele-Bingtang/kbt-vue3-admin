@@ -21,6 +21,7 @@ import {
   type RowProps,
   type ColProps,
   type FormItemInstance,
+  type FormItemProp,
 } from "element-plus";
 import { getPx, getFormProp, isString, setFormProp, hyphenToCamelCase } from "./helper";
 import { useDesign } from "@/hooks";
@@ -40,15 +41,15 @@ export interface ProFormProps {
   rowProps?: Partial<RowProps> & {
     col?: Partial<ColProps>;
   };
-  disabled?: boolean; // 是否禁用所有表单
+  onlyRenderComponent?: boolean; // 是否只渲染 ProFormItem 组件，只使用表单组件
 }
 
 const props = withDefaults(defineProps<ProFormProps>(), {
   modelValue: () => ({}),
   schema: () => [],
   useCol: true,
-  disabled: false,
   formProps: () => ({}),
+  onlyRenderComponent: false,
 });
 
 const model = defineModel<Record<string, any>>({ default: () => ({}) });
@@ -196,7 +197,7 @@ watch(
 
     // 如果 schema 对应的 prop 不存在，则删除 model 中的对应的 prop
     Object.keys(unref(model)).forEach(key => {
-      const isExist = schema.some(item => item.prop === key);
+      const isExist = schema.some(item => item.prop === key || item.render);
       if (!isExist) delete unref(model)[key];
     });
   },
@@ -237,8 +238,8 @@ const setGridProp = (col: Partial<ColProps> = {}) => {
 const slots = useSlots();
 
 const RenderFormWrap = () => {
-  const { elFormProps } = unref(getProps);
-  return (
+  const { elFormProps, onlyRenderComponent, schema } = unref(getProps);
+  return !onlyRenderComponent ? (
     <ElForm ref={elFormRef} {...elFormProps} class={prefixClass} model={unref(model)}>
       {{
         default: () => {
@@ -253,6 +254,21 @@ const RenderFormWrap = () => {
         },
       }}
     </ElForm>
+  ) : (
+    schema
+      .filter(item => !isDestroy(item))
+      .map(item => {
+        return (
+          <div v-show={!isHidden(item)}>
+            <ProFormItem
+              ref={(el: any) => (unref(proFormItemRefs)[item.prop] = el)}
+              column={item}
+              v-model={model.value}
+              style={getComponentWidth(item)}
+            />
+          </div>
+        );
+      })
   );
 };
 
@@ -327,6 +343,7 @@ const renderFormItem = (item: FormSchemaProps) => {
 
 type ProFormEmits = {
   register: [proFormRef?: ComponentPublicInstance | null | any, elFormRef?: FormInstance];
+  validate: [prop: FormItemProp, isValid: boolean, message: string]; // ElForm 自带的事件
 };
 
 export type ProFormOnEmits = keyOnPrefix<ProFormEmits>;

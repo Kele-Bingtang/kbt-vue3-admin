@@ -44,11 +44,11 @@ defineOptions({ name: "DialogOperate" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
-export type DialogProFormProps<T = any> = FormSchemaProps<T> & {
-  destroy?: Array<"add" | "edit">; // 是否销毁表单，类似于 v-if
-  hidden?: Array<"add" | "edit">; // 是否隐藏表单，类似于 v-show
-  disabled?: Array<"add" | "edit">; // 是否禁用表单
-};
+export interface DialogProFormProps<T = any> extends Omit<FormSchemaProps<T>, "destroy" | "hidden" | "disabled"> {
+  destroy?: Array<"add" | "edit"> | boolean; // 是否销毁表单，类似于 v-if
+  hidden?: Array<"add" | "edit"> | boolean; // 是否隐藏表单，类似于 v-show
+  disabled?: Array<"add" | "edit"> | boolean; // 是否禁用表单
+}
 
 export interface DialogFormProps<T = any> {
   formProps: Omit<ProFormProps, "schema"> & { schema?: DialogProFormProps<T>[] };
@@ -106,7 +106,7 @@ const dialogTitle = computed(() =>
   typeof props?.dialog?.title === "function" ? props?.dialog?.title(unref(form), unref(status)) : props?.dialog?.title
 );
 
-const newSchema = computed(() => {
+const newSchema = computed((): FormSchemaProps[] | undefined => {
   // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 hidden 设置为 true
   props.formProps.schema?.forEach(column => {
     if (!column) return;
@@ -127,7 +127,7 @@ const newSchema = computed(() => {
     }
   });
 
-  return props.formProps?.schema;
+  return props.formProps?.schema as FormSchemaProps[];
 });
 
 const handleAdd = async () => {

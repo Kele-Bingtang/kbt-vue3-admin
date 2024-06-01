@@ -108,7 +108,8 @@ const placeholder = computed(() => {
   if (["datetimerange", "daterange", "monthrange"].includes(type) || isRange) {
     return { rangeSeparator: "至", startPlaceholder: "开始时间", endPlaceholder: "结束时间" };
   }
-  const placeholderConst = placeholder ?? (el?.includes("el-input") ? "请输入" : "请选择");
+  const placeholderConst =
+    placeholder ?? (hyphenToCamelCase(el)?.includes(ComponentNameEnum.EL_INPUT) ? "请输入" : "请选择");
 
   return { placeholder: placeholderConst };
 });
@@ -179,8 +180,6 @@ const RenderElComponents = () => {
         clearable={unref(clearable)}
         {...unref(formProps)}
         {...unref(placeholder)}
-        data={el === "el-tree-select" ? unref(columnEnum) : []}
-        options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
         style={style}
       >
         {{ ...slotsMap }}
@@ -193,8 +192,12 @@ const RenderElComponents = () => {
         clearable={unref(clearable)}
         {...unref(formProps)}
         {...unref(placeholder)}
-        data={el === "el-tree-select" ? unref(columnEnum) : []}
-        options={["el-cascader", "el-select-v2"].includes(el!) ? unref(columnEnum) : []}
+        data={rootEl === ComponentNameEnum.EL_TREE_SELECT ? unref(columnEnum) : []}
+        options={
+          [ComponentNameEnum.EL_CASCADER, ComponentNameEnum.EL_SELECT_V2].includes(rootEl as ComponentNameEnum)
+            ? unref(columnEnum)
+            : []
+        }
         style={style}
       >
         {{ ...slotsMap }}

@@ -139,19 +139,19 @@ export const useTable = (
 
   /**
    * @description 更新查询参数
-   * @param {Object | Boolean} model 如果传对象，则查询参数带入对象。如果为 Boolean 值，代表是否去除空值项，true 去除，false 不去除。默认为 true
+   * @param {Object} model 查询参数对象
+   * @param {Boolean} removeNoValue 是否去除空值项，true 去除，false 不去除。默认为 true
    * @return void
    */
-  const updatedTotalParam = (model: Record<string, any> | boolean = true) => {
+  const updatedTotalParam = (model?: Record<string, any>, removeNoValue = true) => {
     state.totalParam = {};
 
-    // 如果为自定义查询参数对象
-    if (model && model !== true) return Object.assign(state.totalParam, model, isBackPage() ? pageParam.value : {});
+    // 如果 model 存在且不清除空值项
+    if (model && !removeNoValue) return Object.assign(state.totalParam, model, isBackPage() ? pageParam.value : {});
 
-    // 如果为 Boolean，代表是否去除空值项，只有传入 false 才关闭该功能，默认开启
-    if (model === true || model === undefined) {
-      // 处理查询参数，可以给查询参数加自定义前缀操作
-      const nowSearchParam: Table.StateProps["searchParam"] = state.searchParam;
+    // 如果去除空值项
+    if (removeNoValue) {
+      const nowSearchParam: Table.StateProps["searchParam"] = model || state.searchParam;
       // 防止手动清空输入框携带参数（这里可以自定义查询参数前缀）
       for (const key in state.searchParam) {
         const val = state.searchParam[key];
@@ -162,8 +162,7 @@ export const useTable = (
       return Object.assign(state.totalParam, nowSearchParam, isBackPage() ? pageParam.value : {});
     }
 
-    // 如果不开启去除空值项，则直接返回内置查询参数
-    return Object.assign(state.totalParam, state.searchParam, isBackPage() ? pageParam.value : {});
+    return Object.assign(state.totalParam, model || state.searchParam, isBackPage() ? pageParam.value : {});
   };
 
   /**
@@ -177,28 +176,30 @@ export const useTable = (
 
   /**
    * @description 表格数据查询
-   * @param {Object | Boolean} model 如果传对象，则查询参数带入对象。如果为 Boolean 值，代表是否开启 removeNoValue 去除空值项，true 开启，false 不开启
+   * @param {Object} model 查询参数对象
+   * @param {Boolean} removeNoValue 是否去除空值项，true 去除，false 不去除。默认为 true
    * @return void
    */
-  const search = (model?: Record<string, any> | boolean) => {
+  const search = (model?: Record<string, any>, removeNoValue = true) => {
     state.paging.pageNum = 1;
     // 更新查询参数
-    updatedTotalParam(model);
+    updatedTotalParam(model, removeNoValue);
     getTableList();
   };
 
   /**
    * @description 表格数据重置
-   * @param {Object | Boolean} model 如果传对象，则查询参数带入对象。如果为 Boolean 值，代表是否开启 removeNoValue 去除空值项，true 开启，false 不开启
+   * @param {Object} model 查询参数对象
+   * @param {Boolean} removeNoValue 是否去除空值项，true 去除，false 不去除。默认为 true
    * @return void
    */
-  const reset = (model?: Record<string, any> | boolean) => {
+  const reset = (model?: Record<string, any>, removeNoValue = true) => {
     state.paging.pageNum = 1;
     state.searchParam = {};
     // 重置搜索表单的时，如果有默认搜索参数，则重置默认的搜索参数
     state.searchParam = { ...state.searchInitParam };
     // 更新查询参数
-    updatedTotalParam(model);
+    updatedTotalParam(model, removeNoValue);
     getTableList();
   };
 

@@ -16,6 +16,9 @@
         <el-table-column v-slot="{ row }" prop="sortable" align="center" label="排序">
           <el-switch v-model="row.sortable"></el-switch>
         </el-table-column>
+        <el-table-column v-slot="{ row }" prop="sortable" align="center" label="筛选">
+          <el-switch v-model="row.filterConfig.enabled"></el-switch>
+        </el-table-column>
         <template #empty>
           <div :class="`${prefixClass}__empty`">
             <img src="@/assets/images/notData.png" alt="notData" />
@@ -29,11 +32,12 @@
 
 <script setup lang="ts">
 import { ElDrawer, ElSwitch, ElTable, ElTableColumn } from "element-plus";
-import type { TableColumnProps } from "../interface";
+import { proTablePrefixClassKey, type TableColumnProps } from "../interface";
+import { lastProp } from "../helper";
 
 defineOptions({ name: "ColSetting" });
 
-const prefixClass = inject("proTablePrefixClass") as string;
+const prefixClass = inject(proTablePrefixClassKey);
 
 defineProps<{ colSetting: TableColumnProps[] }>();
 

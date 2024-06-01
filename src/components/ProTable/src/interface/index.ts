@@ -1,6 +1,6 @@
-import type { VNode, ComponentPublicInstance, ComputedRef, Ref } from "vue";
+import type { VNode, ComponentPublicInstance, ComputedRef, Ref, ShallowRef } from "vue";
 import type { BreakPoint, Responsive, FormRenderScope, FormType } from "@/components";
-import type { TableColumnCtx } from "element-plus";
+import type { TableColumnCtx, PopoverProps } from "element-plus";
 import ProTable, { type ProTableProps } from "../index.vue";
 import DialogForm, { type DialogFormProps } from "../components/DialogForm.vue";
 
@@ -43,7 +43,6 @@ export type SearchProps = {
     | ((model: any, enumMap: Map<string, Record<string, any>>) => ValueType | any)
     | Ref<ValueType>; // 搜索项默认值
   beforeSearch?: (val: ValueType, searchParams: Record<string, any>, col: TableColumnProps) => any; // 自定义搜索内容渲染（tsx 语法）
-  type?: string; // el-select 有 el-select-group
   render?: (scope: FormRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
 } & Partial<Record<BreakPoint, Responsive>>;
 
@@ -77,7 +76,7 @@ export interface TableColumnProps<T = any>
   /**
    * 表头宽度
    */
-  width?: string | number | ComputedRef<string> | ComputedRef<number>;
+  width?: string | number | ComputedRef<string | number>;
   /**
    * 列类型
    */
@@ -94,6 +93,47 @@ export interface TableColumnProps<T = any>
    * 搜索项配置
    */
   search?: SearchProps | undefined;
+  /**
+   * 表头筛选配置项
+   */
+  filterConfig?: {
+    /**
+     * 是否开启筛选功能
+     */
+    enabled?: boolean;
+    /**
+     * 筛选器 Popover 宽度
+     * @default 230px
+     */
+    width?: string | number;
+    /**
+     * 筛选器触发方式
+     *
+     * @property click | focus | hover | contextmenu
+     * @default click
+     */
+    trigger?: PopoverProps["trigger"];
+    /**
+     * 出现位置
+     *
+     * @property top | top-star | /top-end | bottom | bottom-start | bottom-end | left | left-start | left-end | right | right-start | right-end
+     * @default bottom
+     */
+    placement?: PopoverProps["placement"];
+    /**
+     * Tooltip 主题
+     *
+     * @property light | dark
+     * @default light
+     */
+    effect?: PopoverProps["effect"];
+    /**
+     * 支持 PopoverProps 的其他属性
+     * 为什么 filterConfig 不直接继承 PopoverProps 呢？因为继承后 TS 报错 类型实例化过深，且可能无限
+     */
+    [key: string]: any;
+  };
+
   /**
    * 枚举类型（字典）
    */
@@ -155,3 +195,17 @@ export enum TableSizeEnum {
   Small = "small",
   Mini = "mini",
 }
+
+/**
+ * provide 类型
+ */
+export const proTablePrefixClassKey: InjectionKey<string> = Symbol("ProTablePrefixClass");
+export const enumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> = Symbol("EnumMap");
+export const dialogFormInstanceKey: InjectionKey<ShallowRef<DialogFormInstance | undefined>> =
+  Symbol("DialogFormInstance");
+export const filterKey: InjectionKey<{
+  filter: boolean;
+  useFilter: boolean;
+  search: (model?: Record<string, any>, removeNoValue?: boolean) => void;
+  reset: (model?: Record<string, any>, removeNoValue?: boolean) => void;
+}> = Symbol("FilterKey");

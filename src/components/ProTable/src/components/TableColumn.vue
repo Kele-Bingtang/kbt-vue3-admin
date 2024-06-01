@@ -4,26 +4,38 @@
 
 <script setup lang="tsx">
 import { inject, ref, useSlots, unref } from "vue";
-import type { TableColumnProps, TableRenderScope, HeaderRenderScope } from "../interface";
+import {
+  type TableColumnProps,
+  type TableRenderScope,
+  type HeaderRenderScope,
+  enumMapKey,
+  filterKey,
+} from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
-import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
+import { ElCheckTag, ElTag, ElTableColumn, ElPopover, ElIcon, ElButton, ElConfigProvider } from "element-plus";
+import { Filter } from "@element-plus/icons-vue";
+import { ProForm } from "@/components";
+import { useDesign } from "@/hooks";
 
 defineOptions({ name: "TableColumn" });
 
-defineProps<{ column: TableColumnProps }>();
+const { variables } = useDesign();
+
+const props = defineProps<{ column: TableColumnProps; searchParam?: Record<string, any> }>();
 
 const slots = useSlots();
 
-const enumMap = inject("enumMap", ref(new Map()));
+const enumMap = inject(enumMapKey, ref(new Map<string, Record<string, any>[]>()));
+const filterProps = inject(filterKey);
 
 const getEnumData = (item: TableColumnProps, scope: TableRenderScope<any>) => {
-  return unref(enumMap).get(item.prop) && item.isFilterEnum
-    ? filterEnum(handleRowAccordingToProp(scope.row, item.prop!), unref(enumMap).get(item.prop)!, item.fieldNames)
+  return unref(enumMap).get(item.prop!) && item.isFilterEnum
+    ? filterEnum(handleRowAccordingToProp(scope.row, item.prop!), unref(enumMap).get(item.prop!), item.fieldNames)
     : "";
 };
 
 const renderCellData = (item: TableColumnProps, scope: TableRenderScope<any>, enumData: any) => {
-  return unref(enumMap).get(item.prop) && item.isFilterEnum
+  return unref(enumMap).get(item.prop!) && item.isFilterEnum
     ? filterEnumLabel(enumData, item.fieldNames)
     : formatValue(handleRowAccordingToProp(scope.row, item.prop!));
 };
@@ -32,7 +44,7 @@ const renderCellData = (item: TableColumnProps, scope: TableRenderScope<any>, en
 const renderTag = (item: any, data: any, last = true, index?: number) => {
   const { tagType, tagEffect } = item;
 
-  if (item.tagEl === "el-check-tag") {
+  if (["el-check-tag", "ElCheckTag"].includes(item.tagEl)) {
     // 直接 index ? : 是不行的，因为这样 index = 0 是 false
     return (
       <>
@@ -54,6 +66,20 @@ const renderTag = (item: any, data: any, last = true, index?: number) => {
 };
 
 const RenderTableColumn = (item: TableColumnProps) => {
+  /**
+   * 是否使用自定义表头过滤器功能
+   */
+  const useFilter = computed(() => {
+    // item.filterConfig.enabled 优先级最高
+    if (item.filterConfig?.enabled === false || item.prop === "operation") return false;
+    // 全部的可过滤表头启用过滤器
+    if (filterProps?.useFilter) return true;
+    // 启用过滤器且开启 search
+    if (filterProps?.filter && (item.search?.el || item.search?.render)) return true;
+
+    return item.filterConfig?.enabled;
+  });
+
   return (
     <>
       {item.isShow && (
@@ -67,8 +93,8 @@ const RenderTableColumn = (item: TableColumnProps) => {
               if (item._children) return item._children.map(child => RenderTableColumn(child));
               if (item.render) return item.render(scope);
               if (slots[lastProp(item.prop!)]) return slots[lastProp(item.prop!)]!(scope);
-              const enumData = getEnumData(item, scope);
 
+              const enumData = getEnumData(item, scope);
               const data = renderCellData(item, scope, enumData);
 
               if (item.tag && enumData) {
@@ -81,14 +107,94 @@ const RenderTableColumn = (item: TableColumnProps) => {
               return Array.isArray(data) ? data.join(",") : data;
             },
             header: (scope: HeaderRenderScope<any>) => {
-              if (item.headerRender) return item.headerRender(scope);
-              if (slots[`${lastProp(item.prop!)}Header`]) return slots[`${lastProp(item.prop!)}Header`]!(scope);
-              return item.label;
+              let headerSlot = <>{item.label}</>;
+
+              if (item.headerRender) headerSlot = item.headerRender(scope);
+              if (slots[`${lastProp(item.prop!)}Header`]) headerSlot = slots[`${lastProp(item.prop!)}Header`]!(scope);
+
+              return (
+                <>
+                  {headerSlot}
+                  {unref(useFilter) ? filterHeader(item) : undefined}
+                </>
+              );
             },
           }}
         </ElTableColumn>
       )}
     </>
+  );
+};
+
+/**
+ * 渲染表头自定义过滤器
+ */
+const filterHeader = (item: TableColumnProps) => {
+  const { searchParam = {} } = props;
+  const { search, reset } = filterProps || {};
+
+  const model = reactive({});
+
+  watch(
+    model,
+    () => {
+      for (const key in model) searchParam[key] = model[key];
+    },
+    { deep: true }
+  );
+
+  const commonSchema = {
+    label: "",
+    prop: item.prop || "",
+    enum: item.enum as any,
+    useEnumMap: item.useEnumMap,
+    enumKey: item.enumKey,
+    fieldNames: item.fieldNames,
+    props: {
+      teleported: false, // 解决 ElSelect 的 Option 选中后，自动关闭 Popover 问题
+    },
+  };
+
+  const schema = item.search
+    ? { ...item.search, ...commonSchema, props: { ...item.search.props, ...commonSchema.props } }
+    : { el: "ElInput", ...commonSchema };
+
+  const handleSearch = () => {
+    search && search(searchParam);
+  };
+
+  const handleReset = () => {
+    for (const key in model) model[key] = undefined;
+    handleSearch();
+  };
+
+  const { filterConfig = {} } = item;
+  const { width, trigger } = filterConfig;
+
+  return (
+    <ElConfigProvider namespace={variables.elNamespace}>
+      <ElPopover {...filterConfig} width={width || 230} trigger={trigger || "click"}>
+        {{
+          reference: () => (
+            <ElIcon style="vertical-align: -2px; margin-left: 2px; cursor: pointer;" class="hover-theme-color">
+              <Filter />
+            </ElIcon>
+          ),
+          default: () => (
+            <>
+              <ProForm v-model={model} onlyRenderComponent schema={[schema]}></ProForm>
+              <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <ElButton onClick={reset}>重置</ElButton>
+                <div>
+                  <ElButton onClick={handleReset}>清除</ElButton>
+                  <ElButton onClick={handleSearch}>筛选</ElButton>
+                </div>
+              </div>
+            </>
+          ),
+        }}
+      </ElPopover>
+    </ElConfigProvider>
   );
 };
 </script>

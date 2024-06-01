@@ -83,11 +83,17 @@ import { ElTooltip, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, type C
 import { Refresh, Plus, Operation, Search, Delete, Coin, Download } from "@element-plus/icons-vue";
 import { downloadFile, visibleButton } from "../helper";
 import type { DialogFormProps } from "./DialogForm.vue";
-import { TableSizeEnum, type DialogFormInstance, type TableColumnProps, type ToolButton } from "../interface";
+import {
+  TableSizeEnum,
+  dialogFormInstanceKey,
+  proTablePrefixClassKey,
+  type TableColumnProps,
+  type ToolButton,
+} from "../interface";
 
 defineOptions({ name: "ProTableMainHeader" });
 
-const prefixClass = inject("proTablePrefixClass") as string;
+const prefixClass = inject(proTablePrefixClassKey) as string;
 
 export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
@@ -105,7 +111,7 @@ export interface ProTableProps {
 // 接受父组件参数，配置默认值
 const props = defineProps<ProTableProps>();
 
-const dialogFormRef = inject("dialogFormRef") as DialogFormInstance;
+const dialogFormRef = inject(dialogFormInstanceKey);
 
 const showDeleteBatchBtn = computed(() => {
   return props.columns?.filter(item => item.type === "selection");

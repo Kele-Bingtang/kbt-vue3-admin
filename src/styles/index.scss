@@ -192,6 +192,10 @@ div:focus {
   box-shadow: 0 0 12px rgb(0 0 0 / 5%);
 }
 
+.hover-theme-color:hover {
+  color: var(--#{$el-namespace}-color-primary);
+}
+
 /* 自定义 el-drawer 样式 */
 .#{$el-namespace}-drawer {
   .#{$el-namespace}-drawer__header {

@@ -58,7 +58,7 @@
   </div>
 </template>
 <script setup lang="tsx" name="CommonTicket">
-import { ProTable, Grid, GridItem, type TableColumnProps } from "@/components";
+import { ProTable, Grid, GridItem, type TableColumnProps, type DialogProFormProps } from "@/components";
 // import ProForm from "@/components";
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
 import { schema, elFormProps } from "@/views/proComponents/proForm/detailProForm/options";
@@ -90,10 +90,10 @@ const getTicketList = () => {
           {
             id: "100338",
             ticketNo: "k100338",
-            ticketDesc: "这是一封测试信",
+            title: "这是一封测试信",
             priority: "低",
             status: "Open",
-            eventStartTime: "2023-09-28 08:00:00",
+            eventStarTime: "2023-09-28 08:00:00",
             eventEndTime: "2023-10-07 18:00:00",
             dueDate: "2023-10-07",
             owner: "k100338",
@@ -125,10 +125,10 @@ const getTicketList = () => {
           {
             id: "100378",
             ticketNo: "j100378",
-            ticketDesc: "这是一封偏爱信",
+            title: "这是一封偏爱信",
             priority: "高",
             status: "Open",
-            eventStartTime: "2023-09-28 08:00:00",
+            eventStarTime: "2023-09-28 08:00:00",
             eventEndTime: "2023-10-07 18:00:00",
             dueDate: "2072-01-16",
             owner: "j100378",
@@ -193,7 +193,7 @@ const columns: TableColumnProps<ProblemData>[] = [
 
 const dialogForm = {
   formProps: {
-    schema,
+    schema: schema as DialogProFormProps[],
     elFormProps,
   },
   useAdd: true,

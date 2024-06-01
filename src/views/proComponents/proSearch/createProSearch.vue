@@ -1,10 +1,10 @@
 <template>
   <el-space fill>
-    <el-card shadow="never" header="函数式创建 Template 组件">
+    <el-card shadow="never" header="createSearchComponent 函数式创建 Template 组件">
       <RenderProSearch></RenderProSearch>
     </el-card>
 
-    <el-card shadow="never" header="函数式动态渲染组件到指定元素">
+    <el-card shadow="never" header="createSearch 函数式动态渲染组件到指定元素">
       <div ref="proSearchRef"></div>
     </el-card>
   </el-space>

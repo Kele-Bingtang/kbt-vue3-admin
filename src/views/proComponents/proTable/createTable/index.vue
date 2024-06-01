@@ -1,6 +1,6 @@
 <template>
   <el-space fill>
-    <el-card shadow="never" header="函数式创建 Template 组件">
+    <el-card shadow="never" header="createTableComponent 函数式创建 Template 组件">
       <RenderProTable :isShowSearch="false">
         <template #tableHeader="scope">
           <el-button type="primary">新增用户</el-button>
@@ -12,7 +12,7 @@
       </RenderProTable>
     </el-card>
 
-    <el-card shadow="never" header="函数式动态渲染组件到指定元素">
+    <el-card shadow="never" header="createTable 函数式动态渲染组件到指定元素">
       <div ref="proTableRef"></div>
     </el-card>
   </el-space>

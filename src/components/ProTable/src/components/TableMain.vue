@@ -31,7 +31,11 @@
       </el-table-column>
 
       <!-- other -->
-      <TableColumn v-if="!item.type && item.prop && item.isShow && item.prop !== 'operation'" :column="item">
+      <TableColumn
+        v-if="!item.type && item.prop && item.isShow && item.prop !== 'operation'"
+        :column="item"
+        :searchParam="searchParam"
+      >
         <template v-for="slot in Object.keys($slots)" #[slot]="scope">
           <slot :name="slot" v-bind="scope" />
         </template>
@@ -94,18 +98,19 @@ import { inject } from "vue";
 import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon, type TableColumnCtx } from "element-plus";
 import { Edit, Delete, DCaret } from "@element-plus/icons-vue";
 import TableColumn from "./TableColumn.vue";
-import type { DialogFormInstance, TableColumnProps, TypeProps } from "../interface";
+import { dialogFormInstanceKey, proTablePrefixClassKey, type TableColumnProps, type TypeProps } from "../interface";
 import { visibleButton } from "../helper";
 import type { DialogFormProps } from "./DialogForm.vue";
 
 defineOptions({ name: "ProTableMain" });
 
-const prefixClass = inject("proTablePrefixClass") as string;
+const prefixClass = inject(proTablePrefixClassKey);
 
 export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
   columnTypes?: TypeProps[]; // 字段类型
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
+  searchParam: Record<string, any>; // 搜索参数
 }
 
 // 接受父组件参数，配置默认值
@@ -121,7 +126,7 @@ type TableMainEmits = {
 
 const emits = defineEmits<TableMainEmits>();
 
-const dialogFormRef = inject("dialogFormRef") as DialogFormInstance;
+const dialogFormRef = inject(dialogFormInstanceKey);
 
 const tableRef = ref<InstanceType<typeof ElTable>>();
 

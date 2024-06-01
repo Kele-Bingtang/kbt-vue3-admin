@@ -1,6 +1,6 @@
 <template>
   <div class="simple-pro-table-container">
-    <ProTable ref="proTable" :data="data" :columns="columns">
+    <ProTable ref="proTable" :data="data" :columns="columns" searchModel="allAndUseFilter">
       <template #tableHeader="scope">
         <el-button v-auth="'add'" type="primary" :icon="CirclePlus">新增用户</el-button>
         <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain>批量添加用户</el-button>
@@ -105,6 +105,7 @@ const columns: TableColumnProps<ResUserList>[] = [
     // 多级 prop
     prop: "user.detail.age",
     label: "年龄",
+    filterConfig: { width: 400 },
     search: {
       // 自定义 search 显示内容
       render: ({ model }) => {
@@ -128,7 +129,7 @@ const columns: TableColumnProps<ResUserList>[] = [
       { userLabel: "启用", userStatus: 1 },
       { userLabel: "禁用", userStatus: 0 },
     ],
-    search: { el: "el-tree-select", props: { filterable: true } },
+    search: { el: "el-select", props: { filterable: true } },
     fieldNames: { label: "userLabel", value: "userStatus" },
     render: scope => {
       return (
@@ -159,6 +160,9 @@ const columns: TableColumnProps<ResUserList>[] = [
       );
     },
     width: 180,
+    filterConfig: {
+      width: 400,
+    },
     search: {
       el: "el-date-picker",
       span: 2,
