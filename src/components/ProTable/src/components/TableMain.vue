@@ -31,11 +31,7 @@
       </el-table-column>
 
       <!-- other -->
-      <TableColumn
-        v-if="!item.type && item.prop && item.isShow && item.prop !== 'operation'"
-        :column="item"
-        :searchParam="searchParam"
-      >
+      <TableColumn v-if="!item.type && item.prop && item.isShow && item.prop !== 'operation'" :column="item">
         <template v-for="slot in Object.keys($slots)" #[slot]="scope">
           <slot :name="slot" v-bind="scope" />
         </template>
@@ -110,7 +106,6 @@ export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
   columnTypes?: TypeProps[]; // 字段类型
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
-  searchParam: Record<string, any>; // 搜索参数
 }
 
 // 接受父组件参数，配置默认值

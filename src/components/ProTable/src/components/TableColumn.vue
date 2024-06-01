@@ -21,7 +21,7 @@ defineOptions({ name: "TableColumn" });
 
 const { variables } = useDesign();
 
-const props = defineProps<{ column: TableColumnProps; searchParam?: Record<string, any> }>();
+defineProps<{ column: TableColumnProps }>();
 
 const slots = useSlots();
 
@@ -130,18 +130,24 @@ const RenderTableColumn = (item: TableColumnProps) => {
  * 渲染表头自定义过滤器
  */
 const filterHeader = (item: TableColumnProps) => {
-  const { searchParam = {} } = props;
-  const { search, reset } = filterProps || {};
+  const { searchParam = {}, search, reset } = filterProps || {};
 
-  const model = reactive({});
-
-  watch(
-    model,
-    () => {
+  const model = computed({
+    get: () => {
+      return searchParam;
+    },
+    set: () => {
       for (const key in model) searchParam[key] = model[key];
     },
-    { deep: true }
-  );
+  });
+
+  // watch(
+  //   model,
+  //   () => {
+  //     for (const key in model) searchParam[key] = model[key];
+  //   },
+  //   { deep: true }
+  // );
 
   const commonSchema = {
     label: "",
@@ -164,7 +170,7 @@ const filterHeader = (item: TableColumnProps) => {
   };
 
   const handleReset = () => {
-    for (const key in model) model[key] = undefined;
+    for (const key in unref(model)) unref(model)[key] = undefined;
     handleSearch();
   };
 
@@ -182,7 +188,7 @@ const filterHeader = (item: TableColumnProps) => {
           ),
           default: () => (
             <>
-              <ProForm v-model={model} onlyRenderComponent schema={[schema]}></ProForm>
+              <ProForm v-model={model.value} onlyRenderComponent schema={[schema]}></ProForm>
               <div style="display: flex; justify-content: space-between; margin-top: 10px;">
                 <ElButton onClick={reset}>重置</ElButton>
                 <div>

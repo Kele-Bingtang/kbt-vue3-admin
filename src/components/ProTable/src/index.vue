@@ -53,7 +53,6 @@
         :header-cell-style="getHeaderCellStyle"
         :columns="getProps.columns"
         :columnTypes="columnTypes"
-        :searchParam="searchParam"
         :dialogForm="getProps.dialogForm"
         @edit="handleEdit"
         @delete="handleDelete"
@@ -242,12 +241,13 @@ const enumCallback = (data: Record<string, any>[]) => {
   return data;
 };
 
-const filterProps = {
+const filterProps = reactive({
+  searchParam,
   filter: ["filter", "useFilter", "all", "allAndUseFilter"].includes(unref(getProps).searchModel!),
   useFilter: ["useFilter", "allAndUseFilter"].includes(unref(getProps).searchModel!),
   search,
   reset,
-};
+});
 
 // TableColumn 使用
 provide(filterKey, filterProps);
@@ -344,6 +344,17 @@ const searchColumns = computed(() => {
     // 组装搜索表单配置项
     const searchColumn: any = {
       ...item.search,
+      key: undefined,
+      beforeSearch: undefined,
+      grid: {
+        offset: item.search?.offset,
+        span: item.search?.span,
+        xs: item.search?.xs,
+        sm: item.search?.sm,
+        md: item.search?.md,
+        lg: item.search?.lg,
+        xl: item.search?.xl,
+      },
       label: item.label || "",
       prop: item.prop || "",
       enum: item.enum as any,

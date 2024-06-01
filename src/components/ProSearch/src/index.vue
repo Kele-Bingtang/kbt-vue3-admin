@@ -64,7 +64,7 @@ import {
 } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
-import { ElFormItem, ElButton, ElIcon, type FormItemProp, type FormItemProps } from "element-plus";
+import { ElFormItem, ElButton, ElIcon, type FormItemProp } from "element-plus";
 import { isString } from "@/components/ProForm/src/helper";
 
 defineOptions({ name: "ProSearch" });
@@ -77,7 +77,6 @@ export type ProSearchExpose = typeof defaultExpose;
 export type ActionPosition = "left" | "right" | "block-left" | "block-center" | "block-right";
 
 export type ProSearchSchemaProps = FormSchemaProps & {
-  formItem?: Partial<FormItemProps>; // ElFormItem 的 props
   grid?: Partial<GridItemProps>; // GridItem 的 props
 };
 

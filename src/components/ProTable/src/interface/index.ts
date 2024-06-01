@@ -42,7 +42,7 @@ export type SearchProps = {
     | ValueType
     | ((model: any, enumMap: Map<string, Record<string, any>>) => ValueType | any)
     | Ref<ValueType>; // 搜索项默认值
-  beforeSearch?: (val: ValueType, searchParams: Record<string, any>, col: TableColumnProps) => any; // 自定义搜索内容渲染（tsx 语法）
+  beforeSearch?: (val: ValueType, searchParams: Record<string, any>, col: TableColumnProps) => any; // 搜索事件前置处理
   render?: (scope: FormRenderScope) => VNode; // 自定义搜索内容渲染（tsx 语法）
 } & Partial<Record<BreakPoint, Responsive>>;
 
@@ -92,7 +92,7 @@ export interface TableColumnProps<T = any>
   /**
    * 搜索项配置
    */
-  search?: SearchProps | undefined;
+  search?: SearchProps;
   /**
    * 表头筛选配置项
    */
@@ -204,6 +204,7 @@ export const enumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> =
 export const dialogFormInstanceKey: InjectionKey<ShallowRef<DialogFormInstance | undefined>> =
   Symbol("DialogFormInstance");
 export const filterKey: InjectionKey<{
+  searchParam: Record<string, any>;
   filter: boolean;
   useFilter: boolean;
   search: (model?: Record<string, any>, removeNoValue?: boolean) => void;
