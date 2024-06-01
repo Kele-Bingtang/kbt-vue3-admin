@@ -1,5 +1,5 @@
-import { ProSearch, type FormSchemaProps, type FormSetProps } from "@/components";
-import type { ProSearchExpose, ProSearchOnEmits, ProSearchProps } from "../index.vue";
+import type { FormSchemaProps, FormSetProps } from "@/components/ProForm";
+import ProSearch, { type ProSearchExpose, type ProSearchOnEmits, type ProSearchProps } from "../index.vue";
 import { useDesign } from "@/hooks";
 import { ElConfigProvider } from "element-plus";
 import { createVNode, render } from "vue";

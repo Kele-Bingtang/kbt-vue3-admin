@@ -1,9 +1,8 @@
 import { ElConfigProvider, type FormInstance } from "element-plus";
 import type { FormSchemaProps, FormSetProps, ProFormInstance } from "../interface";
-import type { ProFormOnEmits, ProFormProps } from "../index.vue";
+import ProForm, { type ProFormOnEmits, type ProFormProps } from "../index.vue";
 import { isObject } from "../helper";
 import { createVNode, render } from "vue";
-import ProForm from "../index.vue";
 import { useDesign } from "@/hooks";
 import { useLayoutStore } from "@/stores";
 

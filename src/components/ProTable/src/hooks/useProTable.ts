@@ -1,7 +1,8 @@
 import { ElConfigProvider, type TableInstance } from "element-plus";
 import type { ProTableInstance, TableColumnProps, TableSetProps } from "../interface";
-import type { ProTableOnEmits, ProTableProps } from "../index.vue";
-import { ProTable, type Paging, type ProSearchInstance } from "@/components";
+import ProTable, { type ProTableOnEmits, type ProTableProps } from "../index.vue";
+import type { ProSearchInstance } from "@/components/ProSearch";
+import type { Paging } from "@/components/Pagination";
 import { createVNode, render } from "vue";
 import { useDesign } from "@/hooks";
 import { useLayoutStore } from "@/stores";
