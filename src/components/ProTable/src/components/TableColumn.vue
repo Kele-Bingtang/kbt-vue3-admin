@@ -4,25 +4,19 @@
 
 <script setup lang="tsx">
 import { inject, ref, useSlots, unref } from "vue";
-import {
-  type TableColumnProps,
-  type TableRenderScope,
-  type HeaderRenderScope,
-  enumMapKey,
-  filterKey,
-} from "../interface";
+import { type TableColumnProps, type TableRenderScope, type HeaderRenderScope, enumMapKey } from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
 import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
-import { headerFilter } from "./plugins/HeaderFilter";
+import { useHeaderFilter } from "./plugins/HeaderFilter";
+import { useRowInlineEdit } from "./plugins/RowInlineEdit";
 
 defineOptions({ name: "TableColumn" });
 
-defineProps<{ column: TableColumnProps }>();
+const props = defineProps<{ column: TableColumnProps }>();
 
 const slots = useSlots();
 
 const enumMap = inject(enumMapKey, ref(new Map<string, Record<string, any>[]>()));
-const filterProps = inject(filterKey);
 
 const getEnumData = (item: TableColumnProps, scope: TableRenderScope<any>) => {
   return unref(enumMap).get(item.prop!) && item.isFilterEnum
@@ -61,21 +55,10 @@ const renderTag = (item: any, data: any, last = true, index?: number) => {
   );
 };
 
+const { useFilter, renderHeaderFilter } = useHeaderFilter(props.column);
+const { useEdit, renderRowInlineEdit } = useRowInlineEdit(props.column);
+
 const RenderTableColumn = (item: TableColumnProps) => {
-  /**
-   * 是否使用自定义表头过滤器功能
-   */
-  const useFilter = computed(() => {
-    // item.filterConfig.enabled 优先级最高
-    if (item.filterConfig?.enabled === false || item.prop === "operation") return false;
-    // 全部的可过滤表头启用过滤器
-    if (filterProps?.useFilter) return true;
-    // 启用过滤器且开启 search
-    if (filterProps?.filter && (item.search?.el || item.search?.render)) return true;
-
-    return item.filterConfig?.enabled;
-  });
-
   return (
     <>
       {item.isShow && (
@@ -86,6 +69,8 @@ const RenderTableColumn = (item: TableColumnProps) => {
         >
           {{
             default: (scope: TableRenderScope<any>) => {
+              // 行内编辑功能
+              if (unref(useEdit) && scope.row._edit) return renderRowInlineEdit(scope);
               if (item._children) return item._children.map(child => RenderTableColumn(child));
               if (item.render) return item.render(scope);
               if (slots[lastProp(item.prop!)]) return slots[lastProp(item.prop!)]!(scope);
@@ -111,7 +96,7 @@ const RenderTableColumn = (item: TableColumnProps) => {
               return (
                 <>
                   {headerSlot}
-                  {unref(useFilter) ? headerFilter(item) : undefined}
+                  {unref(useFilter) ? renderHeaderFilter() : undefined}
                 </>
               );
             },

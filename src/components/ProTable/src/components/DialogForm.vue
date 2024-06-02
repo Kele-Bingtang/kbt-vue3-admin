@@ -59,17 +59,17 @@ export interface DialogFormProps<T = any> {
       height: string | number;
     }
   >; // el-dialog 配置项
-  addApi?: (params: any) => Promise<any>; // 新增接口
-  addCarryParams?: any; // 额外添加的函数, valueEquals
-  addFilterParams?: string[]; // 过滤走的参数
-  editApi?: (params: any) => Promise<any>; // 编辑接口
-  editCarryParams?: any;
-  editFilterParams?: string[];
-  deleteApi?: (params: any) => Promise<any>; // 删除接口
-  deleteCarryParams?: any;
-  deleteFilterParams?: string[];
-  deleteBatchApi?: (params: any) => Promise<any>; // 批量删除接口
-  apiFilterParams?: string[];
+  addApi?: (params: Record<string, any>) => Promise<any>; // 新增接口
+  addCarryParams?: Record<string, any>; // 额外添加的函数
+  addFilterKeys?: string[]; // 过滤走的参数
+  editApi?: (params: Record<string, any>) => Promise<any>; // 编辑接口
+  editCarryParams?: Record<string, any>;
+  editFilterKeys?: string[];
+  deleteApi?: (params: Record<string, any>) => Promise<any>; // 删除接口
+  deleteCarryParams?: Record<string, any>;
+  deleteFilterKeys?: string[];
+  deleteBatchApi?: (params: Record<string, any>) => Promise<any>; // 批量删除接口
+  apiFilterKeys?: string[];
   id?: string; // 数据主键
   cache?: boolean; // 是否缓存新增、编辑后遗留的数据
   clickAdd?: (form: any) => void | Promise<any> | any; // 点击新增按钮回调
@@ -158,7 +158,7 @@ const handleFormConfirm = (data: any, status: string) => {
         data = (props.beforeAdd && (await props.beforeAdd(data))) || data;
 
         // 删除 Insert 不允许传输的数据
-        const filterParams = [...(props?.apiFilterParams || []), ...(props?.addFilterParams || [])];
+        const filterParams = [...(props?.apiFilterKeys || []), ...(props?.addFilterKeys || [])];
         filterParams.forEach(item => delete data[item]);
 
         // 执行新增接口
@@ -183,7 +183,7 @@ const handleFormConfirm = (data: any, status: string) => {
         data = (props.beforeEdit && (await props.beforeEdit(data))) || data;
 
         // 删除 Update 不允许传输的数据
-        const filterParams = [...(props?.apiFilterParams || []), ...(props?.editFilterParams || [])];
+        const filterParams = [...(props?.apiFilterKeys || []), ...(props?.editFilterKeys || [])];
         filterParams.forEach(item => delete data[item]);
 
         executeApi(
@@ -214,7 +214,7 @@ const handleDelete = async ({ row }: any) => {
     props.beforeConfirm && props.beforeConfirm("delete");
     data = (props.beforeDelete && (await props.beforeDelete(data))) || data;
     // 删除 Delete 不允许传输的数据
-    const filterParams = [...(props?.apiFilterParams || []), ...(props?.deleteFilterParams || [])];
+    const filterParams = [...(props?.apiFilterKeys || []), ...(props?.deleteFilterKeys || [])];
     filterParams.forEach(item => delete data[item]);
 
     executeApi(

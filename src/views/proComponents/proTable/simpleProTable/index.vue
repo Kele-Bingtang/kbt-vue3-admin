@@ -4,7 +4,9 @@
       ref="proTable"
       :data="data"
       :columns="columns"
-      searchModel="allAndUseFilter"
+      row-key="id"
+      search-model="allAndUseFilter"
+      :edit-row="3"
       :pagination="{ enabled: true, fake: true }"
     >
       <template #tableHeader="scope">
@@ -42,10 +44,22 @@
       </template>
 
       <template #operation="scope">
-        <el-button type="primary" link :icon="View">查看</el-button>
-        <el-button type="primary" link :icon="EditPen">编辑</el-button>
-        <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)">重置密码</el-button>
-        <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
+        <el-button v-if="!scope.row._edit" type="primary" link :icon="View">查看</el-button>
+        <el-button v-if="!scope.row._edit" type="primary" link :icon="EditPen" @click="() => (scope.row._edit = true)">
+          编辑
+        </el-button>
+        <el-button v-if="scope.row._edit" type="primary" link :icon="EditPen" @click="cancelEdit(scope.row)">
+          取消
+        </el-button>
+        <el-button v-if="scope.row._edit" type="primary" link :icon="EditPen" @click="confirmEdit(scope.row)">
+          确定
+        </el-button>
+        <el-button v-if="!scope.row._edit" type="primary" link :icon="Refresh" @click="resetPass(scope.row)">
+          重置密码
+        </el-button>
+        <el-button v-if="!scope.row._edit" type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">
+          删除
+        </el-button>
       </template>
     </ProTable>
   </div>
@@ -114,6 +128,10 @@ const columns: TableColumnProps<ResUserList>[] = [
       const property = column["property"];
       return row[property] === Number(value);
     },
+    editConfig: {
+      enabled: true,
+      el: "el-select",
+    },
   },
   {
     // 多级 prop
@@ -129,6 +147,7 @@ const columns: TableColumnProps<ResUserList>[] = [
       },
     },
     search: {
+      el: "el-input-number",
       // 自定义 search 显示内容
       render: ({ model }) => {
         return (
@@ -140,6 +159,10 @@ const columns: TableColumnProps<ResUserList>[] = [
         );
       },
     },
+    editConfig: {
+      el: "el-input-number",
+      key: "age",
+    },
   },
   {
     prop: "idCard",
@@ -148,6 +171,9 @@ const columns: TableColumnProps<ResUserList>[] = [
       rule: "like",
     },
     search: { el: "el-input" },
+    editConfig: {
+      formItem: { required: true },
+    },
   },
   { prop: "email", label: "邮箱" },
   { prop: "address", label: "居住地址" },
@@ -243,6 +269,21 @@ const downloadFile = async () => {
     const d = formatJsonToArray(data.value, filterVal);
     exportJsonToExcel(tHeader, d, "proTable", undefined, undefined, true, "xlsx");
   });
+};
+
+// 取消行内编辑
+const cancelEdit = (row: any) => {
+  row._edit = false;
+  proTable.value?.removeEditModel(row.id);
+};
+
+const confirmEdit = (row: any) => {
+  row._edit = false;
+  ElMessage.success({
+    message: `编辑成功，内容为 ${JSON.stringify(proTable.value?.getEditModel(row.id))}`,
+    plain: true,
+  });
+  proTable.value?.removeEditModel(row.id);
 };
 </script>
 

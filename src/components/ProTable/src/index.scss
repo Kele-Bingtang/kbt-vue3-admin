@@ -59,6 +59,15 @@ $prefix-class: #{$admin-namespace}-pro-table;
         .#{$el-namespace}-table__placeholder {
           display: inline;
         }
+
+        .#{$el-namespace}-table__cell {
+          .#{$el-namespace}-form-item {
+            &__label {
+              line-height: 10px;
+              padding: 0;
+            }
+          }
+        }
       }
 
       // 设置 el-table 中 header 文字不换行，并省略

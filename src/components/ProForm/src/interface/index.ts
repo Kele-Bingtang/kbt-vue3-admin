@@ -184,11 +184,14 @@ export interface FormSchemaProps<T = Record<string, any>> {
     | FormEnumProps[]
     | ((model: T, enumMap: Map<string, Record<string, any>>) => Promise<any>)
     | ComputedRef<FormEnumProps[]>;
-  enumKey?: string;
   /**
    * 从 enumMap 中获取其他的 enum 数据
    */
   useEnumMap?: string | ((enumMap: Map<string, Record<string, any>>) => Record<string, any>);
+  /**
+   * 搭配 useEnumMap 使用，指定 enumMap 的 key
+   */
+  enumKey?: string;
   /**
    * 字典指定 label && value && children 的 key 值
    */
@@ -234,7 +237,7 @@ export interface FormSchemaProps<T = Record<string, any>> {
    */
   order?: number;
   /**
-   *  表单属性的默认值
+   * 表单属性的默认值
    */
   defaultValue?:
     | ValueType

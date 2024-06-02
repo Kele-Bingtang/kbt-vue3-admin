@@ -35,6 +35,7 @@ export const useProTable = () => {
     tableData: unref(tableRef)?.tableData, // 表格数据
     paging: unref(tableRef)?.paging, // 分页信息
     enumMap: unref(tableRef)?.enumMap, // 字典枚举
+    editModelList: unref(tableRef)?.editModelList, // 行内编辑 Map
   };
 
   const searchState = {
@@ -143,6 +144,70 @@ export const useProTable = () => {
     },
 
     /**
+     * @description 获取 ProSearch 组件的实例
+     * @returns ProSearch instance
+     */
+    getSearchRef: async () => {
+      await getTable();
+      return unref(searchRef);
+    },
+
+    /**
+     * @description 获取行内编辑指定的 model
+     * @param key key
+     * @returns model
+     */
+    getEditModel: async (key: string | number) => {
+      const table = await getTable();
+      return table?.getEditModel(key);
+    },
+
+    /**
+     * @description 获取行内编辑所有的 model
+     * @returns 所有 model
+     */
+    getEditModelValues: async () => {
+      const table = await getTable();
+      return table?.getEditModelValues();
+    },
+
+    /**
+     * @description 获取行内编辑所有 model 对应的 key
+     * @returns 所有 key
+     */
+    getEditModelKeys: async () => {
+      const table = await getTable();
+      return table?.getEditModelKeys();
+    },
+
+    /**
+     * @description 设置行内编辑的 model
+     * @param key key
+     * @param model model
+     */
+    setEditModel: async (key: string | number, model: Record<string, any>) => {
+      const table = await getTable();
+      table?.setEditModel(key, model);
+    },
+
+    /**
+     * @description 清除行内编辑的 model
+     */
+    clearEditModel: async () => {
+      const table = await getTable();
+      table?.clearEditModel();
+    },
+
+    /**
+     * @description 删除行内编辑指定 key 的 model
+     * @param key key
+     */
+    removeEditModel: async (key: string | number | string[] | number[]) => {
+      const table = await getTable();
+      table?.removeEditModel(key);
+    },
+
+    /**
      * @description 获取 ElTable 组件的实例
      * @returns ElTable instance
      */
@@ -158,15 +223,6 @@ export const useProTable = () => {
     getTableExpose: async () => {
       await getTable();
       return unref(tableRef);
-    },
-
-    /**
-     * @description 获取 ProSearch 组件的实例
-     * @returns ProSearch instance
-     */
-    getSearchRef: async () => {
-      await getTable();
-      return unref(searchRef);
     },
   };
 

@@ -115,6 +115,7 @@ import {
   dialogFormInstanceKey,
   filterKey,
   type FilterRule,
+  editKey,
 } from "./interface";
 import { filterEnum, filterEnumLabel, handleRowAccordingToProp, setColumnProp, lastProp, frontFilter } from "./helper";
 import ColSetting from "./components/ColSetting.vue";
@@ -123,7 +124,7 @@ import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./compo
 import DialogFormComponent, { type DialogFormProps } from "./components/DialogForm.vue";
 import Sortable from "sortablejs";
 import { useDesign } from "@/hooks";
-import type { FormInstance, TableInstance, TableProps } from "element-plus";
+import { ElMessage, type FormInstance, type TableInstance, type TableProps } from "element-plus";
 
 defineOptions({ name: "ProTable" });
 
@@ -156,6 +157,7 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   // 搜索模式，search 使用 ProSearch 组件，filter 开启表格筛选功能，useFilter 启用所有表格筛选功能，不管也没有配置 search。all 两个都使用。allAndUseFilter 两个都使用的同时，默认启用所有表格筛选功能
   searchModel?: "search" | "filter" | "useFilter" | "all" | "allAndUseFilter";
   filterRule?: "front" | "back"; // 过滤规则：前端筛选还是后端筛选，默认后端筛选
+  editRow?: number; // 允许最大编辑的行数，默认 undefined，没有限制
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
 }
 
@@ -330,9 +332,8 @@ const searchColumns = computed(() => {
     const key = item.search?.key ?? lastProp(item.prop!);
     const defaultValue = unref(item.search?.defaultValue);
     if (defaultValue !== undefined && defaultValue !== null) {
-      if (typeof defaultValue !== "function") return (unref(searchInitParam)[key] = defaultValue);
-
-      unref(searchInitParam)[key] = await defaultValue(searchParam, unref(enumMap));
+      if (typeof defaultValue !== "function") unref(searchInitParam)[key] = defaultValue;
+      else unref(searchInitParam)[key] = await defaultValue(searchParam, unref(enumMap));
     }
 
     // 组装搜索表单配置项
@@ -350,7 +351,7 @@ const searchColumns = computed(() => {
         xl: item.search?.xl,
       },
       label: item.label || "",
-      prop: item.prop || "",
+      prop: key,
       enum: item.enum as any,
       useEnumMap: item.useEnumMap,
       enumKey: item.enumKey,
@@ -403,6 +404,49 @@ const filterProps = reactive({
 });
 // TableColumn 使用
 provide(filterKey, filterProps);
+
+// ------- 行内编辑功能 -------
+const editModelList = ref(new Map<string | number, Record<string, any>>());
+provide(editKey, {
+  editModelList,
+  rowKey: unref(getProps).rowKey,
+  editRow: unref(getProps).editRow,
+});
+
+// 获取行内编辑指定的 model
+const getEditModel = (key: string | number) => {
+  return unref(editModelList).get(key);
+};
+
+// 获取行内编辑所有的 model
+const getEditModelValues = () => {
+  return [...unref(editModelList).values()];
+};
+
+// 获取行内编辑所有 model 对应的 key
+const getEditModelKeys = () => {
+  return [...unref(editModelList).keys()];
+};
+
+// 设置行内编辑的 model
+const setEditModel = (key: string | number, model: Record<string, any>) => {
+  unref(editModelList).set(key, model);
+};
+
+// 清除行内编辑的 model
+const clearEditModel = () => {
+  editModelList.value = new Map<string, Record<string, any>>();
+};
+
+// 删除行内编辑指定 key 的 model
+const removeEditModel = (key: string | number | string[] | number[]) => {
+  if (Array.isArray(key)) {
+    return key.forEach(i => {
+      unref(editModelList).delete(i);
+    });
+  }
+  return unref(editModelList).delete(key);
+};
 
 // ------- 列设置 ==> 过滤掉不需要设置的列 -------
 const colSettingVisible = ref(false);
@@ -604,12 +648,19 @@ const expose = {
   isSelected,
   selectedList,
   selectedListIds,
+  editModelList,
   toggleColSetting,
   getTableList,
   search,
   reset,
   handlePagination,
   clearSelection,
+  getEditModel,
+  getEditModelValues,
+  getEditModelKeys,
+  setEditModel,
+  clearEditModel,
+  removeEditModel,
   setProps,
   setColumn,
   addColumn,

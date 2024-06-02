@@ -1,5 +1,5 @@
-import type { VNode, ComponentPublicInstance, ComputedRef, Ref, ShallowRef } from "vue";
-import type { BreakPoint, Responsive, FormRenderScope, FormType } from "@/components";
+import type { VNode, ComponentPublicInstance, ComputedRef, Ref, ShallowRef, InjectionKey } from "vue";
+import type { BreakPoint, Responsive, FormRenderScope, FormType, FormSchemaProps } from "@/components";
 import type { TableColumnCtx, PopoverProps } from "element-plus";
 import ProTable, { type ProTableProps } from "../index.vue";
 import DialogForm, { type DialogFormProps } from "../components/DialogForm.vue";
@@ -86,6 +86,85 @@ export type FilterRule =
   | ((model: Record<string, any>, row: any, key: string) => boolean) // 自定义函数查询，返回 boolean、true 符合条件，false 不符合条件
   | undefined;
 
+export interface FilterConfig {
+  /**
+   * 是否开启筛选功能
+   */
+  enabled?: boolean;
+  /**
+   * 筛选器 Popover 宽度
+   * @default 230px
+   */
+  width?: string | number;
+  /**
+   * 当前端查询时，指定查询的规则
+   */
+  rule?: FilterRule;
+  /**
+   * 筛选器触发方式
+   *
+   * @property click | focus | hover | contextmenu
+   * @default click
+   */
+  trigger?: PopoverProps["trigger"];
+  /**
+   * 出现位置
+   *
+   * @property top | top-star | /top-end | bottom | bottom-start | bottom-end | left | left-start | left-end | right | right-start | right-end
+   * @default bottom
+   */
+  placement?: PopoverProps["placement"];
+  /**
+   * Tooltip 主题
+   *
+   * @property light | dark
+   * @default light
+   */
+  effect?: PopoverProps["effect"];
+  /**
+   * 支持 PopoverProps 的其他属性
+   * 为什么 filterConfig 不直接继承 PopoverProps 呢？因为继承后 TS 报错：类型实例化过深，且可能无限
+   */
+  [key: string]: any;
+}
+
+export interface EditConfig
+  extends Omit<
+    FormSchemaProps,
+    | "prop"
+    | "label"
+    | "enum"
+    | "fieldNames"
+    | "width"
+    | "destroy"
+    | "hidden"
+    | "disabled"
+    | "labelSize"
+    | "useEnumMap"
+    | "enumKey"
+  > {
+  /**
+   * 是否开启行内编辑，默认为 true
+   */
+  enabled?: boolean;
+  /**
+   * 行内编辑的表单组件，不配置则取 search 的 el，如果 search 的 el 也不配置，则禁用行内编辑
+   */
+  el?: SearchType;
+  /**
+   * 当表单 model 的 key 不为 prop 属性时，可指定其他 key
+   */
+  key?: string;
+  /**
+   * 编辑时过滤的对象 key 数组
+   */
+  filterKey?: string[];
+  /**
+   * 编辑时额外添加到 model 的参数
+   */
+  carryParams?: Record<string, any>;
+}
+
 /**
  * 表字段属性配置
  * 在 Element Plus 的类型基础增强
@@ -115,47 +194,7 @@ export interface TableColumnProps<T = any>
   /**
    * 表头筛选配置项
    */
-  filterConfig?: {
-    /**
-     * 是否开启筛选功能
-     */
-    enabled?: boolean;
-    /**
-     * 筛选器 Popover 宽度
-     * @default 230px
-     */
-    width?: string | number;
-    /**
-     * 当前端查询时，指定查询的规则
-     */
-    rule?: FilterRule;
-    /**
-     * 筛选器触发方式
-     *
-     * @property click | focus | hover | contextmenu
-     * @default click
-     */
-    trigger?: PopoverProps["trigger"];
-    /**
-     * 出现位置
-     *
-     * @property top | top-star | /top-end | bottom | bottom-start | bottom-end | left | left-start | left-end | right | right-start | right-end
-     * @default bottom
-     */
-    placement?: PopoverProps["placement"];
-    /**
-     * Tooltip 主题
-     *
-     * @property light | dark
-     * @default light
-     */
-    effect?: PopoverProps["effect"];
-    /**
-     * 支持 PopoverProps 的其他属性
-     * 为什么 filterConfig 不直接继承 PopoverProps 呢？因为继承后 TS 报错：类型实例化过深，且可能无限
-     */
-    [key: string]: any;
-  };
+  filterConfig?: FilterConfig;
   /**
    * 自定义 render 时候，需要填写 render 里表单组件使用 v-model 绑定的 prop
    */
@@ -184,6 +223,10 @@ export interface TableColumnProps<T = any>
    */
   fieldNames?: FieldNamesProps;
   /**
+   * 行内编辑配置项，使用前提：必须指定 ElTable 的 rowKey
+   */
+  editConfig?: EditConfig;
+  /**
    * 自定义表头内容渲染（tsx 语法）
    */
   headerRender?: (scope: HeaderRenderScope<T>) => VNode;
@@ -198,11 +241,11 @@ export interface TableColumnProps<T = any>
   /**
    * 编辑操作事件，仅限 prop 为 operation 生效
    */
-  handleEdit?: (scope: any, expose: any) => void;
+  handleEdit?: (scope: TableRenderScope<any>, expose: any) => void;
   /**
    * 删除操作事件，仅限 prop 为 operation 生效
    */
-  handleDelete?: (scope: any, expose: any) => void;
+  handleDelete?: (scope: TableRenderScope<any>, expose: any) => void;
 }
 
 export type DialogFormInstance = Omit<
@@ -236,3 +279,9 @@ export const filterKey: InjectionKey<{
   search: (searchParam: Record<string, any>) => void;
   reset: () => void;
 }> = Symbol("FilterKey");
+
+export const editKey: InjectionKey<{
+  editModelList: Ref<Map<string | number, Record<string, any>>>;
+  rowKey: string;
+  editRow: number | undefined;
+}> = Symbol("EditKey");

@@ -178,7 +178,32 @@ export const visibleButton = (api: any, flag: boolean | undefined) => {
 };
 
 /**
- * @description 对 form 对象的 pro 赋值
+ * @description 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
+ */
+export const getColumnProp = (
+  column: Record<string, any>,
+  prop: string,
+  valueFormat: "default" | "string" | "number" | "boolean" = "default"
+) => {
+  let value: any;
+  if (!prop.includes(".")) value = column[prop] ?? undefined;
+  else {
+    prop.split(".").forEach(item => (column = column[item] ?? ""));
+    // 如果是 ElInputNumber，则需要返回数字类型，因此这里 column 如果为 ""，则返回 undefined，这样字符串和数字类型的组件都支持
+    value = column || undefined;
+  }
+
+  if (valueFormat === "string") return value + "";
+  if (valueFormat === "number") return Number(value);
+  if (valueFormat === "boolean") {
+    if ((value as any) === "1" || (value as any) === 1) return true;
+    else return false;
+  }
+  return value;
+};
+
+/**
+ * @description 对 column 对象的 pro 赋值
  */
 export const setColumnProp = (column: Record<string, any>, prop: string, value: any) => {
   if (!column) return;
