@@ -95,11 +95,12 @@ const initDefaultValue = async ({ defaultValue, fieldNames, prop }: FormSchemaPr
 
   if (value || value === false || value === 0) return;
 
+  const defaultValueConst = unref(defaultValue);
   // 设置表单项的默认值，如果存在值，则不需要赋默认值
-  if (defaultValue !== undefined && defaultValue !== null) {
-    if (typeof defaultValue !== "function") return setFormProp(formConst, prop, unref(defaultValue));
+  if (defaultValueConst !== undefined && defaultValueConst !== null) {
+    if (typeof defaultValueConst !== "function") return setFormProp(formConst, prop, defaultValueConst);
 
-    return setFormProp(formConst, prop, await defaultValue(formConst, unref(enumMap)));
+    return setFormProp(formConst, prop, await defaultValueConst(formConst, unref(enumMap)));
   }
 
   // 如果没有设置默认值，则判断后台是否返回 isDefault 为 Y 的枚举

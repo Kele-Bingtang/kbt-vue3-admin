@@ -324,13 +324,14 @@ const searchColumns = computed(() => {
 
   const searchColumns: ProSearchSchemaProps[] = [];
 
-  column?.forEach(item => {
+  column?.forEach(async item => {
     // Table 默认查询参数初始化
     const key = item.search?.key ?? lastProp(item.prop!);
     const defaultValue = unref(item.search?.defaultValue);
     if (defaultValue !== undefined && defaultValue !== null) {
-      unref(searchInitParam)[key] = defaultValue;
-      unref(searchParam)[key] = defaultValue;
+      if (typeof defaultValue !== "function") return (unref(searchInitParam)[key] = defaultValue);
+
+      unref(searchInitParam)[key] = await defaultValue(searchParam, unref(enumMap));
     }
 
     // 组装搜索表单配置项
