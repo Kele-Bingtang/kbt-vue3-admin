@@ -36,7 +36,7 @@ const config = reactive({
 
 // element 语言配置
 const i18nLocale = computed(() => {
-  if (layoutStore.language && layoutStore.language === "zh-CN") return zhCn;
+  if (layoutStore.language === "zh-CN") return zhCn;
   if (layoutStore.language === "en-US") return en;
   return getBrowserLang() === "zh-CN" ? zhCn : en;
 });

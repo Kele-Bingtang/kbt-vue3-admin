@@ -1,5 +1,5 @@
 <template>
-  <el-table ref="tableRef" v-bind="$attrs">
+  <el-table ref="tableRef" v-bind="$attrs" @row-click="handleRowClick">
     <!-- 默认插槽 -->
     <slot />
 
@@ -106,12 +106,14 @@ export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
   columnTypes?: TypeProps[]; // 字段类型
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
+  rowClickEdit?: boolean; // 单击行激活行内编辑
 }
 
 // 接受父组件参数，配置默认值
-withDefaults(defineProps<ProTableProps>(), {
+const props = withDefaults(defineProps<ProTableProps>(), {
   columns: () => [],
   columnTypes: () => ["selection", "radio", "index", "expand", "sort"],
+  rowClickEdit: false,
 });
 
 type TableMainEmits = {
@@ -137,6 +139,13 @@ const handleDelete = (scope: any, item: TableColumnProps) => {
 
 const setTableColumn = (item: TableColumnProps) => {
   return item as TableColumnCtx<any>;
+};
+
+const attrs = useAttrs();
+
+const handleRowClick = (row: any, column: any, event: Event) => {
+  if (props.rowClickEdit) row._edit = !row._edit;
+  attrs.onRowClick && (attrs.onRowClick as any)(row, column, event);
 };
 
 defineExpose({ table: tableRef });

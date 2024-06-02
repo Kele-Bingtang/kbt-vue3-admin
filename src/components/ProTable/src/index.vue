@@ -1,6 +1,5 @@
 <template>
   <div :class="prefixClass">
-    {{ searchParam }}
     <!-- 查询表单 card -->
     <ProSearch
       ref="proSearchRef"
@@ -54,6 +53,7 @@
         :header-cell-style="getHeaderCellStyle"
         :columns="getProps.columns"
         :columnTypes="columnTypes"
+        :rowClickEdit="rowClickEdit"
         :dialogForm="getProps.dialogForm"
         @edit="handleEdit"
         @delete="handleDelete"
@@ -124,7 +124,7 @@ import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./compo
 import DialogFormComponent, { type DialogFormProps } from "./components/DialogForm.vue";
 import Sortable from "sortablejs";
 import { useDesign } from "@/hooks";
-import { ElMessage, type FormInstance, type TableInstance, type TableProps } from "element-plus";
+import { type FormInstance, type TableInstance, type TableProps } from "element-plus";
 
 defineOptions({ name: "ProTable" });
 
@@ -158,6 +158,7 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   searchModel?: "search" | "filter" | "useFilter" | "all" | "allAndUseFilter";
   filterRule?: "front" | "back"; // 过滤规则：前端筛选还是后端筛选，默认后端筛选
   editRow?: number; // 允许最大编辑的行数，默认 undefined，没有限制
+  rowClickEdit?: boolean; // 单击行激活行内编辑
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
 }
 
@@ -176,6 +177,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
   searchModel: "search",
   filterRule: "front",
+  rowClickEdit: false,
 });
 
 // 表格 DOM 元素

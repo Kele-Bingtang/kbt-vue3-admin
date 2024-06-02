@@ -162,7 +162,7 @@ export const useProForm = () => {
       const proFormInstance = createVNode(ProForm, { ...proFormProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(
         ElConfigProvider,
-        { namespace: variables.elNamespace },
+        { namespace: variables.elNamespace, size: unref(layoutSize) },
         { default: () => proFormInstance }
       );
       const currentInstance = getCurrentInstance();

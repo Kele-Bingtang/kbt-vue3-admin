@@ -1,11 +1,8 @@
 import ProForm from "@/components/ProForm";
-import { ElConfigProvider, ElPopover, ElIcon, ElButton } from "element-plus";
+import { ElPopover, ElIcon, ElButton } from "element-plus";
 import { filterKey, type TableColumnProps } from "../../interface";
 import { Filter } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
 import { lastProp } from "../../helper";
-
-const { variables } = useDesign();
 
 export const useHeaderFilter = (column: TableColumnProps) => {
   const filterProps = inject(filterKey);
@@ -71,29 +68,27 @@ export const useHeaderFilter = (column: TableColumnProps) => {
     const { width, trigger } = filterConfig;
 
     return (
-      <ElConfigProvider namespace={variables.elNamespace}>
-        <ElPopover {...filterConfig} width={width || 230} trigger={trigger || "click"}>
-          {{
-            reference: () => (
-              <ElIcon style="vertical-align: -2px; margin-left: 2px; cursor: pointer;" class="hover-theme-color">
-                <Filter />
-              </ElIcon>
-            ),
-            default: () => (
-              <>
-                <ProForm v-model={searchParam} dynamicModel={false} onlyRenderComponent schema={[schema]}></ProForm>
-                <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-                  <ElButton onClick={handleReset}>重置</ElButton>
-                  <div>
-                    <ElButton onClick={handleClear}>清除</ElButton>
-                    <ElButton onClick={handleSearch}>筛选</ElButton>
-                  </div>
+      <ElPopover {...filterConfig} width={width || 230} trigger={trigger || "click"}>
+        {{
+          reference: () => (
+            <ElIcon style="vertical-align: -2px; margin-left: 2px; cursor: pointer;" class="hover-theme-color">
+              <Filter />
+            </ElIcon>
+          ),
+          default: () => (
+            <>
+              <ProForm v-model={searchParam} dynamicModel={false} onlyRenderComponent schema={[schema]}></ProForm>
+              <div style="display: flex; justify-content: space-between; margin-top: 10px;">
+                <ElButton onClick={handleReset}>重置</ElButton>
+                <div>
+                  <ElButton onClick={handleClear}>清除</ElButton>
+                  <ElButton onClick={handleSearch}>筛选</ElButton>
                 </div>
-              </>
-            ),
-          }}
-        </ElPopover>
-      </ElConfigProvider>
+              </div>
+            </>
+          ),
+        }}
+      </ElPopover>
     );
   };
 

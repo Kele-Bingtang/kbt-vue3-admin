@@ -68,12 +68,10 @@ export const useRowInlineEdit = (column: TableColumnProps) => {
         if (editConfig.filterKey?.length) editConfig.filterKey.forEach(key => delete editModel![key]);
       }
 
-      // 当存在自定义 key 时，则以自定义 key 当作 prop
-      if (editConfig?.key || column.search?.key) {
-        // 如果存在多级 prop，则删除，然后用 key 替换 prop
-        if (prop.indexOf(".") !== -1) delete editModel![prop.split(".")[0]];
-        else delete editModel![prop];
-
+      // 如果存在多级 prop，则删除，然后用 key 替换 prop
+      if (column.prop?.indexOf(".") !== -1 || editConfig?.key || column.search?.key) {
+        if (column.prop?.indexOf(".") !== -1) delete editModel![column.prop!.split(".")[0]];
+        else delete editModel![column.prop!];
         setColumnProp(editModel!, prop, getColumnProp(row, column.prop!));
         editModelListConst?.set(key, editModel!);
       }
