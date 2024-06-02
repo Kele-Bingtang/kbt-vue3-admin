@@ -2,6 +2,25 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.3.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.2.0...v1.3.0) (2024-06-02)
+
+### Features
+
+- 🚀 新增表格自定义筛选器功能，修复 ProForm、ProSearch 问题 ([7243e17](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/7243e1786849ce84b714fafe7b47aea19b740450))
+- 🚀 pro 组件新增两个 create 函数来实现函数式编程，修复 Use 组件问题。统一缓存 key 的前缀。新增一个针对 Emits 转换的全局 TS 类型 ([2145876](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/21458765b8fd81d8452c997d5ba9503a298aed97))
+- 🚀 proTable 添加点击行激活行内编辑功能，修复 ProForm 不随全局 size 变化问题。修复 ProTable 行内编辑 model 额外添加了多级 prop 问题 ([c6f7131](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/c6f7131ebbf1cdab7f8adad7621dbf070887235f))
+- 🚀 proTable 添加前端过滤器规则，支持 lt、gt、ge、eq、like、between、in 等规则以及自定义规则函数 ([3778f2c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/3778f2c8980af62302e3718c1403a2ea60b55fe0))
+- 🚀 proTable 新增行内编辑功能。修复多个 prop 时，ProForm 存储问题 ([162040c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/162040c24bd57c98f5fc1b188f7f29a9c2d3b805))
+
+### Bug Fixes
+
+- 🐞 处理 ProTable 的 default 为函数问题 ([7a3d8f8](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/7a3d8f8000ca68110f78e73eded375728db06a9c))
+- 🐞 修复 ProTable 传给 ProSearch 的 Props 缺失问题。修复表格过滤器和 ProSearch 查询参数关联失效问题 ([c237789](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/c2377890e912c8078a6a04a0787fd3aedeee4a50))
+- 🐞 修复打包后超级组件存在循环引用问题 ([66b61d8](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/66b61d81f85bbc538fa73a4117a22677cdeeb559))
+- 🐞 修复自定义全局 TS 类型被 eslint 认为没有被定义报错 ([13ec24d](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/13ec24d8d589e536a01e73f1fc66a16ac0b99df7))
+- 🐞 修复自定义筛选器和 ProSearch 关联问题，ProForm 添加 props 配置项（适配自定义筛选器） ([ecfb0c3](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/ecfb0c383bb14347b3fded451e9d579781ceefa7))
+- 🐞 provide 的 key 采用 InjectionKey 代替字符串 ([32ca848](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/32ca8489a921b9ddd0cf387e680d6b267fccd533))
+
 ## [1.2.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.1.0...v1.2.0) (2024-05-30)
 
 ### Features
