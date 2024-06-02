@@ -1,5 +1,6 @@
 <template>
   <div :class="prefixClass">
+    {{ searchParam }}
     <!-- 查询表单 card -->
     <ProSearch
       ref="proSearchRef"
@@ -42,9 +43,9 @@
       <!-- 表格主体 -->
       <TableMain
         ref="tableMainRef"
-        v-bind="getProps"
+        v-bind="$attrs"
+        :data="filterTableData ? filterTableData : processTableData"
         :size="elTableSize"
-        :data="processTableData ?? tableData"
         :border="getProps.border"
         :row-key="getProps.rowKey"
         @selection-change="selectionChange"
@@ -62,6 +63,7 @@
         </template>
       </TableMain>
 
+      <!-- Dialog 表单 -->
       <DialogFormComponent
         ref="dialogFormRef"
         v-bind="{ ...(getProps.dialogForm || { formProps: {}, dialog: {} }), afterConfirm: () => getTableList() }"
@@ -72,7 +74,7 @@
         </template>
       </DialogFormComponent>
 
-      <!-- 分页组件 -->
+      <!-- 表格分页 -->
       <slot name="pagination" :total="pageTotal">
         <Pagination
           v-if="isOpenPage(pagination) && pageTotal"
@@ -113,7 +115,7 @@ import {
   dialogFormInstanceKey,
   filterKey,
 } from "./interface";
-import { filterEnum, filterEnumLabel, handleRowAccordingToProp, setColumnProp, lastProp } from "./helper";
+import { filterEnum, filterEnumLabel, handleRowAccordingToProp, setColumnProp, lastProp, frontFilter } from "./helper";
 import ColSetting from "./components/ColSetting.vue";
 import TableMain from "./components/TableMain.vue";
 import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./components/TableMainHeader.vue";
@@ -152,6 +154,7 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   searchProps?: Omit<ProSearchProps, "schema" | "searchCols" | "modeValue">; // ProSearch 配置项
   // 搜索模式，search 使用 ProSearch 组件，filter 开启表格筛选功能，useFilter 启用所有表格筛选功能，不管也没有配置 search。all 两个都使用。allAndUseFilter 两个都使用的同时，默认启用所有表格筛选功能
   searchModel?: "search" | "filter" | "useFilter" | "all" | "allAndUseFilter";
+  filterRule?: "front" | "back"; // 过滤规则：前端筛选还是后端筛选，默认后端筛选
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
 }
 
@@ -169,6 +172,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   exportKey: "dataKey",
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
   searchModel: "search",
+  filterRule: "front",
 });
 
 // 表格 DOM 元素
@@ -241,21 +245,7 @@ const enumCallback = (data: Record<string, any>[]) => {
   return data;
 };
 
-const filterProps = reactive({
-  searchParam,
-  filter: ["filter", "useFilter", "all", "allAndUseFilter"].includes(unref(getProps).searchModel!),
-  useFilter: ["useFilter", "allAndUseFilter"].includes(unref(getProps).searchModel!),
-  search,
-  reset,
-});
-
-// TableColumn 使用
-provide(filterKey, filterProps);
-
-// 清空选中数据列表
-const clearSelection = () => unref(tableMainRef)?.table?.clearSelection();
-
-// 静态数据分页
+// 表格数据
 const processTableData = computed(() => {
   const { data, pagination } = unref(getProps);
   const { pageNum, pageSize } = unref(paging);
@@ -289,6 +279,7 @@ watch(
   { deep: true }
 );
 
+// ------- 字典处理 -------
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, Record<string, any>[]>());
 const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
@@ -308,6 +299,7 @@ const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
 };
 provide(enumMapKey, enumMap);
 
+// ------- 初始化搜索配置项 -------
 // 扁平化 columns，为了过滤需要搜索的配置项
 const flatColumnsFunc = (columns: TableColumnProps[], flatArr: TableColumnProps[] = []) => {
   columns.forEach(async col => {
@@ -368,7 +360,35 @@ const searchColumns = computed(() => {
   return searchColumns;
 });
 
-// 列设置 ==> 过滤掉不需要设置的列
+// ------- 表格过滤器功能 -------
+const filterTableData = ref<any[]>();
+
+// 原始数据发生改变，则清除过滤数据
+watch(processTableData, () => (filterTableData.value = undefined));
+
+const filterProps = reactive({
+  searchParam,
+  filter: ["filter", "useFilter", "all", "allAndUseFilter"].includes(unref(getProps).searchModel!),
+  useFilter: ["useFilter", "allAndUseFilter"].includes(unref(getProps).searchModel!),
+  search: (searchParam: Record<string, any>) => {
+    // 后端过滤
+    if (unref(getProps).filterRule === "back") return search(searchParam, unref(getProps).searchProps?.removeNoValue);
+
+    // 前端过滤
+    const filterData = frontFilter(searchParam, unref(processTableData));
+    const { pageNum, pageSize } = unref(paging);
+
+    filterTableData.value = filterData.slice((pageNum - 1) * pageSize, pageNum * pageSize);
+  },
+  reset: () => {
+    filterTableData.value = undefined;
+    reset();
+  },
+});
+// TableColumn 使用
+provide(filterKey, filterProps);
+
+// ------- 列设置 ==> 过滤掉不需要设置的列 -------
 const colSettingVisible = ref(false);
 const colSetting = computed(() =>
   unref(getProps)
@@ -385,24 +405,31 @@ const colSetting = computed(() =>
 
 const toggleColSetting = (show = !unref(colSettingVisible)) => (colSettingVisible.value = show);
 
-// 操作框
+// ------- 按钮点击事件 -------
 const dialogFormRef = shallowRef<DialogFormInstance>();
 provide(dialogFormInstanceKey, dialogFormRef);
 
-// 编辑回调
+// 编辑事件
 const handleEdit = (scope: any, item: TableColumnProps) => {
   if (item.handleEdit) item.handleEdit(scope, expose);
   else unref(dialogFormRef)?.handleEdit(scope);
 };
 
-// 删除回调
+// 删除事件
 const handleDelete = (scope: any, item: TableColumnProps) => {
   if (item.handleDelete) item.handleDelete(scope, expose);
   unref(dialogFormRef)?.handleDelete(scope);
 };
 
-// ------- 表格样式 Start -------
+// 批量删除事件
+const handleDeleteBatch = () => {
+  unref(dialogFormRef)?.handleDeleteBatch(unref(selectedListIds), unref(selectedList), () => {
+    clearSelection();
+    getTableList();
+  });
+};
 
+// ------- 表格样式 -------
 // 如果是 mini，则取 ElTableSize 为 default，反之默认
 const elTableSize = computed(() => (unref(getProps).size === TableSizeEnum.Mini ? "default" : unref(getProps).size));
 const rowStyle = ref<CSSProperties>({});
@@ -438,15 +465,10 @@ const getHeaderCellStyle = (tableInfo: any) => {
   return getStyle(tableInfo, "headerCellStyle", unref(headerCellStyle));
 };
 
-// ------- 表格样式 End -------
+// 清空选中数据列表
+const clearSelection = () => unref(tableMainRef)?.table?.clearSelection();
 
-const handleDeleteBatch = () => {
-  unref(dialogFormRef)?.handleDeleteBatch(unref(selectedListIds), unref(selectedList), () => {
-    clearSelection();
-    getTableList();
-  });
-};
-
+// ------- Emits 事件 -------
 type ProTableEmits = {
   register: [
     proTableRef?: ComponentPublicInstance | null | any,
@@ -510,6 +532,7 @@ const dragSort = () => {
     });
 };
 
+// ------- 动态操作 ProTable 函数 -------
 // 设置 proTable 组件的 props
 const setProps = (props: ProTableProps = {}) => {
   mergeProps.value = Object.assign(unref(mergeProps), props);

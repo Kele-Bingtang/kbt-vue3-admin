@@ -193,3 +193,49 @@ export const setColumnProp = (column: Record<string, any>, prop: string, value: 
 
   current[props[props.length - 1]] = value;
 };
+
+/**
+ * @description 将 data 转换为日期，如果转换失败，则返回 undefined
+ */
+export const strToDate = (data: string | number) => {
+  if (isNaN(data as number) && !isNaN(Date.parse(data as string))) return new Date(data);
+};
+
+/**
+ * 前端过滤表格数据
+ * @param searchParam 查询参数
+ * @param tableData 表格数据
+ * @returns 过滤后的表格数据
+ */
+export const frontFilter = (filterParam: Record<string, any>, tableData: Record<string, any>) => {
+  return tableData.filter((item: any) => {
+    return Object.keys(filterParam).every(key => {
+      const value = filterParam[key];
+      const rowValue = item[key];
+      // 空值默认显示
+      if (value === undefined || value === null || value === "") return true;
+
+      const rowDate = strToDate(rowValue);
+
+      // 如果 rowDate 为日期，则为日期搜索
+      if (rowDate) {
+        // 日期范围查询
+        if (Array.isArray(value) && value.length === 2) {
+          const startDate = strToDate(value[0]);
+          const endDate = strToDate(value[1]);
+          const rowDate = strToDate(rowValue);
+          if (startDate && endDate && rowDate) return startDate <= rowDate && rowDate <= endDate;
+          return;
+        }
+
+        // 单个日期查询
+        const date = strToDate(value);
+        if (date) return strToDate(rowValue)! >= date;
+      }
+
+      if (Array.isArray(value)) return value.includes(rowValue);
+
+      return rowValue === value;
+    });
+  });
+};

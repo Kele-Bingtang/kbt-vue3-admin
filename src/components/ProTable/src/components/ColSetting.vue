@@ -33,7 +33,6 @@
 <script setup lang="ts">
 import { ElDrawer, ElSwitch, ElTable, ElTableColumn } from "element-plus";
 import { proTablePrefixClassKey, type TableColumnProps } from "../interface";
-import { lastProp } from "../helper";
 
 defineOptions({ name: "ColSetting" });
 

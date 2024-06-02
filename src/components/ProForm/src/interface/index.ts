@@ -249,6 +249,10 @@ export interface FormSchemaProps<T = Record<string, any>> {
    */
   render?: (scope: FormRenderScope) => VNode;
   /**
+   * 自定义 render 时候，需要填写 render 里表单组件使用 v-model 绑定的 prop
+   */
+  renderUseProp?: string[];
+  /**
    * 是否销毁表单，true 销毁，false 不销毁，类似于 v-if
    */
   destroy?: boolean | ((model: T) => boolean);

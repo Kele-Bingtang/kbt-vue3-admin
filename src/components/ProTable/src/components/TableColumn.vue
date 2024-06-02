@@ -12,14 +12,10 @@ import {
   filterKey,
 } from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
-import { ElCheckTag, ElTag, ElTableColumn, ElPopover, ElIcon, ElButton, ElConfigProvider } from "element-plus";
-import { Filter } from "@element-plus/icons-vue";
-import { ProForm } from "@/components";
-import { useDesign } from "@/hooks";
+import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
+import { headerFilter } from "./plugins/HeaderFilter";
 
 defineOptions({ name: "TableColumn" });
-
-const { variables } = useDesign();
 
 defineProps<{ column: TableColumnProps }>();
 
@@ -115,7 +111,7 @@ const RenderTableColumn = (item: TableColumnProps) => {
               return (
                 <>
                   {headerSlot}
-                  {unref(useFilter) ? filterHeader(item) : undefined}
+                  {unref(useFilter) ? headerFilter(item) : undefined}
                 </>
               );
             },
@@ -123,84 +119,6 @@ const RenderTableColumn = (item: TableColumnProps) => {
         </ElTableColumn>
       )}
     </>
-  );
-};
-
-/**
- * 渲染表头自定义过滤器
- */
-const filterHeader = (item: TableColumnProps) => {
-  const { searchParam = {}, search, reset } = filterProps || {};
-
-  const model = computed({
-    get: () => {
-      return searchParam;
-    },
-    set: () => {
-      for (const key in model) searchParam[key] = model[key];
-    },
-  });
-
-  // watch(
-  //   model,
-  //   () => {
-  //     for (const key in model) searchParam[key] = model[key];
-  //   },
-  //   { deep: true }
-  // );
-
-  const commonSchema = {
-    label: "",
-    prop: item.prop || "",
-    enum: item.enum as any,
-    useEnumMap: item.useEnumMap,
-    enumKey: item.enumKey,
-    fieldNames: item.fieldNames,
-    props: {
-      teleported: false, // 解决 ElSelect 的 Option 选中后，自动关闭 Popover 问题
-    },
-  };
-
-  const schema = item.search
-    ? { ...item.search, ...commonSchema, props: { ...item.search.props, ...commonSchema.props } }
-    : { el: "ElInput", ...commonSchema };
-
-  const handleSearch = () => {
-    search && search(searchParam);
-  };
-
-  const handleReset = () => {
-    for (const key in unref(model)) unref(model)[key] = undefined;
-    handleSearch();
-  };
-
-  const { filterConfig = {} } = item;
-  const { width, trigger } = filterConfig;
-
-  return (
-    <ElConfigProvider namespace={variables.elNamespace}>
-      <ElPopover {...filterConfig} width={width || 230} trigger={trigger || "click"}>
-        {{
-          reference: () => (
-            <ElIcon style="vertical-align: -2px; margin-left: 2px; cursor: pointer;" class="hover-theme-color">
-              <Filter />
-            </ElIcon>
-          ),
-          default: () => (
-            <>
-              <ProForm v-model={model.value} onlyRenderComponent schema={[schema]}></ProForm>
-              <div style="display: flex; justify-content: space-between; margin-top: 10px;">
-                <ElButton onClick={reset}>重置</ElButton>
-                <div>
-                  <ElButton onClick={handleReset}>清除</ElButton>
-                  <ElButton onClick={handleSearch}>筛选</ElButton>
-                </div>
-              </div>
-            </>
-          ),
-        }}
-      </ElPopover>
-    </ElConfigProvider>
   );
 };
 </script>

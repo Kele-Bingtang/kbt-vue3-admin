@@ -133,7 +133,10 @@ export interface TableColumnProps<T = any>
      */
     [key: string]: any;
   };
-
+  /**
+   * 自定义 render 时候，需要填写 render 里表单组件使用 v-model 绑定的 prop
+   */
+  renderUseProp?: string[];
   /**
    * 枚举类型（字典）
    */
@@ -207,6 +210,6 @@ export const filterKey: InjectionKey<{
   searchParam: Record<string, any>;
   filter: boolean;
   useFilter: boolean;
-  search: (model?: Record<string, any>, removeNoValue?: boolean) => void;
-  reset: (model?: Record<string, any>, removeNoValue?: boolean) => void;
+  search: (searchParam: Record<string, any>) => void;
+  reset: () => void;
 }> = Symbol("FilterKey");

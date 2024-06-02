@@ -1,6 +1,12 @@
 <template>
   <div class="simple-pro-table-container">
-    <ProTable ref="proTable" :data="data" :columns="columns" searchModel="allAndUseFilter">
+    <ProTable
+      ref="proTable"
+      :data="data"
+      :columns="columns"
+      searchModel="allAndUseFilter"
+      :pagination="{ enabled: true, fake: true }"
+    >
       <template #tableHeader="scope">
         <el-button v-auth="'add'" type="primary" :icon="CirclePlus">新增用户</el-button>
         <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain>批量添加用户</el-button>
@@ -48,7 +54,7 @@
 <script setup lang="tsx" name="SimpleProTable">
 import { ProTable, type TableColumnProps, type ProTableInstance } from "@/components";
 import { useHandleData, usePermission } from "@/hooks";
-import { ElButton, ElInput, ElMessage, ElMessageBox, ElSwitch, ElTag } from "element-plus";
+import { ElButton, ElInput, ElMessage, ElMessageBox, ElSwitch, ElTag, type TableColumnCtx } from "element-plus";
 import { tableData } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
 import { exportJsonToExcel, formatJsonToArray } from "@/utils";
@@ -100,10 +106,19 @@ const columns: TableColumnProps<ResUserList>[] = [
     ],
     fieldNames: { label: "genderLabel", value: "genderValue" },
     search: { el: "el-select", props: { filterable: true } },
+    filters: [
+      { text: "男", value: "1" },
+      { text: "女", value: "2" },
+    ],
+    filterMethod: (value: string, row: any, column: TableColumnCtx<any>) => {
+      const property = column["property"];
+      return row[property] === Number(value);
+    },
   },
   {
     // 多级 prop
     prop: "user.detail.age",
+    renderUseProp: ["minAge", "maxAge"],
     label: "年龄",
     filterConfig: { width: 400 },
     search: {
@@ -119,7 +134,11 @@ const columns: TableColumnProps<ResUserList>[] = [
       },
     },
   },
-  { prop: "idCard", label: "身份证号", search: { el: "el-input" } },
+  {
+    prop: "idCard",
+    label: "身份证号",
+    search: { el: "el-input" },
+  },
   { prop: "email", label: "邮箱" },
   { prop: "address", label: "居住地址" },
   {
@@ -167,7 +186,7 @@ const columns: TableColumnProps<ResUserList>[] = [
       el: "el-date-picker",
       span: 2,
       props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
-      defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"],
+      defaultValue: ["1900-11-12 11:35:00", "2024-12-12 11:35:00"],
     },
   },
   { prop: "operation", label: "操作", fixed: "right", width: 330 },
