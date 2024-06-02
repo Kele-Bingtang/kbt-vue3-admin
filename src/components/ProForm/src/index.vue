@@ -6,6 +6,7 @@
 import { shallowRef, ref, provide, watch, unref } from "vue";
 import {
   ComponentNameEnum,
+  enumMapKey,
   type FormSchemaProps,
   type FormSetProps,
   type ProElFormProps,
@@ -85,7 +86,7 @@ const setEnumMap = async ({ enum: enumValue, prop }: FormSchemaProps) => {
   const { data } = await enumValue(unref(model), unref(enumMap));
   unref(enumMap).set(prop, data);
 };
-provide("enumMap", enumMap);
+provide(enumMapKey, enumMap);
 
 // 初始化默认值
 const initDefaultValue = async ({ defaultValue, fieldNames, prop }: FormSchemaProps) => {

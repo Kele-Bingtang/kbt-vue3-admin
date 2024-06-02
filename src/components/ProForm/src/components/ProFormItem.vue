@@ -16,7 +16,7 @@
 
 <script setup lang="tsx">
 import { computed, inject, ref, unref, resolveComponent } from "vue";
-import { ComponentNameEnum, type FormSchemaProps, type PascalCaseComponentName } from "../interface";
+import { ComponentNameEnum, enumMapKey, type FormSchemaProps, type PascalCaseComponentName } from "../interface";
 import Tree from "./Tree.vue";
 import { getFormProp, hyphenToCamelCase, setComponentSlots, setFormProp } from "../helper";
 import { useRenderSelect } from "./useRenderSelect";
@@ -48,7 +48,7 @@ const fieldNames = computed(() => {
 });
 
 // 接收 enumMap (el 为 select-v 2 需单独处理 enumData)
-const enumMap = inject("enumMap", ref(new Map()));
+const enumMap = inject(enumMapKey, ref(new Map()));
 const columnEnum = computed(() => {
   const { useEnumMap, enumKey, prop, el } = props.column;
 

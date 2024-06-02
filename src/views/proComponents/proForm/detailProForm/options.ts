@@ -13,7 +13,6 @@ export const elFormProps = {
   inline: false,
   labelPosition: "right",
   labelWidth: "120px",
-  size: "default",
   disabled: false,
   labelSuffix: " :",
   fixWidth: true,

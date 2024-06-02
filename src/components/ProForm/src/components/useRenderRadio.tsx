@@ -4,7 +4,7 @@ import { hyphenToCamelCase } from "../helper";
 
 export const useRenderRadio = () => {
   const renderRadioOptions = (
-    columnEnum: Record<string, any>,
+    columnEnum: Record<string, any>[],
     fieldNames: FormFieldNamesProps,
     column: FormSchemaProps
   ) => {

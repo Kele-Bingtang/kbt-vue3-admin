@@ -121,12 +121,15 @@ type ProSearchEmits = {
 };
 
 /**
- * 将 ProSearchEmits 类型的 key 变为 on{key} 的形式
- * @example 返回 ['onSearch', 'onReset', 'onRegister', 'onValidate']
+ * 将 ProSearchEmits 类型的 key 变为 on{Key} 的形式
+ * @example 返回 { onSearch: (params: Record<string, any>) => void }
  */
 export type ProSearchOnEmits = keyOnPrefix<ProSearchEmits>;
 
 const emits = defineEmits<ProSearchEmits>();
+
+const { formRegister, formMethods, formElState } = useProForm();
+const { getElFormExpose, getFormData, getFormExpose } = formMethods;
 
 const schemaForm = computed(() =>
   props.schema
@@ -147,9 +150,6 @@ const schemaForm = computed(() =>
 
 // 搜索参数
 const model = defineModel<Record<string, any>>({ default: {} });
-
-const { formRegister, formMethods, formElState } = useProForm();
-const { getElFormExpose, getFormData, getFormExpose } = formMethods;
 
 const mergeProps = ref<ProSearchProps>({});
 

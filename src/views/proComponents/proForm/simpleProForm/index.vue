@@ -19,7 +19,6 @@ const elFormProps: ProElFormProps = {
   inline: false,
   labelPosition: "right",
   labelWidth: "80px",
-  size: "default",
   disabled: false,
   labelSuffix: " :",
 };

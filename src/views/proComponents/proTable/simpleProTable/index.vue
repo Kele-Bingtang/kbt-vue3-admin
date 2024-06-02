@@ -184,7 +184,7 @@ const columns: TableColumnProps<ResUserList>[] = [
     },
     search: {
       el: "el-date-picker",
-      span: 2,
+      span: 2, // 占两个位置
       props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
       defaultValue: ["1900-11-12 11:35:00", "2024-12-12 11:35:00"],
     },

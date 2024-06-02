@@ -283,3 +283,8 @@ export interface FormSchemaProps<T = Record<string, any>> {
 }
 
 export type ProFormInstance = Omit<InstanceType<typeof ProForm>, keyof ComponentPublicInstance | keyof ProFormProps>;
+
+/**
+ * provide 类型
+ */
+export const enumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> = Symbol("EnumMap");
