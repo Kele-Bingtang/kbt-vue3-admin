@@ -150,7 +150,7 @@ watch(
   { immediate: true }
 );
 
-const tableSizeValueMap = { small: { height: "40px" }, mini: { height: "24px", fontSize: "12px", padding: "0" } };
+const tableSizeMap = { small: { height: "40px" }, mini: { height: "24px", fontSize: "12px", padding: "0" } };
 
 const handleSizeCommand = (command: CustomTableSize) => {
   if (command === TableSizeEnum.Large) {
@@ -162,17 +162,17 @@ const handleSizeCommand = (command: CustomTableSize) => {
   } else if (command === TableSizeEnum.Small) {
     changeTableSize(TableSizeEnum.Small);
     cellStyle = {};
-    headerCellStyle = rowStyle = { height: tableSizeValueMap.small.height };
+    headerCellStyle = rowStyle = { height: tableSizeMap.small.height };
   } else if (command === TableSizeEnum.Mini) {
     elTableSize = TableSizeEnum.Default;
     customTableSize = TableSizeEnum.Mini;
-    rowStyle = { height: tableSizeValueMap.mini.height, fontSize: tableSizeValueMap.mini.fontSize };
+    rowStyle = { height: tableSizeMap.mini.height, fontSize: tableSizeMap.mini.fontSize };
     headerCellStyle = {
-      height: tableSizeValueMap.mini.height,
-      fontSize: tableSizeValueMap.mini.fontSize,
-      padding: tableSizeValueMap.mini.padding,
+      height: tableSizeMap.mini.height,
+      fontSize: tableSizeMap.mini.fontSize,
+      padding: tableSizeMap.mini.padding,
     };
-    cellStyle = { padding: tableSizeValueMap.mini.padding };
+    cellStyle = { padding: tableSizeMap.mini.padding };
   }
 
   emits("size", elTableSize, rowStyle, cellStyle, headerCellStyle);
@@ -186,6 +186,6 @@ const changeTableSize = (size: ElTableSize) => {
 const changeStyle = (style: CSSProperties) => {
   rowStyle = style;
   cellStyle = style;
-  headerCellStyle = { ...style, backgroundColor: "#ededed" }; // 表头背景色
+  headerCellStyle = style;
 };
 </script>

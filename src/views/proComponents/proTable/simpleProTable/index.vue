@@ -120,7 +120,14 @@ const columns: TableColumnProps<ResUserList>[] = [
     prop: "user.detail.age",
     renderUseProp: ["minAge", "maxAge"],
     label: "年龄",
-    filterConfig: { width: 400 },
+    filterConfig: {
+      width: 400,
+      // 自定义过滤规则
+      rule: (model, row) => {
+        const value = row.user.detail.age;
+        return value >= model.minAge && value <= model.maxAge;
+      },
+    },
     search: {
       // 自定义 search 显示内容
       render: ({ model }) => {
@@ -137,6 +144,9 @@ const columns: TableColumnProps<ResUserList>[] = [
   {
     prop: "idCard",
     label: "身份证号",
+    filterConfig: {
+      rule: "like",
+    },
     search: { el: "el-input" },
   },
   { prop: "email", label: "邮箱" },

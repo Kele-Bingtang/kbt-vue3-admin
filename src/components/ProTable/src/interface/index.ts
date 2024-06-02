@@ -68,6 +68,25 @@ export interface TableSetProps {
 }
 
 /**
+ * 部分查询条件有固定的规则，比如时间范围查询不可能是 lt、gt 之类的，具体规则过滤代码请看 ../helper/index.ts#frontFilter
+ */
+export type FilterRule =
+  | "lt"
+  | "gt"
+  | "le"
+  | "ge"
+  | "eq"
+  | "ne"
+  | "like"
+  | "notLike"
+  | "between"
+  | "notBetween"
+  | "in"
+  | "notIn"
+  | ((model: Record<string, any>, row: any, key: string) => boolean) // 自定义函数查询，返回 boolean、true 符合条件，false 不符合条件
+  | undefined;
+
+/**
  * 表字段属性配置
  * 在 Element Plus 的类型基础增强
  **/
@@ -107,6 +126,10 @@ export interface TableColumnProps<T = any>
      */
     width?: string | number;
     /**
+     * 当前端查询时，指定查询的规则
+     */
+    rule?: FilterRule;
+    /**
      * 筛选器触发方式
      *
      * @property click | focus | hover | contextmenu
@@ -129,7 +152,7 @@ export interface TableColumnProps<T = any>
     effect?: PopoverProps["effect"];
     /**
      * 支持 PopoverProps 的其他属性
-     * 为什么 filterConfig 不直接继承 PopoverProps 呢？因为继承后 TS 报错 类型实例化过深，且可能无限
+     * 为什么 filterConfig 不直接继承 PopoverProps 呢？因为继承后 TS 报错：类型实例化过深，且可能无限
      */
     [key: string]: any;
   };

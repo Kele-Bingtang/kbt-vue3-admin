@@ -114,6 +114,7 @@ import {
   enumMapKey,
   dialogFormInstanceKey,
   filterKey,
+  type FilterRule,
 } from "./interface";
 import { filterEnum, filterEnumLabel, handleRowAccordingToProp, setColumnProp, lastProp, frontFilter } from "./helper";
 import ColSetting from "./components/ColSetting.vue";
@@ -367,6 +368,20 @@ const filterTableData = ref<any[]>();
 // 原始数据发生改变，则清除过滤数据
 watch(processTableData, () => (filterTableData.value = undefined));
 
+// 统计过滤规则
+const columnFilterRule = computed(() => {
+  // key 为 prop，value 为过滤规则
+  const filterRule: Record<string, FilterRule> = {};
+  unref(getProps).columns.forEach(item => {
+    if (item.renderUseProp?.length) {
+      item.renderUseProp.forEach(prop => {
+        filterRule[prop] = item.filterConfig?.rule;
+      });
+    } else filterRule[item.prop!] = item.filterConfig?.rule;
+  });
+  return filterRule;
+});
+
 const filterProps = reactive({
   searchParam,
   filter: ["filter", "useFilter", "all", "allAndUseFilter"].includes(unref(getProps).searchModel!),
@@ -376,7 +391,7 @@ const filterProps = reactive({
     if (unref(getProps).filterRule === "back") return search(searchParam, unref(getProps).searchProps?.removeNoValue);
 
     // 前端过滤
-    const filterData = frontFilter(searchParam, unref(processTableData));
+    const filterData = frontFilter(searchParam, unref(processTableData), unref(columnFilterRule));
     const { pageNum, pageSize } = unref(paging);
 
     filterTableData.value = filterData.slice((pageNum - 1) * pageSize, pageNum * pageSize);
@@ -445,25 +460,29 @@ const handleSizeCommand = (size: ElTableSize, row: CSSProperties, cell: CSSPrope
   headerCellStyle.value = headerCell;
 };
 
-const getStyle = (tableInfo: any, styleName: string, styleRef: any) => {
-  const style = attrs[styleName] as any;
+// 获取父组件的样式 & ProTable 内置表格样式
+const getStyle = (tableInfo: any, styleName: string[], styleRef: any) => {
+  const style = attrs[styleName[0]] || (attrs[styleName[1]] as CSSProperties | ((tableInfo: any) => CSSProperties));
 
+  // 判断父组件也没有传入 ElTable 的自定义样式
   if (!style) return styleRef;
-  if (typeof style === "function") {
-    return { ...styleRef, ...style(tableInfo) };
-  } else return { ...style, ...styleRef };
+  if (typeof style === "function") return { ...styleRef, ...style(tableInfo) };
+  else return { ...style, ...styleRef };
 };
 
+// 获取行样式
 const getRowStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, "rowStyle", unref(rowStyle));
+  return getStyle(tableInfo, ["rowStyle", "row-style"], unref(rowStyle));
 };
 
+// 获取单元格样式
 const getCellStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, "cellStyle", unref(cellStyle));
+  return getStyle(tableInfo, ["cellStyle", "cell-style"], unref(cellStyle));
 };
 
+// 获取表头样式
 const getHeaderCellStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, "headerCellStyle", unref(headerCellStyle));
+  return getStyle(tableInfo, ["headerCellStyle", "header-cell-style"], unref(headerCellStyle));
 };
 
 // 清空选中数据列表

@@ -43,12 +43,13 @@ $prefix-class: #{$admin-namespace}-pro-table;
         width: 100%;
       }
 
-      .#{$el-namespace}-table__header th {
+      .#{$el-namespace}-table__header tr th {
         height: 45px;
         font-size: 15px;
         font-weight: bold;
         color: var(--#{$el-namespace}-text-color-primary);
-        background: var(--#{$el-namespace}-fill-color-light);
+        // 表头背景色
+        background: #e6eaef;
       }
 
       .#{$el-namespace}-table__row {
