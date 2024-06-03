@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.1](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.0...v1.3.1) (2024-06-03)
+
+### Features
+
+- 🚀 proTable 新增行内编辑校验必填方法。Pro 组件 create 函数支持传入 ref 或者 shallowRef 对象 ([940a92f](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/940a92f6943669aa2f3715ff60c8010a9294b1c6))
+
+### Styling
+
+- 🎨 proTable 去除 Demo 代码 ([424eac8](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/424eac8eed7cfa3838c7640fcfe8cc95b181b184))
+
 ## [1.3.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.2.0...v1.3.0) (2024-06-02)
 
 ### Features
