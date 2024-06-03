@@ -1,6 +1,5 @@
 <template>
   <div :class="prefixClass">
-    {{ editModelList }}
     <!-- 查询表单 card -->
     <ProSearch
       ref="proSearchRef"
