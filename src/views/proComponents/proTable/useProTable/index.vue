@@ -48,7 +48,7 @@ const getTicketList = () => {
 };
 
 const showSearch = (show: boolean) => {
-  setProps({ isShowSearch: show });
+  setProps({ initShowSearch: show });
 };
 
 const showTableButton = (show: boolean) => {

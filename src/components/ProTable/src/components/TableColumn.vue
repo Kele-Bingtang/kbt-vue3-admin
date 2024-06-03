@@ -4,7 +4,7 @@
 
 <script setup lang="tsx">
 import { inject, ref, useSlots, unref } from "vue";
-import { type TableColumnProps, type TableRenderScope, type HeaderRenderScope, enumMapKey } from "../interface";
+import { type TableColumnProps, type TableRenderScope, type HeaderRenderScope, tableEnumMapKey } from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
 import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
 import { useHeaderFilter } from "./plugins/HeaderFilter";
@@ -16,7 +16,7 @@ const props = defineProps<{ column: TableColumnProps }>();
 
 const slots = useSlots();
 
-const enumMap = inject(enumMapKey, ref(new Map<string, Record<string, any>[]>()));
+const enumMap = inject(tableEnumMapKey, ref(new Map<string, Record<string, any>[]>()));
 
 const getEnumData = (item: TableColumnProps, scope: TableRenderScope<any>) => {
   return unref(enumMap).get(item.prop!) && item.isFilterEnum

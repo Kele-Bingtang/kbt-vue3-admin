@@ -269,7 +269,7 @@ export enum TableSizeEnum {
  * provide 类型
  */
 export const proTablePrefixClassKey: InjectionKey<string> = Symbol("ProTablePrefixClass");
-export const enumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> = Symbol("EnumMap");
+export const tableEnumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> = Symbol("EnumMap");
 export const dialogFormInstanceKey: InjectionKey<ShallowRef<DialogFormInstance | undefined>> =
   Symbol("DialogFormInstance");
 export const filterKey: InjectionKey<{

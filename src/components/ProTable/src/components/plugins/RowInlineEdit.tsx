@@ -6,6 +6,8 @@ import { ElMessage } from "element-plus";
 export const useRowInlineEdit = (column: TableColumnProps) => {
   const { editConfig = {} } = column;
 
+  const proFormRef = ref();
+
   // ProTable 通过 provide 传过来
   const { editModelList, rowKey, editRow } = inject(editKey, {
     editModelList: ref(new Map<string | number, Record<string, any>>()),
@@ -59,6 +61,9 @@ export const useRowInlineEdit = (column: TableColumnProps) => {
       // 从 Map 获取 model，如果不存在在初始化，存入 Map，方便下次可以直接获取
       let editModel = editModelListConst?.get(key);
       if (!editModel) {
+        delete row._validate;
+        delete row._validateItem;
+
         // 初始化编辑已存在的的值 & 自定义携带参数
         editModel = { ...row, ...editConfig.carryParams };
         editModelListConst?.set(key, editModel!);
@@ -79,8 +84,26 @@ export const useRowInlineEdit = (column: TableColumnProps) => {
       return editModel;
     });
 
+    nextTick(() => {
+      // 每一行添加校验方法。因为本文件是 TableColum 每次每次列循环使用，所以必须要加上是否存在校验，确保 N 此列循环只执行一次
+      if (!row._validate) {
+        row._validate = async (callBack: (validate: boolean, needProp?: string, needLabel?: string) => void) => {
+          for (const key in row._validateItem) {
+            const result = await row._validateItem[key]((validate: boolean) => validate);
+            if (!result) return callBack(false, key.split("-")[0], key.split("-")[1]);
+          }
+          callBack(true);
+        };
+      }
+      // 添加每个表单的校验方法。必须假设是否存在校验，原因参考上面 _validate
+      if (!(row._validateItem && row._validateItem[`${prop}-${column.label}`])) {
+        row._validateItem = { ...row._validateItem, [`${prop}-${column.label}`]: proFormRef.value?.form?.validate };
+      }
+    });
+
     return (
       <ProForm
+        ref={proFormRef}
         v-model={model.value}
         elFormProps={{ style: "margin: 0" }}
         dynamicModel={false}

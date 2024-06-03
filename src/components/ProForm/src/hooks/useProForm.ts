@@ -2,7 +2,7 @@ import { ElConfigProvider, type FormInstance } from "element-plus";
 import type { FormSchemaProps, FormSetProps, ProFormInstance } from "../interface";
 import ProForm, { type ProFormOnEmits, type ProFormProps } from "../index.vue";
 import { isObject } from "../helper";
-import { createVNode, render } from "vue";
+import { createVNode, isShallow, render, type ShallowRef } from "vue";
 import { useDesign } from "@/hooks";
 import { useLayoutStore } from "@/stores";
 
@@ -158,15 +158,21 @@ export const useProForm = () => {
     /**
      * 动态创建表单。使用该函数，控制台会有 warning： Slot "XXX" invoked outside of the render function，可以忽略
      */
-    createForm: async (el: string, proFormProps?: ProFormProps & Partial<ProFormOnEmits>, slots?: any) => {
+    createForm: async (
+      el: string | Ref<HTMLElement> | ShallowRef<HTMLElement>,
+      proFormProps?: ProFormProps & Partial<ProFormOnEmits>,
+      slots?: any
+    ) => {
       const proFormInstance = createVNode(ProForm, { ...proFormProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(
         ElConfigProvider,
         { namespace: variables.elNamespace, size: unref(layoutSize) },
         { default: () => proFormInstance }
       );
+      if (isRef(el) || isShallow(el)) return render(rootInstance, unref(el as Ref<HTMLElement>));
+
       const currentInstance = getCurrentInstance();
-      const rootEl = currentInstance?.refs[el] as HTMLElement;
+      const rootEl = currentInstance?.refs[el as string] as HTMLElement;
       rootEl && render(rootInstance, rootEl);
     },
   };

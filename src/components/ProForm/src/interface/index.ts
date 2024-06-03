@@ -290,4 +290,4 @@ export type ProFormInstance = Omit<InstanceType<typeof ProForm>, keyof Component
 /**
  * provide 类型
  */
-export const enumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> = Symbol("EnumMap");
+export const formEnumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> = Symbol("EnumMap");

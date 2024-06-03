@@ -3,7 +3,7 @@ import type { ProTableInstance, TableColumnProps, TableSetProps } from "../inter
 import ProTable, { type ProTableOnEmits, type ProTableProps } from "../index.vue";
 import type { ProSearchInstance } from "@/components/ProSearch";
 import type { Paging } from "@/components/Pagination";
-import { createVNode, render } from "vue";
+import { createVNode, isShallow, render, type ShallowRef } from "vue";
 import { useDesign } from "@/hooks";
 import { useLayoutStore } from "@/stores";
 
@@ -242,15 +242,21 @@ export const useProTable = () => {
     /**
      * 动态创建表格。使用该函数，控制台会有 warning： Slot "XXX" invoked outside of the render function，可以忽略
      */
-    createTable: async (el: string, proTableProps?: ProTableProps & Partial<ProTableOnEmits>, slots?: any) => {
+    createTable: async (
+      el: string | Ref<HTMLElement> | ShallowRef<HTMLElement>,
+      proTableProps?: ProTableProps & Partial<ProTableOnEmits>,
+      slots?: any
+    ) => {
       const proTableInstance = createVNode(ProTable, { ...proTableProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(
         ElConfigProvider,
         { namespace: variables.elNamespace, size: unref(layoutSize) },
         { default: () => proTableInstance }
       );
+      if (isRef(el) || isShallow(el)) return render(rootInstance, unref(el as Ref<HTMLElement>));
+
       const currentInstance = getCurrentInstance();
-      const rootEl = currentInstance?.refs[el] as HTMLElement;
+      const rootEl = currentInstance?.refs[el as string] as HTMLElement;
       rootEl && render(rootInstance, rootEl);
     },
   };

@@ -72,6 +72,7 @@ import { ElButton, ElInput, ElMessage, ElMessageBox, ElSwitch, ElTag, type Table
 import { tableData } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
 import { exportJsonToExcel, formatJsonToArray } from "@/utils";
+import { withModifiers } from "vue";
 
 export interface ResUserList {
   id: string;
@@ -105,7 +106,11 @@ const columns: TableColumnProps<ResUserList>[] = [
     search: { el: "el-input" },
     render: scope => {
       return (
-        <ElButton type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
+        <ElButton
+          type="primary"
+          link
+          onClick={withModifiers(() => ElMessage.success("我是通过 tsx 语法渲染的内容"), ["stop"])}
+        >
           {scope.row.username}
         </ElButton>
       );
@@ -162,6 +167,7 @@ const columns: TableColumnProps<ResUserList>[] = [
     editConfig: {
       el: "el-input-number",
       key: "age",
+      formItem: { required: true },
     },
   },
   {
@@ -278,12 +284,21 @@ const cancelEdit = (row: any) => {
 };
 
 const confirmEdit = (row: any) => {
-  row._edit = false;
-  ElMessage.success({
-    message: `编辑成功，内容为 ${JSON.stringify(proTable.value?.getEditModel(row.id))}`,
-    plain: true,
+  row._validate((isValid, prop, label) => {
+    if (isValid) {
+      row._edit = false;
+      ElMessage.success({
+        message: `编辑成功，内容为 ${JSON.stringify(proTable.value?.getEditModel(row.id))}`,
+        plain: true,
+      });
+      proTable.value?.removeEditModel(row.id);
+    } else {
+      ElMessage.warning({
+        message: `${label} 为必填项`,
+        plain: true,
+      });
+    }
   });
-  proTable.value?.removeEditModel(row.id);
 };
 </script>
 

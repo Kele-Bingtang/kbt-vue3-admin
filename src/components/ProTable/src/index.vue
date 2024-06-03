@@ -1,5 +1,6 @@
 <template>
   <div :class="prefixClass">
+    {{ editModelList }}
     <!-- 查询表单 card -->
     <ProSearch
       ref="proSearchRef"
@@ -111,7 +112,7 @@ import {
   type ToolButton,
   type TableSetProps,
   proTablePrefixClassKey,
-  enumMapKey,
+  tableEnumMapKey,
   dialogFormInstanceKey,
   filterKey,
   type FilterRule,
@@ -302,7 +303,7 @@ const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
   const { data } = await enumValue(unref(enumMap));
   unref(enumMap).set(prop!, data);
 };
-provide(enumMapKey, enumMap);
+provide(tableEnumMapKey, enumMap);
 
 // ------- 初始化搜索配置项 -------
 // 扁平化 columns，为了过滤需要搜索的配置项
