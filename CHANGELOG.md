@@ -2,6 +2,24 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.2](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.1...v1.3.2) (2024-06-04)
+
+### Features
+
+- 🚀 proForm 新增 includeModelKeys prop，指定不要被自动清除的 key ([6a1f5f9](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/6a1f5f994c8fe921b14db8d2eb611a39126bdbee))
+
+### Bug Fixes
+
+- 🐞 解决部署 Vercel 后，路由刷新 404 问题 ([deb412b](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/deb412bff48a595d082fb9a3628871cdddc3784e))
+- 🐞 修复 ProTable 初始化重复发起请求。DialogForm 内容修复 ([cc3bb2d](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/cc3bb2de2555293f9b77e5ac354182eb6c90bd65))
+- 🐞 重构 DialogForm 组件代码，修复部分缺陷 ([f592db6](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/f592db632245484a86a9b2e8139d97790950a7c2))
+
+### Styling
+
+- 🎨 添加 vue 引用的导入 ([37ef9b2](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/37ef9b2724a54c78996d2673b3de3438e58a646b))
+- 🎨 scss 样式引入位置迁移。优化部分 TS 类型 ([1bf4f2f](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/1bf4f2f6709eb0c91d7df4c2f3a978a13d3a4eea))
+- 🎨 useDialog、UseDrawer 添加 footer 插槽 ([0ada931](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/0ada9311ff52533b22b9069085e7e0ea21949692))
+
 ### [1.3.1](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.0...v1.3.1) (2024-06-03)
 
 ### Features
