@@ -43,7 +43,8 @@ export interface ProFormProps {
     col?: Partial<ColProps>;
   };
   onlyRenderComponent?: boolean; // 是否只渲染 ProFormItem 组件，只使用表单组件
-  dynamicModel?: boolean; // 动态 model，如果 schema 发生变化，则重新渲染 model 表单数据（将被去掉的 schema 从 model 中去掉），默认启用 true
+  dynamicModel?: boolean; // 动态 model，如果 schema 发生变化，则重新渲染 model 表单数据（将不存在 schema 的 prop 从 model 中去掉），默认启用 true
+  includeModelKeys?: string[]; // 搭配 dynamicModel 使用，清除 model 不存在的 prop 时，指定保留 prop
 }
 
 const props = withDefaults(defineProps<ProFormProps>(), {
@@ -53,6 +54,7 @@ const props = withDefaults(defineProps<ProFormProps>(), {
   formProps: () => ({}),
   onlyRenderComponent: false,
   dynamicModel: true,
+  includeModelKeys: () => [],
 });
 
 const model = defineModel<Record<string, any>>({ default: () => ({}) });
@@ -202,7 +204,10 @@ watch(
     if (unref(getProps).dynamicModel) {
       // 如果 schema 对应的 prop 不存在，则删除 model 中的对应的 prop
       Object.keys(unref(model)).forEach(key => {
-        const isExist = schema.some(item => item.prop === key || item.renderUseProp?.includes(key));
+        const isExist = schema.some(
+          item =>
+            item.prop === key || item.renderUseProp?.includes(key) || unref(getProps).includeModelKeys?.includes(key)
+        );
         if (!isExist) delete unref(model)[key];
       });
     }

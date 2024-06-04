@@ -4,31 +4,31 @@
       <ProForm
         v-if="formProps.schema"
         ref="formElementRef"
+        v-bind="{ ...$attrs, ...formProps }"
+        v-model="model"
         :schema="newSchema"
-        :el-form-props="formProps.elFormProps"
-        :use-col="formProps.useCol"
-        :rowProps="formProps.rowProps"
-        v-model="form"
-        v-bind="$attrs"
+        :includeModelKeys="
+          formProps.includeModelKeys?.length ? [...formProps.includeModelKeys, ...[id || 'id']] : [id || 'id']
+        "
       >
         <template #footer v-if="$slots.formFooter">
-          <slot name="formFooter" v-bind="form"></slot>
+          <slot name="formFooter" v-bind="model"></slot>
         </template>
 
         <template #operation v-if="$slots.formOperation">
-          <slot name="formOperation" v-bind="form"></slot>
+          <slot name="formOperation" v-bind="model"></slot>
         </template>
       </ProForm>
     </slot>
 
     <template #header="scope" v-if="$slots.dialogHeader">
-      <slot name="dialogHeader" v-bind="{ ...form, ...scope }"></slot>
+      <slot name="dialogHeader" v-bind="{ ...model, ...scope }"></slot>
     </template>
 
     <template #footer>
-      <slot name="dialogFooter" v-bind="form">
+      <slot name="dialogFooter" v-bind="model">
         <el-button @click="dialogFormVisible = !dialogFormVisible">取消</el-button>
-        <el-button type="primary" @click="handleFormConfirm(form, status)">保存</el-button>
+        <el-button type="primary" @click="handleFormConfirm(model, status)">保存</el-button>
       </slot>
     </template>
   </WorkDialog>
@@ -100,11 +100,11 @@ const formElementRef = shallowRef();
 const dialogFormVisible = ref(false);
 
 // 表单
-const form = ref({});
+const model = ref({});
 const status = ref<DialogStatus>("");
 
 const dialogTitle = computed(() =>
-  typeof props?.dialog?.title === "function" ? props?.dialog?.title(unref(form), unref(status)) : props?.dialog?.title
+  typeof props?.dialog?.title === "function" ? props?.dialog?.title(unref(model), unref(status)) : props?.dialog?.title
 );
 
 const newSchema = computed((): FormSchemaProps[] | undefined => {
@@ -133,16 +133,16 @@ const newSchema = computed((): FormSchemaProps[] | undefined => {
 
 const handleAdd = async () => {
   status.value = "add";
-  if (!props?.cache) form.value = {};
-  else props?.id && delete (form.value as Record<string, any>)[props?.id!];
-  props.clickAdd && (form.value = (await props.clickAdd(unref(form))) ?? unref(form));
+  if (!props?.cache) model.value = {};
+  else props?.id && delete (model.value as Record<string, any>)[props?.id!];
+  props.clickAdd && (model.value = (await props.clickAdd(unref(model))) ?? unref(model));
   dialogFormVisible.value = true;
 };
 
 const handleEdit = async ({ row }: any) => {
   status.value = "edit";
-  form.value = deepCloneTableRow(row);
-  props.clickEdit && (form.value = (await props.clickEdit(unref(form))) ?? unref(form));
+  model.value = deepCloneTableRow(row);
+  props.clickEdit && (model.value = (await props.clickEdit(unref(model))) ?? unref(model));
   dialogFormVisible.value = true;
 };
 
@@ -170,7 +170,7 @@ const handleFormConfirm = (data: any, status: string) => {
           "添加失败！",
           async res => {
             props.afterAdd && (await props.afterAdd({ ...props.addCarryParams, data }, res));
-            if (!props.cache) form.value = {};
+            if (!props.cache) model.value = {};
             dialogFormVisible.value = false;
             props.afterConfirm && props.afterConfirm(true);
           },
@@ -194,7 +194,7 @@ const handleFormConfirm = (data: any, status: string) => {
           "编辑失败！",
           async res => {
             props.afterEdit && (await props.afterEdit({ ...props.editCarryParams, data }, res));
-            if (!props.cache) form.value = {};
+            if (!props.cache) model.value = {};
             dialogFormVisible.value = false;
             // 回调
             props.afterConfirm && props.afterConfirm(true);
@@ -224,8 +224,8 @@ const handleDelete = async ({ row }: any) => {
       "删除成功！",
       "删除失败！",
       async res => {
-        props.afterDelete && (await props.afterDelete(form, res));
-        if (props.cache) form.value = {};
+        props.afterDelete && (await props.afterDelete(model, res));
+        if (props.cache) model.value = {};
         props.afterConfirm && props.afterConfirm(true);
       },
       () => props.afterConfirm && props.afterConfirm(false)
@@ -252,7 +252,7 @@ const handleDeleteBatch = async (selectedListIds: string[], selectedList: any, f
         "删除成功！",
         "删除失败！",
         async res => {
-          props.afterDeleteBatch && (await props.afterDeleteBatch(form, res));
+          props.afterDeleteBatch && (await props.afterDeleteBatch(model, res));
           props.afterConfirm && props.afterConfirm(true);
           fallback();
         },
