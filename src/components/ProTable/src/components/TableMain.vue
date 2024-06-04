@@ -53,8 +53,8 @@
             </el-button>
             <el-popconfirm
               title="你确定删除吗?"
-              @confirm="handleDelete(scope, item)"
-              v-if="visibleButton(dialogForm?.deleteApi, dialogForm?.useDelete)"
+              @confirm="handleRemove(scope, item)"
+              v-if="visibleButton(dialogForm?.removeApi, dialogForm?.useRemove)"
             >
               <template #reference>
                 <el-button
@@ -62,7 +62,7 @@
                   type="danger"
                   size="small"
                   :icon="Delete"
-                  :disabled="scope.row.disableDelete && !dialogForm?.disableDelete"
+                  :disabled="scope.row.disableRemove && !dialogForm?.disableRemove"
                 >
                   删除
                 </el-button>
@@ -118,7 +118,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
 
 type TableMainEmits = {
   edit: [cope: any, item: TableColumnProps];
-  delete: [cope: any, item: TableColumnProps];
+  remove: [cope: any, item: TableColumnProps];
 };
 
 const emits = defineEmits<TableMainEmits>();
@@ -133,8 +133,8 @@ const handleEdit = (scope: any, item: TableColumnProps) => {
 };
 
 // 删除回调
-const handleDelete = (scope: any, item: TableColumnProps) => {
-  emits("delete", scope, item);
+const handleRemove = (scope: any, item: TableColumnProps) => {
+  emits("remove", scope, item);
 };
 
 const setTableColumn = (item: TableColumnProps) => {

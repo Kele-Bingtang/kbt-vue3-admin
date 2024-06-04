@@ -245,7 +245,7 @@ export interface TableColumnProps<T = any>
   /**
    * 删除操作事件，仅限 prop 为 operation 生效
    */
-  handleDelete?: (scope: TableRenderScope<any>, expose: any) => void;
+  handleRemove?: (scope: TableRenderScope<any>, expose: any) => void;
 }
 
 export type DialogFormInstance = Omit<

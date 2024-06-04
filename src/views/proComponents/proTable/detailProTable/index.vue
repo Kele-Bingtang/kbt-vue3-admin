@@ -198,7 +198,7 @@ const dialogForm = {
   },
   useAdd: true,
   useEdit: true,
-  useDelete: true,
+  useRemove: true,
   dialog: { title: "测试", width: "90%", top: "2vh", closeOnClickModal: false, height: 700 },
 };
 

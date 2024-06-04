@@ -18,12 +18,12 @@
           新增
         </el-button>
         <el-button
-          v-if="visibleButton(dialogForm?.deleteBatchApi, dialogForm?.useDeleteBatch) && showDeleteBatchBtn"
+          v-if="visibleButton(dialogForm?.removeBatchApi, dialogForm?.useRemoveBatch) && showDeleteBatchBtn"
           type="danger"
           :icon="Delete"
           plain
-          @click="emits('deleteBatch')"
-          :disabled="dialogForm?.disableDeleteBatch || !isSelected"
+          @click="emits('removeBatch')"
+          :disabled="dialogForm?.disableRemoveBatch || !isSelected"
         >
           删除
         </el-button>
@@ -124,7 +124,7 @@ const showToolButton = (key: ToolButton) => {
 
 type TableMainHeaderEmits = {
   add: [];
-  deleteBatch: [];
+  removeBatch: [];
   refresh: [];
   size: [size: ElTableSize, rowStyle: CSSProperties, cellStyle: CSSProperties, headerCellStyle: CSSProperties];
   colSetting: [];

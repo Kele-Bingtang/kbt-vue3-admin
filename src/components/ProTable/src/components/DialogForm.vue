@@ -36,7 +36,7 @@
 
 <script setup lang="ts">
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
-import { ProForm, WorkDialog, type ProFormProps, type FormSchemaProps } from "@/components";
+import { ProForm, WorkDialog, type ProFormProps, type FormSchemaProps, type ProFormInstance } from "@/components";
 import { shallowRef, ref, computed } from "vue";
 import { deepCloneTableRow } from "../helper";
 
@@ -59,54 +59,62 @@ export interface DialogFormProps<T = any> {
       height: string | number;
     }
   >; // el-dialog 配置项
+  id?: string; // 数据主键。编辑时必传，默认 id
+  cache?: boolean; // 是否缓存新增、编辑后遗留的数据
   addApi?: (params: Record<string, any>) => Promise<any>; // 新增接口
   addCarryParams?: Record<string, any>; // 新增时，额外添加的函数
   addFilterKeys?: string[]; // 新增时，过滤的参数
   editApi?: (params: Record<string, any>) => Promise<any>; // 编辑接口
   editCarryParams?: Record<string, any>; // 编辑时，额外添加的参数
   editFilterKeys?: string[]; // 编辑时，过滤的参数
-  deleteApi?: (params: Record<string, any>) => Promise<any>; // 删除接口
-  deleteCarryParams?: Record<string, any>; // 删除时，额外添加的参数
-  deleteFilterKeys?: string[]; // 删除时，过滤的参数
-  deleteBatchApi?: (params: Record<string, any>) => Promise<any>; // 批量删除接口
+  removeApi?: (params: Record<string, any>) => Promise<any>; // 删除接口
+  removeCarryParams?: Record<string, any>; // 删除时，额外添加的参数
+  removeFilterKeys?: string[]; // 删除时，过滤的参数
+  removeBatchCarryParams?: Record<string, any>; // 批量删除时，额外添加的参数
+  removeBatchFilterKeys?: string[]; // 批量删除时，过滤的参数
+  removeBatchApi?: (params: Record<string, any>) => Promise<any>; // 批量删除接口
   apiFilterKeys?: string[]; // 新增、编辑、删除时，过滤的参数
   apiCarryParams?: string[]; // 新增、编辑、删除时，额外添加的参数
-  id?: string; // 数据主键
-  cache?: boolean; // 是否缓存新增、编辑后遗留的数据
-  clickAdd?: (form: any) => void | Promise<any> | any; // 点击新增按钮回调
-  clickEdit?: (form: any) => void | Promise<any> | any; // 点击编辑按钮回调
-  beforeAdd?: (form: any) => void | Promise<any> | any; // 新增前回调
-  afterAdd?: (form: any, res: any) => void; // 新增后回调
-  beforeEdit?: (form: any) => void | Promise<any> | any; // 编辑前回调
-  afterEdit?: (form: any, res: any) => void; // 编辑后回调
-  beforeDelete?: (form: any) => void | Promise<any> | any; // 删除前回调
-  afterDelete?: (form: any, res: any) => void; // 删除后回调
-  beforeDeleteBatch?: (form: any) => void | Promise<any> | any; // 批量删除前回调
-  afterDeleteBatch?: (form: any, res: any) => void; // 批量删除后回调
+  clickAdd?: (model: Record<string, any>) => void | Promise<any> | any; // 点击新增按钮回调
+  clickEdit?: (model: Record<string, any>) => void | Promise<any> | any; // 点击编辑按钮回调
+  beforeAdd?: (model: Record<string, any>) => void | Promise<any> | any; // 新增前回调
+  afterAdd?: (model: Record<string, any>, result: any) => void; // 新增后回调
+  beforeEdit?: (model: Record<string, any>) => void | Promise<any> | any; // 编辑前回调
+  afterEdit?: (model: Record<string, any>, result: any) => void; // 编辑后回调
+  beforeRemove?: (model: Record<string, any>) => void | Promise<any> | any; // 删除前回调
+  afterRemove?: (model: Record<string, any>, result: any) => void; // 删除后回调
+  beforeRemoveBatch?: (model: Record<string, any>) => void | Promise<any> | any; // 批量删除前回调
+  afterRemoveBatch?: (model: Record<string, any>, result: any) => void; // 批量删除后回调
   beforeConfirm?: (status: string) => void; // 确定按钮触发前回调
-  afterConfirm?: (result: boolean) => void; // 确定按钮触发后回调
-  disableAdd?: boolean;
-  disableEdit?: boolean;
-  disableDelete?: boolean;
-  disableDeleteBatch?: boolean;
-  useAdd?: boolean;
-  useEdit?: boolean;
-  useDelete?: boolean;
-  useDeleteBatch?: boolean;
+  afterConfirm?: (status: string, result: any) => void; // 确定按钮触发后回调
+  disableAdd?: boolean; // 禁用新增按钮
+  disableEdit?: boolean; // 禁用编辑按钮
+  disableRemove?: boolean; // 禁用删除按钮
+  disableRemoveBatch?: boolean; // 禁用批量删除按钮
+  useAdd?: boolean; // 使用新增按钮
+  useEdit?: boolean; // 使用编辑按钮
+  useRemove?: boolean; // 使用删除按钮
+  useRemoveBatch?: boolean; // 使用批量删除按钮
 }
 
 const props = defineProps<DialogFormProps>();
-const formElementRef = shallowRef();
+const formElementRef = shallowRef<ProFormInstance>();
 const dialogFormVisible = ref(false);
 
 // 表单
-const model = ref({});
+const model = ref<Record<string, any>>({});
 const status = ref<DialogStatus>("");
 
+/**
+ * Dialog 标题
+ */
 const dialogTitle = computed(() =>
   typeof props?.dialog?.title === "function" ? props?.dialog?.title(unref(model), unref(status)) : props?.dialog?.title
 );
 
+/**
+ * 表单配置项
+ */
 const newSchema = computed((): FormSchemaProps[] | undefined => {
   // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 hidden 设置为 true
   props.formProps.schema?.forEach(column => {
@@ -131,134 +139,222 @@ const newSchema = computed((): FormSchemaProps[] | undefined => {
   return props.formProps?.schema as FormSchemaProps[];
 });
 
+/**
+ * 触发新增事件
+ */
 const handleAdd = async () => {
+  const { cache, id = "id", clickAdd } = props;
+
   status.value = "add";
-  if (!props?.cache) model.value = {};
-  else props?.id && delete (model.value as Record<string, any>)[props?.id!];
-  props.clickAdd && (model.value = (await props.clickAdd(unref(model))) ?? unref(model));
+  if (!cache) model.value = {};
+  else id && delete unref(model)[id];
+  clickAdd && (model.value = (await clickAdd(unref(model))) ?? unref(model));
   dialogFormVisible.value = true;
 };
 
+/**
+ * 触发编辑事件
+ */
 const handleEdit = async ({ row }: any) => {
+  const { clickEdit } = props;
+
   status.value = "edit";
   model.value = deepCloneTableRow(row);
-  props.clickEdit && (model.value = (await props.clickEdit(unref(model))) ?? unref(model));
+  clickEdit && (model.value = (await clickEdit(unref(model))) ?? unref(model));
   dialogFormVisible.value = true;
 };
 
-const handleFormConfirm = (data: any, status: string) => {
-  const formRef = unref(formElementRef).form as FormInstance;
-  props.beforeConfirm && props.beforeConfirm(status);
+/**
+ * 点击保存事件
+ */
+const handleFormConfirm = (data: any, status: DialogStatus) => {
+  const { beforeConfirm } = props;
+
+  beforeConfirm && beforeConfirm(status);
 
   // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台
   delete data._enum;
 
-  if (status === "add") {
-    formRef.validate(async valid => {
-      if (valid && props) {
-        data = (props.beforeAdd && (await props.beforeAdd(data))) || data;
-
-        // 删除 Insert 不允许传输的数据
-        const filterParams = [...(props?.apiFilterKeys || []), ...(props?.addFilterKeys || [])];
-        filterParams.forEach(item => delete data[item]);
-
-        // 执行新增接口
-        executeApi(
-          props.addApi,
-          { ...props.apiCarryParams, ...props.addCarryParams, ...data },
-          "添加成功！",
-          "添加失败！",
-          async res => {
-            props.afterAdd && (await props.afterAdd({ ...props.addCarryParams, data }, res));
-            if (!props.cache) model.value = {};
-            dialogFormVisible.value = false;
-            props.afterConfirm && props.afterConfirm(true);
-          },
-          () => props.afterConfirm && props.afterConfirm(false)
-        );
-      }
-    });
-  } else if (status === "edit") {
-    formRef.validate(async valid => {
-      if (valid && props) {
-        data = (props.beforeEdit && (await props.beforeEdit(data))) || data;
-
-        // 删除 Update 不允许传输的数据
-        const filterParams = [...(props?.apiFilterKeys || []), ...(props?.editFilterKeys || [])];
-        filterParams.forEach(item => delete data[item]);
-
-        executeApi(
-          props.editApi,
-          { ...props.apiCarryParams, ...props.editCarryParams, ...data },
-          "编辑成功！",
-          "编辑失败！",
-          async res => {
-            props.afterEdit && (await props.afterEdit({ ...props.editCarryParams, data }, res));
-            if (!props.cache) model.value = {};
-            dialogFormVisible.value = false;
-            // 回调
-            props.afterConfirm && props.afterConfirm(true);
-          },
-          () => props.afterConfirm && props.afterConfirm(false)
-        );
-      }
-    });
-  }
+  if (status === "add") handleDoAdd(data);
+  else if (status === "edit") handleDoEdit(data);
 };
 
-const handleDelete = async ({ row }: any) => {
-  if (props) {
-    let data = deepCloneTableRow(row);
-    // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台
-    delete data._enum;
+/**
+ * 执行新增事件
+ */
+const handleDoAdd = (data: any) => {
+  const formRef = unref(formElementRef)?.form as FormInstance;
 
-    props.beforeConfirm && props.beforeConfirm("delete");
-    data = (props.beforeDelete && (await props.beforeDelete(data))) || data;
-    // 删除 Delete 不允许传输的数据
-    const filterParams = [...(props?.apiFilterKeys || []), ...(props?.deleteFilterKeys || [])];
-    filterParams.forEach(item => delete data[item]);
+  formRef.validate(async valid => {
+    if (valid) {
+      const {
+        beforeAdd,
+        apiFilterKeys,
+        addFilterKeys,
+        addApi,
+        apiCarryParams,
+        addCarryParams,
+        afterAdd,
+        cache,
+        afterConfirm,
+      } = props;
 
-    executeApi(
-      props.deleteApi,
-      { ...props.apiCarryParams, ...props.deleteCarryParams, ...data },
-      "删除成功！",
-      "删除失败！",
-      async res => {
-        props.afterDelete && (await props.afterDelete(model, res));
-        if (props.cache) model.value = {};
-        props.afterConfirm && props.afterConfirm(true);
-      },
-      () => props.afterConfirm && props.afterConfirm(false)
-    );
-  }
+      data = (beforeAdd && (await beforeAdd(data))) || data;
+
+      // 删除 Add 不允许传输的数据
+      const filterParams = [...(apiFilterKeys || []), ...(addFilterKeys || [])];
+      filterParams.forEach(item => delete data[item]);
+
+      // 执行新增接口
+      executeApi(
+        addApi,
+        { ...apiCarryParams, ...addCarryParams, ...data },
+        "添加成功！",
+        "添加失败！",
+        async res => {
+          afterAdd && (await afterAdd({ ...addCarryParams, data }, res));
+          if (!cache) model.value = {};
+          dialogFormVisible.value = false;
+          afterConfirm && afterConfirm(unref(status), true);
+        },
+        () => afterConfirm && afterConfirm(unref(status), false)
+      );
+    }
+  });
 };
 
-const handleDeleteBatch = async (selectedListIds: string[], selectedList: any, fallback: () => void) => {
+/**
+ * 执行编辑事件
+ */
+const handleDoEdit = (data: any) => {
+  const formRef = unref(formElementRef)?.form as FormInstance;
+
+  formRef.validate(async valid => {
+    if (valid) {
+      const {
+        beforeEdit,
+        apiFilterKeys,
+        editFilterKeys,
+        editApi,
+        apiCarryParams,
+        editCarryParams,
+        afterEdit,
+        cache,
+        afterConfirm,
+      } = props;
+
+      data = (beforeEdit && (await beforeEdit(data))) || data;
+
+      // 删除 Update 不允许传输的数据
+      const filterParams = [...(apiFilterKeys || []), ...(editFilterKeys || [])];
+      filterParams.forEach(item => delete data[item]);
+
+      executeApi(
+        editApi,
+        { ...apiCarryParams, ...editCarryParams, ...data },
+        "编辑成功！",
+        "编辑失败！",
+        async res => {
+          afterEdit && (await afterEdit({ ...editCarryParams, data }, res));
+          if (!cache) model.value = {};
+          dialogFormVisible.value = false;
+          // 回调
+          afterConfirm && afterConfirm(unref(status), res);
+        },
+        () => afterConfirm && afterConfirm(unref(status), false)
+      );
+    }
+  });
+};
+
+/**
+ * 执行删除事件
+ */
+const handleRemove = async ({ row }: any) => {
+  let data = deepCloneTableRow(row);
+
+  // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台
+  delete data._enum;
+
+  const {
+    beforeConfirm,
+    beforeRemove,
+    apiFilterKeys,
+    removeFilterKeys,
+    removeApi,
+    apiCarryParams,
+    removeCarryParams,
+    afterRemove,
+    cache,
+    afterConfirm,
+  } = props;
+
+  beforeConfirm && beforeConfirm("remove");
+  data = (beforeRemove && (await beforeRemove(data))) || data;
+
+  // 删除 Remove 不允许传输的数据
+  const filterParams = [...(apiFilterKeys || []), ...(removeFilterKeys || [])];
+  filterParams.forEach(item => delete data[item]);
+
+  executeApi(
+    removeApi,
+    { ...apiCarryParams, ...removeCarryParams, ...data },
+    "删除成功！",
+    "删除失败！",
+    async res => {
+      afterRemove && (await afterRemove(model, res));
+      if (!cache) model.value = {};
+      afterConfirm && afterConfirm(unref(status), res);
+    },
+    () => afterConfirm && afterConfirm(unref(status), false)
+  );
+};
+
+/**
+ * 执行批量删除事件
+ */
+const handleRemoveBatch = async (selectedListIds: string[], selectedList: any, fallback: () => void) => {
   ElMessageBox.confirm(`删除所选信息?`, "温馨提示", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
     draggable: true,
   }).then(async () => {
-    if (props) {
-      let data = { idList: selectedListIds, dataList: selectedList };
+    let data = { idList: selectedListIds, dataList: selectedList };
 
-      props.beforeConfirm && props.beforeConfirm("deleteBatch");
-      data = (props.beforeDeleteBatch && (await props.beforeDeleteBatch(data))) || data;
+    const {
+      beforeConfirm,
+      beforeRemoveBatch,
+      apiFilterKeys,
+      removeBatchFilterKeys,
+      removeBatchApi,
+      apiCarryParams,
+      removeBatchCarryParams,
+      afterRemoveBatch,
+      cache,
+      afterConfirm,
+    } = props;
 
-      executeApi(
-        props.deleteBatchApi,
-        data,
-        "删除成功！",
-        "删除失败！",
-        async res => {
-          props.afterDeleteBatch && (await props.afterDeleteBatch(model, res));
-          props.afterConfirm && props.afterConfirm(true);
-          fallback();
-        },
-        () => props.afterConfirm && props.afterConfirm(false)
-      );
-    }
+    beforeConfirm && beforeConfirm("deleteBatch");
+    data = (beforeRemoveBatch && (await beforeRemoveBatch(data))) || data;
+
+    // 删除 Remove 不允许传输的数据
+    const filterParams = [...(apiFilterKeys || []), ...(removeBatchFilterKeys || [])];
+    filterParams.forEach(item => delete data[item]);
+
+    executeApi(
+      removeBatchApi,
+      { ...apiCarryParams, ...removeBatchCarryParams, ...data },
+      "删除成功！",
+      "删除失败！",
+      async res => {
+        afterRemoveBatch && (await afterRemoveBatch(model, res));
+        if (!cache) model.value = {};
+        afterConfirm && afterConfirm(unref(status), res);
+        fallback();
+      },
+      () => afterConfirm && afterConfirm(unref(status), false)
+    );
   });
 };
 
@@ -270,10 +366,10 @@ const executeApi = (
   successCallBack?: (res: any) => void,
   failureCallBack?: (res: any) => void
 ) => {
-  if (!api) return ElMessage.warning(failure + "没有提供对应接口");
+  if (!api) return ElMessage.warning({ message: `${failure}没有提供对应接口`, plain: true });
   api(params)
     .then(res => {
-      ElMessage.success(success);
+      ElMessage.success({ message: success, plain: true });
       return successCallBack && successCallBack(res);
     })
     .catch(err => {
@@ -281,5 +377,5 @@ const executeApi = (
     });
 };
 
-defineExpose({ handleAdd, handleEdit, handleDelete, handleDeleteBatch });
+defineExpose({ handleAdd, handleEdit, handleRemove, handleRemoveBatch });
 </script>

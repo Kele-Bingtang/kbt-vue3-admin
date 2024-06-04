@@ -28,7 +28,7 @@
         :isSelected="isSelected"
         :dialogForm="getProps.dialogForm"
         @add="dialogFormRef?.handleAdd"
-        @deleteBatch="handleDeleteBatch"
+        @removeBatch="handleRemoveBatch"
         @refresh="getTableList"
         @size="handleSizeCommand"
         @colSetting="toggleColSetting"
@@ -56,7 +56,7 @@
         :rowClickEdit="rowClickEdit"
         :dialogForm="getProps.dialogForm"
         @edit="handleEdit"
-        @delete="handleDelete"
+        @remove="handleRemove"
       >
         <template v-for="slot in Object.keys($slots)" #[slot]="scope">
           <slot :name="slot" v-bind="scope" />
@@ -478,14 +478,14 @@ const handleEdit = (scope: any, item: TableColumnProps) => {
 };
 
 // 删除事件
-const handleDelete = (scope: any, item: TableColumnProps) => {
-  if (item.handleDelete) item.handleDelete(scope, expose);
-  unref(dialogFormRef)?.handleDelete(scope);
+const handleRemove = (scope: any, item: TableColumnProps) => {
+  if (item.handleRemove) item.handleRemove(scope, expose);
+  unref(dialogFormRef)?.handleRemove(scope);
 };
 
 // 批量删除事件
-const handleDeleteBatch = () => {
-  unref(dialogFormRef)?.handleDeleteBatch(unref(selectedListIds), unref(selectedList), () => {
+const handleRemoveBatch = () => {
+  unref(dialogFormRef)?.handleRemoveBatch(unref(selectedListIds), unref(selectedList), () => {
     clearSelection();
     getTableList();
   });
