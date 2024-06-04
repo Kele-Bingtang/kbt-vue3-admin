@@ -2,6 +2,7 @@
 @import "./transition";
 @import "./module/namespace";
 @import "element-plus/theme-chalk/dark/css-vars.css"; // Element Plus 内置暗黑模式
+@import "./element-dark.scss"; // 自定义暗黑模式
 
 /* Global scss */
 body {

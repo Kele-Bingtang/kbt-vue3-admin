@@ -1,6 +1,5 @@
 import type { Plugin } from "vite";
 import compressPlugin from "vite-plugin-compression";
-import { isArray } from "../src/utils/layout/validate";
 
 /**
  * 打包压缩格式的类型声明
@@ -39,7 +38,7 @@ export const configCompressPlugin = (compress: ViteCompression): Plugin | Plugin
   codeList.forEach((item: any) => {
     if (compress.includes(item.k)) {
       if (compress.includes("clear")) {
-        if (isArray(item.v)) {
+        if (Array.isArray(item.v)) {
           item.v.forEach((vItem: any) => {
             plugins.push(compressPlugin(Object.assign(vItem, { deleteOriginFile: true })));
           });
@@ -47,7 +46,7 @@ export const configCompressPlugin = (compress: ViteCompression): Plugin | Plugin
           plugins.push(compressPlugin(Object.assign(item.v, { deleteOriginFile: true })));
         }
       } else {
-        if (isArray(item.v)) {
+        if (Array.isArray(item.v)) {
           item.v.forEach((vItem: any) => {
             plugins.push(compressPlugin(vItem));
           });

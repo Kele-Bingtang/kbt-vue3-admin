@@ -220,7 +220,7 @@ export const getCssVar = (prop: string, dom = document.documentElement) => {
 };
 
 /**
- * 补 px 单位
+ * @description 补 px 单位
  * @param val 值
  * @returns 补 px 单位的 string
  */

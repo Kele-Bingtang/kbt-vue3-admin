@@ -1,11 +1,10 @@
 import { createApp } from "vue";
 import pinia from "@/stores";
-import "@/styles/element-dark.scss"; // 自定义暗黑模式
 import App from "./App.vue";
 import router from "./router";
 import "@/styles/normalize.css"; // CSS Reset
-import directives from "@/directives/index";
-import I18n from "@/languages/index";
+import directives from "@/directives";
+import I18n from "@/languages";
 import "virtual:svg-icons-register";
 import { Icon, Auth, Role } from "@/components";
 import { errorHandler, checkNeed } from "@/utils";

@@ -61,18 +61,18 @@ export interface DialogFormProps<T = any> {
   >; // el-dialog 配置项
   id?: string; // 数据主键。编辑时必传，默认 id
   cache?: boolean; // 是否缓存新增、编辑后遗留的数据
-  addApi?: (params: Record<string, any>) => Promise<any>; // 新增接口
+  addApi?: (params: any) => Promise<any>; // 新增接口
   addCarryParams?: Record<string, any>; // 新增时，额外添加的函数
   addFilterKeys?: string[]; // 新增时，过滤的参数
-  editApi?: (params: Record<string, any>) => Promise<any>; // 编辑接口
+  editApi?: (params: any) => Promise<any>; // 编辑接口
   editCarryParams?: Record<string, any>; // 编辑时，额外添加的参数
   editFilterKeys?: string[]; // 编辑时，过滤的参数
-  removeApi?: (params: Record<string, any>) => Promise<any>; // 删除接口
+  removeApi?: (params: any) => Promise<any>; // 删除接口
   removeCarryParams?: Record<string, any>; // 删除时，额外添加的参数
   removeFilterKeys?: string[]; // 删除时，过滤的参数
   removeBatchCarryParams?: Record<string, any>; // 批量删除时，额外添加的参数
   removeBatchFilterKeys?: string[]; // 批量删除时，过滤的参数
-  removeBatchApi?: (params: Record<string, any>) => Promise<any>; // 批量删除接口
+  removeBatchApi?: (params: any) => Promise<any>; // 批量删除接口
   apiFilterKeys?: string[]; // 新增、编辑、删除时，过滤的参数
   apiCarryParams?: string[]; // 新增、编辑、删除时，额外添加的参数
   clickAdd?: (model: Record<string, any>) => void | Promise<any> | any; // 点击新增按钮回调
