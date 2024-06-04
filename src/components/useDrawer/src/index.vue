@@ -30,8 +30,10 @@
     <slot></slot>
 
     <template #footer>
-      <ElButton @Click="handleClose()">取 消</ElButton>
-      <ElButton type="primary" @click="handleConfirm()">确 定</ElButton>
+      <slot name="footer">
+        <ElButton @Click="handleClose()">取 消</ElButton>
+        <ElButton type="primary" @click="handleConfirm()">确 定</ElButton>
+      </slot>
     </template>
   </ElDrawer>
 </template>
