@@ -9,10 +9,12 @@
   </div>
 </template>
 
-<script setup lang="ts" name="403">
+<script setup lang="ts">
 import { useRouter } from "vue-router";
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
+
+defineOptions({ name: "403" });
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("error-page");

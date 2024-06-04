@@ -1,6 +1,6 @@
 import { type FormSchemaProps } from "@/components";
 import { getFormProp, hyphenToCamelCase, setFormProp } from "../helper";
-import type { ModelRef } from "vue";
+import type { ComputedRef, ModelRef, defineComponent } from "vue";
 import { componentMap } from "../helper/componentMap";
 import { type PascalCaseComponentName } from "../interface";
 

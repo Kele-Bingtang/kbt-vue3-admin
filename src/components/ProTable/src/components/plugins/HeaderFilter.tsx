@@ -3,6 +3,7 @@ import { ElPopover, ElIcon, ElButton } from "element-plus";
 import { filterKey, type TableColumnProps } from "../../interface";
 import { Filter } from "@element-plus/icons-vue";
 import { lastProp } from "../../helper";
+import { computed, inject } from "vue";
 
 export const useHeaderFilter = (column: TableColumnProps) => {
   const filterProps = inject(filterKey);

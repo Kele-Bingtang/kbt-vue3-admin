@@ -90,7 +90,20 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, provide, onMounted, computed, useAttrs, shallowRef, unref, type CSSProperties } from "vue";
+import {
+  ref,
+  watch,
+  provide,
+  onMounted,
+  computed,
+  useAttrs,
+  shallowRef,
+  unref,
+  type CSSProperties,
+  type ComponentPublicInstance,
+  isReactive,
+  reactive,
+} from "vue";
 import { useTable, type Table } from "./hooks/useTable";
 import { useSelection } from "./hooks/useSelection";
 import {

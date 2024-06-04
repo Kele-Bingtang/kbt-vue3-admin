@@ -72,6 +72,7 @@
 
 <script setup lang="ts" name="ErrorLog">
 import { useErrorLogStore, type ErrorLog } from "@/stores";
+import { computed, onActivated, onMounted, reactive, ref } from "vue";
 
 const errorStore = useErrorLogStore();
 const dialogErrorStackVisible = ref(false);

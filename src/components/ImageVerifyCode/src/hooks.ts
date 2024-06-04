@@ -1,3 +1,5 @@
+import { ref, onMounted } from "vue";
+
 /**
  * 绘制图形验证码
  * @param width - 图形宽度

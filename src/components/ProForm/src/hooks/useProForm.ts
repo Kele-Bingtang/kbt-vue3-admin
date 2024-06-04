@@ -2,7 +2,18 @@ import { ElConfigProvider, type FormInstance } from "element-plus";
 import type { FormSchemaProps, FormSetProps, ProFormInstance } from "../interface";
 import ProForm, { type ProFormOnEmits, type ProFormProps } from "../index.vue";
 import { isObject } from "../helper";
-import { createVNode, isShallow, render, type ShallowRef } from "vue";
+import {
+  type Ref,
+  createVNode,
+  getCurrentInstance,
+  isRef,
+  isShallow,
+  nextTick,
+  ref,
+  render,
+  unref,
+  type ShallowRef,
+} from "vue";
 import { useDesign } from "@/hooks";
 import { useLayoutStore } from "@/stores";
 

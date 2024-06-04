@@ -2,6 +2,7 @@ import { ProForm } from "@/components";
 import { type TableColumnProps, editKey, type TableRenderScope } from "../../interface";
 import { getColumnProp, lastProp, setColumnProp } from "../../helper";
 import { ElMessage } from "element-plus";
+import { ref, inject, computed, unref, nextTick } from "vue";
 
 export const useRowInlineEdit = (column: TableColumnProps) => {
   const { editConfig = {} } = column;

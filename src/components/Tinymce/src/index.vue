@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts" name="Tinymce">
-import { ref, reactive, computed, onMounted, onBeforeUnmount, watch, nextTick, unref } from "vue";
+import { ref, reactive, computed, onMounted, onBeforeUnmount, watch, nextTick, unref, useAttrs } from "vue";
 import TinymceEditor from "@tinymce/tinymce-vue";
 import "tinymce/tinymce";
 import "tinymce/icons/default";

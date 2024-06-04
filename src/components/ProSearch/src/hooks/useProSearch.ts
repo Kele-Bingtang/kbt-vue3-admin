@@ -2,7 +2,18 @@ import type { FormSchemaProps, FormSetProps } from "@/components/ProForm";
 import ProSearch, { type ProSearchExpose, type ProSearchOnEmits, type ProSearchProps } from "../index.vue";
 import { useDesign } from "@/hooks";
 import { ElConfigProvider } from "element-plus";
-import { createVNode, isShallow, render, type ShallowRef } from "vue";
+import {
+  type Ref,
+  createVNode,
+  getCurrentInstance,
+  isRef,
+  isShallow,
+  nextTick,
+  ref,
+  render,
+  unref,
+  type ShallowRef,
+} from "vue";
 import { useLayoutStore } from "@/stores";
 
 export const useProSearch = () => {

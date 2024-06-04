@@ -78,7 +78,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, type CSSProperties } from "vue";
+import { computed, inject, nextTick, watch, type CSSProperties } from "vue";
 import { ElTooltip, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, type ComponentSize } from "element-plus";
 import { Refresh, Plus, Operation, Search, Delete, Coin, Download } from "@element-plus/icons-vue";
 import { downloadFile, visibleButton } from "../helper";

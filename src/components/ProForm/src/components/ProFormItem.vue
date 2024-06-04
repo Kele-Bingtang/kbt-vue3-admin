@@ -23,7 +23,7 @@ import { useRenderSelect } from "./useRenderSelect";
 import { useRenderRadio } from "./useRenderRadio";
 import { useRenderCheckbox } from "./useRenderCheckbox";
 import { useRenderComponent } from "./useRenderComponent";
-import type { Component } from "vue";
+import type { Component, defineComponent } from "vue";
 import { componentMap } from "../helper/componentMap";
 
 defineOptions({ name: "ProFormItem" });

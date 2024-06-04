@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject } from "vue";
+import { inject, ref, useAttrs } from "vue";
 import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon, type TableColumnCtx } from "element-plus";
 import { Edit, Delete, DCaret } from "@element-plus/icons-vue";
 import TableColumn from "./TableColumn.vue";

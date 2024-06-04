@@ -22,7 +22,7 @@ import { ElPagination } from "element-plus";
 export const pageSetting = { pageNum: 1, pageSizes: [10, 20, 50, 100, 200], pageSize: 20 };
 </script>
 
-<script setup lang="ts" name="Pagination">
+<script setup lang="ts">
 import { useDesign } from "@/hooks";
 
 export interface Paging {
