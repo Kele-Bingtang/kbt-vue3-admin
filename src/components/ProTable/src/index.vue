@@ -279,7 +279,7 @@ onMounted(() => {
 
 // 监听页面 initRequestParam 改化，重新获取表格数据
 watch(
-  () => unref(getProps).initRequestParam,
+  () => [unref(mergeProps).initRequestParam, props.initRequestParam],
   () => getTableList(unref(getProps).initRequestParam),
   { deep: true }
 );

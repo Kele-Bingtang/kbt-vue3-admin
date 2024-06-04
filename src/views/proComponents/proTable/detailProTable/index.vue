@@ -58,7 +58,7 @@
   </div>
 </template>
 <script setup lang="tsx" name="CommonTicket">
-import { ProTable, Grid, GridItem, type TableColumnProps, type DialogProFormProps } from "@/components";
+import { ProTable, Grid, GridItem, type TableColumnProps, type DialogFormSchemaProps } from "@/components";
 // import ProForm from "@/components";
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
 import { schema, elFormProps } from "@/views/proComponents/proForm/detailProForm/options";
@@ -193,7 +193,7 @@ const columns: TableColumnProps<ProblemData>[] = [
 
 const dialogForm = {
   formProps: {
-    schema: schema as DialogProFormProps[],
+    schema: schema as DialogFormSchemaProps[],
     elFormProps,
   },
   useAdd: true,

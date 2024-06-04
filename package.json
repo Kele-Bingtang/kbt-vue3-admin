@@ -94,6 +94,7 @@
     "@rushstack/eslint-patch": "^1.10.2",
     "@types/file-saver": "^2.0.7",
     "@types/node": "^20.12.12",
+    "@types/nprogress": "^0.2.3",
     "@types/qrcode": "^1.5.5",
     "@types/sortablejs": "^1.15.8",
     "@uiw/codemirror-theme-dracula": "^4.22.1",

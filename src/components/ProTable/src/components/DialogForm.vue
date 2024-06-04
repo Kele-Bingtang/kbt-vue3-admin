@@ -40,18 +40,18 @@ import { ProForm, WorkDialog, type ProFormProps, type FormSchemaProps } from "@/
 import { shallowRef, ref, computed } from "vue";
 import { deepCloneTableRow } from "../helper";
 
-defineOptions({ name: "DialogOperate" });
+defineOptions({ name: "DialogForm" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
-export interface DialogProFormProps<T = any> extends Omit<FormSchemaProps<T>, "destroy" | "hidden" | "disabled"> {
+export interface DialogFormSchemaProps<T = any> extends Omit<FormSchemaProps<T>, "destroy" | "hidden" | "disabled"> {
   destroy?: Array<"add" | "edit"> | boolean; // 是否销毁表单，类似于 v-if
   hidden?: Array<"add" | "edit"> | boolean; // 是否隐藏表单，类似于 v-show
   disabled?: Array<"add" | "edit"> | boolean; // 是否禁用表单
 }
 
 export interface DialogFormProps<T = any> {
-  formProps: Omit<ProFormProps, "schema"> & { schema?: DialogProFormProps<T>[] };
+  formProps: Omit<ProFormProps, "schema"> & { schema?: DialogFormSchemaProps<T>[] };
   dialog: Partial<
     Omit<DialogProps, "modelValue" | "title"> & {
       title: string | ((form: any, status: DialogStatus) => string);
@@ -60,16 +60,17 @@ export interface DialogFormProps<T = any> {
     }
   >; // el-dialog 配置项
   addApi?: (params: Record<string, any>) => Promise<any>; // 新增接口
-  addCarryParams?: Record<string, any>; // 额外添加的函数
-  addFilterKeys?: string[]; // 过滤走的参数
+  addCarryParams?: Record<string, any>; // 新增时，额外添加的函数
+  addFilterKeys?: string[]; // 新增时，过滤的参数
   editApi?: (params: Record<string, any>) => Promise<any>; // 编辑接口
-  editCarryParams?: Record<string, any>;
-  editFilterKeys?: string[];
+  editCarryParams?: Record<string, any>; // 编辑时，额外添加的参数
+  editFilterKeys?: string[]; // 编辑时，过滤的参数
   deleteApi?: (params: Record<string, any>) => Promise<any>; // 删除接口
-  deleteCarryParams?: Record<string, any>;
-  deleteFilterKeys?: string[];
+  deleteCarryParams?: Record<string, any>; // 删除时，额外添加的参数
+  deleteFilterKeys?: string[]; // 删除时，过滤的参数
   deleteBatchApi?: (params: Record<string, any>) => Promise<any>; // 批量删除接口
-  apiFilterKeys?: string[];
+  apiFilterKeys?: string[]; // 新增、编辑、删除时，过滤的参数
+  apiCarryParams?: string[]; // 新增、编辑、删除时，额外添加的参数
   id?: string; // 数据主键
   cache?: boolean; // 是否缓存新增、编辑后遗留的数据
   clickAdd?: (form: any) => void | Promise<any> | any; // 点击新增按钮回调
@@ -146,7 +147,7 @@ const handleEdit = async ({ row }: any) => {
 };
 
 const handleFormConfirm = (data: any, status: string) => {
-  const formRef = unref(formElementRef).formRef as FormInstance;
+  const formRef = unref(formElementRef).form as FormInstance;
   props.beforeConfirm && props.beforeConfirm(status);
 
   // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台
@@ -164,7 +165,7 @@ const handleFormConfirm = (data: any, status: string) => {
         // 执行新增接口
         executeApi(
           props.addApi,
-          { ...props.addCarryParams, ...data },
+          { ...props.apiCarryParams, ...props.addCarryParams, ...data },
           "添加成功！",
           "添加失败！",
           async res => {
@@ -188,7 +189,7 @@ const handleFormConfirm = (data: any, status: string) => {
 
         executeApi(
           props.editApi,
-          { ...props.editCarryParams, ...data },
+          { ...props.apiCarryParams, ...props.editCarryParams, ...data },
           "编辑成功！",
           "编辑失败！",
           async res => {
@@ -219,7 +220,7 @@ const handleDelete = async ({ row }: any) => {
 
     executeApi(
       props.deleteApi,
-      { ...props.deleteCarryParams, ...data },
+      { ...props.apiCarryParams, ...props.deleteCarryParams, ...data },
       "删除成功！",
       "删除失败！",
       async res => {
