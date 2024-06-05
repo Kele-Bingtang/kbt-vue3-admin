@@ -38,11 +38,17 @@
 import { ref, watch, onBeforeMount, unref } from "vue";
 import { ElInput, ElScrollbar, ElTree } from "element-plus";
 import { useDesign } from "@/hooks";
+import type { TreeFilter } from "..";
 
 defineOptions({ name: "TreeFilter" });
 
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("tree-filter");
+
+export type TreeFilterInstance = Omit<
+  InstanceType<typeof TreeFilter>,
+  keyof ComponentPublicInstance | keyof TreeFilterProps
+>;
 
 // 接收父组件参数并设置默认值
 interface TreeFilterProps {
@@ -53,11 +59,14 @@ interface TreeFilterProps {
   label?: string; // 显示的label ==> 非必传，默认为 “label”
   multiple?: boolean; // 是否为多选 ==> 非必传，默认为 false
   defaultValue?: any; // 默认选中的值 ==> 非必传
+  enableTotal?: boolean; // 是否显示【全部】选项
+  defaultFirst?: boolean; // 是否默认选中第一个选项
 }
 const props = withDefaults(defineProps<TreeFilterProps>(), {
   id: "id",
   label: "label",
   multiple: false,
+  enableTotal: true,
 });
 
 const defaultProps = {
@@ -85,7 +94,15 @@ onBeforeMount(async () => {
   }
   const { data } = await props.requestApi!();
   treeData.value = data;
-  treeAllData.value = [{ [props.id]: "", [props.label]: "全部" }, ...data];
+  treeAllData.value = props.enableTotal ? [{ [props.id]: "", [props.label]: "全部" }, ...data] : data;
+
+  if (props.defaultFirst && treeAllData.value?.length) {
+    nextTick(() => {
+      const firstData = treeAllData.value[0];
+      treeRef.value?.setCurrentKey(firstData[props.id]);
+      emit("change", firstData[props.id], firstData);
+    });
+  }
 });
 
 watch(filterText, val => {
@@ -108,14 +125,14 @@ const filterNode = (value: string, data: Record<string, any>, node: any) => {
 };
 
 type FilterEmits = {
-  change: [value: any];
+  change: [value: any, data?: any];
 };
 const emit = defineEmits<FilterEmits>();
 
 // 单选
 const handleNodeClick = (data: Record<string, any>) => {
   if (props.multiple) return;
-  emit("change", data[props.id]);
+  emit("change", data[props.id], data);
 };
 
 // 多选
