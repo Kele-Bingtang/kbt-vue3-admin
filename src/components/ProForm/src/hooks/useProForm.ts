@@ -28,6 +28,8 @@ export const useProForm = () => {
 
   const layoutSize = computed(() => useLayoutStore().layoutSize);
 
+  const currentInstance = getCurrentInstance();
+
   /**
    * @param ref ProForm 实例
    * @param elRef ElForm 实例
@@ -180,9 +182,10 @@ export const useProForm = () => {
         { namespace: variables.elNamespace, size: unref(layoutSize) },
         { default: () => proFormInstance }
       );
+      await nextTick();
+
       if (isRef(el) || isShallow(el)) return render(rootInstance, unref(el as Ref<HTMLElement>));
 
-      const currentInstance = getCurrentInstance();
       const rootEl = currentInstance?.refs[el as string] as HTMLElement;
       rootEl && render(rootInstance, rootEl);
     },

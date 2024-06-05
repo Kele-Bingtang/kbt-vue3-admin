@@ -35,10 +35,6 @@ const RenderProSearch = (_: any, context: Record<string, any>) => {
   );
 };
 
-onMounted(() => {
-  createSearch("proSearchRef", { schema: schema, modeValue: model, onSearch: handleSearch, onReset: handleSearch });
-});
-
 const handleSearch = async (data: Record<string, any>) => {
   console.log(data);
 };
@@ -99,6 +95,8 @@ const schema: ProSearchSchemaProps[] = reactive([
     el: "el-input",
   },
 ]);
+
+createSearch("proSearchRef", { schema: schema, modeValue: model, onSearch: handleSearch, onReset: handleSearch });
 </script>
 
 <style lang="scss" scoped></style>

@@ -1,6 +1,7 @@
 // https://github.com/pure-admin/vue-pure-admin/blob/main/src/utils/message.ts 进行封装
 import { type MessageHandler, ElMessage } from "element-plus";
 import { isFunction, isString } from "./validate";
+import type { VNode } from "vue";
 
 type MessageStyle = "el" | "antd";
 type MessageTypes = "info" | "success" | "warning" | "error";
@@ -31,6 +32,7 @@ interface MessageParams {
   grouping?: boolean;
   /** 关闭时的回调函数, 参数为被关闭的 `message` 实例 */
   onClose?: Function | null;
+  plain?: boolean;
 }
 
 /** 用法非常简单，参考 src/views/components/message/index.vue 文件 */
@@ -104,6 +106,7 @@ function messageType(
         appendTo = document.body,
         grouping = false,
         onClose,
+        plain,
       } = extra;
       return ElMessage({
         message: params,
@@ -118,11 +121,13 @@ function messageType(
         grouping,
         customClass: customClass === "antd" ? "antd-message" : customClass,
         onClose: () => (isFunction(onClose) ? onClose() : null),
+        plain,
       });
     }
     return ElMessage({
       message: params,
       type: t,
+      plain: true,
     });
   } else {
     const {
@@ -161,7 +166,7 @@ function messageType(
 }
 
 function isMessageProps(value: MessageProps | MessageParams): value is MessageProps {
-  return isString(value) || !(value as MessageParams).message;
+  return isString(value) || !(value as MessageParams)?.message;
 }
 
 function isMessageParams(params: MessageParams | Omit<MessageParams, "type">): params is MessageParams {

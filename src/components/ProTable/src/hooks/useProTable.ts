@@ -1,7 +1,7 @@
 import { ElConfigProvider, type TableInstance } from "element-plus";
 import type { ProTableInstance, TableColumnProps, TableSetProps } from "../interface";
 import ProTable, { type ProTableOnEmits, type ProTableProps } from "../index.vue";
-import type { ProSearchInstance, Paging } from "@work/components";
+import type { ProSearchInstance, Paging } from "@/components";
 import {
   type Ref,
   createVNode,
@@ -30,6 +30,8 @@ export const useProTable = () => {
   const { variables } = useDesign();
 
   const layoutSize = computed(() => useLayoutStore().layoutSize);
+
+  const currentInstance = getCurrentInstance();
 
   /**
    * @param ref ProTable 实例
@@ -263,9 +265,10 @@ export const useProTable = () => {
         { namespace: variables.elNamespace, size: unref(layoutSize) },
         { default: () => proTableInstance }
       );
+      await nextTick();
+
       if (isRef(el) || isShallow(el)) return render(rootInstance, unref(el as Ref<HTMLElement>));
 
-      const currentInstance = getCurrentInstance();
       const rootEl = currentInstance?.refs[el as string] as HTMLElement;
       rootEl && render(rootInstance, rootEl);
     },

@@ -24,6 +24,8 @@ export const useProSearch = () => {
 
   const layoutSize = computed(() => useLayoutStore().layoutSize);
 
+  const currentInstance = getCurrentInstance();
+
   /**
    * @param ref Search实例
    * @param elRef ElForm实例
@@ -134,9 +136,11 @@ export const useProSearch = () => {
         { namespace: variables.elNamespace, size: unref(layoutSize) },
         { default: () => proSearchInstance }
       );
+
+      await nextTick();
+
       if (isRef(el) || isShallow(el)) return render(rootInstance, unref(el as Ref<HTMLElement>));
 
-      const currentInstance = getCurrentInstance();
       const rootEl = currentInstance?.refs[el as string] as HTMLElement;
       rootEl && render(rootInstance, rootEl);
     },
