@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.3](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.2...v1.3.3) (2024-06-05)
+
+### Features
+
+- 🚀 treeFilter 添加部分 props 功能 ([fd26055](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/fd2605510f7ff2bf565fd464fa3d27e97748719b))
+
+### Bug Fixes
+
+- 🐞 修复静态资源找不到问题 ([7260689](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/7260689b2a8939b2b167f9122917bbb5d185edf3))
+- 🐞 修复类型丢失导致打包失败问题 ([8acc44d](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/8acc44d659629cbffa14f4fac9047d1f136c49cd))
+
+### Styling
+
+- 🎨 超级组件 create 函数支持在 script setup 直接使用。message 函数支持 ElMesage 的 plain 以及默认开启 plain ([e211188](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/e21118847ffac4e28860a37b3b70378700d4f316))
+
 ### [1.3.2](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.1...v1.3.2) (2024-06-04)
 
 ### Features
