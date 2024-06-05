@@ -8,7 +8,7 @@
       <el-tooltip effect="dark" content="亮色" placement="top" :show-after="200">
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="`${prefixClass}__item`" @click="handleAsideTheme(LayoutThemeType.Light)">
-            <img src="@/assets/svg/menu-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
+            <img src="@/assets/icons/menu-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
             <el-icon v-if="settingsStore.menuTheme === LayoutThemeType.Light"><CircleCheckFilled /></el-icon>
           </div>
         </div>
@@ -17,7 +17,7 @@
       <el-tooltip effect="dark" content="暗色" placement="top" :show-after="200">
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="`${prefixClass}__item`" @click="handleAsideTheme(LayoutThemeType.Dark)">
-            <img src="@/assets/svg/menu-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
+            <img src="@/assets/icons/menu-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
             <el-icon v-if="settingsStore.menuTheme === LayoutThemeType.Dark"><CircleCheckFilled /></el-icon>
           </div>
         </div>
@@ -30,7 +30,7 @@
       <el-tooltip effect="dark" content="亮色" placement="top" :show-after="200">
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="`${prefixClass}__item`" @click="handleHeaderTheme(LayoutThemeType.Light)">
-            <img src="@/assets/svg/header-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
+            <img src="@/assets/icons/header-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
             <el-icon v-if="settingsStore.headerTheme === LayoutThemeType.Light"><CircleCheckFilled /></el-icon>
           </div>
         </div>
@@ -38,7 +38,7 @@
       <el-tooltip effect="dark" content="暗色" placement="top" :show-after="200">
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="`${prefixClass}__item`" @click="handleHeaderTheme(LayoutThemeType.Dark)">
-            <img src="@/assets/svg/header-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
+            <img src="@/assets/icons/header-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
             <el-icon v-if="settingsStore.headerTheme === LayoutThemeType.Dark"><CircleCheckFilled /></el-icon>
           </div>
         </div>

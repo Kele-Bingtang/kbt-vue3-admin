@@ -1,5 +1,5 @@
 <template>
-  <WorkDialog v-model="dialogFormVisible" destroy-on-close draggable v-bind="dialog" :title="dialogTitle">
+  <WorkDialog v-model="dialogFormVisible" draggable v-bind="dialog" :title="dialogTitle">
     <slot name="form">
       <ProForm
         v-if="formProps.schema"
@@ -8,7 +8,7 @@
         v-model="model"
         :schema="newSchema"
         :includeModelKeys="
-          formProps.includeModelKeys?.length ? [...formProps.includeModelKeys, ...[id || 'id']] : [id || 'id']
+          formProps.includeModelKeys?.length ? [...formProps.includeModelKeys, ...includeModelKeys] : includeModelKeys
         "
       >
         <template #footer v-if="$slots.formFooter">
@@ -44,10 +44,10 @@ defineOptions({ name: "DialogForm" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
-export interface DialogFormSchemaProps<T = any> extends Omit<FormSchemaProps<T>, "destroy" | "hidden" | "disabled"> {
-  destroy?: Array<"add" | "edit"> | boolean; // 是否销毁表单，类似于 v-if
-  hidden?: Array<"add" | "edit"> | boolean; // 是否隐藏表单，类似于 v-show
-  disabled?: Array<"add" | "edit"> | boolean; // 是否禁用表单
+export interface DialogFormSchemaProps<T = any> extends FormSchemaProps {
+  destroyIn?: Array<"add" | "edit">; // 是否销毁表单，类似于 v-if
+  hiddenIn?: Array<"add" | "edit">; // 是否隐藏表单，类似于 v-show
+  disabledIn?: Array<"add" | "edit">; // 是否禁用表单
 }
 
 export interface DialogFormProps<T = any> {
@@ -59,7 +59,7 @@ export interface DialogFormProps<T = any> {
       height: string | number;
     }
   >; // el-dialog 配置项
-  id?: string; // 数据主键。编辑时必传，默认 id
+  id?: string | string[]; // 数据主键。编辑时必传，默认 id
   cache?: boolean; // 是否缓存新增、编辑后遗留的数据
   addApi?: (params: any) => Promise<any>; // 新增接口
   addCarryParams?: Record<string, any>; // 新增时，额外添加的函数
@@ -112,6 +112,9 @@ const dialogTitle = computed(() =>
   typeof props?.dialog?.title === "function" ? props?.dialog?.title(unref(model), unref(status)) : props?.dialog?.title
 );
 
+// 组装主键 id 为数组
+const includeModelKeys = computed(() => (Array.isArray(props.id) ? props.id : [props.id || "id"]));
+
 /**
  * 表单配置项
  */
@@ -119,20 +122,20 @@ const newSchema = computed((): FormSchemaProps[] | undefined => {
   // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 hidden 设置为 true
   props.formProps.schema?.forEach(column => {
     if (!column) return;
-    const { destroy, hidden, disabled } = column;
+    const { destroyIn, hiddenIn, disabledIn } = column;
 
-    if (Array.isArray(destroy)) {
-      if (destroy.includes("add")) (column.destroy as boolean) = status.value === "add";
-      else if (destroy.includes("edit")) (column.destroy as boolean) = status.value === "edit";
+    if (Array.isArray(destroyIn)) {
+      if (destroyIn.includes("add")) (column.destroy as boolean) = status.value === "add";
+      else if (destroyIn.includes("edit")) (column.destroy as boolean) = status.value === "edit";
     }
-    if (Array.isArray(hidden)) {
-      if (hidden.includes("add")) (column.hidden as boolean) = status.value === "add";
-      else if (hidden.includes("edit")) (column.hidden as boolean) = status.value === "edit";
+    if (Array.isArray(hiddenIn)) {
+      if (hiddenIn.includes("add")) (column.hidden as boolean) = status.value === "add";
+      else if (hiddenIn.includes("edit")) (column.hidden as boolean) = status.value === "edit";
     }
 
-    if (Array.isArray(disabled)) {
-      if (disabled.includes("add")) (column.disabled as boolean) = status.value === "add";
-      else if (disabled.includes("edit")) (column.disabled as boolean) = status.value === "edit";
+    if (Array.isArray(disabledIn)) {
+      if (disabledIn.includes("add")) (column.disabled as boolean) = status.value === "add";
+      else if (disabledIn.includes("edit")) (column.disabled as boolean) = status.value === "edit";
     }
   });
 
@@ -147,7 +150,11 @@ const handleAdd = async () => {
 
   status.value = "add";
   if (!cache) model.value = {};
-  else id && delete unref(model)[id];
+  else if (Array.isArray(id)) {
+    id.forEach(key => {
+      delete unref(model)[key];
+    });
+  } else id && delete unref(model)[id];
   clickAdd && (model.value = (await clickAdd(unref(model))) ?? unref(model));
   dialogFormVisible.value = true;
 };
@@ -379,3 +386,4 @@ const executeApi = (
 
 defineExpose({ handleAdd, handleEdit, handleRemove, handleRemoveBatch });
 </script>
+, unref

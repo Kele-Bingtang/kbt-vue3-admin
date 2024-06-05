@@ -24,7 +24,7 @@
       >
         <template #default="scope">
           <span :class="`${variables.elNamespace}-tree-node__label`">
-            <slot :row="scope">
+            <slot v-bind="scope">
               {{ scope.node.label }}
             </slot>
           </span>

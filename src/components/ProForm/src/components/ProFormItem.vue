@@ -71,7 +71,7 @@ const columnEnum = computed(() => {
       return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
     });
   }
-  if (enumKey) return enumData[enumKey];
+  if (enumKey) return enumData[enumKey] || [];
   return enumData;
 });
 

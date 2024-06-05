@@ -364,7 +364,7 @@ Admin 模板布局用到的可定制化样式位于 `src/styles` 下，如侧边
 
 Admin 模板使用的图标是 Element UI 内置的和 SVG 格式，因为 Element UI 内置的图标较少，所以自行在网上找 SVG 图标，如 [阿里云矢量图标库](https://www.iconfont.cn/)。
 
-图标放置于 `src/assets/svg` 下。
+图标放置于 `src/assets/icons` 下。
 
 使用步骤：在 vue 组件里使用 Icon 标签，如 `<Icon name="bug" width="20px" height="20px" />`，其中 name 是 svg 的文件名，width 和 height 为图标的宽度和高度。
 
