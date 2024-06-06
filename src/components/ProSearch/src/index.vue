@@ -1,6 +1,6 @@
 <template>
   <div v-if="schema.length" :class="`card ${prefixClass}`">
-    <ProForm :schema="schema" v-model="model" @register="formRegister" @validate="onFormValidate">
+    <ProForm :schema="schema" v-model="model" @register="formRegister" @validate="onFormValidate" :enum-map-props>
       <template #default="{ parseLabel, getComponentWidth }">
         <Grid
           ref="gridRef"
@@ -94,6 +94,7 @@ export interface ProSearchProps {
   searchLoading?: boolean; // 搜索按钮的 loading
   resetLoading?: boolean; // 搜索按钮的 loading
   removeNoValue?: boolean; // 是否去除空值项
+  enumMapProps?: Map<string, Record<string, any>[]>; // 存储 enum 值。该 props 是搭配 ProTable 使用，因为 ProTable 已经初始化部分字典数据，因此不需要 ProForm 再次请求这些字典数据
 }
 
 // 默认值

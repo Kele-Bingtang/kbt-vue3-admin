@@ -56,6 +56,7 @@ export interface ProFormProps {
   onlyRenderComponent?: boolean; // 是否只渲染 ProFormItem 组件，只使用表单组件
   dynamicModel?: boolean; // 动态 model，如果 schema 发生变化，则重新渲染 model 表单数据（将不存在 schema 的 prop 从 model 中去掉），默认启用 true
   includeModelKeys?: string[]; // 搭配 dynamicModel 使用，清除 model 不存在的 prop 时，指定保留 prop
+  enumMapProps?: Map<string, Record<string, any>[]>; // 存储 enum 值。该 props 是搭配 ProTable 使用，因为 ProTable 已经初始化部分字典数据，因此不需要 ProForm 再次请求这些字典数据
 }
 
 const props = withDefaults(defineProps<ProFormProps>(), {
@@ -82,7 +83,7 @@ const getProps = computed(() => {
 });
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
-const enumMap = ref(new Map<string, Record<string, any>[]>());
+const enumMap = ref(props.enumMapProps || new Map<string, Record<string, any>[]>());
 
 const setEnumMap = async ({ enum: enumValue, prop, useCacheEnum = true }: FormSchemaProps) => {
   if (!enumValue) return;

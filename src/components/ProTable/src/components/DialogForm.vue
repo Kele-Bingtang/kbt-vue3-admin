@@ -10,6 +10,7 @@
         :includeModelKeys="
           formProps.includeModelKeys?.length ? [...formProps.includeModelKeys, ...includeModelKeys] : includeModelKeys
         "
+        :enumMapProps="enumMap"
       >
         <template #footer v-if="$slots.formFooter">
           <slot name="formFooter" v-bind="model"></slot>
@@ -39,6 +40,7 @@ import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox 
 import { ProForm, WorkDialog, type ProFormProps, type FormSchemaProps, type ProFormInstance } from "@/components";
 import { shallowRef, ref, computed, unref } from "vue";
 import { deepCloneTableRow } from "../helper";
+import { tableEnumMapKey } from "../interface";
 
 defineOptions({ name: "DialogForm" });
 
@@ -104,6 +106,8 @@ const dialogFormVisible = ref(false);
 // 表单
 const model = ref<Record<string, any>>({});
 const status = ref<DialogStatus>("");
+
+const enumMap = inject(tableEnumMapKey);
 
 const dialogProps = computed(() => {
   const { dialog } = props;

@@ -211,11 +211,6 @@ export interface TableColumnProps<T = any>
     | ((enumMap?: Map<string, Record<string, any>>) => Promise<any>)
     | ComputedRef<TableEnumProps[]>;
   /**
-   * 是否缓存 enum 数据
-   * @default true
-   */
-  useCacheEnum?: boolean;
-  /**
    * 如果 enum 是接口调用，那么可以指定哪个 key 获取 enum 数据，默认返回的数据作为 enum
    */
   enumKey?: string;

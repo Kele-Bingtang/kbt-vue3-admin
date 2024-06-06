@@ -12,6 +12,7 @@
       @search="_search"
       @reset="_reset"
       @register="searchRegister"
+      :enum-map-props="enumMap"
     />
 
     <div :class="`card ${prefixClass}__main`">
@@ -300,19 +301,13 @@ watch(
 // ------- 字典处理 -------
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, Record<string, any>[]>());
-const setEnumMap = async ({ enum: enumValue, prop, useCacheEnum = true }: TableColumnProps) => {
+const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
   if (!enumValue) return;
 
   const enumMapConst = unref(enumMap);
 
   // 如果当前 enumMap 存在相同的值 return & 开启缓存功能
-  if (
-    useCacheEnum &&
-    enumMapConst.has(prop!) &&
-    (typeof enumValue === "function" || enumMapConst.get(prop!) === enumValue)
-  ) {
-    return;
-  }
+  if (enumMapConst.has(prop!) && (typeof enumValue === "function" || enumMapConst.get(prop!) === enumValue)) return;
 
   // 当前 enum 为静态数据，则直接存储到 enumMap
   if (typeof enumValue !== "function") return enumMapConst.set(prop!, unref(enumValue!));
