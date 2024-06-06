@@ -300,20 +300,29 @@ watch(
 // ------- 字典处理 -------
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充搜索下拉选择）
 const enumMap = ref(new Map<string, Record<string, any>[]>());
-const setEnumMap = async ({ enum: enumValue, prop }: TableColumnProps) => {
+const setEnumMap = async ({ enum: enumValue, prop, useCacheEnum = true }: TableColumnProps) => {
   if (!enumValue) return;
 
-  // 如果当前 enumMap 存在相同的值 return
-  if (unref(enumMap).has(prop!) && (typeof enumValue === "function" || unref(enumMap).get(prop!) === enumValue)) return;
+  const enumMapConst = unref(enumMap);
 
-  // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
-  if (typeof enumValue !== "function") return unref(enumMap).set(prop!, unref(enumValue!));
+  // 如果当前 enumMap 存在相同的值 return & 开启缓存功能
+  if (
+    useCacheEnum &&
+    enumMapConst.has(prop!) &&
+    (typeof enumValue === "function" || enumMapConst.get(prop!) === enumValue)
+  ) {
+    return;
+  }
+
+  // 当前 enum 为静态数据，则直接存储到 enumMap
+  if (typeof enumValue !== "function") return enumMapConst.set(prop!, unref(enumValue!));
 
   // 为了防止接口执行慢，而存储慢，导致重复请求，所以预先存储为[]，接口返回后再二次存储
-  unref(enumMap).set(prop!, []);
+  enumMapConst.set(prop!, []);
 
-  const { data } = await enumValue(unref(enumMap));
-  unref(enumMap).set(prop!, data);
+  // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
+  const { data } = await enumValue(enumMapConst);
+  enumMapConst.set(prop!, data);
 };
 provide(tableEnumMapKey, enumMap);
 

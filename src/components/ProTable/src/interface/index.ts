@@ -88,7 +88,8 @@ export type FilterRule =
 
 export interface FilterConfig {
   /**
-   * 是否开启筛选功能
+   * 是否开启筛选功能.
+   * @default true
    */
   enabled?: boolean;
   /**
@@ -144,7 +145,8 @@ export interface EditConfig
     | "enumKey"
   > {
   /**
-   * 是否开启行内编辑，默认为 true
+   * 是否开启行内编辑，true 开启，false 不开启
+   * @default true
    */
   enabled?: boolean;
   /**
@@ -181,10 +183,12 @@ export interface TableColumnProps<T = any>
   type?: TypeProps;
   /**
    * 是否是标签展示
+   * @default false
    */
   tag?: boolean;
   /**
    * 是否显示在表格当中
+   * @default true
    */
   isShow?: boolean;
   /**
@@ -207,6 +211,11 @@ export interface TableColumnProps<T = any>
     | ((enumMap?: Map<string, Record<string, any>>) => Promise<any>)
     | ComputedRef<TableEnumProps[]>;
   /**
+   * 是否缓存 enum 数据
+   * @default true
+   */
+  useCacheEnum?: boolean;
+  /**
    * 如果 enum 是接口调用，那么可以指定哪个 key 获取 enum 数据，默认返回的数据作为 enum
    */
   enumKey?: string;
@@ -216,6 +225,7 @@ export interface TableColumnProps<T = any>
   useEnumMap?: string | ((enumMap: Map<string, Record<string, any>>) => Record<string, any>);
   /**
    * 当前单元格值是否根据 enum 格式化（示例：enum 只作为搜索项数据，不参与内容格式化）
+   * @default true
    */
   isFilterEnum?: boolean;
   /**

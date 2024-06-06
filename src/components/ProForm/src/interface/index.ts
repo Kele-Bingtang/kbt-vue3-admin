@@ -59,6 +59,7 @@ export enum ComponentNameEnum {
   EL_UPLOAD = "ElUpload",
   WANG_EDITOR = "WangEditor",
   TINYMCE = "Tinymce",
+  USER_SELECT = "UserSelect",
   ICON_PICKER = "IconPicker",
 }
 
@@ -157,7 +158,7 @@ export interface FormSetProps {
 /**
  * 表单配置项
  */
-export interface FormSchemaProps<T = Record<string, any>> {
+export interface FormSchemaProps<T = any> {
   /**
    * ElCol Props
    */
@@ -186,6 +187,11 @@ export interface FormSchemaProps<T = Record<string, any>> {
     | ((model: T, enumMap: Map<string, Record<string, any>>) => Promise<any>)
     | ComputedRef<FormEnumProps[]>;
   /**
+   * 是否缓存 enum 数据
+   * @default true
+   */
+  useCacheEnum?: boolean;
+  /**
    * 从 enumMap 中获取其他的 enum 数据
    */
   useEnumMap?: string | ((enumMap: Map<string, Record<string, any>>) => Record<string, any>);
@@ -195,6 +201,7 @@ export interface FormSchemaProps<T = Record<string, any>> {
   enumKey?: string;
   /**
    * 字典指定 label && value && children 的 key 值
+   * @default Object { label: "label", value: "value", children: "children" }
    */
   fieldNames?: FormFieldNamesProps;
   /**
@@ -258,22 +265,27 @@ export interface FormSchemaProps<T = Record<string, any>> {
   renderUseProp?: string[];
   /**
    * 是否销毁表单，true 销毁，false 不销毁，类似于 v-if
+   * @default false
    */
   destroy?: boolean | ((model: T) => boolean);
   /**
    * 是否隐藏表单，true 隐藏，false 不隐藏，类似于 v-show
+   * @default false
    */
   hidden?: boolean | ((model: T) => boolean);
   /**
    * 是否禁用表单，true 禁用，false 不禁用
+   * @default false
    */
   disabled?: boolean | ((model: T) => boolean);
   /**
-   * 表单绑定的值格式，默认 default（针对 Enum Value 是 string "1"，而值是 number 1 导致编辑时无法匹配问题）
+   * 表单绑定的值格式，针对 Enum Value 是 string "1"，而值是 number 1 导致编辑时无法匹配问题
+   * @default default
    */
   valueFormat?: "default" | "string" | "number" | "boolean";
   /**
    * label 标题大小，默认 default。仅 el 为 el-divider | ElDivider 生效
+   * @default default
    */
   labelSize?: "default" | "small" | "large";
   /**
