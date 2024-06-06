@@ -37,16 +37,16 @@ export const getFormProp = (
   valueFormat: "default" | "string" | "number" | "boolean" = "default"
 ) => {
   let value: any;
-  if (!prop.includes(".")) value = form[prop] ?? undefined;
+  if (!prop.includes(".")) value = form[prop];
   else {
     prop.split(".").forEach(item => (form = form[item] ?? ""));
     // 如果是 ElInputNumber，则需要返回数字类型，因此这里 form 如果为 ""，则返回 undefined，这样字符串和数字类型的组件都支持
     value = form || undefined;
   }
 
-  if (valueFormat === "string") return value + "";
-  if (valueFormat === "number") return Number(value);
-  if (valueFormat === "boolean") {
+  if (valueFormat === "string" && value) return value + "";
+  if (valueFormat === "number" && value) return Number(value);
+  if (valueFormat === "boolean" && value) {
     if ((value as any) === "1" || (value as any) === 1) return true;
     else return false;
   }

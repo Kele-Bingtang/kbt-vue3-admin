@@ -1,5 +1,5 @@
 <template>
-  <WorkDialog v-model="dialogFormVisible" draggable v-bind="dialog" :title="dialogTitle">
+  <WorkDialog v-model="dialogFormVisible" draggable v-bind="dialogProps">
     <slot name="form">
       <ProForm
         v-if="formProps.schema"
@@ -53,10 +53,10 @@ export interface DialogFormSchemaProps<T = any> extends FormSchemaProps<T> {
 export interface DialogFormProps<T = any> {
   formProps: Omit<ProFormProps, "schema"> & { schema?: DialogFormSchemaProps<T>[] };
   dialog: Partial<
-    Omit<DialogProps, "modelValue" | "title"> & {
-      title: string | ((form: any, status: DialogStatus) => string);
+    Omit<DialogProps, "modelValue" | "title" | "height"> & {
+      title: string | ((model: any, status: DialogStatus) => string);
       fullscreen: boolean;
-      height: string | number;
+      height: string | number | ((status: DialogStatus) => string | number);
     }
   >; // el-dialog 配置项
   id?: string | string[]; // 数据主键。编辑时必传，默认 id
@@ -105,12 +105,13 @@ const dialogFormVisible = ref(false);
 const model = ref<Record<string, any>>({});
 const status = ref<DialogStatus>("");
 
-/**
- * Dialog 标题
- */
-const dialogTitle = computed(() =>
-  typeof props?.dialog?.title === "function" ? props?.dialog?.title(unref(model), unref(status)) : props?.dialog?.title
-);
+const dialogProps = computed(() => {
+  const { dialog } = props;
+
+  const title = typeof dialog?.title === "function" ? dialog?.title(unref(model), unref(status)) : dialog?.title;
+  const height = typeof dialog?.height === "function" ? dialog.height(unref(status)) : dialog?.height;
+  return { ...dialog, title, height };
+});
 
 // 组装主键 id 为数组
 const includeModelKeys = computed(() => (Array.isArray(props.id) ? props.id : [props.id || "id"]));

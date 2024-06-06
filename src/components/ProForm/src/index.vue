@@ -182,8 +182,14 @@ const isHidden = (item: FormSchemaProps) => {
  * 是否销毁表单项 & 是否初始化表单项默认值
  */
 const isDestroy = (item: FormSchemaProps) => {
-  const { destroy } = item;
-  if (typeof destroy === "function") return destroy(unref(model));
+  let destroy: boolean;
+  if (typeof item.destroy === "function") destroy = item.destroy(unref(model));
+  else destroy = item.destroy || false;
+
+  // 如果不销毁，则初始化表单默认值，反之则重置为空
+  if (!destroy) initDefaultValue(item);
+  else delete unref(model)[item.prop?.split(".")[0]];
+
   return destroy;
 };
 
