@@ -5,7 +5,7 @@
     v-if="!menuItem.children || menuItem.children.length == 0"
     class="menu-item"
   >
-    <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
+    <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />
     <template #title>
       <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
       <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
@@ -15,7 +15,7 @@
   </el-menu-item>
   <el-sub-menu v-else :index="menuItem.meta._fullPath || menuItem.path" class="sub-menu">
     <template #title>
-      <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" />
+      <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />
       <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
       <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
         <span>{{ title(menuItem) }}</span>
@@ -72,14 +72,13 @@ watch(
 <style lang="scss" scoped>
 .menu-item,
 .sub-menu {
-  user-select: none;
-
-  :deep(.svg-icon) {
-    width: 1.5rem !important;
+  .menu-icon {
     width: var(--#{$el-namespace}-menu-icon-width) !important;
     margin-right: 5px;
     overflow: visible;
+    font-size: 18px;
     text-align: center;
+    vertical-align: middle;
   }
 }
 </style>

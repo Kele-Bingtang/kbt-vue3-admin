@@ -1,6 +1,6 @@
 <template>
   <div :class="prefixClass">
-    <ElInput disabled v-model="modelValue" clearable />
+    <ElInput disabled v-model="modelValue" clearable v-bind="$attrs" />
     <ElPopover
       :popper-class="`${prefixClass}__popover`"
       placement="bottom"
@@ -29,7 +29,7 @@
                 }"
                 :class="`${prefixClass}__icon`"
                 @click="iconSelect(icon)"
-                v-copy="modelValue"
+                v-copy="tip ? modelValue : undefined"
               >
                 <Icon
                   :icon="icon"
@@ -48,7 +48,7 @@
           small
           :page-sizes="[100, 200, 300, 400]"
           layout="total, prev, pager, next, jumper"
-          :total="filterItemIcons(icons[currentIconNameIndex].icons).length"
+          :total="filterItemIcons(icons[currentIconNameIndex]?.icons || []).length"
         />
       </div>
     </ElPopover>
@@ -70,6 +70,8 @@ defineOptions({ name: "IconPicker" });
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("icon-picker");
 
+defineProps<{ tip?: boolean }>();
+
 const configGlobal = inject(ConfigGlobalKey);
 
 const init = async (icon?: string) => {
@@ -77,8 +79,9 @@ const init = async (icon?: string) => {
   const iconInfo = icon.split(":");
   iconName.value = iconInfo[0];
   const wrapIndex = icons.findIndex(item => item.prefix === iconInfo[0]);
+
   // 查询当前icon的索引
-  const index = filterItemIcons(icons[wrapIndex].icons).findIndex(item => item === icon);
+  const index = filterItemIcons(icons[wrapIndex]?.icons || []).findIndex(item => item === icon);
   // 计算当前icon的页码
   await nextTick();
   currentPage.value = Math.ceil((index + 1) / unref(pageSize));
@@ -148,7 +151,7 @@ const popoverShow = () => {
 };
 
 const iconSelect = (icon: string) => {
-  // 如果是同一个icon则不做处理，则相当于点击了清空按钮
+  // 如果是同一个 icon 则不做处理，则相当于点击了清空按钮
   if (icon === unref(modelValue)) {
     modelValue.value = "";
     return;
