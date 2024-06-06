@@ -12,7 +12,7 @@ import {
   useSlots,
   onMounted,
   computed,
-  ComponentPublicInstance,
+  type ComponentPublicInstance,
   defineComponent,
 } from "vue";
 import {
@@ -240,7 +240,7 @@ const getComponentWidth = ({ width, props: componentProps }: FormSchemaProps) =>
   const { elFormProps = {} } = unref(getProps);
   const style = componentProps?.style || { width: "100%" }; // 默认宽度 100%
   if (width) return { ...style, width: getPx(width) };
-  if (elFormProps?.fixWidth) return { ...style, width: getPx(elFormProps.width || elFormProps.inline ? 220 : "100%") };
+  if (elFormProps.fixWidth) return { ...style, width: getPx(elFormProps.width || elFormProps.inline ? 220 : "100%") };
   return style;
 };
 

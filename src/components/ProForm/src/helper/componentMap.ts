@@ -22,10 +22,11 @@ import {
   ElTreeSelect,
   ElUpload,
 } from "element-plus";
+import { type PascalCaseComponentName } from "../interface";
+import Tree from "../components/Tree.vue";
 import WangEditor from "@/components/WangEditor/index";
 import Tinymce from "@/components/Tinymce/index";
-import Tree from "../components/Tree.vue";
-import { type PascalCaseComponentName } from "../interface";
+import IconPicker from "@/components/IconPicker/index";
 
 const componentMap: Record<PascalCaseComponentName, Component> = {
   ElInput,
@@ -54,6 +55,7 @@ const componentMap: Record<PascalCaseComponentName, Component> = {
   ElUpload,
   WangEditor,
   Tinymce,
+  IconPicker,
 };
 
 export { componentMap };

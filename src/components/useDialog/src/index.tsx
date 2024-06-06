@@ -80,7 +80,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
     isFullscreen.value = !unref(isFullscreen);
   };
 
-  const contentHeight = ref(getPx(dialogProps.height));
+  const contentHeight = ref(getPx(dialogProps.height || 400));
 
   watch(
     () => unref(isFullscreen),
@@ -90,7 +90,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
         const windowHeight = document.documentElement.offsetHeight;
         contentHeight.value = `${windowHeight - 41 - 49 - 47 - (dialogProps.footerRender ? 63 : 0)}px`;
       } else {
-        contentHeight.value = getPx(dialogProps.height);
+        contentHeight.value = getPx(dialogProps.height || 400);
       }
     },
     {

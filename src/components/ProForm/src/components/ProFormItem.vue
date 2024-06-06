@@ -11,7 +11,7 @@
 
   <RenderElComponents v-else-if="hyphenToCamelCase(column.el)?.startsWith('El')" />
 
-  <RenderComponent v-else />
+  <RenderComponent :style="style" v-else />
 </template>
 
 <script setup lang="tsx">

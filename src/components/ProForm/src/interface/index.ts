@@ -59,6 +59,7 @@ export enum ComponentNameEnum {
   EL_UPLOAD = "ElUpload",
   WANG_EDITOR = "WangEditor",
   TINYMCE = "Tinymce",
+  ICON_PICKER = "IconPicker",
 }
 
 /**
