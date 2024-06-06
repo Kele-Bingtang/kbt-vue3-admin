@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.3.4](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.3...v1.3.4) (2024-06-06)
+
+### Features
+
+- 🚀 proTable、ProForm 添加是否使用缓存 enum 配置项 ([7ede707](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/7ede707fed690215f176d8f4f3239ca2c121e1b5))
+
+### Bug Fixes
+
+- 🐞 修复 ProForm 的 Select 渲染 undefined 值。添加常用的原子 class。封装 DialogForm 传给 Dialog 的 props ([c745a3e](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/c745a3e706a49243af479dc4c02f8b48001d00b9))
+- 🐞 修复 ProTable enum 调用接口获取字典数据后，ProSearch 和 DialogForm 使用了 ProForm，导致重复获取调用接口重复获取字典数据问题 ([fc5f6a8](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/fc5f6a8c8fb1423176659e4d296d8e9cd6841883))
+
+### Styling
+
+- 🎨 iconPicker 添加 tip props。修复 IconPicker 传不存在的 icon 名字报错问题 ([b01a5fe](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/b01a5fef31bfb9f3fc898951f0b0c93a41ab1b13))
+- 🎨 useDialog 默认高度 400。ProForm 添加自定义组件的 style 透传。ProForm 内置 IconPicker 组件 ([d2abc0c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/d2abc0c83a55ace0fded036b665ad867bfa767c4))
+
 ### [1.3.3](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.2...v1.3.3) (2024-06-05)
 
 ### Features
