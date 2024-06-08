@@ -491,7 +491,7 @@ provide(dialogFormInstanceKey, dialogFormRef);
 // 编辑事件
 const handleEdit = (scope: any, item: TableColumnProps) => {
   if (item.handleEdit) item.handleEdit(scope, expose);
-  else unref(dialogFormRef)?.handleEdit(scope);
+  else unref(dialogFormRef)?.handleEdit(scope.row);
 };
 
 // 删除事件

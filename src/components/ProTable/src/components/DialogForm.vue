@@ -2,13 +2,13 @@
   <WorkDialog v-model="dialogFormVisible" draggable v-bind="dialogProps">
     <slot name="form">
       <ProForm
-        v-if="formProps.schema"
-        ref="formElementRef"
+        v-if="formProps?.schema"
+        ref="proFormRef"
         v-bind="{ ...$attrs, ...formProps }"
         v-model="model"
         :schema="newSchema"
         :includeModelKeys="
-          formProps.includeModelKeys?.length ? [...formProps.includeModelKeys, ...includeModelKeys] : includeModelKeys
+          formProps?.includeModelKeys?.length ? [...formProps.includeModelKeys, ...includeModelKeys] : includeModelKeys
         "
         :enumMapProps="enumMap"
       >
@@ -53,12 +53,12 @@ export interface DialogFormSchemaProps<T = any> extends FormSchemaProps<T> {
 }
 
 export interface DialogFormProps<T = any> {
-  formProps: Omit<ProFormProps, "schema"> & { schema?: DialogFormSchemaProps<T>[] };
-  dialog: Partial<
+  formProps?: Omit<ProFormProps, "schema"> & { schema?: DialogFormSchemaProps<T>[] };
+  dialog?: Partial<
     Omit<DialogProps, "modelValue" | "title" | "height"> & {
       title: string | ((model: any, status: DialogStatus) => string);
       fullscreen: boolean;
-      height: string | number | ((status: DialogStatus) => string | number);
+      height: string | number | ((model: any, status: DialogStatus) => string | number);
     }
   >; // el-dialog 配置项
   id?: string | string[]; // 数据主键。编辑时必传，默认 id
@@ -100,7 +100,7 @@ export interface DialogFormProps<T = any> {
 }
 
 const props = defineProps<DialogFormProps>();
-const formElementRef = shallowRef<ProFormInstance>();
+const proFormRef = shallowRef<ProFormInstance>();
 const dialogFormVisible = ref(false);
 
 // 表单
@@ -113,7 +113,7 @@ const dialogProps = computed(() => {
   const { dialog } = props;
 
   const title = typeof dialog?.title === "function" ? dialog?.title(unref(model), unref(status)) : dialog?.title;
-  const height = typeof dialog?.height === "function" ? dialog.height(unref(status)) : dialog?.height;
+  const height = typeof dialog?.height === "function" ? dialog.height(unref(model), unref(status)) : dialog?.height;
   return { ...dialog, title, height };
 });
 
@@ -125,7 +125,7 @@ const includeModelKeys = computed(() => (Array.isArray(props.id) ? props.id : [p
  */
 const newSchema = computed((): FormSchemaProps[] | undefined => {
   // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 hidden 设置为 true
-  props.formProps.schema?.forEach(column => {
+  props.formProps?.schema?.forEach(column => {
     if (!column) return;
     const { destroyIn, hiddenIn, disabledIn } = column;
 
@@ -150,11 +150,14 @@ const newSchema = computed((): FormSchemaProps[] | undefined => {
 /**
  * 触发新增事件
  */
-const handleAdd = async () => {
+const handleAdd = async (row?: any) => {
   const { cache, id = "id", clickAdd } = props;
 
   status.value = "add";
-  if (!cache) model.value = {};
+  unref(proFormRef)?.form?.resetFields();
+
+  if (row) model.value = deepCloneTableRow(row);
+  else if (!cache) model.value = {};
   else if (Array.isArray(id)) {
     id.forEach(key => {
       delete unref(model)[key];
@@ -167,10 +170,11 @@ const handleAdd = async () => {
 /**
  * 触发编辑事件
  */
-const handleEdit = async ({ row }: any) => {
+const handleEdit = async (row: any) => {
   const { clickEdit } = props;
 
   status.value = "edit";
+  unref(proFormRef)?.form?.resetFields();
   model.value = deepCloneTableRow(row);
   clickEdit && (model.value = (await clickEdit(unref(model))) ?? unref(model));
   dialogFormVisible.value = true;
@@ -195,7 +199,7 @@ const handleFormConfirm = (data: any, status: DialogStatus) => {
  * 执行新增事件
  */
 const handleDoAdd = (data: any) => {
-  const formRef = unref(formElementRef)?.form as FormInstance;
+  const formRef = unref(proFormRef)?.form as FormInstance;
 
   formRef.validate(async valid => {
     if (valid) {
@@ -239,7 +243,7 @@ const handleDoAdd = (data: any) => {
  * 执行编辑事件
  */
 const handleDoEdit = (data: any) => {
-  const formRef = unref(formElementRef)?.form as FormInstance;
+  const formRef = unref(proFormRef)?.form as FormInstance;
 
   formRef.validate(async valid => {
     if (valid) {
@@ -282,7 +286,7 @@ const handleDoEdit = (data: any) => {
 /**
  * 执行删除事件
  */
-const handleRemove = async ({ row }: any) => {
+const handleRemove = async (row: any) => {
   let data = deepCloneTableRow(row);
 
   // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台
