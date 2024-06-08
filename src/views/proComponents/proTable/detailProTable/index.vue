@@ -66,10 +66,10 @@ import { schema, elFormProps } from "@/views/proComponents/proForm/detailProForm
 interface ProblemData {
   id: string;
   ticketNo: string;
-  ticketDesc: string;
+  title: string;
   priority: string;
   status: string;
-  eventStartTime: string;
+  eventStarTime: string;
   eventEndTime: string;
   dueDate: string;
   owner: string;
@@ -171,7 +171,7 @@ const initRequestParam = { serviceName: "ETS_MIT_iWork_problem" };
 const columns: TableColumnProps<ProblemData>[] = [
   { type: "expand", label: "Expand", width: 50 },
   { prop: "ticketNo", label: "TicketNo", width: 100, search: { el: "el-input" } },
-  { prop: "ticketDesc", label: "TicketDesc", search: { el: "el-input" } },
+  { prop: "title", label: "TicketDesc", search: { el: "el-input" } },
   { prop: "priority", label: "Priority", width: 80 },
   { prop: "status", label: "Status", width: 70 },
   {
@@ -181,7 +181,7 @@ const columns: TableColumnProps<ProblemData>[] = [
     render: ({ row }) => {
       return (
         <>
-          <span>{row.eventStartTime}</span> {row.eventEndTime && <div>~</div>} <span>{row.eventEndTime}</span>
+          <span>{row.eventStarTime}</span> {row.eventEndTime && <div>~</div>} <span>{row.eventEndTime}</span>
         </>
       );
     },

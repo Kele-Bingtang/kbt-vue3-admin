@@ -82,7 +82,7 @@ const afterChange = () => {
   if (props.autoScroll) {
     nextTick(() => {
       scrollTo(`${variables.elNamespace}-table__body-wrapper`, 0, 700);
-      scrollTo(`${variables.elNamespace}el-main`, 0, 700);
+      scrollTo(`${variables.elNamespace}-main`, 0, 700);
     });
   }
 };
@@ -94,7 +94,7 @@ defineExpose({ paging: pageSetting });
 $prefix-class: #{$admin-namespace}-pagination;
 
 .#{$prefix-class} {
-  padding: 32px 16px;
+  padding: 15px 2px 0;
   background: #ffffff;
 
   &.hidden {

@@ -1,8 +1,8 @@
 <template>
-  <RenderSlots v-if="column?.render" />
+  <RenderSlots v-if="column?.render" :style="style" />
 
   <Tree
-    v-else-if="column?.el === 'el-tree'"
+    v-else-if="hyphenToCamelCase(column.el) === ComponentNameEnum.EL_TREE"
     :data="columnEnum"
     :model-value="getFormProp(model, column.prop)"
     @update:model-value="v => setFormProp(model, column.prop, v)"
@@ -11,7 +11,7 @@
 
   <RenderElComponents v-else-if="hyphenToCamelCase(column.el)?.startsWith('El')" />
 
-  <RenderComponent :style="style" v-else />
+  <RenderComponent v-else :style="style" />
 </template>
 
 <script setup lang="tsx">
