@@ -1,5 +1,5 @@
 import type { IconifyIcon } from "@iconify/vue";
-import type { Component, ComponentPublicInstance } from "vue";
+import type { Component, ComponentPublicInstance, ShallowRef, Ref } from "vue";
 
 // LayoutState
 export interface TabProp {
@@ -123,4 +123,14 @@ export interface MessageStore {
 
 export interface MessageState {
   message: MessageStore;
+}
+
+// WebSocketStore
+export interface WebSocketStore {
+  websocket: Nullable<WebSocket>;
+  status: string;
+  websocketUrl: string;
+  connect: (url: string) => void;
+  disconnect: () => void;
+  sendMessage: (data: any) => void;
 }

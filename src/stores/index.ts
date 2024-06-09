@@ -2,13 +2,14 @@ import settings from "@/config/settings";
 import { createPinia } from "pinia";
 import { createPersistedState } from "pinia-plugin-persistedstate";
 
+export * from "./interface";
 export * from "./errorLog";
 export * from "./layout";
 export * from "./permission";
 export * from "./settings";
 export * from "./user";
-export * from "./interface";
 export * from "./message";
+export * from "./websocket";
 
 const customStorage = {
   getItem: (key: string) => {

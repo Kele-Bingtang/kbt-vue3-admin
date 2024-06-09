@@ -10,11 +10,11 @@ import router from "@/router";
 import { LOGIN_URL } from "@/router/routesConfig";
 import { ElNotification } from "element-plus";
 
-const axiosCanceler = new AxiosCanceler();
-
 type AxiosRequestConfigProp<D = any> = AxiosRequestConfig<D> & {
   method: "get" | "post" | "delete" | "put" | "download";
 };
+
+const axiosCanceler = new AxiosCanceler();
 
 /**
  * @description 当请求 url 携带的如下前缀（key），会替换为 http（value），如接口 url 为 /test/xx/xxx，则最终发送的请求为 https://youngkbt.cn/xx/xxx
@@ -112,10 +112,10 @@ class RequestHttp {
   get<T>(url: string, params?: object, _object = {}): Promise<T> {
     return this.service.get(url, { params, ..._object });
   }
-  post<T>(url: string, params?: object, _object = {}): Promise<T> {
+  post<T>(url: string, params?: object | string, _object = {}): Promise<T> {
     return this.service.post(url, params, _object);
   }
-  put<T>(url: string, params?: object, _object = {}): Promise<T> {
+  put<T>(url: string, params?: object | string, _object = {}): Promise<T> {
     return this.service.put(url, params, _object);
   }
   delete<T>(url: string, params?: any, _object = {}): Promise<T> {
