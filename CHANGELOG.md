@@ -2,6 +2,22 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.4.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.4...v1.4.0) (2024-06-10)
+
+### Features
+
+- 🚀 添加全局 log 打印功能，支持 base、info、success、warning、danger、error、table、picture 函数美化输出到控制台 ([d7fc3e5](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/d7fc3e5158d2554e712acf8b928c02a9fc63dde0))
+- 🚀 新增 WebSocket 的 Store ([397b8e4](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/397b8e4a11d8ca4ab2975bc735c5902060aaf15b))
+
+### Styling
+
+- 🎨 分页 padding 修改。ProFormItem render 传入 style ([9f78354](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/9f78354dfbff47b44cf2350162a43e7b8ceb1c21))
+- 🎨 dialogForm 代码格式修改 ([68b0d5a](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/68b0d5a03c9d1baae9abe657c890681c805943b9))
+
+### Docs
+
+- 📚 更新 README.md 文档 ([94075be](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/94075be902f0d19caad08c6696413cea71107ff7))
+
 ### [1.3.4](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.3...v1.3.4) (2024-06-06)
 
 ### Features
