@@ -1,5 +1,5 @@
 import type { IconifyIcon } from "@iconify/vue";
-import type { Component, ComponentPublicInstance, ShallowRef, Ref } from "vue";
+import type { Component, ComponentPublicInstance } from "vue";
 
 // LayoutState
 export interface TabProp {

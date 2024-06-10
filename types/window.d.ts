@@ -1,3 +1,15 @@
+interface Log {
+  base: (text: any) => void;
+  info: (textOrTitle: any, content?: any) => void;
+  primary: (textOrTitle: any, content?: any) => void;
+  success: (textOrTitle: any, content?: any) => void;
+  warning: (textOrTitle: any, content?: any) => void;
+  danger: (textOrTitle: any, content?: any) => void;
+  error: (content: any) => void;
+  table: (data: any[]) => void;
+  picture: (url: string, scale: number) => void;
+}
+
 declare global {
   interface Navigator {
     browserLanguage: string;
@@ -11,10 +23,9 @@ declare global {
     mozRequestAnimationFrame;
     oRequestAnimationFrame;
     msRequestAnimationFrame;
+    log: Log;
   }
-}
 
-declare global {
   /**
    * 平台的名称、版本、依赖、最后构建时间的类型提示
    */
@@ -27,6 +38,8 @@ declare global {
     };
     lastBuildTime: string;
   };
+
+  const log: Log;
 }
 
 export {}; // 扩展 global 而不是覆盖

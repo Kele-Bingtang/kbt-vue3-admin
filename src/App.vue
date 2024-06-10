@@ -81,4 +81,6 @@ const versionCache = () => {
     useCache().setCacheVersion(version);
   }
 };
+
+log.success(__APP_INFO__.pkg.version, "欢迎使用 Kbt Vue3 Admin 系统");
 </script>

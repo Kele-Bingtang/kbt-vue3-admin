@@ -85,6 +85,7 @@
     "AppInfo": true,
     "__APP_INFO__": true,
     "http": true,
-    "ExtractPropTypes": true
+    "ExtractPropTypes": true,
+    "log": true
   }
 }

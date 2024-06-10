@@ -11,7 +11,7 @@ import LayoutColumns from "./LayoutColumns/index.vue";
 import LayoutMixins from "./LayoutMixins/index.vue";
 import LayoutSubsystem from "./LayoutSubsystem/index.vue";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
-import { useSettingsStore, useUserStore, useWebSocketStore, type WebSocketStore } from "@/stores";
+import { useSettingsStore, useUserStore, useWebSocketStore } from "@/stores";
 import { useLayout } from "@/hooks";
 import { getPx, setStyleVar } from "@/utils";
 import { type Component, computed, watch, watchEffect } from "vue";

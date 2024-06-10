@@ -125,6 +125,7 @@ export default defineConfig(({ command, mode }: ConfigEnv): UserConfig => {
     define: {
       __APP_INFO__: JSON.stringify(__APP_INFO__),
       __VUE_PROD_HYDRATION_MISMATCH_DETAILS__: "true", // 去除控制台的一个警告信息
+      log: {},
     },
   };
 });

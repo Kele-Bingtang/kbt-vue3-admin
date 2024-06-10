@@ -8,6 +8,7 @@ export * from "./layout/message";
 export * from "./layout/scrollTo";
 export * from "./layout/themeTool";
 export * from "./layout/validate";
+export * from "./layout/log";
 
 export * from "./idGenerator";
 
