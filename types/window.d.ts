@@ -7,7 +7,7 @@ interface Log {
   danger: (textOrTitle: any, content?: any) => void;
   error: (content: any) => void;
   table: (data: any[]) => void;
-  picture: (url: string, scale: number) => void;
+  picture: (url: string, scale?: number) => void;
 }
 
 declare global {

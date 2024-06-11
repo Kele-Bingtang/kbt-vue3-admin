@@ -76,7 +76,7 @@ export interface DialogFormProps<T = any> {
   removeBatchFilterKeys?: string[]; // 批量删除时，过滤的参数
   removeBatchApi?: (params: any) => Promise<any>; // 批量删除接口
   apiFilterKeys?: string[]; // 新增、编辑、删除时，过滤的参数
-  apiCarryParams?: string[]; // 新增、编辑、删除时，额外添加的参数
+  apiCarryParams?: Record<string, any>; // 新增、编辑、删除时，额外添加的参数
   clickAdd?: (model: Record<string, any>) => void | Promise<any> | any; // 点击新增按钮回调
   clickEdit?: (model: Record<string, any>) => void | Promise<any> | any; // 点击编辑按钮回调
   beforeAdd?: (model: Record<string, any>) => void | Promise<any> | any; // 新增前回调
