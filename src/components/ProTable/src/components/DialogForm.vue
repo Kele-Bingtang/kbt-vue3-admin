@@ -178,7 +178,7 @@ const handleEdit = async (row: any) => {
 
   status.value = "edit";
   unref(proFormRef)?.form?.resetFields();
-  model.value = deepCloneTableRow(row);
+  if (!(row instanceof Event)) model.value = deepCloneTableRow(row);
   clickEdit && (model.value = (await clickEdit(unref(model))) ?? unref(model));
   dialogFormVisible.value = true;
 };
