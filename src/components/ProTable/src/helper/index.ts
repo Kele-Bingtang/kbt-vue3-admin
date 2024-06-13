@@ -95,14 +95,14 @@ export function findItemNested(enumData: any, callValue: any, value: string, chi
 }
 
 // 导出
-export const downloadFile = async (
+export const exportExcel = async (
   columns: any,
   data: any[],
   fileName: string,
-  msg: string,
-  exportKey: "props" | "label" | "dataKey"
+  exportKey: "props" | "label" | "dataKey" = "label",
+  message = "确认导出数据?"
 ) => {
-  ElMessageBox.confirm(msg, "温馨提示", { type: "warning" }).then(() => {
+  ElMessageBox.confirm(message, "温馨提示", { type: "warning" }).then(() => {
     const tHeader = [] as string[];
     const propName = [] as string[];
 

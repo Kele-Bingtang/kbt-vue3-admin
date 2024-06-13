@@ -62,11 +62,7 @@
         </el-tooltip>
 
         <el-tooltip v-if="showToolButton('export')" effect="light" content="导出" placement="top">
-          <el-button
-            :icon="Download"
-            circle
-            @click="() => downloadFile(columns, data, 'export', '确认导出数据?', exportKey)"
-          />
+          <el-button :icon="Download" circle @click="emits('export')" />
         </el-tooltip>
 
         <el-tooltip v-if="showToolButton('search') && showSearch" effect="light" content="隐藏搜索" placement="top">
@@ -81,7 +77,7 @@
 import { computed, inject, nextTick, watch, type CSSProperties } from "vue";
 import { ElTooltip, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, type ComponentSize } from "element-plus";
 import { Refresh, Plus, Operation, Search, Delete, Coin, Download } from "@element-plus/icons-vue";
-import { downloadFile, visibleButton } from "../helper";
+import { visibleButton } from "../helper";
 import type { DialogFormProps } from "./DialogForm.vue";
 import {
   TableSizeEnum,
@@ -97,13 +93,11 @@ const prefixClass = inject(proTablePrefixClassKey) as string;
 
 export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
-  data: any[]; // 数据
   toolButton: ToolButton[] | boolean; // 按钮显示数组
   selectedList: Record<string, any>[]; // 选择的数据
   selectedListIds: string[]; // 选择的数据 ID
   isSelected: boolean; // 是否选中过数据
   size: CustomTableSize; // 表格大小
-  exportKey: "props" | "label" | "dataKey"; // 导出时的表头配置（prop 为使用  columns 的 props，label 为使用 columns 的 label，dataKey 为使用 data 的 key），默认为 dataKey
   showSearch: boolean; // 是否展示搜索按钮
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
 }
@@ -129,6 +123,7 @@ type TableMainHeaderEmits = {
   size: [size: ElTableSize, rowStyle: CSSProperties, cellStyle: CSSProperties, headerCellStyle: CSSProperties];
   colSetting: [];
   search: [];
+  export: [];
 };
 
 const emits = defineEmits<TableMainHeaderEmits>();

@@ -106,7 +106,10 @@ const setEnumMap = async ({ enum: enumValue, prop, useCacheEnum = true }: FormSc
   enumMapConst.set(prop!, []);
 
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
-  const { data } = await enumValue(unref(model), enumMapConst);
+  let data = await enumValue(unref(model), enumMapConst);
+  // 适配 enum 接口返回 data 以及自定义函数返回数组
+  data = data?.data || data;
+
   enumMapConst.set(prop, data);
 };
 provide(formEnumMapKey, enumMap);
