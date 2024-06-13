@@ -32,7 +32,7 @@ interface Settings {
   layoutTheme: LayoutThemeType; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
   errorLog: {
     showInHeader: boolean; // 设为 false 后不会在顶部显示错误日志徽标
-    env: string[]; // 日志收集的环境，默认是 production 生成环境
+    env: string[]; // 日志收集的环境，对应 .evn.xxx，如 development、test、production
   };
   /**
    * 白名单额三种模式：["*"]、["next"]、[to.path, ...]
@@ -92,7 +92,7 @@ const layoutSettings: Partial<Settings> = {
   showSettings: true,
   errorLog: {
     showInHeader: true,
-    env: ["production"],
+    env: [""],
   },
   moreRouteChildrenHideInMenuThenOnlyOne: false,
   tooltipEffect: "light",
