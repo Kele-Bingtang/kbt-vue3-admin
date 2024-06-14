@@ -19,7 +19,8 @@
       <!-- 表格头部 操作按钮 -->
       <TableMainHeader
         :columns="getProps.columns"
-        :toolButton="getProps.toolButton"
+        :useToolButton="getProps.useToolButton"
+        :disabledButton="getProps.disabledButton"
         :size="getProps.size"
         :showSearch="searchColumns ? searchColumns.length > 0 : false"
         :selectedList="selectedList"
@@ -66,6 +67,7 @@
       <!-- Dialog 表单 -->
       <DialogFormComponent
         ref="dialogFormRef"
+        v-if="getProps.dialogForm"
         v-bind="{ ...(getProps.dialogForm || { formProps: {}, dialog: {} }), afterConfirm: () => getTableList() }"
         @register="formRegister"
       >
@@ -85,7 +87,7 @@
       </slot>
     </div>
     <!-- 列设置 -->
-    <ColSetting v-if="getProps.toolButton" v-model="colSettingVisible" v-model:col-setting="colSetting" />
+    <ColSetting v-if="getProps.useToolButton" v-model="colSettingVisible" v-model:col-setting="colSetting" />
   </div>
 </template>
 
@@ -164,12 +166,13 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   requestError?: (params: any) => void; // 表格 api 请求错误监听 ==> 非必传
   beforeSearch?: (data: any) => any; // 查询数据前的回调函数，可以对查询参数进行处理或禁止查询 ==> 非必传
   dataCallback?: (data: any) => any; // 返回数据的回调函数，可以对数据进行处理 ==> 非必传
-  exportFile?: (data: Record<string, any>[], searchParam: Record<string, any>) => void; // 点击导出按钮的回调函数，可以执行自定义导出功能 ==> 非必传
+  exportFile?: (data: Record<string, any>[], searchParam: Record<string, any>) => void;
   initRequestParam?: any; // 初始化请求参数 ==> 非必传（默认为{}）
   title?: string; // 表格标题，目前只在打印的时候用到 ==> 非必传
   pagination?: boolean | Table.PaginationProps; // 是否需要分页组件 ==> 非必传（默认为 true）
   border?: boolean; // 是否带有纵向边框 ==> 非必传（默认为 true）
-  toolButton?: ToolButton[] | boolean; // 是否显示表格功能按钮 ==> 非必传（默认为 true）
+  useToolButton?: ToolButton[] | boolean; // 是否显示表格功能按钮 ==> 非必传（默认为 true）
+  disabledButton?: ToolButton[]; // 指定禁用的表格功能按钮 ==> 非必传
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   size?: CustomTableSize; // 表格密度
   exportKey?: "props" | "label" | "dataKey"; // 导出时的表头配置（prop 为使用  columns 的 props，label 为使用 columns 的 label，dataKey 为使用 data 的 key），默认为 dataKey
@@ -191,7 +194,7 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   pagination: true,
   initRequestParam: {},
   border: true,
-  toolButton: true,
+  useToolButton: true,
   rowKey: "id",
   size: "default",
   initShowSearch: true,
@@ -327,9 +330,7 @@ const setEnumMap = async ({ enum: enumValue, prop, search: { key } = {} }: Table
   enumMapConst.set(prop!, []);
 
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
-  let data = await enumValue(enumMapConst);
-  // 适配 enum 接口返回 data 以及自定义函数返回数组
-  data = data?.data || data;
+  const { data } = await enumValue(enumMapConst);
 
   key && enumMapConst.set(key, data);
   enumMapConst.set(prop!, data);
@@ -367,7 +368,7 @@ const searchColumns = computed(() => {
     const defaultValue = unref(item.search?.defaultValue);
     if (defaultValue !== undefined && defaultValue !== null) {
       if (typeof defaultValue !== "function") unref(searchInitParam)[key] = defaultValue;
-      else unref(searchInitParam)[key] = await defaultValue(searchParam, unref(enumMap));
+      else unref(searchInitParam)[key] = await defaultValue(unref(searchParam), unref(enumMap));
     }
 
     // 组装搜索表单配置项
@@ -522,7 +523,7 @@ const handleEdit = (scope: any, item: TableColumnProps) => {
 // 删除事件
 const handleRemove = (scope: any, item: TableColumnProps) => {
   if (item.handleRemove) item.handleRemove(scope, expose);
-  unref(dialogFormRef)?.handleRemove(scope);
+  unref(dialogFormRef)?.handleRemove(scope.row);
 };
 
 // 批量删除事件

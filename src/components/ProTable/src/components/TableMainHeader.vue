@@ -8,25 +8,41 @@
         :is-selected="isSelected"
         :operate="dialogFormRef"
       >
-        <el-button
-          v-if="visibleButton(dialogForm?.addApi, dialogForm?.useAdd)"
-          type="primary"
-          :icon="Plus"
-          @click="emits('add')"
-          :disabled="dialogForm?.disableAdd"
+        <slot
+          name="add"
+          :selected-list-ids="selectedListIds"
+          :selected-list="selectedList"
+          :is-selected="isSelected"
+          :operate="dialogFormRef"
         >
-          新增
-        </el-button>
-        <el-button
-          v-if="visibleButton(dialogForm?.removeBatchApi, dialogForm?.useRemoveBatch) && showDeleteBatchBtn"
-          type="danger"
-          :icon="Delete"
-          plain
-          @click="emits('removeBatch')"
-          :disabled="dialogForm?.disableRemoveBatch || !isSelected"
+          <el-button
+            v-if="visibleButton(dialogForm?.addApi, dialogForm?.useAdd)"
+            type="primary"
+            :icon="Plus"
+            @click="emits('add')"
+            :disabled="dialogForm?.disableAdd"
+          >
+            新增
+          </el-button>
+        </slot>
+        <slot
+          name="removeBatch"
+          :selected-list-ids="selectedListIds"
+          :selected-list="selectedList"
+          :is-selected="isSelected"
+          :operate="dialogFormRef"
         >
-          删除
-        </el-button>
+          <el-button
+            v-if="visibleButton(dialogForm?.removeBatchApi, dialogForm?.useRemoveBatch) && showDeleteBatchBtn"
+            type="danger"
+            :icon="Delete"
+            plain
+            @click="emits('removeBatch')"
+            :disabled="dialogForm?.disableRemoveBatch || !isSelected"
+          >
+            批量删除
+          </el-button>
+        </slot>
         <slot
           name="tableHeaderExtra"
           :selected-list-ids="selectedListIds"
@@ -37,15 +53,15 @@
       </slot>
     </div>
 
-    <div v-if="toolButton" :class="`${prefixClass}__main__header--button-ri`">
+    <div v-if="useToolButton" :class="`${prefixClass}__main__header--button-ri`">
       <slot name="toolButton">
         <el-tooltip v-if="showToolButton('refresh')" effect="light" content="刷新" placement="top">
-          <el-button :icon="Refresh" circle @click="emits('refresh')" />
+          <el-button :disabled="disabledButton?.includes('refresh')" :icon="Refresh" circle @click="emits('refresh')" />
         </el-tooltip>
 
         <el-tooltip v-if="showToolButton('size')" effect="light" content="密度" placement="top">
           <el-dropdown style="margin: 0 15px" @command="handleSizeCommand">
-            <el-button :icon="Coin" circle />
+            <el-button :disabled="disabledButton?.includes('size')" :icon="Coin" circle />
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item command="large" :disabled="customTableSize === 'large'">Large</el-dropdown-item>
@@ -58,15 +74,20 @@
         </el-tooltip>
 
         <el-tooltip v-if="showToolButton('setting') && columns.length" effect="light" content="列配置" placement="top">
-          <el-button :icon="Operation" circle @click="emits('colSetting')" />
+          <el-button
+            :disabled="disabledButton?.includes('setting')"
+            :icon="Operation"
+            circle
+            @click="emits('colSetting')"
+          />
         </el-tooltip>
 
         <el-tooltip v-if="showToolButton('export')" effect="light" content="导出" placement="top">
-          <el-button :icon="Download" circle @click="emits('export')" />
+          <el-button :disabled="disabledButton?.includes('export')" :icon="Download" circle @click="emits('export')" />
         </el-tooltip>
 
         <el-tooltip v-if="showToolButton('search') && showSearch" effect="light" content="隐藏搜索" placement="top">
-          <el-button :icon="Search" circle @click="emits('search')" />
+          <el-button :disabled="disabledButton?.includes('search')" :icon="Search" circle @click="emits('search')" />
         </el-tooltip>
       </slot>
     </div>
@@ -93,7 +114,8 @@ const prefixClass = inject(proTablePrefixClassKey) as string;
 
 export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
-  toolButton: ToolButton[] | boolean; // 按钮显示数组
+  useToolButton: ToolButton[] | boolean; // 按钮显示数组
+  disabledButton?: ToolButton[]; // 指定禁用的表格功能按钮 ==> 非必传
   selectedList: Record<string, any>[]; // 选择的数据
   selectedListIds: string[]; // 选择的数据 ID
   isSelected: boolean; // 是否选中过数据
@@ -113,7 +135,7 @@ const showDeleteBatchBtn = computed(() => {
 
 // 控制 ToolButton 显示
 const showToolButton = (key: ToolButton) => {
-  return Array.isArray(props.toolButton) ? props.toolButton.includes(key) : props.toolButton;
+  return Array.isArray(props.useToolButton) ? props.useToolButton.includes(key) : props.useToolButton;
 };
 
 type TableMainHeaderEmits = {

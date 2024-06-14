@@ -62,7 +62,7 @@
                   type="danger"
                   size="small"
                   :icon="Delete"
-                  :disabled="scope.row.disableRemove && !dialogForm?.disableRemove"
+                  :disabled="scope.row.disableRemove || dialogForm?.disableRemove"
                 >
                   删除
                 </el-button>
