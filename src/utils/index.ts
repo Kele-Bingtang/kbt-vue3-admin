@@ -8,12 +8,12 @@ export * from "./layout/message";
 export * from "./layout/scrollTo";
 export * from "./layout/themeTool";
 export * from "./layout/validate";
-export * from "./layout/log";
 
 export * from "./idGenerator";
 
 import NProgress from "./nprogress";
 import Print from "./print";
 import mittBus from "./layout/mittBus";
+import log from "./layout/log";
 
-export { NProgress, Print, mittBus };
+export { NProgress, Print, mittBus, log };

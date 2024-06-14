@@ -7,12 +7,13 @@ import directives from "@/directives";
 import I18n from "@/languages";
 import "virtual:svg-icons-register";
 import { Icon, Auth, Role } from "@/components";
-import { errorHandler, checkNeed } from "@/utils";
+import { errorHandler, checkNeed, log } from "@/utils";
 import Vue3TreeOrg from "vue3-tree-org";
 import "vue3-tree-org/lib/vue3-tree-org.css";
 
 const app = createApp(App);
 
+window.log = log;
 checkNeed() && (app.config.errorHandler = errorHandler);
 
 // 全局注册按钮级别权限、页面级别权限、Icon 图标组件组件
