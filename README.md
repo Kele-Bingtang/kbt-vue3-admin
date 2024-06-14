@@ -1,10 +1,8 @@
-# kbt-vue3-template
+# KBT Vue3 Admin
 
-基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 搭建的 Admin Template 模板。
+基于 Vue3.4、TypeScript5、Vite5、Pinia2、Element-Plus2.7 搭建的 Admin Template 模板。
 
-这是纯净版，只有项目框架必要的信息。完整版请看 [kbt-vue3-admin](https://github.com/Kele-Bingtang/kbt-vue3-admin)。
-
-master 支持国际化，如果你不需要国际化，则看本仓库的另一个分支：[no-i18n](https://github.com/Kele-Bingtang/kbt-vue3-template/tree/no-i18n)。
+这是完整版，有完整的使用实例代码。纯净版请看 [kbt-vue3-template](https://github.com/Kele-Bingtang/kbt-vue3-template)。
 
 ## 必须操作
 
@@ -35,50 +33,55 @@ git clone https://github.com/Kele-Bingtang/kbt-vue3-admin
 Project setup：安装依赖
 
 ```sh
-yarn install
+pnpm install
 ```
 
 Compiles and hot-reloads for development：编译运行（开发环境使用）
 
 ```sh
-yarn dev
+pnpm dev
 # or
-yarn server
+pnpm server
 ```
 
 Compiles and minifies for production：打包运行（测试环境使用）
 
 ```sh
-yarn build:test
+pnpm build:test
 ```
 
 Compiles and minifies for production：打包运行（生产环境使用）
 
 ```sh
-yarn build:pro
+pnpm build
+# or
+pnpm build:prod
 ```
 
 Lints and fixes files：检查和修复文件
 
 ```sh
-yarn lint
+pnpm lint
 ```
 
 Push code：提交代码到 git
 
-前往 push.sh 文件修改要提交的远程仓库地址，然后在 Git Bash Here 执行命令：
-
 ```sh
-sh push.sh "您的 commit 信息"
+# 提交代码到本地仓库
+pnpm cz
+
+# 提交代码到本地 && 推送远程仓库
+pnpm czp
 ```
 
 ## 文件资源目录 📚
 
 ```text
-Vue3-Admin-Ts
+Kbt-Vue3-Admin
 ├─ .husky                 # git commit 钩子
 ├─ .vscode                # VSCode 推荐配置
-├─ public                 # 静态资源文件（该文件夹不会被打包）
+├─ build                  # Vite 构建配置
+├─ public                 # 静态资源文件
 ├─ src
 │  ├─ api                 # API 接口管理
 │  ├─ assets              # 静态资源文件
@@ -90,37 +93,38 @@ Vue3-Admin-Ts
 │  ├─ languages           # 语言国际化 i18n
 │  ├─ layouts             # 框架布局模块
 │  ├─ routers             # 路由管理
-│  ├─ stores              # pinia store
+│  ├─ stores              # pinia stores
 │  ├─ styles              # 全局样式文件
-│  ├─ typings             # 全局 ts 声明
+│  ├─ types               # 项目 TS 声明
 │  ├─ utils               # 常用工具库
 │  ├─ views               # 项目所有页面
 │  ├─ App.vue             # 项目主组件
-│  ├─ env.d.ts            # 指定 ts 识别 vue
 │  └─ main.ts             # 项目入口文件
+├─ types          			  # 全局 TS 声明
 ├─ .editorconfig          # 统一不同编辑器的编码风格
-├─ .env                   # vite 常用配置
+├─ .env                   # vite 基础环境配置
 ├─ .env.development       # 开发环境配置
 ├─ .env.production        # 生产环境配置
 ├─ .env.test              # 测试环境配置
 ├─ .eslintignore          # 忽略 Eslint 校验
+├─ .eslintrc-globals.json # Eslint 忽略关键词校验
 ├─ .eslintrc.js           # Eslint 校验配置文件
-├─ .gitignore             # 忽略 git 提交
+├─ .gitignore             # 忽略 Git 提交
 ├─ .prettierignore        # 忽略 Prettier 格式化
-├─ .prettierrc.js         # Prettier 格式化配置
+├─ .prettierrc.json       # Prettier 格式化配置
 ├─ .stylelintignore       # 忽略 stylelint 格式化
 ├─ .stylelintrc.js        # stylelint 样式格式化配置
+├─ .versionrc        	    # Standard Version 配置文件
 ├─ CHANGELOG.md           # 项目更新日志
-├─ commitlint.config.js   # git 提交规范配置
+├─ commitlint.config.js   # Git 提交规范配置
 ├─ index.html             # 入口 html
 ├─ LICENSE                # 开源协议文件
 ├─ package-lock.json      # 依赖包包版本锁
 ├─ package.json           # 依赖包管理
 ├─ postcss.config.js      # postcss 配置
-├─ README.md              # README 介绍
-├─ STANDARD.md            # 项目编码规范说明书
+├─ README.md              # README 介绍文档
 ├─ tsconfig.json          # typescript 全局配置
-└─ vite.config.ts         # vite 全局配置文件
+└─ vite.config.mts        # vite 全局配置文件
 ```
 
 ## 内容说明
@@ -547,4 +551,4 @@ router.replace("/redirect" + route.path);
 
 Admin 根据路由、角色等信息自动生成菜单栏、面包屑、标签页。
 
-用户的默认角色为空数组，实际的角色应该从后端获取。
+用户的默认角色为 `["admin"]`，实际的角色应该从后端获取。
