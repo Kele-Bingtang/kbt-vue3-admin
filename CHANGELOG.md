@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.1](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.0...v1.4.1) (2024-06-14)
+
+### Features
+
+- 🚀 proTable 添加内置按钮数组禁用 props。修复 ProTable 批量删除按钮 disabled 失效问题 ([0431572](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/0431572dc3febe1ba7926de9812723f0201ce767))
+
+### Bug Fixes
+
+- 🐞 解决部署访问失败问题 ([298bcef](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/298bcefdf54b0e61933e21248fc67a8b2d6e8504))
+- 🐞 修复 ProTable 和 log 类型 ([0d21148](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/0d211484e32eb4cb04229ef9b548a12245b23bf0))
+- 🐞 修复 ProTable 使用 enum + el-search + key 后，当 enum 为接口时重复调用两次问题 ([0b93ed4](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/0b93ed48179f27d6401e7ed8df5bcb0eb33416a4))
+- 🐞 dialogForm 的 handleAdd 添加 Event 判断。ProTable ProForm 接口适配直接返回数据以及 .data 里取数据。ProTable 导出优化，支持自定义导出方法 ([2c74f73](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/2c74f7369e619961203f79d3335680a8f21a36e1))
+- 🐞 dialogForm 的 handleEdit 添加 Event 判断 ([8cc9873](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/8cc9873b1fe668ed9008265b06b56e08f50364a8))
+
+### Styling
+
+- 🎨 更改 settings 默认配置 ([bee3f6c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/bee3f6c40de6c3771c45667f31e1443f3b199f4d))
+- 🎨 去掉全局 log 打印，解决生产访问失败问题 ([8ba3e04](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/8ba3e04c0cbe42238d1f0a3e10ed3442fcca84d0))
+- 🎨 添加 log 打印介绍功能 ([4ff899c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/4ff899c438f170c7d6ea6f38d419f34e26e62017))
+
 ## [1.4.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.3.4...v1.4.0) (2024-06-10)
 
 ### Features
