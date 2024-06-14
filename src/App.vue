@@ -82,5 +82,5 @@ const versionCache = () => {
   }
 };
 
-log?.success(__APP_INFO__.pkg.version, "欢迎使用 Kbt Vue3 Admin 系统");
+if (typeof log.success === "function") log.success(__APP_INFO__.pkg.version, "欢迎使用 Kbt Vue3 Admin 系统");
 </script>
