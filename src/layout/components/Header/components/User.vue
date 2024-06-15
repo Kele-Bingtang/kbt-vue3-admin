@@ -72,14 +72,17 @@ const profileLabel = computed(() => {
   const profile = t("_headerBar.profile");
   return profile === "_headerBar.profile" ? "我的主页" : profile;
 });
+
 const messageCenterLabel = computed(() => {
   const messageCenter = t("_headerBar.messageCenter");
   return messageCenter === "_headerBar.messageCenter" ? "我的消息" : messageCenter;
 });
+
 const settingsLabel = computed(() => {
   const settings = t("_headerBar.settings");
   return settings === "_headerBar.settings" ? "我的设置" : settings;
 });
+
 const logOutLabel = computed(() => {
   const logOut = t("_headerBar.logOut");
   return logOut === "_headerBar.logOut" ? "退出登录" : logOut;

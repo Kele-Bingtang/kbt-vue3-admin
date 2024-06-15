@@ -8,7 +8,6 @@ export * from "./layout/message";
 export * from "./layout/scrollTo";
 export * from "./layout/themeTool";
 export * from "./layout/validate";
-
 export * from "./idGenerator";
 
 import NProgress from "./nprogress";

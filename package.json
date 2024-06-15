@@ -96,6 +96,7 @@
     "@types/node": "^20.12.12",
     "@types/nprogress": "^0.2.3",
     "@types/qrcode": "^1.5.5",
+    "@types/qs": "^6.9.15",
     "@types/sortablejs": "^1.15.8",
     "@uiw/codemirror-theme-dracula": "^4.22.1",
     "@uiw/codemirror-theme-xcode": "^4.22.1",

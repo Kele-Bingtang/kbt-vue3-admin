@@ -181,6 +181,9 @@ devDependencies:
   '@types/qrcode':
     specifier: ^1.5.5
     version: registry.npmmirror.com/@types/qrcode@1.5.5
+  '@types/qs':
+    specifier: ^6.9.15
+    version: 6.9.15
   '@types/sortablejs':
     specifier: ^1.15.8
     version: 1.15.8
@@ -1441,6 +1444,10 @@ packages:
 
   /@types/nprogress@0.2.3:
     resolution: {integrity: sha512-k7kRA033QNtC+gLc4VPlfnue58CM1iQLgn1IMAU8VPHGOj7oIHPp9UlhedEnD/Gl8evoCjwkZjlBORtZ3JByUA==}
+    dev: true
+
+  /@types/qs@6.9.15:
+    resolution: {integrity: sha512-uXHQKES6DQKKCLh441Xv/dwxOq1TVS3JPUMlEqoEglvlhR6Mxnlew/Xq/LRVHpLyk7iK3zODe1qYHIMltO7XGg==}
     dev: true
 
   /@types/sortablejs@1.15.8:
