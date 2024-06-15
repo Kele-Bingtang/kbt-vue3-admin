@@ -79,7 +79,8 @@ const isFixTabsNav = computed(() => {
   background-color: #f0f2f5;
 
   .main-content {
-    padding: 10px 12px;
+    padding: 0;
+    margin: 10px 12px;
     overflow: v-bind(isFixTabsNav);
   }
 
