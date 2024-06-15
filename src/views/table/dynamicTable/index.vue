@@ -14,7 +14,7 @@ import UnFixedHeaderTable from "./unFixedHeaderTable.vue";
 
 <style lang="scss" scoped>
 .dynamic-table-container {
-  margin: 10px 12px;
+  padding: 10px 12px;
   background-color: #ffffff;
 }
 </style>

@@ -83,8 +83,6 @@ const lineBarData = [
 
 <style lang="scss" scoped>
 .home-container {
-  padding: 20px;
-
   .#{$el-namespace}-card {
     width: 100%;
   }

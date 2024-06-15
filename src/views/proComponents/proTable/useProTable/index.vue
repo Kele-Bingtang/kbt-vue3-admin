@@ -249,5 +249,3 @@ const columns: TableColumnProps<ResUserList>[] = reactive([
   },
 ]);
 </script>
-
-<style lang="scss" scoped></style>

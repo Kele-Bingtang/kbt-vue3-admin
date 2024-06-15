@@ -96,7 +96,7 @@ const handleDownload = () => {
 
 <style lang="scss" scoped>
 .export-excel-container {
-  margin: 10px 12px;
+  padding: 10px 12px;
   background-color: #ffffff;
 
   .radio-label {

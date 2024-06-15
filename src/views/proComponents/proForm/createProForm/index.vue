@@ -283,5 +283,3 @@ const getTreeSelectData = () => {
   });
 };
 </script>
-
-<style lang="scss" scoped></style>

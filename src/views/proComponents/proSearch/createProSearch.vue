@@ -98,5 +98,3 @@ const schema: ProSearchSchemaProps[] = reactive([
 
 createSearch("proSearchRef", { schema: schema, modeValue: model, onSearch: handleSearch, onReset: handleSearch });
 </script>
-
-<style lang="scss" scoped></style>

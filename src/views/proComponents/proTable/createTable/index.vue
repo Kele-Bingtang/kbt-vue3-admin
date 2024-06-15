@@ -163,5 +163,3 @@ const columns: TableColumnProps[] = reactive([
   },
 ]);
 </script>
-
-<style lang="scss" scoped></style>

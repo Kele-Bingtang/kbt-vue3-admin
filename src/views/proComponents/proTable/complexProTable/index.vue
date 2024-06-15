@@ -190,9 +190,3 @@ const resetPass = async (params: ResUserList) => {
   background-color: var(--#{$el-namespace}-color-success-light-9);
 }
 </style>
-
-<style lang="scss" scoped>
-.complex-pro-table-container {
-  padding: 10px;
-}
-</style>

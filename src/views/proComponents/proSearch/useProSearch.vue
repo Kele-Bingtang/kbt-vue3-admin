@@ -143,5 +143,3 @@ const schema: ProSearchSchemaProps[] = reactive([
   },
 ]);
 </script>
-
-<style lang="scss" scoped></style>

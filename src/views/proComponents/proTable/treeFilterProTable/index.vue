@@ -119,7 +119,6 @@ const downloadFile = async () => {
   display: flex;
   width: 100%;
   height: 100%;
-  padding: 10px;
 
   .table-box {
     // 这里减去的是 treeFilter 组件宽度

@@ -310,7 +310,7 @@ const handleSizeChange = (pagingParam: Paging) => {
 
 <style lang="scss" scoped>
 .operate-table-container {
-  margin: 10px 12px;
+  padding: 10px 12px;
   background-color: #ffffff;
 
   .edit-input {

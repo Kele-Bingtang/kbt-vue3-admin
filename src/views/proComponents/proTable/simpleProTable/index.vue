@@ -301,9 +301,3 @@ const confirmEdit = (row: any) => {
   });
 };
 </script>
-
-<style lang="scss" scoped>
-.simple-pro-table-container {
-  padding: 10px;
-}
-</style>

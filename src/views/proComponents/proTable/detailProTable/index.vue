@@ -216,9 +216,3 @@ const handleExpandAll = () => {
   else expandKeys.value = [];
 };
 </script>
-
-<style lang="scss" scoped>
-.detail-pro-table-container {
-  padding: 10px;
-}
-</style>

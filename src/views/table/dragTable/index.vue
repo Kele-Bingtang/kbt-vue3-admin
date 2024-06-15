@@ -148,7 +148,7 @@ const rowDrop2 = () => {
 
 <style lang="scss" scoped>
 .drag-table-container {
-  margin: 10px 12px;
+  padding: 10px 12px;
   background-color: #ffffff;
 
   :deep(.sortable-ghost) {

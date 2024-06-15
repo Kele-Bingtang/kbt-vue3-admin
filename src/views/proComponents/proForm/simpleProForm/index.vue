@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 10px">
+  <div>
     <div class="card">
       <ProForm :elFormProps="elFormProps" :schema="schema" v-model="model" />
     </div>
