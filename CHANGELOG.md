@@ -2,11 +2,30 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.2](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.1...v1.4.2) (2024-06-16)
+
+### Features
+
+- 🚀 安装 @types/qs 依赖 ([a1ef5c7](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/a1ef5c7df01abce55db136b322049b8a47ef5045))
+
+### Bug Fixes
+
+- 🐞 proForm 删除的 key 由一级 key 改为具体的嵌套 key。修复 DialogForm includeModelKeys 循环处理问题 ([41f39f6](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/41f39f6ea164d82c784e2f6b883fe25844aad244))
+
+### Docs
+
+- 📚 更新 README 文档 ([042f97b](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/042f97b7364703865557e7f3b30eb47485725fbd))
+
+### Styling
+
+- 🎨 修改 MainContent 默认样式 ([c52b0f7](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/c52b0f78666774bacda604aff0cb163095eafa55))
+- 🎨 mainContent padding 样式去掉 ([ee3539b](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/ee3539b84dc96f5a630ae5d08918c3595c74ef6a))
+
 ### [1.4.1](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.0...v1.4.1) (2024-06-14)
 
 ### Features
 
-- 🚀 proTable 添加内置按钮数组禁用 props。修复 ProTable 批量删除按钮 disabled 失效问题 ([0431572](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/0431572dc3febe1ba7926de9812723f0201ce767))
+- 🚀 ProTable 添加内置按钮数组禁用 props。修复 ProTable 批量删除按钮 disabled 失效问题 ([0431572](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/0431572dc3febe1ba7926de9812723f0201ce767))
 
 ### Bug Fixes
 
