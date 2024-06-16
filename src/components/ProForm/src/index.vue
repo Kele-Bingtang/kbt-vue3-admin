@@ -35,7 +35,7 @@ import {
   type FormItemInstance,
   type FormItemProp,
 } from "element-plus";
-import { getPx, getFormProp, isString, setFormProp, hyphenToCamelCase } from "./helper";
+import { getPx, getFormProp, isString, setFormProp, hyphenToCamelCase, deleteObjProperty } from "./helper";
 import { useDesign } from "@/hooks";
 import { componentMap } from "./helper/componentMap";
 
@@ -201,7 +201,7 @@ const isDestroy = (item: FormSchemaProps) => {
 
   // 如果不销毁，则初始化表单默认值，反之则重置为空
   if (!destroy) initDefaultValue(item);
-  else delete unref(model)[item.prop?.split(".")[0]];
+  else deleteObjProperty(unref(model), item.prop);
 
   return destroy;
 };

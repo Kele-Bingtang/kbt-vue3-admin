@@ -7,9 +7,7 @@
         v-bind="{ ...$attrs, ...formProps }"
         v-model="model"
         :schema="newSchema"
-        :includeModelKeys="
-          formProps?.includeModelKeys?.length ? [...formProps.includeModelKeys, ...includeModelKeys] : includeModelKeys
-        "
+        :includeModelKeys="includeModelKeys"
         :enumMapProps="enumMap"
       >
         <template #footer v-if="$slots.formFooter">
@@ -117,8 +115,13 @@ const dialogProps = computed(() => {
   return { ...dialog, title, height };
 });
 
-// 组装主键 id 为数组
-const includeModelKeys = computed(() => (Array.isArray(props.id) ? props.id : [props.id || "id"]));
+// 组装主键 id & ProForm 不过滤的 keys
+const includeModelKeys = computed(() => {
+  const ids = Array.isArray(props.id) ? props.id : [props.id || "id"];
+
+  const { formProps } = props;
+  return formProps?.includeModelKeys?.length ? [...formProps.includeModelKeys, ...ids] : ids;
+});
 
 /**
  * 表单配置项
