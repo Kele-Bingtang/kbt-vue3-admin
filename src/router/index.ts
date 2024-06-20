@@ -62,7 +62,8 @@ router.beforeEach(async (to, from, next) => {
   // 判断是否存在角色或加载过路由，如果不存在，则加载路由
   if (!permissionStore.loadedRouteList.length) {
     try {
-      await initDynamicRouters();
+      const roles = await userStore.getUserInfo();
+      await initDynamicRouters(roles);
       return next({ ...to, replace: true });
     } catch (error) {
       userStore.resetToken();

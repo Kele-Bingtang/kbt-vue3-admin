@@ -60,7 +60,6 @@ export const useRoutes = () => {
       return Promise.reject("No permission");
     }
 
-    if (!roles || !roles.length) roles = await userStore.getUserInfo();
     loadDynamicRouters(routeList, roles || settings.whiteList);
   };
 
