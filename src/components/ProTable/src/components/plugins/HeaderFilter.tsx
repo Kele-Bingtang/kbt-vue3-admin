@@ -72,7 +72,7 @@ export const useHeaderFilter = (column: TableColumnProps) => {
       <ElPopover {...filterConfig} width={width || 230} trigger={trigger || "click"}>
         {{
           reference: () => (
-            <ElIcon style="vertical-align: -2px; margin-left: 2px; cursor: pointer;" class="hover-theme-color">
+            <ElIcon style="vertical-align: -2px; margin-left: 2px; cursor: pointer;" class="theme-color-hover">
               <Filter />
             </ElIcon>
           ),
