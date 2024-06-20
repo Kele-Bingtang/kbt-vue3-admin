@@ -47,7 +47,7 @@ export const closeDrawer = () => {
 const handleClose = (drawerProps: WorkDrawerProps) => {
   if (drawerProps.onClose) {
     const result = drawerProps.onClose(closeDrawer);
-    if (!result) return;
+    if (result === false) return;
   }
   return closeDrawer();
 };
@@ -55,7 +55,7 @@ const handleClose = (drawerProps: WorkDrawerProps) => {
 const handleConfirm = (drawerProps: WorkDrawerProps) => {
   if (drawerProps.onConfirm) {
     const result = drawerProps.onConfirm(closeDrawer);
-    if (!result) return;
+    if (result === false) return;
   }
   return closeDrawer();
 };
