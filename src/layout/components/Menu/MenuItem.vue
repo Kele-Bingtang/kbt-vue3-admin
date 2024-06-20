@@ -1,8 +1,11 @@
 <template>
+  <template v-if="menuItem.meta.render">
+    <component :is="menuItem.meta.render" class="el-menu-item menu-item" />
+  </template>
   <el-menu-item
+    v-else-if="!menuItem.children || menuItem.children.length == 0"
     :index="menuItem.meta._fullPath"
     @click="handleMenuClick(menuItem)"
-    v-if="!menuItem.children || menuItem.children.length == 0"
     class="menu-item"
   >
     <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />

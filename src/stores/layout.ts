@@ -52,6 +52,12 @@ export const useLayoutStore = defineStore(
       }
     };
 
+    const removeBatchTab = async (pathList: string[]) => {
+      pathList.forEach(path => {
+        removeCurrentTab({ path } as TabProp);
+      });
+    };
+
     const removeLeftTab = async (tab: TabProp) => {
       const index = tabNavList.value.findIndex(v => v.path === tab.path);
       if (index === -1) return;
@@ -159,6 +165,7 @@ export const useLayoutStore = defineStore(
       setLanguage,
       addTab,
       removeCurrentTab,
+      removeBatchTab,
       removeLeftTab,
       removeRightTab,
       removeOtherTabs,

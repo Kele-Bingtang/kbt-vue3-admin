@@ -84,7 +84,7 @@ export const useRoutes = () => {
       }
     });
     // 最后添加 notFoundRouter
-    router.addRoute(notFoundRouter);
+    if (!r.hasRoute(notFoundRouter.name)) router.addRoute(notFoundRouter);
   };
   /**
    * @description 过滤出当前系统角色的路由权限
