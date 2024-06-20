@@ -193,6 +193,7 @@ div:focus {
   box-shadow: 0 0 12px rgb(0 0 0 / 5%);
 }
 
+/* 主题色悬停样式 */
 .theme-color-hover:hover {
   color: var(--#{$el-namespace}-color-primary);
 }

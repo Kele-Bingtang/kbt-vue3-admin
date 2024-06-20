@@ -33,8 +33,8 @@ export interface WorkDrawerProps extends Partial<DrawerProps> {
   headerRender?: () => VNode; // 顶部渲染 TSX
   footerRender?: () => VNode; // 顶部渲染 TSX
   showFooter?: boolean; // 是否渲染顶部
-  onConfirm?: (closeDrawer: () => void) => void; // 确认按钮点击事件
-  onClose?: (closeDrawer: () => void) => void; // 关闭按钮点击事件
+  onConfirm?: (closeDrawer: () => void) => void | boolean; // 确认按钮点击事件
+  onClose?: (closeDrawer: () => void) => void | boolean; // 关闭按钮点击事件
   fullscreen?: boolean; // 是否默认全屏，默认 false
   fullscreenIcon?: boolean; // 是否渲染全屏图标，默认 true
 }
@@ -45,12 +45,18 @@ export const closeDrawer = () => {
 };
 
 const handleClose = (drawerProps: WorkDrawerProps) => {
-  if (drawerProps.onClose) drawerProps.onClose(closeDrawer);
+  if (drawerProps.onClose) {
+    const result = drawerProps.onClose(closeDrawer);
+    if (!result) return;
+  }
   return closeDrawer();
 };
 
 const handleConfirm = (drawerProps: WorkDrawerProps) => {
-  if (drawerProps.onConfirm) drawerProps.onConfirm(closeDrawer);
+  if (drawerProps.onConfirm) {
+    const result = drawerProps.onConfirm(closeDrawer);
+    if (!result) return;
+  }
   return closeDrawer();
 };
 

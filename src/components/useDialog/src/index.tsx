@@ -35,8 +35,8 @@ export interface WorkDialogProps extends Partial<DialogProps> {
   headerRender?: (scope: any) => VNode; // 头部渲染 TSX
   footerRender?: () => VNode; // 底部渲染 TSX
   showFooter?: boolean; // 是否渲染底部，默认 true
-  onConfirm?: (closeDialog: () => void) => void; // 确认按钮点击事件
-  onClose?: (closeDialog: () => void) => void; // 关闭按钮点击事件
+  onConfirm?: (closeDialog: () => void) => void | boolean; // 确认按钮点击事件
+  onClose?: (closeDialog: () => void) => void | boolean; // 关闭按钮点击事件
   fullscreen?: boolean; // 是否默认全屏，默认 false
   fullscreenIcon?: boolean; // 是否渲染全屏图标，默认 true
   height?: string | number; // 内容高度，默认 400px
@@ -51,12 +51,18 @@ export const closeDialog = () => {
 };
 
 const handleClose = (dialogProps?: WorkDialogProps) => {
-  if (dialogProps?.onClose) dialogProps?.onClose(closeDialog);
+  if (dialogProps?.onClose) {
+    const result = dialogProps?.onClose(closeDialog);
+    if (result === false) return;
+  }
   return closeDialog();
 };
 
 const handleConfirm = (dialogProps?: WorkDialogProps) => {
-  if (dialogProps?.onConfirm) dialogProps?.onConfirm(closeDialog);
+  if (dialogProps?.onConfirm) {
+    const result = dialogProps?.onConfirm(closeDialog);
+    if (result === false) return;
+  }
   return closeDialog();
 };
 
@@ -88,7 +94,8 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
       await nextTick();
       if (val) {
         const windowHeight = document.documentElement.offsetHeight;
-        contentHeight.value = `${windowHeight - 41 - 49 - 47 - (dialogProps.footerRender ? 63 : 0)}px`;
+        // 头部高度 41px，顶部 padding-bottom 16px，内容区 padding 上下各 15，底部高度 49px，顶部 padding-top 16px
+        contentHeight.value = `${windowHeight - 41 - 16 - 30 - 49 - 16 - (dialogProps.footerRender ? 63 : 0)}px`;
       } else {
         contentHeight.value = getPx(dialogProps.height || 400);
       }
