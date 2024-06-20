@@ -20,6 +20,7 @@ import type {
   CheckboxGroupProps,
   RadioProps,
   TimePickerDefaultProps,
+  ElTooltipProps,
 } from "element-plus";
 import type { VNode, ComputedRef, ComponentPublicInstance, ExtractPropTypes, InjectionKey, Ref } from "vue";
 import ProForm, { type ProFormProps } from "../index.vue";
@@ -292,6 +293,14 @@ export interface FormSchemaProps<T = any> {
    * 表单组件的插槽
    */
   slots?: any;
+  /**
+   * Label 使用 ElToolTip 提示的配置
+   */
+  tip?: Partial<ElTooltipProps> & {
+    icon?: Component; // ElTooTip 绑定的元素图标
+    render?: () => VNode | string; // 自定义 ElTooTip 绑定的元素，将会覆盖图标，传入 ElTooTip 的 default 插槽里
+    contentRender?: () => VNode | string; // 自定义 ElTooTip 的内容，传入 ElTooTip 的 content 插槽里
+  };
   /**
    * 其他拓展
    */

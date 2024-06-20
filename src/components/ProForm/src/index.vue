@@ -29,6 +29,7 @@ import {
   ElCol,
   ElForm,
   ElFormItem,
+  ElTooltip,
   type FormInstance,
   type RowProps,
   type ColProps,
@@ -38,6 +39,8 @@ import {
 import { getPx, getFormProp, isString, setFormProp, hyphenToCamelCase, deleteObjProperty } from "./helper";
 import { useDesign } from "@/hooks";
 import { componentMap } from "./helper/componentMap";
+import { Icon } from "@/components";
+import { QuestionFilled } from "@element-plus/icons-vue";
 
 defineOptions({ name: "ProForm" });
 
@@ -362,7 +365,7 @@ const formItemComponentsRef = ref<Record<string, FormItemInstance>>({});
 // 存储表单组件实例
 const proFormItemRefs = shallowRef<Record<string, InstanceType<typeof ProFormItem>>>({});
 
-// 渲染 FormItem
+// 渲染 FormItem & 表单组件，如果有 tip 配置项，则渲染 ToolTip 在 FormItem 的 label 插槽里
 const renderFormItem = (item: FormSchemaProps) => {
   return (
     <ElFormItem
@@ -372,12 +375,33 @@ const renderFormItem = (item: FormSchemaProps) => {
       prop={item.prop}
       label={parseLabel(item.label)}
     >
-      <ProFormItem
-        ref={(el: any) => (unref(proFormItemRefs)[item.prop] = el)}
-        column={item}
-        v-model={model.value}
-        style={getComponentWidth(item)}
-      />
+      {{
+        default: () => (
+          <ProFormItem
+            ref={(el: any) => (unref(proFormItemRefs)[item.prop] = el)}
+            column={item}
+            v-model={model.value}
+            style={getComponentWidth(item)}
+          />
+        ),
+        label: () =>
+          item.tip && (
+            <>
+              <>{parseLabel(item.label)}</>
+              <ElTooltip effect="dark" placement="right" {...item.tip}>
+                {{
+                  default: () =>
+                    item.tip?.render ? (
+                      item.tip.render()
+                    ) : (
+                      <Icon style="margin-left: 3px;" icon={item.tip?.icon || QuestionFilled} />
+                    ),
+                  content: () => item.tip?.contentRender && item.tip.contentRender(),
+                }}
+              </ElTooltip>
+            </>
+          ),
+      }}
     </ElFormItem>
   );
 };
