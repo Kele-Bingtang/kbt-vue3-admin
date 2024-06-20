@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.3](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.2...v1.4.3) (2024-06-20)
+
+### Features
+
+- 🚀 新增 removeBatchTab 函数，优化路由初始化判断，路由配置支持菜单 render ([3763517](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/37635173cebd31d1e827156b0afd81019b129b4b))
+- 🚀 proForm 新增 ElToopTip 提示功能，位于 label 右上角 ([20b1c0c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/20b1c0ca249010b85a14bd85ffe7c66a77bd7002))
+- 🚀 useDialog、UseDrawer 的 onConfirm、onClose 函数支持 return false 阻止关闭。UseDialog 弹框全屏高度计算优化 ([2992d65](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/2992d65391ce85142759846e91f3ac0fe25ea59d))
+
+### Bug Fixes
+
+- 🐞 useDrawer 阻止关闭判断优化 ([fe89e20](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/fe89e20aa325e4a24045660931c8c02ce56c1ba0))
+
+### Styling
+
+- 🎨 登录逻辑移到 router beforeEach 里 ([509720f](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/509720fe6a73eb5e9533fad396c3421424afcbe4))
+- 🎨 主题色悬停 class 重命名 ([e7dd6bd](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/e7dd6bd4bd27b2245f08f3e14fda281fffecdf53))
+
 ### [1.4.2](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.1...v1.4.2) (2024-06-16)
 
 ### Features
