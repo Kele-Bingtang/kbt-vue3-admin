@@ -3,6 +3,7 @@ export default {
     Home: "Home",
     HomeFull: "Home Full",
     Login: "Login",
+    Redirect: "Redirect",
     Layout: "Layout",
     ErrorLog: "Error Logger",
     Profile: "My Profile",

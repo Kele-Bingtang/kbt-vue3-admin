@@ -370,7 +370,7 @@ Admin 模板布局用到的可定制化样式位于 `src/styles` 下，如侧边
 
 ### SVG 图标
 
-Admin 模板使用的图标是 Element UI 内置、SVG 格式和 iconify 图标，因为 Element UI 内置的图标较少，所以自行在网上找 SVG 图标，如 [阿里云矢量图标库](https://www.iconfont.cn/)，或者使用 iconify 图标。
+Admin 模板使用的图标是 Element Plus 内置、SVG 格式和 iconify 图标，因为 Element Plus 内置的图标较少，所以自行在网上找 SVG 图标，如 [阿里云矢量图标库](https://www.iconfont.cn/)，或者使用 iconify 图标。
 
 SVG 图标放置于 `src/assets/icons` 下。
 
@@ -421,8 +421,6 @@ const openSettingsDrawer = () => {
 Admin 内置错误日志，当项目抛出 1 个 Error 的时候，Admin 会将其捕获，然后放到日志组件里，您可以在页面的右上角看到一个「虫子」的图标，点击后会跳转到日志页面，查看错误的信息。
 
 「虫子」的图标只有在出现抛出至少 1 个 Error 的时候才会出现，默认是不出现的，如果你想直接访问，则访问项目根路径 + `/error-log` 即可。
-
-关于其他内容请仔细阅读源码，或者后续慢慢往下补充。
 
 ### 页面刷新
 
@@ -496,7 +494,7 @@ const route = useRoute();
 
 router.push("/redirect" + route.path);
 // or
-router.replace("/redirect" + route.path);
+router.replace("/redirect" + route.fullPath);
 ```
 
 具体是 `route.path` 还是 `route.fullPath`，根据你的需求来实现，最终都会刷新当前页面。
@@ -512,9 +510,9 @@ router.replace("/redirect" + route.path);
   path: "vue2-template-iframe",
   name: "IFrameVue2Template",
   meta: {
-  title: "Vue2 Template IFrame",
-  icon: "HotWater",
-    frameSrc: "http://172.16.49.41/vue2-template",
+		title: "Vue2 Template IFrame",
+		icon: "HotWater",
+		frameSrc: "http://172.16.49.41/vue2-template",
   },
 }
 ```
@@ -547,7 +545,7 @@ router.replace("/redirect" + route.path);
 一套简单的开发仅需两步：
 
 - 开发您自己的 Vue 组件
-- 在 `src/router/routes-config.ts` 里配置路由、角色等信息
+- 在 `src/router/routesConfig.ts` 里配置路由、角色等信息
 
 Admin 根据路由、角色等信息自动生成菜单栏、面包屑、标签页。
 

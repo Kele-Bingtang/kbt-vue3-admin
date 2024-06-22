@@ -9,7 +9,7 @@ import {
   type RouteRecordRaw,
   type RouterHistory,
 } from "vue-router";
-import { constantRoutes, LOGIN_URL } from "./routesConfig";
+import { constantRoutes, LOGIN_NAME, LOGIN_URL } from "./routesConfig";
 
 const router = createRouter({
   history: getHistoryMode(import.meta.env.VITE_ROUTER_MODE),
@@ -20,11 +20,18 @@ const router = createRouter({
 /**
  * @description 重置路由
  **/
-export function resetRouter() {
+export function resetRouter(retainConstantRoutes = false) {
   const permissionStore = usePermissionStore();
-  permissionStore.flatRouteList.forEach(route => {
+  router.getRoutes().forEach(route => {
     const { name, meta } = route;
-    if (name && router.hasRoute(name) && meta?._dynamic) router.removeRoute(name);
+    if (name && router.hasRoute(name) && name !== LOGIN_NAME) {
+      retainConstantRoutes ? meta?._dynamic && router.removeRoute(name) : router.removeRoute(name);
+    }
+  });
+
+  permissionStore.$patch({
+    loadedRouteList: [],
+    flatRouteList: [],
   });
 }
 
@@ -41,7 +48,7 @@ router.beforeEach(async (to, from, next) => {
 
   NProgress.start();
   // 判断是访问登陆页，有 Token 就在当前页面，没有 Token 重置路由并放行到登陆页
-  if (to.path === "/login") {
+  if (to.path === LOGIN_URL) {
     if (token) return next(from.fullPath);
     resetRouter();
     return next();
@@ -57,7 +64,7 @@ router.beforeEach(async (to, from, next) => {
   } else if (whiteList.includes("next") || whiteList.includes(to.path)) return next();
 
   // 判断是否有 Token，没有重定向到 login
-  if (!token) return next({ path: "/login", replace: true });
+  if (!token) return next({ path: LOGIN_URL, replace: true });
 
   // 判断是否存在角色或加载过路由，如果不存在，则加载路由
   if (!permissionStore.loadedRouteList.length) {

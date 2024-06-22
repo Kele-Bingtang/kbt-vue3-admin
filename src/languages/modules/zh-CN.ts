@@ -3,6 +3,7 @@ export default {
     Home: "首页",
     HomeFull: "全屏首页",
     Login: "登录",
+    Redirect: "重定向",
     Layout: "布局",
     ErrorLog: "错误日志",
     Profile: "我的主页",

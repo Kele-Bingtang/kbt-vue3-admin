@@ -1,5 +1,5 @@
 import router from "@/router";
-import { HOME_NAME, LOGIN_URL, notFoundRouter, rolesRoutes } from "@/router/routesConfig";
+import { HOME_NAME, LAYOUT_NAME, LOGIN_URL, notFoundRouter, rolesRoutes } from "@/router/routesConfig";
 import { usePermissionStore, useUserStore } from "@/stores";
 import { isExternal, isType } from "@/utils";
 import { ElNotification } from "element-plus";
@@ -44,9 +44,7 @@ export const useRoutes = () => {
     // else routeList = getDynamicRouters(await getMenuList()); // 请求后台拿到菜单，并处理成路由
 
     // 缓存后台路由
-    if (cacheDynamicRoutes && !isCacheDynamicRoutes) {
-      useCache().setCacheDynamicRoutesKey(routeList);
-    }
+    if (cacheDynamicRoutes && !isCacheDynamicRoutes) useCache().setCacheDynamicRoutesKey(routeList);
 
     if (!routeList.length) {
       ElNotification({
@@ -79,12 +77,13 @@ export const useRoutes = () => {
       item.children ? (item.children = []) : ""; // 防止加载 children 而不加载提取出来变成的一级路由
       item.path = (item.meta?._fullPath as string) || item.path; // 加载动态路由时，子路由的 path 可能不带 /，这样会依赖父路由来拼接（vue-route 规则），但是 template 实现多级路由缓存，所以都拍成二级路由，则 path 加载时要求是完整的，不再放到父路由的 children 里
       if (!item.name || !r.hasRoute(item.name)) {
-        if (item.meta?.isFull) r.addRoute(item as RouteRecordRaw);
-        else r.addRoute("Layout", item as RouteRecordRaw);
+        // 当重置路由后，静态路由也需要二次添加
+        if (item.meta?.isFull || item.name === LAYOUT_NAME) r.addRoute(item as RouteRecordRaw);
+        else r.addRoute(LAYOUT_NAME, item as RouteRecordRaw);
       }
     });
     // 最后添加 notFoundRouter
-    if (!r.hasRoute(notFoundRouter.name)) router.addRoute(notFoundRouter);
+    if (!r.hasRoute(notFoundRouter.name)) router.addRoute(notFoundRouter as RouteRecordRaw);
   };
   /**
    * @description 过滤出当前系统角色的路由权限
