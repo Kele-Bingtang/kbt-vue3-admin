@@ -175,7 +175,7 @@ export interface FormSchemaProps<T = any> {
   /**
    * ElFormItem 的 label 属性
    */
-  label: ValueType | ((model: T) => any);
+  label: ValueType | ((model: T) => any) | ComputedRef<ValueType>;
   /**
    * 使用的表单组件名
    */

@@ -21,7 +21,14 @@ export const useRenderSelect = () => {
   };
 
   const renderSelectOptionItem = (col: Record<string, any>, fieldNames: FormFieldNamesProps) => {
-    return <ElOption label={col[fieldNames.label]} value={col[fieldNames.value]} key={col[fieldNames.value]} />;
+    return (
+      <ElOption
+        label={col[fieldNames.label]}
+        value={col[fieldNames.value]}
+        disabled={col[fieldNames.disabled!]}
+        key={col[fieldNames.value]}
+      />
+    );
   };
 
   return {

@@ -210,9 +210,9 @@ const isDestroy = (item: FormSchemaProps) => {
   return destroy;
 };
 
-const parseLabel = (label: ValueType | ((model: Record<string, any>) => string)) => {
+const parseLabel = (label: ValueType | ((model: Record<string, any>) => string) | ComputedRef<ValueType>) => {
   if (typeof label === "function") return label(unref(model));
-  return label + "";
+  return unref(label) + "";
 };
 
 // 监听表单结构化数组，重新组装 schema
