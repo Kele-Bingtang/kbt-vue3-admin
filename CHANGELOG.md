@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.4](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.3...v1.4.4) (2024-06-23)
+
+### Features
+
+- 🚀 proForm 添加 colRow props 快捷让每一个 col 独占一行 ([9cff921](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/9cff9218af30888c46972cd82fc08316660d9770))
+- 🚀 proForm 新增 label 为 Computed 类型逻辑处理，ElSelect 支持 enum 里指定 disabled 实现禁用功能 ([b9f3b09](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/b9f3b09fc7b750796656da1b9a2a0cbd88d30d2f))
+
+### Bug Fixes
+
+- 🐞 路由重置函数优化。添加 403、404、500 路由。路由加载函数优化 ([4b0cc7f](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/4b0cc7f82f0f0bd4bc8e3d7176bcd0ac33cc933a))
+- 🐞 修复 UseDialog、UseDrawer 使用 inject 失效问题 ([f9242d3](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/f9242d3b0b80c9829c88ac54d7649e606017563a))
+
+### Styling
+
+- 🎨 添加路由配置的使用注释 ([00ef51e](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/00ef51e5d263e7630495ce2f5252cded89951a39))
+- 🎨 useDialog、useDrawer 的 onConfirm 和 onClose 添加 Promise<void> 返回类型 ([18c9dbd](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/18c9dbdd17d0e8844b738ecc562aef82c484f9ff))
+
 ### [1.4.3](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.2...v1.4.3) (2024-06-20)
 
 ### Features
