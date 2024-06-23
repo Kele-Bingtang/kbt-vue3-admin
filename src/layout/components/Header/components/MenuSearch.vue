@@ -4,7 +4,7 @@
       name="search"
       width="20px"
       height="20px"
-      :icon-style="{ cursor: 'pointer', verticalAlign: 'middle' }"
+      :icon-style="{ cursor: 'pointer', verticalAlign: 'middle', display: 'inline-block' }"
       @click.stop="handleStartSearch"
       v-if="!isShowSearch"
     />
