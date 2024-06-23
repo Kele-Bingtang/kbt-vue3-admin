@@ -13,7 +13,7 @@ import { ElDrawer, ElButton, type DrawerProps, ElConfigProvider } from "element-
 import { Icon } from "@/components";
 import "./index.scss";
 import { useDesign } from "@/hooks";
-import { useLayoutStore } from "@/stores";
+import { ConfigGlobalKey } from "@/config/symbols";
 
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-drawer");
@@ -21,6 +21,7 @@ const prefixClass = getPrefixClass("work-drawer");
 let id = 0;
 
 let appContextConst: AppContext | undefined;
+let layoutSize: "default" | "small" | "large" | undefined;
 
 const getFather = (): Element => {
   const fullScreen = document.querySelector(":not(:root):fullscreen");
@@ -68,8 +69,6 @@ const handleConfirm = (drawerProps: WorkDrawerProps) => {
  * 在第一个参数里写 headerRender 和 footerRender，可以自定义 el-drawer 的 header 和 footer
  */
 export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, componentsProps?: any) => {
-  const layoutSize = computed(() => useLayoutStore().layoutSize);
-
   const isFullscreen = ref(false);
 
   const toggleFull = () => {
@@ -150,6 +149,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
 export const initDrawer = (ctx?: ComponentInternalInstance) => {
   const { appContext } = ctx || getCurrentInstance() || {};
   appContextConst = appContext;
+  layoutSize = unref(inject(ConfigGlobalKey)?.size);
 
   return { showDrawer };
 };

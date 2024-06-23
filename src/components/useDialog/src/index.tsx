@@ -15,7 +15,7 @@ import { getPx } from "@/utils";
 import { Icon } from "@/components";
 import "./index.scss";
 import { useDesign } from "@/hooks";
-import { useLayoutStore } from "@/stores";
+import { ConfigGlobalKey } from "@/config/symbols";
 
 const { getPrefixClass, variables } = useDesign();
 const prefixClass = getPrefixClass("work-dialog");
@@ -23,6 +23,7 @@ const prefixClass = getPrefixClass("work-dialog");
 let id = 0;
 
 let appContextConst: AppContext | undefined;
+let layoutSize: "default" | "small" | "large" | undefined;
 
 const getFather = (): Element => {
   const fullScreen = document.querySelector(":not(:root):fullscreen");
@@ -74,8 +75,6 @@ const handleConfirm = (dialogProps?: WorkDialogProps) => {
  * 在第一个参数里写 headerRender 和 footerRender，可以自定义 el-dialog 的 header 和 footer
  */
 export const showDialog = (dialogProps: WorkDialogProps, component?: Component, componentsProps?: any) => {
-  const layoutSize = computed(() => useLayoutStore().layoutSize);
-
   const isFullscreen = ref(dialogProps.fullscreen || false);
 
   const toggleFull = () => {
@@ -190,6 +189,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
 export const initDialog = (ctx?: ComponentInternalInstance) => {
   const { appContext } = ctx || getCurrentInstance() || {};
   appContextConst = appContext;
+  layoutSize = unref(inject(ConfigGlobalKey)?.size);
 
   return { showDialog };
 };
