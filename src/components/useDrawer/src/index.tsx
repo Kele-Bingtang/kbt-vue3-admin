@@ -45,20 +45,18 @@ export const closeDrawer = () => {
   vm && getFather().removeChild(vm);
 };
 
-const handleClose = (drawerProps: WorkDrawerProps) => {
-  if (drawerProps.onClose) {
-    const result = drawerProps.onClose(closeDrawer);
-    if (result === false) return;
-  }
-  return closeDrawer();
+const handleClose = async (drawerProps?: WorkDrawerProps) => {
+  if (!drawerProps?.onClose) return closeDrawer();
+
+  const result = await drawerProps?.onClose(closeDrawer);
+  if (result === true) return closeDrawer();
 };
 
-const handleConfirm = (drawerProps: WorkDrawerProps) => {
-  if (drawerProps.onConfirm) {
-    const result = drawerProps.onConfirm(closeDrawer);
-    if (result === false) return;
-  }
-  return closeDrawer();
+const handleConfirm = async (drawerProps?: WorkDrawerProps) => {
+  if (!drawerProps?.onConfirm) return closeDrawer();
+
+  const result = await drawerProps?.onConfirm(closeDrawer);
+  if (result === true) return closeDrawer();
 };
 
 /**

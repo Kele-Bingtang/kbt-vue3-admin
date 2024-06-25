@@ -51,20 +51,18 @@ export const closeDialog = () => {
   vm && getFather().removeChild(vm);
 };
 
-const handleClose = (dialogProps?: WorkDialogProps) => {
-  if (dialogProps?.onClose) {
-    const result = dialogProps?.onClose(closeDialog);
-    if (result === false) return;
-  }
-  return closeDialog();
+const handleClose = async (dialogProps?: WorkDialogProps) => {
+  if (!dialogProps?.onClose) return closeDialog();
+
+  const result = await dialogProps?.onClose(closeDialog);
+  if (result === true) return closeDialog();
 };
 
-const handleConfirm = (dialogProps?: WorkDialogProps) => {
-  if (dialogProps?.onConfirm) {
-    const result = dialogProps?.onConfirm(closeDialog);
-    if (result === false) return;
-  }
-  return closeDialog();
+const handleConfirm = async (dialogProps?: WorkDialogProps) => {
+  if (!dialogProps?.onConfirm) return closeDialog();
+
+  const result = await dialogProps?.onConfirm(closeDialog);
+  if (result === true) return closeDialog();
 };
 
 /**
