@@ -36,8 +36,10 @@ export interface WorkDialogProps extends Partial<DialogProps> {
   headerRender?: (scope: any) => VNode; // 头部渲染 TSX
   footerRender?: () => VNode; // 底部渲染 TSX
   showFooter?: boolean; // 是否渲染底部，默认 true
-  onConfirm?: (closeDialog: () => void) => void | boolean | Promise<void>; // 确认按钮点击事件
-  onClose?: (closeDialog: () => void) => void | boolean | Promise<void>; // 关闭按钮点击事件
+  onConfirm?: (closeDialog: () => void) => void | any; // 确认按钮点击事件
+  onClose?: (closeDialog: () => void) => void | any; // 关闭按钮点击事件
+  confirmLabel?: string; // 确认按钮文字，默认 确认
+  closeLabel?: string; // 关闭按钮文字，默认 关闭
   fullscreen?: boolean; // 是否默认全屏，默认 false
   fullscreenIcon?: boolean; // 是否渲染全屏图标，默认 true
   height?: string | number; // 内容高度，默认 400px
@@ -55,14 +57,14 @@ const handleClose = async (dialogProps?: WorkDialogProps) => {
   if (!dialogProps?.onClose) return closeDialog();
 
   const result = await dialogProps?.onClose(closeDialog);
-  if (result === true) return closeDialog();
+  if (result || result === 0) return closeDialog();
 };
 
 const handleConfirm = async (dialogProps?: WorkDialogProps) => {
   if (!dialogProps?.onConfirm) return closeDialog();
 
   const result = await dialogProps?.onConfirm(closeDialog);
-  if (result === true) return closeDialog();
+  if (result || result === 0) return closeDialog();
 };
 
 /**
@@ -163,9 +165,9 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
             if (dialogProps.showFooter === false) return;
             return (
               <>
-                <ElButton onClick={() => handleClose(dialogProps)}>取 消</ElButton>
+                <ElButton onClick={() => handleClose(dialogProps)}>{dialogProps.closeLabel || "取 消"}</ElButton>
                 <ElButton type="primary" onClick={() => handleConfirm(dialogProps)}>
-                  确 定
+                  {dialogProps.confirmLabel || "确 定"}
                 </ElButton>
               </>
             );
