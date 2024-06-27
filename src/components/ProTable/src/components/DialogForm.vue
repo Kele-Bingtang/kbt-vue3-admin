@@ -37,8 +37,8 @@
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
 import { ProForm, WorkDialog, type ProFormProps, type FormSchemaProps, type ProFormInstance } from "@/components";
 import { shallowRef, ref, computed, unref } from "vue";
-import { deepCloneTableRow } from "../helper";
 import { tableEnumMapKey } from "../interface";
+import { deepClone } from "@/utils";
 
 defineOptions({ name: "DialogForm" });
 
@@ -159,7 +159,7 @@ const handleAdd = async (row?: any) => {
   status.value = "add";
   unref(proFormRef)?.form?.resetFields();
   // 过滤掉 Event 类型
-  if (row && !(row instanceof Event)) model.value = deepCloneTableRow(row);
+  if (row && !(row instanceof Event)) model.value = deepClone(row);
   else if (!cache) model.value = {};
   else if (Array.isArray(id)) {
     id.forEach(key => {
@@ -181,7 +181,7 @@ const handleEdit = async (row: any) => {
 
   status.value = "edit";
   unref(proFormRef)?.form?.resetFields();
-  if (!(row instanceof Event)) model.value = deepCloneTableRow(row);
+  if (!(row instanceof Event)) model.value = deepClone(row);
   clickEdit && (model.value = (await clickEdit(unref(model))) ?? unref(model));
   dialogFormVisible.value = true;
 };
@@ -293,7 +293,7 @@ const handleDoEdit = (data: any) => {
  * 执行删除事件
  */
 const handleRemove = async (row: any) => {
-  let data = deepCloneTableRow(row);
+  let data = deepClone(row);
 
   // _enum 是 ProTable 内置的属性，专门存储字典数据，不需要发送给后台
   delete data._enum;

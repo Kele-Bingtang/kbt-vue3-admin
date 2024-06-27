@@ -4,8 +4,8 @@
   <Tree
     v-else-if="hyphenToCamelCase(column.el) === ComponentNameEnum.EL_TREE"
     :data="columnEnum"
-    :model-value="getFormProp(model, column.prop)"
-    @update:model-value="v => setFormProp(model, column.prop, v)"
+    :model-value="getProp(model, column.prop)"
+    @update:model-value="v => setProp(model, column.prop, v)"
     v-bind="{ ...formProps }"
   />
 
@@ -18,7 +18,7 @@
 import { computed, inject, ref, unref, resolveComponent } from "vue";
 import { ComponentNameEnum, formEnumMapKey, type FormSchemaProps, type PascalCaseComponentName } from "../interface";
 import Tree from "./Tree.vue";
-import { getFormProp, hyphenToCamelCase, setComponentSlots, setFormProp } from "../helper";
+import { getProp, hyphenToCamelCase, setComponentSlots, setProp } from "../helper";
 import { useRenderSelect } from "./useRenderSelect";
 import { useRenderRadio } from "./useRenderRadio";
 import { useRenderCheckbox } from "./useRenderCheckbox";
@@ -135,7 +135,7 @@ const RenderSlots = () => {
   const { column } = props;
   return column.render!({
     model: unref(model),
-    data: getFormProp(unref(model), column.prop),
+    data: getProp(unref(model), column.prop),
     enumData: unref(columnEnum),
   });
 };
@@ -163,10 +163,10 @@ const RenderElComponents = () => {
 
   const componentModel = computed({
     get: () => {
-      return getFormProp(unref(model), prop, valueFormat);
+      return getProp(unref(model), prop, valueFormat);
     },
     set: val => {
-      setFormProp(unref(model), prop, val);
+      setProp(unref(model), prop, val);
     },
   });
 

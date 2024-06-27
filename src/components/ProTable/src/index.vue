@@ -117,6 +117,7 @@ import {
   type ProFormInstance,
   type ProSearchExpose,
   type ProSearchProps,
+  setProp,
 } from "@/components";
 import {
   type TableColumnProps,
@@ -132,15 +133,7 @@ import {
   type FilterRule,
   editKey,
 } from "./interface";
-import {
-  filterEnum,
-  filterEnumLabel,
-  handleRowAccordingToProp,
-  setColumnProp,
-  lastProp,
-  frontFilter,
-  exportExcel,
-} from "./helper";
+import { filterEnum, filterEnumLabel, handleRowAccordingToProp, lastProp, frontFilter, exportExcel } from "./helper";
 import ColSetting from "./components/ColSetting.vue";
 import TableMain from "./components/TableMain.vue";
 import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./components/TableMainHeader.vue";
@@ -653,7 +646,7 @@ const setColumn = (columnSet: TableSetProps[], columnsChildren?: TableColumnProp
   for (const column of columnsChildren || columns) {
     for (const item of columnSet) {
       if (column.prop === item.prop) {
-        setColumnProp(column, item.field, item.value);
+        setProp(column, item.field, item.value);
       } else if (column._children?.length) {
         setColumn(columnSet, column._children);
       }

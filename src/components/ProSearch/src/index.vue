@@ -56,16 +56,15 @@ import {
   type BreakPoint,
   useProForm,
   type FormSetProps,
-  setFormProp,
+  setProp,
   type GridInstance,
   type GridItemProps,
   isEmptyVal,
-  isObject,
 } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { useDesign } from "@/hooks";
 import { ElFormItem, ElButton, ElIcon, type FormItemProp } from "element-plus";
-import { isString } from "@/components/ProForm/src/helper";
+import { isObject, isString } from "@/utils";
 
 defineOptions({ name: "ProSearch" });
 
@@ -290,7 +289,7 @@ const setSchema = (schemaProps: FormSetProps[]) => {
   for (const v of schema) {
     for (const item of schemaProps) {
       if (v.prop === item.prop) {
-        setFormProp(v, item.field, item.value);
+        setProp(v, item.field, item.value);
       }
     }
   }

@@ -111,6 +111,9 @@ export const schema: FormSchemaProps[] = [
     label: "Sub Category",
     prop: "subCategory",
     el: "el-select",
+    tip: {
+      content: "请先选择 Category",
+    },
     props: { placeholder: "请选择 Sub Category", filterable: true },
   },
   {

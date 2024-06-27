@@ -1,6 +1,6 @@
-import { ProForm } from "@/components";
+import { ProForm, setProp, getProp } from "@/components";
 import { type TableColumnProps, editKey, type TableRenderScope } from "../../interface";
-import { getColumnProp, lastProp, setColumnProp } from "../../helper";
+import { lastProp } from "../../helper";
 import { ElMessage } from "element-plus";
 import { ref, inject, computed, unref, nextTick } from "vue";
 
@@ -78,7 +78,7 @@ export const useRowInlineEdit = (column: TableColumnProps) => {
       if (column.prop?.indexOf(".") !== -1 || editConfig?.key || column.search?.key) {
         if (column.prop?.indexOf(".") !== -1) delete editModel![column.prop!.split(".")[0]];
         else delete editModel![column.prop!];
-        setColumnProp(editModel!, prop, getColumnProp(row, column.prop!));
+        setProp(editModel!, prop, getProp(row, column.prop!));
         editModelListConst?.set(key, editModel!);
       }
 

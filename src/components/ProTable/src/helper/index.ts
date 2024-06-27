@@ -145,78 +145,10 @@ const filterFlatData = (data: any[]) => {
   }, []);
 };
 
-/**
- * @description 深拷贝函数
- */
-export const deepCloneTableRow = (obj: any, hash = new WeakMap()): Record<string, any> => {
-  if (!obj || typeof obj !== "object") return obj;
-  if (Array.isArray(obj)) return obj.map(item => deepCloneTableRow(item));
-
-  if (hash.has(obj)) return hash.get(obj);
-
-  const Constructor = obj.constructor;
-
-  if (Constructor === Date) return new Date(obj);
-  if (Constructor === RegExp) return new RegExp(obj);
-
-  const newObj = new Constructor();
-  hash.set(obj, newObj);
-
-  for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
-      newObj[key] = deepCloneTableRow(obj[key], hash);
-    }
-  }
-
-  return newObj;
-};
-
 export const visibleButton = (api: any, flag: boolean | undefined) => {
   // flag 为 undefined 时，判断 api 是否存在
   if (flag === undefined) return api;
   return flag;
-};
-
-/**
- * @description 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
- */
-export const getColumnProp = (
-  column: Record<string, any>,
-  prop: string,
-  valueFormat: "default" | "string" | "number" | "boolean" = "default"
-) => {
-  let value: any;
-  if (!prop.includes(".")) value = column[prop] ?? undefined;
-  else {
-    prop.split(".").forEach(item => (column = column[item] ?? ""));
-    // 如果是 ElInputNumber，则需要返回数字类型，因此这里 column 如果为 ""，则返回 undefined，这样字符串和数字类型的组件都支持
-    value = column || undefined;
-  }
-
-  if (valueFormat === "string") return value + "";
-  if (valueFormat === "number") return Number(value);
-  if (valueFormat === "boolean") {
-    if ((value as any) === "1" || (value as any) === 1) return true;
-    else return false;
-  }
-  return value;
-};
-
-/**
- * @description 对 column 对象的 pro 赋值
- */
-export const setColumnProp = (column: Record<string, any>, prop: string, value: any) => {
-  if (!column) return;
-  const props = prop.split(".");
-  let current = column;
-
-  for (let i = 0; i < props.length - 1; i++) {
-    const prop = props[i];
-    if (!current[prop]) current[prop] = {};
-    current = current[prop];
-  }
-
-  current[props[props.length - 1]] = value;
 };
 
 /**

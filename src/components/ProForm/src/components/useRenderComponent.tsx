@@ -1,5 +1,5 @@
 import { type FormSchemaProps } from "@/components";
-import { getFormProp, hyphenToCamelCase, setFormProp } from "../helper";
+import { getProp, hyphenToCamelCase, setProp } from "../helper";
 import type { ComputedRef, ModelRef, defineComponent } from "vue";
 import { componentMap } from "../helper/componentMap";
 import { type PascalCaseComponentName } from "../interface";
@@ -17,8 +17,8 @@ export const useRenderComponent = (
 
     return (
       <Component
-        modelValue={getFormProp(model.value, column.prop, column.valueFormat)}
-        onUpdate:modelValue={(v: any) => setFormProp(model.value, column.prop, v)}
+        modelValue={getProp(model.value, column.prop, column.valueFormat)}
+        onUpdate:modelValue={(v: any) => setProp(model.value, column.prop, v)}
         {...componentProps.value}
       ></Component>
     );

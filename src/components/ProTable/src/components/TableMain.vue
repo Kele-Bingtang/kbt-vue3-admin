@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref, useAttrs } from "vue";
+import { inject, ref } from "vue";
 import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon, type TableColumnCtx } from "element-plus";
 import { Edit, Delete, DCaret } from "@element-plus/icons-vue";
 import TableColumn from "./TableColumn.vue";
@@ -141,11 +141,8 @@ const setTableColumn = (item: TableColumnProps) => {
   return item as TableColumnCtx<any>;
 };
 
-const attrs = useAttrs();
-
-const handleRowClick = (row: any, column: any, event: Event) => {
+const handleRowClick = (row: any) => {
   if (props.rowClickEdit) row._edit = !row._edit;
-  attrs.onRowClick && (attrs.onRowClick as any)(row, column, event);
 };
 
 defineExpose({ table: tableRef });

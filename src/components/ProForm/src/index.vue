@@ -36,11 +36,12 @@ import {
   type FormItemInstance,
   type FormItemProp,
 } from "element-plus";
-import { getPx, getFormProp, isString, setFormProp, hyphenToCamelCase, deleteObjProperty } from "./helper";
+import { getProp, setProp, hyphenToCamelCase, deleteObjProperty } from "./helper";
 import { useDesign } from "@/hooks";
 import { componentMap } from "./helper/componentMap";
 import { Icon } from "@/components";
 import { QuestionFilled } from "@element-plus/icons-vue";
+import { getPx, isString } from "@/utils";
 
 defineOptions({ name: "ProForm" });
 
@@ -121,16 +122,16 @@ provide(formEnumMapKey, enumMap);
 // 初始化默认值
 const initDefaultValue = async ({ defaultValue, fieldNames, prop }: FormSchemaProps) => {
   const formConst = unref(model);
-  const value = getFormProp(formConst, prop);
+  const value = getProp(formConst, prop);
 
   if (value || value === false || value === 0) return;
 
   const defaultValueConst = unref(defaultValue);
   // 设置表单项的默认值，如果存在值，则不需要赋默认值
   if (defaultValueConst !== undefined && defaultValueConst !== null) {
-    if (typeof defaultValueConst !== "function") return setFormProp(formConst, prop, defaultValueConst);
+    if (typeof defaultValueConst !== "function") return setProp(formConst, prop, defaultValueConst);
 
-    return setFormProp(formConst, prop, await defaultValueConst(formConst, unref(enumMap)));
+    return setProp(formConst, prop, await defaultValueConst(formConst, unref(enumMap)));
   }
 
   // 如果没有设置默认值，则判断后台是否返回 isDefault 为 Y 的枚举
@@ -139,7 +140,7 @@ const initDefaultValue = async ({ defaultValue, fieldNames, prop }: FormSchemaPr
     // 找出 isDefault 为 Y 的 value
     const data = enumData.filter(item => item.isDefault === "Y");
 
-    return data.length && setFormProp(formConst, prop, data[0][fieldNames?.value ?? "value"]);
+    return data.length && setProp(formConst, prop, data[0][fieldNames?.value ?? "value"]);
   }
 };
 
@@ -151,7 +152,7 @@ const cascadeEnum = ({ prop, el, subProp, subEnum }: FormSchemaProps) => {
     if (typeof subProp !== "string") return;
     // 监听级联下拉变化
     watch(
-      () => getFormProp(unref(model), prop),
+      () => getProp(unref(model), prop),
       async (newVal: string) => {
         const enumMapConst = unref(enumMap);
         // 选择时将级联的 subProp 置空
@@ -438,7 +439,7 @@ const setSchema = (schemaSet: FormSetProps[]) => {
   for (const v of schema) {
     for (const item of schemaSet) {
       if (v.prop === item.prop) {
-        setFormProp(v, item.field, item.value);
+        setProp(v, item.field, item.value);
       }
     }
   }
