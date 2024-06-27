@@ -7,6 +7,7 @@ $prefix-class: #{$admin-namespace}-vertical-layout;
       .menu-item {
         &.is-active {
           background: var(--menu-active-bg-color);
+          font-weight: 700;
 
           &::before {
             position: absolute;
@@ -43,6 +44,7 @@ $prefix-class: #{$admin-namespace}-vertical-layout;
         /* 子级高亮，父级也高亮 */
         &.is-active > .#{$el-namespace}-sub-menu__title {
           color: var(--#{$el-namespace}-color-primary);
+          font-weight: 700;
         }
 
         .#{$el-namespace}-menu {

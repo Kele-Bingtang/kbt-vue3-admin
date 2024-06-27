@@ -59,6 +59,7 @@ $prefix-class: #{$admin-namespace}-columns-layout;
 
       .split-active {
         background-color: var(--split-menu-active-bg-color);
+        font-weight: 700;
 
         .#{$prefix-class}__aside__list-item__title {
           color: var(--#{$el-namespace}-menu-active-color);

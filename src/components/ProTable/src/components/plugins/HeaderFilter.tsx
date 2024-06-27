@@ -4,6 +4,8 @@ import { filterKey, type TableColumnProps } from "../../interface";
 import { Filter } from "@element-plus/icons-vue";
 import { lastProp } from "../../helper";
 import { computed, inject } from "vue";
+import { isEmpty } from "@/utils";
+import { useDesign } from "@/hooks";
 
 export const useHeaderFilter = (column: TableColumnProps) => {
   const filterProps = inject(filterKey);
@@ -65,6 +67,12 @@ export const useHeaderFilter = (column: TableColumnProps) => {
       reset && reset();
     };
 
+    const propIsEmpty = () => {
+      if (column.renderUseProp?.length) return !column.renderUseProp.some(prop => !isEmpty(searchParam[prop]));
+
+      return isEmpty(searchParam[column.prop!]);
+    };
+
     const { filterConfig = {} } = column;
     const { width, trigger } = filterConfig;
 
@@ -72,7 +80,11 @@ export const useHeaderFilter = (column: TableColumnProps) => {
       <ElPopover {...filterConfig} width={width || 230} trigger={trigger || "click"}>
         {{
           reference: () => (
-            <ElIcon style="vertical-align: -2px; margin-left: 2px; cursor: pointer;" class="theme-color-hover">
+            <ElIcon
+              style="vertical-align: -2px; margin-left: 2px; cursor: pointer;"
+              class="theme-color-hover"
+              color={!propIsEmpty() ? `var(--${useDesign().variables.elNamespace}-color-primary)` : ""}
+            >
               <Filter />
             </ElIcon>
           ),

@@ -1,4 +1,4 @@
-import { getLightColor, getDarkColor } from "@/utils";
+import { getLightColor, getDarkColor, setStyleVar } from "@/utils";
 import settings from "@/config/settings";
 import { ElMessage } from "element-plus";
 import { useSettingsStore } from "@/stores";
@@ -31,8 +31,8 @@ export const useTheme = () => {
       primaryTheme: value,
     });
     // 为了兼容暗黑模式下主题颜色也正常，以下方法计算主题颜色 由深到浅 的具体颜色
-    document.documentElement.style.setProperty(`--${variables.elNamespace}-color-primary`, settingsStore.primaryTheme);
-    document.documentElement.style.setProperty(
+    setStyleVar(`--${variables.elNamespace}-color-primary`, settingsStore.primaryTheme);
+    setStyleVar(
       `--${variables.elNamespace}-color-primary-dark-2`,
       settingsStore.isDark
         ? `${getLightColor(settingsStore.primaryTheme, 0.2)}`
@@ -40,7 +40,7 @@ export const useTheme = () => {
     );
     // 颜色加深或变浅
     for (let i = 1; i <= 9; i++) {
-      document.documentElement.style.setProperty(
+      setStyleVar(
         `--${variables.elNamespace}-color-primary-light-${i}`,
         settingsStore.isDark
           ? `${getDarkColor(settingsStore.primaryTheme, i / 10)}`
@@ -67,6 +67,13 @@ export const useTheme = () => {
     // changePrimary(settingsStore.primaryTheme);
     if (settingsStore.isGrey) changeGreyOrWeak(true, "grey");
     if (settingsStore.isWeak) changeGreyOrWeak(true, "weak");
+
+    // 修改 EP 默认色调
+    setStyleVar(`--${variables.elNamespace}-color-success`, "#0bb449");
+    setStyleVar(`--${variables.elNamespace}-color-warning`, "#fa9014");
+    setStyleVar(`--${variables.elNamespace}-color-danger`, "#ef4a38");
+    setStyleVar(`--${variables.elNamespace}-color-error`, "#ef4a38");
+    setStyleVar(`--${variables.elNamespace}-color-info`, "#909399");
   };
 
   return {

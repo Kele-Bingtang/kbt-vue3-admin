@@ -11,8 +11,8 @@ $prefix-class: #{$admin-namespace}-transverse-layout;
 
       .menu-item {
         &.is-active {
-          color: var(--menu-text-color);
           background: var(--menu-active-bg-color);
+          font-weight: 700;
 
           &:hover {
             color: var(--#{$el-namespace}-color-primary);
@@ -38,6 +38,10 @@ $prefix-class: #{$admin-namespace}-transverse-layout;
           color: var(--menu-icon-color);
         }
       }
+    }
+
+    .sub-menu.is-active .#{$el-namespace}-sub-menu__title {
+      font-weight: 700;
     }
 
     /* 下拉菜单 */

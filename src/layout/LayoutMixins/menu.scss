@@ -11,7 +11,7 @@ $prefix-class: #{$admin-namespace}-mixins-layout;
 
       .menu-item {
         &.is-active {
-          color: var(--menu-text-color);
+          font-weight: 700;
           background: var(--menu-active-bg-color);
 
           &:hover {
@@ -77,6 +77,7 @@ $prefix-class: #{$admin-namespace}-mixins-layout;
       &.is-active > .#{$el-namespace}-sub-menu__title,
       .is-active.menu-item {
         color: var(--#{$el-namespace}-color-primary);
+        font-weight: 700;
       }
 
       .#{$el-namespace}-menu {

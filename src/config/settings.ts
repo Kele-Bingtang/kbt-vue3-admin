@@ -82,7 +82,7 @@ const themeSettings: Partial<Settings> = {
   isWeak: false,
   isGrey: false,
   maximize: false,
-  primaryTheme: "#168BF7", // 蓝色偏暗：#168BF7，官方：#409EFF
+  primaryTheme: "#395AE3", // EP 官方 primaryColor：#409EFF
   layoutTheme: LayoutThemeType.Light,
   menuWidth: 210,
   headerHeight: 55,
