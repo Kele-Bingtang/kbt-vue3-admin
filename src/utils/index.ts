@@ -7,7 +7,7 @@ export * from "./layout/errorHandler";
 export * from "./layout/message";
 export * from "./layout/scrollTo";
 export * from "./layout/themeTool";
-export * from "./layout/validate";
+export * from "./layout/is";
 export * from "./idGenerator";
 
 import NProgress from "./nprogress";

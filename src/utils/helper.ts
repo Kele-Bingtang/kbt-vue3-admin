@@ -1,4 +1,4 @@
-import { isNumber, isString } from "./layout/validate";
+import { isNumber, isString } from "./layout/is";
 
 /**
  * @description 数据解耦后，再返回（深拷贝函数）

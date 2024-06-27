@@ -70,13 +70,6 @@ export const setProp = (form: Record<string, any>, prop: string, value: any) => 
 };
 
 /**
- * @description 是否为空值项
- */
-export const isEmptyVal = (val: any): boolean => {
-  return val === "" || val === null || val === undefined;
-};
-
-/**
  * @description 将连字符转换为大驼峰格式
  */
 export const hyphenToCamelCase = (val?: string) => {

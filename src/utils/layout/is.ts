@@ -1,5 +1,5 @@
 /**
- * @description 是否为合法的前缀
+ * @description 是否为合法的 URL 前缀
  */
 export const isExternal = (path: string) => /^(http?:|https?:|mailto:|tel:)/.test(path);
 
@@ -24,21 +24,21 @@ export function isType(val: any) {
 }
 
 /**
- * @description: 判断值是否未某个类型
+ * @description 判断值是否未某个类型
  */
 export function is(val: unknown, type: string) {
   return Object.prototype.toString.call(val) === `[object ${type}]`;
 }
 
 /**
- * @description:  是否为函数
+ * @description 是否为函数
  */
 export function isFunction<T = Function>(val: unknown): val is T {
   return is(val, "Function");
 }
 
 /**
- * @description: 是否已定义
+ * @description:是否已定义
  */
 export const isDef = <T = unknown>(val?: T): val is T => {
   return typeof val !== "undefined";
@@ -49,21 +49,21 @@ export const isUnDef = <T = unknown>(val?: T): val is T => {
 };
 
 /**
- * @description: 是否为对象
+ * @description 是否为对象
  */
 export const isObject = (val: any): val is Record<any, any> => {
   return val !== null && is(val, "Object");
 };
 
 /**
- * @description:  是否为时间
+ * @description 是否为时间
  */
 export function isDate(val: unknown): val is Date {
   return is(val, "Date");
 }
 
 /**
- * 是否是有效的数字（包含正负整数，0以及正负浮点数）
+ * 是否是有效的数字（包含正负整数，0 以及正负浮点数）
  */
 export const isNumber = (val: string) => {
   const regPos = /^\d+(\.\d+)?$/; // 非负浮点数
@@ -76,28 +76,28 @@ export const isNumber = (val: string) => {
 };
 
 /**
- * @description:  是否为AsyncFunction
+ * @description  是否为 AsyncFunction
  */
 export function isAsyncFunction<T = any>(val: unknown): val is Promise<T> {
   return is(val, "AsyncFunction");
 }
 
 /**
- * @description:  是否为promise
+ * @description  是否为 promise
  */
 export function isPromise<T = any>(val: unknown): val is Promise<T> {
   return is(val, "Promise") && isObject(val) && isFunction(val.then) && isFunction(val.catch);
 }
 
 /**
- * @description:  是否为字符串
+ * @description  是否为字符串
  */
 export function isString(val: unknown): val is string {
   return is(val, "String");
 }
 
 /**
- * @description:  是否为boolean类型
+ * @description  是否为boolean类型
  */
 export function isBoolean(val: unknown): val is boolean {
   return is(val, "Boolean");
@@ -114,14 +114,14 @@ export const isArray = (arg: any) => {
 };
 
 /**
- * @description: 是否客户端
+ * @description 是否客户端
  */
 export const isClient = () => {
   return typeof window !== "undefined";
 };
 
 /**
- * @description: 是否为浏览器
+ * @description 是否为浏览器
  */
 export const isWindow = (val: any): val is Window => {
   return typeof window !== "undefined" && is(val, "Window");
@@ -154,11 +154,29 @@ export function isPhone(val: string) {
   return /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(val);
 }
 
-// 是否是图片链接
+/**
+ * 是否是图片链接
+ */
 export const isImgPath = (path: string): boolean => {
   return /(https?:\/\/|data:image\/).*?\.(png|jpg|jpeg|gif|svg|webp|ico)/gi.test(path);
 };
 
-export const isEmptyVal = (val: any): boolean => {
-  return val === "" || val === null || val === undefined;
+/**
+ * @description 是否为空值项（包含数组、对象判断）
+ * @param checkFull 是否检查数组、对象是否为空。默认 true
+ */
+export const isEmpty = (val: any, checkFull = true): boolean => {
+  // 检查空字符串、null 和 undefined
+  if (val === "" || val === null || val === undefined) return true;
+
+  if (checkFull) return false;
+
+  // 检查是不是数组并且长度为 0
+  if (isArray(val) && val.length === 0) return true;
+
+  // 检查是不是对象并且没有自身可枚举属性
+  if (isObject(val) && Object.keys(val).length === 0) return true;
+
+  // 如果以上都不是，则不为空
+  return false;
 };

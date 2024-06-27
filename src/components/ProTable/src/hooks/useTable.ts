@@ -1,6 +1,7 @@
 import type { Paging } from "@/components";
 import type { TableColumnProps } from "../interface";
 import { reactive, computed, toRefs } from "vue";
+import { isEmpty } from "@/utils";
 
 export namespace Table {
   export interface Paging {
@@ -156,7 +157,7 @@ export const useTable = (
       for (const key in state.searchParam) {
         const val = state.searchParam[key];
         // 过滤空值
-        if (val !== "" && val !== null && val !== undefined) nowSearchParam[key] = val;
+        if (!isEmpty(val)) nowSearchParam[key] = val;
       }
 
       return Object.assign(state.totalParam, nowSearchParam, isBackPage() ? pageParam.value : {});
