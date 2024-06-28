@@ -68,7 +68,13 @@
       <DialogFormComponent
         ref="dialogFormRef"
         v-if="getProps.dialogForm"
-        v-bind="{ ...(getProps.dialogForm || { formProps: {}, dialog: {} }), afterConfirm: () => getTableList() }"
+        v-bind="{
+          ...(getProps.dialogForm || { formProps: {}, dialog: {} }),
+          afterConfirm: (status, result) => {
+            getTableList();
+            getProps.dialogForm?.afterConfirm && getProps.dialogForm.afterConfirm(status, result);
+          },
+        }"
         @register="formRegister"
       >
         <template v-for="slot in Object.keys($slots)" #[slot]="scope">
@@ -509,8 +515,9 @@ provide(dialogFormInstanceKey, dialogFormRef);
 
 // 编辑事件
 const handleEdit = (scope: any, item: TableColumnProps) => {
-  if (item.handleEdit) item.handleEdit(scope, expose);
-  else unref(dialogFormRef)?.handleEdit(scope.row);
+  if (item.handleEdit) return item.handleEdit(scope, expose);
+
+  unref(dialogFormRef)?.handleEdit(scope.row);
 };
 
 // 删除事件

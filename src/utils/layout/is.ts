@@ -166,6 +166,9 @@ export const isImgPath = (path: string): boolean => {
  * @param checkFull 是否检查数组、对象是否为空。默认 true
  */
 export const isEmpty = (val: any, checkFull = true): boolean => {
+  // NaN 的检查
+  if (isNumber(val) && isNaN(val)) return true;
+
   // 检查空字符串、null 和 undefined
   if (val === "" || val === null || val === undefined) return true;
 

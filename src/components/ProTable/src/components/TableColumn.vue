@@ -32,9 +32,9 @@ const renderCellData = (item: TableColumnProps, scope: TableRenderScope<any>, en
 
 // 获取 tag 标签
 const renderTag = (item: any, data: any, last = true, index?: number) => {
-  const { tagType, tagEffect } = item;
+  const { tagEl, tagType, tagEffect } = item;
 
-  if (["el-check-tag", "ElCheckTag"].includes(item.tagEl)) {
+  if (["el-check-tag", "ElCheckTag"].includes(tagEl)) {
     // 直接 index ? : 是不行的，因为这样 index = 0 是 false
     return (
       <>

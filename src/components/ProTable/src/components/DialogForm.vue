@@ -175,7 +175,7 @@ const handleAdd = async (row?: any) => {
  */
 const handleEdit = async (row: any) => {
   // 过滤掉 Event 类型
-  if (!(row instanceof Event)) return;
+  if (row instanceof Event) return;
 
   const { clickEdit } = props;
 

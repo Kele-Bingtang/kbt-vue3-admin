@@ -1,6 +1,6 @@
 import type { VNode, ComponentPublicInstance, ComputedRef, Ref, ShallowRef, InjectionKey } from "vue";
 import type { BreakPoint, Responsive, FormRenderScope, FormType, FormSchemaProps } from "@/components";
-import type { TableColumnCtx, PopoverProps } from "element-plus";
+import type { TableColumnCtx, PopoverProps, TagProps } from "element-plus";
 import ProTable, { type ProTableProps } from "../index.vue";
 import DialogForm, { type DialogFormProps } from "../components/DialogForm.vue";
 
@@ -16,7 +16,9 @@ export interface TableEnumProps {
   label?: string; // 选项框显示的文字
   value?: ValueType; // 选项框值
   disabled?: boolean; // 是否禁用此选项
-  tagType?: string; // 当 tag 为 true 时，此选择会指定 tag 显示类型
+  tagEl?: "el-tag" | "el-check-tag" | "el-tag" | "ElCheckTag"; // 当 tag 为 true 时，此选择会指定 tag 组件
+  tagType?: TagProps["type"]; // 当 tag 为 true 时，此选择会指定 tag 显示类型
+  tagEffect?: TagProps["effect"]; // 当 tag 为 true 时，此选择会指定 tag 主题
   children?: TableEnumProps[]; // 为树形选择时，可以通过 children 属性指定子选项
   [key: string]: any;
 }
