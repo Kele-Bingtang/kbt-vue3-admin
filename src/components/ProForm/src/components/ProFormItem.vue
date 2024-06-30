@@ -121,8 +121,8 @@ const clearable = computed(() => {
 });
 
 const isDisabled = () => {
-  if (typeof props.column.isDisabled === "function") return props.column.isDisabled(unref(model));
-  return props.column.isDisabled;
+  if (typeof props.column.disabled === "function") return props.column.disabled(unref(model));
+  return props.column.disabled;
 };
 
 const { renderComponent: RenderComponent } = useRenderComponent(model, formProps, props.column);

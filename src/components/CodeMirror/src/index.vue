@@ -17,6 +17,12 @@
       </slot>
     </template>
 
+    <div v-if="fullScreen" :class="`${prefixClass}__full-screen`">
+      <el-button size="small" plain @click="toggleFullScreen">
+        <el-icon><FullScreen /></el-icon>
+      </el-button>
+    </div>
+
     <aside v-if="$slots.default" style="display: none" aria-hidden><slot /></aside>
   </component>
 </template>
@@ -49,6 +55,7 @@ import { basicSetup, minimalSetup } from "codemirror";
 import { useDesign } from "@/hooks";
 import { getPx } from "@/utils";
 import { ref, shallowRef, computed, type Ref, type ComputedRef, watch, onMounted, nextTick, onUnmounted } from "vue";
+import { FullScreen } from "@element-plus/icons-vue";
 
 export interface MergeCodeMirrorProps {
   [key: string]: any;
@@ -103,6 +110,7 @@ export interface CodeMirrorProps {
   indentUnit?: string; // 缩进单位，如 "  "，缩进两个空格，"    " 代表缩进四个空格
   extensions?: Extension[]; // 额外扩展
   mergeConfig?: MergeCodeMirrorProps; // 代码对比编辑器配置项，传入配置项即开启
+  fullScreen?: boolean; // 是否启用全屏模式，默认不开启 false
 }
 
 defineOptions({ name: "CodeMirror6" });
@@ -125,6 +133,7 @@ const props = withDefaults(defineProps<CodeMirrorProps>(), {
   forceLinting: false,
   gutter: false,
   tag: "div",
+  fullScreen: false,
 });
 
 type CodeMirror6Emits = {
@@ -558,6 +567,12 @@ defineExpose({
   extendSelectionsBy,
 });
 
+// 全屏事件
+const toggleFullScreen = () => {
+  const codeMirrorEl = document.querySelector(`.${prefixClass}`) as HTMLElement;
+  if (codeMirrorEl) codeMirrorEl.classList.toggle("is-fullscreen");
+};
+
 const codeMirrorWidth = computed(() => getPx(props.width));
 const codeMirrorHeight = computed(() => getPx(props.height));
 const codeMirrorMaxHeight = computed(() => getPx(props.maxHeight));
@@ -657,6 +672,10 @@ $prefix-class: #{$admin-namespace}-code-mirror;
     background-color: v-bind(mergeCmBHighlightTextBgColor);
   }
 
+  :deep(.cm-mergeView) {
+    height: 100%;
+  }
+
   &__merge--header {
     display: flex;
     align-items: stretch;
@@ -672,8 +691,30 @@ $prefix-class: #{$admin-namespace}-code-mirror;
     }
   }
 
-  :deep(.cm-mergeView) {
+  &__full-screen {
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    z-index: 1999;
+
+    .#{$el-namespace}-button {
+      width: 24px;
+      height: 24px;
+
+      .#{$el-namespace}-icon {
+        font-size: 16px;
+      }
+    }
+  }
+
+  &.is-fullscreen {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 1990;
+    width: 100%;
     height: 100%;
+    overflow: auto;
   }
 }
 </style>

@@ -294,7 +294,7 @@ const RenderFormWrap = () => {
           return (
             <>
               {RenderForm()}
-              {slots.operation ? <ElFormItem>{slots.operation()}</ElFormItem> : undefined}
+              {slots.operation ? <ElFormItem>{slots.operation(unref(model))}</ElFormItem> : undefined}
             </>
           );
         },
@@ -353,7 +353,7 @@ const renderFormItemWrap = () => {
         </>
       ) : useCol ? (
         // 如果需要栅格，需要包裹 ElCol
-        <ElCol {...setGridProp({ ...rowProps?.col, ...item.col, ...col })} v-show={!isHidden(item)}>
+        <ElCol {...setGridProp({ ...col, ...rowProps?.col, ...item.col })} v-show={!isHidden(item)}>
           {renderFormItem(item)}
         </ElCol>
       ) : (
