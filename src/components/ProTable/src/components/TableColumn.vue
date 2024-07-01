@@ -6,7 +6,7 @@
 import { inject, ref, useSlots, unref } from "vue";
 import { type TableColumnProps, type TableRenderScope, type HeaderRenderScope, tableEnumMapKey } from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
-import { ElCheckTag, ElTag, ElTableColumn } from "element-plus";
+import { ElCheckTag, ElTag, ElTableColumn, ElButton } from "element-plus";
 import { useHeaderFilter } from "./plugins/HeaderFilter";
 import { useRowInlineEdit } from "./plugins/RowInlineEdit";
 
@@ -85,7 +85,21 @@ const RenderTableColumn = (item: TableColumnProps) => {
                 }
                 return renderTag(enumData, data);
               }
-              return Array.isArray(data) ? data.join(",") : data;
+              const defaultRender = Array.isArray(data) ? data.join(",") : data;
+
+              // 判断是否使用 ElButton Link 属性渲染单元格
+              return item.link ? (
+                <ElButton
+                  type="primary"
+                  link
+                  {...{ ...item.linkProps, onClick: undefined }}
+                  onClick={() => item.linkProps?.onClick && item.linkProps.onClick(scope)}
+                >
+                  {defaultRender}
+                </ElButton>
+              ) : (
+                defaultRender
+              );
             },
             header: (scope: HeaderRenderScope<any>) => {
               let headerSlot = <>{item.label}</>;

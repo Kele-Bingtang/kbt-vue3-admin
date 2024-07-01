@@ -1,6 +1,6 @@
 import type { VNode, ComponentPublicInstance, ComputedRef, Ref, ShallowRef, InjectionKey } from "vue";
 import type { BreakPoint, Responsive, FormRenderScope, FormType, FormSchemaProps } from "@/components";
-import type { TableColumnCtx, PopoverProps, TagProps } from "element-plus";
+import type { TableColumnCtx, PopoverProps, TagProps, ButtonProps } from "element-plus";
 import ProTable, { type ProTableProps } from "../index.vue";
 import DialogForm, { type DialogFormProps } from "../components/DialogForm.vue";
 
@@ -233,6 +233,14 @@ export interface TableColumnProps<T = any>
    * 行内编辑配置项，使用前提：必须指定 ElTable 的 rowKey
    */
   editConfig?: EditConfig;
+  /**
+   * 是否使用 ElButton link 属性来渲染单元格
+   */
+  link?: boolean;
+  /**
+   * ElButton Props
+   */
+  linkProps?: Partial<ButtonProps & { onClick: (scope: TableRenderScope<any>) => void }>;
   /**
    * 自定义表头内容渲染（tsx 语法）
    */

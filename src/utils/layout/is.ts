@@ -172,7 +172,7 @@ export const isEmpty = (val: any, checkFull = true): boolean => {
   // 检查空字符串、null 和 undefined
   if (val === "" || val === null || val === undefined) return true;
 
-  if (checkFull) return false;
+  if (!checkFull) return false;
 
   // 检查是不是数组并且长度为 0
   if (isArray(val) && val.length === 0) return true;
