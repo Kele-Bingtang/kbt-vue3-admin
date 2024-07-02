@@ -637,6 +637,7 @@ const defaultPhrases = {
 $prefix-class: #{$admin-namespace}-code-mirror;
 
 .#{$prefix-class} {
+  position: relative;
   width: v-bind(codeMirrorWidth);
   height: v-bind(codeMirrorHeight);
   max-height: v-bind(codeMirrorMaxHeight);
