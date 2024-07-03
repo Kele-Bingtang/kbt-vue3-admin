@@ -1,4 +1,4 @@
-import ProForm from "@/components/ProForm";
+import ProForm, { hyphenToCamelCase } from "@/components/ProForm";
 import { ElPopover, ElIcon, ElButton } from "element-plus";
 import { filterKey, type TableColumnProps } from "../../interface";
 import { Filter } from "@element-plus/icons-vue";
@@ -35,7 +35,7 @@ export const useHeaderFilter = (column: TableColumnProps) => {
 
     const schema = {
       ...column.search,
-      el: column.search?.el || "ElInput", // 如果不指定 el，则默认使用 ElInput 来过滤
+      el: hyphenToCamelCase(column.search?.el) === "ElSelect" ? "CheckBoxSelect" : column.search?.el || "ElInput", // 如果指定 el 为 ElSelect，则走自定义 Select。如果不指定 el，则默认使用 ElInput 来过滤
       label: "",
       prop: prop,
       enum: column.enum as any,

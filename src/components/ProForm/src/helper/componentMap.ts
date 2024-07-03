@@ -24,6 +24,7 @@ import {
 } from "element-plus";
 import { type PascalCaseComponentName } from "../interface";
 import Tree from "../components/Tree.vue";
+import CheckBoxSelect from "../components/CheckBoxSelect.vue";
 import WangEditor from "@/components/WangEditor/index";
 import Tinymce from "@/components/Tinymce/index";
 import IconPicker from "@/components/IconPicker/index";
@@ -53,6 +54,7 @@ const componentMap: Record<PascalCaseComponentName, Component> = {
   ElTransfer,
   ElDivider,
   ElUpload,
+  CheckBoxSelect,
   WangEditor,
   Tinymce,
   IconPicker,

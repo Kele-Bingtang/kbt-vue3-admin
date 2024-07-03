@@ -58,9 +58,9 @@ export enum ComponentNameEnum {
   EL_TRANSFER = "ElTransfer",
   EL_DIVIDER = "ElDivider",
   EL_UPLOAD = "ElUpload",
+  CHECK_BOX_SELECT = "CheckBoxSelect",
   WANG_EDITOR = "WangEditor",
   TINYMCE = "Tinymce",
-  USER_SELECT = "UserSelect",
   ICON_PICKER = "IconPicker",
 }
 

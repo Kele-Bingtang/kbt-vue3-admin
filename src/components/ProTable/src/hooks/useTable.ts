@@ -39,6 +39,7 @@ export namespace Theme {
  * @param {Function} api 获取表格数据 api 方法 (必传)
  * @param {Object} initRequestParam 获取数据初始化参数 (非必传，默认为{})
  * @param {Boolean} openPage 是否有分页 (非必传，默认为true)
+ * @param {Object} pageConfig 分页对象
  * @param {Function} beforeSearch 查询前的回调函数
  * @param {Function} dataCallBack 对后台返回的数据进行处理的方法 (非必传)
  * @param {Function} requestError 请求出错后的回调函数
@@ -49,6 +50,7 @@ export const useTable = (
   api?: (params: any) => Promise<any>,
   initRequestParam: object = {},
   openPage: boolean | Table.PaginationProps = true,
+  pageConfig?: Partial<Table.Paging>,
   beforeSearch?: (searchParam: any) => any,
   dataCallBack?: (data: any) => any,
   requestError?: (error: any) => void,
@@ -67,6 +69,7 @@ export const useTable = (
       pageSizes: [10, 20, 50, 100, 200],
       // 总条数
       total: 0,
+      ...pageConfig,
     },
     // 查询参数（只包括查询）
     searchParam: {},

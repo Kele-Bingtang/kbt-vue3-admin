@@ -125,7 +125,13 @@ const isDisabled = () => {
   return props.column.disabled;
 };
 
-const { renderComponent: RenderComponent } = useRenderComponent(model, formProps, props.column);
+const { renderComponent: RenderComponent } = useRenderComponent(
+  model,
+  formProps,
+  props.column,
+  unref(columnEnum),
+  unref(fieldNames)
+);
 const { renderSelectOptions } = useRenderSelect();
 const { renderRadioOptions } = useRenderRadio();
 const { renderCheckboxOptions } = useRenderCheckbox();
