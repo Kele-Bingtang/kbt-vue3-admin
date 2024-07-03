@@ -2,6 +2,31 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.5](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.4...v1.4.5) (2024-07-03)
+
+### Features
+
+- 🚀 防抖和节流指令支持指定的限制时间传入 ([fa22f98](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/fa22f984e67fc23583a30111c04489a672ad5551))
+- 🚀 过滤新增 CheckBoxSelect 组件代替 ElSelect 组件。ProTable 新增自定义分页信息配置项 ([e60b2e1](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/e60b2e1599d048a5a09fcd9981f1f4391bbe68fd))
+- 🚀 新增 isEmpty 空值判断（包括数组、对象），validate.ts 文件重命名为 is.ts ([9ae9daf](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/9ae9daf4814d12ed608ab780c48b51249a61a6af))
+- 🚀 修改 EP 的五个主题色。ProTable 过滤功能添加选择高亮 ([59e4379](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/59e437934bd1e84a363ca7261278b2233a0caa9d))
+- 🚀 codeMirror 新增全屏功能。ProForm 解决禁用配置项不生效问题 ([fd354f2](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/fd354f24ca05aec3ee2b2f87cc9938565f3e51b7))
+- 🚀 proTable 添加 ElButton Link 属性渲染单元格 ([53d311d](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/53d311d5cc03624c58ff14238c1dcb1fffc3ed67))
+
+### Bug Fixes
+
+- 🐞 公共组件优化，样式优化 ([6eb4d30](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/6eb4d3032cf7ff6b16f1023f2d65a7d4d02e32d5))
+- 🐞 修复 CodeMirror 全屏按钮位置错位问题 ([aa11c6e](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/aa11c6e241034dab412bec9acd4984d7d0f3c34c))
+- 🐞 useDialog、UseDrawer 确定和取消按钮逻辑优化 ([4422983](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/44229830f66568f37d0fad1d6363be23ad8cbbec))
+
+### Code Refactoring
+
+- ♻️ 去掉多余的重复函数 ([0b2de24](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/0b2de2484e0070d7032b57965b5be321f5d34e78))
+
+### Styling
+
+- 🎨 useDialog、UseDrawer OnConfirm、OnClose 逻辑优化 ([b2862c5](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/b2862c58782230615839c4a002e883ee60f04860))
+
 ### [1.4.4](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.3...v1.4.4) (2024-06-23)
 
 ### Features
