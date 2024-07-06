@@ -175,7 +175,7 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   rowKey?: string; // 行数据的 Key，用来优化 Table 的渲染，当表格数据多选时，所指定的 id ==> 非必传（默认为 id）
   size?: CustomTableSize; // 表格密度
   pageConfig?: Partial<Table.Paging>; // 分页信息
-  exportKey?: "props" | "label" | "dataKey"; // 导出时的表头配置（prop 为使用  columns 的 props，label 为使用 columns 的 label，dataKey 为使用 data 的 key），默认为 dataKey
+  exportKey?: "label" | "prop" | "dataKey"; // 导出时的表头配置（prop 为使用  columns 的 prop，label 为使用 columns 的 label，dataKey 为使用 data 的 key），默认为 dataKey
   initShowSearch?: boolean; // 初始化时是否显示搜索模块
   searchCols?: number | Record<BreakPoint, number>; // 表格搜索项 每列占比配置 ==> 非必传 { xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }
   searchProps?: Omit<ProSearchProps, "schema" | "searchCols" | "modeValue">; // ProSearch 配置项
