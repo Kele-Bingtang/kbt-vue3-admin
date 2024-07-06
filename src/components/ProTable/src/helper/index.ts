@@ -1,3 +1,4 @@
+import type { FieldNamesProps, FilterRule } from "../interface";
 export * from "./export";
 
 /**
