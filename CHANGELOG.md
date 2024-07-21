@@ -2,6 +2,18 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.6](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.5...v1.4.6) (2024-07-21)
+
+### Features
+
+- 🚀 proForm 的 Schema 支持 Computed 计算 ([c88fef8](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/c88fef85bc040fba994462f6026c8f26d63b75a8))
+- 🚀 proTable 导出功能添加可选导出列后再导出 ([d645754](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/d645754ff803028326c025ffcbb601b46fe80e4b))
+- 🚀 useDialog、UseDrawer 新增 maxHeight prop。Vue 组件额外添加 confirmLabel、CloseLabel prop，并添加文档说明 ([5539f1f](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/5539f1f6c93000a9d97958e18b5e0eaf9fb3c3b2))
+
+### Styling
+
+- 🎨 添加类型引入 ([ff23f30](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/ff23f30a0a03d3abe280e2e423ceb116611bbd38))
+
 ### [1.4.5](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.4...v1.4.5) (2024-07-03)
 
 ### Features
