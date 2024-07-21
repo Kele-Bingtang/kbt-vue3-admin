@@ -109,12 +109,6 @@ watch(
   }
 );
 
-const dialogStyle = computed(() => {
-  return {
-    height: unref(dialogHeight),
-  };
-});
-
 const handleClose = () => {
   emits("close", unref(elDialogRef));
   dialogVisible.value = false;
