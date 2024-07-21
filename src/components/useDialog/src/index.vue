@@ -31,14 +31,14 @@
       </slot>
     </template>
 
-    <ElScrollbar :style="dialogStyle">
+    <ElScrollbar :height="dialogHeight" :maxHeight>
       <slot></slot>
     </ElScrollbar>
 
     <template #footer>
       <slot name="footer">
-        <ElButton @Click="handleClose()">取 消</ElButton>
-        <ElButton type="primary" @click="handleConfirm()">确 定</ElButton>
+        <ElButton @Click="handleClose()">{{ closeLabel }}</ElButton>
+        <ElButton type="primary" @click="handleConfirm()">{{ confirmLabel }}</ElButton>
       </slot>
     </template>
   </ElDialog>
@@ -61,6 +61,9 @@ interface WorkDialogProps {
   fullscreen?: boolean; // 是否默认全屏，默认 false
   fullscreenIcon?: boolean; // 是否渲染全屏图标，默认 true
   height?: string | number; // 内容高度，默认 400px
+  maxHeight?: string | number; // 内容最大高度，默认 400px
+  confirmLabel?: string; // 确认按钮文字，默认 确 认
+  closeLabel?: string; // 关闭按钮文字，默认 关 闭
 }
 
 const props = withDefaults(defineProps<WorkDialogProps>(), {
@@ -68,6 +71,8 @@ const props = withDefaults(defineProps<WorkDialogProps>(), {
   fullscreen: false,
   fullscreenIcon: true,
   height: 400,
+  confirmLabel: "确认",
+  closeLabel: "关闭",
 });
 
 const emits = defineEmits<{

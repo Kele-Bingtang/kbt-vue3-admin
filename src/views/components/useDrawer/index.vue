@@ -45,6 +45,8 @@
           点击关闭按钮回调。`(closeDrawer: () => void) => void` 类型，默认 undefined。其中 closeDrawer
           为函数，触发后关闭 Drawer
         </el-descriptions-item>
+        <el-descriptions-item label="confirmLabel">确认按钮文字。`string` 类型，默认 确认</el-descriptions-item>
+        <el-descriptions-item label="closeLabel">关闭按钮文字。`string` 类型，默认 关闭</el-descriptions-item>
         <el-descriptions-item label="fullscreen">
           是否以全屏进入 Drawer。`boolean` 类型，默认 `false`
         </el-descriptions-item>
@@ -64,6 +66,8 @@
         <el-descriptions-item label="fullscreenIcon">
           是否渲染全屏图标。`boolean` 类型，默认 `true`
         </el-descriptions-item>
+        <el-descriptions-item label="confirmLabel">确认按钮文字。`string` 类型，默认 确认</el-descriptions-item>
+        <el-descriptions-item label="closeLabel">关闭按钮文字。`string` 类型，默认 关闭</el-descriptions-item>
       </el-descriptions>
     </el-card>
   </el-space>

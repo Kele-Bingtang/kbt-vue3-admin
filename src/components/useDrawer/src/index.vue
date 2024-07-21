@@ -31,8 +31,8 @@
 
     <template #footer>
       <slot name="footer">
-        <ElButton @Click="handleClose()">取 消</ElButton>
-        <ElButton type="primary" @click="handleConfirm()">确 定</ElButton>
+        <ElButton @Click="handleClose()">{{ closeLabel }}</ElButton>
+        <ElButton type="primary" @click="handleConfirm()">{{ confirmLabel }}</ElButton>
       </slot>
     </template>
   </ElDrawer>
@@ -53,12 +53,16 @@ interface WorkDrawerProps {
   title?: string; // 顶部标题
   fullscreen?: boolean; // 是否默认全屏，默认 false
   fullscreenIcon?: boolean; // 是否渲染全屏图标，默认 true
+  confirmLabel?: string; // 确认按钮文字，默认 确 认
+  closeLabel?: string; // 关闭按钮文字，默认 关 闭
 }
 
 const props = withDefaults(defineProps<WorkDrawerProps>(), {
   title: "弹框",
   fullscreen: false,
   fullscreenIcon: true,
+  confirmLabel: "确认",
+  closeLabel: "关闭",
 });
 
 const emits = defineEmits<{
