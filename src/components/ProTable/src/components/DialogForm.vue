@@ -49,7 +49,9 @@ export interface DialogFormSchemaProps<T = any> extends FormSchemaProps<T> {
 }
 
 export interface DialogFormProps<T = any> {
-  formProps?: Omit<ProFormProps, "schema"> & { schema?: DialogFormSchemaProps<T>[] };
+  formProps?: Omit<ProFormProps, "schema"> & {
+    schema?: DialogFormSchemaProps<T>[] | ComputedRef<DialogFormSchemaProps<T>[]>;
+  };
   dialog?: Partial<
     Omit<DialogProps, "modelValue" | "title" | "height"> & {
       title: string | ((model: any, status: DialogStatus) => string);
@@ -126,7 +128,7 @@ const includeModelKeys = computed(() => {
  */
 const newSchema = computed((): FormSchemaProps[] | undefined => {
   // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 hidden 设置为 true
-  props.formProps?.schema?.forEach(column => {
+  unref(props.formProps?.schema)?.forEach(column => {
     if (!column) return;
     const { destroyIn, hiddenIn, disabledIn } = column;
 

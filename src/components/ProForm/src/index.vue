@@ -13,6 +13,7 @@ import {
   onMounted,
   computed,
   type ComponentPublicInstance,
+  type ComputedRef,
   defineComponent,
 } from "vue";
 import {
@@ -220,7 +221,7 @@ const parseLabel = (label: ValueType | ((model: Record<string, any>) => string) 
 watch(
   () => unref(getProps).schema,
   (schema = []) => {
-    schema.forEach((item, index) => {
+    unref(schema).forEach((item, index) => {
       // 设置枚举
       setEnumMap(item);
       // 级联下拉监听
@@ -234,7 +235,7 @@ watch(
     });
 
     // 排序表单项
-    schema.sort((a, b) => a.order! - b.order!);
+    unref(schema).sort((a, b) => a.order! - b.order!);
 
     if (unref(getProps).dynamicModel) {
       // 如果 schema 对应的 prop 不存在，则删除 model 中的对应的 prop
@@ -301,7 +302,7 @@ const RenderFormWrap = () => {
       }}
     </ElForm>
   ) : (
-    schema
+    unref(schema)
       .filter(item => !isDestroy(item))
       .map(item => {
         return (
@@ -337,7 +338,7 @@ const renderFormItemWrap = () => {
   const { schema = [], useCol, rowProps, colRow } = unref(getProps);
   const col = colRow ? { span: 24 } : {};
 
-  return schema
+  return unref(schema)
     .filter(item => !isDestroy(item))
     .map(item => {
       // 如果有 title
