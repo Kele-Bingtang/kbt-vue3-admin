@@ -329,7 +329,7 @@ onMounted(async () => {
   /** 初始化 Value */
   let value: string | Text = doc.value;
   if (!editorRef.value) return;
-  if (editorRef.value.children[0] && !props.mergeConfig) {
+  if (editorRef.value.children[0] && !props.mergeConfig && !props.fullScreen) {
     if (doc.value !== "") {
       console.warn(
         "[CodeMirror.vue] The <code-mirror> tag contains child elements that overwrite the `v-model` values."
