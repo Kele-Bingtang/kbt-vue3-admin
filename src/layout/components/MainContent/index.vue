@@ -22,7 +22,7 @@ import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
 import CustomTransition from "./components/CustomTransition.vue";
 import Maximize from "./components/Maximize.vue";
 import FrameLayout from "../FrameLayout/index.vue";
-import { getUrlParams } from "@/utils";
+import { getUrlParams, mittBus } from "@/utils";
 import { RefreshKey } from "@/config/symbols";
 
 const layoutStore = useLayoutStore();
@@ -49,6 +49,8 @@ const refreshCurrentPage = (value?: boolean) => {
   return true;
 };
 provide(RefreshKey, refreshCurrentPage);
+
+mittBus.on("refreshCurrentPage", () => refreshCurrentPage());
 
 // 监听当前页是否最大化，动态添加 class
 watchEffect(() => {

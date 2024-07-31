@@ -34,7 +34,7 @@ const getFather = (): Element => {
 export interface WorkDialogProps extends Partial<DialogProps> {
   render?: () => VNode; // 内容渲染 TSX
   headerRender?: (scope: any) => VNode; // 头部渲染 TSX
-  footerRender?: () => VNode; // 底部渲染 TSX
+  footerRender?: (closeDialog: () => void) => VNode; // 底部渲染 TSX
   showFooter?: boolean; // 是否渲染底部，默认 true
   onConfirm?: (closeDialog: () => void) => any; // 确认按钮点击事件
   onClose?: (closeDialog: () => void) => any; // 关闭按钮点击事件
@@ -158,7 +158,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
             );
           },
           footer: () => {
-            if (dialogProps.footerRender) return dialogProps.footerRender();
+            if (dialogProps.footerRender) return dialogProps.footerRender(closeDialog);
             if (dialogProps.showFooter === false) return;
             return (
               <>

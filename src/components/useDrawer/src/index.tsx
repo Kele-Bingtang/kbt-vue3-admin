@@ -32,7 +32,7 @@ const getFather = (): Element => {
 export interface WorkDrawerProps extends Partial<DrawerProps> {
   render?: () => VNode; // 内容区渲染 TSX
   headerRender?: () => VNode; // 顶部渲染 TSX
-  footerRender?: () => VNode; // 顶部渲染 TSX
+  footerRender?: (closeDrawer: () => void) => VNode; // 顶部渲染 TSX
   showFooter?: boolean; // 是否渲染顶部
   onConfirm?: (closeDrawer: () => void) => any; // 确认按钮点击事件
   onClose?: (closeDrawer: () => void) => any; // 关闭按钮点击事件
@@ -117,7 +117,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
             );
           },
           footer: () => {
-            if (drawerProps.footerRender) return drawerProps.footerRender();
+            if (drawerProps.footerRender) return drawerProps.footerRender(closeDrawer);
             if (drawerProps.showFooter === false) return;
             return (
               <>
