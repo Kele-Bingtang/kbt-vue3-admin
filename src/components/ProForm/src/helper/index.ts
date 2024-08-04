@@ -44,9 +44,9 @@ export const getProp = (
     value = form || undefined;
   }
 
-  if (valueFormat === "string" && value) return value + "";
-  if (valueFormat === "number" && value) return Number(value);
-  if (valueFormat === "boolean" && value) {
+  if (valueFormat === "string" && (value || value === 0 || value === false)) return value + "";
+  if (valueFormat === "number" && (value || value === 0 || value === false)) return Number(value);
+  if (valueFormat === "boolean" && (value || value === 0 || value === false)) {
     if ((value as any) === "1" || (value as any) === 1) return true;
     else return false;
   }
