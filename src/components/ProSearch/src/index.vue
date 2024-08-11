@@ -15,7 +15,7 @@
             </el-form-item>
           </GridItem>
 
-          <GridItem v-if="getProps.useCollapsed" :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
+          <GridItem :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
             <div :style="style">
               <slot name="action" :model="model" :showCollapse="showCollapse" :toggleCollapsed="toggleCollapsed">
                 <el-button
@@ -30,7 +30,13 @@
                 <el-button v-if="getProps.showReset" :icon="Delete" @click="reset" :loading="getProps.resetLoading">
                   重置
                 </el-button>
-                <el-button v-if="showCollapse" type="primary" link class="search-isOpen" @click="toggleCollapsed()">
+                <el-button
+                  v-if="getProps.useCollapsed === false ? false : showCollapse"
+                  type="primary"
+                  link
+                  class="search-isOpen"
+                  @click="toggleCollapsed()"
+                >
                   {{ getProps.collapsed ? "展开" : "折叠" }}
                   <el-icon class="el-icon--right">
                     <component :is="getProps.collapsed ? ArrowDown : ArrowUp"></component>
