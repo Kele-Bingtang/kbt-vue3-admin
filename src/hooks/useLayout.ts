@@ -164,7 +164,8 @@ export const useLayout = () => {
       if (route.meta?.hideInMenu) return;
       // 如果只有一个子路由且 alwaysShowRoot 为 false | undefined，则子路由成为一级菜单
       if (route.children?.length === 1 && !route.meta?.alwaysShowRoot) {
-        menusList.push(getMenuListByRouter(route.children)[0]);
+        const children = getMenuListByRouter(route.children);
+        children.length && menusList.push(children[0]);
       } else {
         // 否则，生成子菜单列表
         const children = getMenuListByRouter(route.children || []);
