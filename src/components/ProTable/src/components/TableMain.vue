@@ -47,14 +47,14 @@
               :icon="Edit"
               @click="handleEdit(scope, item)"
               :disabled="scope.row.disableEdit || dialogForm?.disableEdit"
-              v-if="visibleButton(dialogForm?.editApi, dialogForm?.useEdit)"
+              v-if="(scope.row.useEdit ?? true) && visibleButton(dialogForm?.editApi, dialogForm?.useEdit)"
             >
               编辑
             </el-button>
             <el-popconfirm
               title="你确定删除吗?"
               @confirm="handleRemove(scope, item)"
-              v-if="visibleButton(dialogForm?.removeApi, dialogForm?.useRemove)"
+              v-if="(scope.row.useRemove ?? true) && visibleButton(dialogForm?.removeApi, dialogForm?.useRemove)"
             >
               <template #reference>
                 <el-button

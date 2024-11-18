@@ -15,7 +15,7 @@
       :enum-map-props="enumMap"
     />
 
-    <div :class="`card ${prefixClass}__main`">
+    <div :class="[{ card: useCardStyle }, `${prefixClass}__main`]">
       <!-- 表格头部 操作按钮 -->
       <TableMainHeader
         :columns="getProps.columns"
@@ -44,7 +44,7 @@
       <TableMain
         ref="tableMainRef"
         v-bind="$attrs"
-        :data="filterTableData ? filterTableData : processTableData"
+        :data="filterTableData ? filterTableData : currentTableData"
         :size="elTableSize"
         :border="getProps.border"
         :row-key="getProps.rowKey"
@@ -182,9 +182,11 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   // 搜索模式，search 使用 ProSearch 组件，filter 开启表格筛选功能，useFilter 启用所有表格筛选功能，不管也没有配置 search。all 两个都使用。allAndUseFilter 两个都使用的同时，默认启用所有表格筛选功能
   searchModel?: "search" | "filter" | "useFilter" | "all" | "allAndUseFilter";
   filterRule?: "front" | "back"; // 过滤规则：前端筛选还是后端筛选，默认后端筛选
+  filterAlData?: boolean; // 是否基于全部数据还是当前表格数据过滤（如分页），true 则基于全部数据，false 则基于当前表格数据
   editRow?: number; // 允许最大编辑的行数，默认 undefined，没有限制
   rowClickEdit?: boolean; // 单击行激活行内编辑
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
+  useCardStyle?: boolean; // 是否使用卡片样式
 }
 
 // 接受父组件参数，配置默认值
@@ -203,6 +205,8 @@ const props = withDefaults(defineProps<ProTableProps>(), {
   searchModel: "search",
   filterRule: "front",
   rowClickEdit: false,
+  filterAllData: true,
+  useCardStyle: true,
 });
 
 // 表格 DOM 元素
@@ -276,13 +280,19 @@ const enumCallback = (data: Record<string, any>[]) => {
   return data;
 };
 
-// 表格数据
-const processTableData = computed(() => {
-  const { data, pagination } = unref(getProps);
+// 表格所有数据
+const allTableData = computed(() => {
+  const { data } = unref(getProps);
+  if (data?.length) return data;
+  return unref(tableData);
+});
+
+// 表格实际渲染的数据
+const currentTableData = computed(() => {
+  const { pagination } = unref(getProps);
   const { pageNum, pageSize } = unref(paging);
 
-  let tableDataConst = unref(tableData);
-  if (data?.length) tableDataConst = data;
+  const tableDataConst = unref(allTableData);
   if (!isFrontPage(pagination)) return tableDataConst;
 
   return tableDataConst?.slice((pageNum - 1) * pageSize, pageNum * pageSize);
@@ -403,7 +413,7 @@ const searchColumns = computed(() => {
 const filterTableData = ref<any[]>();
 
 // 原始数据发生改变，则清除过滤数据
-watch(processTableData, () => (filterTableData.value = undefined));
+watch(currentTableData, () => (filterTableData.value = undefined));
 
 // 统计过滤规则
 const columnFilterRule = computed(() => {
@@ -428,7 +438,8 @@ const filterProps = reactive({
     if (unref(getProps).filterRule === "back") return search(searchParam, unref(getProps).searchProps?.removeNoValue);
 
     // 前端过滤
-    const filterData = frontFilter(searchParam, unref(processTableData), unref(columnFilterRule));
+    const data = unref(getProps).filterAllData ? unref(allTableData) : unref(currentTableData);
+    const filterData = frontFilter(searchParam, data, unref(columnFilterRule));
     const { pageNum, pageSize } = unref(paging);
 
     filterTableData.value = filterData.slice((pageNum - 1) * pageSize, pageNum * pageSize);
@@ -635,8 +646,8 @@ const dragSort = () => {
       animation: 300,
       onEnd({ newIndex, oldIndex }) {
         if (typeof oldIndex !== "undefined" && typeof newIndex !== "undefined") {
-          const [removedItem] = unref(processTableData).splice(oldIndex!, 1);
-          unref(processTableData).splice(newIndex!, 0, removedItem);
+          const [removedItem] = unref(currentTableData).splice(oldIndex!, 1);
+          unref(currentTableData).splice(newIndex!, 0, removedItem);
           emits("dargSort", { newIndex, oldIndex });
         }
       },
