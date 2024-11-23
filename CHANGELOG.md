@@ -2,6 +2,26 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.4.7](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.6...v1.4.7) (2024-11-23)
+
+### Features
+
+- 🚀 使用 mittBus 添加页面刷新功能，UseDialog 函数优化 ([e1707fb](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/e1707fba59487fad733aeccbda26f6ea4683d7e5))
+- 🚀 新增富文本内容解析图片和附件工具 ([def84fe](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/def84fea606ea9f12297d85230e3f381af202713))
+- 🚀 proTable 过滤支持全部数据过滤。支持取消卡片样式。支持自定义行不使用编辑和删除按钮 ([f4b1c98](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/f4b1c98fe36ad0a3bd068746b2773f5404bc5c92))
+
+### Bug Fixes
+
+- 🐞 修复 CodeMirror 使用 fullScreen 后，值为空字符问题 ([aa17b18](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/aa17b18f3dfb5e93b73e698f2a2c961a6f22f6d5))
+- 🐞 修复值为 0、false， valueFormat 失效问题 ([1b6a80a](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/1b6a80a56c941f6bacde0a382c22fde6516413f3))
+- 🐞 子路由 hideInMenun 全为 false 时报错问题修复 ([324e39c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/324e39c50491e3e56b27b85ae28f63c8ccf19092))
+- 🐞 proSearch useCollapsed prop 优化 ([12cdac9](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/12cdac95f0fd527e963d41f412060809e85654d1))
+
+### Styling
+
+- 🎨 去掉不需要的引用 ([7df49a7](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/7df49a7184eb3be5d346641a6e376f47508ddfba))
+- 🎨 去掉不需要的引用 ([9bd30f9](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/9bd30f9df7b986ef36de5d1f009feae759c4593a))
+
 ### [1.4.6](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.5...v1.4.6) (2024-07-21)
 
 ### Features
