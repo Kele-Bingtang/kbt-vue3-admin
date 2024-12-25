@@ -119,6 +119,40 @@ const proComponents: RouterConfigRaw = {
         },
       ],
     },
+    {
+      path: "/pro-steps",
+      name: "ProSteps",
+      meta: {
+        notClickBread: true,
+        title: "超级步骤条",
+        icon: Box,
+      },
+      children: [
+        {
+          path: "simple",
+          name: "SimpleProSteps",
+          component: () => import("@/views/proComponents/proSteps/index.vue"),
+          meta: { title: () => "简单 ProSteps", icon: StarFilled },
+        },
+      ],
+    },
+    {
+      path: "/pro-transfer",
+      name: "ProTransfer",
+      meta: {
+        notClickBread: true,
+        title: "超级穿梭框",
+        icon: Box,
+      },
+      children: [
+        {
+          path: "simple",
+          name: "SimpleProTransfer",
+          component: () => import("@/views/proComponents/proTransfer/index.vue"),
+          meta: { title: () => "简单 ProTransfer", icon: StarFilled },
+        },
+      ],
+    },
   ],
 };
 

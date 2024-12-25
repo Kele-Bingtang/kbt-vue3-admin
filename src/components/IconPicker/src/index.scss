@@ -1,3 +1,5 @@
+@use "@/styles/namespace.scss" as *;
+
 $prefix-class: #{$admin-namespace}-icon-picker;
 
 .#{$prefix-class} {

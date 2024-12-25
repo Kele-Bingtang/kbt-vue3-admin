@@ -177,7 +177,7 @@ watch(
 onMounted(() => {
   try {
     Boot.registerModule(attachmentModule);
-  } catch (e) {
+  } catch {
     /* empty */
   }
 });

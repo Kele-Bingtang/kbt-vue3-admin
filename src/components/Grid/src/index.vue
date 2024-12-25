@@ -143,7 +143,7 @@ const findHiddenIndex = () => {
     }, 0);
     if (!find) hiddenIndex.value = -1;
   } catch (e) {
-    // console.warn(e);
+    console.error(e);
   }
 };
 

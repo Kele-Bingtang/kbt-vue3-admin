@@ -91,7 +91,7 @@ const prefixClass = getPrefixClass("animation-mixin");
 const demo = reactive({
   title: "",
 });
-const validateLength = (rule: any, value: string, callback: Function) => {
+const validateLength = (rule: any, value: string, callback: (e?: Error) => void) => {
   if (value.length !== 6) {
     callback(new Error("请输入六个字符"));
   } else {

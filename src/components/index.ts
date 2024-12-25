@@ -32,3 +32,5 @@ export * from "./useDialog";
 export * from "./useDrawer";
 export * from "./VideoPlayer";
 export * from "./WangEditor";
+export * from "./ProSteps";
+export * from "./ProTransfer";

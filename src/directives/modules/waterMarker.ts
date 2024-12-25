@@ -22,7 +22,6 @@ const addWaterMarker: Directive = (str: string, parentNode: any, font: any, text
   cans.font = font || "16px Microsoft JhengHei";
   cans.fillStyle = textColor || "rgba(180, 180, 180, 0.3)";
   cans.textAlign = "left";
-  // eslint-disable-next-line no-undef
   cans.textBaseline = "Middle" as CanvasTextBaseline;
   cans.fillText(str, can.width / 10, can.height / 2);
   parentNode.style.backgroundImage = "url(" + can.toDataURL("image/png") + ")";

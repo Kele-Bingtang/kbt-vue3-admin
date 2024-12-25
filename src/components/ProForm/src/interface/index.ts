@@ -24,7 +24,7 @@ import type {
 } from "element-plus";
 import type { VNode, ComputedRef, ComponentPublicInstance, ExtractPropTypes, InjectionKey, Ref } from "vue";
 import ProForm, { type ProFormProps } from "../index.vue";
-import { type TreeProps as CustomTreeProps } from "../components/Tree.vue";
+import type { TreeProps as CustomTreeProps } from "../components/Tree.vue";
 import type { TreeProps } from "element-plus/es/components/tree-v2/src/types";
 import type { SelectProps } from "element-plus/es/components/select/src/select";
 import type { SelectProps as SelectV2Props } from "element-plus/es/components/select-v2/src/defaults";

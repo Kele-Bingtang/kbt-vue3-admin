@@ -100,5 +100,5 @@ const tabRemove = async (fullPath: TabPaneName) => {
 </script>
 
 <style lang="scss" scoped>
-@import "./index";
+@use "./index";
 </style>

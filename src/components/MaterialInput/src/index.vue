@@ -212,7 +212,6 @@ const handleInput = (event: Event) => {
   if ((instance?.parent as any).type.name === "ElFormItem") {
     if (props.validateEvent) {
       // See https://github.com/ElemeFE/element/blob/dev/packages/form/src/form-item.vue#L293
-      // eslint-disable-next-line vue/custom-event-name-casing
       (instance?.parent as any).emit("el.form.change", [value]);
     }
   }
@@ -230,7 +229,6 @@ const handleBlur = (event: FocusEvent) => {
   if ((instance?.parent as any).type.name === "ElFormItem") {
     if (props.validateEvent) {
       // See https://github.com/ElemeFE/element/blob/dev/packages/form/src/form-item.vue#L292
-      // eslint-disable-next-line vue/custom-event-name-casing
       (instance?.parent as any).$emit("el.form.blur", [unref(valueCopy)]);
     }
   }
@@ -238,5 +236,5 @@ const handleBlur = (event: FocusEvent) => {
 </script>
 
 <style lang="scss" scoped>
-@import "./index";
+@use "./index";
 </style>

@@ -100,7 +100,7 @@ import type { DialogFormProps } from "./DialogForm.vue";
 
 defineOptions({ name: "ProTableMain" });
 
-const prefixClass = inject(proTablePrefixClassKey);
+const prefixClass = inject(proTablePrefixClassKey, "pro-table");
 
 export interface ProTableProps {
   columns: TableColumnProps[]; // 列配置项 ==> 必传
@@ -123,7 +123,7 @@ type TableMainEmits = {
 
 const emits = defineEmits<TableMainEmits>();
 
-const dialogFormRef = inject(dialogFormInstanceKey);
+const dialogFormRef = inject(dialogFormInstanceKey, undefined);
 
 const tableRef = ref<InstanceType<typeof ElTable>>();
 

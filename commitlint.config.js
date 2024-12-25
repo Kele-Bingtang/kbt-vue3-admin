@@ -27,7 +27,7 @@
  * git commit -m 'fix(hooks): 修复 xxx 的 bug'
  * git commit -m 'refactor: 重构整个项目'
  */
-module.exports = {
+export default {
   ignores: [commit => commit.includes("init")],
   extends: ["@commitlint/config-conventional"],
   rules: {

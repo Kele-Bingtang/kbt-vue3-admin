@@ -1,4 +1,4 @@
-module.exports = {
+export default {
   root: true,
   customSyntax: "postcss-html",
   extends: [
@@ -22,7 +22,6 @@ module.exports = {
     "no-empty-source": null, // 禁止空源码
     "selector-class-pattern": null, // 强制选择器类名的格式
     "value-no-vendor-prefix": null, // 关闭 vendor-prefix(为了解决多行省略 -webkit-box)
-    "selector-class-pattern": null,
     "keyframes-name-pattern": null,
     "selector-pseudo-class-no-unknown": [
       true,

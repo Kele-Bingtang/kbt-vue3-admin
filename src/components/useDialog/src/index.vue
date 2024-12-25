@@ -123,5 +123,5 @@ defineExpose({ elDialogRef });
 </script>
 
 <style lang="scss" scoped>
-@import "./index";
+@use "./index";
 </style>

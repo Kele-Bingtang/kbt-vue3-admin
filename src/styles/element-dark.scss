@@ -1,3 +1,5 @@
+@use "./namespace.scss" as *;
+
 $login-prefix-class: #{$admin-namespace}-login;
 $columns-prefix-class: #{$admin-namespace}-columns-layout;
 $tabs-nav-prefix-class: #{$admin-namespace}-tabs-nav;

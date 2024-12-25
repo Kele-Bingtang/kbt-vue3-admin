@@ -31,7 +31,7 @@ interface MessageParams {
   /** 合并内容相同的消息，不支持 `VNode` 类型的消息，默认值 `false` */
   grouping?: boolean;
   /** 关闭时的回调函数, 参数为被关闭的 `message` 实例 */
-  onClose?: Function | null;
+  onClose?: () => never | null;
   plain?: boolean;
 }
 

@@ -1,5 +1,3 @@
-/* eslint-disable indent */
-/* eslint-disable prettier/prettier */
 interface Email {
   name?: string;
   subject?: string;

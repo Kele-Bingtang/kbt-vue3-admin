@@ -98,7 +98,7 @@ const getComputedThresholdValue = (type: string) => {
   else return typeof value === "string" ? px2percent(value, size) : value;
 };
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars, no-unused-vars
+// eslint-disable-next-line no-unused-vars
 const getMin = (value1: NumOrStr, value2: NumOrStr) => {
   if (unref(valueIsString)) return `${Math.min(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
   else return Math.min(value1 as number, value2 as number);

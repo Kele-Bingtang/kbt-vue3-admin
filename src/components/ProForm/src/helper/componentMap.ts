@@ -22,7 +22,7 @@ import {
   ElTreeSelect,
   ElUpload,
 } from "element-plus";
-import { type PascalCaseComponentName } from "../interface";
+import type { PascalCaseComponentName } from "../interface";
 import Tree from "../components/Tree.vue";
 import CheckBoxSelect from "../components/CheckBoxSelect.vue";
 import WangEditor from "@/components/WangEditor/index";

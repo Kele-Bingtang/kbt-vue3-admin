@@ -1,4 +1,5 @@
 const Print = function (this: any, dom: string | HTMLElement, options?: object) {
+  // eslint-disable-next-line @typescript-eslint/no-this-alias
   const _this: any = this;
   options = options || {};
   // @ts-expect-error
@@ -13,8 +14,7 @@ const Print = function (this: any, dom: string | HTMLElement, options?: object) 
     printDoneCallBack: null,
   };
   for (const key in _this.conf) {
-    // eslint-disable-next-line no-prototype-builtins
-    if (key && options.hasOwnProperty(key)) {
+    if (key && options[key]) {
       _this.conf[key] = (options as any)[key];
     }
   }
@@ -42,7 +42,6 @@ Print.prototype = {
    * @param {Object} obj
    * @param {Object} obj2
    */
-  // eslint-disable-next-line space-before-function-paren
   extendOptions: function <T>(obj: any, obj2: T): T {
     for (const k in obj2) {
       obj[k] = obj2[k];
@@ -124,9 +123,7 @@ Print.prototype = {
     const f: HTMLIFrameElement = document.body.appendChild(iframe);
     iframe.id = "myIframe";
     iframe.setAttribute("style", "position:absolute;width:0;height:0;top:-10px;left:-10px;");
-    // eslint-disable-next-line prefer-const
     w = f.contentWindow || f.contentDocument;
-    // eslint-disable-next-line prefer-const
     doc = f.contentDocument || f.contentWindow?.document || null;
     doc?.open();
     doc?.write(content);
@@ -164,7 +161,7 @@ Print.prototype = {
           if (!frameWindow.document.execCommand("print", false, "")) {
             frameWindow.print();
           }
-        } catch (e) {
+        } catch {
           frameWindow.print();
         }
         frameWindow.close();

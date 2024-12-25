@@ -75,14 +75,14 @@ interface LoginForm {
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
-const switchFormMode = inject("switchFormMode") as (mode: string) => {};
+const switchFormMode = inject("switchFormMode") as (mode: string) => void;
 
 const loginRules = {
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }],
   verifyCode: [
     {
-      validator: (rule: any, value: string, callback: Function) => {
+      validator: (rule: any, value: string, callback: (e?: Error) => void) => {
         if (value === "") {
           callback(new Error("请输入验证码"));
         } else if (imgCode.value !== value) {
@@ -203,5 +203,5 @@ const resetForm = () => {
 </script>
 
 <style lang="scss" scoped>
-@import "./index";
+@use "./index";
 </style>

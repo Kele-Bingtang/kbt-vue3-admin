@@ -683,8 +683,8 @@ $prefix-class: #{$admin-namespace}-code-mirror;
 
     &__left,
     &__right {
-      flex-basis: 0;
       flex-grow: 1;
+      flex-basis: 0;
       padding: 8px 11px;
       text-align: center;
       background-color: v-bind(mergeCmBgColor);

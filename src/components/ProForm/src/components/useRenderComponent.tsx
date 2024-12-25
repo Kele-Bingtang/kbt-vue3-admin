@@ -1,8 +1,8 @@
-import { type FormSchemaProps } from "@/components";
+import type { FormSchemaProps } from "@/components";
 import { getProp, hyphenToCamelCase, setProp } from "../helper";
 import type { ComputedRef, ModelRef, defineComponent } from "vue";
 import { componentMap } from "../helper/componentMap";
-import { type FormFieldNamesProps, type PascalCaseComponentName } from "../interface";
+import type { FormFieldNamesProps, PascalCaseComponentName } from "../interface";
 
 export const useRenderComponent = (
   model: ModelRef<Record<string, any>, string>,

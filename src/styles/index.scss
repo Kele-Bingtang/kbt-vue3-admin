@@ -1,8 +1,14 @@
-@import "./variables";
-@import "./transition";
-@import "./module/namespace";
-@import "element-plus/theme-chalk/dark/css-vars.css"; // Element Plus 内置暗黑模式
-@import "./element-dark"; // 自定义暗黑模式
+@forward "variables";
+@forward "namespace"; // 导出到项目的全局变量里，当前文件无法使用 namespace.scss 的变量
+@use "transition";
+@use "element-plus/theme-chalk/dark/css-vars.css"; // Element Plus 内置暗黑模式
+@use "element-dark"; // 自定义暗黑模式
+@use "namespace" as *; // 当前文件使用 namespace.scss 的变量
+
+// 自定义 EP 样式命名空间
+@forward "element-plus/theme-chalk/src/mixins/config.scss" with (
+  $namespace: #{$el-namespace}
+);
 
 /* Global scss */
 body {

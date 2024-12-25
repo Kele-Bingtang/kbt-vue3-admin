@@ -1,22 +1,8 @@
+@use "@/styles/namespace.scss" as *;
+
 $prefix-class: #{$admin-namespace}-point-flicker;
 
 .#{$prefix-class} {
-  @keyframes flicker {
-    0% {
-      opacity: 1;
-      transform: scale(0.5);
-    }
-
-    30% {
-      opacity: 1;
-    }
-
-    100% {
-      opacity: 0;
-      transform: scale(var(--point-scale));
-    }
-  }
-
   position: relative;
   width: var(--point-width);
   height: var(--point-height);
@@ -37,5 +23,21 @@ $prefix-class: #{$admin-namespace}-point-flicker;
     content: "";
     border-radius: var(--point-border-radius);
     animation: flicker 1.2s ease-out infinite;
+  }
+
+  @keyframes flicker {
+    0% {
+      opacity: 1;
+      transform: scale(0.5);
+    }
+
+    30% {
+      opacity: 1;
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale(var(--point-scale));
+    }
   }
 }

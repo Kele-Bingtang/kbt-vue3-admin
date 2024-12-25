@@ -147,6 +147,7 @@ const pushList = (list: DragList, type: string) => {
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-drag-list;
+
 .#{$prefix-class} {
   height: 100%;
 

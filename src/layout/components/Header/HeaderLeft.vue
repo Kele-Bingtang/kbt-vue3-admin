@@ -45,9 +45,9 @@ $prefix-class: #{$admin-namespace}-header-left;
 
     // 最后一个面包屑 item
     :deep(
-        .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click,
-        .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click:hover
-      ) {
+      .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click,
+      .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click:hover
+    ) {
       color: #a8abb0;
     }
   }

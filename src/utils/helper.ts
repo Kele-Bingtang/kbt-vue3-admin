@@ -25,7 +25,7 @@ export const deepClone = (obj: any, hash = new WeakMap()): Record<string, any> =
   hash.set(obj, newObj);
 
   for (const key in obj) {
-    if (obj.hasOwnProperty(key)) {
+    if (obj[key]) {
       newObj[key] = deepClone(obj[key], hash);
     }
   }
@@ -67,7 +67,7 @@ export function removeDuplicateObj<T>(arr: Array<T>, removeKeys: string[], keyIs
       }
       return itemArr;
     }, []);
-  } catch (error) {
+  } catch {
     return arr;
   }
 }
@@ -125,7 +125,7 @@ export function isObjectValueEqual(a: Record<string, any>, b: Record<string, any
     const propName = aProps[i];
     const propA = a[propName];
     const propB = b[propName];
-    if (!b.hasOwnProperty(propName)) return false;
+    if (!b[propName]) return false;
     if (propA instanceof Object) {
       if (!isObjectValueEqual(propA, propB)) return false;
     } else if (propA !== propB) {

@@ -166,7 +166,11 @@ const handleImgUpload = async (blobInfo: any, success: (value: unknown) => void,
  * @param filetype 在哪个工具上传文件类型："image" | "media" | "file"，并不是上传的文件类型（文件上传就是插入/编辑链接的那个按钮，传入一个链接）
  * @param callback callback 是个回调，参数 1 是一个有效的 http 链接，如果是图片，执行 callback 后就会执行 @img-upload 回调
  */
-const handleFileUpload = async (file: File, filetype: "image" | "media" | "file", callback: Function) => {
+const handleFileUpload = async (
+  file: File,
+  filetype: "image" | "media" | "file",
+  callback: (uri: string, meta?: { text?: string; title?: string }) => void
+) => {
   if (filetype === "image") {
     if (file.type && !file.type.startsWith("image")) {
       ElMessage.error("请上传图片！");

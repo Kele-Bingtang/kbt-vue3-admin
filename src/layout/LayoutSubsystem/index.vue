@@ -82,9 +82,9 @@ onBeforeUnmount(() => {
 </script>
 
 <style lang="scss" scoped>
-@import "./index";
+@use "./index";
 </style>
 
 <style lang="scss">
-@import "./menu";
+@use "./menu";
 </style>

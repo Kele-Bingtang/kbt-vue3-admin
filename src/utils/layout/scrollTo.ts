@@ -28,7 +28,7 @@ const position = (el: string) => {
   return document.getElementsByClassName(el)[0].scrollTop;
 };
 
-export const scrollTo = (el: string, to: number, duration: number, callback?: Function) => {
+export const scrollTo = (el: string, to: number, duration: number, callback?: () => void) => {
   const start = position(el);
   const change = to - start;
   const increment = 20;
