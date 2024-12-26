@@ -115,9 +115,7 @@ $prefix-class: #{$admin-namespace}-tabs-nav;
       padding: 6px 4px;
       line-height: 14px;
       text-align: center;
-      border-color: var(--#{$el-namespace}-border-color-light);
-      border-top: none;
-      border-bottom: none;
+      border: none;
 
       &:active {
         border-color: #a2d0ff !important;
