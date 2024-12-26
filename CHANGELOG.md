@@ -2,6 +2,17 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.5.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.7...v1.5.0) (2024-12-26)
+
+### Features
+
+- 🚀 升级 i18n 依赖，更正 persistedstate 新版的 api ([b311677](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/b311677669d3fab1571992859de656d806904523))
+- 🚀 依赖升级，Eslint 升级 9.17，sass 升级 1.83.0。修改文件兼容每个新版依赖 ([0ebdac8](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/0ebdac8bbfc4e2c1aede5df4d2f5e6b6136a484b))
+
+### Bug Fixes
+
+- 🐞 修复 eslint ignores 忽略指定文件失效问题 ([8e5360c](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/8e5360c2adca593247cf1b535ce55aa1f7e83b2b))
+
 ### [1.4.7](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.6...v1.4.7) (2024-11-23)
 
 ### Features
