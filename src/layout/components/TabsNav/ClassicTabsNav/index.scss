@@ -87,6 +87,7 @@ $prefix-class: #{$admin-namespace}-tabs-nav;
           }
 
           svg {
+            display: inline-block;
             vertical-align: -3px;
           }
         }

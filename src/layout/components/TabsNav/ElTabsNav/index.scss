@@ -6,6 +6,10 @@ $prefix-class: #{$admin-namespace}-tabs-nav;
   position: relative;
   background-color: #ffffff;
 
+  svg: {
+    display: inline-block;
+  }
+
   :deep(.#{$prefix-class}__content) {
     position: relative;
     width: 100%;
