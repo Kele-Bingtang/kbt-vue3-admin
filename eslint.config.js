@@ -2,7 +2,7 @@ import { defineFlatConfig } from "eslint-define-config";
 import eslint from "@eslint/js";
 import globals from "globals";
 import pluginVue from "eslint-plugin-vue";
-import projectGlobals from "./eslintrc-globals.json" with { type: "json" };
+import projectGlobals from "./eslintrc-globals.js";
 import configPrettier from "eslint-config-prettier";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginTypeScript from "@typescript-eslint/eslint-plugin";
@@ -11,20 +11,20 @@ import * as parserTypeScript from "@typescript-eslint/parser";
 
 export default defineFlatConfig([
   eslint.configs.recommended,
-  // 不指定 files，则默认是所有文件生效
+  { ignores: ["**/.*", "public/*", "dist/*", "*.d.ts", "src/assets/**"] }, // 忽略文件配置单独放在一个对象，否则不生效
   {
-    ignores: ["**/.*", "public/*", "dist/**", "*.d.ts", "src/assets/**"],
     languageOptions: {
       globals: {
         ...globals.browser,
         ...globals.es6,
         ...globals.node,
-        ...projectGlobals.globals,
+        ...projectGlobals,
       },
     },
     plugins: {
       prettier: pluginPrettier,
     },
+    // 不指定 files，则默认是所有文件生效
     rules: {
       ...configPrettier.rules,
       ...pluginPrettier.configs.recommended.rules,
@@ -154,7 +154,6 @@ export default defineFlatConfig([
     files: ["**/*.d.ts"],
     rules: {
       "import/no-duplicates": "off",
-      "unused-imports/no-unused-vars": "off",
     },
   },
   {
