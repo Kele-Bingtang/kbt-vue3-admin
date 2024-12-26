@@ -2,6 +2,16 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.5.1](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.5.0...v1.5.1) (2024-12-26)
+
+### Features
+
+- 🚀 引入 TailWindcss 功能 ([85ba541](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/85ba541492e3b5451711706f5c28025bfe424190))
+
+### Bug Fixes
+
+- 🐞 修复部分样式 ([8d6ad07](https://github.com/Kele-Bingtang/kbt-vue3-admin/commit/8d6ad070b31fc9a589c63c7f9faa9a9aae791adf))
+
 ## [1.5.0](https://github.com/Kele-Bingtang/kbt-vue3-admin/compare/v1.4.7...v1.5.0) (2024-12-26)
 
 ### Features
