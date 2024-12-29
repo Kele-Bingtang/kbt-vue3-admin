@@ -100,6 +100,7 @@
     "@types/qs": "^6.9.17",
     "@types/sortablejs": "^1.15.8",
     "@typescript-eslint/eslint-plugin": "^8.18.2",
+    "@typescript-eslint/parser": "^8.18.2",
     "@uiw/codemirror-theme-dracula": "^4.23.7",
     "@uiw/codemirror-theme-xcode": "^4.23.7",
     "@vitejs/plugin-vue": "^5.2.1",
