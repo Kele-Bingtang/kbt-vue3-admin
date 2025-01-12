@@ -8,7 +8,7 @@ type MetaNeedKey = "_fullPath" | "_dynamic";
 
 declare module "vue-router" {
   // 扩展路由 Meta 类型
-  interface RouteMeta extends RequiredKey<MetaProp, MetaNeedKey> {}
+  type RouteMeta = RequiredKey<MetaProp, MetaNeedKey>;
 }
 
 declare global {
