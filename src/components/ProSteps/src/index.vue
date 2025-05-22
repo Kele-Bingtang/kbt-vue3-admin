@@ -357,7 +357,7 @@ export interface Step {
 
 interface StepsProps {
   type: "basic" | "align-top" | "custom-icon" | "column" | "dotted-row" | "dotted-column";
-  data: Step[];
+  data?: Step[];
 }
 
 const props = withDefaults(defineProps<StepsProps>(), { data: () => [] });

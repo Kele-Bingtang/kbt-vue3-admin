@@ -103,7 +103,7 @@ defineOptions({ name: "ProTableMain" });
 const prefixClass = inject(proTablePrefixClassKey, "pro-table");
 
 export interface ProTableProps {
-  columns: TableColumnProps[]; // 列配置项 ==> 必传
+  columns?: TableColumnProps[]; // 列配置项 ==> 必传
   columnTypes?: TypeProps[]; // 字段类型
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
   rowClickEdit?: boolean; // 单击行激活行内编辑

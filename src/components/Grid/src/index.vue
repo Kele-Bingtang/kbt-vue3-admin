@@ -29,7 +29,7 @@ export type Responsive = responsive;
 export type BreakPoint = "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface GridProps {
-  cols: number | Record<BreakPoint, number>; // 响应式布局
+  cols?: number | Record<BreakPoint, number>; // 响应式布局
   collapsed?: boolean; // 是否开启折叠功能
   collapsedRows?: number; // 可见的行数
   gap?: [number, number] | number; // 行和列间距

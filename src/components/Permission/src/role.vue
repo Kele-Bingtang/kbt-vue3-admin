@@ -11,7 +11,7 @@ import { usePermission } from "@/hooks";
 defineOptions({ name: "Role" });
 
 interface RoleProps {
-  value: string | string[];
+  value?: string | string[];
 }
 
 withDefaults(defineProps<RoleProps>(), {

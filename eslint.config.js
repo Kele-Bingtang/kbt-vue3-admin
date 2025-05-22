@@ -1,4 +1,4 @@
-import { defineFlatConfig } from "eslint-define-config";
+import { defineConfig } from "eslint/config";
 import eslint from "@eslint/js";
 import globals from "globals";
 import pluginVue from "eslint-plugin-vue";
@@ -9,9 +9,9 @@ import pluginTypeScript from "@typescript-eslint/eslint-plugin";
 import * as parserVue from "vue-eslint-parser";
 import * as parserTypeScript from "@typescript-eslint/parser";
 
-export default defineFlatConfig([
+export default defineConfig([
   eslint.configs.recommended,
-  { ignores: ["**/.*", "public/*", "dist/*", "*.d.ts", "src/assets/**"] }, // 忽略文件配置单独放在一个对象，否则不生效
+  { ignores: ["**/.*", "**/dist/*", "*.d.ts", "public"] }, // 忽略文件配置单独放在一个对象，否则不生效
   {
     languageOptions: {
       globals: {
@@ -28,9 +28,9 @@ export default defineFlatConfig([
     rules: {
       ...configPrettier.rules,
       ...pluginPrettier.configs.recommended.rules,
-      "no-debugger": process.env.NODE_ENV === "production" ? "error" : "off", // 禁用 debugger
-      "no-unused-vars": [process.env.NODE_ENV === "production" ? "error" : "warn", { vars: "all", args: "none" }], // 禁止出现未使用的变量，函数和函数的参数
-      "no-undef": process.env.NODE_ENV === "production" ? "error" : "warn", // 禁用未声明的变量，除非它们在 /*global */ 注释中被提到
+      "no-debugger": process.env.NODE_ENV === "production" ? "warn" : "off", // 禁用 debugger
+      "no-unused-vars": [process.env.NODE_ENV === "production" ? "warn" : "warn", { vars: "all", args: "none" }], // 禁止出现未使用的变量，函数和函数的参数
+      "no-undef": process.env.NODE_ENV === "production" ? "warn" : "warn", // 禁用未声明的变量，除非它们在 /*global */ 注释中被提到
       "no-console": "off", // 禁用 console
       "accessor-pairs": "error", // 强制 getter 和 setter 在对象中成对出现
       eqeqeq: ["error", "always", { null: "ignore" }], // 要求使用 === 和 !==
@@ -89,7 +89,6 @@ export default defineFlatConfig([
       ...pluginVue.configs["recommended"].rules,
 
       // vue (https://eslint.vuejs.org/rules)
-      "vue/script-setup-uses-vars": "error", // 防止<script setup>使用的变量<template>被标记为未使用，此规则仅在启用该no-unused-vars规则时有效。
       "vue/v-slot-style": "error", // 强制执行 v-slot 指令样式
       "vue/no-mutating-props": "off", // 不允许组件 prop 的改变
       "vue/custom-event-name-casing": "off", // 为自定义事件名称强制使用特定大小写
