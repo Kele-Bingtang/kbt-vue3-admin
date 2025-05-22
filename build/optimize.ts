@@ -30,6 +30,7 @@ const include = [
   "codemirror",
   "tinymce",
   "@tinymce/tinymce-vue",
+  "v-code-diff",
 ];
 
 /**

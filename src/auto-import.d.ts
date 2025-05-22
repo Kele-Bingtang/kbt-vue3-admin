@@ -73,6 +73,8 @@ declare global {
   // @ts-ignore
   export type {
     Component,
+    Slot,
+    Slots,
     ComponentPublicInstance,
     ComputedRef,
     DirectiveBinding,
