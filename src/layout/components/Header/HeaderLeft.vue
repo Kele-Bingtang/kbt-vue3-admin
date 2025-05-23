@@ -1,16 +1,17 @@
 <template>
   <div :class="prefixClass">
     <CollapseTrigger />
-    <Breadcrumb v-if="showBreadcrumb && layoutStore.device !== DeviceType.Mobile" />
+    <Breadcrumb v-if="showBreadcrumb && layoutStore.device !== DeviceEnum.Mobile" />
   </div>
 </template>
 
 <script setup lang="ts" name="HeaderLeft">
 import CollapseTrigger from "./components/CollapseTrigger.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
-import { useSettingsStore, useLayoutStore, DeviceType } from "@/stores";
+import { useSettingsStore, useLayoutStore } from "@/stores";
 import { useDesign } from "@/hooks";
 import { computed } from "vue";
+import { DeviceEnum } from "@/enums/appEnum";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("header-left");

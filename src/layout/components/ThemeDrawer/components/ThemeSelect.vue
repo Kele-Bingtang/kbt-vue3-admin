@@ -29,9 +29,10 @@
 
 <script setup lang="ts" name="ThemeSelect">
 import { useDesign, useTheme } from "@/hooks";
-import { useSettingsStore, LayoutThemeType } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { Sunny, Moon } from "@element-plus/icons-vue";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
+import { MenuThemeEnum } from "@/enums/appEnum";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("theme-select");
@@ -42,7 +43,7 @@ const settingsStore = useSettingsStore();
 
 // 预定义主题颜色
 const colorList = [
-  settings.primaryTheme,
+  SystemConfig.themeConfig.primaryTheme,
   "#DAA96E",
   "#0C819F",
   "#409EFF",
@@ -56,7 +57,7 @@ const colorList = [
 
 const handleSwitchDark = () => {
   const isDark = switchDark();
-  const theme = isDark ? LayoutThemeType.Dark : LayoutThemeType.Light;
+  const theme = isDark ? MenuThemeEnum.Dark : MenuThemeEnum.Light;
   settingsStore.$patch({
     menuTheme: theme,
     headerTheme: theme,

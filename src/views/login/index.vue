@@ -8,7 +8,7 @@
       <div :class="`${prefixClass}__box__form`">
         <div :class="`${prefixClass}__box__form--logo`">
           <img :class="`${prefixClass}__box__form--logo__img`" src="@/assets/images/logo.png" alt="" />
-          <h2 :class="`${prefixClass}__box__form--logo__text`">{{ settings.title }}</h2>
+          <h2 :class="`${prefixClass}__box__form--logo__text`">{{ SystemConfig.themeConfig.title }}</h2>
         </div>
         <component :is="formComponents[formMode]" />
       </div>
@@ -19,7 +19,7 @@
 <script setup lang="ts" name="Login">
 import { SwitchDark } from "@/components";
 import LoginForm from "./loginForm.vue";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import Phone from "./components/phone.vue";
 import QrCode from "./components/qrCode.vue";
 import Register from "./components/register.vue";

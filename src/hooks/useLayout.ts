@@ -1,11 +1,12 @@
-import { useLayoutStore, usePermissionStore, useSettingsStore, useUserStore, DeviceType } from "@/stores";
+import { useLayoutStore, usePermissionStore, useSettingsStore, useUserStore } from "@/stores";
 import { ElMessage } from "element-plus";
 import { useI18n } from "vue-i18n";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { transformI18n } from "@/languages";
 import { isFunction, isString } from "@/utils";
 import { useRoutes } from "./useRoutes";
 import type { RouteLocationNormalizedLoaded } from "vue-router";
+import { DeviceEnum } from "@/enums/appEnum";
 
 export const useLayout = () => {
   const layoutStore = useLayoutStore();
@@ -29,7 +30,7 @@ export const useLayout = () => {
   const resizeHandler = () => {
     if (!document.hidden) {
       const result = isMobile();
-      layoutStore.toggleDevice(result ? DeviceType.Mobile : DeviceType.Desktop);
+      layoutStore.toggleDevice(result ? DeviceEnum.Mobile : DeviceEnum.Desktop);
       if (result) settingsStore.closeSideMenu();
     }
   };
@@ -39,7 +40,7 @@ export const useLayout = () => {
    * @param route 当前路由
    */
   const setBrowserTitle = (route: RouteLocationNormalizedLoaded) => {
-    const { title } = settings;
+    const { title } = SystemConfig.themeConfig;
     const pageTitle = getTitle(route);
 
     let resTitle = pageTitle ? `${title} - ${pageTitle}` : title; // 默认标题的模式
@@ -93,7 +94,7 @@ export const useLayout = () => {
    * @returns i18n 转换后的文字
    */
   const handleI18nTitle = (name: string | undefined, title: string, titleIsFunction = false, useI18n = false) => {
-    const { routeUseI18n: useI18nSetting } = settings;
+    const { routeUseI18n: useI18nSetting } = SystemConfig.routerConfig;
     if (!useI18nSetting || !useI18n) return title;
     // 处理 {{ }}，如 title 为 "{{ _route.Home }}"，则说明 _route.Home 需要 i18n 转化
     if (isString(title) && title.includes("{{") && title.includes("}}") && useI18nSetting) {
@@ -212,7 +213,7 @@ export const useLayoutNoSetup = () => {
    * @returns i18n 转换后的文字
    */
   const handleI18nTitle = (name: string | undefined, title: string, useI18n = false) => {
-    const { routeUseI18n: useI18nSetting } = settings;
+    const { routeUseI18n: useI18nSetting } = SystemConfig.routerConfig;
     if (!useI18nSetting || !useI18n) return title;
     // 处理 {{ }}，如 title 为 "{{ _route.Home }}"，则说明 _route.Home 需要 i18n 转化
     if (isString(title) && title.includes("{{") && title.includes("}}") && useI18nSetting) {

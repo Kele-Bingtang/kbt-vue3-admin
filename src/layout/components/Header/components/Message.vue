@@ -15,7 +15,7 @@
                 <img :src="notice.image" alt="" :class="`${prefixClass}__list-item__icon`" />
                 <div :class="`${prefixClass}__list-item__content`">
                   <div :class="`${prefixClass}__list-item__content--header`">
-                    <Tooltip :effect="settings.tooltipEffect" :line="1" :try="1">
+                    <Tooltip :effect="SystemConfig.layoutConfig.tooltipEffect" :line="1" :try="1">
                       <span>{{ notice.title }}</span>
                     </Tooltip>
                   </div>
@@ -37,11 +37,11 @@
                 <img src="@/assets/images/msg/msg02.png" alt="" :class="`${prefixClass}__list-item__icon`" />
                 <div :class="`${prefixClass}__list-item__content`">
                   <div :class="`${prefixClass}__list-item__content--header`">
-                    <Tooltip :effect="settings.tooltipEffect" :line="1" :try="1">
+                    <Tooltip :effect="SystemConfig.layoutConfig.tooltipEffect" :line="1" :try="1">
                       <span>{{ message.title }}</span>
                     </Tooltip>
                   </div>
-                  <Tooltip :effect="settings.tooltipEffect" :line="2" :try="1">
+                  <Tooltip :effect="SystemConfig.layoutConfig.tooltipEffect" :line="2" :try="1">
                     <span :class="`${prefixClass}__list-item__content--desc`">{{ message.description }}</span>
                   </Tooltip>
                   <span :class="`${prefixClass}__list-item__content--date`">{{ message.createTime }}</span>
@@ -92,7 +92,7 @@
 import { computed, ref, onMounted } from "vue";
 import { ElPopover, ElTabs, ElTabPane, ElScrollbar, ElButton, ElBadge, ElTag } from "element-plus";
 import { useMessageStore } from "@/stores";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { Tooltip } from "@/components";
 import { useDesign } from "@/hooks";
 

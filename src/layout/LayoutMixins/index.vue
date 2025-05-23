@@ -3,7 +3,7 @@
     <el-header class="flx-justify-between">
       <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-        <span>{{ settings.title }}</span>
+        <span>{{ SystemConfig.themeConfig.title }}</span>
       </div>
       <CollapseTrigger />
       <Menu
@@ -32,7 +32,7 @@ import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import { useLayout, useRoutes } from "@/hooks";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import Menu from "@/layout/components/Menu/index.vue";
 import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
@@ -55,7 +55,7 @@ const activeMenu = ref("");
 const childrenMenu = ref<RouterConfig[]>([]);
 const isCollapse = computed(() => settingsStore.isCollapse);
 const menuList = computed(() => {
-  if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {
+  if (SystemConfig.layoutConfig.moreRouteChildrenHideInMenuThenOnlyOne) {
     const menu = getMenuListByRouter(permissionStore.loadedRouteList);
     return getMenuListByRouter(menu);
   } else return getMenuListByRouter(permissionStore.loadedRouteList);

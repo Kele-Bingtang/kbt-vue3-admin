@@ -57,7 +57,7 @@ import { useRouter } from "vue-router";
 import { ElNotification, type FormInstance } from "element-plus";
 import { useUserStore } from "@/stores";
 import { getTimeState } from "@/utils";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { ImageVerifyCode } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";
 import { User, Lock, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
@@ -176,7 +176,7 @@ const startLogin = () => {
       if (Object.keys(otherQuery).length === 0) router.push(path);
       else router.push({ path, query: otherQuery });
       ElNotification({
-        title: `欢迎登录 ${settings.title}`,
+        title: `欢迎登录 ${SystemConfig.themeConfig.title}`,
         message: getTimeState(),
         type: "success",
         duration: 3000,

@@ -18,7 +18,7 @@
           >
             <Icon v-if="item.meta?.icon" :icon="item.meta.icon" />
             <div class="flx-center" style="width: 100%">
-              <Tooltip :effect="settings.tooltipEffect">
+              <Tooltip :effect="SystemConfig.layoutConfig.tooltipEffect">
                 <span :class="`${prefixClass}__aside__list-item__title`">{{ item.meta?.title }}</span>
               </Tooltip>
             </div>
@@ -28,7 +28,7 @@
     </div>
     <el-aside :class="{ 'not-aside': !menuItem.length }">
       <div :class="`${prefixClass}__aside__logo layout__logo flx-center`">
-        <span v-show="menuItem.length">{{ isCollapse ? "K" : settings.title }}</span>
+        <span v-show="menuItem.length">{{ isCollapse ? "K" : SystemConfig.themeConfig.title }}</span>
       </div>
       <el-scrollbar v-if="menuItem?.length">
         <Menu :menu-list="menuItem" :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
@@ -50,7 +50,7 @@ import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import { useLayout } from "@/hooks";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import Menu from "@/layout/components/Menu/index.vue";
 import { Tooltip } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";
@@ -73,7 +73,7 @@ const splitActive = ref<string>(""); // 菜单是否激活
 const isCollapse = computed(() => settingsStore.isCollapse);
 
 const menuList = computed(() => {
-  if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {
+  if (SystemConfig.layoutConfig.moreRouteChildrenHideInMenuThenOnlyOne) {
     const menu = getMenuListByRouter(permissionStore.loadedRouteList);
     return getMenuListByRouter(menu);
   } else return getMenuListByRouter(permissionStore.loadedRouteList);

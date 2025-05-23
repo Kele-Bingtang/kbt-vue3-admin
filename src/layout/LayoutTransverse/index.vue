@@ -3,7 +3,7 @@
     <el-header class="flx-justify-between">
       <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-        <span>{{ settings.title }}</span>
+        <span>{{ SystemConfig.themeConfig.title }}</span>
       </div>
       <Menu
         mode="horizontal"
@@ -22,7 +22,7 @@
 import { ElContainer, ElHeader } from "element-plus";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 import { useSettingsStore } from "@/stores";
 import { HOME_URL } from "@/router/routesConfig";

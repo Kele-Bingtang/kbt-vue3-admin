@@ -3,7 +3,7 @@ import { HOME_NAME, LAYOUT_NAME, LOGIN_URL, notFoundRouter, rolesRoutes } from "
 import { usePermissionStore, useUserStore } from "@/stores";
 import { isExternal, isType } from "@/utils";
 import { ElNotification } from "element-plus";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { useLayoutNoSetup } from "./useLayout";
 import type { BackstageMenuList } from "@/api/menu";
 import type { RouteRecordRaw } from "vue-router";
@@ -25,7 +25,7 @@ export const useRoutes = () => {
    * @param api 接口
    */
   const initDynamicRouters = async (roles?: string[], api?: () => Promise<BackstageMenuList[]>) => {
-    const { cacheDynamicRoutes } = settings;
+    const { cacheDynamicRoutes } = SystemConfig.routerConfig;
 
     let routeList: RouterConfigRaw[] = [];
     let isCacheDynamicRoutes = false;
@@ -58,7 +58,7 @@ export const useRoutes = () => {
       return Promise.reject("No permission");
     }
 
-    loadDynamicRouters(routeList, roles || settings.whiteList);
+    loadDynamicRouters(routeList, roles || SystemConfig.routerConfig.whiteList || []);
   };
 
   /**
@@ -111,7 +111,7 @@ export const useRoutes = () => {
       // 处理成后面布局要用到的 title。title 如果为函数，则涉及到当前路由，所以这里无法处理
       if (router.meta) {
         const { useI18n, isKeepAlive, isFull, useTooltip } = router.meta;
-        const { routeUseI18n, isKeepAlive: keepAlive, isFull: full, routeUseTooltip } = settings;
+        const { routeUseI18n, isKeepAlive: keepAlive, isFull: full, routeUseTooltip } = SystemConfig.routerConfig;
         router.meta._fullPath = fullPath;
         // 这两个顺序不能互换，因为 getLayoutTitle 函数需要 useI18n
         if (useI18n === undefined && routeUseI18n !== undefined) router.meta.useI18n = routeUseI18n;

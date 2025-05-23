@@ -3,7 +3,7 @@ import beforeClose from "@/router/beforeClose";
 import { useLayoutStore, usePermissionStore, type TabProp } from "@/stores";
 import { getUrlParams, mittBus } from "@/utils";
 import Sortable from "sortablejs";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { HOME_URL } from "@/router/routesConfig";
 import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 import { inject, ref, reactive, computed, nextTick, watchEffect } from "vue";
@@ -98,10 +98,14 @@ export const useTabsNav = () => {
     if (index !== -1) {
       if (urlKey.length) {
         // 如果存在 key=value，则判断是否完全匹配 key
-        for (const item of urlKey) if (settings.tabActiveExcludes.includes(item)) return r.meta?._fullPath;
+        for (const item of urlKey) {
+          if (SystemConfig.keyConfig.tabActiveExcludes.includes(item)) return r.meta?._fullPath;
+        }
       } else {
         // 如果不存在 key=value ，则模糊匹配 ? 后的参数
-        for (const item of settings.tabActiveExcludes) if (url.slice(index).includes(item)) return r.meta?._fullPath;
+        for (const item of SystemConfig.keyConfig.tabActiveExcludes) {
+          if (url.slice(index).includes(item)) return r.meta?._fullPath;
+        }
       }
     }
     return r.fullPath || r.meta._fullPath;

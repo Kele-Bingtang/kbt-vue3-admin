@@ -7,7 +7,7 @@
           <div :class="`${prefixClass}__header--left`">
             <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
               <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-              <span>{{ settings.title }}</span>
+              <span>{{ SystemConfig.themeConfig.title }}</span>
             </div>
             <HeaderLeft />
           </div>
@@ -30,7 +30,7 @@ import { useSettingsStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";

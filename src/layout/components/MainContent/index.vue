@@ -78,7 +78,7 @@ const isFixTabsNav = computed(() => {
   flex-direction: column;
   padding: 0;
   overflow-x: hidden;
-  background-color: #f0f2f5;
+  background-color: var(--#{$admin-namespace}-bg-color);
 
   .main-content {
     margin: 10px 12px;
@@ -86,7 +86,7 @@ const isFixTabsNav = computed(() => {
   }
 
   &::-webkit-scrollbar {
-    background-color: #f0f2f5;
+    background-color: var(--#{$admin-namespace}-bg-color);
   }
 }
 </style>

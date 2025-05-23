@@ -4,7 +4,7 @@
 
     <div :class="`${prefixClass}__item`">
       <el-tooltip effect="dark" content="经典" placement="left" :show-after="200">
-        <div :class="`${prefixClass}__item__theme`" @click="handleTabsNav(TabsNavModeType.Classic)">
+        <div :class="`${prefixClass}__item__theme`" @click="handleTabsNav(TabsNavModeEnum.Classic)">
           <div :class="`${prefixClass}__item__theme-classic`">
             <div class="dot"></div>
             <span class="title">首页</span>
@@ -23,7 +23,7 @@
     </div>
     <div :class="`${prefixClass}__item`">
       <el-tooltip effect="dark" content="流行" placement="left" :show-after="200">
-        <div :class="`${prefixClass}__item__theme`" @click="handleTabsNav(TabsNavModeType.Popular)">
+        <div :class="`${prefixClass}__item__theme`" @click="handleTabsNav(TabsNavModeEnum.Popular)">
           <div :class="`${prefixClass}__item__theme-el active`">
             <el-icon><HomeFilled /></el-icon>
             <span class="title">首页</span>
@@ -34,7 +34,7 @@
           </div>
         </div>
       </el-tooltip>
-      <el-icon :class="`${prefixClass}__item__icon`" v-if="settingsStore.tabsNavMode === TabsNavModeType.Popular">
+      <el-icon :class="`${prefixClass}__item__icon`" v-if="settingsStore.tabsNavMode === TabsNavModeEnum.Popular">
         <CircleCheckFilled />
       </el-icon>
     </div>
@@ -42,8 +42,9 @@
 </template>
 
 <script setup lang="ts" name="TabsNavSwitch">
+import { TabsNavModeEnum } from "@/enums/appEnum";
 import { useDesign } from "@/hooks";
-import { useSettingsStore, TabsNavModeType } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { CircleCheckFilled, Menu, Close, HomeFilled } from "@element-plus/icons-vue";
 import { ElIcon } from "element-plus";
 
@@ -52,14 +53,14 @@ const prefixClass = getPrefixClass("tabs-nav-switch");
 
 const settingsStore = useSettingsStore();
 
-const handleTabsNav = (value: TabsNavModeType) => {
+const handleTabsNav = (value: TabsNavModeEnum) => {
   settingsStore.$patch({ tabsNavMode: value });
 
-  if (value === TabsNavModeType.Classic) {
+  if (value === TabsNavModeEnum.Classic) {
     return settingsStore.$patch({ showTabsNavIcon: false });
   }
 
-  if (value === TabsNavModeType.Popular) {
+  if (value === TabsNavModeEnum.Popular) {
     return settingsStore.$patch({ showTabsNavIcon: true });
   }
 };

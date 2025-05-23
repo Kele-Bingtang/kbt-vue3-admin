@@ -56,8 +56,9 @@
 </template>
 
 <script setup lang="ts" name="LayoutSelect">
+import { DeviceEnum } from "@/enums/appEnum";
 import { useDesign } from "@/hooks";
-import { useSettingsStore, useLayoutStore, DeviceType } from "@/stores";
+import { useSettingsStore, useLayoutStore } from "@/stores";
 import { computed } from "vue";
 
 const { getPrefixClass } = useDesign();
@@ -66,7 +67,7 @@ const prefixClass = getPrefixClass("layout-select");
 const settingsStore = useSettingsStore();
 const layoutStore = useLayoutStore();
 
-const isMobile = computed(() => layoutStore.device === DeviceType.Mobile);
+const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
 </script>
 
 <style lang="scss" scoped>

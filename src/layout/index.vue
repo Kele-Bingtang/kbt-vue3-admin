@@ -4,6 +4,7 @@
 </template>
 
 <script setup lang="ts" name="Layout">
+import LayoutMenu from "./LayoutMenu/index.vue";
 import LayoutVertical from "./LayoutVertical/index.vue";
 import LayoutClassic from "./LayoutClassic/index.vue";
 import LayoutTransverse from "./LayoutTransverse/index.vue";
@@ -13,12 +14,14 @@ import LayoutSubsystem from "./LayoutSubsystem/index.vue";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import { useSettingsStore, useUserStore, useWebSocketStore } from "@/stores";
 import { useLayout } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { getPx, setStyleVar } from "@/utils";
 import { type Component, computed, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { WebSocketKey } from "@/config/symbols";
 
 const LayoutComponents: Record<string, Component> = {
+  menu: LayoutMenu,
   vertical: LayoutVertical,
   classic: LayoutClassic,
   transverse: LayoutTransverse,
@@ -27,6 +30,7 @@ const LayoutComponents: Record<string, Component> = {
   subsystem: LayoutSubsystem,
 };
 
+const ns = useNamespace("layout");
 const settingsStore = useSettingsStore();
 const layoutMode = computed(() => settingsStore.layoutMode);
 
@@ -41,9 +45,10 @@ watch(
   }
 );
 
-watchEffect(() => setStyleVar("--aside-width", getPx(settingsStore.menuWidth)));
+watchEffect(() => setStyleVar(ns.cssVarName("layout-open-aside-width"), getPx(settingsStore.menuWidth)));
+watchEffect(() => setStyleVar(ns.cssVarName("layout-close-aside-width"), "64px"));
 
-watchEffect(() => setStyleVar("--header-height", getPx(settingsStore.headerHeight)));
+watchEffect(() => setStyleVar(ns.cssVarName("layout-header-height"), getPx(settingsStore.headerHeight)));
 
 // 初始化 WebSocket
 if (import.meta.env.VITE_WEBSOCKET === "true") {

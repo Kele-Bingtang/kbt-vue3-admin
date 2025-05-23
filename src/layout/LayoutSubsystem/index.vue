@@ -3,14 +3,18 @@
     <el-aside>
       <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-        <span v-show="!isCollapse">{{ settings.title }}</span>
+        <span v-show="!isCollapse">{{ SystemConfig.themeConfig.title }}</span>
       </div>
       <div :class="`${prefixClass}__menu-header`">
         <CollapseTrigger />
         <template v-if="!isCollapse">
           <Fullscreen />
           <MenuSearch v-if="errorCount === 0" />
-          <ErrorLog id="errorLog" :errorCount="errorCount" v-if="settings.errorLog.showInHeader && errorCount > 0" />
+          <ErrorLog
+            id="errorLog"
+            :errorCount="errorCount"
+            v-if="SystemConfig.layoutConfig.errorLog.showInHeader && errorCount > 0"
+          />
           <LayoutSizeSelect />
           <LanguageSelect />
           <User id="user" :show-avatar="false" />
@@ -28,10 +32,10 @@
 import { computed, watch, onBeforeMount, onBeforeUnmount, unref } from "vue";
 import { ElContainer, ElAside } from "element-plus";
 import { useLayout } from "@/hooks";
-import { useLayoutStore, useSettingsStore, useErrorLogStore, DeviceType } from "@/stores";
+import { useLayoutStore, useSettingsStore, useErrorLogStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import Fullscreen from "@/layout/components/Header/components/Fullscreen.vue";
 import LanguageSelect from "@/layout/components/Header/components/LanguageSelect.vue";
 import LayoutSizeSelect from "@/layout/components/Header/components/LayoutSizeSelect.vue";
@@ -42,6 +46,7 @@ import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigg
 import { HOME_URL } from "@/router/routesConfig";
 import { useDesign } from "@/hooks";
 import { useRoute, useRouter } from "vue-router";
+import { DeviceEnum } from "@/enums/appEnum";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("subsystem-layout");
@@ -66,7 +71,7 @@ const device = computed(() => layoutStore.device);
 watch(
   () => route.fullPath,
   () => {
-    if (device.value === DeviceType.Mobile && !unref(isCollapse)) {
+    if (device.value === DeviceEnum.Mobile && !unref(isCollapse)) {
       settingsStore.closeSideMenu();
     }
   }

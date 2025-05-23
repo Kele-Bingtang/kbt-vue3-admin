@@ -1,3 +1,4 @@
+import type { DeviceEnum, LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum } from "@/enums/appEnum";
 import type { IconifyIcon } from "@iconify/vue";
 import type { Component, ComponentPublicInstance } from "vue";
 
@@ -11,16 +12,11 @@ export interface TabProp {
   meta: MetaProp;
 }
 
-export enum DeviceType {
-  Mobile = "mobile", // 移动端
-  Desktop = "desktop", // 桌面端
-}
-
 export type LayoutSizeType = "default" | "small" | "large";
 export type LanguageType = "zh-CN" | "en-US";
 
 export interface LayoutState {
-  device: DeviceType; // 设备类型
+  device: DeviceEnum; // 设备类型
   tabNavList: TabProp[]; // 标签栏列表
   keepAliveName: string[]; // 缓存的路由组件名
   layoutSize: LayoutSizeType; // 布局大小
@@ -34,32 +30,12 @@ export interface PermissionState {
   flatRouteList: RouterConfigRaw[]; // 扁平化路由
 }
 
-// SettingsState
-export enum LayoutModeType {
-  Vertical = "vertical",
-  Classic = "classic",
-  Transverse = "transverse",
-  Columns = "columns",
-  Subsystem = "subsystem",
-  Mixins = "mixins",
-}
-
-export enum TabsNavModeType {
-  Classic = "classic",
-  Popular = "popular",
-}
-
-export enum LayoutThemeType {
-  Light = "light",
-  Dark = "dark",
-}
-
 export interface SettingsState {
   theme: string; // Element UI 主题色
   titleMode: string; // 标题在浏览器标签上的多种模式。0：title + 页面 title，1：用户名 + 页面 title，2：title，3：页面 title
-  layoutMode: LayoutModeType; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
-  tabsNavMode: TabsNavModeType; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
-  menuTheme: LayoutThemeType; // 侧边菜单栏主题色
+  layoutMode: LayoutModeEnum; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
+  tabsNavMode: TabsNavModeEnum; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
+  menuTheme: MenuThemeEnum; // 侧边菜单栏主题色
   isCollapse: boolean; // 侧边菜单
   showSettings: boolean; // 是否显示 settings 配置
   showTabsNav: boolean; // 是否显示标签页
@@ -71,7 +47,7 @@ export interface SettingsState {
   isDark: boolean; // 是否开启暗色主题
   isWeak: boolean; // 是否开启灰色主题
   isGrey: boolean; // 是否开启色弱主题
-  headerTheme: LayoutThemeType; // 是否开启灰色模式
+  headerTheme: MenuThemeEnum; // 是否开启灰色模式
 }
 // UserState
 export interface UserInfo {

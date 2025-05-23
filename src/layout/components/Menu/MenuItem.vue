@@ -11,7 +11,7 @@
     <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />
     <template #title>
       <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
-      <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
+      <Tooltip v-else :effect="SystemConfig.layoutConfig.tooltipEffect" :offset="-10" :try="1">
         <span>{{ title(menuItem) }}</span>
       </Tooltip>
     </template>
@@ -20,7 +20,7 @@
     <template #title>
       <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />
       <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
-      <Tooltip v-else :effect="settings.tooltipEffect" :offset="-10" :try="1">
+      <Tooltip v-else :effect="SystemConfig.layoutConfig.tooltipEffect" :offset="-10" :try="1">
         <span>{{ title(menuItem) }}</span>
       </Tooltip>
     </template>
@@ -36,7 +36,7 @@ import { ElMenuItem, ElSubMenu } from "element-plus";
 import { useLayout } from "@/hooks";
 import { isExternal } from "@/utils";
 import { Tooltip } from "@/components";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { useLayoutStore } from "@/stores";
 import { useRouter } from "vue-router";
 
@@ -80,8 +80,8 @@ watch(
     margin-right: 5px;
     overflow: visible;
     font-size: 18px;
-    text-align: center;
     vertical-align: middle;
+    text-align: center;
   }
 }
 </style>

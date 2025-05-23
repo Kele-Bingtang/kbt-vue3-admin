@@ -1,18 +1,257 @@
-/* 自定义全局变量，这里填写的变量在编译的时候内置到系统，直接使用就行 */
+@use "./mixins/config.scss" as *;
 
-/**
-  如何使用？在任意组件调用变量名即可，如：
-	.class {
-		color: $blue;
-	}
-*/
+:root {
+  // @include setCssVar(layout-header-height, "60px");
+}
 
-/* Base color */
-$blue: #324157;
-$light-blue: #3a71a8;
-$red: #c03639;
-$pink: #e65d6e;
-$green: #30b08f;
-$tiffany: #4ab7bd;
-$yellow: #fec171;
-$pan-green: #30b08f;
+// 默认主题变量 ｜ Light 主题变量
+:root {
+  // Theme color
+  --#{$namespace}-primary: 93, 135, 255;
+  --#{$namespace}-secondary: 73, 190, 255;
+  --#{$namespace}-error: 250, 137, 107;
+  --#{$namespace}-info: 83, 155, 255;
+  --#{$namespace}-success: 19, 222, 185;
+  --#{$namespace}-warning: 255, 174, 31;
+  --#{$namespace}-danger: 255, 77, 79;
+
+  // Theme background color
+  --#{$namespace}-bg-primary: 236, 242, 255;
+  --#{$namespace}-bg-secondary: 232, 247, 255;
+  --#{$namespace}-bg-success: 230, 255, 250;
+  --#{$namespace}-bg-error: 253, 237, 232;
+  --#{$namespace}-bg-info: 235, 243, 254;
+  --#{$namespace}-bg-warning: 254, 245, 229;
+  --#{$namespace}-bg-danger: 253, 237, 232;
+
+  --#{$namespace}-hoverColor: 246, 249, 252;
+  --#{$namespace}-grey100: 242, 246, 250;
+  --#{$namespace}-grey200: 234, 239, 244;
+
+  --#{$namespace}-color: #ffffff;
+  --#{$namespace}-light: #f9f9f9;
+  --#{$namespace}-dark: #1e2129;
+
+  // Background color | Hover color
+  --#{$namespace}-text-muted: #99a1b7;
+  --#{$namespace}-gray-100: #f9f9f9;
+  --#{$namespace}-gray-100-rgb: 249, 249, 249;
+  --#{$namespace}-gray-200: #f1f1f4;
+  --#{$namespace}-gray-200-rgb: 241, 241, 244;
+  --#{$namespace}-gray-300: #dbdfe9;
+  --#{$namespace}-gray-300-rgb: 219, 223, 233;
+  --#{$namespace}-gray-400: #c4cada;
+  --#{$namespace}-gray-400-rgb: 196, 202, 218;
+  --#{$namespace}-gray-500: #99a1b7;
+  --#{$namespace}-gray-500-rgb: 153, 161, 183;
+  --#{$namespace}-gray-600: #78829d;
+  --#{$namespace}-gray-600-rgb: 120, 130, 157;
+  --#{$namespace}-gray-700: #4b5675;
+  --#{$namespace}-gray-700-rgb: 75, 86, 117;
+  --#{$namespace}-gray-800: #252f4a;
+  --#{$namespace}-gray-800-rgb: 37, 47, 74;
+  --#{$namespace}-gray-900: #071437;
+  --#{$namespace}-gray-900-rgb: 7, 20, 55;
+
+  // Text color
+  --#{$namespace}-text-muted: #99a1b7;
+  --#{$namespace}-text-gray-100: #f9f9f9;
+  --#{$namespace}-text-gray-200: #f1f1f4;
+  --#{$namespace}-text-gray-300: #dbdfe9;
+  --#{$namespace}-text-gray-400: #c4cada;
+  --#{$namespace}-text-gray-500: #99a1b7;
+  --#{$namespace}-text-gray-600: #78829d;
+  --#{$namespace}-text-gray-700: #4b5675;
+  --#{$namespace}-text-gray-800: #252f4a;
+  --#{$namespace}-text-gray-900: #071437;
+
+  // Border
+  --#{$namespace}-border-color: #eaebf1;
+  --#{$namespace}-border-dashed-color: #dbdfe9;
+  --#{$namespace}-root-card-border-color: #f1f1f4;
+
+  // Shadow
+  --#{$namespace}-box-shadow-xs: 0 0.1rem 0.75rem 0.25rem rgba(0, 0, 0, 0.05);
+  --#{$namespace}-box-shadow-sm: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+  --#{$namespace}-box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(0, 0, 0, 0.075);
+  --#{$namespace}-box-shadow-lg: 0 1rem 2rem 1rem rgba(0, 0, 0, 0.1);
+
+  // Root card box、shadow
+  --#{$namespace}-root-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03);
+  --#{$namespace}-root-card-border-color: #f1f1f4;
+
+  // Theme background color
+  --#{$namespace}-bg-color: #fafbfc; // 最底部背景颜色
+  --#{$namespace}-main-bg-color: #ffffff;
+}
+
+// Dark 主题变量
+html.dark {
+  // Theme color
+  --#{$namespace}-primary: 93, 135, 255;
+  --#{$namespace}-secondary: 73, 190, 255;
+  --#{$namespace}-error: 250, 137, 107;
+  --#{$namespace}-info: 83, 155, 255;
+  --#{$namespace}-success: 19, 222, 185;
+  --#{$namespace}-warning: 255, 174, 31;
+  --#{$namespace}-danger: 255, 77, 79;
+
+  // Theme background color
+  --#{$namespace}-bg-primary: 37, 54, 98;
+  --#{$namespace}-bg-secondary: 28, 69, 93;
+  --#{$namespace}-bg-success: 27, 60, 72;
+  --#{$namespace}-bg-error: 75, 49, 61;
+  --#{$namespace}-bg-info: 34, 54, 98;
+  --#{$namespace}-bg-warning: 77, 58, 42;
+  --#{$namespace}-bg-danger: 100, 49, 61;
+
+  --#{$namespace}-hoverColor: 51, 63, 85;
+  --#{$namespace}-grey100: 51, 63, 85;
+  --#{$namespace}-grey200: 70, 86, 112;
+
+  --#{$namespace}-color: #000000;
+  --#{$namespace}-light: #1b1c22;
+  --#{$namespace}-dark: #272a34;
+
+  // Background color | Hover color
+  --#{$namespace}-text-muted: #636674;
+  --#{$namespace}-gray-100: #1b1c22;
+  --#{$namespace}-gray-100-rgb: 27, 28, 34;
+  --#{$namespace}-gray-200: #26272f;
+  --#{$namespace}-gray-200-rgb: 38, 39, 47;
+  --#{$namespace}-gray-300: #363843;
+  --#{$namespace}-gray-300-rgb: 54, 56, 67;
+  --#{$namespace}-gray-400: #464852;
+  --#{$namespace}-gray-400-rgb: 70, 72, 82;
+  --#{$namespace}-gray-500: #636674;
+  --#{$namespace}-gray-500-rgb: 99, 102, 116;
+  --#{$namespace}-gray-600: #808290;
+  --#{$namespace}-gray-600-rgb: 128, 130, 144;
+  --#{$namespace}-gray-700: #9a9cae;
+  --#{$namespace}-gray-700-rgb: 154, 156, 174;
+  --#{$namespace}-gray-800: #b5b7c8;
+  --#{$namespace}-gray-800-rgb: 181, 183, 200;
+  --#{$namespace}-gray-900: #f5f5f5;
+  --#{$namespace}-gray-900-rgb: 245, 245, 245;
+
+  // Text color
+  --#{$namespace}-text-muted: #636674;
+  --#{$namespace}-text-gray-100: #1b1c22;
+  --#{$namespace}-text-gray-200: #26272f;
+  --#{$namespace}-text-gray-300: #363843;
+  --#{$namespace}-text-gray-400: #464852;
+  --#{$namespace}-text-gray-500: #636674;
+  --#{$namespace}-text-gray-600: #808290;
+  --#{$namespace}-text-gray-700: #9a9cae;
+  --#{$namespace}-text-gray-800: #b5b7c8;
+  --#{$namespace}-text-gray-900: #f5f5f5;
+
+  // Border
+  --#{$namespace}-border-color: #26272f;
+  --#{$namespace}-border-dashed-color: #363843;
+  --#{$namespace}-root-card-border-color: #1e2027;
+
+  // Shadow
+  --#{$namespace}-box-shadow-xs: 0 0.1rem 0.75rem 0.25rem rgba(0, 0, 0, 0.05);
+  --#{$namespace}-box-shadow-sm: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
+  --#{$namespace}-box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(0, 0, 0, 0.075);
+  --#{$namespace}-box-shadow-lg: 0 1rem 2rem 1rem rgba(0, 0, 0, 0.1);
+
+  // Root card box、shadow
+  --#{$namespace}-root-card-box-shadow: none;
+  --#{$namespace}-root-card-border-color: #1e2027;
+
+  // Theme background color
+  --#{$namespace}-bg-color: #070707;
+  --#{$namespace}-main-bg-color: #161618;
+}
+
+// CSS 全局变量
+:root {
+  --console-margin: 20px; // 工作台盒子间距
+  --#{$namespace}-card-border: rgba(var(--#{$namespace}-gray-300-rgb), 0.6); // 卡片边框颜色
+  --#{$namespace}-card-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.04); // 卡片阴影
+}
+
+// 媒体查询-设备尺寸
+// notebook
+$device-notebook: 1600px;
+// ipad pro
+$device-ipad-pro: 1180px;
+// ipad
+$device-ipad: 800px;
+// ipad-竖屏
+$device-ipad-vertical: 900px;
+// mobile
+$device-phone: 500px;
+
+.bg-primary {
+  background-color: rgb(var(--#{$namespace}-bg-primary)) !important;
+  color: rgb(var(--#{$namespace}-primary)) !important;
+}
+
+.bg-secondary {
+  background-color: rgb(var(--#{$namespace}-bg-secondary)) !important;
+  color: rgb(var(--#{$namespace}-secondary)) !important;
+  border: 1px solid var(--#{$namespace}-secondary);
+}
+
+.bg-warning {
+  background-color: rgb(var(--#{$namespace}-bg-warning)) !important;
+  color: rgb(var(--#{$namespace}-warning)) !important;
+}
+
+.bg-error {
+  background-color: rgb(var(--#{$namespace}-bg-error)) !important;
+  color: rgb(var(--#{$namespace}-error)) !important;
+}
+
+.bg-success {
+  background-color: rgb(var(--#{$namespace}-bg-success)) !important;
+  color: rgb(var(--#{$namespace}-success)) !important;
+}
+
+.bg-danger {
+  background-color: rgb(var(--#{$namespace}-bg-danger)) !important;
+  color: rgb(var(--#{$namespace}-danger)) !important;
+}
+
+.bg-grey100 {
+  background-color: rgb(var(--#{$namespace}-grey100)) !important;
+}
+
+.bg-grey200 {
+  background-color: rgb(var(--#{$namespace}-grey200)) !important;
+}
+
+.bg-hoverColor {
+  background-color: rgb(var(--#{$namespace}-hoverColor)) !important;
+}
+
+.text-primary {
+  color: rgb(var(--#{$namespace}-primary)) !important;
+}
+
+.text-secondary {
+  color: rgb(var(--#{$namespace}-secondary)) !important;
+}
+
+.text-error {
+  color: rgb(var(--#{$namespace}-error)) !important;
+}
+
+.text-danger {
+  color: rgb(var(--#{$namespace}-danger)) !important;
+}
+
+.text-info {
+  color: rgb(var(--#{$namespace}-info)) !important;
+}
+
+.text-success {
+  color: rgb(var(--#{$namespace}-success)) !important;
+}
+
+.text-warning {
+  color: rgb(var(--#{$namespace}-warning)) !important;
+}

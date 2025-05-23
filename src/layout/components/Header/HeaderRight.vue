@@ -9,7 +9,7 @@
       <ErrorLog
         id="errorLog"
         :errorCount="errorCount"
-        v-if="settings.errorLog.showInHeader && errorCount > 0 && !isMobile"
+        v-if="SystemConfig.layoutConfig.errorLog.showInHeader && errorCount > 0 && !isMobile"
       />
       <User id="user" />
     </div>
@@ -24,10 +24,11 @@ import MenuSearch from "./components/MenuSearch.vue";
 import Message from "./components/Message.vue";
 import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
-import settings from "@/config/settings";
-import { useErrorLogStore, useLayoutStore, DeviceType } from "@/stores";
+import SystemConfig from "@/config";
+import { useErrorLogStore, useLayoutStore } from "@/stores";
 import { useDesign } from "@/hooks";
 import { computed } from "vue";
+import { DeviceEnum } from "@/enums/appEnum";
 
 const { getPrefixClass } = useDesign();
 const prefixClass = getPrefixClass("header-right");
@@ -42,7 +43,7 @@ const errorCount = computed(() => {
   return noReadErrorLogs.length;
 });
 
-const isMobile = computed(() => layoutStore.device === DeviceType.Mobile);
+const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
 </script>
 
 <style lang="scss" scoped>

@@ -1,9 +1,9 @@
 import { isArray } from "@/utils";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { useErrorLogStore } from "@/stores";
 import { ElNotification } from "element-plus";
 
-const { errorLog } = settings;
+const { errorLog } = SystemConfig.layoutConfig;
 
 const { env } = errorLog;
 

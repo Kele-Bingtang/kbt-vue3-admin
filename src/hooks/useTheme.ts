@@ -1,5 +1,5 @@
 import { getLightColor, getDarkColor, setStyleVar } from "@/utils";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { ElMessage } from "element-plus";
 import { useSettingsStore } from "@/stores";
 import { toRaw } from "vue";
@@ -24,7 +24,7 @@ export const useTheme = () => {
   // 修改主题颜色
   const changePrimary = (value: string | null) => {
     if (!value) {
-      value = settings.primaryTheme;
+      value = SystemConfig.themeConfig.primaryTheme;
       ElMessage({ type: "success", message: `主题颜色已重置为 ${settingsStore.primaryTheme}` });
     }
     settingsStore.$patch({

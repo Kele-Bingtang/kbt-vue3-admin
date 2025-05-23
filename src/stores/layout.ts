@@ -1,22 +1,23 @@
 import { defineStore } from "pinia";
-import { DeviceType, type LanguageType, type LayoutSizeType, type TabProp } from "./interface";
+import type { LanguageType, LayoutSizeType, TabProp } from "./interface";
 import { useSettingsStore } from "./settings";
-import defaultSettings from "@/config/settings";
+import SystemConfig from "@/config";
 import type { Frame } from "@/layout/components/FrameLayout/useFrame";
 import { ref, watch } from "vue";
 import { useCache } from "@/hooks";
+import { DeviceEnum } from "@/enums/appEnum";
 
 export const useLayoutStore = defineStore(
   "layoutStore",
   () => {
     const tabNavList = ref<TabProp[]>(useCache().getCacheTabNavList() || []);
     const keepAliveName = ref<string[]>([]);
-    const device = ref(DeviceType.Desktop);
-    const layoutSize = ref<LayoutSizeType>(defaultSettings.layoutSize);
-    const language = ref(defaultSettings.language);
+    const device = ref(DeviceEnum.Desktop);
+    const layoutSize = ref<LayoutSizeType>(SystemConfig.layoutConfig.layoutSize);
+    const language = ref(SystemConfig.layoutConfig.language);
     const frameList = ref<Frame[]>([]);
 
-    const toggleDevice = (deviceParam: DeviceType) => {
+    const toggleDevice = (deviceParam: DeviceEnum) => {
       device.value = deviceParam;
     };
 

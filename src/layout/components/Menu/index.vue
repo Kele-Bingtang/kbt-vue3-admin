@@ -3,9 +3,9 @@
     <el-menu
       :default-active="activeMenu"
       :collapse="isCollapse"
-      background-color="var(--menu-bg-color)"
-      text-color="var(--menu-text-color)"
-      :active-text-color="primaryTheme"
+      :background-color="SystemConfig.themeList[0].background"
+      :text-color="SystemConfig.themeList[0].textColor"
+      :active-text-color="SystemConfig.themeList[0].textActiveColor"
       :unique-opened="settingsStore.menuAccordion"
       :collapse-transition="false"
       v-bind="$attrs"
@@ -20,9 +20,9 @@ import { ElScrollbar, ElMenu } from "element-plus";
 import { computed } from "vue";
 import { useLayout } from "@/hooks";
 import { usePermissionStore, useSettingsStore } from "@/stores";
-import settings from "@/config/settings";
 import MenuItem from "@/layout/components/Menu/MenuItem.vue";
 import { useRoute } from "vue-router";
+import SystemConfig from "@/config";
 
 interface MenuProps {
   menuList?: RouterConfig[];
@@ -44,7 +44,6 @@ const activeMenu = computed(() =>
   props.activeMenu ? props.activeMenu : ((route.meta.activeMenu || route.meta._fullPath || route.path) as string)
 );
 const isCollapse = computed(() => (props.isCollapse === undefined ? settingsStore.isCollapse : props.isCollapse));
-const primaryTheme = computed(() => settingsStore.primaryTheme);
 
 const menuList = computed(() => {
   if (props.menuList?.length) return props.menuList;
@@ -58,7 +57,7 @@ const menuList = computed(() => {
    *
    * 如果您确保您的路由不会出现：多个子路由且只有一个 hideInMenu 不为 true，可以只过滤一次提升性能，即直接 return this.getMenuListByRouter(PermissionModule.loadedRouteList);
    */
-  if (settings.moreRouteChildrenHideInMenuThenOnlyOne) {
+  if (SystemConfig.layoutConfig.moreRouteChildrenHideInMenuThenOnlyOne) {
     const menu = getMenuListByRouter(permissionStore.loadedRouteList);
     return getMenuListByRouter(menu);
   } else {

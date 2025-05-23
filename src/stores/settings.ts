@@ -1,58 +1,36 @@
 import { defineStore } from "pinia";
-import type { LayoutModeType, LayoutThemeType, TabsNavModeType } from ".";
-import defaultSettings from "@/config/settings";
+import SystemConfig from "@/config";
 import { ref } from "vue";
 import { useStorage, useCache } from "@/hooks";
-
-const {
-  primaryTheme: primaryThemeSetting,
-  titleMode: titleModeSetting,
-  layoutMode: layoutModeSetting,
-  tabsNavMode: tabsNavModeSetting,
-  layoutTheme: layoutThemeSetting,
-  showSettings: showSettingsSetting,
-  showTabsNav: showTagsNavSetting,
-  recordTabsNav: recordTagsNavSetting,
-  showLayoutLogo: showLayoutLogoSetting,
-  showBreadcrumb: showBreadcrumbSetting,
-  showBreadcrumbIcon: showBreadcrumbIconSetting,
-  showTabsNavIcon: tabsNavSetting,
-  isCollapse: isCollapseSetting,
-  menuAccordion: menuAccordionSetting,
-  fixTabsNav: fixTabsNavSetting,
-  isDark: isDarkSetting,
-  isWeak: isWeakSetting,
-  isGrey: isGreySetting,
-  maximize: maximizeSetting,
-  menuWidth: menuWidthSetting,
-  headerHeight: headerHeightSetting,
-} = defaultSettings;
+import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum } from "@/enums/appEnum";
 
 export const useSettingsStore = defineStore(
   "settingsStore",
   () => {
-    const primaryTheme = ref(primaryThemeSetting);
-    const titleMode = ref(titleModeSetting);
-    const layoutMode = ref<LayoutModeType>(layoutModeSetting);
-    const tabsNavMode = ref<TabsNavModeType>(tabsNavModeSetting);
-    const menuTheme = ref<LayoutThemeType>(layoutThemeSetting);
-    const showSettings = ref(showSettingsSetting);
-    const showTabsNav = ref(showTagsNavSetting);
-    const recordTabsNav = ref(recordTagsNavSetting);
-    const showLayoutLogo = ref(showLayoutLogoSetting);
-    const showBreadcrumb = ref(showBreadcrumbSetting);
-    const showBreadcrumbIcon = ref(showBreadcrumbIconSetting);
-    const showTabsNavIcon = ref(tabsNavSetting);
-    const isCollapse = ref(isCollapseSetting);
-    const menuAccordion = ref(menuAccordionSetting);
-    const fixTabsNav = ref(fixTabsNavSetting);
-    const isDark = ref(isDarkSetting);
-    const isWeak = ref(isWeakSetting);
-    const isGrey = ref(isGreySetting);
-    const headerTheme = ref<LayoutThemeType>(layoutThemeSetting);
-    const maximize = ref(maximizeSetting);
-    const menuWidth = ref(menuWidthSetting);
-    const headerHeight = ref(headerHeightSetting);
+    const { themeConfig, layoutConfig } = SystemConfig;
+
+    const primaryTheme = ref(themeConfig.primaryTheme);
+    const titleMode = ref(themeConfig.titleMode);
+    const layoutMode = ref<LayoutModeEnum>(themeConfig.layoutMode || LayoutModeEnum.Classic);
+    const tabsNavMode = ref<TabsNavModeEnum>(themeConfig.tabsNavMode || TabsNavModeEnum.Popular);
+    const menuTheme = ref<MenuThemeEnum>(themeConfig.menuTheme || MenuThemeEnum.Light);
+    const showSettings = ref(layoutConfig.showSettings);
+    const showTabsNav = ref(themeConfig.showTabsNav);
+    const recordTabsNav = ref(themeConfig.recordTabsNav);
+    const showLayoutLogo = ref(themeConfig.showLayoutLogo);
+    const showBreadcrumb = ref(themeConfig.showBreadcrumb);
+    const showBreadcrumbIcon = ref(themeConfig.showBreadcrumbIcon);
+    const showTabsNavIcon = ref(themeConfig.showTabsNavIcon);
+    const isCollapse = ref(themeConfig.isCollapse);
+    const menuAccordion = ref(themeConfig.menuAccordion);
+    const fixTabsNav = ref(themeConfig.fixTabsNav);
+    const isDark = ref(themeConfig.isDark);
+    const isWeak = ref(themeConfig.isWeak);
+    const isGrey = ref(themeConfig.isGrey);
+    const headerTheme = ref<MenuThemeEnum>(themeConfig.menuTheme || MenuThemeEnum.Light);
+    const maximize = ref(themeConfig.maximize);
+    const menuWidth = ref(themeConfig.menuWidth);
+    const headerHeight = ref(themeConfig.headerHeight);
 
     const closeSideMenu = () => {
       isCollapse.value = true;
@@ -64,7 +42,7 @@ export const useSettingsStore = defineStore(
 
     const resetSettings = () => {
       const { removeStorage } = useStorage("localStorage");
-      removeStorage(`${defaultSettings.cacheKeyPrefix}_settingsStore`);
+      removeStorage(`${layoutConfig.cacheKeyPrefix}_settingsStore`);
       if (!recordTabsNav.value) useCache().removeCacheTabNavList();
     };
 

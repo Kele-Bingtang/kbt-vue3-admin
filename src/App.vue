@@ -14,7 +14,7 @@ import en from "element-plus/es/locale/lang/en";
 import { getBrowserLang } from "@/utils";
 import { useTheme } from "./hooks/useTheme";
 import { useFrame } from "./layout/components/FrameLayout/useFrame";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { useSettingsStore } from "@/stores";
 import { useDesign, useCache } from "@/hooks";
 import { reactive, computed, provide, onMounted } from "vue";
@@ -60,7 +60,7 @@ const { acceptFrameMsg } = useFrame();
  * 消息：需要打开的连接
  */
 const handleMsgFromFrame = () => {
-  if (settings.watchFrame) window.addEventListener("message", acceptFrameMsg);
+  if (SystemConfig.layoutConfig.watchFrame) window.addEventListener("message", acceptFrameMsg);
 };
 
 /**
@@ -70,8 +70,8 @@ const versionCache = () => {
   const { version } = __APP_INFO__.pkg;
   const cacheVersion = useCache().getCacheVersion();
   if (version && cacheVersion !== version) {
-    const { layoutSize, language } = settings;
-    settingsStore.$patch({ ...(settings as any), menuTheme: settings.layoutTheme });
+    const { layoutSize, language } = SystemConfig.layoutConfig;
+    settingsStore.$patch({ ...(SystemConfig as any), menuTheme: SystemConfig.themeConfig.systemTheme });
     layoutStore.$patch({
       layoutSize,
       language,

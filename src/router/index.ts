@@ -1,5 +1,5 @@
 import { NProgress } from "@/utils";
-import settings from "@/config/settings";
+import SystemConfig from "@/config";
 import { useRoutes } from "@/hooks";
 import { usePermissionStore, useUserStore } from "@/stores";
 import {
@@ -35,7 +35,7 @@ export function resetRouter(retainConstantRoutes = false) {
   });
 }
 
-const whiteList = settings.whiteList;
+const whiteList = SystemConfig.routerConfig.whiteList;
 
 /**
  * @description 路由拦截 beforeEach

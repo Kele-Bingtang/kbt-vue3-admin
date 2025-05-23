@@ -6,96 +6,97 @@
       <div
         :class="[
           `${prefixClass}__item ${prefixClass}-vertical`,
-          settingsStore.layoutMode == LayoutModeType.Vertical ? 'is-active' : '',
+          settingsStore.layoutMode == LayoutModeEnum.Vertical ? 'is-active' : '',
         ]"
-        @click="changeLayout(LayoutModeType.Vertical)"
+        @click="changeLayout(LayoutModeEnum.Vertical)"
       >
         <div :class="`${prefixClass}__item__dark`"></div>
         <div :class="`${prefixClass}__item__container`">
           <div :class="`${prefixClass}__item__light`"></div>
           <div :class="`${prefixClass}__item__content`"></div>
         </div>
-        <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Vertical"><CircleCheckFilled /></el-icon>
+        <el-icon v-if="settingsStore.layoutMode == LayoutModeEnum.Vertical"><CircleCheckFilled /></el-icon>
       </div>
     </el-tooltip>
     <el-tooltip effect="dark" content="经典" placement="top" :show-after="200">
       <div
         :class="[
           `${prefixClass}__item ${prefixClass}-classic`,
-          settingsStore.layoutMode === LayoutModeType.Classic ? 'is-active' : '',
+          settingsStore.layoutMode === LayoutModeEnum.Classic ? 'is-active' : '',
         ]"
-        @click="changeLayout(LayoutModeType.Classic)"
+        @click="changeLayout(LayoutModeEnum.Classic)"
       >
         <div :class="`${prefixClass}__item__dark`"></div>
         <div :class="`${prefixClass}__item__container`">
           <div :class="`${prefixClass}__item__light`"></div>
           <div :class="`${prefixClass}__item__content`"></div>
         </div>
-        <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Classic"><CircleCheckFilled /></el-icon>
+        <el-icon v-if="settingsStore.layoutMode == LayoutModeEnum.Classic"><CircleCheckFilled /></el-icon>
       </div>
     </el-tooltip>
     <el-tooltip effect="dark" content="横向" placement="top" :show-after="200">
       <div
         :class="[
           `${prefixClass}__item ${prefixClass}-transverse`,
-          settingsStore.layoutMode === LayoutModeType.Transverse ? 'is-active' : '',
+          settingsStore.layoutMode === LayoutModeEnum.Transverse ? 'is-active' : '',
         ]"
-        @click="changeLayout(LayoutModeType.Transverse)"
+        @click="changeLayout(LayoutModeEnum.Transverse)"
       >
         <div :class="`${prefixClass}__item__dark`"></div>
         <div :class="`${prefixClass}__item__content`"></div>
-        <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Transverse"><CircleCheckFilled /></el-icon>
+        <el-icon v-if="settingsStore.layoutMode == LayoutModeEnum.Transverse"><CircleCheckFilled /></el-icon>
       </div>
     </el-tooltip>
     <el-tooltip effect="dark" content="分栏" placement="top" :show-after="200">
       <div
         :class="[
           `${prefixClass}__item ${prefixClass}-columns`,
-          settingsStore.layoutMode === LayoutModeType.Columns ? 'is-active' : '',
+          settingsStore.layoutMode === LayoutModeEnum.Columns ? 'is-active' : '',
         ]"
-        @click="changeLayout(LayoutModeType.Columns)"
+        @click="changeLayout(LayoutModeEnum.Columns)"
       >
         <div :class="`${prefixClass}__item__dark`"></div>
         <div :class="`${prefixClass}__item__light`"></div>
         <div :class="`${prefixClass}__item__content`"></div>
-        <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Columns"><CircleCheckFilled /></el-icon>
+        <el-icon v-if="settingsStore.layoutMode === LayoutModeEnum.Columns"><CircleCheckFilled /></el-icon>
       </div>
     </el-tooltip>
     <el-tooltip effect="dark" content="混合" placement="top" :show-after="200">
       <div
         :class="[
           `${prefixClass}__item ${prefixClass}-mixins`,
-          settingsStore.layoutMode == LayoutModeType.Mixins ? 'is-active' : '',
+          settingsStore.layoutMode == LayoutModeEnum.Mixins ? 'is-active' : '',
         ]"
-        @click="changeLayout(LayoutModeType.Mixins)"
+        @click="changeLayout(LayoutModeEnum.Mixins)"
       >
         <div :class="`${prefixClass}__item__dark`"></div>
         <div :class="`${prefixClass}__item__container`">
           <div :class="`${prefixClass}__item__dark`"></div>
           <div :class="`${prefixClass}__item__content`"></div>
         </div>
-        <el-icon v-if="settingsStore.layoutMode == LayoutModeType.Mixins"><CircleCheckFilled /></el-icon>
+        <el-icon v-if="settingsStore.layoutMode == LayoutModeEnum.Mixins"><CircleCheckFilled /></el-icon>
       </div>
     </el-tooltip>
     <el-tooltip effect="dark" content="子系统" placement="top" :show-after="200">
       <div
         :class="[
           `${prefixClass}__item ${prefixClass}-subsystem`,
-          settingsStore.layoutMode === LayoutModeType.Subsystem ? 'is-active' : '',
+          settingsStore.layoutMode === LayoutModeEnum.Subsystem ? 'is-active' : '',
         ]"
-        @click="changeLayout(LayoutModeType.Subsystem)"
+        @click="changeLayout(LayoutModeEnum.Subsystem)"
       >
         <div :class="`${prefixClass}__item__dark`"></div>
         <div :class="`${prefixClass}__item__content`"></div>
-        <el-icon v-if="settingsStore.layoutMode === LayoutModeType.Subsystem"><CircleCheckFilled /></el-icon>
+        <el-icon v-if="settingsStore.layoutMode === LayoutModeEnum.Subsystem"><CircleCheckFilled /></el-icon>
       </div>
     </el-tooltip>
   </div>
 </template>
 
 <script setup lang="ts" name="LayoutSwitch">
+import type { LayoutModeEnum } from "@/enums/appEnum";
 import { useDesign } from "@/hooks";
-import { useSettingsStore, LayoutModeType } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { ElIcon } from "element-plus";
 
@@ -104,7 +105,7 @@ const prefixClass = getPrefixClass("layout-switch");
 
 const settingsStore = useSettingsStore();
 
-const changeLayout = (value: LayoutModeType) => {
+const changeLayout = (value: LayoutModeEnum) => {
   settingsStore.$patch({
     layoutMode: value,
   });
