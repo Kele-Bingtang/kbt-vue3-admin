@@ -43,7 +43,7 @@ export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
       : undefined,
     AutoImport({
       imports: ["vue", "vue-router"], // 自动引入 vue 的 ref、toRefs、onMounted 等，无需在页面中再次引入
-      dts: "src/auto-import.d.ts", // 生成在 src 路径下名为 auto-import.d.ts 的声明文件
+      dts: "src/types/auto-import.d.ts", // 生成在 src 路径下名为 auto-import.d.ts 的声明文件
       eslintrc: {
         enabled: false, // 改为 true 用于生成 eslint 配置。生成后改回 false，避免重复生成消耗
       },
@@ -53,7 +53,7 @@ export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
       ? Components({
           resolvers: [ElementPlusResolver({ importStyle: "sass" })],
           dirs: "src/components", // 自定引入需要扫描的组件路径
-          dts: "src/auto-components.d.ts", // 生成在 src 路径下名为 auto-components.d.ts 的声明文件
+          dts: "src/types/auto-components.d.ts", // 生成在 src 路径下名为 auto-components.d.ts 的声明文件
           directoryAsNamespace: true,
         })
       : undefined,

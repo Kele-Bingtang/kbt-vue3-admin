@@ -13,13 +13,15 @@ export function isProdFn(mode: string): boolean {
 }
 
 /**
- * Whether to generate package preview
+ * 是否开启生成 package 报告
  */
 export function isReportMode(): boolean {
   return process.env.VITE_REPORT === "true";
 }
 
-// 重新解析 .env 的内容，重新封装类型，比如 .env 定义了 true，false，默认为字符串类型，需要转换为 boolean 类型
+/**
+ * 重新解析 .env 的内容，重新封装类型，比如 .env 定义了 true，false，默认为字符串类型，需要转换为 boolean 类型
+ */
 export function wrapperEnv(envConf: Recordable): ImportMetaEnv {
   const ret: any = {};
 
@@ -27,9 +29,7 @@ export function wrapperEnv(envConf: Recordable): ImportMetaEnv {
     let realName = envConf[envName].replace(/\\n/g, "\n");
     realName = realName === "true" ? true : realName === "false" ? false : realName;
 
-    if (envName === "VITE_PORT") {
-      realName = Number(realName);
-    }
+    if (envName === "VITE_PORT") realName = Number(realName);
     if (envName === "VITE_PROXY") {
       try {
         realName = JSON.parse(realName);
@@ -44,11 +44,12 @@ export function wrapperEnv(envConf: Recordable): ImportMetaEnv {
 }
 
 /**
- * Get the environment variables starting with the specified prefix
- * @param match prefix
- * @param confFiles ext
+ * 从环境变量文件里获取变量值
+ *
+ * @param match 前缀
+ * @param confFiles 文件列表
  */
-export function getEnvConfig(match = "VITE_GLOB_", confFiles = [".env", ".env.production"]) {
+export function getEnvConfig(match = "VITE_", confFiles = [".env", ".env.production"]) {
   let envConfig = {};
   confFiles.forEach(item => {
     try {
@@ -69,8 +70,7 @@ export function getEnvConfig(match = "VITE_GLOB_", confFiles = [".env", ".env.pr
 }
 
 /**
- * Get user root directory
- * @param dir file path
+ * 获取项目根路径
  */
 export function getRootPath(...dir: string[]) {
   return path.resolve(process.cwd(), ...dir);

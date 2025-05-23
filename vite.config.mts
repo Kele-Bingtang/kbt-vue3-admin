@@ -1,9 +1,9 @@
 import { fileURLToPath, URL } from "node:url";
 import { defineConfig, loadEnv, type ConfigEnv, type UserConfig } from "vite";
-import { wrapperEnv } from "./build/getEnv";
+import { wrapperEnv } from "./node/getEnv";
 import { resolve } from "path";
-import { getPluginsList } from "./build/plugins";
-import { include, exclude } from "./build/optimize";
+import { getPluginsList } from "./node/plugins";
+import { include, exclude } from "./node/optimize";
 import { getNowDate } from "./src/utils/helper";
 import pkg from "./package.json";
 
