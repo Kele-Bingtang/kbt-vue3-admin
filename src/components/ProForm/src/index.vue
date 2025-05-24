@@ -42,7 +42,7 @@ import { useNamespace } from "@/composables";
 import { componentMap } from "./helper/componentMap";
 import { Icon } from "@/components";
 import { QuestionFilled } from "@element-plus/icons-vue";
-import { getPx, isString } from "@/utils";
+import { addUnit, isString } from "@/utils";
 
 defineOptions({ name: "ProForm" });
 
@@ -258,8 +258,8 @@ watch(
 const getComponentWidth = ({ width, props: componentProps }: FormSchemaProps) => {
   const { elFormProps = {} } = unref(getProps);
   const style = componentProps?.style || { width: "100%" }; // 默认宽度 100%
-  if (width) return { ...style, width: getPx(width) };
-  if (elFormProps.fixWidth) return { ...style, width: getPx(elFormProps.width || elFormProps.inline ? 220 : "100%") };
+  if (width) return { ...style, width: addUnit(width) };
+  if (elFormProps.fixWidth) return { ...style, width: addUnit(elFormProps.width || elFormProps.inline ? 220 : "100%") };
   return style;
 };
 

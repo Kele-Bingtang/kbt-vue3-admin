@@ -1,4 +1,4 @@
-import { isNumber, isString } from "./layout/is";
+import { isNumber, isString, isStringNumber } from "./layout/is";
 
 /**
  * @description 数据解耦后，再返回（深拷贝函数）
@@ -220,18 +220,23 @@ export const getCssVar = (prop: string, dom = document.documentElement) => {
 };
 
 /**
- * @description 补 px 单位
- * @param val 值
- * @returns 补 px 单位的 string
+ * 添加单位，如 value 为 16，则返回 16px
  */
-export const getPx = (val: number | string | undefined) => {
-  if (!val) return "";
-  if (isString(val)) {
-    if (val.endsWith("%")) return val;
-    if (isNumber(val)) return `${val}px`;
-    return val;
-  }
-  return `${val}px`;
+export const addUnit = (value?: string | number, defaultUnit = "px") => {
+  if (!value) return "";
+  if (isNumber(value) || isStringNumber(value)) return `${value}${defaultUnit}`;
+  else if (isString(value)) return value;
+  return "";
+};
+
+/**
+ * 移除单位，如 value 为 16px，则返回 16
+ */
+export const removeUnit = (value?: string | number, defaultUnit = "px") => {
+  if (!value) return;
+  if (isNumber(value)) return value;
+  if (isString(value)) return Number(value.replace(defaultUnit, ""));
+  else return;
 };
 
 /**

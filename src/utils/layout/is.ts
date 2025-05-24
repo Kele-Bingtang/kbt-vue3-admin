@@ -1,74 +1,80 @@
 /**
- * @description 是否为合法的 URL 前缀
+ * 是否为合法的 URL 前缀
  */
 export const isExternal = (path: string) => /^(http?:|https?:|mailto:|tel:)/.test(path);
 
 /**
- * @description 是否是有效的 URL
+ * 是否是有效的 URL
  */
 export const isValidURL = (url: string) => {
-  const reg =
-    /^(https?|ftp):\/\/([a-zA-Z0-9.-]+(:[a-zA-Z0-9.&%$-]+)*@)*((25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9][0-9]?)(\.(25[0-5]|2[0-4][0-9]|1[0-9]{2}|[1-9]?[0-9])){3}|([a-zA-Z0-9-]+\.)*[a-zA-Z0-9-]+\.(com|edu|gov|int|mil|net|org|biz|arpa|info|name|pro|aero|coop|museum|[a-zA-Z]{2}))(:[0-9]+)*(\/($|[a-zA-Z0-9.,?'\\+&%$#=~_-]+))*$/;
-  return reg.test(url);
+  try {
+    new URL(url);
+    return true;
+  } catch {
+    return false;
+  }
 };
 
 /**
- * @description 判断数据类型
+ * 判断数据类型
  * @param {Any} val 需要判断类型的数据
  * @return string
  */
-export function isType(val: any) {
+export const isType = (val: any) => {
   if (val === null) return "null";
   if (typeof val !== "object") return typeof val;
   else return Object.prototype.toString.call(val).slice(8, -1).toLocaleLowerCase();
-}
+};
 
 /**
- * @description 判断值是否未某个类型
+ * 判断值是否未某个类型
  */
-export function is(val: unknown, type: string) {
+export const is = (val: unknown, type: string) => {
   return Object.prototype.toString.call(val) === `[object ${type}]`;
-}
+};
 
 /**
- * @description 是否为函数
+ * 是否为函数
  */
-export function isFunction<T = Function>(val: unknown): val is T {
+export const isFunction = <T = Function>(val: unknown): val is T => {
   return is(val, "Function");
-}
+};
 
 /**
- * @description:是否已定义
+ * 是否已定义
  */
 export const isDef = <T = unknown>(val?: T): val is T => {
   return typeof val !== "undefined";
 };
 
+/**
+ * 是否为未定义
+ */
 export const isUnDef = <T = unknown>(val?: T): val is T => {
   return !isDef(val);
 };
 
 /**
- * @description 是否为对象
+ * 是否为对象
  */
 export const isObject = (val: any): val is Record<any, any> => {
   return val !== null && is(val, "Object");
 };
 
 /**
- * @description 是否为时间
+ * 是否为时间
  */
-export function isDate(val: unknown): val is Date {
+export const isDate = (val: unknown): val is Date => {
   return is(val, "Date");
-}
+};
 
 /**
  * 是否是有效的数字（包含正负整数，0 以及正负浮点数）
  */
-export const isNumber = (val: string) => {
+export const isNumber = (val: unknown): val is number => {
   const regPos = /^\d+(\.\d+)?$/; // 非负浮点数
   const regNeg = /^(-(([0-9]+\.[0-9]*[1-9][0-9]*)|([0-9]*[1-9][0-9]*\.[0-9]+)|([0-9]*[1-9][0-9]*)))$/; // 负浮点数
-  if (regPos.test(val) || regNeg.test(val)) {
+  if (regPos.test(val as string) || regNeg.test(val as string)) {
     return true;
   } else {
     return false;
@@ -76,32 +82,40 @@ export const isNumber = (val: string) => {
 };
 
 /**
- * @description  是否为 AsyncFunction
+ * 是否为字符串数字
  */
-export function isAsyncFunction<T = any>(val: unknown): val is Promise<T> {
+export const isStringNumber = (val: string): boolean => {
+  if (!isString(val)) return false;
+  return !Number.isNaN(Number(val));
+};
+
+/**
+ *  是否为 AsyncFunction
+ */
+export const isAsyncFunction = <T = any>(val: unknown): val is Promise<T> => {
   return is(val, "AsyncFunction");
-}
+};
 
 /**
- * @description  是否为 promise
+ *  是否为 promise
  */
-export function isPromise<T = any>(val: unknown): val is Promise<T> {
+export const isPromise = <T = any>(val: unknown): val is Promise<T> => {
   return is(val, "Promise") && isObject(val) && isFunction(val.then) && isFunction(val.catch);
-}
+};
 
 /**
- * @description  是否为字符串
+ *  是否为字符串
  */
-export function isString(val: unknown): val is string {
+export const isString = (val: unknown): val is string => {
   return is(val, "String");
-}
+};
 
 /**
- * @description  是否为boolean类型
+ *  是否为boolean类型
  */
-export function isBoolean(val: unknown): val is boolean {
+export const isBoolean = (val: unknown): val is boolean => {
   return is(val, "Boolean");
-}
+};
 
 /**
  * 是否为数组
@@ -114,45 +128,59 @@ export const isArray = (arg: any) => {
 };
 
 /**
- * @description 是否客户端
+ * 是否客户端
  */
-export const isClient = () => {
-  return typeof window !== "undefined";
+export const isClient = typeof window !== "undefined" && typeof document !== "undefined";
+
+/**
+ * 是否为服务器
+ */
+export const isServer = !isClient;
+/**
+ * 是否在浏览器中
+ */
+export const inBrowser = isClient;
+
+/**
+ * 是否为元素节点
+ */
+export const isElement = (val: unknown): val is Element => {
+  if (typeof Element === "undefined") return false;
+  return val instanceof Element;
+};
+
+// 是否为图片节点
+export const isImageDom = (o: Element) => {
+  return o && ["IMAGE", "IMG"].includes(o.tagName);
 };
 
 /**
- * @description 是否为浏览器
+ * 是否为 null
  */
-export const isWindow = (val: any): val is Window => {
-  return typeof window !== "undefined" && is(val, "Window");
-};
-
-export const isElement = (val: unknown): val is Element => {
-  return isObject(val) && !!val.tagName;
-};
-
-export const isServer = typeof window === "undefined";
-
-// 是否为图片节点
-export function isImageDom(o: Element) {
-  return o && ["IMAGE", "IMG"].includes(o.tagName);
-}
-
-export function isNull(val: unknown): val is null {
+export const isNull = (val: unknown): val is null => {
   return val === null;
-}
+};
 
-export function isNullAndUnDef(val: unknown): val is null | undefined {
+/**
+ * 是否为 null 且未定义
+ */
+export const isNullAndUnDef = (val: unknown): val is null | undefined => {
   return isUnDef(val) && isNull(val);
-}
+};
 
-export function isNullOrUnDef(val: unknown): val is null | undefined {
+/**
+ * 是否为 null 或未定义
+ */
+export const isNullOrUnDef = (val: unknown): val is null | undefined => {
   return isUnDef(val) || isNull(val);
-}
+};
 
-export function isPhone(val: string) {
+/**
+ * 是否为手机号
+ */
+export const isPhone = (val: string) => {
   return /^(13[0-9]|14[01456879]|15[0-35-9]|16[2567]|17[0-8]|18[0-9]|19[0-35-9])\d{8}$/.test(val);
-}
+};
 
 /**
  * 是否是图片链接
@@ -161,8 +189,18 @@ export const isImgPath = (path: string): boolean => {
   return /(https?:\/\/|data:image\/).*?\.(png|jpg|jpeg|gif|svg|webp|ico)/gi.test(path);
 };
 
+export const isIOS = () => {
+  return (
+    isClient &&
+    window?.navigator?.userAgent &&
+    (/iP(?:ad|hone|od)/.test(window.navigator.userAgent) ||
+      (window?.navigator?.maxTouchPoints > 2 && /iPad|Macintosh/.test(window?.navigator.userAgent)))
+  );
+};
+
 /**
- * @description 是否为空值项（包含数组、对象判断）
+ * 是否为空值项（包含数组、对象判断）
+ *
  * @param checkFull 是否检查数组、对象是否为空。默认 true
  */
 export const isEmpty = (val: any, checkFull = true): boolean => {
@@ -182,4 +220,36 @@ export const isEmpty = (val: any, checkFull = true): boolean => {
 
   // 如果以上都不是，则不为空
   return false;
+};
+
+/**
+ * 确定目标元素是否可聚焦
+ *
+ * @param element HTML 元素
+ */
+export const isFocusable = (element: HTMLElement): boolean => {
+  if (element.tabIndex > 0 || (element.tabIndex === 0 && element.getAttribute("tabIndex") !== null)) {
+    return true;
+  }
+  if (element.tabIndex < 0 || element.hasAttribute("disabled") || element.getAttribute("aria-disabled") === "true") {
+    return false;
+  }
+
+  switch (element.nodeName) {
+    case "A": {
+      // casting current element to Specific HTMLElement in order to be more type precise
+      return !!(element as HTMLAnchorElement).href && (element as HTMLAnchorElement).rel !== "ignore";
+    }
+    case "INPUT": {
+      return !((element as HTMLInputElement).type === "hidden" || (element as HTMLInputElement).type === "file");
+    }
+    case "BUTTON":
+    case "SELECT":
+    case "TEXTAREA": {
+      return true;
+    }
+    default: {
+      return false;
+    }
+  }
 };

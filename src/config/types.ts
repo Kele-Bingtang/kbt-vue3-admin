@@ -6,7 +6,7 @@ export interface SystemConfig {
   layoutConfig: LayoutConfig;
   routerConfig: RouterConfig;
   keyConfig: KeyConfig;
-  themeList: MenuThemeType[];
+  menuThemeList: MenuThemeType[];
 }
 
 export interface ThemeConfig {

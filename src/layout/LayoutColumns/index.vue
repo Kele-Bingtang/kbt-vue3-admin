@@ -1,48 +1,3 @@
-<template>
-  <el-container :class="[prefixClass, isCollapse ? 'menu-collapse' : 'menu-expand']">
-    <div :class="`${prefixClass}__aside`">
-      <div :class="`${prefixClass}__aside__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
-        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-      </div>
-      <el-scrollbar>
-        <div :class="`${prefixClass}__aside__list`">
-          <div
-            class="flx-center"
-            :class="[
-              `${prefixClass}__aside__list-item`,
-              { 'split-active': splitActive === item.path || `/${splitActive.split('/')[1]}` === item.path },
-            ]"
-            v-for="item in menuList"
-            :key="item.path"
-            @click="changeMenuItem(item)"
-          >
-            <Icon v-if="item.meta?.icon" :icon="item.meta.icon" />
-            <div class="flx-center" style="width: 100%">
-              <Tooltip :effect="SystemConfig.layoutConfig.tooltipEffect">
-                <span :class="`${prefixClass}__aside__list-item__title`">{{ item.meta?.title }}</span>
-              </Tooltip>
-            </div>
-          </div>
-        </div>
-      </el-scrollbar>
-    </div>
-    <el-aside :class="{ 'not-aside': !menuItem.length }">
-      <div :class="`${prefixClass}__aside__logo layout__logo flx-center`">
-        <span v-show="menuItem.length">{{ isCollapse ? "K" : SystemConfig.themeConfig.title }}</span>
-      </div>
-      <el-scrollbar v-if="menuItem?.length">
-        <Menu :menu-list="menuItem" :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
-      </el-scrollbar>
-    </el-aside>
-    <el-container>
-      <el-header class="flx-justify-between">
-        <Header />
-      </el-header>
-      <MainContent />
-    </el-container>
-  </el-container>
-</template>
-
 <script setup lang="ts" name="LayoutVertical">
 import { computed, watch, ref, unref } from "vue";
 import { ElContainer, ElAside, ElHeader, ElScrollbar } from "element-plus";
@@ -58,7 +13,6 @@ import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
 const ns = useNamespace("columns-layout");
-const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();
@@ -106,10 +60,60 @@ const changeMenuItem = (item: RouterConfig) => {
 };
 </script>
 
-<style lang="scss" scoped>
-@use "./index";
-</style>
+<template>
+  <el-container :class="[ns.join('layout'), ns.b(), ns.is('collapse', isCollapse), ns.is('expand', !isCollapse)]">
+    <div :class="[ns.e('aside'), 'flx-column']">
+      <div :class="[ns.e('logo'), ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+      </div>
+
+      <el-scrollbar>
+        <ul :class="ns.e('aside__list')">
+          <li
+            :class="[
+              ns.e('aside__list-item'),
+              ns.is('active', splitActive === item.path || `/${splitActive.split('/')[1]}` === item.path),
+              'flx-center',
+            ]"
+            v-for="item in menuList"
+            :key="item.path"
+            @click="changeMenuItem(item)"
+          >
+            <Icon v-if="item.meta?.icon" :icon="item.meta.icon" />
+            <div class="flx-center" style="width: 100%">
+              <Tooltip :effect="SystemConfig.layoutConfig.tooltipEffect">
+                <span class="title">{{ item.meta?.title }}</span>
+              </Tooltip>
+            </div>
+          </li>
+        </ul>
+      </el-scrollbar>
+    </div>
+
+    <el-aside :class="['flx-column', { 'not-aside': !menuItem.length }]">
+      <div :class="[ns.e('logo'), ns.join('layout-logo'), 'flx-center']">
+        <span v-show="menuItem.length">{{ isCollapse ? "K" : SystemConfig.themeConfig.title }}</span>
+      </div>
+
+      <el-scrollbar v-if="menuItem?.length">
+        <Menu
+          :menu-list="menuItem"
+          :class="[ns.b('menu'), ns.join('layout-menu')]"
+          :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+        />
+      </el-scrollbar>
+    </el-aside>
+
+    <el-container>
+      <el-header class="flx-justify-between">
+        <Header />
+      </el-header>
+      <MainContent />
+    </el-container>
+  </el-container>
+</template>
 
 <style lang="scss">
-@use "./menu";
+@use "./index";
+@use "../base-layout";
 </style>

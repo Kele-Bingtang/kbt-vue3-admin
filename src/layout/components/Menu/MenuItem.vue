@@ -1,12 +1,13 @@
 <template>
   <template v-if="menuItem.meta.render">
-    <component :is="menuItem.meta.render" class="el-menu-item menu-item" />
+    <component :is="menuItem.meta.render" class="el-menu-item only-menu-item" />
   </template>
+
   <el-menu-item
     v-else-if="!menuItem.children || menuItem.children.length == 0"
     :index="menuItem.meta._fullPath"
     @click="handleMenuClick(menuItem)"
-    class="menu-item"
+    class="is-only"
   >
     <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />
     <template #title>
@@ -16,7 +17,8 @@
       </Tooltip>
     </template>
   </el-menu-item>
-  <el-sub-menu v-else :index="menuItem.meta._fullPath || menuItem.path" class="sub-menu">
+
+  <el-sub-menu v-else :index="menuItem.meta._fullPath || menuItem.path" class="is-sub">
     <template #title>
       <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />
       <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>

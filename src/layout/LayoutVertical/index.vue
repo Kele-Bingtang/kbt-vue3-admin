@@ -1,22 +1,3 @@
-<template>
-  <el-container :class="[prefixClass, isCollapse ? 'menu-collapse' : 'menu-expand', { mobile: isMobile }]">
-    <el-aside>
-      <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
-        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-        <span v-show="!isCollapse">{{ SystemConfig.themeConfig.title }}</span>
-      </div>
-      <Menu :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
-    </el-aside>
-    <div v-if="isMobile && !isCollapse" :class="`${prefixClass}__drawer-bg`" @click="handleClickOutSide" />
-    <el-container>
-      <el-header class="flx-justify-between">
-        <Header />
-      </el-header>
-      <MainContent />
-    </el-container>
-  </el-container>
-</template>
-
 <script setup lang="ts" name="LayoutVertical">
 import { computed, watch, onMounted, onBeforeMount, onBeforeUnmount, unref } from "vue";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
@@ -32,7 +13,6 @@ import { useRoute, useRouter } from "vue-router";
 import { DeviceEnum } from "@/enums/appEnum";
 
 const ns = useNamespace("vertical-layout");
-const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();
@@ -70,10 +50,39 @@ const handleClickOutSide = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-@use "./index";
-</style>
+<template>
+  <el-container
+    :class="[
+      ns.join('layout'),
+      ns.b(),
+      ns.is('collapse', isCollapse),
+      ns.is('expand', !isCollapse),
+      { mobile: isMobile },
+    ]"
+  >
+    <el-aside class="flx-column">
+      <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+        <span v-show="!isCollapse">{{ SystemConfig.themeConfig.title }}</span>
+      </div>
+      <Menu
+        :class="[ns.b('menu'), ns.join('layout-menu')]"
+        :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+      />
+    </el-aside>
+
+    <div v-if="isMobile && !isCollapse" :class="ns.e('drawer-bg')" @click="handleClickOutSide" />
+
+    <el-container>
+      <el-header class="flx-justify-between">
+        <Header />
+      </el-header>
+      <MainContent />
+    </el-container>
+  </el-container>
+</template>
 
 <style lang="scss">
-@use "./menu";
+@use "./index";
+@use "../base-layout";
 </style>

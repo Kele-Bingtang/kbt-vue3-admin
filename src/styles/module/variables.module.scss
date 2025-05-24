@@ -25,18 +25,6 @@ $logo-line-light: #3c3c3c1f;
 $logo-title-light: $menuText-light;
 $splitMenuActiveBg-light: var(--#{$el-namespace}-color-primary-light-9);
 
-/* 暗色头部主题 */
-$headerBg-dark: #191a20;
-$headerText-dark: #cfd3d4;
-$headerLine-dark: #414243;
-$headerLogoTitle-dark: #dadada;
-
-/* 白色头部主题 */
-$headerBg-light: #ffffff;
-$headerText-light: #303133;
-$headerLine-light: #3c3c3c1f;
-$headerLogoTitle-light: #423e3e;
-
 :export {
   /* 默认，暗色主题 */
   menuBgDark: $menuBg-dark;

@@ -11,7 +11,7 @@ import {
   watch,
 } from "vue";
 import { ElDialog, ElButton, type DialogProps, ElScrollbar, ElConfigProvider } from "element-plus";
-import { getPx } from "@/utils";
+import { addUnit } from "@/utils";
 import { Icon } from "@/components";
 import "./index.scss";
 import { useNamespace } from "@/composables";
@@ -86,7 +86,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
     isFullscreen.value = !unref(isFullscreen);
   };
 
-  const contentHeight = ref(getPx(dialogProps.height || 400));
+  const contentHeight = ref(addUnit(dialogProps.height || 400));
 
   watch(
     () => unref(isFullscreen),
@@ -97,7 +97,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
         // 头部高度 41px，顶部 padding-bottom 16px，内容区 padding 上下各 15，底部高度 49px，顶部 padding-top 16px
         contentHeight.value = `${windowHeight - 41 - 16 - 30 - 49 - 16 - (dialogProps.footerRender ? 63 : 0)}px`;
       } else {
-        contentHeight.value = getPx(dialogProps.height || 400);
+        contentHeight.value = addUnit(dialogProps.height || 400);
       }
     },
     {

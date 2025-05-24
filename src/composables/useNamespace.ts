@@ -56,7 +56,7 @@ export const useNamespace = (block: string = "", namespaceOverrides?: string) =>
    * 拼接命名空间
    * @param scope
    */
-  const joinNamespace = (scope?: string) => {
+  const join = (scope?: string) => {
     return `${finalNamespace}-${scope}`;
   };
 
@@ -86,7 +86,7 @@ export const useNamespace = (block: string = "", namespaceOverrides?: string) =>
     bem,
     is,
     createBem,
-    joinNamespace,
+    join,
     cssVar,
     cssVarName,
     storageKey,

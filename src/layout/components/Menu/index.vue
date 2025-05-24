@@ -3,12 +3,9 @@
     <el-menu
       :default-active="activeMenu"
       :collapse="isCollapse"
-      :background-color="SystemConfig.themeList[0].background"
-      :text-color="SystemConfig.themeList[0].textColor"
-      :active-text-color="SystemConfig.themeList[0].textActiveColor"
       :unique-opened="settingsStore.menuAccordion"
       :collapse-transition="false"
-      v-bind="$attrs"
+      v-bind="{ ...$attrs, class: undefined }"
     >
       <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" />
     </el-menu>
@@ -35,6 +32,7 @@ const props = withDefaults(defineProps<MenuProps>(), {
   activeMenu: "",
   isCollapse: undefined,
 });
+
 const route = useRoute();
 const settingsStore = useSettingsStore();
 const permissionStore = usePermissionStore();

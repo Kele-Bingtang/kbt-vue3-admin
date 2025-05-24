@@ -167,12 +167,12 @@ watch(
 //       settingsStore.$patch({ menuTheme: settingsStore.headerTheme });
 //     }
 //     // TODO：制作强大的颜色系统，在 store 添加多个变量存储用户选择的颜色，而不是写死颜色
-//     if (settingsStore.headerTheme === LayoutThemeType.Dark) {
+//     if (settingsStore.headerTheme === SystemThemeEnum.Dark) {
 //       setStyleVar("--header-bg-color", variables.headerBgDark);
 //       setStyleVar("--header-text-color", variables.headerTextDark);
 //       setStyleVar("--header-line-color", variables.headerLineDark);
 //       setStyleVar("--header-logo-title-color", variables.headerLogoTitleDark);
-//     } else if (settingsStore.headerTheme === LayoutThemeType.Light) {
+//     } else if (settingsStore.headerTheme === SystemThemeEnum.Light) {
 //       setStyleVar("--header-bg-color", variables.headerBgLight);
 //       setStyleVar("--header-text-color", variables.headerTextLight);
 //       setStyleVar("--header-line-color", variables.headerLineLight);
@@ -184,7 +184,7 @@ watch(
 
 // 监听亮、暗色主题的切换
 // watchEffect(() => {
-//   if (settingsStore.menuTheme === LayoutThemeType.Dark) {
+//   if (settingsStore.menuTheme === SystemThemeEnum.Dark) {
 //     // TODO：制作强大的颜色系统，在 store 添加多个变量存储用户选择的颜色，而不是写死颜色
 //     setStyleVar("--menu-bg-color", variables.menuBgDark);
 //     setStyleVar("--menu-text-color", variables.menuTextDark);
@@ -197,7 +197,7 @@ watch(
 //     setStyleVar("--menu-logo-line-color", variables.logoLineDark);
 //     setStyleVar("--menu-logo-title-color", variables.logoTitleDark);
 //     setStyleVar("--split-menu-active-bg-color", variables.splitMenuActiveBgDark);
-//   } else if (settingsStore.menuTheme === LayoutThemeType.Light) {
+//   } else if (settingsStore.menuTheme === SystemThemeEnum.Light) {
 //     setStyleVar("--menu-bg-color", variables.menuBgLight);
 //     setStyleVar("--menu-text-color", variables.menuTextLight);
 //     setStyleVar("--menu-hover-bg-color", variables.menuHoverBgLight);

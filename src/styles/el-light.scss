@@ -1,5 +1,6 @@
-// 自定义 ElementPlus 亮色主题
+@use "mixins/namespace" as *;
 
+// 自定义 ElementPlus 亮色主题
 @forward "element-plus/theme-chalk/src/common/var.scss" //
   with (
   //
@@ -21,10 +22,10 @@
     ),
   $button: (
     //
-    "hover-bg-color": var(--el-color-primary-light-9),
-    "hover-border-color": var(--el-color-primary),
-    "border-color": var(--el-color-primary),
-    "text-color": var(--el-color-primary)
+    "hover-bg-color": var(--#{$admin-namespace}-color-primary-light-9),
+    "hover-border-color": var(--#{$admin-namespace}-color-primary),
+    "border-color": var(--#{$admin-namespace}-color-primary),
+    "text-color": var(--#{$admin-namespace}-color-primary)
   ),
   $dialog: (
     //

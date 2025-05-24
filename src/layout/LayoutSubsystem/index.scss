@@ -1,84 +1,15 @@
 @use "@/styles/mixins/namespace" as *;
+@use "@/styles/mixins/function" as *;
+@use "@/styles/mixins/bem" as *;
 
-$prefix-class: #{$admin-namespace}-subsystem-layout;
-
-.#{$prefix-class} {
-  position: relative;
-  width: 100%;
-  height: 100%;
-
-  &__drawer-bg {
+@include b(subsystem-layout) {
+  @include e(drawer-bg) {
     position: absolute;
     top: 0;
     z-index: 999;
     width: 100%;
     height: 100%;
-    background: #000000;
+    background: var(--#{$el-namespace}-color-black);
     opacity: 0.3;
-  }
-
-  .#{$el-namespace}-aside {
-    z-index: 1000;
-    height: 100%;
-    overflow: inherit;
-    background: var(--menu-bg-color);
-    box-shadow: 0 1px 4px rgb(0 21 41 / 9%);
-    transition: width 0.28s;
-
-    :deep(.#{$el-namespace}-scrollbar) {
-      height: calc(100% - var(--header-height));
-
-      .#{$el-namespace}-menu {
-        overflow-x: hidden;
-        border-right: none;
-      }
-    }
-
-    .#{$prefix-class}__logo {
-      box-sizing: border-box;
-      height: var(--header-height);
-      cursor: pointer;
-      border-bottom: 1px solid var(--menu-logo-line-color);
-
-      span {
-        font-size: 21.5px;
-        font-weight: bold;
-        color: var(--menu-logo-title-color);
-        white-space: nowrap;
-      }
-
-      img {
-        width: 28px;
-        margin-right: 6px;
-        object-fit: contain;
-      }
-    }
-
-    .#{$prefix-class}__menu-header {
-      display: flex;
-      align-items: center;
-      justify-content: space-around;
-      height: 32px;
-      margin: 10px 0;
-      overflow: hidden;
-      color: var(--menu-text-color);
-
-      :deep(.collapse-icon) {
-        margin: 0;
-      }
-
-      :deep(.#{$el-namespace}-dropdown) {
-        color: var(--menu-text-color);
-      }
-    }
-  }
-
-  &.menu-expand .#{$el-namespace}-aside {
-    width: var(--aside-width) !important;
-  }
-
-  &.menu-collapse .#{$el-namespace}-aside {
-    width: 64px !important;
-    transition-duration: 0.3s;
   }
 }

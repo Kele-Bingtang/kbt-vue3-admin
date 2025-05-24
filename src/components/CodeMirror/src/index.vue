@@ -53,7 +53,7 @@ import { EditorView, keymap, placeholder as placeholderFun, type ViewUpdate } fr
 import { MergeView } from "@codemirror/merge";
 import { basicSetup, minimalSetup } from "codemirror";
 import { useNamespace } from "@/composables";
-import { getPx } from "@/utils";
+import { addUnit } from "@/utils";
 import { ref, shallowRef, computed, type Ref, type ComputedRef, watch, onMounted, nextTick, onUnmounted } from "vue";
 import { FullScreen } from "@element-plus/icons-vue";
 
@@ -573,10 +573,10 @@ const toggleFullScreen = () => {
   if (codeMirrorEl) codeMirrorEl.classList.toggle("is-fullscreen");
 };
 
-const codeMirrorWidth = computed(() => getPx(props.width));
-const codeMirrorHeight = computed(() => getPx(props.height));
-const codeMirrorMaxHeight = computed(() => getPx(props.maxHeight));
-const codeMirrorFontSize = computed(() => getPx(props.fontSize));
+const codeMirrorWidth = computed(() => addUnit(props.width));
+const codeMirrorHeight = computed(() => addUnit(props.height));
+const codeMirrorMaxHeight = computed(() => addUnit(props.maxHeight));
+const codeMirrorFontSize = computed(() => addUnit(props.fontSize));
 const mergeCmBgColor = computed(() => props.mergeConfig?.headerBgColor || "#f6f8fa");
 const mergeCmBorderColor = computed(() => props.mergeConfig?.headerBorderColor || "#d0d7de");
 const mergeCmAHighlightLineBgColor = computed(

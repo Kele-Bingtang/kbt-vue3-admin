@@ -6,7 +6,6 @@ export enum DeviceEnum {
 }
 
 export enum LayoutModeEnum {
-  Menu = "menu",
   Vertical = "vertical",
   Classic = "classic",
   Transverse = "transverse",
@@ -20,14 +19,12 @@ export enum TabsNavModeEnum {
   Popular = "popular",
 }
 
-// App theme enum
 export enum SystemThemeEnum {
   Dark = "dark",
   Light = "light",
   Auto = "auto",
 }
 
-// Menu theme enum
 export enum MenuThemeEnum {
   Dark = "dark",
   Light = "light",

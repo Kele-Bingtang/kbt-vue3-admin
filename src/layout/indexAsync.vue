@@ -15,7 +15,7 @@ import { useSettingsStore } from "@/stores";
 import { useLayout } from "@/composables";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
-import { getPx, setStyleVar } from "@/utils";
+import { addUnit, setStyleVar } from "@/utils";
 import { type Component, defineAsyncComponent, computed, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 
@@ -42,7 +42,7 @@ watch(
   }
 );
 
-watchEffect(() => setStyleVar("--aside-width", getPx(settingsStore.menuWidth)));
+watchEffect(() => setStyleVar("--aside-width", addUnit(settingsStore.menuWidth)));
 
-watchEffect(() => setStyleVar("--header-height", getPx(settingsStore.headerHeight)));
+watchEffect(() => setStyleVar("--header-height", addUnit(settingsStore.headerHeight)));
 </script>

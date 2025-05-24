@@ -31,26 +31,24 @@ $prefix-class: #{$admin-namespace}-header-left;
   overflow: hidden;
   white-space: nowrap;
 
-  & > * {
+  .tk-breadcrumb__item:hover {
+    color: var(--#{$el-namespace}-color-primary);
+  }
+
+  :deep(.#{$el-namespace}-breadcrumb__inner) {
+    color: var(--header-text-color);
+
     &:hover {
       color: var(--#{$el-namespace}-color-primary);
     }
+  }
 
-    :deep(.#{$el-namespace}-breadcrumb__inner) {
-      color: var(--header-text-color);
-
-      &:hover {
-        color: var(--#{$el-namespace}-color-primary);
-      }
-    }
-
-    // 最后一个面包屑 item
-    :deep(
-      .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click,
-      .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click:hover
-    ) {
-      color: #a8abb0;
-    }
+  // 最后一个面包屑 item
+  :deep(
+    .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click,
+    .#{$el-namespace}-breadcrumb__item .#{$el-namespace}-breadcrumb__inner .no-click:hover
+  ) {
+    color: #a8abb0;
   }
 }
 </style>

@@ -48,7 +48,7 @@
 import { ElDialog, ElScrollbar, ElButton, type DialogProps } from "element-plus";
 import { Icon } from "@/components";
 import { nextTick, ref, unref, watch, useSlots, shallowRef } from "vue";
-import { getPx } from "@/utils";
+import { addUnit } from "@/utils";
 import { useNamespace } from "@/composables";
 
 defineOptions({ name: "WorkDialog" });
@@ -91,7 +91,7 @@ const toggleFull = () => {
   isFullscreen.value = !unref(isFullscreen);
 };
 
-const dialogHeight = ref(getPx(props.height));
+const dialogHeight = ref(addUnit(props.height));
 
 watch(
   isFullscreen,
@@ -101,7 +101,7 @@ watch(
       const windowHeight = document.documentElement.offsetHeight;
       dialogHeight.value = `${windowHeight - 41 - 49 - 47 - (slots.footer ? 63 : 0)}px`;
     } else {
-      dialogHeight.value = getPx(props.height);
+      dialogHeight.value = addUnit(props.height);
     }
   },
   {

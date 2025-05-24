@@ -1,4 +1,5 @@
 @use "mixins/namespace" as *;
+@use "mixins/function" as *;
 
 // 自定义 ElementPlus 暗黑主题
 @forward "element-plus/theme-chalk/src/dark/var.scss" //
@@ -57,11 +58,11 @@ html.dark {
   .columns {
     .#{$el-namespace}-aside {
       .#{$el-namespace}-menu-item:not(.is-active) > * {
-        color: var(--menu-text-color);
+        color: getCssVar(layout-aside-text-color);
       }
     }
 
-    .layout__logo {
+    .layout-logo {
       border-right: var(--kbt-border-light);
       border-bottom: var(--kbt-border-light);
     }
@@ -79,7 +80,7 @@ html.dark {
       background-color: var(--kbt-bg-color);
       border-right: var(--kbt-border-light);
 
-      .layout__logo {
+      .layout-logo {
         border-bottom: var(--kbt-border-light);
       }
     }

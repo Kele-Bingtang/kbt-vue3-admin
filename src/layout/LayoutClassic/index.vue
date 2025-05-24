@@ -1,28 +1,3 @@
-<template>
-  <!-- 布局：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧 -->
-  <el-container :class="[prefixClass, isCollapse ? 'menu-collapse' : 'menu-expand']">
-    <el-header class="flx-justify-between">
-      <Header>
-        <template #left>
-          <div :class="`${prefixClass}__header--left`">
-            <div :class="`${prefixClass}__logo layout__logo flx-center`" @click="router.push(HOME_URL)">
-              <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-              <span>{{ SystemConfig.themeConfig.title }}</span>
-            </div>
-            <HeaderLeft />
-          </div>
-        </template>
-      </Header>
-    </el-header>
-    <el-container :class="`${prefixClass}__aside`">
-      <el-aside>
-        <Menu :class="`${prefixClass}__menu`" :popper-class="`${prefixClass}__menu`" />
-      </el-aside>
-      <MainContent />
-    </el-container>
-  </el-container>
-</template>
-
 <script setup lang="ts" name="LayoutVertical">
 import { computed } from "vue";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
@@ -37,7 +12,6 @@ import { useNamespace } from "@/composables";
 import { useRouter } from "vue-router";
 
 const ns = useNamespace("classic-layout");
-const prefixClass = ns.b();
 
 const router = useRouter();
 const settingsStore = useSettingsStore();
@@ -45,10 +19,37 @@ const settingsStore = useSettingsStore();
 const isCollapse = computed(() => settingsStore.isCollapse);
 </script>
 
-<style lang="scss" scoped>
-@use "./index";
-</style>
+<template>
+  <!-- 布局：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧 -->
+  <el-container :class="[ns.join('layout'), ns.b(), ns.is('collapse', isCollapse), ns.is('expand', !isCollapse)]">
+    <el-header class="flx-justify-between">
+      <Header>
+        <template #left>
+          <div :class="[ns.e('header-left'), 'flx-align-center']">
+            <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
+              <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+              <span>{{ SystemConfig.themeConfig.title }}</span>
+            </div>
+            <HeaderLeft />
+          </div>
+        </template>
+      </Header>
+    </el-header>
+
+    <el-container :class="ns.e('content')">
+      <el-aside>
+        <Menu
+          :class="[ns.b('menu'), ns.join('layout-menu')]"
+          :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+        />
+      </el-aside>
+
+      <MainContent />
+    </el-container>
+  </el-container>
+</template>
 
 <style lang="scss">
-@use "./menu";
+@use "./index";
+@use "../base-layout";
 </style>

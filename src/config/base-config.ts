@@ -5,7 +5,7 @@ const themeConfig: ThemeConfig = {
   primaryTheme: "#395AE3",
   title: "kbt-vue3-admin",
   titleMode: "0",
-  layoutMode: LayoutModeEnum.Menu,
+  layoutMode: LayoutModeEnum.Vertical,
   tabsNavMode: TabsNavModeEnum.Classic,
   showBreadcrumb: true,
   showTabsNav: true,
@@ -61,7 +61,7 @@ export const createBaseConfig = (): SystemConfig => ({
   routerConfig,
   keyConfig,
   // 菜单主题列表
-  themeList: [
+  menuThemeList: [
     {
       theme: MenuThemeEnum.Light,
       background: "#ffffff",

@@ -9,7 +9,7 @@
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="`${prefixClass}__item`" @click="handleAsideTheme(MenuThemeEnum.Light)">
             <img src="@/assets/icons/menu-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.menuTheme === LayoutThemeType.Light"><CircleCheckFilled /></el-icon>
+            <el-icon v-if="settingsStore.menuTheme === MenuThemeEnum.Light"><CircleCheckFilled /></el-icon>
           </div>
         </div>
       </el-tooltip>
