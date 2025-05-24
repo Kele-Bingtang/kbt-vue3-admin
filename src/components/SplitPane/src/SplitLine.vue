@@ -6,12 +6,12 @@
 
 <script setup lang="ts">
 import { computed } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "SplitLine" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("split-trigger");
+const ns = useNamespace("split-trigger");
+const prefixClass = ns.b();
 
 const props = defineProps<{ mode: "vertical" | "horizontal" }>();
 

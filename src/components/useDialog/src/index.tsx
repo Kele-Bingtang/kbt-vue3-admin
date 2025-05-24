@@ -14,11 +14,11 @@ import { ElDialog, ElButton, type DialogProps, ElScrollbar, ElConfigProvider } f
 import { getPx } from "@/utils";
 import { Icon } from "@/components";
 import "./index.scss";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { ConfigGlobalKey } from "@/config/symbols";
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("work-dialog");
+const ns = useNamespace("work-dialog");
+const prefixClass = ns.b();
 
 let id = 0;
 
@@ -80,7 +80,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
 
   const toggleFull = () => {
     const elDialogEl = document.querySelector(
-      `${`#${prefixClass}-${id}`} .${prefixClass}.${variables.elNamespace}-dialog`
+      `${`#${prefixClass}-${id}`} .${prefixClass}.${ns.elNamespace}-dialog`
     ) as HTMLElement;
     if (elDialogEl) elDialogEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !unref(isFullscreen);
@@ -106,7 +106,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
   );
 
   const vm = (
-    <ElConfigProvider namespace={variables.elNamespace} size={unref(layoutSize)}>
+    <ElConfigProvider namespace={ns.elNamespace} size={unref(layoutSize)}>
       <ElDialog
         modelValue
         title="弹框"
@@ -140,7 +140,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
             if (dialogProps?.headerRender) return dialogProps.headerRender(scope);
             return (
               <div style="display: flex">
-                <span class={`${variables.elNamespace}-dialog__title`} style="flex: 1">
+                <span class={`${ns.elNamespace}-dialog__title`} style="flex: 1">
                   {dialogProps.title}
                 </span>
                 {dialogProps.fullscreenIcon !== false && (
@@ -149,8 +149,8 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
                     onClick={() => toggleFull()}
                     width="15px"
                     height="15px"
-                    color={`var(--${variables.elNamespace}-color-info)`}
-                    hover-color={`var(--${variables.elNamespace}-color-primary)`}
+                    color={`var(--${ns.elNamespace}-color-info)`}
+                    hover-color={`var(--${ns.elNamespace}-color-primary)`}
                     icon-style={{ cursor: "pointer" }}
                   />
                 )}

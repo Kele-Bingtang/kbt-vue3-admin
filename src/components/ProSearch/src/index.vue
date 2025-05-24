@@ -67,14 +67,14 @@ import {
   type GridItemProps,
 } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { ElFormItem, ElButton, ElIcon, type FormItemProp } from "element-plus";
 import { isEmpty, isObject, isString } from "@/utils";
 
 defineOptions({ name: "ProSearch" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("search-form");
+const ns = useNamespace("search-form");
+const prefixClass = ns.b();
 
 export type ProSearchExpose = typeof defaultExpose;
 

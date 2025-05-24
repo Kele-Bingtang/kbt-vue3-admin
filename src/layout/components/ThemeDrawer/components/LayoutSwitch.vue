@@ -94,14 +94,14 @@
 </template>
 
 <script setup lang="ts" name="LayoutSwitch">
-import type { LayoutModeEnum } from "@/enums/appEnum";
-import { useDesign } from "@/hooks";
+import { LayoutModeEnum } from "@/enums/appEnum";
+import { useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { ElIcon } from "element-plus";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("layout-switch");
+const ns = useNamespace("layout-switch");
+const prefixClass = ns.b();
 
 const settingsStore = useSettingsStore();
 

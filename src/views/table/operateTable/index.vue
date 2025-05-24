@@ -38,7 +38,7 @@
           </template>
           <span
             v-else
-            :style="`color: var(--${variables.elNamespace}-color-primary); cursor: pointer`"
+            :style="`color: var(--${ns.elNamespace}-color-primary); cursor: pointer`"
             @click="handleEdit(row)"
           >
             {{ row.title }}
@@ -147,9 +147,9 @@ import { largeData } from "@/mock/table";
 import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
 import { Search, Refresh, Plus, Check, EditPen, Delete } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { variables } = useDesign();
+const ns = useNamespace();
 const defaultTableData = {
   id: "",
   name: "",

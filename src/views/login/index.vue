@@ -24,10 +24,10 @@ import Phone from "./components/phone.vue";
 import QrCode from "./components/qrCode.vue";
 import Register from "./components/register.vue";
 import Forget from "./components/forget.vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("login");
+const ns = useNamespace("login");
+const prefixClass = ns.b();
 
 const formComponents: Record<string, Component> = {
   login: LoginForm,

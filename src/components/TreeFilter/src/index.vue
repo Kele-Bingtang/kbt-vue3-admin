@@ -23,7 +23,7 @@
         @check="handleCheckChange"
       >
         <template #default="scope">
-          <span :class="`${variables.elNamespace}-tree-node__label`">
+          <span :class="`${ns.elNamespace}-tree-node__label`">
             <slot v-bind="scope">
               {{ scope.node.label }}
             </slot>
@@ -37,13 +37,13 @@
 <script setup lang="ts">
 import { ref, watch, onBeforeMount, unref } from "vue";
 import { ElInput, ElScrollbar, ElTree } from "element-plus";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import type { TreeFilter } from "..";
 
 defineOptions({ name: "TreeFilter" });
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("tree-filter");
+const ns = useNamespace("tree-filter");
+const prefixClass = ns.b();
 
 export type TreeFilterInstance = Omit<
   InstanceType<typeof TreeFilter>,

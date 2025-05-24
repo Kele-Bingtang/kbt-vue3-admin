@@ -1,4 +1,4 @@
-import { useLayout, useBoolean } from "@/hooks";
+import { useLayout, useBoolean } from "@/composables";
 import beforeClose from "@/router/beforeClose";
 import { useLayoutStore, usePermissionStore, type TabProp } from "@/stores";
 import { getUrlParams, mittBus } from "@/utils";

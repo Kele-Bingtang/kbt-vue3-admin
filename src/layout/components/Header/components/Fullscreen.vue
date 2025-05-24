@@ -12,10 +12,10 @@
 
 <script lang="ts" setup>
 import { useFullscreen } from "@vueuse/core";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("fullscreen");
+const ns = useNamespace("fullscreen");
+const prefixClass = ns.b();
 
 const { toggle, isFullscreen } = useFullscreen();
 </script>

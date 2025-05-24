@@ -1,12 +1,7 @@
 @forward "variables";
-@forward "namespace"; // 导出到项目的全局变量里，当前文件无法使用 namespace.scss 的变量
+@forward "mixins/namespace";
 
-@use "namespace" as *; // 当前文件使用 namespace.scss 的变量
-
-// 自定义 EP 样式命名空间
-@forward "element-plus/theme-chalk/src/mixins/config.scss" with (
-  $namespace: #{$el-namespace}
-);
+@use "mixins/namespace" as *;
 
 /* Global scss */
 body {

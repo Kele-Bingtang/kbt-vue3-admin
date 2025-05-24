@@ -18,12 +18,12 @@
 import { ElButton, ElMessage } from "element-plus";
 import { ref, reactive, shallowRef, unref } from "vue";
 import { read, utils } from "xlsx";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "UploadExcel" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("excel-upload");
+const ns = useNamespace("excel-upload");
+const prefixClass = ns.b();
 
 export type ExcelData = { results: any; header: string[] };
 

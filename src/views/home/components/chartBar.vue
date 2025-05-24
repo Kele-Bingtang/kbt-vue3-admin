@@ -4,7 +4,7 @@
 
 <script setup lang="ts" name="ChartBar">
 import * as echarts from "echarts";
-import { useEcharts } from "@/hooks";
+import { useEcharts } from "@/composables";
 import { onMounted, shallowRef } from "vue";
 
 interface BarData {

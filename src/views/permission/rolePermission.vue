@@ -51,7 +51,7 @@
 
 <script setup lang="ts" name="RolePermission">
 import { usePermissionStore, useUserStore } from "@/stores";
-import { useLayout, useRoutes } from "@/hooks";
+import { useLayout, useRoutes } from "@/composables";
 import { ElMessage, ElMessageBox, ElNotification, ElTree } from "element-plus";
 import type { TreeKey } from "element-plus/es/components/tree/src/tree.type";
 import router, { resetRouter } from "@/router";

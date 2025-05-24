@@ -4,7 +4,7 @@
 
 <script setup lang="ts" name="ChartPie">
 import * as echarts from "echarts";
-import { useEcharts } from "@/hooks";
+import { useEcharts } from "@/composables";
 import { shallowRef, onMounted } from "vue";
 
 export interface PieData {

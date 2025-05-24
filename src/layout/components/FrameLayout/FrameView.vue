@@ -8,10 +8,10 @@
 import { nextTick, ref, onMounted, computed, unref } from "vue";
 import { mittBus } from "@/utils";
 import { useRoute } from "vue-router";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("frame");
+const ns = useNamespace("frame");
+const prefixClass = ns.b();
 
 const loading = ref(true);
 const route = useRoute();

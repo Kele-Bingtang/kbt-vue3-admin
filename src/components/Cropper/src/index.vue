@@ -58,12 +58,12 @@ import { VueCropper } from "vue-cropper";
 import "vue-cropper/dist/index.css";
 import { Upload, ZoomIn, ZoomOut, Download } from "@element-plus/icons-vue";
 import { toRefs, ref, reactive, shallowRef, onMounted, unref } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "Cropper" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("cropper");
+const ns = useNamespace("cropper");
+const prefixClass = ns.b();
 
 interface CropperProps {
   imgLink?: string; // 图片链接

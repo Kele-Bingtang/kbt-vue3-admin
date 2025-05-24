@@ -6,7 +6,7 @@
 
 <script setup lang="ts" name="Role">
 import { Fragment } from "vue";
-import { usePermission } from "@/hooks";
+import { usePermission } from "@/composables";
 
 defineOptions({ name: "Role" });
 

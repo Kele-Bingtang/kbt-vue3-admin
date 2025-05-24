@@ -117,7 +117,7 @@
 
 <script setup lang="ts" name="SwitchPermission">
 import { useUserStore } from "@/stores";
-import { usePermission } from "@/hooks";
+import { usePermission } from "@/composables";
 import { RefreshKey } from "@/config/symbols";
 
 const userStore = useUserStore();

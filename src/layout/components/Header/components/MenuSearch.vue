@@ -34,16 +34,16 @@
 <script setup lang="ts" name="MenuSearch">
 import { computed, ref, onUnmounted, nextTick } from "vue";
 import { ElAutocomplete, ElTooltip, ElIcon } from "element-plus";
-import { useLayout } from "@/hooks";
+import { useLayout } from "@/composables";
 import { usePermissionStore } from "@/stores";
 import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils";
 import { Search } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("menu-search");
+const ns = useNamespace("menu-search");
+const prefixClass = ns.b();
 
 const router = useRouter();
 const permissionStore = usePermissionStore();

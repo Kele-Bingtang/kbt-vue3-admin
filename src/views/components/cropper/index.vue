@@ -50,10 +50,10 @@
 
 <script setup lang="ts" name="CropperDemo">
 import { Cropper } from "@/components";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("cropper-demo");
+const ns = useNamespace("cropper-demo");
+const prefixClass = ns.b();
 
 const uploadImage = (imgData: FormData) => {
   console.log(imgData);

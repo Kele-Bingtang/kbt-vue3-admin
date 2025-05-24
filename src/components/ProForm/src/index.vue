@@ -38,7 +38,7 @@ import {
   type FormItemProp,
 } from "element-plus";
 import { getProp, setProp, hyphenToCamelCase, deleteObjProperty } from "./helper";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { componentMap } from "./helper/componentMap";
 import { Icon } from "@/components";
 import { QuestionFilled } from "@element-plus/icons-vue";
@@ -46,8 +46,8 @@ import { getPx, isString } from "@/utils";
 
 defineOptions({ name: "ProForm" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("pro-form");
+const ns = useNamespace("pro-form");
+const prefixClass = ns.b();
 
 export interface ProFormProps {
   modelValue?: Record<string, any>;

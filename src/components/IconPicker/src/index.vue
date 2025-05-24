@@ -25,7 +25,7 @@
                 :style="{
                   width: iconSize,
                   height: iconSize,
-                  border: `1px solid ${icon === modelValue ? `var(--${variables.elNamespace}-color-primary)` : `var(--${variables.elNamespace}-border-color)`}`,
+                  border: `1px solid ${icon === modelValue ? `var(--${ns.elNamespace}-color-primary)` : `var(--${ns.elNamespace}-border-color)`}`,
                 }"
                 :class="`${prefixClass}__icon`"
                 @click="iconSelect(icon)"
@@ -33,7 +33,7 @@
               >
                 <Icon
                   :icon="icon"
-                  :color="icon === modelValue ? `var(--${variables.elNamespace}-color-primary)` : 'inherit'"
+                  :color="icon === modelValue ? `var(--${ns.elNamespace}-color-primary)` : 'inherit'"
                 />
               </div>
             </div>
@@ -62,13 +62,13 @@ import tIcons from "./data/icons.tdesign";
 import { ElInput, ElPopover, ElScrollbar, ElTabs, ElTabPane, ElPagination } from "element-plus";
 import { computed, type CSSProperties, ref, unref, watch, inject } from "vue";
 import { nextTick } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { ConfigGlobalKey } from "@/config/symbols";
 
 defineOptions({ name: "IconPicker" });
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("icon-picker");
+const ns = useNamespace("icon-picker");
+const prefixClass = ns.b();
 
 defineProps<{ tip?: boolean }>();
 
@@ -92,21 +92,23 @@ const modelValue = defineModel<string>();
 const size = computed(() => configGlobal?.size.value || "default");
 
 const iconSize = computed(() => {
+  const { elNamespace } = ns;
   return unref(size) === "small"
-    ? `var(--${variables.elNamespace}-component-size-small)`
+    ? `var(--${elNamespace}-component-size-small)`
     : unref(size) === "large"
-      ? `var(--${variables.elNamespace}-component-size-large)`
-      : `var(--${variables.elNamespace}-component-size)`;
+      ? `var(--${elNamespace}-component-size-large)`
+      : `var(--${elNamespace}-component-size)`;
 });
 
 const iconWrapStyle = computed((): CSSProperties => {
+  const { elNamespace } = ns;
   return {
     width: unref(iconSize),
     height: unref(iconSize),
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
-    boxShadow: `0 0 0 1px var(--${variables.elNamespace}-input-border-color,var(--${variables.elNamespace}-border-color)) inset`,
+    boxShadow: `0 0 0 1px var(--${elNamespace}-input-border-color,var(--${elNamespace}-border-color)) inset`,
     position: "relative",
     left: "-1px",
     cursor: "pointer",

@@ -8,7 +8,7 @@ import { useLayoutNoSetup } from "./useLayout";
 import type { BackstageMenuList } from "@/api/menu";
 import type { RouteRecordRaw } from "vue-router";
 import { isProxy, toRaw } from "vue";
-import { useCache } from "@/hooks";
+import { useCache } from "@/composables";
 
 const modules = import.meta.glob("@/views/**/*.vue");
 const FrameView = () => import("@/layout/components/FrameLayout/FrameView.vue");

@@ -63,11 +63,11 @@ import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuDropdown from "../components/MenuDropdown.vue";
 import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRoute } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("tabs-nav");
+const ns = useNamespace("tabs-nav");
+const prefixClass = ns.b();
 
 const route = useRoute();
 const layoutStore = useLayoutStore();

@@ -13,7 +13,7 @@ import {
   unref,
   type ShallowRef,
 } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
 import { isObject } from "@/utils";
 
@@ -24,7 +24,7 @@ export const useProForm = () => {
   // ElForm 实例
   const elFormRef = ref<FormInstance>();
 
-  const { variables } = useDesign();
+  const ns = useNamespace();
 
   const layoutSize = computed(() => useLayoutStore().layoutSize);
 
@@ -179,7 +179,7 @@ export const useProForm = () => {
       const proFormInstance = createVNode(ProForm, { ...proFormProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(
         ElConfigProvider,
-        { namespace: variables.elNamespace, size: unref(layoutSize) },
+        { namespace: ns.elNamespace, size: unref(layoutSize) },
         { default: () => proFormInstance }
       );
       await nextTick();

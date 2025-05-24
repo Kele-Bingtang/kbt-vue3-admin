@@ -82,7 +82,7 @@
 import { appendFieldById, deleteChildren, getNodeById } from "@/utils";
 import { useDetail } from "./hooks";
 import { usePermissionStore, useLayoutStore } from "@/stores";
-import { useLayout } from "@/hooks";
+import { useLayout } from "@/composables";
 import { copyObj } from "@/utils";
 
 const layoutStore = useLayoutStore();

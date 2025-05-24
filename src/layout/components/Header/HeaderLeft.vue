@@ -9,12 +9,12 @@
 import CollapseTrigger from "./components/CollapseTrigger.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
 import { useSettingsStore, useLayoutStore } from "@/stores";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { computed } from "vue";
 import { DeviceEnum } from "@/enums/appEnum";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("header-left");
+const ns = useNamespace("header-left");
+const prefixClass = ns.b();
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();

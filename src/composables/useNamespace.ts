@@ -1,4 +1,5 @@
 import namespaceModule from "./cssModule/namespace.module.scss";
+
 /**
  * 命名空间
  *
@@ -75,6 +76,7 @@ export const useNamespace = (block: string = "", namespaceOverrides?: string) =>
   return {
     namespaceModule,
     namespace: namespaceModule.namespace,
+    elNamespace: namespaceModule.elNamespace,
     b,
     e,
     m,

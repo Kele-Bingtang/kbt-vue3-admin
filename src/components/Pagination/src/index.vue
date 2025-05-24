@@ -23,7 +23,7 @@ export const pageSetting = { pageNum: 1, pageSizes: [10, 20, 50, 100, 200], page
 </script>
 
 <script setup lang="ts">
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 export interface Paging {
   pageNum: number; // 当前页
@@ -42,8 +42,8 @@ export interface PaginationProps {
 
 defineOptions({ name: "Pagination" });
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("pagination");
+const ns = useNamespace("pagination");
+const prefixClass = ns.b();
 
 const props = withDefaults(defineProps<PaginationProps>(), {
   layout: "total, sizes, prev, pager, next, jumper",
@@ -81,8 +81,8 @@ const afterChange = () => {
   emits("pagination", unref(pageObj));
   if (props.autoScroll) {
     nextTick(() => {
-      scrollTo(`${variables.elNamespace}-table__body-wrapper`, 0, 700);
-      scrollTo(`${variables.elNamespace}-main`, 0, 700);
+      scrollTo(`${ns.elNamespace}-table__body-wrapper`, 0, 700);
+      scrollTo(`${ns.elNamespace}-main`, 0, 700);
     });
   }
 };

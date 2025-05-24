@@ -46,12 +46,12 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import Draggable from "vuedraggable";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "DraggableList" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("drag-list");
+const ns = useNamespace("drag-list");
+const prefixClass = ns.b();
 
 export interface DragClass {
   left: string[];

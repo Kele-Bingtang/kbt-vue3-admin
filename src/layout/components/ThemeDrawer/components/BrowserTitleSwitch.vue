@@ -19,14 +19,14 @@
 </template>
 
 <script setup lang="ts" name="BrowserTitleSwitch">
-import { useDesign, useLayout } from "@/hooks";
+import { useNamespace, useLayout } from "@/composables";
 import { useSettingsStore } from "@/stores";
 import { useRoute } from "vue-router";
 import { ElSelect, ElOption } from "element-plus";
 import { useI18n } from "vue-i18n";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("browser-title-switch");
+const ns = useNamespace("browser-title-switch");
+const prefixClass = ns.b();
 
 const { t } = useI18n();
 const route = useRoute();

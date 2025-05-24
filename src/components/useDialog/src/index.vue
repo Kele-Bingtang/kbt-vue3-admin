@@ -15,7 +15,7 @@
       <slot name="header" v-bind="scope">
         <div style="display: flex">
           <slot name="title">
-            <span :class="`${variables.elNamespace}-dialog__title`" style="flex: 1">{{ title }}</span>
+            <span :class="`${ns.elNamespace}-dialog__title`" style="flex: 1">{{ title }}</span>
           </slot>
           <Icon
             v-if="fullscreenIcon"
@@ -23,8 +23,8 @@
             @click="toggleFull"
             width="15px"
             height="15px"
-            :color="`var(--${variables.elNamespace}-color-info)`"
-            :hover-color="`var(--${variables.elNamespace}-color-primary)`"
+            :color="`var(--${ns.elNamespace}-color-info)`"
+            :hover-color="`var(--${ns.elNamespace}-color-primary)`"
             :icon-style="{ cursor: 'pointer' }"
           />
         </div>
@@ -49,12 +49,12 @@ import { ElDialog, ElScrollbar, ElButton, type DialogProps } from "element-plus"
 import { Icon } from "@/components";
 import { nextTick, ref, unref, watch, useSlots, shallowRef } from "vue";
 import { getPx } from "@/utils";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "WorkDialog" });
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("work-dialog");
+const ns = useNamespace("work-dialog");
+const prefixClass = ns.b();
 
 interface WorkDialogProps {
   title?: string; // 顶部标题

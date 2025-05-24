@@ -26,11 +26,11 @@ import SystemConfig from "@/config";
 import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 import { useSettingsStore } from "@/stores";
 import { HOME_URL } from "@/router/routesConfig";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRouter } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("transverse-layout");
+const ns = useNamespace("transverse-layout");
+const prefixClass = ns.b();
 
 const router = useRouter();
 const settingsStore = useSettingsStore();

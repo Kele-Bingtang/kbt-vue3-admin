@@ -50,11 +50,11 @@ import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vu
 import { mittBus } from "@/utils";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox, ElIcon } from "element-plus";
 import { LOGIN_URL } from "@/router/routesConfig";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("user-dropdown");
+const ns = useNamespace("user-dropdown");
+const prefixClass = ns.b();
 
 const prop = withDefaults(defineProps<{ showAvatar?: boolean }>(), {
   showAvatar: true,

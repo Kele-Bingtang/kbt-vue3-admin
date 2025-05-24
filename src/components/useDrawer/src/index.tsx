@@ -12,11 +12,11 @@ import {
 import { ElDrawer, ElButton, type DrawerProps, ElConfigProvider } from "element-plus";
 import { Icon } from "@/components";
 import "./index.scss";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { ConfigGlobalKey } from "@/config/symbols";
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("work-drawer");
+const ns = useNamespace("work-drawer");
+const prefixClass = ns.b();
 
 let id = 0;
 
@@ -73,14 +73,14 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
 
   const toggleFull = () => {
     const elDrawerEl = document.querySelector(
-      `${`#${prefixClass}-${id}`} .${prefixClass}.${variables.elNamespace}-drawer`
+      `${`#${prefixClass}-${id}`} .${prefixClass}.${ns.elNamespace}-drawer`
     ) as HTMLElement;
     if (elDrawerEl) elDrawerEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !unref(isFullscreen);
   };
 
   const vm = (
-    <ElConfigProvider namespace={variables.elNamespace} size={unref(layoutSize)}>
+    <ElConfigProvider namespace={ns.elNamespace} size={unref(layoutSize)}>
       <ElDrawer
         modelValue
         title="弹框"
@@ -101,15 +101,15 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
             if (drawerProps.headerRender) return drawerProps.headerRender();
             return (
               <>
-                <span class={`${variables.elNamespace}-drawer__title`}>{drawerProps.title}</span>
+                <span class={`${ns.elNamespace}-drawer__title`}>{drawerProps.title}</span>
                 {drawerProps.fullscreenIcon !== false && (
                   <Icon
                     name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
                     onClick={() => toggleFull()}
                     width="18px"
                     height="18px"
-                    color={`var(--${variables.elNamespace}-color-info)`}
-                    hover-color={`var(--${variables.elNamespace}-color-primary)`}
+                    color={`var(--${ns.elNamespace}-color-info)`}
+                    hover-color={`var(--${ns.elNamespace}-color-primary)`}
                     icon-style={{ cursor: "pointer" }}
                   />
                 )}

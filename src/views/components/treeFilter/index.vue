@@ -33,10 +33,10 @@
 <script setup lang="ts" name="TreeFilterDemo">
 import { ElMessage } from "element-plus";
 import { TreeFilter } from "@/components";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("tree-filter-demo");
+const ns = useNamespace("tree-filter-demo");
+const prefixClass = ns.b();
 
 interface Tree {
   id: number;

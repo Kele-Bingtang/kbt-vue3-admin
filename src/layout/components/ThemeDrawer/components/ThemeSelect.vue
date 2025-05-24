@@ -28,14 +28,14 @@
 </template>
 
 <script setup lang="ts" name="ThemeSelect">
-import { useDesign, useTheme } from "@/hooks";
+import { useNamespace, useTheme } from "@/composables";
 import { useSettingsStore } from "@/stores";
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import SystemConfig from "@/config";
 import { MenuThemeEnum } from "@/enums/appEnum";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("theme-select");
+const ns = useNamespace("theme-select");
+const prefixClass = ns.b();
 
 const { changePrimary, changeGreyOrWeak, switchDark } = useTheme();
 

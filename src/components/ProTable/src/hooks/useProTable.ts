@@ -14,7 +14,7 @@ import {
   unref,
   type ShallowRef,
 } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
 
 export const useProTable = () => {
@@ -27,7 +27,7 @@ export const useProTable = () => {
   // ElTable 实例
   const searchRef = ref<ProSearchInstance>();
 
-  const { variables } = useDesign();
+  const ns = useNamespace();
 
   const layoutSize = computed(() => useLayoutStore().layoutSize);
 
@@ -262,7 +262,7 @@ export const useProTable = () => {
       const proTableInstance = createVNode(ProTable, { ...proTableProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(
         ElConfigProvider,
-        { namespace: variables.elNamespace, size: unref(layoutSize) },
+        { namespace: ns.elNamespace, size: unref(layoutSize) },
         { default: () => proTableInstance }
       );
       await nextTick();

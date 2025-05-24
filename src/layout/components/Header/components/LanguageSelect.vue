@@ -19,7 +19,7 @@
 <script setup lang="ts" name="LanguageSelect">
 import { computed } from "vue";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus";
-import { useLayout } from "@/hooks";
+import { useLayout } from "@/composables";
 import { useLayoutStore, type LanguageType } from "@/stores";
 import { ElMessage } from "element-plus";
 import { useI18n } from "vue-i18n";

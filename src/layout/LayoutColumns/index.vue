@@ -49,16 +49,16 @@ import { ElContainer, ElAside, ElHeader, ElScrollbar } from "element-plus";
 import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
-import { useLayout } from "@/hooks";
+import { useLayout } from "@/composables";
 import SystemConfig from "@/config";
 import Menu from "@/layout/components/Menu/index.vue";
 import { Tooltip } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("columns-layout");
+const ns = useNamespace("columns-layout");
+const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();

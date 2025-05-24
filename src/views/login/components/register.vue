@@ -62,10 +62,10 @@ import { ElMessage, type FormInstance } from "element-plus";
 import { useVerifyCode } from "../verifyCode";
 import { updateRules } from "../rules";
 import { User, Phone, Lock, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("login");
+const ns = useNamespace("login");
+const prefixClass = ns.b();
 
 const checked = ref(false);
 const loading = ref(false);

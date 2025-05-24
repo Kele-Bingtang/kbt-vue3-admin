@@ -52,7 +52,7 @@ import {
 import { EditorView, keymap, placeholder as placeholderFun, type ViewUpdate } from "@codemirror/view";
 import { MergeView } from "@codemirror/merge";
 import { basicSetup, minimalSetup } from "codemirror";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { getPx } from "@/utils";
 import { ref, shallowRef, computed, type Ref, type ComputedRef, watch, onMounted, nextTick, onUnmounted } from "vue";
 import { FullScreen } from "@element-plus/icons-vue";
@@ -115,8 +115,8 @@ export interface CodeMirrorProps {
 
 defineOptions({ name: "CodeMirror6" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("code-mirror");
+const ns = useNamespace("code-mirror");
+const prefixClass = ns.b();
 
 const props = withDefaults(defineProps<CodeMirrorProps>(), {
   fontSize: 14,

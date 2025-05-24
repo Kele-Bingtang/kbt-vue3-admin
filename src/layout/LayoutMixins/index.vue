@@ -31,17 +31,17 @@ import { computed, watch, ref, unref } from "vue";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useSettingsStore, usePermissionStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
-import { useLayout, useRoutes } from "@/hooks";
+import { useLayout, useRoutes } from "@/composables";
 import SystemConfig from "@/config";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import Menu from "@/layout/components/Menu/index.vue";
 import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 import { HOME_URL } from "@/router/routesConfig";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("mixins-layout");
+const ns = useNamespace("mixins-layout");
+const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();

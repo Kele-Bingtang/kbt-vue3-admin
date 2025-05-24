@@ -179,7 +179,7 @@ import Sortable from "sortablejs";
 import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
 import { Search, Refresh, Plus, Check, EditPen, Delete } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 const defaultTableData = {
   id: "",
@@ -233,7 +233,7 @@ const statusOptions = [
 ];
 const priorityOptions = [1, 2, 3, 4, 5];
 
-const { variables } = useDesign();
+const ns = useNamespace();
 const dialogTitle: Record<string, string> = {
   look: "查看",
   edit: "编辑",
@@ -288,7 +288,7 @@ onMounted(() => {
 
 const rowDrop = () => {
   const el = tableRef.value.el.$el.querySelector(
-    `.${variables.elNamespace}-table__body-wrapper .${variables.elNamespace}-scrollbar__view > table > tbody`
+    `.${ns.elNamespace}-table__body-wrapper .${ns.elNamespace}-scrollbar__view > table > tbody`
   ) as HTMLElement;
   sortable.value = Sortable.create(el, {
     ghostClass: "sortable-ghost",

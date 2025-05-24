@@ -32,10 +32,10 @@ import { ElIcon } from "element-plus";
 import type { TabProp } from "@/stores";
 import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
 import { Refresh, Close, ArrowLeft, ArrowRight, SemiSelect, FolderDelete } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("right-menu");
+const ns = useNamespace("right-menu");
+const prefixClass = ns.b();
 
 const { refreshSelectedTab, closeCurrentTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } =
   useTabsNav();

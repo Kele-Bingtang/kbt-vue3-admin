@@ -14,7 +14,7 @@
             </el-card>
           </template>
           <template #leftIcon>
-            <el-icon :style="`color: var(--${variables.elNamespace}-color-primary)`"><ArrowRight /></el-icon>
+            <el-icon :style="`color: var(--${ns.elNamespace}-color-primary)`"><ArrowRight /></el-icon>
           </template>
 
           <template #rightTitle>
@@ -26,7 +26,7 @@
             </el-card>
           </template>
           <template #rightIcon>
-            <el-icon :style="`color: var(--${variables.elNamespace}-color-primary)`"><ArrowLeft /></el-icon>
+            <el-icon :style="`color: var(--${ns.elNamespace}-color-primary)`"><ArrowLeft /></el-icon>
           </template>
         </DraggableList>
       </div>
@@ -79,10 +79,10 @@ import { DraggableList } from "@/components";
 import type { DragClass } from "@/components/DraggableList/src/index.vue";
 import { list1, list2 } from "@/mock/drag-list";
 import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("draggable-list-demo");
+const ns = useNamespace("draggable-list-demo");
+const prefixClass = ns.b();
 
 const listData1 = ref(list1);
 const listData2 = ref(list2);
@@ -105,7 +105,7 @@ $prefix-class: #{$admin-namespace}-draggable-list-demo;
 .#{$prefix-class} {
   width: 100%;
   height: 100%;
-  padding: 20;
+  padding: 20px;
 
   &__card {
     width: 100%;

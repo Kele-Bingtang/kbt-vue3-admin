@@ -65,10 +65,10 @@
 
 <script setup lang="ts" name="DragDrawerDemo">
 import { DragDrawer } from "@/components";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("darg-drawer-demo");
+const ns = useNamespace("darg-drawer-demo");
+const prefixClass = ns.b();
 
 const visible1 = ref(false);
 const visible2 = ref(false);

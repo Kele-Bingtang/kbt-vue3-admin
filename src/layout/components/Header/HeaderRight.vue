@@ -26,12 +26,12 @@ import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
 import SystemConfig from "@/config";
 import { useErrorLogStore, useLayoutStore } from "@/stores";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { computed } from "vue";
 import { DeviceEnum } from "@/enums/appEnum";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("header-right");
+const ns = useNamespace("header-right");
+const prefixClass = ns.b();
 
 const layoutStore = useLayoutStore();
 const errorLogStore = useErrorLogStore();

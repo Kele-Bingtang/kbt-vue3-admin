@@ -1,6 +1,6 @@
 import { NProgress } from "@/utils";
 import SystemConfig from "@/config";
-import { useRoutes } from "@/hooks";
+import { useRoutes } from "@/composables";
 import { usePermissionStore, useUserStore } from "@/stores";
 import {
   createRouter,

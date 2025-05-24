@@ -1,6 +1,6 @@
 import SystemConfig from "@/config";
 import type { TabProp } from "@/stores";
-import { useStorage } from "@/hooks";
+import { useStorage } from "@/composables";
 
 export const useCache = () => {
   const { getStorage, setStorage, removeStorage, removeStorages } = useStorage("localStorage");

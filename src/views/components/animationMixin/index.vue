@@ -69,7 +69,7 @@
           <div class="component-item">
             <TextHoverEffect
               init-color="#4dd9d5"
-              :hover-color="`var(--${variables.elNamespace}-color-primary)`"
+              :hover-color="`var(--${ns.elNamespace}-color-primary)`"
               text="kbt-vue-admin"
             />
           </div>
@@ -83,10 +83,10 @@
 import { MaterialInput, TextHoverEffect } from "@/components";
 import Button from "./button.vue";
 import { Search } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("animation-mixin");
+const ns = useNamespace("animation-mixin");
+const prefixClass = ns.b();
 
 const demo = reactive({
   title: "",
@@ -161,9 +161,9 @@ $prefix-class: #{$admin-namespace}-animation-mixin;
     padding: 14px 36px;
     font-size: 14px;
     color: #ffffff;
+    outline: none;
     border: none;
     border-radius: 8px;
-    outline: none;
     transition: 600ms ease all;
 
     &:hover {

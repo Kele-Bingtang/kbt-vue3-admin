@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from "@/hooks";
+import { useTheme } from "@/composables";
 import { useSettingsStore } from "@/stores";
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { ElSwitch } from "element-plus";

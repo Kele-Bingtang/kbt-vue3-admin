@@ -36,7 +36,7 @@
         </div>
       </template>
     </el-upload>
-    <div :class="`${variables.elNamespace}-upload__tip`">
+    <div :class="`${ns.elNamespace}-upload__tip`">
       <slot name="tip"></slot>
     </div>
     <el-image-viewer v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[viewImageUrl]" />
@@ -58,12 +58,12 @@ import {
   type UploadRequestOptions,
 } from "element-plus";
 import { inject, computed, ref } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "ImagesUpload" });
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("images-upload");
+const ns = useNamespace("images-upload");
+const prefixClass = ns.b();
 
 export type SuccessFun = (response: string) => void;
 

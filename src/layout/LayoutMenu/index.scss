@@ -1,4 +1,4 @@
-@use "@/styles/namespace.scss" as *;
+@use "@/styles/mixins/namespace" as *;
 @use "@/styles/mixins/function.scss" as *;
 
 $prefix-class: #{$admin-namespace}-menu-layout;

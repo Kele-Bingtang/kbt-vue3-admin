@@ -67,7 +67,7 @@
 
 <script setup lang="tsx" name="SimpleProTable">
 import { ProTable, type TableColumnProps, type ProTableInstance } from "@/components";
-import { useHandleData, usePermission } from "@/hooks";
+import { useHandleData, usePermission } from "@/composables";
 import { ElButton, ElInput, ElMessage, ElMessageBox, ElSwitch, ElTag, type TableColumnCtx } from "element-plus";
 import { tableData } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";

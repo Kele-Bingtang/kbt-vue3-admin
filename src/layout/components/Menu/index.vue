@@ -18,7 +18,7 @@
 <script setup lang="ts" name="Menu">
 import { ElScrollbar, ElMenu } from "element-plus";
 import { computed } from "vue";
-import { useLayout } from "@/hooks";
+import { useLayout } from "@/composables";
 import { usePermissionStore, useSettingsStore } from "@/stores";
 import MenuItem from "@/layout/components/Menu/MenuItem.vue";
 import { useRoute } from "vue-router";

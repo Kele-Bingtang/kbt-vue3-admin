@@ -1,6 +1,6 @@
 import { defineStore } from "pinia";
 import type { UserInfo } from ".";
-import { useRoutes } from "@/hooks";
+import { useRoutes } from "@/composables";
 import { resetRouter } from "@/router";
 import { useLayoutStore } from "./layout";
 import { ref } from "vue";

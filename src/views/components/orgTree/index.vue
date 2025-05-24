@@ -103,10 +103,10 @@
 
 <script setup lang="ts" name="OrgTreeDemo">
 import { ElMessage } from "element-plus";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("org-tree-demo");
+const ns = useNamespace("org-tree-demo");
+const prefixClass = ns.b();
 
 const treeRef = ref();
 const data = ref({

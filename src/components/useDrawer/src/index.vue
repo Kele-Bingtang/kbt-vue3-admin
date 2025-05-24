@@ -11,7 +11,7 @@
       <slot name="header" v-bind="scope">
         <div style="display: flex">
           <slot name="title">
-            <span :class="`${variables.elNamespace}-drawer__title`" style="flex: 1">{{ title }}</span>
+            <span :class="`${ns.elNamespace}-drawer__title`" style="flex: 1">{{ title }}</span>
           </slot>
           <Icon
             v-if="fullscreenIcon"
@@ -19,8 +19,8 @@
             @click="toggleFull"
             width="18px"
             height="18px"
-            :color="`var(--${variables.elNamespace}-color-info)`"
-            :hover-color="`var(--${variables.elNamespace}-color-primary)`"
+            :color="`var(--${ns.elNamespace}-color-info)`"
+            :hover-color="`var(--${ns.elNamespace}-color-primary)`"
             :icon-style="{ cursor: 'pointer' }"
           />
         </div>
@@ -42,12 +42,12 @@
 import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
 import { ref, unref, shallowRef } from "vue";
 import { Icon } from "@/components";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "WorkDrawer" });
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("work-drawer");
+const ns = useNamespace("work-drawer");
+const prefixClass = ns.b();
 
 interface WorkDrawerProps {
   title?: string; // 顶部标题

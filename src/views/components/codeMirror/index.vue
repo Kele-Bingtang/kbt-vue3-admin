@@ -67,7 +67,7 @@
 
         <el-alert :closable="false">
           如果需要开启编辑功能，则传入 `
-          <span :style="`color: var(--${variables.elNamespace}-color-primary)`">enabled: ['a', 'b']</span>
+          <span :style="`color: var(--${ns.elNamespace}-color-primary)`">enabled: ['a', 'b']</span>
           ，代表 a、b 编辑器开启编辑功能，传入 a 则 a 开启编辑功能
         </el-alert>
       </el-space>
@@ -269,9 +269,9 @@ import { sql } from "@codemirror/lang-sql";
 import { xml } from "@codemirror/lang-xml";
 import oldDoc from "../codeDiffEditor/oldDoc.json";
 import newDoc from "../codeDiffEditor/newDoc.json";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { variables } = useDesign();
+const ns = useNamespace();
 
 const code = ref('const a = "codeMirror"\nconst b = "kbt"\n\n\n\n\n\n\n\n\n\nconst getCode = () => "useCodeMirror"');
 const theme = ref("default");

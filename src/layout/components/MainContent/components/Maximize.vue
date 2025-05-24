@@ -8,10 +8,10 @@
 import { ElIcon } from "element-plus";
 import { useSettingsStore } from "@/stores";
 import { Close } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("maximize");
+const ns = useNamespace("maximize");
+const prefixClass = ns.b();
 
 const settingsStore = useSettingsStore();
 

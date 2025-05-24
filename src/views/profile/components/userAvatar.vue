@@ -33,10 +33,10 @@
 import type { UserInfo } from "@/stores";
 import { Cropper } from "@/components";
 import defaultAvatar from "@/assets/images/default.png";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("user-avatar");
+const ns = useNamespace("user-avatar");
+const prefixClass = ns.b();
 
 const props = defineProps<{ user: UserInfo }>();
 const { user } = toRefs(props);

@@ -43,13 +43,13 @@
 
 <script setup lang="ts" name="TabsNavSwitch">
 import { TabsNavModeEnum } from "@/enums/appEnum";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
 import { CircleCheckFilled, Menu, Close, HomeFilled } from "@element-plus/icons-vue";
 import { ElIcon } from "element-plus";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("tabs-nav-switch");
+const ns = useNamespace("tabs-nav-switch");
+const prefixClass = ns.b();
 
 const settingsStore = useSettingsStore();
 

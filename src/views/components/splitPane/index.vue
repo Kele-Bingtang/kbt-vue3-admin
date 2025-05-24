@@ -30,10 +30,10 @@
 
 <script setup lang="ts" name="SplitPaneDemo">
 import { SplitPane } from "@/components";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("split-pane-demo");
+const ns = useNamespace("split-pane-demo");
+const prefixClass = ns.b();
 
 /**
  * SplitPane 接收的插槽位置为 left、right、top、bottom，即 <div slot="left/right/top/bottom">位置</div>

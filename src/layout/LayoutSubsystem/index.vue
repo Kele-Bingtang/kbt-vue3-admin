@@ -31,7 +31,7 @@
 <script setup lang="ts" name="LayoutSubsystem">
 import { computed, watch, onBeforeMount, onBeforeUnmount, unref } from "vue";
 import { ElContainer, ElAside } from "element-plus";
-import { useLayout } from "@/hooks";
+import { useLayout } from "@/composables";
 import { useLayoutStore, useSettingsStore, useErrorLogStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
@@ -44,12 +44,12 @@ import ErrorLog from "@/layout/components/Header/components/ErrorLog.vue";
 import User from "@/layout/components/Header/components/User.vue";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import { HOME_URL } from "@/router/routesConfig";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 import { DeviceEnum } from "@/enums/appEnum";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("subsystem-layout");
+const ns = useNamespace("subsystem-layout");
+const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();

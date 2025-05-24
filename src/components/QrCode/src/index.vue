@@ -3,7 +3,7 @@
     <canvas ref="wrapRef" @click="clickCode" v-if="props.tag === 'canvas'"></canvas>
     <img v-else ref="wrapRef" @click="clickCode" />
     <div v-if="props.disabled" :class="`${prefixClass}--disabled`" @click="disabledClick">
-      <div :class="`${prefixClass}__icon`" :color="`var(--${variables.elNamespace}-color-primary)`">
+      <div :class="`${prefixClass}__icon`" :color="`var(--${ns.elNamespace}-color-primary)`">
         <el-icon style="cursor: pointer" :size="30"><RefreshRight /></el-icon>
         <div>{{ props.disabledText }}</div>
       </div>
@@ -16,12 +16,12 @@ import QRCode, { type QRCodeRenderersOptions } from "qrcode";
 import { isString } from "@/utils";
 import { RefreshRight } from "@element-plus/icons-vue";
 import { ref, computed, nextTick, unref, watch } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "QrCode" });
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("qrcode");
+const ns = useNamespace("qrcode");
+const prefixClass = ns.b();
 
 interface QrCodeLogo {
   src?: string;

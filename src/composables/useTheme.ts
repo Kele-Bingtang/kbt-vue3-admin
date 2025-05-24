@@ -3,14 +3,14 @@ import SystemConfig from "@/config";
 import { ElMessage } from "element-plus";
 import { useSettingsStore } from "@/stores";
 import { toRaw } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 /**
  * @description 切换主题
  * */
 export const useTheme = () => {
   const settingsStore = useSettingsStore();
-  const { variables } = useDesign();
+  const ns = useNamespace();
 
   // 切换暗黑模式
   const switchDark = () => {
@@ -31,9 +31,9 @@ export const useTheme = () => {
       primaryTheme: value,
     });
     // 为了兼容暗黑模式下主题颜色也正常，以下方法计算主题颜色 由深到浅 的具体颜色
-    setStyleVar(`--${variables.elNamespace}-color-primary`, settingsStore.primaryTheme);
+    setStyleVar(`--${ns.elNamespace}-color-primary`, settingsStore.primaryTheme);
     setStyleVar(
-      `--${variables.elNamespace}-color-primary-dark-2`,
+      `--${ns.elNamespace}-color-primary-dark-2`,
       settingsStore.isDark
         ? `${getLightColor(settingsStore.primaryTheme, 0.2)}`
         : `${getDarkColor(settingsStore.primaryTheme, 0.3)}`
@@ -41,7 +41,7 @@ export const useTheme = () => {
     // 颜色加深或变浅
     for (let i = 1; i <= 9; i++) {
       setStyleVar(
-        `--${variables.elNamespace}-color-primary-light-${i}`,
+        `--${ns.elNamespace}-color-primary-light-${i}`,
         settingsStore.isDark
           ? `${getDarkColor(settingsStore.primaryTheme, i / 10)}`
           : `${getLightColor(settingsStore.primaryTheme, i / 10)}`
@@ -69,11 +69,11 @@ export const useTheme = () => {
     if (settingsStore.isWeak) changeGreyOrWeak(true, "weak");
 
     // 修改 EP 默认色调
-    setStyleVar(`--${variables.elNamespace}-color-success`, "#0bb449");
-    setStyleVar(`--${variables.elNamespace}-color-warning`, "#fa9014");
-    setStyleVar(`--${variables.elNamespace}-color-danger`, "#ef4a38");
-    setStyleVar(`--${variables.elNamespace}-color-error`, "#ef4a38");
-    setStyleVar(`--${variables.elNamespace}-color-info`, "#909399");
+    setStyleVar(`--${ns.elNamespace}-color-success`, "#0bb449");
+    setStyleVar(`--${ns.elNamespace}-color-warning`, "#fa9014");
+    setStyleVar(`--${ns.elNamespace}-color-danger`, "#ef4a38");
+    setStyleVar(`--${ns.elNamespace}-color-error`, "#ef4a38");
+    setStyleVar(`--${ns.elNamespace}-color-info`, "#909399");
   };
 
   return {

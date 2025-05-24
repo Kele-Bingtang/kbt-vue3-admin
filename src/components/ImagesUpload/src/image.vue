@@ -61,12 +61,12 @@ import {
 } from "element-plus";
 import { Edit, ZoomIn, Delete, Plus } from "@element-plus/icons-vue";
 import { ref, inject, computed } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "ImgUpload" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("image-upload");
+const ns = useNamespace("image-upload");
+const prefixClass = ns.b();
 
 export type SuccessFun = (response: string) => void;
 

@@ -70,10 +70,10 @@
 import { useMessageStore, type MessageItem } from "@/stores";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Delete, RefreshLeft } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("message-center");
+const ns = useNamespace("message-center");
+const prefixClass = ns.b();
 
 type MessageType = "unread" | "hasRead" | "recycle";
 
@@ -284,8 +284,8 @@ $prefix-class: #{$admin-namespace}-message-center;
         }
 
         .list-operate {
-          align-items: normal;
           float: right;
+          align-items: normal;
           padding-top: 3px;
           margin-right: 17px;
         }

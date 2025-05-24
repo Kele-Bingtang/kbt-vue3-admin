@@ -27,12 +27,12 @@ import attachmentModule from "@wangeditor/plugin-upload-attachment"; // wangedit
 import "@wangeditor/editor/dist/css/style.css";
 import { toolbarKeys as toolbarKeysConfig } from "./config";
 import { onMounted, watch, onBeforeUnmount, unref, computed, shallowRef, reactive } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "WangEditor" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("wang-editor");
+const ns = useNamespace("wang-editor");
+const prefixClass = ns.b();
 
 export type ImageInsertFnType = (url: string, alt: string) => void;
 export type VideoInsertFnType = (url: string, poster: string) => void;

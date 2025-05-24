@@ -33,7 +33,7 @@
 
 <script setup lang="ts" name="treeFilterProTable">
 import { ProTable, TreeFilter, type TableColumnProps, type ProTableInstance } from "@/components";
-import { useHandleData } from "@/hooks";
+import { useHandleData } from "@/composables";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { genderType, tableData, userStatus, department } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";

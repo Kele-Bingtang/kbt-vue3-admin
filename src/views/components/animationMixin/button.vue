@@ -34,10 +34,10 @@
 </template>
 
 <script setup lang="ts" name="CustomButton">
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("custom-button");
+const ns = useNamespace("custom-button");
+const prefixClass = ns.b();
 </script>
 
 <style lang="scss" scoped>
@@ -169,9 +169,9 @@ $prefix-class: #{$admin-namespace}-custom-button;
     height: 44px;
     margin: 15px;
     line-height: 44px;
+    vertical-align: top;
     color: #ffffff;
     text-align: center;
-    vertical-align: top;
     cursor: pointer;
     border-radius: 4px;
   }
@@ -218,8 +218,8 @@ $prefix-class: #{$admin-namespace}-custom-button;
     height: 42px;
     overflow: hidden;
     line-height: 42px;
-    color: #2194e0;
     vertical-align: top;
+    color: #2194e0;
     border: 1px solid #2194e0;
     opacity: 1;
     transition: all 0.2s ease-in-out;
@@ -234,8 +234,8 @@ $prefix-class: #{$admin-namespace}-custom-button;
     height: 100%;
     content: "";
     background-color: rgb(255 255 255 / 50%);
-    transition: none;
     transform: skewX(-45deg) translateX(0);
+    transition: none;
   }
 
   .golang:hover {
@@ -244,8 +244,8 @@ $prefix-class: #{$admin-namespace}-custom-button;
   }
 
   .golang:hover::before {
-    transition: all 0.5s ease-in-out;
     transform: skewX(-45deg) translateX(260px);
+    transition: all 0.5s ease-in-out;
   }
 
   .golang:active {
@@ -295,11 +295,11 @@ $prefix-class: #{$admin-namespace}-custom-button;
     border-top: none;
     border-right: none;
     opacity: 0;
+    transform: rotate(-140deg);
     transition:
       opacity 0.5s,
       top 0.5s,
       right 0.5s;
-    transform: rotate(-140deg);
   }
 
   .js:hover span,
@@ -313,11 +313,11 @@ $prefix-class: #{$admin-namespace}-custom-button;
     right: 0;
     border-color: #00cc55;
     opacity: 1;
+    transform: rotate(-140deg);
     transition:
       opacity 0.5s,
       top 0.5s,
       right 0.5s;
-    transform: rotate(-140deg);
   }
 
   .nodd-ruby {
@@ -527,9 +527,9 @@ $prefix-class: #{$admin-namespace}-custom-button;
     left: -35%;
     width: 0;
     height: 100%;
-    transition-duration: 0.6s;
     transform: skew(50deg);
     transform-origin: top left;
+    transition-duration: 0.6s;
   }
 
   .php-5:hover::after {

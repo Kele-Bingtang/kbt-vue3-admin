@@ -5,7 +5,7 @@ import { Filter } from "@element-plus/icons-vue";
 import { lastProp } from "../../helper";
 import { computed, inject, withModifiers } from "vue";
 import { isEmpty } from "@/utils";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 export const useHeaderFilter = (column: TableColumnProps) => {
   const filterProps = inject(filterKey);
@@ -75,6 +75,7 @@ export const useHeaderFilter = (column: TableColumnProps) => {
 
     const { filterConfig = {} } = column;
     const { width, trigger } = filterConfig;
+    const ns = useNamespace();
 
     return (
       <ElPopover {...filterConfig} width={width || 230} trigger={trigger || "click"}>
@@ -83,7 +84,7 @@ export const useHeaderFilter = (column: TableColumnProps) => {
             <ElIcon
               style="vertical-align: -2px; margin-left: 2px; cursor: pointer;"
               class="theme-color-hover"
-              color={!propIsEmpty() ? `var(--${useDesign().variables.elNamespace}-color-primary)` : "inherit"}
+              color={!propIsEmpty() ? `var(--${ns.elNamespace}-color-primary)` : "inherit"}
               onClick={withModifiers(() => {}, ["stop"])}
             >
               <Filter />

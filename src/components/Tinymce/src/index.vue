@@ -44,12 +44,12 @@ import "tinymce/plugins/wordcount"; // 右下角统计字数，https://www.tiny.
 import "tinymce/models/dom";
 import { plugins, toolbar as toolbarConfig } from "./config";
 import "/public/tinymce/plugins/axupimgs/plugin";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "Tinymce" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("tinymce");
+const ns = useNamespace("tinymce");
+const prefixClass = ns.b();
 
 export type UITheme = "default" | "dark" | "tinymce-5" | "tinymce-5-dark";
 export type ContentTheme = "" | "default" | "dark" | "document" | "tinymce-5" | "tinymce-5-dark";

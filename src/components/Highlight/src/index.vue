@@ -1,8 +1,8 @@
 <script lang="tsx">
 import { defineComponent, type PropType, computed, h, unref } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { variables } = useDesign();
+const ns = useNamespace();
 
 export default defineComponent({
   name: "Highlight",
@@ -17,7 +17,7 @@ export default defineComponent({
     },
     color: {
       type: String,
-      default: `var(--${variables.elNamespace}-color-primary)`,
+      default: `var(--${ns.elNamespace}-color-primary)`,
     },
   },
 

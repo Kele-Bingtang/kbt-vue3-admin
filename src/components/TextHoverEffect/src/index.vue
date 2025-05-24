@@ -10,12 +10,12 @@
 
 <script setup lang="ts">
 import { onMounted } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "TextHoverEffect" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("link-hover");
+const ns = useNamespace("link-hover");
+const prefixClass = ns.b();
 
 interface TextHoverEffectProps {
   className?: string;
@@ -70,10 +70,10 @@ $prefix-class: #{$admin-namespace}-link-hover;
     margin: -3px 0 0;
     content: "";
     background: var(--theme-color);
+    transform: translate3d(-100%, 0, 0);
     transition: -webkit-transform 0.4s;
     transition: transform 0.4s;
     transition-timing-function: cubic-bezier(0.7, 0, 0.3, 1);
-    transform: translate3d(-100%, 0, 0);
   }
 
   span {
@@ -110,9 +110,9 @@ $prefix-class: #{$admin-namespace}-link-hover;
   }
 
   &:hover span::before {
+    transform: translate3d(0, 0, 0);
     transition-delay: 0.3s;
     transition-timing-function: cubic-bezier(0.2, 1, 0.3, 1);
-    transform: translate3d(0, 0, 0);
   }
 }
 </style>

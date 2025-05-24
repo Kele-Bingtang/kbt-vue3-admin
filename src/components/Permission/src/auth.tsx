@@ -1,5 +1,5 @@
 import { defineComponent, Fragment } from "vue";
-import { usePermission } from "@/hooks";
+import { usePermission } from "@/composables";
 
 export default defineComponent({
   name: "Auth",

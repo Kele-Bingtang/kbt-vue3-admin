@@ -61,10 +61,10 @@ import SystemConfig from "@/config";
 import { ImageVerifyCode } from "@/components";
 import { HOME_URL } from "@/router/routesConfig";
 import { User, Lock, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("login");
+const ns = useNamespace("login");
+const prefixClass = ns.b();
 
 interface LoginForm {
   username: string;

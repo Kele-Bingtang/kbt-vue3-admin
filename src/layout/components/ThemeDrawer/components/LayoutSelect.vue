@@ -57,12 +57,12 @@
 
 <script setup lang="ts" name="LayoutSelect">
 import { DeviceEnum } from "@/enums/appEnum";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useSettingsStore, useLayoutStore } from "@/stores";
 import { computed } from "vue";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("layout-select");
+const ns = useNamespace("layout-select");
+const prefixClass = ns.b();
 
 const settingsStore = useSettingsStore();
 const layoutStore = useLayoutStore();

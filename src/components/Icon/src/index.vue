@@ -37,12 +37,12 @@ import type { IconType } from "./iconType";
 import type { IconifyIcon } from "@iconify/vue";
 import { useAttrs, computed, type Component, toRaw } from "vue";
 import { ElIcon } from "element-plus";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "Icon" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("icon");
+const ns = useNamespace("icon");
+const prefixClass = ns.b();
 
 type IconTypes = string | Object | IconifyIcon | Component;
 

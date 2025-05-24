@@ -49,13 +49,13 @@
 
 <script setup lang="ts" name="MenuSwitch">
 import { MenuThemeEnum } from "@/enums/appEnum";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { ElIcon } from "element-plus";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("aside-header-switch");
+const ns = useNamespace("aside-header-switch");
+const prefixClass = ns.b();
 
 defineProps<{
   useAll?: boolean;

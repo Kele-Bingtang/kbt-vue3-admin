@@ -1,5 +1,5 @@
 import { defineStore } from "pinia";
-import { useRoutes } from "@/hooks";
+import { useRoutes } from "@/composables";
 import { constantRoutes, errorRouter, HOME_NAME, notFoundRouter } from "@/router/routesConfig";
 import { ref, computed, unref } from "vue";
 

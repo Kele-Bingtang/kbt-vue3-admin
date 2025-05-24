@@ -1,7 +1,0 @@
-@use "../namespace.scss" as *;
-
-:export {
-  // 命名空间
-  namespace: $admin-namespace;
-  elNamespace: $el-namespace;
-}

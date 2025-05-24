@@ -33,11 +33,11 @@ import Menu from "@/layout/components/Menu/index.vue";
 import SystemConfig from "@/config";
 import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
 import { HOME_URL } from "@/router/routesConfig";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRouter } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("classic-layout");
+const ns = useNamespace("classic-layout");
+const prefixClass = ns.b();
 
 const router = useRouter();
 const settingsStore = useSettingsStore();

@@ -99,7 +99,7 @@ import { mittBus } from "@/utils";
 import { useI18n } from "vue-i18n";
 import { ElMessage } from "element-plus";
 import { Notification, Menu, ColdDrink, Setting, Box, Refresh } from "@element-plus/icons-vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import {
   LayoutSwitch,
   AsideHeaderSwitch,
@@ -110,8 +110,8 @@ import {
 } from "./components";
 import { DeviceEnum, LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("theme-drawer");
+const ns = useNamespace("theme-drawer");
+const prefixClass = ns.b();
 
 const layoutStore = useLayoutStore();
 

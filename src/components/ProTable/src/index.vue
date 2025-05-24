@@ -145,13 +145,13 @@ import TableMain from "./components/TableMain.vue";
 import TableMainHeader, { type CustomTableSize, type ElTableSize } from "./components/TableMainHeader.vue";
 import DialogFormComponent, { type DialogFormProps } from "./components/DialogForm.vue";
 import Sortable from "sortablejs";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { type FormInstance, type TableInstance, type TableProps } from "element-plus";
 
 defineOptions({ name: "ProTable" });
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("pro-table");
+const ns = useNamespace("pro-table");
+const prefixClass = ns.b();
 
 provide(proTablePrefixClassKey, prefixClass);
 
@@ -182,7 +182,7 @@ export interface ProTableProps extends /* @vue-ignore */ Partial<Omit<TableProps
   // 搜索模式，search 使用 ProSearch 组件，filter 开启表格筛选功能，useFilter 启用所有表格筛选功能，不管也没有配置 search。all 两个都使用。allAndUseFilter 两个都使用的同时，默认启用所有表格筛选功能
   searchModel?: "search" | "filter" | "useFilter" | "all" | "allAndUseFilter";
   filterRule?: "front" | "back"; // 过滤规则：前端筛选还是后端筛选，默认后端筛选
-  filterAlData?: boolean; // 是否基于全部数据还是当前表格数据过滤（如分页），true 则基于全部数据，false 则基于当前表格数据
+  filterAllData?: boolean; // 是否基于全部数据还是当前表格数据过滤（如分页），true 则基于全部数据，false 则基于当前表格数据
   editRow?: number; // 允许最大编辑的行数，默认 undefined，没有限制
   rowClickEdit?: boolean; // 单击行激活行内编辑
   dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
@@ -639,7 +639,7 @@ const _reset = (model: Record<string, any>) => {
 
 // 拖拽排序
 const dragSort = () => {
-  const tbody = document.querySelector(`.${variables.elNamespace}-table__body-wrapper tbody`) as HTMLElement;
+  const tbody = document.querySelector(`.${ns.elNamespace}-table__body-wrapper tbody`) as HTMLElement;
   tbody &&
     Sortable.create(tbody, {
       handle: ".move",

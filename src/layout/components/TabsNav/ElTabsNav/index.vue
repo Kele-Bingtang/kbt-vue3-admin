@@ -42,11 +42,11 @@ import { useSettingsStore } from "@/stores";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
 import MenuButton from "../components/MenuDropdown.vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("tabs-nav");
+const ns = useNamespace("tabs-nav");
+const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();
@@ -71,7 +71,7 @@ const tabsNavValue = ref(resolveFullPath(route));
 const tabsNavRef = ref<HTMLElement>(); // 根标签
 
 onMounted(() => {
-  tabsDrop(`.${variables.elNamespace}-tabs__nav`, `.${variables.elNamespace}-tabs__item`);
+  tabsDrop(`.${ns.elNamespace}-tabs__nav`, `.${ns.elNamespace}-tabs__item`);
   initTabs();
   addOneTab();
 });

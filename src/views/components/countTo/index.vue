@@ -278,10 +278,10 @@
 
 <script setup lang="ts" name="CountToDemo">
 import { CountTo } from "@/components";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("count-to-demo");
+const ns = useNamespace("count-to-demo");
+const prefixClass = ns.b();
 
 const customUnit = [
   { value: 3, label: "千多" },

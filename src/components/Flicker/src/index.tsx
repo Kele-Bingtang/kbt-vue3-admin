@@ -1,9 +1,9 @@
 import { defineComponent, h } from "vue";
 import "./index.scss";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass, variables } = useDesign();
-const prefixClass = getPrefixClass("point-flicker");
+const ns = useNamespace("point-flicker");
+const prefixClass = ns.b();
 
 export interface attrsType {
   width?: string; // 可选 string 宽
@@ -27,7 +27,7 @@ export const useFlicker = (attrs?: attrsType): Component => {
           style: {
             "--point-width": attrs?.width ?? "12px",
             "--point-height": attrs?.height ?? "12px",
-            "--point-background": attrs?.background ?? `var(--${variables.elNamespace}-color-primary)`,
+            "--point-background": attrs?.background ?? `var(--${ns.elNamespace}-color-primary)`,
             "--point-border-radius": attrs?.borderRadius ?? "50%",
             "--point-scale": attrs?.scale ?? "2",
           },

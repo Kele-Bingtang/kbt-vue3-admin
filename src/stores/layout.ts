@@ -4,7 +4,7 @@ import { useSettingsStore } from "./settings";
 import SystemConfig from "@/config";
 import type { Frame } from "@/layout/components/FrameLayout/useFrame";
 import { ref, watch } from "vue";
-import { useCache } from "@/hooks";
+import { useCache } from "@/composables";
 import { DeviceEnum } from "@/enums/appEnum";
 
 export const useLayoutStore = defineStore(

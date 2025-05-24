@@ -105,10 +105,10 @@
 <script setup lang="ts" name="UserCard">
 import type { UserInfo } from "@/stores";
 import defaultAvatar from "@/assets/images/default.png";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("user-card");
+const ns = useNamespace("user-card");
+const prefixClass = ns.b();
 
 const props = defineProps<{ user: UserInfo }>();
 

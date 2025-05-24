@@ -94,10 +94,10 @@ import { ElPopover, ElTabs, ElTabPane, ElScrollbar, ElButton, ElBadge, ElTag } f
 import { useMessageStore } from "@/stores";
 import SystemConfig from "@/config";
 import { Tooltip } from "@/components";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("message-notice");
+const ns = useNamespace("message-notice");
+const prefixClass = ns.b();
 
 interface Notice {
   id: string;

@@ -12,12 +12,12 @@
 <script setup lang="ts">
 import { useRouter } from "vue-router";
 import { HOME_URL } from "@/router/routesConfig";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "403" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("error-page");
+const ns = useNamespace("error-page");
+const prefixClass = ns.b();
 
 const router = useRouter();
 </script>

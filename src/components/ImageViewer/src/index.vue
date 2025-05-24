@@ -1,5 +1,5 @@
 <template>
-  <ElConfigProvider :namespace="variables.elNamespace" :size="layoutSize">
+  <ElConfigProvider :namespace="ns.elNamespace" :size="layoutSize">
     <ElImageViewer v-if="visible" v-bind="bindValue" @close="close" />
   </ElConfigProvider>
 </template>
@@ -7,12 +7,12 @@
 <script setup lang="ts">
 import { ElImageViewer, ElConfigProvider } from "element-plus";
 import { computed } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
 
 defineOptions({ name: "ImageViewer" });
 
-const { variables } = useDesign();
+const ns = useNamespace();
 
 export interface ImageViewerProps {
   urlList?: string[];

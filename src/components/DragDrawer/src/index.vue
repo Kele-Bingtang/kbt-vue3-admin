@@ -34,12 +34,12 @@
 import DragDrawerTrigger from "./DragDrawerTrigger.vue";
 import { computed, onBeforeUnmount, onMounted, ref, unref, type StyleValue } from "vue";
 import { ElDrawer } from "element-plus";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "DragDrawer" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("drag-drawer");
+const ns = useNamespace("drag-drawer");
+const prefixClass = ns.b();
 
 interface DragDrawerProps {
   placement?: string; // 抽屉打开位置

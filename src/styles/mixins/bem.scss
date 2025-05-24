@@ -1,6 +1,6 @@
-// From ElementPlus
-@use "./config" as *;
-@use "./function" as *;
+@use "namespace" as *;
+@use "function" as *;
+@use "element-plus/theme-chalk/src/mixins/config.scss" as *;
 @use "sass:string";
 
 $B: null;
@@ -8,7 +8,7 @@ $E: null;
 
 /* Block 块 */
 @mixin b($block) {
-  $B: $namespace + $common-separator + $block !global;
+  $B: $admin-namespace + $common-separator + $block !global;
 
   .#{$B} {
     @content;
@@ -17,7 +17,7 @@ $E: null;
 
 /* 多个 Block 块 */
 @mixin multiple-b($block) {
-  $B: $namespace + $common-separator !global;
+  $B: $admin-namespace + $common-separator !global;
   $elector: "";
   /* 拼接逗号 */
   @each $unit in $block {

@@ -45,7 +45,7 @@
 import Sortable from "sortablejs";
 import { simpleData } from "@/mock/table";
 import { tableStatusFilter } from "@/config/constant";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 interface ColItem {
   label: string;
@@ -79,7 +79,7 @@ const col: Array<ColItem> = [
   },
 ];
 
-const { variables } = useDesign();
+const ns = useNamespace();
 const draggableTable1 = ref();
 const draggableTable2 = ref();
 const dropCol = ref<ColItem[]>([]);
@@ -98,7 +98,7 @@ onMounted(() => {
 // 循环 table-column 行拖拽
 const rowDrop = () => {
   const el = draggableTable1.value.$el.querySelector(
-    `.${variables.elNamespace}-table__body-wrapper .${variables.elNamespace}-scrollbar__view > table > tbody`
+    `.${ns.elNamespace}-table__body-wrapper .${ns.elNamespace}-scrollbar__view > table > tbody`
   ) as HTMLElement;
   sortable.value = Sortable.create(el, {
     ghostClass: "sortable-ghost",
@@ -114,7 +114,7 @@ const rowDrop = () => {
 };
 // 列拖拽
 const columnDrop = () => {
-  const el = draggableTable1.value.$el.querySelector(`.${variables.elNamespace}-table__header tr`) as HTMLElement;
+  const el = draggableTable1.value.$el.querySelector(`.${ns.elNamespace}-table__header tr`) as HTMLElement;
   sortable.value = Sortable.create(el, {
     animation: 180,
     delay: 0,
@@ -130,7 +130,7 @@ const columnDrop = () => {
 // 完整 table-column 行拖拽
 const rowDrop2 = () => {
   const el = draggableTable2.value.$el.querySelector(
-    `.${variables.elNamespace}-table__body-wrapper .${variables.elNamespace}-scrollbar__view > table > tbody`
+    `.${ns.elNamespace}-table__body-wrapper .${ns.elNamespace}-scrollbar__view > table > tbody`
   ) as HTMLElement;
   sortable.value = Sortable.create(el, {
     ghostClass: "sortable-ghost",

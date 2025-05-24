@@ -35,14 +35,14 @@
 <script setup lang="ts" name="Breadcrumb">
 import { ref, watch } from "vue";
 import { ElBreadcrumb, ElBreadcrumbItem } from "element-plus";
-import { useLayout } from "@/hooks";
+import { useLayout } from "@/composables";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { useSettingsStore } from "@/stores";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("breadcrumb");
+const ns = useNamespace("breadcrumb");
+const prefixClass = ns.b();
 
 const route = useRoute();
 const settingsStore = useSettingsStore();

@@ -6,11 +6,11 @@
 
 <script setup lang="ts" name="ErrorLog">
 import { ElBadge } from "element-plus";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("error-badge");
+const ns = useNamespace("error-badge");
+const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();

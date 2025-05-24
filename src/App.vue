@@ -1,5 +1,5 @@
 <template>
-  <el-config-provider :namespace="variables.elNamespace" :locale="i18nLocale" :button="config" :size="layoutSize">
+  <el-config-provider :namespace="ns.elNamespace" :locale="i18nLocale" :button="config" :size="layoutSize">
     <router-view v-slot="{ Component }">
       <component :is="Component" />
     </router-view>
@@ -12,15 +12,15 @@ import { useLayoutStore } from "./stores/layout";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import { getBrowserLang } from "@/utils";
-import { useTheme } from "./hooks/useTheme";
+import { useTheme } from "./composables/useTheme";
 import { useFrame } from "./layout/components/FrameLayout/useFrame";
 import SystemConfig from "@/config";
 import { useSettingsStore } from "@/stores";
-import { useDesign, useCache } from "@/hooks";
+import { useNamespace, useCache } from "@/composables";
 import { reactive, computed, provide, onMounted } from "vue";
 import { ConfigGlobalKey } from "@/config/symbols";
 
-const { variables } = useDesign();
+const ns = useNamespace();
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
@@ -71,7 +71,7 @@ const versionCache = () => {
   const cacheVersion = useCache().getCacheVersion();
   if (version && cacheVersion !== version) {
     const { layoutSize, language } = SystemConfig.layoutConfig;
-    settingsStore.$patch({ ...(SystemConfig as any), menuTheme: SystemConfig.themeConfig.systemTheme });
+    settingsStore.$patch({ ...(SystemConfig as any), menuTheme: SystemConfig.themeConfig.menuTheme });
     layoutStore.$patch({
       layoutSize,
       language,

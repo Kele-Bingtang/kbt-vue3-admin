@@ -1,4 +1,4 @@
-@use "@/styles/namespace.scss" as *;
+@use "@/styles/mixins/namespace" as *;
 
 $prefix-class: #{$admin-namespace}-tree-filter;
 

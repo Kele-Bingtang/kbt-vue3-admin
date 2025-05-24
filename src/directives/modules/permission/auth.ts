@@ -1,5 +1,5 @@
 import type { Directive } from "vue";
-import { usePermissionNoSetup } from "@/hooks";
+import { usePermissionNoSetup } from "@/composables";
 
 const auth: Directive = {
   mounted(el, binding) {

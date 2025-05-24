@@ -15,12 +15,12 @@
 
 <script setup lang="ts">
 import Draggable from "vuedraggable";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "DraggableItem" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("drag-item");
+const ns = useNamespace("drag-item");
+const prefixClass = ns.b();
 
 export interface DragItemList {
   id: string;

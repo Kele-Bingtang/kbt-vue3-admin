@@ -1,5 +1,5 @@
 <template>
-  <ElConfigProvider :namespace="variables.elNamespace" :size="layoutSize">
+  <ElConfigProvider :namespace="ns.elNamespace" :size="layoutSize">
     <ElOverlay v-show="visible" @click="close">
       <div class="video-player-viewer" @click="close">
         <div class="video-player-viewer-close" @click="close">
@@ -17,12 +17,12 @@ import { ElOverlay, ElConfigProvider } from "element-plus";
 import { Close } from "@element-plus/icons-vue";
 import { computed, nextTick } from "vue";
 import { Icon } from "@/components";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
 
 defineOptions({ name: "VideoPlayerViewer" });
 
-const { variables } = useDesign();
+const ns = useNamespace();
 
 export interface VideoPlayerViewerProps {
   modelValue?: boolean; // 是否打开视频播放器预览

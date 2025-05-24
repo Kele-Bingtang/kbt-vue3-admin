@@ -26,12 +26,12 @@
 <script setup lang="ts">
 import { shallowRef, ref, computed, watch, onMounted, nextTick, unref } from "vue";
 import SplitLine from "./SplitLine.vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "SplitPane" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("split-pane");
+const ns = useNamespace("split-pane");
+const prefixClass = ns.b();
 
 type NumOrStr = number | string;
 

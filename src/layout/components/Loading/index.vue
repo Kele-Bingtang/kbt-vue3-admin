@@ -12,10 +12,10 @@
 </template>
 
 <script setup lang="ts" name="Loading">
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("layout-loading");
+const ns = useNamespace("layout-loading");
+const prefixClass = ns.b();
 </script>
 
 <style lang="scss" scoped>

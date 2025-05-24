@@ -37,7 +37,7 @@
         <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
       </template>
       <template #append>
-        <span :style="`color: var(--${variables.elNamespace}-color-primary)`">
+        <span :style="`color: var(--${ns.elNamespace}-color-primary)`">
           我是插入在表格最后的内容。若表格有合计行，该内容会位于合计行之上。
         </span>
       </template>
@@ -47,14 +47,14 @@
 
 <script setup lang="tsx" name="ComplexProTable">
 import { ProTable, type TableColumnProps, type HeaderRenderScope, type ProTableInstance } from "@/components";
-import { useHandleData } from "@/hooks";
+import { useHandleData } from "@/composables";
 import { ElButton, ElMessage, type TableColumnCtx } from "element-plus";
 import { genderType, tableData, userStatus } from "@/mock/pro-table";
 import { CirclePlus, Delete, Pointer, Refresh } from "@element-plus/icons-vue";
 import type { ResUserList } from "../simpleProTable/index.vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
-const { variables } = useDesign();
+const ns = useNamespace();
 const proTable = ref<ProTableInstance>();
 const data = ref(tableData);
 

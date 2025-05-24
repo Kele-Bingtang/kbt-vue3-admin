@@ -16,12 +16,12 @@
 <script setup lang="ts">
 import CountUp from "countup";
 import { ref, watch, onMounted, onUnmounted, unref } from "vue";
-import { useDesign } from "@/hooks";
+import { useNamespace } from "@/composables";
 
 defineOptions({ name: "CountTo" });
 
-const { getPrefixClass } = useDesign();
-const prefixClass = getPrefixClass("count-to");
+const ns = useNamespace("count-to");
+const prefixClass = ns.b();
 
 interface Unit {
   value: number;

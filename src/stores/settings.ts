@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import SystemConfig from "@/config";
 import { ref } from "vue";
-import { useStorage, useCache } from "@/hooks";
+import { useStorage, useCache } from "@/composables";
 import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum } from "@/enums/appEnum";
 
 export const useSettingsStore = defineStore(

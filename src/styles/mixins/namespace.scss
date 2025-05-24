@@ -1,0 +1,8 @@
+$admin-namespace: tk !default;
+// el 命名空间
+$el-namespace: tk !default;
+
+// 自定义 EP 样式命名空间
+@forward "element-plus/theme-chalk/src/mixins/config.scss" with (
+  $namespace: #{$el-namespace}
+);
