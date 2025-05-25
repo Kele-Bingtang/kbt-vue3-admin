@@ -91,22 +91,12 @@ export const useTabsNav = () => {
   // 判断 tab 的地址，因为携带不同的参数可以引起多个重复的标签，这里可以设置当同一个 path 携带参数不一样，只渲染一个 tab，原理就是去掉 ? 后面的参数
   const resolveFullPath = (r: RouteLocationNormalizedLoaded) => {
     if (r.path !== route.path || r.path === HOME_URL) return r.meta._fullPath;
-    const url = window.location.href;
-    const urlKey = Object.keys(getUrlParams(url));
-    // 存在 ? 才进入判断
-    const index = url.indexOf("?");
-    if (index !== -1) {
-      if (urlKey.length) {
-        // 如果存在 key=value，则判断是否完全匹配 key
-        for (const item of urlKey) {
-          if (SystemConfig.keyConfig.tabActiveExcludes.includes(item)) return r.meta?._fullPath;
-        }
-      } else {
-        // 如果不存在 key=value ，则模糊匹配 ? 后的参数
-        for (const item of SystemConfig.keyConfig.tabActiveExcludes) {
-          if (url.slice(index).includes(item)) return r.meta?._fullPath;
-        }
-      }
+    const urlParams = getUrlParams();
+    if (urlParams.size) {
+      // 如果存在 key=value，则判断是否完全匹配 key
+      urlParams.forEach((_, key) => {
+        if (SystemConfig.keyConfig.tabActiveExcludes.includes(key)) return r.meta?._fullPath;
+      });
     }
     return r.fullPath || r.meta._fullPath;
   };

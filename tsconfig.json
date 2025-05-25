@@ -55,11 +55,10 @@
 
     "baseUrl": ".",
     "paths": {
-      "@": ["src"],
       "@/*": ["src/*"]
     },
     "types": ["element-plus/global", "node"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "vite.config.mts"],
-  "exclude": ["node_modules", "dist", "**/*.js"]
+  "exclude": ["node_modules", "dist", "**/.*"]
 }

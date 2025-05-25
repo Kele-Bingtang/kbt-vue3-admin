@@ -1,18 +1,3 @@
-<template>
-  <Maximize v-if="settingsStore.maximize" />
-  <el-main>
-    <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
-    <router-view v-slot="{ Component, route }">
-      <CustomTransition name="fade-transform">
-        <keep-alive :include="layoutStore.keepAliveName">
-          <component :is="Component" :key="route.path" v-if="isRouterShow" class="main-content" />
-        </keep-alive>
-      </CustomTransition>
-    </router-view>
-    <FrameLayout />
-  </el-main>
-</template>
-
 <script setup lang="ts" name="MainContent">
 import { computed, ref, nextTick, provide, watchEffect, type Component } from "vue";
 import { ElMain } from "element-plus";
@@ -55,11 +40,11 @@ mittBus.on("refreshCurrentPage", () => refreshCurrentPage());
 // 监听当前页是否最大化，动态添加 class
 watchEffect(() => {
   const urlParams = getUrlParams();
-  if (urlParams._maximize) {
-    const app = document.getElementById("app") as HTMLElement;
+  const app = document.getElementById("app") as HTMLElement;
+
+  if (urlParams.get("_maximize")) {
     if (!app.className.includes("main-maximize")) app?.classList.add("main-maximize");
   } else {
-    const app = document.getElementById("app") as HTMLElement;
     if (settingsStore.maximize) app?.classList.add("main-maximize");
     else app?.classList.remove("main-maximize");
   }
@@ -71,9 +56,23 @@ const isFixTabsNav = computed(() => {
 });
 </script>
 
+<template>
+  <Maximize v-if="settingsStore.maximize" />
+  <el-main>
+    <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
+    <router-view v-slot="{ Component, route }">
+      <CustomTransition name="fade-transform">
+        <keep-alive :include="layoutStore.keepAliveName">
+          <component :is="Component" :key="route.path" v-if="isRouterShow" class="main-content" />
+        </keep-alive>
+      </CustomTransition>
+    </router-view>
+    <FrameLayout />
+  </el-main>
+</template>
+
 <style lang="scss" scoped>
 .#{$el-namespace}-main {
-  box-sizing: border-box;
   display: flex;
   flex-direction: column;
   padding: 0;
@@ -83,10 +82,6 @@ const isFixTabsNav = computed(() => {
   .main-content {
     margin: 10px 12px;
     overflow: v-bind(isFixTabsNav);
-  }
-
-  &::-webkit-scrollbar {
-    background-color: var(--#{$admin-namespace}-bg-color);
   }
 }
 </style>

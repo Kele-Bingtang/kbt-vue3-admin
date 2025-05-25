@@ -1,46 +1,3 @@
-<template>
-  <el-dropdown trigger="click" :class="prefixClass">
-    <div :class="`${prefixClass}__avatar`">
-      <template v-if="prop.showAvatar">
-        <el-image :src="user.avatar" :class="`${prefixClass}__avatar--user`" alt="头像">
-          <template #error>
-            <el-image :src="defaultAvatar" alt="头像" />
-          </template>
-        </el-image>
-        <span :class="`${prefixClass}__avatar--username`">{{ user.username }}</span>
-      </template>
-
-      <el-icon><ArrowDownBold /></el-icon>
-    </div>
-    <template #dropdown>
-      <el-dropdown-menu>
-        <router-link to="/profile">
-          <el-dropdown-item :icon="User">
-            {{ profileLabel }}
-          </el-dropdown-item>
-        </router-link>
-
-        <router-link to="/message-center">
-          <el-dropdown-item :icon="Bell">
-            {{ messageCenterLabel }}
-          </el-dropdown-item>
-        </router-link>
-
-        <el-dropdown-item @click="openSettingsDrawer" :icon="Setting" v-if="showSettings">
-          <span>
-            {{ settingsLabel }}
-          </span>
-        </el-dropdown-item>
-        <el-dropdown-item divided @click="logout" :icon="Back">
-          <span>
-            {{ logOutLabel }}
-          </span>
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
-</template>
-
 <script setup lang="ts" name="User">
 import { computed } from "vue";
 import { useSettingsStore, useUserStore } from "@/stores";
@@ -54,7 +11,6 @@ import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
 const ns = useNamespace("user-dropdown");
-const prefixClass = ns.b();
 
 const prop = withDefaults(defineProps<{ showAvatar?: boolean }>(), {
   showAvatar: true,
@@ -107,24 +63,60 @@ const logout = async () => {
 };
 </script>
 
+<template>
+  <el-dropdown trigger="click" :class="ns.b()">
+    <div :class="ns.e('avatar')">
+      <template v-if="prop.showAvatar">
+        <el-image :src="user.avatar" :class="ns.em('avatar', 'img')" alt="头像">
+          <template #error>
+            <el-image :src="defaultAvatar" alt="头像" />
+          </template>
+        </el-image>
+        <span :class="ns.em('avatar', 'username')">{{ user.username }}</span>
+      </template>
+
+      <el-icon><ArrowDownBold /></el-icon>
+    </div>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <router-link to="/profile">
+          <el-dropdown-item :icon="User">
+            {{ profileLabel }}
+          </el-dropdown-item>
+        </router-link>
+
+        <router-link to="/message-center">
+          <el-dropdown-item :icon="Bell">
+            {{ messageCenterLabel }}
+          </el-dropdown-item>
+        </router-link>
+
+        <el-dropdown-item @click="openSettingsDrawer" :icon="Setting" v-if="showSettings">
+          <span>
+            {{ settingsLabel }}
+          </span>
+        </el-dropdown-item>
+        <el-dropdown-item divided @click="logout" :icon="Back">
+          <span>
+            {{ logOutLabel }}
+          </span>
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
+</template>
+
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-user-dropdown;
-
-.#{$prefix-class} {
-  &__avatar {
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 100%;
-
-    &--user {
+@include b(user-dropdown) {
+  @include e(avatar) {
+    @include m(img) {
       width: 35px;
       height: 35px;
       cursor: pointer;
       border-radius: 50%;
     }
 
-    &--username {
+    @include m(username) {
       display: inline-block;
       margin: 0 7px 0 9px;
       font-size: 14px;
@@ -132,6 +124,11 @@ $prefix-class: #{$admin-namespace}-user-dropdown;
       cursor: pointer;
       user-select: none;
     }
+
+    position: relative;
+    display: flex;
+    align-items: center;
+    height: 100%;
 
     .#{$el-namespace}-icon-caret-bottom {
       font-size: 12px;

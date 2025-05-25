@@ -12,6 +12,8 @@ import { HOME_URL } from "@/router/routesConfig";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
+import "./index.scss";
+
 const ns = useNamespace("mixins-layout");
 
 const route = useRoute();
@@ -84,7 +86,7 @@ watch(
 
 <template>
   <el-container :class="[ns.join('layout'), ns.b(), ns.is('collapse', isCollapse), ns.is('expand', !isCollapse)]">
-    <el-header class="flx-justify-between">
+    <el-header :class="[ns.join('layout-header'), 'flx-justify-between']">
       <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ SystemConfig.themeConfig.title }}</span>
@@ -97,19 +99,19 @@ watch(
         :active-menu="activeMenu"
         mode="horizontal"
         :is-collapse="false"
-        :class="[ns.e('header-menu'), ns.join('layout-menu')]"
-        :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+        :class="[ns.join('layout-menu'), ns.e('header-menu')]"
+        :popper-class="`${ns.join('layout-menu-popper')} ${ns.b('menu-popper')}`"
       />
 
       <HeaderRight />
     </el-header>
 
     <el-container :class="ns.e('content')">
-      <el-aside v-if="childrenMenu.length">
+      <el-aside v-if="childrenMenu.length" :class="ns.join('layout-aside')">
         <Menu
           :menu-list="childrenMenu"
-          :class="[ns.e('aside-menu'), ns.join('layout-menu')]"
-          :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+          :class="[ns.join('layout-menu'), ns.e('aside-menu')]"
+          :popper-class="`${ns.join('layout-menu-popper')} ${ns.b('menu-popper')}`"
         />
       </el-aside>
 
@@ -117,8 +119,3 @@ watch(
     </el-container>
   </el-container>
 </template>
-
-<style lang="scss">
-@use "./index";
-@use "../base-layout";
-</style>

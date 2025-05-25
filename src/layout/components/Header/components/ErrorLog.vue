@@ -1,16 +1,9 @@
-<template>
-  <el-badge :class="prefixClass" :value="props.errorCount" :max="99" :hidden="props.errorCount === 0">
-    <Icon name="bug" width="20px" height="20px" @click.stop="openErrorLogger" />
-  </el-badge>
-</template>
-
 <script setup lang="ts" name="ErrorLog">
 import { ElBadge } from "element-plus";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
 const ns = useNamespace("error-badge");
-const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();
@@ -24,10 +17,14 @@ const openErrorLogger = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-error-badge;
+<template>
+  <el-badge :class="ns.b()" :value="props.errorCount" :max="99" :hidden="props.errorCount === 0">
+    <Icon name="bug" width="20px" height="20px" @click.stop="openErrorLogger" />
+  </el-badge>
+</template>
 
-.#{$prefix-class} {
+<style lang="scss" scoped>
+@include b(error-badge) {
   :deep(.#{$el-namespace}-badge__content.is-fixed) {
     top: 11px;
     right: 7px;

@@ -1,6 +1,5 @@
 @use "namespace" as *;
 @use "function" as *;
-@use "element-plus/theme-chalk/src/mixins/config.scss" as *;
 @use "sass:string";
 
 $B: null;
@@ -11,22 +10,6 @@ $E: null;
   $B: $admin-namespace + $common-separator + $block !global;
 
   .#{$B} {
-    @content;
-  }
-}
-
-/* 多个 Block 块 */
-@mixin multiple-b($block) {
-  $B: $admin-namespace + $common-separator !global;
-  $elector: "";
-  /* 拼接逗号 */
-  @each $unit in $block {
-    $elector: #{$elector + "." + $B + $unit + ","};
-  }
-  /* 去掉最后一个多余的逗号 */
-  $elector: string.slice($elector, 1, -2);
-
-  #{$elector} {
     @content;
   }
 }
@@ -72,10 +55,42 @@ $E: null;
   }
 }
 
-@mixin when($state) {
+@mixin is($state) {
   @at-root {
-    &.#{$state-prefix + $state} {
+    &.#{$is-state-prefix + $state} {
       @content;
     }
+  }
+}
+
+@mixin has($state) {
+  @at-root {
+    &.#{$has-state-prefix + $state} {
+      @content;
+    }
+  }
+}
+
+@mixin no($state) {
+  @at-root {
+    &.#{$no-state-prefix + $state} {
+      @content;
+    }
+  }
+}
+
+/* 多个元素 */
+@mixin joins($element...) {
+  $E: $admin-namespace + $common-separator;
+  $elector: "";
+  /* 拼接逗号 */
+  @each $unit in $element {
+    $elector: #{$elector + "." + $E + $unit + ","};
+  }
+  /* 去掉最后一个多余的逗号 */
+  $elector: string.slice($elector, 1, -2);
+
+  #{$elector} {
+    @content;
   }
 }

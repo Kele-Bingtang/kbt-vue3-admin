@@ -1,5 +1,14 @@
+<script lang="ts" setup>
+import { useFullscreen } from "@vueuse/core";
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace("fullscreen");
+
+const { toggle, isFullscreen } = useFullscreen();
+</script>
+
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <Icon
       :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
       @click.stop="toggle"
@@ -9,13 +18,3 @@
     />
   </div>
 </template>
-
-<script lang="ts" setup>
-import { useFullscreen } from "@vueuse/core";
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace("fullscreen");
-const prefixClass = ns.b();
-
-const { toggle, isFullscreen } = useFullscreen();
-</script>

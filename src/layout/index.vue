@@ -19,6 +19,8 @@ import { type Component, computed, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 import { WebSocketKey } from "@/config/symbols";
 
+import "./base-layout.scss";
+
 const LayoutComponents: Record<string, Component> = {
   vertical: LayoutVertical,
   classic: LayoutClassic,

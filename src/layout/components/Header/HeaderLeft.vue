@@ -1,10 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <CollapseTrigger />
-    <Breadcrumb v-if="showBreadcrumb && layoutStore.device !== DeviceEnum.Mobile" />
-  </div>
-</template>
-
 <script setup lang="ts" name="HeaderLeft">
 import CollapseTrigger from "./components/CollapseTrigger.vue";
 import Breadcrumb from "./components/Breadcrumb.vue";
@@ -14,26 +7,30 @@ import { computed } from "vue";
 import { DeviceEnum } from "@/enums/appEnum";
 
 const ns = useNamespace("header-left");
-const prefixClass = ns.b();
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 const showBreadcrumb = computed(() => settingsStore.showBreadcrumb);
 </script>
 
-<style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-header-left;
+<template>
+  <div :class="ns.b()">
+    <CollapseTrigger />
+    <Breadcrumb v-if="showBreadcrumb && layoutStore.device !== DeviceEnum.Mobile" />
+  </div>
+</template>
 
-.#{$prefix-class} {
+<style lang="scss" scoped>
+@include b(header-left) {
+  @include joins("breadcrumb__item:hover") {
+    color: var(--#{$el-namespace}-color-primary);
+  }
+
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   white-space: nowrap;
-
-  .tk-breadcrumb__item:hover {
-    color: var(--#{$el-namespace}-color-primary);
-  }
 
   :deep(.#{$el-namespace}-breadcrumb__inner) {
     color: var(--header-text-color);

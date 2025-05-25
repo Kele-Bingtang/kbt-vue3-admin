@@ -2,13 +2,15 @@ import type { RouteRecordRaw, RouteLocationNormalizedLoaded, RouteComponent } fr
 import type { IconifyIcon } from "@iconify/vue";
 import type { Component, VNode } from "vue";
 
-export {}; // 扩展 global 而不是覆盖
+export {};
 
 type MetaNeedKey = "_fullPath" | "_dynamic";
 
 declare module "vue-router" {
   // 扩展路由 Meta 类型
-  type RouteMeta = RequiredKey<MetaProp, MetaNeedKey>;
+  interface RouteMeta extends RequiredKey<MetaProp, MetaNeedKey> {
+    [key: string]: unknown;
+  }
 }
 
 declare global {

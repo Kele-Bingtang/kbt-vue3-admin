@@ -1,23 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <slot />
-
-    <el-select
-      v-model="settingsStore.titleMode"
-      :placeholder="$t('_settings.titlePlaceholder')"
-      @change="handleTitleModeSelect"
-    >
-      <el-option
-        v-for="item in titleModeOptions"
-        :key="item.value"
-        :label="item.label"
-        :value="item.value"
-        :disabled="item.value === settingsStore.titleMode"
-      ></el-option>
-    </el-select>
-  </div>
-</template>
-
 <script setup lang="ts" name="BrowserTitleSwitch">
 import { useNamespace, useLayout } from "@/composables";
 import { useSettingsStore } from "@/stores";
@@ -26,7 +6,6 @@ import { ElSelect, ElOption } from "element-plus";
 import { useI18n } from "vue-i18n";
 
 const ns = useNamespace("browser-title-switch");
-const prefixClass = ns.b();
 
 const { t } = useI18n();
 const route = useRoute();
@@ -47,10 +26,28 @@ const titleModeOptions = [
 ];
 </script>
 
-<style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-browser-title-switch;
+<template>
+  <div :class="ns.b()">
+    <slot />
 
-.#{$prefix-class} {
+    <el-select
+      v-model="settingsStore.titleMode"
+      :placeholder="$t('_settings.titlePlaceholder')"
+      @change="handleTitleModeSelect"
+    >
+      <el-option
+        v-for="item in titleModeOptions"
+        :key="item.value"
+        :label="item.label"
+        :value="item.value"
+        :disabled="item.value === settingsStore.titleMode"
+      ></el-option>
+    </el-select>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+@include b(browser-title-switch) {
   display: flex;
   flex-wrap: wrap;
   align-items: center;

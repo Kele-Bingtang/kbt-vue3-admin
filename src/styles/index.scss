@@ -1,5 +1,7 @@
 @forward "variables";
 @forward "mixins/namespace";
+@forward "mixins/bem";
+@forward "mixins/function";
 
 @use "mixins/namespace" as *;
 

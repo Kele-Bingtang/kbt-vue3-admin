@@ -1,9 +1,3 @@
-<template>
-  <div :class="prefixClass" @click="exitMaximize">
-    <el-icon><Close /></el-icon>
-  </div>
-</template>
-
 <script setup lang="ts" name="Maximize">
 import { ElIcon } from "element-plus";
 import { useSettingsStore } from "@/stores";
@@ -11,7 +5,6 @@ import { Close } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("maximize");
-const prefixClass = ns.b();
 
 const settingsStore = useSettingsStore();
 
@@ -20,10 +13,14 @@ const exitMaximize = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-maximize;
+<template>
+  <div :class="ns.b()" @click="exitMaximize">
+    <el-icon><Close /></el-icon>
+  </div>
+</template>
 
-.#{$prefix-class} {
+<style lang="scss" scoped>
+@include b(maximize) {
   position: fixed;
   top: -25px;
   right: -25px;
@@ -36,7 +33,6 @@ $prefix-class: #{$admin-namespace}-maximize;
   opacity: 0.7;
 
   &:hover {
-    // background-color: var(--#{$el-namespace}-color-info-dark-2);
     background-color: var(--#{$el-namespace}-color-primary);
   }
 

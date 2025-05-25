@@ -1,21 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <div :class="`${prefixClass}__icon`">
-      <MenuSearch id="menuSearch" />
-      <Fullscreen id="fullscreen" v-if="!isMobile" />
-      <LayoutSizeSelect id="layoutSizeSelect" />
-      <LanguageSelect id="languageSelect" />
-      <Message id="message" />
-      <ErrorLog
-        id="errorLog"
-        :errorCount="errorCount"
-        v-if="SystemConfig.layoutConfig.errorLog.showInHeader && errorCount > 0 && !isMobile"
-      />
-      <User id="user" />
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts" name="HeaderRight">
 import Fullscreen from "./components/Fullscreen.vue";
 import LanguageSelect from "./components/LanguageSelect.vue";
@@ -31,7 +13,6 @@ import { computed } from "vue";
 import { DeviceEnum } from "@/enums/appEnum";
 
 const ns = useNamespace("header-right");
-const prefixClass = ns.b();
 
 const layoutStore = useLayoutStore();
 const errorLogStore = useErrorLogStore();
@@ -46,16 +27,27 @@ const errorCount = computed(() => {
 const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
 </script>
 
+<template>
+  <div :class="ns.b()">
+    <div :class="ns.e('icon')">
+      <MenuSearch id="menuSearch" />
+      <Fullscreen id="fullscreen" v-if="!isMobile" />
+      <LayoutSizeSelect id="layoutSizeSelect" />
+      <LanguageSelect id="languageSelect" />
+      <Message id="message" />
+      <ErrorLog
+        id="errorLog"
+        :errorCount="errorCount"
+        v-if="SystemConfig.layoutConfig.errorLog.showInHeader && errorCount > 0 && !isMobile"
+      />
+      <User id="user" />
+    </div>
+  </div>
+</template>
+
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-header-right;
-
-.#{$prefix-class} {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 20px 0 0;
-
-  &__icon {
+@include b(header-right) {
+  @include e(icon) {
     display: flex;
     align-items: center;
     color: var(--header-text-color);
@@ -72,5 +64,10 @@ $prefix-class: #{$admin-namespace}-header-right;
       fill: var(--#{$el-namespace}-color-primary) !important;
     }
   }
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 20px 0 0;
 }
 </style>

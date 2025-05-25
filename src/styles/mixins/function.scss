@@ -1,4 +1,4 @@
-@use "namespace" as namespace;
+@use "namespace" as ns;
 @use "element-plus/theme-chalk/src/mixins/config.scss" as config;
 @use "sass:meta";
 @use "sass:string";
@@ -51,7 +51,7 @@
 
 /* 合并变量名：joinVarName(('button', 'text-color')) => '--tk-button-text-color' */
 @function joinVarName($list) {
-  $name: "--" + namespace.$admin-namespace;
+  $name: "--" + ns.$admin-namespace;
   @each $item in $list {
     @if $item != "" {
       $name: $name + "-" + $item;
@@ -77,7 +77,7 @@
 
 /* bem('block', 'element', 'modifier') => 'tk-block__element--modifier' */
 @function bem($block, $element: "", $modifier: "") {
-  $name: namespace.$admin-namespace + config.$common-separator + $block;
+  $name: ns.$admin-namespace + config.$common-separator + $block;
 
   @if $element != "" {
     $name: $name + config.$element-separator + $element;

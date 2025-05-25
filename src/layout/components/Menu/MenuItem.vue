@@ -1,51 +1,16 @@
-<template>
-  <template v-if="menuItem.meta.render">
-    <component :is="menuItem.meta.render" class="el-menu-item only-menu-item" />
-  </template>
-
-  <el-menu-item
-    v-else-if="!menuItem.children || menuItem.children.length == 0"
-    :index="menuItem.meta._fullPath"
-    @click="handleMenuClick(menuItem)"
-    class="is-only"
-  >
-    <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />
-    <template #title>
-      <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
-      <Tooltip v-else :effect="SystemConfig.layoutConfig.tooltipEffect" :offset="-10" :try="1">
-        <span>{{ title(menuItem) }}</span>
-      </Tooltip>
-    </template>
-  </el-menu-item>
-
-  <el-sub-menu v-else :index="menuItem.meta._fullPath || menuItem.path" class="is-sub">
-    <template #title>
-      <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" class="menu-icon" />
-      <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
-      <Tooltip v-else :effect="SystemConfig.layoutConfig.tooltipEffect" :offset="-10" :try="1">
-        <span>{{ title(menuItem) }}</span>
-      </Tooltip>
-    </template>
-    <template v-if="menuItem.children">
-      <MenuItem v-for="child in menuItem.children" :key="child.path" :menu-item="child" />
-    </template>
-  </el-sub-menu>
-</template>
-
 <script setup lang="ts" name="MenuItem">
 import { ref, watch, nextTick } from "vue";
 import { ElMenuItem, ElSubMenu } from "element-plus";
-import { useLayout } from "@/composables";
+import { useLayout, useNamespace } from "@/composables";
 import { isExternal } from "@/utils";
 import { Tooltip } from "@/components";
 import SystemConfig from "@/config";
 import { useLayoutStore } from "@/stores";
 import { useRouter } from "vue-router";
 
-defineProps<{
-  menuItem: RouterConfig;
-}>();
+defineProps<{ menuItem: RouterConfig }>();
 
+const ns = useNamespace();
 const { getTitle } = useLayout();
 const router = useRouter();
 const layoutStore = useLayoutStore();
@@ -74,16 +39,37 @@ watch(
 );
 </script>
 
-<style lang="scss" scoped>
-.menu-item,
-.sub-menu {
-  .menu-icon {
-    width: var(--#{$el-namespace}-menu-icon-width) !important;
-    margin-right: 5px;
-    overflow: visible;
-    font-size: 18px;
-    vertical-align: middle;
-    text-align: center;
-  }
-}
-</style>
+<template>
+  <template v-if="menuItem.meta.render">
+    <component :is="menuItem.meta.render" :class="[`${ns.elNamespace}-menu-item`, 'is-only']" />
+  </template>
+
+  <el-menu-item
+    v-else-if="!menuItem.children || menuItem.children.length == 0"
+    :index="menuItem.meta._fullPath"
+    @click="handleMenuClick(menuItem)"
+    class="is-only"
+  >
+    <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" :class="`${ns.elNamespace}-icon`" />
+    <template #title>
+      <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
+      <Tooltip v-else :effect="SystemConfig.layoutConfig.tooltipEffect" :offset="-10" :try="1">
+        <span>{{ title(menuItem) }}</span>
+      </Tooltip>
+    </template>
+  </el-menu-item>
+
+  <el-sub-menu v-else :index="menuItem.meta._fullPath || menuItem.path" class="is-sub">
+    <template #title>
+      <Icon v-if="menuItem.meta.icon" :icon="menuItem.meta.icon" :class="`${ns.elNamespace}-icon`" />
+      <span v-if="!menuItem.meta.useTooltip">{{ title(menuItem) }}</span>
+      <Tooltip v-else :effect="SystemConfig.layoutConfig.tooltipEffect" :offset="-10" :try="1">
+        <span>{{ title(menuItem) }}</span>
+      </Tooltip>
+    </template>
+
+    <template v-if="menuItem.children">
+      <MenuItem v-for="child in menuItem.children" :key="child.path" :menu-item="child" />
+    </template>
+  </el-sub-menu>
+</template>

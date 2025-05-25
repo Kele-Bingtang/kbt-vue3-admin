@@ -1,44 +1,58 @@
+<script setup lang="ts" name="LayoutSelect">
+import { DeviceEnum } from "@/enums/appEnum";
+import { useNamespace } from "@/composables";
+import { useSettingsStore, useLayoutStore } from "@/stores";
+import { computed } from "vue";
+
+const ns = useNamespace("layout-select");
+
+const settingsStore = useSettingsStore();
+const layoutStore = useLayoutStore();
+
+const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
+</script>
+
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <slot />
 
-    <div :class="`${prefixClass}__list`">
+    <div :class="ns.e('item')">
       <span>{{ $t("_settings.collapseMenu") }}</span>
       <el-switch v-model="settingsStore.isCollapse" />
     </div>
-    <div :class="`${prefixClass}__list`">
+    <div :class="ns.e('item')">
       <span>{{ $t("_settings.menuAccordion") }}</span>
       <el-switch v-model="settingsStore.menuAccordion" />
     </div>
-    <div :class="`${prefixClass}__list`" v-if="!isMobile">
+    <div :class="ns.e('item')" v-if="!isMobile">
       <span>{{ $t("_settings.showBreadcrumb") }}</span>
       <el-switch v-model="settingsStore.showBreadcrumb" />
     </div>
-    <div :class="`${prefixClass}__list`" v-if="!isMobile">
+    <div :class="ns.e('item')" v-if="!isMobile">
       <span>{{ $t("_settings.showBreadcrumbIcon") }}</span>
       <el-switch v-model="settingsStore.showBreadcrumbIcon" />
     </div>
-    <div :class="`${prefixClass}__list`">
+    <div :class="ns.e('item')">
       <span>{{ $t("_settings.showTabsNav") }}</span>
       <el-switch v-model="settingsStore.showTabsNav" />
     </div>
-    <div :class="`${prefixClass}__list`">
+    <div :class="ns.e('item')">
       <span>{{ $t("_settings.showTabsNavIcon") }}</span>
       <el-switch v-model="settingsStore.showTabsNavIcon" />
     </div>
-    <div :class="`${prefixClass}__list`">
+    <div :class="ns.e('item')">
       <span>{{ $t("_settings.recordTabsNav") }}</span>
       <el-switch v-model="settingsStore.recordTabsNav" />
     </div>
-    <div :class="`${prefixClass}__list`">
+    <div :class="ns.e('item')">
       <span>{{ $t("_settings.fixTabsNav") }}</span>
       <el-switch v-model="settingsStore.fixTabsNav" />
     </div>
-    <div :class="`${prefixClass}__list`">
+    <div :class="ns.e('item')">
       <span>{{ $t("_settings.showLayoutLogo") }}</span>
       <el-switch v-model="settingsStore.showLayoutLogo" />
     </div>
-    <div :class="`${prefixClass}__list`">
+    <div :class="ns.e('item')">
       <span>{{ $t("_tabsNav.maximize") }}</span>
       <el-switch v-model="settingsStore.maximize" />
     </div>
@@ -55,26 +69,11 @@
   </div>
 </template>
 
-<script setup lang="ts" name="LayoutSelect">
-import { DeviceEnum } from "@/enums/appEnum";
-import { useNamespace } from "@/composables";
-import { useSettingsStore, useLayoutStore } from "@/stores";
-import { computed } from "vue";
-
-const ns = useNamespace("layout-select");
-const prefixClass = ns.b();
-
-const settingsStore = useSettingsStore();
-const layoutStore = useLayoutStore();
-
-const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
-</script>
-
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-layout-select;
 
-.#{$prefix-class} {
-  &__list {
+@include b(layout-select) {
+  @include e(item) {
     display: flex;
     align-items: center;
     justify-content: space-between;

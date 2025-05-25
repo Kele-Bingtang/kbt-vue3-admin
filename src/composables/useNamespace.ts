@@ -9,6 +9,18 @@ import namespaceModule from "./cssModule/namespace.module.scss";
 export const useNamespace = (block: string = "", namespaceOverrides?: string) => {
   const finalNamespace = namespaceOverrides || namespaceModule.namespace;
 
+  /**
+   * 创建 BEM 元素
+   */
+  const createBem = (namespace: string, block: string, blockSuffix?: string, element?: string, modifier?: string) => {
+    let space = `${namespace}-${block}`;
+
+    if (blockSuffix) space += `-${blockSuffix}`;
+    if (element) space += `__${element}`;
+    if (modifier) space += `--${modifier}`;
+    return space;
+  };
+
   const b = (blockSuffix?: string) => {
     return createBem(finalNamespace, block, blockSuffix);
   };
@@ -40,16 +52,12 @@ export const useNamespace = (block: string = "", namespaceOverrides?: string) =>
     return bool ? `is-${name}` : "";
   };
 
-  /**
-   * 创建 BEM 元素
-   */
-  const createBem = (namespace: string, block: string, blockSuffix?: string, element?: string, modifier?: string) => {
-    let space = `${namespace}-${block}`;
+  const has = (name: string, bool = true) => {
+    return bool ? `has-${name}` : "";
+  };
 
-    if (blockSuffix) space += `-${blockSuffix}`;
-    if (element) space += `__${element}`;
-    if (modifier) space += `--${modifier}`;
-    return space;
+  const no = (name: string, bool = true) => {
+    return bool ? `no-${name}` : "";
   };
 
   /**
@@ -85,6 +93,8 @@ export const useNamespace = (block: string = "", namespaceOverrides?: string) =>
     em,
     bem,
     is,
+    has,
+    no,
     createBem,
     join,
     cssVar,

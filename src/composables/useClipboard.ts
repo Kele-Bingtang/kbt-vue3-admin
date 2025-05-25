@@ -1,24 +1,26 @@
+import { isClient } from "@/utils";
 import { ref } from "vue";
 
-const useClipboard = () => {
+/**
+ * 复制文本到剪贴板
+ */
+export const useClipboard = (timeout = 1500) => {
   const copied = ref(false);
   const text = ref("");
   const isSupported = ref(false);
 
-  if (!navigator.clipboard && !document.execCommand) {
-    isSupported.value = false;
-  } else {
-    isSupported.value = true;
-  }
+  if (isClient && !!navigator.clipboard && !!document.execCommand) isSupported.value = true;
+  else isSupported.value = true;
 
-  const copy = (str: string, size = -1) => {
+  const copy = async (str: string, size = -1) => {
+    if (!isClient) return;
+
     if (navigator.clipboard) {
-      navigator.clipboard.writeText(str).then(() => {
+      return await navigator.clipboard.writeText(str).then(() => {
         text.value = str;
         copied.value = true;
         resetCopied();
       });
-      return;
     }
     const input = document.createElement("input");
     input.setAttribute("readonly", "readonly");
@@ -38,10 +40,10 @@ const useClipboard = () => {
   const resetCopied = () => {
     setTimeout(() => {
       copied.value = false;
-    }, 1500);
+    }, timeout);
   };
 
   return { copy, text, copied, isSupported };
 };
 
-export { useClipboard };
+export type UseClipboardReturn = ReturnType<typeof useClipboard>;

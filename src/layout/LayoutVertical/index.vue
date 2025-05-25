@@ -12,6 +12,8 @@ import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 import { DeviceEnum } from "@/enums/appEnum";
 
+import "./index.scss";
+
 const ns = useNamespace("vertical-layout");
 
 const route = useRoute();
@@ -60,29 +62,25 @@ const handleClickOutSide = () => {
       { mobile: isMobile },
     ]"
   >
-    <el-aside class="flx-column">
+    <el-aside :class="[ns.join('layout-aside'), 'flx-column']">
       <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ SystemConfig.themeConfig.title }}</span>
       </div>
+
       <Menu
-        :class="[ns.b('menu'), ns.join('layout-menu')]"
-        :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+        :class="[ns.join('layout-menu'), ns.b('menu')]"
+        :popper-class="`${ns.join('layout-menu-popper')} ${ns.b('menu-popper')}`"
       />
     </el-aside>
 
     <div v-if="isMobile && !isCollapse" :class="ns.e('drawer-bg')" @click="handleClickOutSide" />
 
     <el-container>
-      <el-header class="flx-justify-between">
+      <el-header :class="[ns.join('layout-header'), 'flx-justify-between']">
         <Header />
       </el-header>
       <MainContent />
     </el-container>
   </el-container>
 </template>
-
-<style lang="scss">
-@use "./index";
-@use "../base-layout";
-</style>

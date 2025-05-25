@@ -1,40 +1,3 @@
-<template>
-  <div :class="prefixClass" ref="tabsNavRef">
-    <div :class="`${prefixClass}__content`">
-      <el-tabs v-model="tabsNavValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
-        <el-tab-pane
-          v-for="tab in tabNavList"
-          :key="tab.path"
-          :label="tab.title"
-          :name="tab.path"
-          :closable="tab.close"
-        >
-          <template #label>
-            <div style="display: inline-block" @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)">
-              <Icon
-                v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
-                :icon="tab.meta.icon"
-                :class="`${prefixClass}__content--icon`"
-              />
-              <span>{{ tab.title }}</span>
-            </div>
-          </template>
-        </el-tab-pane>
-      </el-tabs>
-      <MenuButton />
-    </div>
-    <transition name="el-zoom-in-top">
-      <RightMenu
-        :selected-tab="selectedTab"
-        :visible="rightMenuVisible"
-        :left="rightMenuLeft"
-        :top="rightMenuTop"
-        :condition="contextMenuCondition"
-      />
-    </transition>
-  </div>
-</template>
-
 <script setup lang="ts" name="ElTabsNav">
 import { ref, onMounted, watch } from "vue";
 import { ElTabs, ElTabPane, type TabPaneName, type TabsPaneContext } from "element-plus";
@@ -45,8 +8,9 @@ import MenuButton from "../components/MenuDropdown.vue";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
+import "./index.scss";
+
 const ns = useNamespace("tabs-nav");
-const prefixClass = ns.b();
 
 const route = useRoute();
 const router = useRouter();
@@ -94,11 +58,46 @@ const tabClick = (tabItem: TabsPaneContext) => {
 
 // 删除一个 Tab
 const tabRemove = async (fullPath: TabPaneName) => {
-  const tab = tabNavList.value.filter(item => item.path === fullPath)[0];
-  closeCurrentTab(tab);
+  const tab = tabNavList.value.find(item => item.path === fullPath);
+  if (tab) closeCurrentTab(tab);
 };
 </script>
 
-<style lang="scss" scoped>
-@use "./index";
-</style>
+<template>
+  <div ref="tabsNavRef" :class="[ns.b(), 'flx-align-center']">
+    <div :class="ns.e('content')">
+      <el-tabs v-model="tabsNavValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
+        <el-tab-pane
+          v-for="tab in tabNavList"
+          :key="tab.path"
+          :label="tab.title"
+          :name="tab.path"
+          :closable="tab.close"
+        >
+          <template #label>
+            <div @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)">
+              <Icon
+                v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
+                :icon="tab.meta.icon"
+                :class="ns.em('content', 'icon')"
+              />
+              <span>{{ tab.title }}</span>
+            </div>
+          </template>
+        </el-tab-pane>
+      </el-tabs>
+
+      <MenuButton />
+    </div>
+
+    <transition name="el-zoom-in-top">
+      <RightMenu
+        :selected-tab="selectedTab"
+        :visible="rightMenuVisible"
+        :left="rightMenuLeft"
+        :top="rightMenuTop"
+        :condition="contextMenuCondition"
+      />
+    </transition>
+  </div>
+</template>

@@ -1,7 +1,3 @@
-@use "@/styles/mixins/namespace" as *;
-@use "@/styles/mixins/function" as *;
-@use "@/styles/mixins/bem" as *;
-
 @include b(columns-layout) {
   /* 自定义菜单样式 */
   @include e(aside) {
@@ -33,8 +29,7 @@
         background-color: getCssVar(layout-aside-bg-hover-color);
       }
 
-      .#{$el-namespace}-icon,
-      .svg-icon {
+      :where(.#{$el-namespace}-icon, .svg-icon) {
         color: getCssVar(layout-aside-icon-color);
         font-size: 20px;
       }
@@ -45,15 +40,14 @@
         font-size: 12px;
       }
 
-      @include when(active) {
+      @include is(active) {
         background-color: getCssVar(layout-aside-bg-active-color);
         font-weight: 700;
 
         .title {
           color: var(--#{$el-namespace}-menu-active-color);
         }
-        .#{$el-namespace}-icon,
-        .svg-icon {
+        :where(.#{$el-namespace}-icon, .svg-icon) {
           color: var(--#{$el-namespace}-menu-active-color);
         }
       }

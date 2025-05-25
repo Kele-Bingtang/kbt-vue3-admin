@@ -1,21 +1,3 @@
-<template>
-  <el-dropdown trigger="click" @command="handleSelectLanguage">
-    <Icon name="language" width="1.5rem" height="1.5rem" :icon-style="{ cursor: 'pointer' }" />
-    <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item
-          v-for="local in localList"
-          :key="local.value"
-          :command="local.value"
-          :disabled="language === local.value"
-        >
-          {{ local.label }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
-</template>
-
 <script setup lang="ts" name="LanguageSelect">
 import { computed } from "vue";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus";
@@ -27,7 +9,6 @@ import { useRoute } from "vue-router";
 
 const localList = [
   { label: "中文简体", value: "zh-CN" },
-  // { label: "中文繁体", value: "zh-TW" },
   { label: "English", value: "en-US" },
 ];
 
@@ -51,3 +32,21 @@ const handleSelectLanguage = (lang: LanguageType) => {
   });
 };
 </script>
+
+<template>
+  <el-dropdown trigger="click" @command="handleSelectLanguage">
+    <Icon name="language" width="1.5rem" height="1.5rem" :icon-style="{ cursor: 'pointer' }" />
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item
+          v-for="local in localList"
+          :key="local.value"
+          :command="local.value"
+          :disabled="language === local.value"
+        >
+          {{ local.label }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
+</template>

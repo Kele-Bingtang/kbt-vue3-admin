@@ -1,32 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <slot />
-
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.theme") }}</span>
-      <el-color-picker v-model="settingsStore.primaryTheme" :predefine="colorList" @change="changePrimary" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.darkMode") }}</span>
-      <el-switch
-        v-model="settingsStore.isDark"
-        @change="handleSwitchDark"
-        inline-prompt
-        :active-icon="Sunny"
-        :inactive-icon="Moon"
-      />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.greyMode") }}</span>
-      <el-switch v-model="settingsStore.isGrey" @change="changeGreyOrWeak($event as boolean, 'grey')" />
-    </div>
-    <div :class="`${prefixClass}__list`">
-      <span>{{ $t("_settings.weakMode") }}</span>
-      <el-switch v-model="settingsStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts" name="ThemeSelect">
 import { useNamespace, useTheme } from "@/composables";
 import { useSettingsStore } from "@/stores";
@@ -35,7 +6,6 @@ import SystemConfig from "@/config";
 import { MenuThemeEnum } from "@/enums/appEnum";
 
 const ns = useNamespace("theme-select");
-const prefixClass = ns.b();
 
 const { changePrimary, changeGreyOrWeak, switchDark } = useTheme();
 
@@ -65,11 +35,40 @@ const handleSwitchDark = () => {
 };
 </script>
 
-<style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-theme-select;
+<template>
+  <div :class="ns.b()">
+    <slot />
 
-.#{$prefix-class} {
-  &__list {
+    <div :class="ns.e('item')">
+      <span>{{ $t("_settings.theme") }}</span>
+      <el-color-picker v-model="settingsStore.primaryTheme" :predefine="colorList" @change="changePrimary" />
+    </div>
+    <div :class="ns.e('item')">
+      <span>{{ $t("_settings.darkMode") }}</span>
+      <el-switch
+        v-model="settingsStore.isDark"
+        @change="handleSwitchDark"
+        inline-prompt
+        :active-icon="Sunny"
+        :inactive-icon="Moon"
+      />
+    </div>
+    <div :class="ns.e('item')">
+      <span>{{ $t("_settings.greyMode") }}</span>
+      <el-switch v-model="settingsStore.isGrey" @change="changeGreyOrWeak($event as boolean, 'grey')" />
+    </div>
+    <div :class="ns.e('item')">
+      <span>{{ $t("_settings.weakMode") }}</span>
+      <el-switch v-model="settingsStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />
+    </div>
+  </div>
+</template>
+
+<style lang="scss" scoped>
+$prefix-class: #{$admin-namespace}-;
+
+@include b(theme-select) {
+  @include e(item) {
     display: flex;
     align-items: center;
     justify-content: space-between;

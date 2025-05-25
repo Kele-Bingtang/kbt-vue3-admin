@@ -1,15 +1,3 @@
-<template>
-  <Transition
-    appear
-    :name="name"
-    :enterActiveClass="enterActiveClass"
-    :leaveActiveClass="leaveActiveClass"
-    mode="out-in"
-  >
-    <slot></slot>
-  </Transition>
-</template>
-
 <script setup lang="ts" name="CustomTransition">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
@@ -33,3 +21,15 @@ const leaveActiveClass = computed(() => {
   return "";
 });
 </script>
+
+<template>
+  <Transition
+    appear
+    :name="name"
+    :enterActiveClass="enterActiveClass"
+    :leaveActiveClass="leaveActiveClass"
+    mode="out-in"
+  >
+    <slot></slot>
+  </Transition>
+</template>

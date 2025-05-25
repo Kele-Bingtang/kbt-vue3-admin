@@ -1,96 +1,3 @@
-<template>
-  <el-drawer v-model="drawerVisible" title="布局设置" size="300px" :class="prefixClass">
-    <!-- 布局切换 -->
-    <template v-if="!isMobile">
-      <LayoutSwitch>
-        <el-divider :class="`${prefixClass}__divider`" content-position="center">
-          <el-icon><Notification /></el-icon>
-          {{ $t("_settings.layoutSwitch") }}
-        </el-divider>
-      </LayoutSwitch>
-
-      <template v-if="[LayoutModeEnum.Subsystem].includes(settingsStore.layoutMode)">
-        <!-- 菜单主题切换 -->
-        <AsideHeaderSwitch useAside>
-          <el-divider :class="`${prefixClass}__divider`" content-position="center">
-            <el-icon><Menu /></el-icon>
-            {{ $t("_settings.menuSwitch") }}
-          </el-divider>
-        </AsideHeaderSwitch>
-      </template>
-
-      <template v-if="[LayoutModeEnum.Transverse, LayoutModeEnum.Mixins].includes(settingsStore.layoutMode)">
-        <!-- 头部主题切换 -->
-        <AsideHeaderSwitch useHeader>
-          <el-divider :class="`${prefixClass}__divider`" content-position="center">
-            <el-icon><Menu /></el-icon>
-            {{ $t("_settings.headerSwitch") }}
-          </el-divider>
-        </AsideHeaderSwitch>
-      </template>
-
-      <template
-        v-if="
-          [LayoutModeEnum.Vertical, LayoutModeEnum.Classic, LayoutModeEnum.Columns].includes(settingsStore.layoutMode)
-        "
-      >
-        <!-- 菜单主题 & 头部主题切换 -->
-        <AsideHeaderSwitch useAll>
-          <template #aside>
-            <el-divider :class="`${prefixClass}__divider`" content-position="center">
-              <el-icon><Menu /></el-icon>
-              {{ $t("_settings.menuSwitch") }}
-            </el-divider>
-          </template>
-          <template #header>
-            <el-divider :class="`${prefixClass}__divider`" content-position="center">
-              <el-icon><Menu /></el-icon>
-              {{ $t("_settings.headerSwitch") }}
-            </el-divider>
-          </template>
-        </AsideHeaderSwitch>
-      </template>
-    </template>
-
-    <!-- 标签页切换 -->
-    <TabsNavSwitch>
-      <el-divider :class="`${prefixClass}__divider`" content-position="center">
-        <el-icon><Menu /></el-icon>
-        {{ $t("_settings.tabsNavSwitch") }}
-      </el-divider>
-    </TabsNavSwitch>
-
-    <!-- 全局主题 -->
-    <ThemeSelect>
-      <el-divider :class="`${prefixClass}__divider`" content-position="center">
-        <el-icon><ColdDrink /></el-icon>
-        {{ $t("_settings.globalTheme") }}
-      </el-divider>
-    </ThemeSelect>
-
-    <!-- 界面设置 -->
-    <LayoutSelect>
-      <el-divider :class="`${prefixClass}__divider`" content-position="center">
-        <el-icon><Setting /></el-icon>
-        {{ $t("_settings.interfaceSettings") }}
-      </el-divider>
-    </LayoutSelect>
-
-    <BrowserTitleSwitch>
-      <el-divider :class="`${prefixClass}__divider`" content-position="center">
-        <el-icon><Box /></el-icon>
-        {{ $t("_settings.titleSwitch") }}
-      </el-divider>
-    </BrowserTitleSwitch>
-
-    <el-divider />
-
-    <el-button plain :icon="Refresh" @click="resetSettings">
-      {{ $t("_settings.resetSettingsTitle") }}
-    </el-button>
-  </el-drawer>
-</template>
-
 <script setup lang="ts" name="ThemeDrawer">
 import { ref, computed, watch } from "vue";
 import { ElButton, ElDivider, ElDrawer, ElIcon } from "element-plus";
@@ -111,7 +18,6 @@ import {
 import { DeviceEnum, LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
 
 const ns = useNamespace("theme-drawer");
-const prefixClass = ns.b();
 
 const layoutStore = useLayoutStore();
 
@@ -158,66 +64,104 @@ watch(
   },
   { immediate: true }
 );
-
-// 监听头部主题的切换
-// watch(
-//   () => settingsStore.headerTheme,
-//   () => {
-//     if ([LayoutModeType.Transverse, LayoutModeType.Mixins].includes(settingsStore.layoutMode)) {
-//       settingsStore.$patch({ menuTheme: settingsStore.headerTheme });
-//     }
-//     // TODO：制作强大的颜色系统，在 store 添加多个变量存储用户选择的颜色，而不是写死颜色
-//     if (settingsStore.headerTheme === SystemThemeEnum.Dark) {
-//       setStyleVar("--header-bg-color", variables.headerBgDark);
-//       setStyleVar("--header-text-color", variables.headerTextDark);
-//       setStyleVar("--header-line-color", variables.headerLineDark);
-//       setStyleVar("--header-logo-title-color", variables.headerLogoTitleDark);
-//     } else if (settingsStore.headerTheme === SystemThemeEnum.Light) {
-//       setStyleVar("--header-bg-color", variables.headerBgLight);
-//       setStyleVar("--header-text-color", variables.headerTextLight);
-//       setStyleVar("--header-line-color", variables.headerLineLight);
-//       setStyleVar("--header-logo-title-color", variables.headerLogoTitleLight);
-//     }
-//   },
-//   { immediate: true }
-// );
-
-// 监听亮、暗色主题的切换
-// watchEffect(() => {
-//   if (settingsStore.menuTheme === SystemThemeEnum.Dark) {
-//     // TODO：制作强大的颜色系统，在 store 添加多个变量存储用户选择的颜色，而不是写死颜色
-//     setStyleVar("--menu-bg-color", variables.menuBgDark);
-//     setStyleVar("--menu-text-color", variables.menuTextDark);
-//     setStyleVar("--menu-hover-bg-color", variables.menuHoverBgDark);
-//     setStyleVar("--menu-active-bg-color", variables.menuActiveBgDark);
-//     setStyleVar("--sub-menu-bg-color", variables.subMenuBgDark);
-//     setStyleVar("--sub-menu-hover-bg-color", variables.subMenuHoverBgDark);
-//     setStyleVar("--sub-menu-active-bg-color", variables.subMenuActiveBgDark);
-//     setStyleVar("--menu-icon-color", variables.iconDark);
-//     setStyleVar("--menu-logo-line-color", variables.logoLineDark);
-//     setStyleVar("--menu-logo-title-color", variables.logoTitleDark);
-//     setStyleVar("--split-menu-active-bg-color", variables.splitMenuActiveBgDark);
-//   } else if (settingsStore.menuTheme === SystemThemeEnum.Light) {
-//     setStyleVar("--menu-bg-color", variables.menuBgLight);
-//     setStyleVar("--menu-text-color", variables.menuTextLight);
-//     setStyleVar("--menu-hover-bg-color", variables.menuHoverBgLight);
-//     setStyleVar("--menu-active-bg-color", variables.menuActiveBgLight);
-//     setStyleVar("--sub-menu-bg-color", variables.subMenuBgLight);
-//     setStyleVar("--sub-menu-hover-bg-color", variables.subMenuHoverBgLight);
-//     setStyleVar("--sub-menu-active-bg-color", variables.subMenuActiveBgLight);
-//     setStyleVar("--menu-icon-color", variables.iconLight);
-//     setStyleVar("--menu-logo-line-color", variables.logoLineLight);
-//     setStyleVar("--menu-logo-title-color", variables.logoTitleLight);
-//     setStyleVar("--split-menu-active-bg-color", variables.splitMenuActiveBgLight);
-//   }
-// });
 </script>
 
-<style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-theme-drawer;
+<template>
+  <el-drawer v-model="drawerVisible" title="布局设置" size="300px" :class="ns.b()">
+    <!-- 布局切换 -->
+    <template v-if="!isMobile">
+      <LayoutSwitch>
+        <el-divider :class="ns.e('divider')" content-position="center">
+          <el-icon><Notification /></el-icon>
+          {{ $t("_settings.layoutSwitch") }}
+        </el-divider>
+      </LayoutSwitch>
 
-.#{$prefix-class} {
-  &__divider {
+      <template v-if="[LayoutModeEnum.Subsystem].includes(settingsStore.layoutMode)">
+        <!-- 菜单主题切换 -->
+        <AsideHeaderSwitch useAside>
+          <el-divider :class="ns.e('divider')" content-position="center">
+            <el-icon><Menu /></el-icon>
+            {{ $t("_settings.menuSwitch") }}
+          </el-divider>
+        </AsideHeaderSwitch>
+      </template>
+
+      <template v-if="[LayoutModeEnum.Transverse, LayoutModeEnum.Mixins].includes(settingsStore.layoutMode)">
+        <!-- 头部主题切换 -->
+        <AsideHeaderSwitch useHeader>
+          <el-divider :class="ns.e('divider')" content-position="center">
+            <el-icon><Menu /></el-icon>
+            {{ $t("_settings.headerSwitch") }}
+          </el-divider>
+        </AsideHeaderSwitch>
+      </template>
+
+      <template
+        v-if="
+          [LayoutModeEnum.Vertical, LayoutModeEnum.Classic, LayoutModeEnum.Columns].includes(settingsStore.layoutMode)
+        "
+      >
+        <!-- 菜单主题 & 头部主题切换 -->
+        <AsideHeaderSwitch useAll>
+          <template #aside>
+            <el-divider :class="ns.e('divider')" content-position="center">
+              <el-icon><Menu /></el-icon>
+              {{ $t("_settings.menuSwitch") }}
+            </el-divider>
+          </template>
+          <template #header>
+            <el-divider :class="ns.e('divider')" content-position="center">
+              <el-icon><Menu /></el-icon>
+              {{ $t("_settings.headerSwitch") }}
+            </el-divider>
+          </template>
+        </AsideHeaderSwitch>
+      </template>
+    </template>
+
+    <!-- 标签页切换 -->
+    <TabsNavSwitch>
+      <el-divider :class="ns.e('divider')" content-position="center">
+        <el-icon><Menu /></el-icon>
+        {{ $t("_settings.tabsNavSwitch") }}
+      </el-divider>
+    </TabsNavSwitch>
+
+    <!-- 全局主题 -->
+    <ThemeSelect>
+      <el-divider :class="ns.e('divider')" content-position="center">
+        <el-icon><ColdDrink /></el-icon>
+        {{ $t("_settings.globalTheme") }}
+      </el-divider>
+    </ThemeSelect>
+
+    <!-- 界面设置 -->
+    <LayoutSelect>
+      <el-divider :class="ns.e('divider')" content-position="center">
+        <el-icon><Setting /></el-icon>
+        {{ $t("_settings.interfaceSettings") }}
+      </el-divider>
+    </LayoutSelect>
+
+    <BrowserTitleSwitch>
+      <el-divider :class="ns.e('divider')" content-position="center">
+        <el-icon><Box /></el-icon>
+        {{ $t("_settings.titleSwitch") }}
+      </el-divider>
+    </BrowserTitleSwitch>
+
+    <el-divider />
+
+    <el-button plain :icon="Refresh" @click="resetSettings">
+      {{ $t("_settings.resetSettingsTitle") }}
+    </el-button>
+  </el-drawer>
+</template>
+
+<style lang="scss" scoped>
+@include b(theme-drawer) {
+  @include e(divider) {
     margin-top: 15px;
 
     .#{$el-namespace}-icon {
@@ -225,17 +169,6 @@ $prefix-class: #{$admin-namespace}-theme-drawer;
       top: 2px;
       right: 5px;
       font-size: 15px;
-    }
-  }
-
-  &__list {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin: 14px 0;
-
-    span {
-      font-size: 14px;
     }
   }
 }

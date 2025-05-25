@@ -19,6 +19,8 @@ import { addUnit, setStyleVar } from "@/utils";
 import { type Component, defineAsyncComponent, computed, watch, watchEffect } from "vue";
 import { useRoute } from "vue-router";
 
+import "./base-layout.scss";
+
 const LayoutComponents: Record<string, Component> = {
   vertical: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),
   classic: defineAsyncComponent(() => import("./LayoutClassic/index.vue")),

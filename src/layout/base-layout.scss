@@ -1,33 +1,28 @@
-@use "@/styles/mixins/namespace" as *;
-@use "@/styles/mixins/function" as *;
-@use "@/styles/mixins/bem" as *;
-
 @include b(layout) {
   position: relative;
   width: 100%;
   height: 100%;
 
-  @include when(expand) {
-    .#{$el-namespace}-aside {
+  @include is(expand) {
+    @include joins(layout-aside) {
       width: getCssVar(layout-open-aside-width);
       transition-duration: 0.3s;
     }
   }
 
-  @include when(collapse) {
-    @include b(layout-logo) {
+  @include is(collapse) {
+    @include joins(layout-logo) {
       width: getCssVar(layout-close-aside-width);
     }
 
-    .#{$el-namespace}-aside {
+    @include joins(layout-aside) {
       width: getCssVar(layout-close-aside-width);
       transition-duration: 0.3s;
     }
 
-    @include b(layout-menu) {
+    @include joins(layout-menu) {
       /* 折叠后的图案添加背景色 */
-      .#{$el-namespace}-menu,
-      .#{$el-namespace}-menu--popup {
+      .#{$el-namespace}-menu--collapse {
         > .is-active {
           background-color: getCssVar(layout-aside-bg-active-color);
           font-weight: 700;
@@ -36,8 +31,25 @@
     }
   }
 
+  /* 顶部栏样式 */
+  @include joins(layout-header) {
+    height: getCssVar(layout-header-height);
+    color: getCssVar(layout-header-text-color);
+    background-color: getCssVar(layout-header-bg-color);
+    border-bottom: 1px solid getCssVar(layout-header-line-color);
+    padding: 0;
+  }
+
+  /* 侧边栏样式 */
+  @include joins(layout-aside) {
+    background: getCssVar(layout-aside-bg-color);
+    border-right: 1px solid getCssVar(layout-aside-line-color);
+    z-index: 1000;
+    height: 100%;
+  }
+
   /* logo 栏样式 */
-  @include b(layout-logo) {
+  @include joins(layout-logo) {
     width: getCssVar(layout-open-aside-width);
     height: getCssVar(layout-header-height);
     cursor: pointer;
@@ -57,24 +69,7 @@
     }
   }
 
-  /* 顶部栏样式 */
-  .#{$el-namespace}-header {
-    height: getCssVar(layout-header-height);
-    color: getCssVar(layout-header-text-color);
-    background-color: getCssVar(layout-header-bg-color);
-    border-bottom: 1px solid getCssVar(layout-header-line-color);
-    padding: 0;
-  }
-
-  /* 侧边栏样式 */
-  .#{$el-namespace}-aside {
-    background: getCssVar(layout-aside-bg-color);
-    border-right: 1px solid getCssVar(layout-aside-line-color);
-    z-index: 1000;
-    height: 100%;
-  }
-
-  @include b(layout-menu) {
+  @include joins(layout-menu) {
     .#{$el-namespace}-menu {
       overflow-x: hidden;
       border: none;
@@ -92,10 +87,9 @@
 }
 
 /* 菜单和弹框菜单样式 */
-@include multiple-b((layout-menu, layout-menu-popper)) {
+@include joins(layout-menu, layout-menu-popper) {
   /* 叶子菜单高亮样式 */
-  .#{$el-namespace}-menu,
-  .#{$el-namespace}-menu--popup {
+  :where(.#{$el-namespace}-menu, .#{$el-namespace}-menu--popup) {
     > .is-active {
       &.is-only {
         background-color: getCssVar(layout-aside-bg-active-color);
@@ -128,11 +122,8 @@
     }
 
     /* 父级菜单鼠标悬停样式 */
-    .#{$el-namespace}-sub-menu,
-    .#{$el-namespace}-menu-item {
-      .#{$el-namespace}-sub-menu__title:hover {
-        background-color: getCssVar(layout-aside-bg-hover-color);
-      }
+    :where(.#{$el-namespace}-menu-item, .#{$el-namespace}-sub-menu) .#{$el-namespace}-sub-menu__title:hover {
+      background-color: getCssVar(layout-aside-bg-hover-color);
     }
   }
 }

@@ -1,17 +1,3 @@
-<template>
-  <el-scrollbar>
-    <el-menu
-      :default-active="activeMenu"
-      :collapse="isCollapse"
-      :unique-opened="settingsStore.menuAccordion"
-      :collapse-transition="false"
-      v-bind="{ ...$attrs, class: undefined }"
-    >
-      <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" />
-    </el-menu>
-  </el-scrollbar>
-</template>
-
 <script setup lang="ts" name="Menu">
 import { ElScrollbar, ElMenu } from "element-plus";
 import { computed } from "vue";
@@ -63,3 +49,17 @@ const menuList = computed(() => {
   }
 });
 </script>
+
+<template>
+  <el-scrollbar>
+    <el-menu
+      :default-active="activeMenu"
+      :collapse="isCollapse"
+      :unique-opened="settingsStore.menuAccordion"
+      :collapse-transition="false"
+      v-bind="{ ...$attrs, class: undefined }"
+    >
+      <MenuItem v-for="menu in menuList" :key="menu.path" :menu-item="menu" />
+    </el-menu>
+  </el-scrollbar>
+</template>

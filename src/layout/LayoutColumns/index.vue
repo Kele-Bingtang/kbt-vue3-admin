@@ -12,6 +12,8 @@ import { HOME_URL } from "@/router/routesConfig";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
+import "./index.scss";
+
 const ns = useNamespace("columns-layout");
 
 const route = useRoute();
@@ -22,7 +24,8 @@ const { getMenuListByRouter } = useLayout();
 
 // 子菜单
 const menuItem = ref<RouterConfig[]>([]);
-const splitActive = ref<string>(""); // 菜单是否激活
+// 菜单是否激活
+const active = ref<string>("");
 
 const isCollapse = computed(() => settingsStore.isCollapse);
 
@@ -38,10 +41,8 @@ watch(
   () => {
     // 当前菜单没有数据直接 return
     if (!unref(menuList).length) return;
-    splitActive.value = route.path;
-    const item = unref(menuList).filter(
-      item => route.path === item.path || `/${route.path.split("/")[1]}` === item.path
-    );
+    active.value = route.path;
+    const item = unref(menuList).filter(item => [route.path, `/${route.path.split("/")[1]}`].includes(item.path));
 
     if (item[0] && item[0].children?.length) return (menuItem.value = item[0].children);
     menuItem.value = [];
@@ -53,7 +54,7 @@ watch(
 );
 
 const changeMenuItem = (item: RouterConfig) => {
-  splitActive.value = item.path;
+  active.value = item.path;
   if (item.children?.length) return (menuItem.value = item.children);
   menuItem.value = [];
   router.push(item.path);
@@ -72,7 +73,7 @@ const changeMenuItem = (item: RouterConfig) => {
           <li
             :class="[
               ns.e('aside__list-item'),
-              ns.is('active', splitActive === item.path || `/${splitActive.split('/')[1]}` === item.path),
+              ns.is('active', [active, `/${active.split('/')[1]}`].includes(item.path)),
               'flx-center',
             ]"
             v-for="item in menuList"
@@ -90,7 +91,7 @@ const changeMenuItem = (item: RouterConfig) => {
       </el-scrollbar>
     </div>
 
-    <el-aside :class="['flx-column', { 'not-aside': !menuItem.length }]">
+    <el-aside :class="[ns.join('layout-aside'), 'flx-column', { 'not-aside': !menuItem.length }]">
       <div :class="[ns.e('logo'), ns.join('layout-logo'), 'flx-center']">
         <span v-show="menuItem.length">{{ isCollapse ? "K" : SystemConfig.themeConfig.title }}</span>
       </div>
@@ -98,22 +99,17 @@ const changeMenuItem = (item: RouterConfig) => {
       <el-scrollbar v-if="menuItem?.length">
         <Menu
           :menu-list="menuItem"
-          :class="[ns.b('menu'), ns.join('layout-menu')]"
-          :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+          :class="[ns.join('layout-menu'), ns.b('menu')]"
+          :popper-class="`${ns.join('layout-menu-popper')} ${ns.b('menu-popper')}`"
         />
       </el-scrollbar>
     </el-aside>
 
     <el-container>
-      <el-header class="flx-justify-between">
+      <el-header :class="[ns.join('layout-header'), 'flx-justify-between']">
         <Header />
       </el-header>
       <MainContent />
     </el-container>
   </el-container>
 </template>
-
-<style lang="scss">
-@use "./index";
-@use "../base-layout";
-</style>

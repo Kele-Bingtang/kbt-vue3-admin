@@ -1,36 +1,3 @@
-<template>
-  <div :class="[prefixClass, { show: isShowSearch }]">
-    <Icon
-      name="search"
-      width="20px"
-      height="20px"
-      :icon-style="{ cursor: 'pointer', verticalAlign: 'middle', display: 'inline-block' }"
-      @click.stop="handleStartSearch"
-      v-if="!isShowSearch"
-    />
-    <el-autocomplete
-      v-model="searchMenu"
-      ref="autocompleteRef"
-      placeholder="支持菜单名称、路径"
-      :fetch-suggestions="handleSearchMenuList"
-      @select="handleClickMenu"
-      @click.stop
-    >
-      <template #prefix>
-        <el-tooltip effect="dark" content="切换查询模式" placement="left" :show-after="100">
-          <el-icon :class="`${prefixClass}__icon`" @click.stop="handleSwitchMode"><Search /></el-icon>
-        </el-tooltip>
-      </template>
-      <template #default="{ item }">
-        <template v-if="!isFunction(item.meta.title)">
-          <Icon :icon="item.meta.icon" />
-          <span>{{ nestMode ? item.title.join(" > ") : item.meta.title }}</span>
-        </template>
-      </template>
-    </el-autocomplete>
-  </div>
-</template>
-
 <script setup lang="ts" name="MenuSearch">
 import { computed, ref, onUnmounted, nextTick } from "vue";
 import { ElAutocomplete, ElTooltip, ElIcon } from "element-plus";
@@ -43,7 +10,6 @@ import { useNamespace } from "@/composables";
 import { useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 
 const ns = useNamespace("menu-search");
-const prefixClass = ns.b();
 
 const router = useRouter();
 const permissionStore = usePermissionStore();
@@ -153,10 +119,49 @@ onUnmounted(() => {
 });
 </script>
 
-<style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-menu-search;
+<template>
+  <div :class="[ns.b(), { show: isShowSearch }]">
+    <Icon
+      name="search"
+      width="20px"
+      height="20px"
+      :icon-style="{ cursor: 'pointer', verticalAlign: 'middle', display: 'inline-block' }"
+      @click.stop="handleStartSearch"
+      v-if="!isShowSearch"
+    />
+    <el-autocomplete
+      v-model="searchMenu"
+      ref="autocompleteRef"
+      placeholder="支持菜单名称、路径"
+      :fetch-suggestions="handleSearchMenuList"
+      @select="handleClickMenu"
+      @click.stop
+    >
+      <template #prefix>
+        <el-tooltip effect="dark" content="切换查询模式" placement="left" :show-after="100">
+          <el-icon :class="ns.e('icon')" @click.stop="handleSwitchMode"><Search /></el-icon>
+        </el-tooltip>
+      </template>
+      <template #default="{ item }">
+        <template v-if="!isFunction(item.meta.title)">
+          <Icon :icon="item.meta.icon" />
+          <span>{{ nestMode ? item.title.join(" > ") : item.meta.title }}</span>
+        </template>
+      </template>
+    </el-autocomplete>
+  </div>
+</template>
 
-.#{$prefix-class} {
+<style lang="scss" scoped>
+@include b(menu-search) {
+  @include e(icon) {
+    cursor: pointer;
+
+    &:hover {
+      color: var(--#{$el-namespace}-color-primary);
+    }
+  }
+
   &:not(.show) {
     :deep(.#{$el-namespace}-autocomplete) {
       width: 0;
@@ -177,14 +182,6 @@ $prefix-class: #{$admin-namespace}-menu-search;
     :deep(.#{$el-namespace}-autocomplete) {
       width: 220px;
       transition: width 0.2s;
-    }
-  }
-
-  &__icon {
-    cursor: pointer;
-
-    &:hover {
-      color: var(--#{$el-namespace}-color-primary);
     }
   }
 }

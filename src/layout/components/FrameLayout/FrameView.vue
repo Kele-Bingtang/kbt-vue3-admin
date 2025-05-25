@@ -1,17 +1,10 @@
-<template>
-  <div :class="prefixClass" v-loading="loading" element-loading-text="加载中...">
-    <iframe v-if="needRefresh" :src="iframeSrc" :class="`${prefixClass}__iframe`" ref="frameRef" />
-  </div>
-</template>
-
 <script setup lang="ts" name="FrameView">
 import { nextTick, ref, onMounted, computed, unref } from "vue";
 import { mittBus } from "@/utils";
 import { useRoute } from "vue-router";
 import { useNamespace } from "@/composables";
 
-const ns = useNamespace("frame");
-const prefixClass = ns.b();
+const ns = useNamespace("frame-view");
 
 const loading = ref(true);
 const route = useRoute();
@@ -65,19 +58,23 @@ onMounted(() => {
 });
 </script>
 
+<template>
+  <div :class="ns.b()" v-loading="loading" element-loading-text="加载中...">
+    <iframe v-if="needRefresh" :src="iframeSrc" :class="ns.e('iframe')" ref="frameRef" />
+  </div>
+</template>
+
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-frame;
-
-.#{$prefix-class} {
-  z-index: 998;
-  height: calc(100vh - 88px);
-
-  &__iframe {
+@include b(frame-view) {
+  @include e(iframe) {
     box-sizing: border-box;
     width: 100%;
     height: 100%;
     overflow: hidden;
     border: 0;
   }
+
+  z-index: 998;
+  height: calc(100vh - 88px);
 }
 </style>

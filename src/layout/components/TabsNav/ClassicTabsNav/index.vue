@@ -1,60 +1,3 @@
-<template>
-  <div :class="prefixClass" ref="tabsNavRef">
-    <div style="height: 39px">
-      <div :class="`${prefixClass}__scroll`" ref="scrollContainerDom">
-        <div
-          :class="`${prefixClass}__scroll__body`"
-          ref="scrollBodyDom"
-          :style="{ left: tabBodyLeft + 'px' }"
-          @DOMMouseScroll="handleScrollOnDom"
-          @mousewheel="handleScrollOnDom"
-        >
-          <router-link
-            v-for="tab in tabNavList"
-            :key="tab.path"
-            :to="tab.path"
-            :class="[`${prefixClass}__tab--link`, { active: isActive(tab) }]"
-            :style="activeStyle(tab)"
-            ref="tabsDom"
-            @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
-          >
-            <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
-            <Icon
-              v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
-              :icon="tab.meta.icon"
-              :class="`${prefixClass}__tab--icon`"
-            />
-            <span>{{ tab.title }}</span>
-            <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
-              <Close />
-            </el-icon>
-          </router-link>
-        </div>
-      </div>
-      <div :class="`${prefixClass}__btn left-btn`">
-        <el-button plain @click="handleScroll(240)">
-          <el-icon><ArrowLeft /></el-icon>
-        </el-button>
-      </div>
-      <div :class="`${prefixClass}__btn right-btn`">
-        <el-button plain @click="handleScroll(-240)">
-          <el-icon><ArrowRight /></el-icon>
-        </el-button>
-      </div>
-      <MenuDropdown :class="`${prefixClass}__menu-dropdown`"></MenuDropdown>
-    </div>
-    <transition name="el-zoom-in-top">
-      <RightMenu
-        :selected-tab="selectedTab"
-        :visible="rightMenuVisible"
-        :left="rightMenuLeft"
-        :top="rightMenuTop"
-        :condition="contextMenuCondition"
-      />
-    </transition>
-  </div>
-</template>
-
 <script setup lang="ts" name="TabsNav">
 import { ref, onMounted, watch, nextTick } from "vue";
 import { ElButton, ElIcon } from "element-plus";
@@ -66,8 +9,9 @@ import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { useRoute } from "vue-router";
 
+import "./index.scss";
+
 const ns = useNamespace("tabs-nav");
-const prefixClass = ns.b();
 
 const route = useRoute();
 const layoutStore = useLayoutStore();
@@ -96,7 +40,7 @@ const {
 } = useTabsNav();
 
 onMounted(() => {
-  tabsDrop(`.${prefixClass}__scroll__body`, `.${prefixClass}__tab--link`);
+  tabsDrop(`.${ns.e("scroll-body")}`, `.${ns.e("tab")}`);
   initTabs();
   addOneTab();
 });
@@ -133,6 +77,7 @@ const moveToTargetTab = (tabElement: HTMLElement) => {
   const outerWidth = scrollContainerDom.value?.offsetWidth as number;
   const bodyWidth = scrollBodyDom.value?.offsetWidth as number;
   const outerPadding = 4;
+
   if (bodyWidth < outerWidth) tabBodyLeft.value = 0;
   else if (tabElement.offsetLeft < -tabBodyLeft.value) {
     tabBodyLeft.value = -tabElement.offsetLeft + outerPadding;
@@ -159,6 +104,7 @@ const handleScrollOnDom = (e: MouseEvent & { wheelDelta: number }) => {
 const handleScroll = (offset: number) => {
   const outerWidth = scrollContainerDom.value?.offsetWidth as number;
   const bodyWidth = scrollBodyDom.value?.offsetWidth as number;
+
   if (offset > 0) tabBodyLeft.value = Math.min(0, tabBodyLeft.value + offset);
   else if (outerWidth < bodyWidth) {
     if (tabBodyLeft.value >= -(bodyWidth - outerWidth)) {
@@ -178,6 +124,62 @@ watch(
 );
 </script>
 
-<style lang="scss" scoped>
-@use "./index";
-</style>
+<template>
+  <div :class="ns.b()" ref="tabsNavRef">
+    <div style="height: 39px">
+      <div :class="ns.e('scroll')" ref="scrollContainerDom">
+        <div
+          ref="scrollBodyDom"
+          :class="ns.e('scroll-body')"
+          :style="{ left: tabBodyLeft + 'px' }"
+          @DOMMouseScroll="handleScrollOnDom"
+          @mousewheel="handleScrollOnDom"
+        >
+          <router-link
+            ref="tabsDom"
+            v-for="tab in tabNavList"
+            :key="tab.path"
+            :to="tab.path"
+            :class="[ns.e('tab'), { active: isActive(tab) }]"
+            :style="activeStyle(tab)"
+            @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
+          >
+            <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
+            <Icon
+              v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
+              :icon="tab.meta.icon"
+              :class="ns.em('tab', 'icon')"
+            />
+            <span>{{ tab.title }}</span>
+            <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
+              <Close />
+            </el-icon>
+          </router-link>
+        </div>
+      </div>
+
+      <div :class="[ns.e('btn'), 'left-btn']">
+        <el-button plain @click="handleScroll(240)">
+          <el-icon><ArrowLeft /></el-icon>
+        </el-button>
+      </div>
+
+      <div :class="[ns.e('btn'), 'right-btn']">
+        <el-button plain @click="handleScroll(-240)">
+          <el-icon><ArrowRight /></el-icon>
+        </el-button>
+      </div>
+      <MenuDropdown :class="ns.e('menu-dropdown')"></MenuDropdown>
+    </div>
+
+    <transition name="el-zoom-in-top">
+      <RightMenu
+        :selected-tab="selectedTab"
+        :visible="rightMenuVisible"
+        :left="rightMenuLeft"
+        :top="rightMenuTop"
+        :condition="contextMenuCondition"
+      />
+    </transition>
+  </div>
+</template>

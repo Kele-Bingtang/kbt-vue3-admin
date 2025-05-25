@@ -1,23 +1,3 @@
-<template>
-  <el-dropdown trigger="click" @command="handleSetSize">
-    <div class="svg-container">
-      <Icon name="size" width="20px" height="20px" :icon-style="{ cursor: 'pointer' }" />
-    </div>
-    <template #dropdown>
-      <el-dropdown-menu>
-        <el-dropdown-item
-          v-for="item of sizeOptions"
-          :key="item.value"
-          :disabled="layoutSize === item.value"
-          :command="item.value"
-        >
-          {{ item.label }}
-        </el-dropdown-item>
-      </el-dropdown-menu>
-    </template>
-  </el-dropdown>
-</template>
-
 <script setup lang="ts" name="LayoutSizeSelect">
 import { computed } from "vue";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus";
@@ -44,3 +24,23 @@ const handleSetSize = (layoutSize: LayoutSizeType) => {
   });
 };
 </script>
+
+<template>
+  <el-dropdown trigger="click" @command="handleSetSize">
+    <div class="svg-container">
+      <Icon name="size" width="20px" height="20px" :icon-style="{ cursor: 'pointer' }" />
+    </div>
+    <template #dropdown>
+      <el-dropdown-menu>
+        <el-dropdown-item
+          v-for="item of sizeOptions"
+          :key="item.value"
+          :disabled="layoutSize === item.value"
+          :command="item.value"
+        >
+          {{ item.label }}
+        </el-dropdown-item>
+      </el-dropdown-menu>
+    </template>
+  </el-dropdown>
+</template>

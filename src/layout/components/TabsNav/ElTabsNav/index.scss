@@ -1,16 +1,14 @@
 @use "@/styles/mixins/namespace" as *;
 
-$prefix-class: #{$admin-namespace}-tabs-nav;
-
-.#{$prefix-class} {
+@include b(tabs-nav) {
   position: relative;
   background-color: #ffffff;
 
-  svg: {
+  svg {
     display: inline-block;
   }
 
-  :deep(.#{$prefix-class}__content) {
+  @include e(content) {
     position: relative;
     width: 100%;
 
@@ -20,7 +18,7 @@ $prefix-class: #{$admin-namespace}-tabs-nav;
       right: 13px;
     }
 
-    .#{$prefix-class}__content--icon {
+    @include m(icon) {
       top: 2px;
       margin-right: 5px;
       font-size: 15px;
@@ -32,7 +30,6 @@ $prefix-class: #{$admin-namespace}-tabs-nav;
     }
 
     .#{$el-namespace}-tabs--card > .#{$el-namespace}-tabs__header {
-      box-sizing: border-box;
       height: 40px;
       padding: 0 10px;
       margin: 0;

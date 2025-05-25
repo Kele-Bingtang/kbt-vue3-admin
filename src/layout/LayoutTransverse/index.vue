@@ -9,6 +9,8 @@ import { HOME_URL } from "@/router/routesConfig";
 import { useNamespace } from "@/composables";
 import { useRouter } from "vue-router";
 
+import "./index.scss";
+
 const ns = useNamespace("transverse-layout");
 
 const router = useRouter();
@@ -17,7 +19,7 @@ const settingsStore = useSettingsStore();
 
 <template>
   <el-container :class="[ns.join('layout'), ns.b()]">
-    <el-header class="flx-justify-between">
+    <el-header :class="[ns.join('layout-header'), 'flx-justify-between']">
       <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
         <span>{{ SystemConfig.themeConfig.title }}</span>
@@ -27,8 +29,8 @@ const settingsStore = useSettingsStore();
         mode="horizontal"
         :is-collapse="false"
         :wrap-style="{ overflow: 'hidden' }"
-        :class="[ns.b('menu'), ns.join('layout-menu')]"
-        :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+        :class="[ns.join('layout-menu'), ns.b('menu')]"
+        :popper-class="`${ns.join('layout-menu-popper')} ${ns.b('menu-popper')}`"
       />
       <HeaderRight />
     </el-header>
@@ -36,8 +38,3 @@ const settingsStore = useSettingsStore();
     <MainContent />
   </el-container>
 </template>
-
-<style lang="scss">
-@use "./index";
-@use "../base-layout";
-</style>

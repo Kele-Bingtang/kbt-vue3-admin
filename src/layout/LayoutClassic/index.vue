@@ -11,6 +11,8 @@ import { HOME_URL } from "@/router/routesConfig";
 import { useNamespace } from "@/composables";
 import { useRouter } from "vue-router";
 
+import "./index.scss";
+
 const ns = useNamespace("classic-layout");
 
 const router = useRouter();
@@ -22,7 +24,7 @@ const isCollapse = computed(() => settingsStore.isCollapse);
 <template>
   <!-- 布局：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧 -->
   <el-container :class="[ns.join('layout'), ns.b(), ns.is('collapse', isCollapse), ns.is('expand', !isCollapse)]">
-    <el-header class="flx-justify-between">
+    <el-header :class="[ns.join('layout-header'), 'flx-justify-between']">
       <Header>
         <template #left>
           <div :class="[ns.e('header-left'), 'flx-align-center']">
@@ -37,10 +39,10 @@ const isCollapse = computed(() => settingsStore.isCollapse);
     </el-header>
 
     <el-container :class="ns.e('content')">
-      <el-aside>
+      <el-aside :class="ns.join('layout-aside')">
         <Menu
-          :class="[ns.b('menu'), ns.join('layout-menu')]"
-          :popper-class="`${ns.b('menu-popper')} ${ns.join('layout-menu-popper')}`"
+          :class="[ns.join('layout-menu'), ns.b('menu')]"
+          :popper-class="`${ns.join('layout-menu-popper')} ${ns.b('menu-popper')}`"
         />
       </el-aside>
 
@@ -48,8 +50,3 @@ const isCollapse = computed(() => settingsStore.isCollapse);
     </el-container>
   </el-container>
 </template>
-
-<style lang="scss">
-@use "./index";
-@use "../base-layout";
-</style>
