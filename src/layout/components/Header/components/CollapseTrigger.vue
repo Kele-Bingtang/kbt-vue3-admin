@@ -1,9 +1,9 @@
 <script setup lang="ts" name="CollapseTrigger">
-import { ElIcon } from "element-plus";
-import { useSettingsStore } from "@/stores";
-import { Expand, Fold } from "@element-plus/icons-vue";
-import { useNamespace } from "@/composables";
 import { computed } from "vue";
+import { ElIcon } from "element-plus";
+import { Expand, Fold } from "@element-plus/icons-vue";
+import { useSettingsStore } from "@/stores";
+import { useNamespace } from "@/composables";
 
 const ns = useNamespace("collapse-trigger");
 
@@ -23,9 +23,15 @@ const toggleTrigger = () => {
 
 <style lang="scss" scoped>
 @include b(collapse-trigger) {
+  width: 40px;
+  height: 100%;
   margin-right: 20px;
-  font-size: 22px;
+  font-size: 20px;
   cursor: pointer;
   user-select: none;
+
+  &:hover {
+    background-color: getCssVar(gray-200);
+  }
 }
 </style>

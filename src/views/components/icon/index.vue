@@ -52,8 +52,8 @@
         <el-descriptions-item label="本地 SVG 图标：<Icon icon='SVG-bug'></Icon>" width="300">
           <Icon icon="SVG-bug"></Icon>
         </el-descriptions-item>
-        <el-descriptions-item label="本地 SVG 图标：<Icon name='bug'></Icon>" width="300">
-          <Icon name="bug"></Icon>
+        <el-descriptions-item label="本地 SVG 图标：<Icon icon='bug'></Icon>" width="300">
+          <Icon icon="bug"></Icon>
         </el-descriptions-item>
       </el-descriptions>
     </el-card>

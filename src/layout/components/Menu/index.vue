@@ -1,11 +1,11 @@
 <script setup lang="ts" name="Menu">
-import { ElScrollbar, ElMenu } from "element-plus";
 import { computed } from "vue";
+import { useRoute } from "vue-router";
+import { ElScrollbar, ElMenu } from "element-plus";
+import SystemConfig from "@/config";
 import { useLayout } from "@/composables";
 import { usePermissionStore, useSettingsStore } from "@/stores";
-import MenuItem from "@/layout/components/Menu/MenuItem.vue";
-import { useRoute } from "vue-router";
-import SystemConfig from "@/config";
+import MenuItem from "./MenuItem.vue";
 
 interface MenuProps {
   menuList?: RouterConfig[];

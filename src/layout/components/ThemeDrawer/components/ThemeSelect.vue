@@ -37,8 +37,6 @@ const handleSwitchDark = () => {
 
 <template>
   <div :class="ns.b()">
-    <slot />
-
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.theme") }}</span>
       <el-color-picker v-model="settingsStore.primaryTheme" :predefine="colorList" @change="changePrimary" />
@@ -65,8 +63,6 @@ const handleSwitchDark = () => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-;
-
 @include b(theme-select) {
   @include e(item) {
     display: flex;

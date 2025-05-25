@@ -1,11 +1,11 @@
 <script setup lang="ts" name="Breadcrumb">
+import type { RouteLocationNormalizedLoaded } from "vue-router";
 import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
 import { ElBreadcrumb, ElBreadcrumbItem } from "element-plus";
-import { useLayout } from "@/composables";
 import { ArrowRight } from "@element-plus/icons-vue";
+import { useLayout, useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
-import { useNamespace } from "@/composables";
-import { useRoute, type RouteLocationNormalizedLoaded } from "vue-router";
 
 const ns = useNamespace("breadcrumb");
 
@@ -22,7 +22,7 @@ watch(
 </script>
 
 <template>
-  <el-breadcrumb :class="ns.b()" :separator-icon="ArrowRight">
+  <el-breadcrumb :class="[ns.b(), 'flx-align-center']" :separator-icon="ArrowRight">
     <transition-group name="breadcrumb">
       <template v-for="(breadcrumb, index) in breadcrumbList" :key="breadcrumb.path">
         <el-breadcrumb-item>
@@ -37,6 +37,7 @@ watch(
             />
             <span>{{ breadcrumb.meta.title }}</span>
           </div>
+
           <router-link v-else :to="{ path: breadcrumb.meta._fullPath || breadcrumb.path }" :class="ns.e('link')">
             <Icon
               v-if="breadcrumb.meta?.icon && settingsStore.showBreadcrumbIcon"
@@ -53,16 +54,21 @@ watch(
 
 <style lang="scss" scoped>
 @include b(breadcrumb) {
-  @include e(link) {
-    @include no(click) {
-      display: inline-flex;
-      align-items: center;
-      color: #97a8be;
-      cursor: text;
-    }
+  padding-right: 50px;
+  overflow: hidden;
 
+  @include e(link) {
     display: inline-flex;
     align-items: center;
+    color: getCssVar(layout-header-breadcrumb-link-color);
+
+    &:not(.no-click):hover {
+      color: getCssVar(main-color);
+    }
+
+    @include no(click) {
+      color: getCssVar(layout-header-breadcrumb-text-color);
+    }
   }
 
   @include e(icon) {
@@ -73,12 +79,5 @@ watch(
       font-size: 12px;
     }
   }
-
-  display: flex;
-  align-items: center;
-  padding-right: 50px;
-  overflow: hidden;
-  white-space: nowrap;
-  mask-image: linear-gradient(90deg, #000000 0%, #000000 calc(100% - 50px), transparent);
 }
 </style>

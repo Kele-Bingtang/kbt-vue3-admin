@@ -30,8 +30,6 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
 
 <template>
   <div :class="ns.b()">
-    <slot />
-
     <template v-if="useAside || useAll">
       <slot name="aside" />
 
@@ -78,9 +76,20 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-aside-header-switch;
-
 @include b(aside-header-switch) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: flex-start;
+
+  .is-dark {
+    cursor: no-drop;
+
+    @include e(item) {
+      pointer-events: none;
+    }
+  }
+
   @include e(item) {
     position: relative;
     height: 100%;
@@ -92,22 +101,9 @@ $prefix-class: #{$admin-namespace}-aside-header-switch;
       position: absolute;
       right: 15px;
       bottom: 15px;
-      color: var(--#{$el-namespace}-color-primary);
+      color: getCssVar(main-color);
       transition: all 0.2s;
     }
-  }
-
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  justify-content: flex-start;
-
-  .is-dark {
-    @include e(item) {
-      pointer-events: none;
-    }
-
-    cursor: no-drop;
   }
 }
 </style>

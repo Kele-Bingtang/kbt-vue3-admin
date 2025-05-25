@@ -2,7 +2,7 @@
   /* 自定义菜单样式 */
   @include e(aside) {
     background-color: getCssVar(layout-aside-bg-color);
-    border-right: 1px solid getCssVar(layout-aside-line-color);
+    border-right: 1px solid getCssVar(layout-aside-line);
     width: getCssVar(columns-layout-aside-width);
     height: 100%;
 
@@ -56,7 +56,7 @@
 
   /* 折叠按钮添加左间距 */
   .#{$el-namespace}-header {
-    padding-left: 20px !important;
+    padding-left: 10px !important;
   }
 
   /* 没有二级菜单样式 */

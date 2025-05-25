@@ -2,52 +2,54 @@
 @use "mixins/mixins" as *;
 @use "mixins/function" as *;
 
+// 基础变量
 :root {
-  @include set-css-var(layout-header-line-color, #e4e7ed);
-  @include set-css-var(layout-header-text-color, #303133);
-  @include set-css-var(layout-header-bg-color, #ffffff);
+  --#{$admin-namespace}-card-border: rgba(var(--#{$admin-namespace}-gray-300-rgb), 0.6); // 卡片边框颜色
+  --#{$admin-namespace}-card-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.04); // 卡片阴影
+}
 
-  @include set-css-var(layout-logo-title-color, #68758e);
+// 布局变量
+:root {
+  // 顶部栏
+  @include set-css-var(layout-header-bg-color, var(--#{$admin-namespace}-bg-color));
+  @include set-css-var(layout-header-text-color, var(--#{$admin-namespace}-text-gray-600));
+  @include set-css-var(layout-header-icon-size, 22px);
+  @include set-css-var(layout-header-line, 1px solid var(--#{$admin-namespace}-card-border));
+  // 顶部左侧面包屑
+  @include set-css-var(layout-header-breadcrumb-link-color, var(--#{$admin-namespace}-text-gray-500));
+  @include set-css-var(layout-header-breadcrumb-text-color, var(--#{$admin-namespace}-text-gray-700));
 
-  @include set-css-var(layout-aside-bg-color, #ffffff);
+  @include set-css-var(layout-logo-title-color, var(--#{$admin-namespace}-text-gray-800));
+
+  // 侧边栏
+  @include set-css-var(layout-aside-bg-color, var(--#{$admin-namespace}-main-bg-color));
   @include set-css-var(layout-aside-bg-active-color, var(--#{$el-namespace}-color-primary-light-9));
   @include set-css-var(layout-aside-bg-hover-color, var(--#{$el-namespace}-color-primary-light-9));
-  @include set-css-var(layout-aside-text-color, #29343d);
-  @include set-css-var(layout-aside-text-active-color, #3f8cff);
-  @include set-css-var(layout-aside-icon-color, #6b6b6b);
-  @include set-css-var(layout-aside-icon-active-color, #333333);
-  @include set-css-var(layout-aside-line-color, #edeef0);
+  @include set-css-var(layout-aside-text-color, var(--#{$admin-namespace}-text-gray-800));
+  @include set-css-var(layout-aside-text-active-color, var(--#{$admin-namespace}-main-color));
+  @include set-css-var(layout-aside-icon-color, var(--#{$admin-namespace}-text-gray-800));
+  @include set-css-var(layout-aside-icon-active-color, var(--#{$admin-namespace}-main-color));
+  @include set-css-var(layout-aside-line, 1px solid var(--#{$admin-namespace}-card-border));
   @include set-css-var(columns-layout-aside-width, 72px);
   @include set-css-var(columns-layout-aside-item-height, 72px);
 
-  @include set-css-var(layout-tab-bg-color, #ffffff);
+  // 页签栏
+  @include set-css-var(layout-tab-bg-color, var(--#{$admin-namespace}-bg-color));
+  @include set-css-var(layout-tab-item-bg-color, var(--#{$admin-namespace}-bg-color));
+  @include set-css-var(layout-tab-height, 38px);
+  @include set-css-var(layout-tab-text-color, var(--#{$admin-namespace}-text-gray-400));
+  @include set-css-var(layout-tab-line, 1px solid var(--#{$admin-namespace}-card-border));
+  @include set-css-var(layout-tab-text-size, 12px);
+  @include set-css-var(layout-tab-icon-size, 14px);
 
   --#{$el-namespace}-menu-bg-color: var(--#{$admin-namespace}-layout-aside-bg-color);
   --#{$el-namespace}-menu-text-color: var(--#{$admin-namespace}-layout-aside-text-color);
   --#{$el-namespace}-menu-active-color: var(--#{$admin-namespace}-layout-aside-text-active-color);
 }
 
-:root.dark {
-  @include set-css-var(layout-header-line-color, #414243);
-  @include set-css-var(layout-header-text-color, #cfd3d4);
-  @include set-css-var(layout-header-bg-color, #191a20);
-
-  @include set-css-var(layout-logo-title-color, #babbbd);
-
-  @include set-css-var(layout-aside-bg-color, #ffffff);
-  @include set-css-var(layout-aside-bg-active-color, var(--#{$el-namespace}-color-primary-light-9));
-  @include set-css-var(layout-aside-bg-hover-color, var(--#{$el-namespace}-color-primary-light-9));
-  @include set-css-var(layout-aside-text-color, #dadada);
-  @include set-css-var(layout-aside-text-active-color, #ffffff);
-  @include set-css-var(layout-aside-icon-color, #babbbd);
-  @include set-css-var(layout-aside-icon-active-color, #ffffff);
-  @include set-css-var(layout-aside-line-color, #edeef0);
-
-  @include set-css-var(layout-tab-bg-color, #ffffff);
-}
-
-// 默认主题变量 ｜ Light 主题变量
+// Light 主题变量
 :root {
+  --#{$admin-namespace}-main-color: var(--#{$el-namespace}-color-primary);
   // Theme color
   --#{$admin-namespace}-primary: 93, 135, 255;
   --#{$admin-namespace}-secondary: 73, 190, 255;
@@ -206,13 +208,6 @@ html.dark {
   // Theme background color
   --#{$admin-namespace}-bg-color: #070707;
   --#{$admin-namespace}-main-bg-color: #161618;
-}
-
-// CSS 全局变量
-:root {
-  --console-margin: 20px; // 工作台盒子间距
-  --#{$admin-namespace}-card-border: rgba(var(--#{$admin-namespace}-gray-300-rgb), 0.6); // 卡片边框颜色
-  --#{$admin-namespace}-card-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.04); // 卡片阴影
 }
 
 // 媒体查询-设备尺寸

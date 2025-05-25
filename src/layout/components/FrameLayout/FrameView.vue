@@ -1,7 +1,7 @@
 <script setup lang="ts" name="FrameView">
 import { nextTick, ref, onMounted, computed, unref } from "vue";
-import { mittBus } from "@/utils";
 import { useRoute } from "vue-router";
+import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("frame-view");
@@ -66,15 +66,14 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 @include b(frame-view) {
+  z-index: 998;
+  height: calc(100vh - 88px);
+
   @include e(iframe) {
-    box-sizing: border-box;
     width: 100%;
     height: 100%;
     overflow: hidden;
     border: 0;
   }
-
-  z-index: 998;
-  height: calc(100vh - 88px);
 }
 </style>

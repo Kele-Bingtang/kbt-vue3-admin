@@ -1,5 +1,33 @@
+<script setup lang="ts" name="RightMenu">
+import { ElIcon } from "element-plus";
+import type { TabProp } from "@/stores";
+import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
+import { Refresh, Close, ArrowLeft, ArrowRight, SemiSelect, FolderDelete } from "@element-plus/icons-vue";
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace("right-menu");
+
+const { refreshSelectedTab, closeCurrentTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } =
+  useTabsNav();
+
+interface RightMenuProps {
+  selectedTab: TabProp;
+  visible?: boolean;
+  left?: number;
+  top?: number;
+  condition?: ContextMenuCondition;
+}
+
+withDefaults(defineProps<RightMenuProps>(), {
+  visible: false,
+  left: 0,
+  right: 0,
+  condition: () => ({ refresh: false, current: false, left: false, right: false, other: false, all: false }),
+});
+</script>
+
 <template>
-  <ul v-show="visible" :style="{ left: `${left}px`, top: `${top}px` }" :class="prefixClass">
+  <ul v-show="visible" :style="{ left: `${left}px`, top: `${top}px` }" :class="ns.b()">
     <li v-if="condition.refresh" @click="refreshSelectedTab(selectedTab)">
       <el-icon><Refresh /></el-icon>
       {{ $t("_tabsNav.refresh") }}
@@ -27,39 +55,10 @@
   </ul>
 </template>
 
-<script setup lang="ts" name="RightMenu">
-import { ElIcon } from "element-plus";
-import type { TabProp } from "@/stores";
-import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
-import { Refresh, Close, ArrowLeft, ArrowRight, SemiSelect, FolderDelete } from "@element-plus/icons-vue";
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace("right-menu");
-const prefixClass = ns.b();
-
-const { refreshSelectedTab, closeCurrentTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } =
-  useTabsNav();
-
-interface RightMenuProps {
-  selectedTab: TabProp;
-  visible?: boolean;
-  left?: number;
-  top?: number;
-  condition?: ContextMenuCondition;
-}
-
-withDefaults(defineProps<RightMenuProps>(), {
-  visible: false,
-  left: 0,
-  right: 0,
-  condition: () => ({ refresh: false, current: false, left: false, right: false, other: false, all: false }),
-});
-</script>
-
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-right-menu;
 
-.#{$prefix-class} {
+@include b(right-menu) {
   position: absolute;
   z-index: 4000;
   padding: 5px 0;
@@ -81,7 +80,7 @@ $prefix-class: #{$admin-namespace}-right-menu;
     cursor: pointer;
 
     &:hover {
-      color: var(--#{$el-namespace}-color-primary);
+      color: getCssVar(main-color);
     }
 
     .#{$el-namespace}-icon {

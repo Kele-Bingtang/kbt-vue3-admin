@@ -1,45 +1,47 @@
-@include b(tabs-nav) {
+$btn-width: 28px;
+
+@include b(classic-tabs-nav) {
   position: relative;
   width: 100%;
-  height: 38px;
-  padding: 1px 4px 0;
-  line-height: 31px;
+  height: getCssVar(layout-tab-height);
+  background-color: getCssVar(layout-tab-bg-color);
+  border-bottom: getCssVar(layout-tab-line);
   white-space: nowrap;
-  background-color: #ffffff;
-  border-bottom: 1px solid #d8dce5;
-  box-shadow: 0 1px 4px rgb(0 21 41 / 8%);
-  transition: left 0.3s ease;
+  gap: 5px;
+  padding: 0 5px;
 
   @include e(scroll) {
-    position: absolute;
-    inset: 0 88px 0 28px;
+    position: relative;
+    width: 100%;
+    height: 100%;
     overflow: hidden;
   }
 
   @include e(scroll-body) {
     position: absolute;
-    display: inline-block;
+    top: calc(getCssVar(layout-tab-height) / 2 - 16px);
+    left: $btn-width;
     padding: 2px 4px 0;
     white-space: nowrap;
-    transition: left 0.3s ease;
+    transition: left var(--#{$el-namespace}-transition-duration) ease;
   }
 
   @include e(tab) {
-    display: inline-block;
-    height: 28px;
-    padding: 0 10px;
-    margin: 2px 4px 2px 0;
+    display: inline-flex;
+    align-items: center;
+    background-color: getCssVar(layout-tab-item-bg-color);
+    font-size: getCssVar(layout-tab-text-size);
+    border: 1px solid var(--#{$admin-namespace}-card-border);
+    height: 100%;
+    padding: 5px 10px;
+    margin-right: 8px;
     overflow: hidden;
-    font-size: 12px;
-    line-height: 27px;
-    vertical-align: middle;
     cursor: pointer;
-    border: 1px solid var(--#{$el-namespace}-border-color-light);
-    border-radius: 3px;
+    border-radius: 4px;
 
     &.active {
       color: #ffffff;
-      background-color: #4c9bd8;
+      background-color: getCssVar(main-color);
 
       .dot {
         background-color: #ffffff;
@@ -47,86 +49,46 @@
     }
 
     .dot {
-      position: relative;
-      top: 1px;
-      display: inline-block;
       width: 12px;
       height: 12px;
       margin-right: 7px;
-      background-color: var(--#{$el-namespace}-border-color-light);
+      background-color: getCssVar(gray-300);
       border-radius: 50%;
-      transition: background 0.2s ease;
+      transition: background var(--#{$el-namespace}-transition-duration) ease;
     }
 
     .icon-close {
-      display: inline-block;
       width: 16px;
       height: 16px;
-      padding-right: 1px;
-      margin-left: 10px;
-      font-size: 12px;
-      text-align: center;
-      vertical-align: 2px;
+      margin-left: 6px;
       cursor: pointer;
       border-radius: 50%;
-      transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-      transform-origin: 100% 50%;
+      transition: all var(--#{$el-namespace}-transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
 
       &:hover {
         color: #ffffff;
-        background-color: #b4bccc;
-      }
-
-      svg {
-        display: inline-block;
-        vertical-align: -3px;
+        background-color: getCssVar(gray-500);
       }
     }
 
     @include m(icon) {
-      position: relative;
-      top: 2px;
       margin-right: 4px;
-      font-size: 15px;
+      font-size: getCssVar(layout-tab-icon-size);
     }
   }
 
   @include e(btn) {
-    position: absolute;
-    top: 0;
-    z-index: 10;
     height: 100%;
 
-    &.left-btn {
-      left: 0;
-    }
-
-    &.right-btn {
-      right: 60px;
-    }
-
     .#{$el-namespace}-button {
-      width: 28px;
+      background-color: transparent;
+      width: $btn-width;
       height: 100%;
-      padding: 6px 4px;
-      line-height: 14px;
-      text-align: center;
       border: none;
 
-      &:active {
-        border-color: #a2d0ff !important;
-      }
-
-      .#{$el-namespace}-icon-arrow-left,
-      .#{$el-namespace}-icon-arrow-right {
-        font-weight: 600;
+      &:hover {
+        background-color: getCssVar(gray-200);
       }
     }
-  }
-
-  @include e(menu-dropdown) {
-    position: absolute;
-    top: 7px;
-    right: 0;
   }
 }

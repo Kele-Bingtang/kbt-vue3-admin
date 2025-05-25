@@ -30,7 +30,7 @@ const isCollapse = computed(() => settingsStore.isCollapse);
           <div :class="[ns.e('header-left'), 'flx-align-center']">
             <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
               <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-              <span>{{ SystemConfig.themeConfig.title }}</span>
+              <span v-show="!isCollapse">{{ SystemConfig.themeConfig.title }}</span>
             </div>
             <HeaderLeft />
           </div>

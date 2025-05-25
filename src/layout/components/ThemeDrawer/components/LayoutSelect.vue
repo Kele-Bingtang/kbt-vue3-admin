@@ -14,8 +14,6 @@ const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
 
 <template>
   <div :class="ns.b()">
-    <slot />
-
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.collapseMenu") }}</span>
       <el-switch v-model="settingsStore.isCollapse" />
@@ -70,8 +68,6 @@ const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-layout-select;
-
 @include b(layout-select) {
   @include e(item) {
     display: flex;

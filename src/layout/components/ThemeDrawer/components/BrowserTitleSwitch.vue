@@ -28,8 +28,6 @@ const titleModeOptions = [
 
 <template>
   <div :class="ns.b()">
-    <slot />
-
     <el-select
       v-model="settingsStore.titleMode"
       :placeholder="$t('_settings.titlePlaceholder')"

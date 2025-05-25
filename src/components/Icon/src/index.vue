@@ -1,128 +1,123 @@
-<template>
-  <ElIcon v-if="isElIcon(icon)">
-    <component v-if="isString(icon)" :is="icon.slice(3)"></component>
-    <component v-else :is="iconRaw"></component>
-  </ElIcon>
-  <SvgIcon
-    v-else-if="isSvgIcon(name, icon)"
-    :name="name ? name : (icon as string).slice(4)"
-    :color="color"
-    v-bind="attrsComputed as any"
-    :class="prefixClass"
-  ></SvgIcon>
-  <FontIcon
-    v-else-if="isFontIcon(icon)"
-    :icon="fontIcon.iconName"
-    :iconType="fontIcon.iconType"
-    v-bind="attrsComputed"
-    :color="color"
-    :class="prefixClass"
-  ></FontIcon>
-  <IconifyOffline
-    v-else-if="isIconifyOffline(icon)"
-    :icon="icon"
-    v-bind="attrsComputed"
-    :color="color"
-    :class="prefixClass"
-  ></IconifyOffline>
-  <IconifyOnline v-else-if="isIconifyOnline(icon)" :icon="icon" v-bind="attrsComputed" :color="color"></IconifyOnline>
-</template>
-
 <script setup lang="ts">
+import type { IconProps } from "./icon";
+import { useSlots, computed } from "vue";
+import { useNamespace } from "@/composables";
+import { addUnit, isString } from "@/utils";
 import SvgIcon from "./components/vue/SvgIcon.vue";
 import FontIcon from "./components/vue/FontIcon.vue";
 import IconifyOffline from "./components/vue/IconifyOffline.vue";
 import IconifyOnline from "./components/vue/IconifyOnline.vue";
-import type { IconType } from "./iconType";
-import type { IconifyIcon } from "@iconify/vue";
-import { useAttrs, computed, type Component, toRaw } from "vue";
-import { ElIcon } from "element-plus";
-import { useNamespace } from "@/composables";
 
 defineOptions({ name: "Icon" });
 
 const ns = useNamespace("icon");
-const prefixClass = ns.b();
 
-type IconTypes = string | Object | IconifyIcon | Component;
+const { icon = "", iconType, color, hover = false, hoverColor, pointer = false, ...props } = defineProps<IconProps>();
 
-type Undefined<T> = T | undefined;
+const slot = useSlots();
 
-interface IconProps {
-  icon?: IconTypes;
-  name?: string;
-  color?: string;
-  hoverColor?: string;
-  attrs?: IconType;
-}
-
-const props = withDefaults(defineProps<IconProps>(), { hoverColor: "" });
-const attrsProp = useAttrs();
-
-const attrsComputed = computed(() => Object.assign({}, attrsProp, props.attrs));
-
-const iconRaw = computed(() => toRaw(props.icon));
-
-const isElIcon = (icon: Undefined<IconTypes>) => {
-  if (isString(icon) && icon.toLowerCase().startsWith("el-")) return true;
-  if ((icon as Component)?.name) return true;
-  return false;
+const getStyle = () => {
+  return {
+    ...props.style,
+    ...(pointer ? { cursor: "pointer" } : undefined),
+    "--icon-color": color,
+    "--icon-size": props.size && addUnit(props.size),
+    "--icon-color-hover": hoverColor,
+  };
 };
 
-const isSvgIcon = (name: Undefined<string>, icon: Undefined<IconTypes>): name is string =>
-  !!name || (isString(icon) && icon.toLowerCase().startsWith("svg-"));
-
-const isFontIcon = (icon: Undefined<IconTypes>): icon is string =>
-  !!icon && isString(icon) && icon.toLowerCase().startsWith("if-");
-
-const isIconifyOffline = (icon: Undefined<IconTypes>): icon is string | Object | IconifyIcon =>
-  !!icon && (!!(icon as IconifyIcon)?.body || !(icon as string)?.includes(":"));
-
-const isIconifyOnline = (icon: Undefined<IconTypes>): icon is string => !!icon && isString(icon);
-
-const fontIcon = computed(() => {
-  if (props.icon && isFontIcon(props.icon)) {
-    const name = (props.icon as string)?.toLowerCase().split("if-")[1];
-    const iconName = name.slice(0, name.indexOf(" ") === -1 ? name.length : name.indexOf(" "));
-    const iconType = name.slice(name.indexOf(" ") + 1, name.length);
-    return {
-      iconName,
-      iconType,
-    };
-  }
-  return {
-    iconName: "",
-    iconType: "",
-  };
+/**
+ * 当 props.icon 为字符串时，支持传入修饰符来代替 props.iconType
+ *
+ * 1、icon 为 img- 或 IMG- 开头，则默认为 img
+ * 2、icon 为 if- 或 IF- 开头，则默认为 iconfont
+ * 3、icon 为 uni- 或 UNI- 开头，则默认为 unicode
+ * 4、icon 为 sym- 或 SYM- 开头，则默认为 symbol
+ * 5、icon 为 svg- 或 SVG- 开头，则默认为 svg
+ */
+const finalIcon = computed<any>(() => {
+  if (!isString(icon)) return icon;
+  return icon.replace(/^(svg-|if-|uni-|sym-|img-)/i, "");
 });
 
-const isString = (icon: Undefined<IconTypes>): icon is string => {
-  return typeof icon === "string";
+const getFontIconType = () => {
+  if (iconType && ["unicode", "iconfont", "symbol"].includes(iconType)) {
+    return iconType as unknown as "unicode" | "iconfont" | "symbol";
+  }
+
+  if (!isString(icon)) return;
+
+  if (icon.toLowerCase().startsWith("if-")) return "iconfont";
+  if (icon.toLowerCase().startsWith("uni-")) return "unicode";
+  if (icon.toLowerCase().startsWith("sym-")) return "symbol";
 };
+
+const isSvgIcon = () => isString(icon) && (iconType === "svg" || icon.startsWith("<svg") || isString(icon));
+const isFontIcon = () => isString(icon) && !!getFontIconType();
+const isComponent = () =>
+  !isString(icon) &&
+  (iconType === "component" ||
+    (typeof icon === "object" && ("setup" in icon || "render" in icon)) ||
+    typeof icon === "function");
+const isIconifyOffline = () => !isString(icon) && (iconType === "iconifyOffline" || "body" in icon);
+const isIconifyOnline = () => isString(icon) && (iconType === "iconifyOnline" || icon.includes(":"));
+const isImg = () => isString(icon) && (iconType === "img" || icon.toLowerCase().startsWith("img-"));
 </script>
 
-<style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-icon;
+<template>
+  <i :class="[ns.b(), ns.is('hover', hover)]" :style="getStyle()">
+    <template v-if="slot.default">
+      <slot />
+    </template>
 
-.#{$prefix-class} {
-  &:hover {
-    color: v-bind(hoverColor) !important;
-  }
-}
+    <template v-else-if="isComponent()">
+      <component :is="finalIcon" :size />
+    </template>
 
-.iconify {
-  &:hover {
-    color: v-bind(hoverColor) !important;
-  }
-}
-</style>
+    <img v-else-if="isImg()" :src="finalIcon" :alt="imgAlt" />
+    <FontIcon v-else-if="isFontIcon()" :icon="finalIcon" :iconType="getFontIconType()!" />
+    <IconifyOffline v-else-if="isIconifyOffline()" :icon="finalIcon" />
+    <IconifyOnline v-else-if="isIconifyOnline()" :icon="finalIcon" />
+    <SvgIcon v-else-if="isSvgIcon()" :icon="finalIcon" />
+  </i>
+</template>
 
 <style lang="scss">
-$prefix-class: #{$admin-namespace}-icon;
+@include b(icon) {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-size, 1em);
+  height: var(--icon-size, 1em);
+  font-size: var(--icon-size, inherit);
+  line-height: 1em;
+  color: var(--icon-color, inherit);
+  fill: var(--icon-color, currentColor);
 
-.#{$prefix-class}.iconfont {
-  &:hover {
-    color: v-bind(hoverColor) !important;
+  svg {
+    width: var(--icon-size, 1em);
+    height: var(--icon-size, 1em);
+    vertical-align: middle;
+    fill: currentcolor;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  .iconfont {
+    font-size: var(--icon-size, 1em);
+    color: var(--icon-color, inherit);
+  }
+
+  @include is(hover) {
+    &:hover {
+      svg,
+      i {
+        color: var(--icon-color-hover, inherit);
+      }
+    }
   }
 }
 </style>

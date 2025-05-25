@@ -1,9 +1,10 @@
 <script setup lang="ts" name="FrameLayout">
-import FrameView from "./FrameView.vue";
-import { useLayoutStore } from "@/stores";
-import { useFrame, type Frame } from "./useFrame";
+import type { Frame } from "./useFrame";
 import { computed, unref, watch } from "vue";
 import { useRoute } from "vue-router";
+import { useLayoutStore } from "@/stores";
+import { useFrame } from "./useFrame";
+import FrameView from "./FrameView.vue";
 
 const route = useRoute();
 const layoutStore = useLayoutStore();

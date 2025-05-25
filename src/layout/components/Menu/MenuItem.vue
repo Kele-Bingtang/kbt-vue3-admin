@@ -1,12 +1,12 @@
 <script setup lang="ts" name="MenuItem">
 import { ref, watch, nextTick } from "vue";
-import { ElMenuItem, ElSubMenu } from "element-plus";
-import { useLayout, useNamespace } from "@/composables";
-import { isExternal } from "@/utils";
-import { Tooltip } from "@/components";
-import SystemConfig from "@/config";
-import { useLayoutStore } from "@/stores";
 import { useRouter } from "vue-router";
+import { ElMenuItem, ElSubMenu } from "element-plus";
+import { isExternal } from "@/utils";
+import { useLayout, useNamespace } from "@/composables";
+import { Tooltip } from "@/components";
+import { useLayoutStore } from "@/stores";
+import SystemConfig from "@/config";
 
 defineProps<{ menuItem: RouterConfig }>();
 
@@ -30,11 +30,10 @@ const title = (menuItem: RouterConfig) => {
 
 watch(
   () => layoutStore.language,
-  () => {
+  async () => {
     isSwitchLanguage.value = true;
-    nextTick(() => {
-      isSwitchLanguage.value = false;
-    });
+    await nextTick();
+    isSwitchLanguage.value = false;
   }
 );
 </script>
@@ -73,3 +72,13 @@ watch(
     </template>
   </el-sub-menu>
 </template>
+
+<style lang="scss" scoped>
+.#{$admin-namespace}-icon {
+  width: var(--el-menu-icon-width);
+  margin-right: 5px;
+  font-size: 18px;
+  vertical-align: middle;
+  text-align: center;
+}
+</style>

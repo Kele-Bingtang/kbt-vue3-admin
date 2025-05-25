@@ -4,7 +4,7 @@ import AutoImport from "unplugin-auto-import/vite";
 import { resolve } from "path";
 import { createSvgIconsPlugin } from "vite-plugin-svg-icons";
 import eslintPlugin from "vite-plugin-eslint";
-import VueSetupExtend from "vite-plugin-vue-setup-extend";
+// import VueSetupExtend from "vite-plugin-vue-setup-extend";
 import { configCompressPlugin } from "./compress";
 import { visualizer } from "rollup-plugin-visualizer";
 import ServerUrlCopy from "vite-plugin-url-copy";
@@ -19,7 +19,7 @@ export function getPluginsList(command: string, viteEnv: ImportMetaEnv) {
     vue(),
     vueJsx(),
     eslintPlugin({ cache: false }), // EsLint 报错信息显示在浏览器界面上
-    VueSetupExtend(), // script setup 标签支持 name 命名组件
+    // VueSetupExtend(), // script setup 标签支持 name 命名组件
     ServerUrlCopy({
       qrcode: {
         disabled: true, // 是否生成二维码

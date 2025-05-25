@@ -18,8 +18,6 @@ const changeLayout = (value: LayoutModeEnum) => {
 
 <template>
   <div :class="ns.b()">
-    <slot />
-
     <el-tooltip effect="dark" content="纵向" placement="top" :show-after="200">
       <div
         :class="[
@@ -120,6 +118,15 @@ const changeLayout = (value: LayoutModeEnum) => {
 
 <style lang="scss" scoped>
 @include b(layout-switch) {
+  position: relative;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-around;
+
+  .is-active {
+    box-shadow: 0 0 0 2px getCssVar(main-color) !important;
+  }
+
   @include e(item) {
     position: relative;
     box-sizing: border-box;
@@ -133,7 +140,7 @@ const changeLayout = (value: LayoutModeEnum) => {
     transition: all 0.2s;
 
     .dark {
-      background-color: var(--#{$el-namespace}-color-primary);
+      background-color: getCssVar(main-color);
       border-radius: 3px;
     }
 
@@ -144,7 +151,7 @@ const changeLayout = (value: LayoutModeEnum) => {
 
     .content {
       background-color: var(--#{$el-namespace}-color-primary-light-8);
-      border: 1px dashed var(--#{$el-namespace}-color-primary);
+      border: 1px dashed getCssVar(main-color);
       border-radius: 3px;
     }
 
@@ -152,7 +159,7 @@ const changeLayout = (value: LayoutModeEnum) => {
       position: absolute;
       right: 10px;
       bottom: 10px;
-      color: var(--#{$el-namespace}-color-primary);
+      color: getCssVar(main-color);
       transition: all 0.2s;
     }
 
@@ -276,15 +283,6 @@ const changeLayout = (value: LayoutModeEnum) => {
     .content {
       width: 70%;
     }
-  }
-
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-
-  .is-active {
-    box-shadow: 0 0 0 2px var(--#{$el-namespace}-color-primary) !important;
   }
 }
 </style>

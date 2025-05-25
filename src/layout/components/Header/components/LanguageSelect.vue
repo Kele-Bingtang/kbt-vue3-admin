@@ -1,11 +1,11 @@
 <script setup lang="ts" name="LanguageSelect">
+import type { LanguageType } from "@/stores";
 import { computed } from "vue";
-import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus";
-import { useLayout } from "@/composables";
-import { useLayoutStore, type LanguageType } from "@/stores";
-import { ElMessage } from "element-plus";
 import { useI18n } from "vue-i18n";
 import { useRoute } from "vue-router";
+import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessage } from "element-plus";
+import { useLayout } from "@/composables";
+import { useLayoutStore } from "@/stores";
 
 const localList = [
   { label: "中文简体", value: "zh-CN" },
@@ -24,18 +24,17 @@ const handleSelectLanguage = (lang: LanguageType) => {
   layoutStore.setLanguage(lang);
   document.documentElement.lang = lang;
   setBrowserTitle(route);
+
   let message = i18n.t("_headerBar.changeLanguage");
   message = message === "_headerBar.changeLanguage" ? "修改语言成功！" : message;
-  ElMessage({
-    message,
-    type: "success",
-  });
+  ElMessage.success(message);
 };
 </script>
 
 <template>
   <el-dropdown trigger="click" @command="handleSelectLanguage">
-    <Icon name="language" width="1.5rem" height="1.5rem" :icon-style="{ cursor: 'pointer' }" />
+    <Icon icon="language" style="width: 100%; height: 100%" />
+
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item

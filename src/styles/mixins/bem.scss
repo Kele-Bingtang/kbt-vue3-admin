@@ -55,26 +55,47 @@ $E: null;
   }
 }
 
-@mixin is($state) {
+@mixin is($state, $match: true) {
+  $selector: $is-state-prefix + $state;
   @at-root {
-    &.#{$is-state-prefix + $state} {
-      @content;
+    @if $match {
+      &.#{$selector} {
+        @content;
+      }
+    } @else {
+      &:not(.#{$selector}) {
+        @content;
+      }
     }
   }
 }
 
-@mixin has($state) {
+@mixin has($state, $match: true) {
+  $selector: $has-state-prefix + $state;
   @at-root {
-    &.#{$has-state-prefix + $state} {
-      @content;
+    @if $match {
+      &.#{$selector} {
+        @content;
+      }
+    } @else {
+      &:not(.#{$selector}) {
+        @content;
+      }
     }
   }
 }
 
-@mixin no($state) {
+@mixin no($state, $match: true) {
+  $selector: $no-state-prefix + $state;
   @at-root {
-    &.#{$no-state-prefix + $state} {
-      @content;
+    @if $match {
+      &.#{$selector} {
+        @content;
+      }
+    } @else {
+      &:not(.#{$selector}) {
+        @content;
+      }
     }
   }
 }

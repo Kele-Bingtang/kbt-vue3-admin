@@ -24,8 +24,6 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
 
 <template>
   <div :class="ns.b()">
-    <slot />
-
     <div :class="ns.e('item')">
       <el-tooltip effect="dark" content="经典" placement="left" :show-after="200">
         <div :class="ns.e('theme')" @click="handleTabsNav(TabsNavModeEnum.Classic)">
@@ -71,6 +69,12 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
 
 <style lang="scss" scoped>
 @include b(tabs-nav-switch) {
+  text-align: center;
+
+  .tabs-nav-theme:first-child {
+    margin-bottom: 15px;
+  }
+
   @include e(item) {
     position: relative;
   }
@@ -79,11 +83,24 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
     position: absolute;
     top: 6px;
     right: 15px;
-    color: var(--#{$el-namespace}-color-primary);
+    color: getCssVar(main-color);
     transition: all 0.2s;
   }
 
   @include e(theme) {
+    position: relative;
+    display: inline-flex;
+    width: 150px;
+    height: 30px;
+    cursor: pointer;
+    background-color: #ffffff;
+    box-shadow: 0 0 0 2px rgb(0 0 0 / 10%) !important;
+
+    .title {
+      margin-left: 15px;
+      font-size: 12px;
+    }
+
     @include m(classic) {
       position: relative;
       display: flex;
@@ -113,7 +130,7 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
       }
 
       &.active {
-        background-color: var(--#{$el-namespace}-color-primary);
+        background-color: getCssVar(main-color);
 
         .dot {
           background-color: #ffffff;
@@ -137,11 +154,11 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
       color: #cccccc;
 
       &.active {
-        color: var(--#{$el-namespace}-color-primary);
-        border-bottom: 1px solid var(--#{$el-namespace}-color-primary);
+        color: getCssVar(main-color);
+        border-bottom: 1px solid getCssVar(main-color);
 
         .#{$el-namespace}-icon {
-          color: var(--#{$el-namespace}-color-primary);
+          color: getCssVar(main-color);
         }
       }
 
@@ -158,25 +175,6 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
         margin-top: 3px;
       }
     }
-
-    position: relative;
-    display: inline-flex;
-    width: 150px;
-    height: 30px;
-    cursor: pointer;
-    background-color: #ffffff;
-    box-shadow: 0 0 0 2px rgb(0 0 0 / 10%) !important;
-
-    .title {
-      margin-left: 15px;
-      font-size: 12px;
-    }
-  }
-
-  text-align: center;
-
-  .tabs-nav-theme:first-child {
-    margin-bottom: 15px;
   }
 }
 </style>

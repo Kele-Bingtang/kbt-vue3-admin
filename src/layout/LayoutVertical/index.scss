@@ -1,7 +1,5 @@
 @use "@/styles/mixins/function" as *;
 
-$prefix-class: #{$admin-namespace}-vertical-layout;
-
 @include b(vertical-layout) {
   @include e(drawer-bg) {
     position: absolute;
@@ -15,7 +13,7 @@ $prefix-class: #{$admin-namespace}-vertical-layout;
 
   /* 折叠按钮添加左间距 */
   .#{$el-namespace}-header {
-    padding-left: 20px !important;
+    padding-left: 10px !important;
   }
 
   &.mobile {

@@ -8,13 +8,7 @@ const { toggle, isFullscreen } = useFullscreen();
 </script>
 
 <template>
-  <div :class="ns.b()">
-    <Icon
-      :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
-      @click.stop="toggle"
-      width="1.8rem"
-      height="1.8rem"
-      :icon-style="{ cursor: 'pointer' }"
-    />
+  <div :class="ns.b()" @click.stop="toggle">
+    <Icon :icon="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" />
   </div>
 </template>

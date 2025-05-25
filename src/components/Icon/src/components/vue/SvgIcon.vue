@@ -1,60 +1,27 @@
 <template>
-  <svg :class="iconClass" :style="style" aria-hidden="true">
+  <svg :class="iconClass" aria-hidden="true">
     <use :xlink:href="iconName" />
   </svg>
 </template>
 
 <script setup lang="ts">
-import { computed, type CSSProperties } from "vue";
+import { computed } from "vue";
 
 defineOptions({ name: "SvgIcon" });
 
 interface SvgProps {
-  name: string; // 图标的名称，必传
-  color?: string; // 填充的颜色，非必传
+  icon: string; // 图标的名称，必传
   prefix?: string; // 图标的前缀，非必传（默认为 icon）
-  iconStyle?: CSSProperties; // 图标的样式， 非必传
-  width?: string;
-  height?: string;
 }
 
 // 接收父组件参数并设置默认值
 const props = withDefaults(defineProps<SvgProps>(), {
-  color: "",
   prefix: "icon",
-  width: "",
-  height: "",
-  iconStyle: () => ({ width: "1em", height: "1em" }),
 });
 
-const iconName = computed(() => `#${props.prefix}-${props.name}`);
+const iconName = computed(() => `#${props.prefix}-${props.icon}`);
 const iconClass = computed(() => {
-  if (props.name) {
-    return `svg-icon ${props.name}`;
-  }
+  if (props.icon) return `svg-icon ${props.icon}`;
   return "svg-icon";
 });
-
-const style = computed(() => {
-  const { width, height, color, iconStyle } = props;
-  if (width) iconStyle.width = width;
-  if (height) iconStyle.height = height;
-  if (color) iconStyle.color = color;
-  return iconStyle;
-});
 </script>
-
-<style lang="scss" scoped>
-.svg-icon {
-  overflow: hidden;
-
-  // width: 1em;
-  // height: 1em;
-  vertical-align: -0.15em;
-  fill: currentcolor;
-
-  &:focus {
-    outline: none;
-  }
-}
-</style>

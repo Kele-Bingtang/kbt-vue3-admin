@@ -39,6 +39,7 @@ export const useTabsNav = () => {
     close: true, // 是否允许关闭
     meta: {},
   });
+
   const contextMenuCondition = reactive<ContextMenuCondition>({
     refresh: false, // 刷新当前标签页
     current: false, // 关闭当前标签页
@@ -58,25 +59,32 @@ export const useTabsNav = () => {
     const fullPath = resolveFullPath(route);
     return fullPath === tab.path || fullPath === tab.path + "/";
   };
-  // 标签拖拽排序
+
+  /**
+   * 标签拖拽排序
+   */
   const tabsDrop = (className: string, draggable: string) => {
     const tabDom = document.querySelector(className) as HTMLElement;
-    tabDom &&
-      Sortable.create(tabDom, {
-        draggable: draggable,
-        animation: 300,
-        onEnd({ newIndex, oldIndex }) {
-          const tabsList = [...tabNavList.value];
-          const currRow = tabsList.splice(oldIndex as number, 1)[0];
-          tabsList.splice(newIndex as number, 0, currRow);
-          layoutStore.$patch({
-            tabNavList: tabsList,
-          });
-        },
-      });
+
+    if (!tabDom) return;
+
+    Sortable.create(tabDom, {
+      draggable: draggable,
+      animation: 300,
+      onEnd({ newIndex, oldIndex }) {
+        const tabsList = [...tabNavList.value];
+        const currRow = tabsList.splice(oldIndex as number, 1)[0];
+        tabsList.splice(newIndex as number, 0, currRow);
+        layoutStore.$patch({
+          tabNavList: tabsList,
+        });
+      },
+    });
   };
 
-  // 判断当前激活的 tab
+  /**
+   * 判断当前激活的 tab
+   */
   const getOneTab = (route: RouteLocationNormalizedLoaded) => {
     return {
       path: resolveFullPath(route),
@@ -88,7 +96,9 @@ export const useTabsNav = () => {
     };
   };
 
-  // 判断 tab 的地址，因为携带不同的参数可以引起多个重复的标签，这里可以设置当同一个 path 携带参数不一样，只渲染一个 tab，原理就是去掉 ? 后面的参数
+  /**
+   * 判断 tab 的地址，因为携带不同的参数可以引起多个重复的标签，这里可以设置当同一个 path 携带参数不一样，只渲染一个 tab，原理就是去掉 ? 后面的参数
+   */
   const resolveFullPath = (r: RouteLocationNormalizedLoaded) => {
     if (r.path !== route.path || r.path === HOME_URL) return r.meta._fullPath;
     const urlParams = getUrlParams();
@@ -100,7 +110,10 @@ export const useTabsNav = () => {
     }
     return r.fullPath || r.meta._fullPath;
   };
-  // 初始化固定在标签栏的 tabs
+
+  /**
+   * 初始化固定在标签栏的 tabs
+   */
   const initTabs = () => {
     permissionStore.flatRouteList.forEach(item => {
       if (item.meta?.isAffix && !item.meta?.isFull) {
@@ -110,7 +123,10 @@ export const useTabsNav = () => {
       }
     });
   };
-  // 添加一个 tab
+
+  /**
+   * 添加一个 tab
+   */
   const addOneTab = () => {
     if (route.name) {
       const tab: TabProp = getOneTab(route);
@@ -119,11 +135,14 @@ export const useTabsNav = () => {
     }
   };
 
-  // 初始化标签页的右键菜单
+  /**
+   * 初始化标签页的右键菜单
+   */
   const initContextMenu = (tab: TabProp) => {
     const t = tabNavList.value;
     const tabLength = t.length;
     const currentIndex = t.findIndex(t => t.path === tab.path);
+
     // 如果选择的是固定在标签栏的标签
     if (!tab.close) {
       if (currentIndex === 0) {
@@ -177,79 +196,102 @@ export const useTabsNav = () => {
     });
   };
 
-  // 打开右键菜单，并初始化菜单布局、内容
+  /**
+   * 打开右键菜单，并初始化菜单布局、内容
+   */
   const openRightMenu = (e: MouseEvent, tab: TabProp, tabsNavRef?: HTMLElement) => {
     initContextMenu(tab);
+
     const menuMinWidth = 0;
-    const offsetLeft = tabsNavRef?.getBoundingClientRect().left as number; // margin-left 的数值
-    const offsetWidth = tabsNavRef?.offsetWidth as number; //  width 数值
+    const offsetLeft = tabsNavRef?.getBoundingClientRect().left || 0; // margin-left 的数值
+    const offsetWidth = tabsNavRef?.offsetWidth || 0; //  width 数值
     const maxLeft = offsetWidth - menuMinWidth;
     const left = e.clientX - offsetLeft + 14;
+
     if (left > maxLeft) rightMenuLeft.value = maxLeft;
     else rightMenuLeft.value = left;
+
     rightMenuTop.value = e.offsetY + 12;
     rightMenuVisible.value = true;
     selectedTab.value = tab;
   };
 
-  // 关闭一个 tab，并激活到上一个 tab
+  /**
+   * 关闭一个 tab，并激活到上一个 tab
+   */
   const closeCurrentTab = async (tab: TabProp) => {
     if (tab.meta && tab.meta.beforeCloseName && tab.meta.beforeCloseName in beforeClose) {
       const isClose = await new Promise(resolve => {
         beforeClose[tab.meta.beforeCloseName as string](resolve, route);
       });
+
       if (isClose) closeSelectedTab(tab);
     } else closeSelectedTab(tab);
   };
 
-  // 关闭选择的 tab
+  /**
+   * 关闭选择的 tab
+   */
   const closeSelectedTab = (tab: TabProp) => {
     layoutStore.removeCurrentTab(tab);
     layoutStore.removeKeepAliveName(tab.name);
+
     if (isActive(tab)) toLastTab();
   };
 
-  // 刷新选中的 tab
-  const refreshSelectedTab = (tab: TabProp) => {
+  /**
+   * 刷新选中的 tab
+   */
+  const refreshSelectedTab = async (tab: TabProp) => {
     if (tab.meta?.frameSrc) mittBus.emit("refreshFrame");
     else {
       layoutStore.removeKeepAliveName(tab.name);
+
       refreshCurrentPage(false);
-      nextTick(() => {
-        layoutStore.addKeepAliveName(tab.name);
-        refreshCurrentPage(true);
-      });
+      await nextTick();
+
+      layoutStore.addKeepAliveName(tab.name);
+      refreshCurrentPage(true);
     }
   };
 
+  /**
+   * 关闭左侧的 tab
+   */
   const closeLeftTab = async (tab: TabProp) => {
     layoutStore.removeLeftTab(tab);
   };
 
+  /**
+   * 关闭右侧的 tab
+   */
   const closeRightTab = async (tab: TabProp) => {
     layoutStore.removeRightTab(tab);
-    if (route.path !== tab.path) {
-      router.push(tab.path).catch(err => console.warn(err));
-    }
+    if (route.path !== tab.path) router.push(tab.path).catch(err => console.warn(err));
   };
 
-  // 关闭除当前选中 tab 的其他 tab
+  /**
+   * 关闭除当前选中 tab 的其他 tab
+   */
   const closeOthersTabs = (tab: TabProp) => {
     layoutStore.removeOtherTabs(tab);
+
     if (route.meta.isKeepAlive) layoutStore.setKeepAliveName([route.name] as string[]);
-    if (route.path !== tab.path) {
-      router.push(tab.path).catch(err => console.warn(err));
-    }
+    if (route.path !== tab.path) router.push(tab.path).catch(err => console.warn(err));
   };
 
-  // 关闭除固定在 tabsNav 的所有其他 tabs
+  /**
+   * 关闭除固定在 tabsNav 的所有其他 tabs
+   */
   const closeAllTabs = () => {
     layoutStore.removeAllTabs();
     layoutStore.setKeepAliveName();
     toLastTab();
   };
 
-  // 跳转到上一个 tab
+  /**
+   * 跳转到上一个 tab
+   */
   const toLastTab = () => {
     // 获取最后一个 tab 数据
     const lastTab = layoutStore.tabNavList.slice(-1)[0];
@@ -259,11 +301,8 @@ export const useTabsNav = () => {
 
   watchEffect(() => {
     // 关闭右侧菜单
-    if (rightMenuVisible.value) {
-      document.body.addEventListener("click", setFalse);
-    } else {
-      document.body.removeEventListener("click", setFalse);
-    }
+    if (rightMenuVisible.value) document.body.addEventListener("click", setFalse);
+    else document.body.removeEventListener("click", setFalse);
   });
 
   return {

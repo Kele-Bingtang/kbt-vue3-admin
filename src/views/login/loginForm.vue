@@ -45,7 +45,7 @@
       <el-divider>第三方登录</el-divider>
       <div :class="`${prefixClass}__third--item`">
         <span v-for="(item, index) in thirdParty" :key="index" :title="item.title">
-          <Icon :name="item.icon" width="20" height="20" />
+          <Icon :icon="item.icon" width="20" height="20" />
         </span>
       </div>
     </el-form-item>

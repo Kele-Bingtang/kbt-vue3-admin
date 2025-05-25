@@ -23,6 +23,7 @@ export default {
     "selector-class-pattern": null, // 强制选择器类名的格式
     "value-no-vendor-prefix": null, // 关闭 vendor-prefix(为了解决多行省略 -webkit-box)
     "keyframes-name-pattern": null,
+    "function-name-case": null,
     "selector-pseudo-class-no-unknown": [
       true,
       {
@@ -67,8 +68,11 @@ export default {
       },
     ],
     "unit-no-unknown": [true, { ignoreUnits: ["rpx"] }],
+    // 不允许声明中的属性值未知。这里忽略 v-bind 和 getCssVar 报错
+    "declaration-property-value-no-unknown": [true, { ignoreProperties: { "/.+/": "/v-bind|getCssVar/" } }],
     "order/order": [
-      ["dollar-variables", "custom-properties", "at-rules", "declarations", "rules"],
+      // 排序规则：$变量(如 $primary-color: red) > 自定义属性(如 --custom-color: red) > 声明(如 color: red) > 规则集(如嵌套选择器 .a{ .b{} }) > 规则集(如 @include)
+      ["dollar-variables", "custom-properties", "declarations", "rules", "at-rules"],
       { severity: "warning" },
     ],
   },

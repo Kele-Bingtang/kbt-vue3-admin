@@ -19,7 +19,7 @@ const openErrorLogger = () => {
 
 <template>
   <el-badge :class="ns.b()" :value="props.errorCount" :max="99" :hidden="props.errorCount === 0">
-    <Icon name="bug" width="20px" height="20px" @click.stop="openErrorLogger" />
+    <Icon icon="bug" @click.stop="openErrorLogger" />
   </el-badge>
 </template>
 

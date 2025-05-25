@@ -1,17 +1,17 @@
 <script setup lang="ts" name="TabsNav">
 import { ref, onMounted, watch, nextTick } from "vue";
-import { ElButton, ElIcon } from "element-plus";
-import { useLayoutStore, useSettingsStore, type TabProp } from "@/stores";
-import { useTabsNav } from "../useTabsNav";
-import RightMenu from "../components/RightMenu.vue";
-import MenuDropdown from "../components/MenuDropdown.vue";
-import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
-import { useNamespace } from "@/composables";
 import { useRoute } from "vue-router";
+import { ElButton, ElIcon } from "element-plus";
+import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
+import { useLayoutStore, useSettingsStore, type TabProp } from "@/stores";
+import { useNamespace } from "@/composables";
+import { useTabsNav } from "../useTabsNav";
+import MenuDropdown from "../components/MenuDropdown.vue";
+import RightMenu from "../components/RightMenu.vue";
 
 import "./index.scss";
 
-const ns = useNamespace("tabs-nav");
+const ns = useNamespace("classic-tabs-nav");
 
 const route = useRoute();
 const layoutStore = useLayoutStore();
@@ -45,7 +45,9 @@ onMounted(() => {
   addOneTab();
 });
 
-// 更换 tab 颜色为全局 primaryTheme
+/**
+ * 更换 tab 颜色为全局 primaryTheme
+ */
 const activeStyle = (tab: TabProp) => {
   if (!isActive(tab)) return {};
   return {
@@ -54,22 +56,24 @@ const activeStyle = (tab: TabProp) => {
   };
 };
 
-// 找出访问的目标 tab
-const findTargetTab = () => {
-  nextTick(() => {
-    if (tabsDom.value) {
-      for (const tab of tabsDom.value) {
-        if (route.path === tab.to) {
-          moveToTargetTab(tab.$el);
-          // 当 query 不一样
-          if (tab.to.path !== route.fullPath) {
-            const tabParam = getOneTab(route);
-            layoutStore.updateTab(tabParam);
-          }
-        }
+/**
+ * 找出访问的目标 tab
+ */
+const findTargetTab = async () => {
+  await nextTick();
+
+  if (!tabsDom.value) return;
+
+  for (const tab of tabsDom.value) {
+    if (route.path === tab.to) {
+      moveToTargetTab(tab.$el);
+      // 当 query 不一样
+      if (tab.to.path !== route.fullPath) {
+        const tabParam = getOneTab(route);
+        layoutStore.updateTab(tabParam);
       }
     }
-  });
+  }
 };
 
 // 移动到目标 tab，如果目标 tab 在 TabsNav 可视区域外面，则有滚动的动画效果
@@ -125,52 +129,51 @@ watch(
 </script>
 
 <template>
-  <div :class="ns.b()" ref="tabsNavRef">
-    <div style="height: 39px">
-      <div :class="ns.e('scroll')" ref="scrollContainerDom">
-        <div
-          ref="scrollBodyDom"
-          :class="ns.e('scroll-body')"
-          :style="{ left: tabBodyLeft + 'px' }"
-          @DOMMouseScroll="handleScrollOnDom"
-          @mousewheel="handleScrollOnDom"
-        >
-          <router-link
-            ref="tabsDom"
-            v-for="tab in tabNavList"
-            :key="tab.path"
-            :to="tab.path"
-            :class="[ns.e('tab'), { active: isActive(tab) }]"
-            :style="activeStyle(tab)"
-            @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
-          >
-            <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
-            <Icon
-              v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
-              :icon="tab.meta.icon"
-              :class="ns.em('tab', 'icon')"
-            />
-            <span>{{ tab.title }}</span>
-            <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
-              <Close />
-            </el-icon>
-          </router-link>
-        </div>
-      </div>
-
-      <div :class="[ns.e('btn'), 'left-btn']">
-        <el-button plain @click="handleScroll(240)">
-          <el-icon><ArrowLeft /></el-icon>
-        </el-button>
-      </div>
-
-      <div :class="[ns.e('btn'), 'right-btn']">
-        <el-button plain @click="handleScroll(-240)">
-          <el-icon><ArrowRight /></el-icon>
-        </el-button>
-      </div>
-      <MenuDropdown :class="ns.e('menu-dropdown')"></MenuDropdown>
+  <div :class="[ns.b(), 'flx-align-center']" ref="tabsNavRef">
+    <div :class="[ns.e('btn'), ns.is('left')]">
+      <el-button plain @click="handleScroll(240)">
+        <el-icon><ArrowLeft /></el-icon>
+      </el-button>
     </div>
+
+    <div :class="ns.e('scroll')" ref="scrollContainerDom">
+      <div
+        ref="scrollBodyDom"
+        :class="ns.e('scroll-body')"
+        :style="{ left: tabBodyLeft + 'px' }"
+        @DOMMouseScroll="handleScrollOnDom"
+        @mousewheel="handleScrollOnDom"
+      >
+        <router-link
+          ref="tabsDom"
+          v-for="tab in tabNavList"
+          :key="tab.path"
+          :to="tab.path"
+          :class="[ns.e('tab'), { active: isActive(tab) }]"
+          :style="activeStyle(tab)"
+          @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
+        >
+          <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
+          <Icon
+            v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
+            :icon="tab.meta.icon"
+            :class="ns.em('tab', 'icon')"
+          />
+          <span>{{ tab.title }}</span>
+          <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
+            <Close />
+          </el-icon>
+        </router-link>
+      </div>
+    </div>
+
+    <div :class="[ns.e('btn'), ns.is('right')]">
+      <el-button plain @click="handleScroll(-240)">
+        <el-icon><ArrowRight /></el-icon>
+      </el-button>
+    </div>
+
+    <MenuDropdown :class="ns.e('menu-dropdown')"></MenuDropdown>
 
     <transition name="el-zoom-in-top">
       <RightMenu

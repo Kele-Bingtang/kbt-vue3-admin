@@ -1,12 +1,12 @@
-<script setup lang="ts" name="ThemeDrawer">
-import { ref, computed, watch } from "vue";
-import { ElButton, ElDivider, ElDrawer, ElIcon } from "element-plus";
+<script setup lang="tsx" name="ThemeDrawer">
+import { ref, computed, watch, defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
+import { ElButton, ElDivider, ElDrawer, ElIcon, ElMessage } from "element-plus";
+import { Notification, Menu, ColdDrink, Setting, Box, Refresh } from "@element-plus/icons-vue";
 import { useSettingsStore, useLayoutStore } from "@/stores";
 import { mittBus } from "@/utils";
-import { useI18n } from "vue-i18n";
-import { ElMessage } from "element-plus";
-import { Notification, Menu, ColdDrink, Setting, Box, Refresh } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
+import { DeviceEnum, LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
 import {
   LayoutSwitch,
   AsideHeaderSwitch,
@@ -15,10 +15,8 @@ import {
   LayoutSelect,
   BrowserTitleSwitch,
 } from "./components";
-import { DeviceEnum, LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
 
 const ns = useNamespace("theme-drawer");
-
 const layoutStore = useLayoutStore();
 
 const { t } = useI18n();
@@ -35,6 +33,7 @@ const resetSettings = () => {
     duration: 1000,
     icon: "Loading",
   });
+
   settingsStore.resetSettings();
   setTimeout(() => window.location.reload(), 1000);
 };
@@ -64,37 +63,44 @@ watch(
   },
   { immediate: true }
 );
+
+const Divider = defineComponent({
+  setup(_, { slots }) {
+    return () => (
+      <ElDivider class={ns.e("divider")} content-position="center">
+        {slots.default?.()}
+      </ElDivider>
+    );
+  },
+});
 </script>
 
 <template>
   <el-drawer v-model="drawerVisible" title="布局设置" size="300px" :class="ns.b()">
     <!-- 布局切换 -->
+    <Divider>
+      <ElIcon><Notification /></ElIcon>
+      {{ $t("_settings.layoutSwitch") }}
+    </Divider>
     <template v-if="!isMobile">
-      <LayoutSwitch>
-        <el-divider :class="ns.e('divider')" content-position="center">
-          <el-icon><Notification /></el-icon>
-          {{ $t("_settings.layoutSwitch") }}
-        </el-divider>
-      </LayoutSwitch>
+      <LayoutSwitch />
 
       <template v-if="[LayoutModeEnum.Subsystem].includes(settingsStore.layoutMode)">
         <!-- 菜单主题切换 -->
-        <AsideHeaderSwitch useAside>
-          <el-divider :class="ns.e('divider')" content-position="center">
-            <el-icon><Menu /></el-icon>
-            {{ $t("_settings.menuSwitch") }}
-          </el-divider>
-        </AsideHeaderSwitch>
+        <Divider>
+          <el-icon><Menu /></el-icon>
+          {{ $t("_settings.menuSwitch") }}
+        </Divider>
+        <AsideHeaderSwitch useAside />
       </template>
 
       <template v-if="[LayoutModeEnum.Transverse, LayoutModeEnum.Mixins].includes(settingsStore.layoutMode)">
         <!-- 头部主题切换 -->
-        <AsideHeaderSwitch useHeader>
-          <el-divider :class="ns.e('divider')" content-position="center">
-            <el-icon><Menu /></el-icon>
-            {{ $t("_settings.headerSwitch") }}
-          </el-divider>
-        </AsideHeaderSwitch>
+        <Divider>
+          <el-icon><Menu /></el-icon>
+          {{ $t("_settings.headerSwitch") }}
+        </Divider>
+        <AsideHeaderSwitch useHeader />
       </template>
 
       <template
@@ -105,53 +111,51 @@ watch(
         <!-- 菜单主题 & 头部主题切换 -->
         <AsideHeaderSwitch useAll>
           <template #aside>
-            <el-divider :class="ns.e('divider')" content-position="center">
+            <Divider>
               <el-icon><Menu /></el-icon>
               {{ $t("_settings.menuSwitch") }}
-            </el-divider>
+            </Divider>
           </template>
+
           <template #header>
-            <el-divider :class="ns.e('divider')" content-position="center">
+            <Divider>
               <el-icon><Menu /></el-icon>
               {{ $t("_settings.headerSwitch") }}
-            </el-divider>
+            </Divider>
           </template>
         </AsideHeaderSwitch>
       </template>
     </template>
 
     <!-- 标签页切换 -->
-    <TabsNavSwitch>
-      <el-divider :class="ns.e('divider')" content-position="center">
-        <el-icon><Menu /></el-icon>
-        {{ $t("_settings.tabsNavSwitch") }}
-      </el-divider>
-    </TabsNavSwitch>
+    <Divider>
+      <el-icon><Menu /></el-icon>
+      {{ $t("_settings.tabsNavSwitch") }}
+    </Divider>
+    <TabsNavSwitch />
 
     <!-- 全局主题 -->
-    <ThemeSelect>
-      <el-divider :class="ns.e('divider')" content-position="center">
-        <el-icon><ColdDrink /></el-icon>
-        {{ $t("_settings.globalTheme") }}
-      </el-divider>
-    </ThemeSelect>
+    <Divider>
+      <el-icon><ColdDrink /></el-icon>
+      {{ $t("_settings.globalTheme") }}
+    </Divider>
+    <ThemeSelect />
 
     <!-- 界面设置 -->
-    <LayoutSelect>
-      <el-divider :class="ns.e('divider')" content-position="center">
-        <el-icon><Setting /></el-icon>
-        {{ $t("_settings.interfaceSettings") }}
-      </el-divider>
-    </LayoutSelect>
+    <Divider>
+      <el-icon><Setting /></el-icon>
+      {{ $t("_settings.interfaceSettings") }}
+    </Divider>
+    <LayoutSelect />
 
-    <BrowserTitleSwitch>
-      <el-divider :class="ns.e('divider')" content-position="center">
-        <el-icon><Box /></el-icon>
-        {{ $t("_settings.titleSwitch") }}
-      </el-divider>
-    </BrowserTitleSwitch>
+    <!-- 标题设置 -->
+    <Divider>
+      <el-icon><Box /></el-icon>
+      {{ $t("_settings.titleSwitch") }}
+    </Divider>
+    <BrowserTitleSwitch />
 
-    <el-divider />
+    <Divider />
 
     <el-button plain :icon="Refresh" @click="resetSettings">
       {{ $t("_settings.resetSettingsTitle") }}

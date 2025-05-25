@@ -120,15 +120,9 @@ onUnmounted(() => {
 </script>
 
 <template>
-  <div :class="[ns.b(), { show: isShowSearch }]">
-    <Icon
-      name="search"
-      width="20px"
-      height="20px"
-      :icon-style="{ cursor: 'pointer', verticalAlign: 'middle', display: 'inline-block' }"
-      @click.stop="handleStartSearch"
-      v-if="!isShowSearch"
-    />
+  <div :class="[ns.b(), ns.is('show', isShowSearch)]">
+    <Icon v-if="!isShowSearch" icon="search" @click.stop="handleStartSearch" style="width: 100%; height: 100%" />
+
     <el-autocomplete
       v-model="searchMenu"
       ref="autocompleteRef"
@@ -142,6 +136,7 @@ onUnmounted(() => {
           <el-icon :class="ns.e('icon')" @click.stop="handleSwitchMode"><Search /></el-icon>
         </el-tooltip>
       </template>
+
       <template #default="{ item }">
         <template v-if="!isFunction(item.meta.title)">
           <Icon :icon="item.meta.icon" />
@@ -154,18 +149,15 @@ onUnmounted(() => {
 
 <style lang="scss" scoped>
 @include b(menu-search) {
-  @include e(icon) {
-    cursor: pointer;
-
-    &:hover {
-      color: var(--#{$el-namespace}-color-primary);
-    }
+  @include is(show) {
+    width: 220px !important;
+    background-color: transparent !important;
   }
 
-  &:not(.show) {
+  @include is(show, false) {
     :deep(.#{$el-namespace}-autocomplete) {
       width: 0;
-      transition: width 0.2s;
+      transition: width 0.3s;
 
       .#{$el-namespace}-input__wrapper {
         width: 0;
@@ -178,10 +170,11 @@ onUnmounted(() => {
     }
   }
 
-  &.show {
-    :deep(.#{$el-namespace}-autocomplete) {
-      width: 220px;
-      transition: width 0.2s;
+  @include e(icon) {
+    cursor: pointer;
+
+    &:hover {
+      color: getCssVar(main-color);
     }
   }
 }

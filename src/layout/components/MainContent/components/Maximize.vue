@@ -1,7 +1,7 @@
 <script setup lang="ts" name="Maximize">
 import { ElIcon } from "element-plus";
-import { useSettingsStore } from "@/stores";
 import { Close } from "@element-plus/icons-vue";
+import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("maximize");
@@ -28,12 +28,12 @@ const exitMaximize = () => {
   width: 52px;
   height: 52px;
   cursor: pointer;
-  background-color: var(--#{$el-namespace}-color-info);
+  background-color: getCssVar(gray-600);
   border-radius: 50%;
   opacity: 0.7;
 
   &:hover {
-    background-color: var(--#{$el-namespace}-color-primary);
+    background-color: getCssVar(gray-700);
   }
 
   .#{$el-namespace}-icon {

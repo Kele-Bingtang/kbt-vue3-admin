@@ -1,56 +1,53 @@
-@use "@/styles/mixins/namespace" as *;
+$btn-width: 28px;
 
-@include b(tabs-nav) {
+@include b(el-tabs-nav) {
   position: relative;
-  background-color: #ffffff;
-
-  svg {
-    display: inline-block;
-  }
+  background-color: getCssVar(layout-tab-bg-color);
+  border-bottom: getCssVar(layout-tab-line);
+  padding: 0 10px;
 
   @include e(content) {
-    position: relative;
     width: 100%;
-
-    .#{$el-namespace}-dropdown {
-      position: absolute;
-      top: 8px;
-      right: 13px;
-    }
 
     @include m(icon) {
       top: 2px;
       margin-right: 5px;
-      font-size: 15px;
+      font-size: getCssVar(layout-tab-icon-size);
     }
 
-    .#{$el-namespace}-tabs__nav-wrap {
-      position: absolute;
-      width: calc(100% - 110px);
+    .#{$el-namespace}-tabs {
+      width: calc(100% - $btn-width);
     }
 
     .#{$el-namespace}-tabs--card > .#{$el-namespace}-tabs__header {
-      height: 40px;
-      padding: 0 10px;
+      height: getCssVar(layout-tab-height);
       margin: 0;
-    }
+      border-bottom: none;
 
-    .#{$el-namespace}-tabs--card > .#{$el-namespace}-tabs__header .#{$el-namespace}-tabs__nav {
-      border: none;
-    }
+      .#{$el-namespace}-tabs__nav-wrap {
+        position: absolute;
+        width: 100%;
+      }
 
-    .#{$el-namespace}-tabs--card > .#{$el-namespace}-tabs__header .#{$el-namespace}-tabs__item {
-      color: #cccccc;
-      border: none;
-    }
+      .#{$el-namespace}-tabs__nav {
+        border: none;
+      }
 
-    .#{$el-namespace}-tabs--card > .#{$el-namespace}-tabs__header .#{$el-namespace}-tabs__item.is-active {
-      color: var(--#{$el-namespace}-color-primary);
-      border-bottom: 2px solid var(--#{$el-namespace}-color-primary);
-    }
+      .#{$el-namespace}-tabs__item {
+        color: getCssVar(layout-tab-text-color);
+        // background-color: getCssVar(layout-tab-item-bg-color);
+        border-left: none;
+        padding: 0 10px;
 
-    .#{$el-namespace}-tabs__item .is-icon-close svg {
-      margin-top: 0.5px;
+        &.is-active {
+          color: getCssVar(main-color);
+          border-bottom: 2px solid getCssVar(main-color);
+        }
+
+        .is-icon-close svg {
+          margin-top: 0.5px;
+        }
+      }
     }
   }
 }

@@ -139,9 +139,11 @@ onMounted(() => {
   <div :class="ns.b()">
     <el-popover placement="bottom" :width="330" trigger="click" popper-class="message-popover">
       <template #reference>
-        <el-badge :value="messageLength" :class="ns.e('badge-item')">
-          <Icon name="bell" width="25px" height="25px" :icon-style="{ cursor: 'pointer' }" />
-        </el-badge>
+        <div class="flx-center" style="width: 100%; height: 100%">
+          <el-badge :value="messageLength">
+            <Icon icon="bell" />
+          </el-badge>
+        </div>
       </template>
 
       <el-tabs v-model="activeName">
@@ -229,8 +231,6 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-message-notice;
-
 @include b(message-notice) {
   @include e(list) {
     display: flex;
@@ -239,12 +239,6 @@ $prefix-class: #{$admin-namespace}-message-notice;
   }
 
   @include e(list-item) {
-    @include m(icon) {
-      width: 40px;
-      height: 40px;
-      margin: 0 20px 0 5px;
-    }
-
     display: flex;
     align-items: center;
     padding: 13px 0;
@@ -253,9 +247,19 @@ $prefix-class: #{$admin-namespace}-message-notice;
     &:last-child {
       border: none;
     }
+
+    @include m(icon) {
+      width: 40px;
+      height: 40px;
+      margin: 0 20px 0 5px;
+    }
   }
 
   @include e(list-item__content) {
+    display: flex;
+    flex: 1;
+    flex-direction: column;
+
     @include m(header) {
       display: flex;
       flex: 1;
@@ -274,10 +278,6 @@ $prefix-class: #{$admin-namespace}-message-notice;
       font-size: 12px;
       color: var(--#{$el-namespace}-text-color-secondary);
     }
-
-    display: flex;
-    flex: 1;
-    flex-direction: column;
   }
 
   @include e(empty) {

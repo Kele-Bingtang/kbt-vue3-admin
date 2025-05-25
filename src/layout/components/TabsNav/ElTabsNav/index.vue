@@ -10,7 +10,7 @@ import { useRoute, useRouter } from "vue-router";
 
 import "./index.scss";
 
-const ns = useNamespace("tabs-nav");
+const ns = useNamespace("el-tabs-nav");
 
 const route = useRoute();
 const router = useRouter();
@@ -64,8 +64,8 @@ const tabRemove = async (fullPath: TabPaneName) => {
 </script>
 
 <template>
-  <div ref="tabsNavRef" :class="[ns.b(), 'flx-align-center']">
-    <div :class="ns.e('content')">
+  <div ref="tabsNavRef" :class="ns.b()">
+    <div :class="[ns.e('content'), 'flx-align-center']">
       <el-tabs v-model="tabsNavValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
         <el-tab-pane
           v-for="tab in tabNavList"

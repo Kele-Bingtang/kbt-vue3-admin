@@ -1,17 +1,18 @@
 <script setup lang="ts" name="MainContent">
 import { computed, ref, nextTick, provide, watchEffect, type Component } from "vue";
 import { ElMain } from "element-plus";
+import { RefreshKey } from "@/config/symbols";
+import { getUrlParams, mittBus } from "@/utils";
 import { useLayoutStore, useSettingsStore } from "@/stores";
 import ClassicTabsNav from "@/layout/components/TabsNav/ClassicTabsNav/index.vue";
 import ElTabsNav from "@/layout/components/TabsNav/ElTabsNav/index.vue";
 import CustomTransition from "./components/CustomTransition.vue";
 import Maximize from "./components/Maximize.vue";
 import FrameLayout from "../FrameLayout/index.vue";
-import { getUrlParams, mittBus } from "@/utils";
-import { RefreshKey } from "@/config/symbols";
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
+
 const tabsNavMode = computed(() => settingsStore.tabsNavMode);
 const showTabsNav = computed(() => settingsStore.showTabsNav);
 
@@ -23,15 +24,12 @@ const TabsNavComponents: Record<string, Component> = {
 // 刷新当前页面
 const isRouterShow = ref(true);
 const refreshCurrentPage = (value?: boolean) => {
-  if (value !== undefined) {
-    isRouterShow.value = value;
-    return true;
-  }
+  if (value !== undefined) isRouterShow.value = value;
   isRouterShow.value = false;
+
   nextTick(() => {
     isRouterShow.value = true;
   });
-  return true;
 };
 provide(RefreshKey, refreshCurrentPage);
 
@@ -43,7 +41,7 @@ watchEffect(() => {
   const app = document.getElementById("app") as HTMLElement;
 
   if (urlParams.get("_maximize")) {
-    if (!app.className.includes("main-maximize")) app?.classList.add("main-maximize");
+    if (!app?.className.includes("main-maximize")) app?.classList.add("main-maximize");
   } else {
     if (settingsStore.maximize) app?.classList.add("main-maximize");
     else app?.classList.remove("main-maximize");
@@ -58,7 +56,7 @@ const isFixTabsNav = computed(() => {
 
 <template>
   <Maximize v-if="settingsStore.maximize" />
-  <el-main>
+  <el-main class="flx-column">
     <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
     <router-view v-slot="{ Component, route }">
       <CustomTransition name="fade-transform">
@@ -73,13 +71,11 @@ const isFixTabsNav = computed(() => {
 
 <style lang="scss" scoped>
 .#{$el-namespace}-main {
-  display: flex;
-  flex-direction: column;
   padding: 0;
-  overflow-x: hidden;
   background-color: var(--#{$admin-namespace}-bg-color);
 
   .main-content {
+    flex: 1;
     margin: 10px 12px;
     overflow: v-bind(isFixTabsNav);
   }

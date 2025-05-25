@@ -1,3 +1,54 @@
+<script setup lang="ts" name="MenuButton">
+import { ref, watch } from "vue";
+import { useRoute } from "vue-router";
+import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon, ElButton } from "element-plus";
+import {
+  ArrowDown,
+  Refresh,
+  FullScreen,
+  Close,
+  ArrowLeft,
+  ArrowRight,
+  SemiSelect,
+  FolderDelete,
+} from "@element-plus/icons-vue";
+import { useDebounceFn } from "@vueuse/core";
+import { useSettingsStore } from "@/stores";
+import { useTabsNav } from "../useTabsNav";
+
+const {
+  contextMenuCondition,
+  getOneTab,
+  initContextMenu,
+  refreshSelectedTab,
+  closeCurrentTab,
+  closeLeftTab,
+  closeRightTab,
+  closeOthersTabs,
+  closeAllTabs,
+} = useTabsNav();
+
+const route = useRoute();
+const settingStore = useSettingsStore();
+
+const selectedTab = ref(getOneTab(route));
+
+const expandDropdown = () => {
+  useDebounceFn(() => {
+    initContextMenu(selectedTab.value);
+  }, 100)();
+};
+
+const useMaximize = () => {
+  settingStore.$patch({ maximize: true });
+};
+
+watch(
+  () => route.fullPath,
+  () => (selectedTab.value = getOneTab(route))
+);
+</script>
+
 <template>
   <el-dropdown trigger="click" :teleported="false">
     <slot>
@@ -6,6 +57,7 @@
         <el-icon class="el-icon--right"><ArrowDown /></el-icon>
       </el-button>
     </slot>
+
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item @click="refreshSelectedTab(selectedTab)" :disabled="!contextMenuCondition.refresh">
@@ -41,53 +93,8 @@
   </el-dropdown>
 </template>
 
-<script setup lang="ts" name="MenuButton">
-import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon, ElButton } from "element-plus";
-import { useSettingsStore } from "@/stores";
-import { useDebounceFn } from "@vueuse/core";
-import { useTabsNav } from "../useTabsNav";
-import {
-  ArrowDown,
-  Refresh,
-  FullScreen,
-  Close,
-  ArrowLeft,
-  ArrowRight,
-  SemiSelect,
-  FolderDelete,
-} from "@element-plus/icons-vue";
-import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
-
-const {
-  contextMenuCondition,
-  getOneTab,
-  initContextMenu,
-  refreshSelectedTab,
-  closeCurrentTab,
-  closeLeftTab,
-  closeRightTab,
-  closeOthersTabs,
-  closeAllTabs,
-} = useTabsNav();
-
-const route = useRoute();
-const settingStore = useSettingsStore();
-
-const selectedTab = ref(getOneTab(route));
-
-const expandDropdown = () => {
-  useDebounceFn(() => {
-    initContextMenu(selectedTab.value);
-  }, 100)();
-};
-
-const useMaximize = () => {
-  settingStore.$patch({ maximize: true });
-};
-
-watch(
-  () => route.fullPath,
-  () => (selectedTab.value = getOneTab(route))
-);
-</script>
+<style lang="scss" scoped>
+.#{$el-namespace}-button:hover {
+  background-color: getCssVar(gray-200) !important;
+}
+</style>

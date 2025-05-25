@@ -36,21 +36,21 @@
     height: getCssVar(layout-header-height);
     color: getCssVar(layout-header-text-color);
     background-color: getCssVar(layout-header-bg-color);
-    border-bottom: 1px solid getCssVar(layout-header-line-color);
-    padding: 0;
+    border-bottom: getCssVar(layout-header-line);
+    padding-left: 0;
   }
 
   /* 侧边栏样式 */
   @include joins(layout-aside) {
     background: getCssVar(layout-aside-bg-color);
-    border-right: 1px solid getCssVar(layout-aside-line-color);
+    border-right: getCssVar(layout-aside-line);
     z-index: 1000;
     height: 100%;
   }
 
   /* logo 栏样式 */
   @include joins(layout-logo) {
-    width: getCssVar(layout-open-aside-width);
+    width: calc(getCssVar(layout-open-aside-width) - 1px);
     height: getCssVar(layout-header-height);
     cursor: pointer;
     overflow: hidden;
@@ -71,6 +71,7 @@
 
   @include joins(layout-menu) {
     .#{$el-namespace}-menu {
+      user-select: none;
       overflow-x: hidden;
       border: none;
     }
@@ -102,7 +103,7 @@
           left: 0;
           width: 4px;
           content: "";
-          background: var(--#{$el-namespace}-color-primary);
+          background: getCssVar(main-color);
         }
       }
     }
@@ -117,7 +118,7 @@
 
     /* 子级高亮，父级也高亮 */
     > .is-sub.is-active > .#{$el-namespace}-sub-menu__title {
-      color: var(--#{$el-namespace}-color-primary);
+      color: getCssVar(main-color);
       font-weight: 700;
     }
 

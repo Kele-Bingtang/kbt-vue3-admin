@@ -16,20 +16,17 @@ const layoutSize = computed(() => layoutStore.layoutSize);
 
 const handleSetSize = (layoutSize: LayoutSizeType) => {
   layoutStore.setLayoutSize(layoutSize);
+
   let message = i18n.t("_headerBar.changeSize");
   message = message === "_headerBar.changeSize" ? "修改尺寸成功！" : message;
-  ElMessage({
-    message,
-    type: "success",
-  });
+  ElMessage.success(message);
 };
 </script>
 
 <template>
   <el-dropdown trigger="click" @command="handleSetSize">
-    <div class="svg-container">
-      <Icon name="size" width="20px" height="20px" :icon-style="{ cursor: 'pointer' }" />
-    </div>
+    <Icon icon="size" style="width: 100%; height: 100%" />
+
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item

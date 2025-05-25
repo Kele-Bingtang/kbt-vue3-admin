@@ -1,25 +1,18 @@
-<template>
-  <IconifyIcon
-    :icon="icon as IconifyIconInterface"
-    :style="style ? Object.assign(style, { outline: 'none' }) : { outline: 'none' }"
-    v-bind="$attrs"
-  ></IconifyIcon>
-</template>
-
-<script setup lang="ts">
-import { Icon as IconifyIcon, addIcon, type IconifyIcon as IconifyIconInterface } from "@iconify/vue/dist/offline";
-import { onMounted, type CSSProperties } from "vue";
+<script setup lang="ts" name="IconifyOffline">
+import type { IconifyIcon } from "@iconify/vue";
+import { onMounted, useId } from "vue";
+import { Icon, addIcon } from "@iconify/vue";
 
 defineOptions({ name: "IconifyOffline" });
 
-interface IconifyOfflineProps {
-  icon: Object | string | IconifyIconInterface;
-  style?: CSSProperties;
-}
-
-const props = defineProps<IconifyOfflineProps>();
+const props = defineProps<{ icon: IconifyIcon }>();
 
 onMounted(() => {
-  if (typeof props.icon === "object") addIcon(props.icon + "", props.icon as IconifyIconInterface);
+  const id = useId();
+  addIcon(`iconify-${id}`, props.icon as IconifyIcon);
 });
 </script>
+
+<template>
+  <Icon :icon :style="{ outline: 'none' }" />
+</template>

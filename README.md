@@ -374,7 +374,7 @@ Admin 模板使用的图标是 Element Plus 内置、SVG 格式和 iconify 图�
 
 SVG 图标放置于 `src/assets/icons` 下。
 
-使用步骤：在 vue 组件里使用 Icon 标签，如 `<Icon name="bug" width="20px" height="20px" />`，其中 name 是 svg 的文件名，width 和 height 为图标的宽度和高度。
+使用步骤：在 vue 组件里使用 Icon 标签，如 `<Icon icon="bug" width="20px" height="20px" />`，其中 name 是 svg 的文件名，width 和 height 为图标的宽度和高度。
 
 具体请看 `src/views/components/icon` 里的 Demo。
 

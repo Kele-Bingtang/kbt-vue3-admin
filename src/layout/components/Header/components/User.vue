@@ -1,26 +1,26 @@
 <script setup lang="ts" name="User">
 import { computed } from "vue";
-import { useSettingsStore, useUserStore } from "@/stores";
 import { useI18n } from "vue-i18n";
-import defaultAvatar from "@/assets/images/default.png";
-import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
-import { mittBus } from "@/utils";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox, ElIcon } from "element-plus";
+import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
+import { useSettingsStore, useUserStore } from "@/stores";
+import { mittBus } from "@/utils";
 import { LOGIN_URL } from "@/router/routesConfig";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
+import defaultAvatar from "@/assets/images/default.png";
 
 const ns = useNamespace("user-dropdown");
 
-const prop = withDefaults(defineProps<{ showAvatar?: boolean }>(), {
+withDefaults(defineProps<{ showAvatar?: boolean }>(), {
   showAvatar: true,
 });
 
-const { t } = useI18n();
 const userStore = useUserStore();
 const settingsStore = useSettingsStore();
 const route = useRoute();
 const router = useRouter();
+const { t } = useI18n();
 
 const user = computed(() => userStore.userInfo);
 const showSettings = computed(() => settingsStore.showSettings);
@@ -65,18 +65,20 @@ const logout = async () => {
 
 <template>
   <el-dropdown trigger="click" :class="ns.b()">
-    <div :class="ns.e('avatar')">
-      <template v-if="prop.showAvatar">
+    <div :class="[ns.e('avatar'), 'flx-align-center']">
+      <template v-if="showAvatar">
         <el-image :src="user.avatar" :class="ns.em('avatar', 'img')" alt="头像">
           <template #error>
             <el-image :src="defaultAvatar" alt="头像" />
           </template>
         </el-image>
+
         <span :class="ns.em('avatar', 'username')">{{ user.username }}</span>
       </template>
 
       <el-icon><ArrowDownBold /></el-icon>
     </div>
+
     <template #dropdown>
       <el-dropdown-menu>
         <router-link to="/profile">
@@ -109,6 +111,9 @@ const logout = async () => {
 <style lang="scss" scoped>
 @include b(user-dropdown) {
   @include e(avatar) {
+    position: relative;
+    height: 100%;
+
     @include m(img) {
       width: 35px;
       height: 35px;
@@ -120,19 +125,8 @@ const logout = async () => {
       display: inline-block;
       margin: 0 7px 0 9px;
       font-size: 14px;
-      line-height: 0px;
       cursor: pointer;
       user-select: none;
-    }
-
-    position: relative;
-    display: flex;
-    align-items: center;
-    height: 100%;
-
-    .#{$el-namespace}-icon-caret-bottom {
-      font-size: 12px;
-      cursor: pointer;
     }
   }
 }
