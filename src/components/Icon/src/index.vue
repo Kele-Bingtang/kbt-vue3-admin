@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { IconProps } from "./icon";
-import { useSlots, computed } from "vue";
+import { useSlots, computed, toRaw } from "vue";
 import { useNamespace } from "@/composables";
 import { addUnit, isString } from "@/utils";
 import SvgIcon from "./components/vue/SvgIcon.vue";
@@ -10,10 +10,9 @@ import IconifyOnline from "./components/vue/IconifyOnline.vue";
 
 defineOptions({ name: "Icon" });
 
-const ns = useNamespace("icon");
-
 const { icon = "", iconType, color, hover = false, hoverColor, pointer = false, ...props } = defineProps<IconProps>();
 
+const ns = useNamespace("icon");
 const slot = useSlots();
 
 const getStyle = () => {
@@ -36,7 +35,7 @@ const getStyle = () => {
  * 5、icon 为 svg- 或 SVG- 开头，则默认为 svg
  */
 const finalIcon = computed<any>(() => {
-  if (!isString(icon)) return icon;
+  if (!isString(icon)) return toRaw(icon);
   return icon.replace(/^(svg-|if-|uni-|sym-|img-)/i, "");
 });
 
@@ -52,7 +51,8 @@ const getFontIconType = () => {
   if (icon.toLowerCase().startsWith("sym-")) return "symbol";
 };
 
-const isSvgIcon = () => isString(icon) && (iconType === "svg" || icon.startsWith("<svg") || isString(icon));
+const isSvgIcon = () =>
+  isString(icon) && (iconType === "svg" || icon.startsWith("<svg") || icon.startsWith("svg-") || isString(icon));
 const isFontIcon = () => isString(icon) && !!getFontIconType();
 const isComponent = () =>
   !isString(icon) &&

@@ -1,3 +1,74 @@
+/* 公共侧边栏样式（包含弹框菜单） */
+@include joins(layout-menu, layout-menu-popper) {
+  --#{$el-namespace}-menu-bg-color: var(--#{$admin-namespace}-layout-aside-bg-color);
+  --#{$el-namespace}-menu-text-color: var(--#{$admin-namespace}-layout-aside-text-color);
+  --#{$el-namespace}-menu-active-color: var(--#{$admin-namespace}-layout-aside-text-active-color);
+  --#{$el-namespace}-menu-hover-bg-color: var(--#{$admin-namespace}-layout-aside-bg-hover-color);
+  --#{$el-namespace}-menu-item-height: var(--#{$admin-namespace}-layout-aside-item-height);
+  --#{$el-namespace}-menu-sub-item-height: var(--#{$admin-namespace}-layout-aside-sub-item-height);
+  --#{$el-namespace}-menu-item-font-size: var(--#{$admin-namespace}-layout-aside-text-size);
+  --#{$el-namespace}-menu-icon-width: var(--#{$admin-namespace}-layout-aside-icon-size);
+  --#{$el-namespace}-menu-item-hover-fill: var(--#{$admin-namespace}-layout-aside-text-hover-color);
+  --#{$el-namespace}-menu-base-level-padding: 20px;
+  --#{$el-namespace}-menu-level-padding: 20px;
+  --#{$el-namespace}-menu-horizontal-height: 60px;
+  --#{$el-namespace}-menu-horizontal-sub-item-height: 36px;
+
+  /* 垂直菜单样式 */
+  .#{$el-namespace}-menu--vertical .is-active.is-only {
+    background-color: getCssVar(layout-aside-bg-active-color);
+    font-weight: getCssVar(layout-aside-text-active-weight);
+    &::before {
+      position: absolute;
+      top: 0;
+      bottom: 0;
+      left: 0;
+      width: 4px;
+      content: "";
+      background: getCssVar(main-color);
+    }
+  }
+
+  /* 菜单和弹框菜单样式 */
+  :where(.#{$el-namespace}-menu, .#{$el-namespace}-menu--popup) {
+    user-select: none;
+    border: none !important;
+
+    /* 非激活图标样式 */
+    > li:not(.is-active) {
+      .#{$el-namespace}-icon,
+      .svg-icon {
+        color: getCssVar(layout-aside-icon-color);
+      }
+    }
+
+    /* 子级高亮，父级也高亮 */
+    > .is-sub.is-active > .#{$el-namespace}-sub-menu__title {
+      color: getCssVar(main-color);
+      font-weight: getCssVar(layout-aside-text-active-weight);
+    }
+
+    :where(.#{$el-namespace}-menu-item, .#{$el-namespace}-sub-menu) {
+      margin-bottom: 5px;
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+
+      /* 父级菜单鼠标悬停样式 */
+      .#{$el-namespace}-sub-menu__title:hover {
+        background-color: getCssVar(layout-aside-bg-hover-color) !important;
+      }
+    }
+
+    // 菜单右侧箭头
+    .#{$el-namespace}-sub-menu__icon-arrow {
+      width: getCssVar(layout-aside-arrow-size);
+      font-size: getCssVar(layout-aside-arrow-size);
+    }
+  }
+}
+
+/* 非弹框侧边栏样式 */
 @include b(layout) {
   position: relative;
   width: 100%;
@@ -12,7 +83,7 @@
 
   @include is(collapse) {
     @include joins(layout-logo) {
-      width: getCssVar(layout-close-aside-width);
+      width: calc(getCssVar(layout-close-aside-width) - 1px);
     }
 
     @include joins(layout-aside) {
@@ -25,7 +96,6 @@
       .#{$el-namespace}-menu--collapse {
         > .is-active {
           background-color: getCssVar(layout-aside-bg-active-color);
-          font-weight: 700;
         }
       }
     }
@@ -46,6 +116,7 @@
     border-right: getCssVar(layout-aside-line);
     z-index: 1000;
     height: 100%;
+    overflow-x: hidden;
   }
 
   /* logo 栏样式 */
@@ -69,61 +140,10 @@
   }
 
   @include joins(layout-menu) {
-    .#{$el-namespace}-menu {
-      user-select: none;
-      overflow-x: hidden;
-      border: none;
-    }
-
-    /* 水平菜单减去自身的 border，避免滚动条出现 */
     .#{$el-namespace}-menu--horizontal {
+      background-color: getCssVar(layout-header-bg-color);
+      /* 水平菜单减去自身的 border，避免滚动条出现 */
       height: calc(getCssVar(layout-header-height) - 1px);
-      /* 水平菜单去掉左侧的高亮线 */
-      .is-active::before {
-        content: none !important;
-      }
-    }
-  }
-}
-
-/* 菜单和弹框菜单样式 */
-@include joins(layout-menu, layout-menu-popper) {
-  /* 叶子菜单高亮样式 */
-  :where(.#{$el-namespace}-menu, .#{$el-namespace}-menu--popup) {
-    > .is-active {
-      &.is-only {
-        background-color: getCssVar(layout-aside-bg-active-color);
-        font-weight: 700;
-
-        &::before {
-          position: absolute;
-          top: 0;
-          bottom: 0;
-          left: 0;
-          width: 4px;
-          content: "";
-          background: getCssVar(main-color);
-        }
-      }
-    }
-
-    /* 图标样式 */
-    > li:not(.is-active) {
-      .#{$el-namespace}-icon,
-      .svg-icon {
-        color: getCssVar(layout-aside-icon-color);
-      }
-    }
-
-    /* 子级高亮，父级也高亮 */
-    > .is-sub.is-active > .#{$el-namespace}-sub-menu__title {
-      color: getCssVar(main-color);
-      font-weight: 700;
-    }
-
-    /* 父级菜单鼠标悬停样式 */
-    :where(.#{$el-namespace}-menu-item, .#{$el-namespace}-sub-menu) .#{$el-namespace}-sub-menu__title:hover {
-      background-color: getCssVar(layout-aside-bg-hover-color);
     }
   }
 }

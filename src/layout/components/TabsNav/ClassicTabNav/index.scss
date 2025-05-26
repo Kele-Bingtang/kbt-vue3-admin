@@ -81,12 +81,12 @@ $btn-width: 28px;
     }
 
     .dot {
-      width: 12px;
-      height: 12px;
-      margin-right: 7px;
+      width: getCssVar(layout-tab-dot-size);
+      height: getCssVar(layout-tab-dot-size);
       background-color: getCssVar(gray-300);
-      border-radius: 50%;
       transition: background var(--#{$el-namespace}-transition-duration) ease;
+      margin-right: 7px;
+      border-radius: 50%;
     }
 
     .icon-close {

@@ -1,24 +1,6 @@
 // sass 混合宏（函数）
 
 /**
-* 溢出省略号
-*/
-@mixin ellipsis($rowCount: 1) {
-  @if $rowCount <=1 {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  } @else {
-    min-width: 0;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    display: -webkit-box;
-    -webkit-line-clamp: $rowCount;
-    -webkit-box-orient: vertical;
-  }
-}
-
-/**
 * css3 动画
 */
 @mixin animation(

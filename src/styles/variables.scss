@@ -25,11 +25,19 @@
   @include set-css-var(layout-aside-bg-color, var(--#{$admin-namespace}-main-bg-color));
   @include set-css-var(layout-aside-bg-active-color, var(--#{$el-namespace}-color-primary-light-9));
   @include set-css-var(layout-aside-bg-hover-color, var(--#{$el-namespace}-color-primary-light-9));
-  @include set-css-var(layout-aside-text-color, var(--#{$admin-namespace}-text-gray-800));
+  @include set-css-var(layout-aside-text-color, var(--#{$admin-namespace}-text-gray-700));
   @include set-css-var(layout-aside-text-active-color, var(--#{$admin-namespace}-main-color));
+  @include set-css-var(layout-aside-text-hover-color, var(--#{$admin-namespace}-main-color));
   @include set-css-var(layout-aside-icon-color, var(--#{$admin-namespace}-text-gray-700));
   @include set-css-var(layout-aside-icon-active-color, var(--#{$admin-namespace}-main-color));
   @include set-css-var(layout-aside-line, 1px solid var(--#{$admin-namespace}-card-border));
+  @include set-css-var(layout-aside-text-active-weight, 700);
+  @include set-css-var(layout-aside-text-size, 14px);
+  @include set-css-var(layout-aside-icon-size, 20px);
+  @include set-css-var(layout-aside-arrow-size, 13px);
+  @include set-css-var(layout-aside-item-height, 46px);
+  @include set-css-var(layout-aside-sub-item-height, 40px);
+
   @include set-css-var(columns-layout-aside-width, 72px);
   @include set-css-var(columns-layout-aside-item-height, 72px);
 
@@ -41,10 +49,11 @@
   // @include set-css-var(layout-tab-line, 1px solid var(--#{$admin-namespace}-card-border));
   @include set-css-var(layout-tab-text-size, 13px);
   @include set-css-var(layout-tab-icon-size, 14px);
+  @include set-css-var(layout-tab-dot-size, 11px);
+}
 
-  --#{$el-namespace}-menu-bg-color: var(--#{$admin-namespace}-layout-aside-bg-color);
-  --#{$el-namespace}-menu-text-color: var(--#{$admin-namespace}-layout-aside-text-color);
-  --#{$el-namespace}-menu-active-color: var(--#{$admin-namespace}-layout-aside-text-active-color);
+:root.dark {
+  @include set-css-var(layout-aside-text-active-weight, 400);
 }
 
 // Light 主题变量

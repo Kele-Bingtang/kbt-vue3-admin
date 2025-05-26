@@ -23,11 +23,6 @@ $tabs-nav-prefix-class: #{$admin-namespace}-tabs-nav;
 
 /* 自定义 element 暗黑模式样式 */
 html.dark {
-  /* kbt-admin */
-  --kbt-bg-color: #141414;
-  --kbt-main-bg-color: #0d0d0d;
-  --kbt-border-light: 1px solid #4c4c4d;
-
   /* 以下为自定义暗黑模式内容 */
   .#{$login-prefix-class} {
     background-color: var(--#{$el-namespace}-fill-color-extra-light);
@@ -44,88 +39,6 @@ html.dark {
         }
       }
     }
-  }
-
-  /* scroll-bar */
-  ::-webkit-scrollbar {
-    background-color: var(--#{$el-namespace}-scrollbar-bg-color);
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: var(--#{$el-namespace}-border-color-darker);
-  }
-
-  .columns {
-    .#{$el-namespace}-aside {
-      .#{$el-namespace}-menu-item:not(.is-active) > * {
-        color: getCssVar(layout-aside-text-color);
-      }
-    }
-
-    .layout-logo {
-      border-right: var(--kbt-border-light);
-      border-bottom: var(--kbt-border-light);
-    }
-  }
-
-  .mixins {
-    .#{$el-namespace}-header {
-      border-bottom: var(--kbt-border-light);
-    }
-  }
-
-  /* layout */
-  .#{$el-namespace}-container {
-    .#{$el-namespace}-aside {
-      background-color: var(--kbt-bg-color);
-      border-right: var(--kbt-border-light);
-
-      .layout-logo {
-        border-bottom: var(--kbt-border-light);
-      }
-    }
-
-    .#{$columns-prefix-class}__aside__list {
-      border-right: var(--kbt-border-light) !important;
-    }
-
-    .not-aside {
-      border-right: none !important;
-    }
-
-    .#{$el-namespace}-header {
-      color: var(--#{$el-namespace}-text-color-regular) !important;
-      background-color: var(--kbt-bg-color) !important;
-      border-bottom-color: var(--#{$el-namespace}-border-color-light);
-    }
-
-    .#{$el-namespace}-main,
-    .#{$el-namespace}-main > div {
-      background-color: var(--kbt-main-bg-color) !important;
-    }
-
-    .#{$tabs-nav-prefix-class} {
-      border-bottom: 1px solid var(--#{$el-namespace}-border-color-light);
-
-      .#{$el-namespace}-tabs {
-        background-color: var(--kbt-bg-color) !important;
-        border-bottom: 1px solid var(--#{$el-namespace}-border-color-light);
-
-        .#{$tabs-nav-prefix-class}__btn .#{$el-namespace}-button {
-          border-color: var(--#{$el-namespace}-border-color-light) !important;
-        }
-      }
-    }
-
-    .#{$el-namespace}-dropdown {
-      color: var(--#{$el-namespace}-text-color-regular) !important;
-    }
-  }
-
-  .#{$el-namespace}-menu,
-  .#{$el-namespace}-menu-item,
-  .#{$el-namespace}-sub-menu__title {
-    background-color: var(--kbt-bg-color);
   }
 
   /* 克隆并自定义 ElMessage 样式，不会影响 ElMessage 原本样式，在 src/utils/message.ts 中调用自定义样式 ElMessage 方法即可，非暗黑模式在 src/style/element-plus.scss 文件进行了适配 */

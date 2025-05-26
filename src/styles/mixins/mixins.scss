@@ -3,3 +3,21 @@
 @mixin set-css-var($name, $value) {
   #{joinVarName($name)}: #{$value};
 }
+
+/**
+* 溢出省略号
+*/
+@mixin ellipsis($rowCount: 1) {
+  @if $rowCount <=1 {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  } @else {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: $rowCount;
+    -webkit-box-orient: vertical;
+  }
+}
