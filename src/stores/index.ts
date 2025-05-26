@@ -1,6 +1,6 @@
-import SystemConfig from "@/config";
 import { createPinia } from "pinia";
 import { createPersistedState } from "pinia-plugin-persistedstate";
+import SystemConfig from "@/config";
 
 export * from "./interface";
 export * from "./errorLog";

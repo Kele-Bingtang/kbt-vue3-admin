@@ -10,8 +10,6 @@
 @forward "mixins/function";
 @forward "mixins/mixins";
 
-@use "mixins/namespace" as *;
-
 /* 自定义原子类 */
 @for $i from 1 through 6 {
   .m-#{$i * 5} {

@@ -1,6 +1,6 @@
-import { useDebounceFn } from "@vueuse/core";
 import type * as echarts from "echarts";
 import { onActivated, onBeforeUnmount, onDeactivated } from "vue";
+import { useDebounceFn } from "@vueuse/core";
 
 /**
  * @description 使用 Echarts(只是为了添加图表响应式)

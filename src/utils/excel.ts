@@ -1,5 +1,6 @@
+import type { WorkBook, WorkSheet } from "xlsx";
+import { write, utils, SSF } from "xlsx";
 import { saveAs } from "file-saver";
-import { write, utils, SSF, type WorkBook, type WorkSheet } from "xlsx";
 
 interface ICell {
   v: Date | number | boolean | string;

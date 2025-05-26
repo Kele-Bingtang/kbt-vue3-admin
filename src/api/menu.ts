@@ -1,4 +1,4 @@
-import http from "@/config/request";
+import http from "@/request";
 
 export interface BackstageMenuList {
   imageIcon: string;

@@ -28,6 +28,7 @@ const toggleTrigger = () => {
   font-size: 20px;
   cursor: pointer;
   user-select: none;
+  transition: background-color var(--#{$el-namespace}-transition-duration);
 
   &:hover {
     background-color: getCssVar(gray-200);

@@ -1,5 +1,5 @@
-import { ElMessageBox } from "element-plus";
 import type { RouteLocationNormalizedLoaded } from "vue-router";
+import { ElMessageBox } from "element-plus";
 
 type BeforeCloseType = (value: unknown) => void;
 

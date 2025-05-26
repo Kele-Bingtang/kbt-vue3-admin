@@ -1,7 +1,8 @@
 // https://github.com/pure-admin/vue-pure-admin/blob/main/src/utils/message.ts 进行封装
-import { type MessageHandler, ElMessage } from "element-plus";
-import { isFunction, isString } from "./is";
 import type { VNode } from "vue";
+import type { MessageHandler } from "element-plus";
+import { ElMessage } from "element-plus";
+import { isFunction, isString } from "./is";
 
 type MessageStyle = "el" | "antd";
 type MessageTypes = "info" | "success" | "warning" | "error";

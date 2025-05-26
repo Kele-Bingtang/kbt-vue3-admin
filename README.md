@@ -170,7 +170,7 @@ Admin 对 axios 进行了一些处理，可以在 params 下添加了一个关�
 如果发送请求时，需要显示全局 loading 加载，在 api 服务中通过指定: { headers: { loading: true } } 来控制显示 loading
 
 ```typescript
-import http from "@/config/request";
+import http from "@/request";
 
 export const api = () => {
   http.request({
@@ -188,7 +188,7 @@ export const api = () => {
 当项目变得复杂时，那么获取资源的 `https://ip:port` 必然有很多个，可以在接口的 header 使用 mapping 来开启多个 baseURL 功能：
 
 ```typescript
-import http from "@/config/request";
+import http from "@/request";
 
 export const api = () => {
   http.request({
@@ -215,7 +215,7 @@ default 是默认的 baseURL，**请不要删除或者更改**，当不开启 ma
 当配置了一个键值对，如上面的 test，则在请求的时候，url 前缀携带 test，如（第五行）：
 
 ```typescript
-import http from "@/config/request";
+import http from "@/request";
 
 export const api = () => {
   http.request({

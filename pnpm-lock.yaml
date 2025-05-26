@@ -327,9 +327,6 @@ importers:
       vite-plugin-url-copy:
         specifier: ^1.1.4
         version: 1.1.4(vite@6.3.5(@types/node@22.15.21)(jiti@2.4.2)(sass@1.89.0)(yaml@2.8.0))
-      vite-plugin-vue-setup-extend:
-        specifier: ^0.4.0
-        version: 0.4.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.4.2)(sass@1.89.0)(yaml@2.8.0))
       vue-eslint-parser:
         specifier: ^10.1.1
         version: 10.1.3(eslint@9.27.0(jiti@2.4.2))
@@ -5407,11 +5404,6 @@ packages:
     resolution: {integrity: sha512-LuNI0RHdg3gfbyIiY4yzJaIxhq2fAapUTV31eskHIV56CxioddReH+H+bZtRkEdcgr3XkFBdetUVRzBSJjNEyg==}
     peerDependencies:
       vite: '>=4.0.0'
-
-  vite-plugin-vue-setup-extend@0.4.0:
-    resolution: {integrity: sha512-WMbjPCui75fboFoUTHhdbXzu4Y/bJMv5N9QT9a7do3wNMNHHqrk+Tn2jrSJU0LS5fGl/EG+FEDBYVUeWIkDqXQ==}
-    peerDependencies:
-      vite: '>=2.0.0'
 
   vite@6.3.5:
     resolution: {integrity: sha512-cZn6NDFE7wdTpINgs++ZJ4N49W2vRp8LCKrn3Ob1kYNtOo21vfDoaV5GzBfLU4MovSAB8uNRm4jgzVQZ+mBzPQ==}
@@ -11349,12 +11341,6 @@ snapshots:
       clipboardy: 4.0.0
       consola: 3.3.1
       uqr: 0.1.2
-      vite: 6.3.5(@types/node@22.15.21)(jiti@2.4.2)(sass@1.89.0)(yaml@2.8.0)
-
-  vite-plugin-vue-setup-extend@0.4.0(vite@6.3.5(@types/node@22.15.21)(jiti@2.4.2)(sass@1.89.0)(yaml@2.8.0)):
-    dependencies:
-      '@vue/compiler-sfc': 3.5.13
-      magic-string: 0.25.9
       vite: 6.3.5(@types/node@22.15.21)(jiti@2.4.2)(sass@1.89.0)(yaml@2.8.0)
 
   vite@6.3.5(@types/node@22.15.21)(jiti@2.4.2)(sass@1.89.0)(yaml@2.8.0):

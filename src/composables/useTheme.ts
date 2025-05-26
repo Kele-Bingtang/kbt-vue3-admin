@@ -1,9 +1,9 @@
-import { getLightColor, getDarkColor, setStyleVar } from "@/utils";
-import SystemConfig from "@/config";
-import { ElMessage } from "element-plus";
-import { useSettingsStore } from "@/stores";
 import { toRaw } from "vue";
+import { ElMessage } from "element-plus";
+import { getLightColor, getDarkColor, setStyleVar } from "@/utils";
+import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
+import SystemConfig from "@/config";
 
 /**
  * @description 切换主题

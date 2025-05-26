@@ -94,7 +94,12 @@ watch(
 </template>
 
 <style lang="scss" scoped>
-.#{$el-namespace}-button:hover {
-  background-color: getCssVar(gray-200) !important;
+.#{$el-namespace}-button {
+  color: getCssVar(layout-tab-text-color);
+
+  &:hover {
+    color: getCssVar(main-color);
+    background-color: getCssVar(gray-200) !important;
+  }
 }
 </style>

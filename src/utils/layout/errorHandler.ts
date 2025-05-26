@@ -1,7 +1,7 @@
-import { isArray } from "@/utils";
-import SystemConfig from "@/config";
-import { useErrorLogStore } from "@/stores";
 import { ElNotification } from "element-plus";
+import { isArray } from "@/utils";
+import { useErrorLogStore } from "@/stores";
+import SystemConfig from "@/config";
 
 /**
  * @description 检查当前环境是否符合错误日志的运行

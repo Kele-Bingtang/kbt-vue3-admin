@@ -1,11 +1,11 @@
-import { defineStore } from "pinia";
 import type { LanguageType, LayoutSizeType, TabProp } from "./interface";
-import { useSettingsStore } from "./settings";
-import SystemConfig from "@/config";
 import type { Frame } from "@/layout/components/FrameLayout/useFrame";
 import { ref, watch } from "vue";
+import { defineStore } from "pinia";
 import { useCache } from "@/composables";
 import { DeviceEnum } from "@/enums/appEnum";
+import SystemConfig from "@/config";
+import { useSettingsStore } from "./settings";
 
 export const useLayoutStore = defineStore(
   "layoutStore",

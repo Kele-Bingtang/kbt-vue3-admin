@@ -1,5 +1,6 @@
 import { ref } from "vue";
 import { createImageViewer } from "@/components";
+
 export const useImage = () => {
   // 预览图片的 src 数组
   const imgPreview = ref<string[]>([]);

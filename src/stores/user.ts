@@ -1,9 +1,9 @@
-import { defineStore } from "pinia";
 import type { UserInfo } from ".";
-import { useRoutes } from "@/composables";
-import { resetRouter } from "@/router";
-import { useLayoutStore } from "./layout";
 import { ref } from "vue";
+import { defineStore } from "pinia";
+import { resetRouter } from "@/router";
+import { useRoutes } from "@/composables";
+import { useLayoutStore } from "./layout";
 
 export const useUserStore = defineStore(
   "userStore",

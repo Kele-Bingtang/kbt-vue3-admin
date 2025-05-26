@@ -1,7 +1,7 @@
+import { ref, computed, unref } from "vue";
 import { defineStore } from "pinia";
 import { useRoutes } from "@/composables";
 import { constantRoutes, errorRouter, HOME_NAME, notFoundRouter } from "@/router/routesConfig";
-import { ref, computed, unref } from "vue";
 
 export const usePermissionStore = defineStore("permissionStore", () => {
   const loadedRouteList = ref<RouterConfig[]>([]);

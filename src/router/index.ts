@@ -1,14 +1,9 @@
+import type { RouteRecordRaw, RouterHistory } from "vue-router";
+import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { NProgress } from "@/utils";
-import SystemConfig from "@/config";
 import { useRoutes } from "@/composables";
 import { usePermissionStore, useUserStore } from "@/stores";
-import {
-  createRouter,
-  createWebHashHistory,
-  createWebHistory,
-  type RouteRecordRaw,
-  type RouterHistory,
-} from "vue-router";
+import SystemConfig from "@/config";
 import { constantRoutes, LOGIN_NAME, LOGIN_URL } from "./routesConfig";
 
 const router = createRouter({

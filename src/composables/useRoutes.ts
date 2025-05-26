@@ -1,14 +1,14 @@
+import type { BackstageMenuList } from "@/api/menu";
+import type { RouteRecordRaw } from "vue-router";
+import { isProxy, toRaw } from "vue";
+import { ElNotification } from "element-plus";
 import router from "@/router";
 import { HOME_NAME, LAYOUT_NAME, LOGIN_URL, notFoundRouter, rolesRoutes } from "@/router/routesConfig";
 import { usePermissionStore, useUserStore } from "@/stores";
 import { isExternal, isType } from "@/utils";
-import { ElNotification } from "element-plus";
+import { useCache } from "@/composables";
 import SystemConfig from "@/config";
 import { useLayoutNoSetup } from "./useLayout";
-import type { BackstageMenuList } from "@/api/menu";
-import type { RouteRecordRaw } from "vue-router";
-import { isProxy, toRaw } from "vue";
-import { useCache } from "@/composables";
 
 const modules = import.meta.glob("@/views/**/*.vue");
 const FrameView = () => import("@/layout/components/FrameLayout/FrameView.vue");
