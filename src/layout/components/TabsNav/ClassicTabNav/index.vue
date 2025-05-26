@@ -3,7 +3,7 @@ import { ref, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { ElButton, ElIcon } from "element-plus";
 import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
-import { useLayoutStore, useSettingsStore, type TabProp } from "@/stores";
+import { useLayoutStore, useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
 import { useTabsNav } from "../useTabsNav";
 import MenuDropdown from "../components/MenuDropdown.vue";
@@ -12,6 +12,8 @@ import RightMenu from "../components/RightMenu.vue";
 import "./index.scss";
 
 const ns = useNamespace("classic-tabs-nav");
+
+const { type = "simple" } = defineProps<{ type?: "simple" | "classic" }>();
 
 const route = useRoute();
 const layoutStore = useLayoutStore();
@@ -22,6 +24,7 @@ const tabsNavRef = ref<HTMLElement>(); // 根标签
 const scrollContainerDom = ref<HTMLElement>(); // 滚动栏标签
 const scrollBodyDom = ref<HTMLElement>();
 const tabsDom = ref(); // tab 标签
+const hasScroll = ref(false);
 
 const {
   selectedTab,
@@ -46,17 +49,6 @@ onMounted(() => {
 });
 
 /**
- * 更换 tab 颜色为全局 primaryTheme
- */
-const activeStyle = (tab: TabProp) => {
-  if (!isActive(tab)) return {};
-  return {
-    "background-color": settingsStore.primaryTheme,
-    "border-color": settingsStore.primaryTheme,
-  };
-};
-
-/**
  * 找出访问的目标 tab
  */
 const findTargetTab = async () => {
@@ -78,20 +70,36 @@ const findTargetTab = async () => {
 
 // 移动到目标 tab，如果目标 tab 在 TabsNav 可视区域外面，则有滚动的动画效果
 const moveToTargetTab = (tabElement: HTMLElement) => {
-  const outerWidth = scrollContainerDom.value?.offsetWidth as number;
-  const bodyWidth = scrollBodyDom.value?.offsetWidth as number;
-  const outerPadding = 4;
+  const outerWidth = scrollContainerDom.value?.offsetWidth || 0;
+  const bodyWidth = scrollBodyDom.value?.offsetWidth || 0;
+  hasScroll.value = bodyWidth > outerWidth;
 
-  if (bodyWidth < outerWidth) tabBodyLeft.value = 0;
-  else if (tabElement.offsetLeft < -tabBodyLeft.value) {
-    tabBodyLeft.value = -tabElement.offsetLeft + outerPadding;
-  } else if (
-    // 标签在可视区域左侧
-    tabElement.offsetLeft > -tabBodyLeft.value &&
-    tabElement.offsetLeft + tabElement.offsetWidth < -tabBodyLeft.value + outerWidth
-  ) {
-    tabBodyLeft.value = Math.min(0, outerWidth - tabElement.offsetWidth - tabElement.offsetLeft - outerPadding);
-  } else tabBodyLeft.value = -(tabElement.offsetLeft - (outerWidth - outerPadding - tabElement.offsetWidth)); // 标签在可视区域右侧
+  if (bodyWidth <= outerWidth) {
+    tabBodyLeft.value = 0;
+    return;
+  }
+
+  const outerPadding = 4;
+  const tabOffsetLeft = tabElement.offsetLeft;
+  const tabWidth = tabElement.offsetWidth;
+  const currentScrollLeft = -tabBodyLeft.value;
+
+  // 可视区域右边界
+  const visibleRightEdge = currentScrollLeft + outerWidth - outerPadding;
+  // Tab 的右边界
+  const tabRightEdge = tabOffsetLeft + tabWidth;
+
+  // 如果 Tab 完全在可视区域内，无需滚动
+  if (tabOffsetLeft >= currentScrollLeft && tabRightEdge <= visibleRightEdge) return;
+  // Tab 在左侧不可见
+  if (tabOffsetLeft < currentScrollLeft) {
+    tabBodyLeft.value = -tabOffsetLeft + outerPadding;
+  }
+  // Tab 在右侧不可见
+  else if (tabRightEdge > visibleRightEdge) {
+    const newScrollLeft = tabRightEdge - outerWidth + outerPadding;
+    tabBodyLeft.value = -newScrollLeft;
+  }
 };
 
 // 鼠标中键滚动回调
@@ -129,8 +137,8 @@ watch(
 </script>
 
 <template>
-  <div :class="[ns.b(), 'flx-align-center']" ref="tabsNavRef">
-    <div :class="[ns.e('btn'), ns.is('left')]">
+  <div :class="[ns.b(), 'flx-align-center', ns.is(type)]" ref="tabsNavRef">
+    <div v-show="hasScroll" :class="[ns.e('btn'), ns.is('left')]">
       <el-button plain @click="handleScroll(240)">
         <el-icon><ArrowLeft /></el-icon>
       </el-button>
@@ -149,8 +157,7 @@ watch(
           v-for="tab in tabNavList"
           :key="tab.path"
           :to="tab.path"
-          :class="[ns.e('tab'), { active: isActive(tab) }]"
-          :style="activeStyle(tab)"
+          :class="[ns.e('tab'), ns.is('active', isActive(tab))]"
           @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
         >
           <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
@@ -167,7 +174,7 @@ watch(
       </div>
     </div>
 
-    <div :class="[ns.e('btn'), ns.is('right')]">
+    <div v-show="hasScroll" :class="[ns.e('btn'), ns.is('right')]">
       <el-button plain @click="handleScroll(-240)">
         <el-icon><ArrowRight /></el-icon>
       </el-button>

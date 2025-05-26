@@ -102,7 +102,7 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
       right: 15px;
       bottom: 15px;
       color: getCssVar(main-color);
-      transition: all 0.2s;
+      transition: all var(--#{$el-namespace}-transition-duration-fast);
     }
   }
 }

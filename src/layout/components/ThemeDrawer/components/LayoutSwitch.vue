@@ -137,7 +137,7 @@ const changeLayout = (value: LayoutModeEnum) => {
     cursor: pointer;
     border-radius: 5px;
     box-shadow: 0 0 5px 1px var(--#{$el-namespace}-border-color-lighter);
-    transition: all 0.2s;
+    transition: all var(--#{$el-namespace}-transition-duration-fast);
 
     .dark {
       background-color: getCssVar(main-color);
@@ -160,7 +160,7 @@ const changeLayout = (value: LayoutModeEnum) => {
       right: 10px;
       bottom: 10px;
       color: getCssVar(main-color);
-      transition: all 0.2s;
+      transition: all var(--#{$el-namespace}-transition-duration-fast);
     }
 
     &:hover {

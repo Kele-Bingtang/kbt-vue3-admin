@@ -3,10 +3,10 @@ import type { LayoutConfig, SystemConfig, ThemeConfig, RouterConfig, KeyConfig }
 
 const themeConfig: ThemeConfig = {
   primaryTheme: "#395AE3",
-  title: "kbt-vue3-admin",
+  title: "teek-vue-admin",
   titleMode: "0",
   layoutMode: LayoutModeEnum.Vertical,
-  tabsNavMode: TabsNavModeEnum.Classic,
+  tabsNavMode: TabsNavModeEnum.Simple,
   showBreadcrumb: true,
   showTabsNav: true,
   showLayoutLogo: true,

@@ -8,7 +8,40 @@ $btn-width: 28px;
   border-bottom: getCssVar(layout-tab-line);
   white-space: nowrap;
   gap: 5px;
-  padding: 0 5px;
+  padding: 0 10px;
+
+  @include is(simple) {
+    @include e(tab) {
+      .icon-close:hover {
+        background-color: getCssVar(gray-300);
+      }
+
+      @include is(active) {
+        color: getCssVar(main-color);
+        .dot {
+          background-color: var(--#{$el-namespace}-color-primary-light-3);
+        }
+      }
+    }
+  }
+
+  @include is(classic) {
+    @include e(tab) {
+      .icon-close:hover {
+        color: #ffffff;
+        background-color: getCssVar(gray-500);
+      }
+
+      @include is(active) {
+        color: #ffffff;
+        background-color: getCssVar(main-color);
+        border-color: getCssVar(main-color);
+        .dot {
+          background-color: #ffffff;
+        }
+      }
+    }
+  }
 
   @include e(scroll) {
     position: relative;
@@ -30,8 +63,9 @@ $btn-width: 28px;
     display: inline-flex;
     align-items: center;
     background-color: getCssVar(layout-tab-item-bg-color);
+    color: getCssVar(layout-tab-text-color);
     font-size: getCssVar(layout-tab-text-size);
-    border: 1px solid var(--#{$admin-namespace}-card-border);
+    border: 1px solid getCssVar(card-border);
     height: 100%;
     padding: 5px 10px;
     margin-right: 8px;
@@ -39,12 +73,10 @@ $btn-width: 28px;
     cursor: pointer;
     border-radius: 4px;
 
-    &.active {
-      color: #ffffff;
-      background-color: getCssVar(main-color);
-
+    &:hover {
+      color: getCssVar(main-color);
       .dot {
-        background-color: #ffffff;
+        background-color: var(--#{$el-namespace}-color-primary-light-3);
       }
     }
 
@@ -60,15 +92,10 @@ $btn-width: 28px;
     .icon-close {
       width: 16px;
       height: 16px;
-      margin-left: 6px;
+      margin-left: 5px;
       cursor: pointer;
       border-radius: 50%;
       transition: all var(--#{$el-namespace}-transition-duration) cubic-bezier(0.645, 0.045, 0.355, 1);
-
-      &:hover {
-        color: #ffffff;
-        background-color: getCssVar(gray-500);
-      }
     }
 
     @include m(icon) {

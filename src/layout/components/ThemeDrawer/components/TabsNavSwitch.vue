@@ -84,7 +84,7 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
     top: 6px;
     right: 15px;
     color: getCssVar(main-color);
-    transition: all 0.2s;
+    transition: all var(--#{$el-namespace}-transition-duration-fast);
   }
 
   @include e(theme) {

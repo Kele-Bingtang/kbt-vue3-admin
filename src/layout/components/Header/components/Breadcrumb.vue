@@ -54,7 +54,7 @@ watch(
 
 <style lang="scss" scoped>
 @include b(breadcrumb) {
-  padding-right: 50px;
+  margin-left: 10px;
   overflow: hidden;
 
   @include e(link) {

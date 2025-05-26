@@ -15,6 +15,7 @@ export enum LayoutModeEnum {
 }
 
 export enum TabsNavModeEnum {
+  Simple = "simple",
   Classic = "classic",
   Popular = "popular",
 }

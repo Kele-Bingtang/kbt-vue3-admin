@@ -23,7 +23,7 @@
       height: getCssVar(columns-layout-aside-item-height);
       flex-direction: column;
       cursor: pointer;
-      transition: all 0.3s ease;
+      transition: all var(--#{$el-namespace}-transition-duration) ease;
 
       &:hover {
         background-color: getCssVar(layout-aside-bg-hover-color);

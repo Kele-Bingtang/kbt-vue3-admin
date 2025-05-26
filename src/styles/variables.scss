@@ -14,7 +14,7 @@
   @include set-css-var(layout-header-bg-color, var(--#{$admin-namespace}-bg-color));
   @include set-css-var(layout-header-text-color, var(--#{$admin-namespace}-text-gray-600));
   @include set-css-var(layout-header-icon-size, 22px);
-  @include set-css-var(layout-header-line, 1px solid var(--#{$admin-namespace}-card-border));
+  // @include set-css-var(layout-header-line, 1px solid var(--#{$admin-namespace}-card-border));
   // 顶部左侧面包屑
   @include set-css-var(layout-header-breadcrumb-link-color, var(--#{$admin-namespace}-text-gray-500));
   @include set-css-var(layout-header-breadcrumb-text-color, var(--#{$admin-namespace}-text-gray-700));
@@ -27,7 +27,7 @@
   @include set-css-var(layout-aside-bg-hover-color, var(--#{$el-namespace}-color-primary-light-9));
   @include set-css-var(layout-aside-text-color, var(--#{$admin-namespace}-text-gray-800));
   @include set-css-var(layout-aside-text-active-color, var(--#{$admin-namespace}-main-color));
-  @include set-css-var(layout-aside-icon-color, var(--#{$admin-namespace}-text-gray-800));
+  @include set-css-var(layout-aside-icon-color, var(--#{$admin-namespace}-text-gray-700));
   @include set-css-var(layout-aside-icon-active-color, var(--#{$admin-namespace}-main-color));
   @include set-css-var(layout-aside-line, 1px solid var(--#{$admin-namespace}-card-border));
   @include set-css-var(columns-layout-aside-width, 72px);
@@ -35,11 +35,11 @@
 
   // 页签栏
   @include set-css-var(layout-tab-bg-color, var(--#{$admin-namespace}-bg-color));
-  @include set-css-var(layout-tab-item-bg-color, var(--#{$admin-namespace}-bg-color));
+  @include set-css-var(layout-tab-item-bg-color, var(--#{$admin-namespace}-main-bg-color));
   @include set-css-var(layout-tab-height, 38px);
-  @include set-css-var(layout-tab-text-color, var(--#{$admin-namespace}-text-gray-400));
-  @include set-css-var(layout-tab-line, 1px solid var(--#{$admin-namespace}-card-border));
-  @include set-css-var(layout-tab-text-size, 12px);
+  @include set-css-var(layout-tab-text-color, var(--#{$admin-namespace}-text-gray-600));
+  // @include set-css-var(layout-tab-line, 1px solid var(--#{$admin-namespace}-card-border));
+  @include set-css-var(layout-tab-text-size, 13px);
   @include set-css-var(layout-tab-icon-size, 14px);
 
   --#{$el-namespace}-menu-bg-color: var(--#{$admin-namespace}-layout-aside-bg-color);

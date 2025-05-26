@@ -39,6 +39,10 @@ $btn-width: 28px;
         border-left: none;
         padding: 0 10px;
 
+        &:hover {
+          color: getCssVar(main-color);
+        }
+
         &.is-active {
           color: getCssVar(main-color);
           border-bottom: 2px solid getCssVar(main-color);

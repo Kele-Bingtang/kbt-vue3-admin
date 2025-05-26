@@ -23,9 +23,8 @@ const toggleTrigger = () => {
 
 <style lang="scss" scoped>
 @include b(collapse-trigger) {
-  width: 40px;
+  width: 45px;
   height: 100%;
-  margin-right: 20px;
   font-size: 20px;
   cursor: pointer;
   user-select: none;
