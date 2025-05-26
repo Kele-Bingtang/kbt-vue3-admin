@@ -1,9 +1,9 @@
+import type { WritableComputedRef } from "vue";
 import { createI18n } from "vue-i18n";
+import SystemConfig from "@/config";
+import { getBrowserLang } from "@/utils";
 import zhCN from "./modules/zh-CN";
 import enUS from "./modules/en-US";
-import { getBrowserLang } from "@/utils";
-import type { WritableComputedRef } from "vue";
-import SystemConfig from "@/config";
 
 const messages = {
   "zh-CN": zhCN,
@@ -11,7 +11,7 @@ const messages = {
 };
 
 export const getLocale = () => {
-  const layoutCache = localStorage.getItem(`${SystemConfig.layoutConfig.cacheKeyPrefix}_layoutStore`);
+  const layoutCache = localStorage.getItem(`${SystemConfig.layoutConfig.cacheKeyPrefix}:layoutStore`);
   const layoutStore = layoutCache ? JSON.parse(layoutCache) : "";
   const cookieLanguage = layoutStore ? layoutStore.language : layoutStore;
   if (cookieLanguage) {

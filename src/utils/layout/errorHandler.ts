@@ -3,14 +3,11 @@ import SystemConfig from "@/config";
 import { useErrorLogStore } from "@/stores";
 import { ElNotification } from "element-plus";
 
-const { errorLog } = SystemConfig.layoutConfig;
-
-const { env } = errorLog;
-
 /**
  * @description 检查当前环境是否符合错误日志的运行
  */
 export const checkNeed = () => {
+  const { env } = SystemConfig.layoutConfig.errorLog;
   const node_env = import.meta.env.MODE;
   if (isArray(env) && node_env) return env.includes(node_env);
   return false;

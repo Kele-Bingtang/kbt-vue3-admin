@@ -176,7 +176,7 @@ const startLogin = () => {
       if (Object.keys(otherQuery).length === 0) router.push(path);
       else router.push({ path, query: otherQuery });
       ElNotification({
-        title: `欢迎登录 ${SystemConfig.themeConfig.title}`,
+        title: `欢迎登录 ${SystemConfig.systemInfo.name}`,
         message: getTimeState(),
         type: "success",
         duration: 3000,

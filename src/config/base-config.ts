@@ -1,47 +1,48 @@
-import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum } from "@/enums/appEnum";
-import type { LayoutConfig, SystemConfig, ThemeConfig, RouterConfig, KeyConfig } from "./types";
+import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
+import type { SystemInfo, LayoutConfig, SystemConfig, ThemeConfig, RouterConfig, KeyConfig } from "./types";
+
+const systemInfo: SystemInfo = {
+  name: "teek-vue-admin",
+};
 
 const themeConfig: ThemeConfig = {
-  primaryTheme: "#395AE3",
-  title: "teek-vue-admin",
-  titleMode: "0",
+  primaryColor: "#395AE3",
+  titleMode: TitleModeEnum.ProjectPage,
   layoutMode: LayoutModeEnum.Vertical,
   tabsNavMode: TabsNavModeEnum.Simple,
+  menuTheme: MenuThemeEnum.Light,
+  showSettings: true,
   showBreadcrumb: true,
-  showTabsNav: true,
+  showTabNav: true,
   showLayoutLogo: true,
   showBreadcrumbIcon: true,
-  showTabsNavIcon: true,
-  recordTabsNav: false,
+  showTabNavIcon: true,
+  showTabNavDot: true,
+  recordTabNav: false,
   isCollapse: false,
   menuAccordion: false,
-  fixTabsNav: true,
+  fixTabNav: true,
   isDark: false,
   isWeak: false,
   isGrey: false,
   maximize: false,
-  menuTheme: MenuThemeEnum.Light,
-  menuWidth: 210,
+  menuWidth: 240,
   headerHeight: 55,
 };
 
 const layoutConfig: LayoutConfig = {
-  showSettings: true,
-  errorLog: {
-    showInHeader: true,
-    env: [""],
-  },
+  errorLog: { showInHeader: true, env: [""] },
   moreRouteChildrenHideInMenuThenOnlyOne: false,
   tooltipEffect: "light",
   layoutSize: "default",
   language: "zh-CN",
   watchFrame: false,
-  cacheKeyPrefix: "kbt",
+  cacheKeyPrefix: "teek",
 };
 
 const routerConfig: RouterConfig = {
-  routeUseI18n: true,
   whiteList: [""],
+  routeUseI18n: true,
   isKeepAlive: false,
   isFull: false,
   cacheDynamicRoutes: false,
@@ -49,57 +50,16 @@ const routerConfig: RouterConfig = {
 };
 
 const keyConfig: KeyConfig = {
-  tabsNavCacheKey: `${layoutConfig.cacheKeyPrefix}_tabsNav`,
-  cacheDynamicRoutesKey: `${layoutConfig.cacheKeyPrefix}_dynamic_routes`,
-  versionCacheKey: `${layoutConfig.cacheKeyPrefix}_version`,
+  tabsNavCacheKey: `${layoutConfig.cacheKeyPrefix}:tabsNav`,
+  cacheDynamicRoutesKey: `${layoutConfig.cacheKeyPrefix}:dynamic:routes`,
+  versionCacheKey: `${layoutConfig.cacheKeyPrefix}:version`,
   tabActiveExcludes: ["layoutMode"],
 };
 
 export const createBaseConfig = (): SystemConfig => ({
+  systemInfo,
   themeConfig,
   layoutConfig,
   routerConfig,
   keyConfig,
-  // 菜单主题列表
-  menuThemeList: [
-    {
-      theme: MenuThemeEnum.Light,
-      background: "#ffffff",
-      systemNameColor: "#68758E",
-      iconColor: "#6B6B6B",
-      textColor: "#29343D",
-      textActiveColor: "#3F8CFF",
-      iconActiveColor: "#333333",
-      tabBarBackground: "#FFFFFF",
-      systemBackground: "#F8F8F8",
-      leftLineColor: "#EDEEF0",
-      rightLineColor: "#EDEEF0",
-    },
-    {
-      theme: MenuThemeEnum.Dark,
-      background: "#191A23",
-      systemNameColor: "#BABBBD",
-      iconColor: "#BABBBD",
-      textColor: "#BABBBD",
-      textActiveColor: "#FFFFFF",
-      iconActiveColor: "#FFFFFF",
-      tabBarBackground: "#FFFFFF",
-      systemBackground: "#F8F8F8",
-      leftLineColor: "#3F4257",
-      rightLineColor: "#EDEEF0",
-    },
-    {
-      theme: MenuThemeEnum.Design,
-      background: "#FFFFFF",
-      systemNameColor: "var(--art-text-gray-800)",
-      iconColor: "#6B6B6B",
-      textColor: "#29343D",
-      textActiveColor: "#3F8CFF",
-      iconActiveColor: "#333333",
-      tabBarBackground: "#FAFBFC",
-      systemBackground: "#FAFBFC",
-      leftLineColor: "#EDEEF0",
-      rightLineColor: "#EDEEF0",
-    },
-  ],
 });

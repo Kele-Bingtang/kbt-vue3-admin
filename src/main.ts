@@ -3,16 +3,15 @@ import pinia from "@/stores";
 import App from "./App.vue";
 import router from "./router";
 import "@/styles/normalize.css"; // CSS Reset
-// import "@/styles/el-ui.scss";
-import "@/styles/el-light.scss";
-import "@/styles/el-dark.scss";
-import "@/styles/transition.scss";
+// import "@/styles/element-plus/el-ui.scss";
+import "@/styles/element-plus/el-light.scss";
+import "@/styles/element-plus/el-dark.scss";
 import directives from "@/directives";
 import I18n from "@/languages";
-import "virtual:svg-icons-register";
 import { Icon, Auth, Role } from "@/components";
 import { errorHandler, checkNeed, log } from "@/utils";
 import Vue3TreeOrg from "vue3-tree-org";
+import "virtual:svg-icons-register";
 import "vue3-tree-org/lib/vue3-tree-org.css";
 
 const app = createApp(App);

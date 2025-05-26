@@ -160,9 +160,9 @@ watch(
           :class="[ns.e('tab'), ns.is('active', isActive(tab))]"
           @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)"
         >
-          <span class="dot" v-if="!settingsStore.showTabsNavIcon" />
+          <span class="dot" v-if="settingsStore.showTabNavDot && !settingsStore.showTabNavIcon" />
           <Icon
-            v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
+            v-if="tab.meta.icon && settingsStore.showTabNavIcon"
             :icon="tab.meta.icon"
             :class="ns.em('tab', 'icon')"
           />

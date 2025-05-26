@@ -9,25 +9,26 @@ export const useSettingsStore = defineStore(
   () => {
     const { themeConfig, layoutConfig } = SystemConfig;
 
-    const primaryTheme = ref(themeConfig.primaryTheme);
+    const primaryColor = ref(themeConfig.primaryColor);
     const titleMode = ref(themeConfig.titleMode);
-    const layoutMode = ref<LayoutModeEnum>(themeConfig.layoutMode || LayoutModeEnum.Classic);
-    const tabsNavMode = ref<TabsNavModeEnum>(themeConfig.tabsNavMode || TabsNavModeEnum.Popular);
-    const menuTheme = ref<MenuThemeEnum>(themeConfig.menuTheme || MenuThemeEnum.Light);
-    const showSettings = ref(layoutConfig.showSettings);
-    const showTabsNav = ref(themeConfig.showTabsNav);
-    const recordTabsNav = ref(themeConfig.recordTabsNav);
+    const layoutMode = ref(themeConfig.layoutMode || LayoutModeEnum.Classic);
+    const tabsNavMode = ref(themeConfig.tabsNavMode || TabsNavModeEnum.Popular);
+    const menuTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
+    const showSettings = ref(themeConfig.showSettings);
+    const showTabNav = ref(themeConfig.showTabNav);
+    const recordTabNav = ref(themeConfig.recordTabNav);
     const showLayoutLogo = ref(themeConfig.showLayoutLogo);
     const showBreadcrumb = ref(themeConfig.showBreadcrumb);
     const showBreadcrumbIcon = ref(themeConfig.showBreadcrumbIcon);
-    const showTabsNavIcon = ref(themeConfig.showTabsNavIcon);
+    const showTabNavIcon = ref(themeConfig.showTabNavIcon);
+    const showTabNavDot = ref(themeConfig.showTabNavDot);
     const isCollapse = ref(themeConfig.isCollapse);
     const menuAccordion = ref(themeConfig.menuAccordion);
-    const fixTabsNav = ref(themeConfig.fixTabsNav);
+    const fixTabNav = ref(themeConfig.fixTabNav);
     const isDark = ref(themeConfig.isDark);
     const isWeak = ref(themeConfig.isWeak);
     const isGrey = ref(themeConfig.isGrey);
-    const headerTheme = ref<MenuThemeEnum>(themeConfig.menuTheme || MenuThemeEnum.Light);
+    const headerTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
     const maximize = ref(themeConfig.maximize);
     const menuWidth = ref(themeConfig.menuWidth);
     const headerHeight = ref(themeConfig.headerHeight);
@@ -42,26 +43,27 @@ export const useSettingsStore = defineStore(
 
     const resetSettings = () => {
       const { removeStorage } = useStorage("localStorage");
-      removeStorage(`${layoutConfig.cacheKeyPrefix}_settingsStore`);
-      if (!recordTabsNav.value) useCache().removeCacheTabNavList();
+      removeStorage(`${layoutConfig.cacheKeyPrefix}:settingsStore`);
+      if (!recordTabNav.value) useCache().removeCacheTabNavList();
     };
 
     return {
-      primaryTheme,
+      primaryColor,
       titleMode,
       layoutMode,
       tabsNavMode,
       menuTheme,
       showSettings,
-      showTabsNav,
-      recordTabsNav,
+      showTabNav,
+      recordTabNav,
       showLayoutLogo,
       showBreadcrumb,
       showBreadcrumbIcon,
-      showTabsNavIcon,
+      showTabNavIcon,
+      showTabNavDot,
       isCollapse,
       menuAccordion,
-      fixTabsNav,
+      fixTabNav,
       isDark,
       isWeak,
       isGrey,

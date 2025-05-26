@@ -1,5 +1,5 @@
-@use "mixins/namespace" as *;
-@use "mixins/function" as *;
+@use "../mixins/namespace" as *;
+@use "../mixins/function" as *;
 
 // 自定义 ElementPlus 暗黑主题
 @forward "element-plus/theme-chalk/src/dark/var.scss" //

@@ -28,7 +28,7 @@ const customStorage = {
 const pinia = createPinia();
 pinia.use(
   createPersistedState({
-    key: key => `${SystemConfig.layoutConfig.cacheKeyPrefix}_${key}`,
+    key: key => `${SystemConfig.layoutConfig.cacheKeyPrefix}:${key}`,
     storage: customStorage,
   })
 );

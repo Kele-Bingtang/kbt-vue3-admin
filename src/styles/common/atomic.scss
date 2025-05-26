@@ -1,0 +1,118 @@
+@use "../mixins/namespace" as *;
+
+/* flex */
+.flx {
+  display: flex;
+}
+
+.flx-column {
+  display: flex;
+  flex-direction: column;
+}
+
+.flx-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.flx-column-center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+}
+
+.flx-align-center {
+  display: flex;
+  align-items: center;
+}
+
+.flx-justify-center {
+  display: flex;
+  justify-content: center;
+}
+
+.flx-justify-between {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.flx-justify-around {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+
+.flx-start-justify-center {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.flx-wrap-between {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.flx-wrap-justify-center {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.flx-1 {
+  flex: 1;
+}
+
+.flx-space-y-20 {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+/* 文字单行省略号 */
+.sle {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* 文字多行省略号 */
+.mle {
+  display: -webkit-box;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  -webkit-box-orient: vertical;
+  line-clamp: 2;
+  -webkit-line-clamp: 2;
+}
+
+.text-center {
+  text-align: center;
+}
+
+.no-padding {
+  padding: 0 !important;
+}
+
+.clearfix {
+  &::after {
+    display: table;
+    clear: both;
+    content: "";
+  }
+}
+
+/* 自定义 card 卡片样式 */
+.card {
+  box-sizing: border-box;
+  padding: 20px;
+  overflow-x: hidden;
+  background-color: var(--#{$el-namespace}-fill-color-blank);
+  border: 1px solid var(--#{$el-namespace}-border-color-light);
+  border-radius: 4px;
+  box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+}

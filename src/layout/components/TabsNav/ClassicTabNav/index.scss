@@ -1,3 +1,4 @@
+$tab-padding-top: 4px;
 $btn-width: 28px;
 
 @include b(classic-tabs-nav) {
@@ -52,9 +53,8 @@ $btn-width: 28px;
 
   @include e(scroll-body) {
     position: absolute;
-    top: calc(getCssVar(layout-tab-height) / 2 - 16px);
     left: $btn-width;
-    padding: 2px 4px 0;
+    padding-top: $tab-padding-top;
     white-space: nowrap;
     transition: left var(--#{$el-namespace}-transition-duration) ease;
   }
@@ -66,8 +66,8 @@ $btn-width: 28px;
     color: getCssVar(layout-tab-text-color);
     font-size: getCssVar(layout-tab-text-size);
     border: 1px solid getCssVar(card-border);
-    height: 100%;
-    padding: 5px 10px;
+    height: calc(getCssVar(layout-tab-height) - 2 * $tab-padding-top);
+    padding: 0 11px;
     margin-right: 8px;
     overflow: hidden;
     cursor: pointer;

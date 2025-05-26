@@ -17,34 +17,34 @@ export const useTheme = () => {
     const body = document.documentElement;
     if (settingsStore.isDark) body.setAttribute("class", "dark");
     else body.setAttribute("class", "");
-    changePrimary(settingsStore.primaryTheme);
+    changePrimary(settingsStore.primaryColor);
     return toRaw(settingsStore.isDark);
   };
 
   // 修改主题颜色
   const changePrimary = (value: string | null) => {
     if (!value) {
-      value = SystemConfig.themeConfig.primaryTheme;
-      ElMessage({ type: "success", message: `主题颜色已重置为 ${settingsStore.primaryTheme}` });
+      value = SystemConfig.themeConfig.primaryColor;
+      ElMessage({ type: "success", message: `主题颜色已重置为 ${settingsStore.primaryColor}` });
     }
     settingsStore.$patch({
-      primaryTheme: value,
+      primaryColor: value,
     });
     // 为了兼容暗黑模式下主题颜色也正常，以下方法计算主题颜色 由深到浅 的具体颜色
-    setStyleVar(`--${ns.elNamespace}-color-primary`, settingsStore.primaryTheme);
+    setStyleVar(`--${ns.elNamespace}-color-primary`, settingsStore.primaryColor);
     setStyleVar(
       `--${ns.elNamespace}-color-primary-dark-2`,
       settingsStore.isDark
-        ? `${getLightColor(settingsStore.primaryTheme, 0.2)}`
-        : `${getDarkColor(settingsStore.primaryTheme, 0.3)}`
+        ? `${getLightColor(settingsStore.primaryColor, 0.2)}`
+        : `${getDarkColor(settingsStore.primaryColor, 0.3)}`
     );
     // 颜色加深或变浅
     for (let i = 1; i <= 9; i++) {
       setStyleVar(
         `--${ns.elNamespace}-color-primary-light-${i}`,
         settingsStore.isDark
-          ? `${getDarkColor(settingsStore.primaryTheme, i / 10)}`
-          : `${getLightColor(settingsStore.primaryTheme, i / 10)}`
+          ? `${getDarkColor(settingsStore.primaryColor, i / 10)}`
+          : `${getLightColor(settingsStore.primaryColor, i / 10)}`
       );
     }
   };
@@ -61,10 +61,10 @@ export const useTheme = () => {
     });
   };
 
-  // 初始化 primaryTheme 配置
+  // 初始化 primaryColor 配置
   const initTheme = () => {
     switchDark();
-    // changePrimary(settingsStore.primaryTheme);
+    // changePrimary(settingsStore.primaryColor);
     if (settingsStore.isGrey) changeGreyOrWeak(true, "grey");
     if (settingsStore.isWeak) changeGreyOrWeak(true, "weak");
 

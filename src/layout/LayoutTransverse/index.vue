@@ -22,7 +22,7 @@ const settingsStore = useSettingsStore();
     <el-header :class="[ns.join('layout-header'), 'flx-justify-between']">
       <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
-        <span>{{ SystemConfig.themeConfig.title }}</span>
+        <span>{{ SystemConfig.systemInfo.name }}</span>
       </div>
 
       <Menu

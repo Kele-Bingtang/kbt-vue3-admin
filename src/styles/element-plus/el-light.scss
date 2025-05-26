@@ -1,4 +1,4 @@
-@use "mixins/namespace" as *;
+@use "../mixins/namespace" as *;
 
 // 自定义 ElementPlus 亮色主题
 @forward "element-plus/theme-chalk/src/common/var.scss" //

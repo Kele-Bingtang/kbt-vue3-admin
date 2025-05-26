@@ -13,11 +13,11 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
   settingsStore.$patch({ tabsNavMode: value });
 
   if (value === TabsNavModeEnum.Classic) {
-    return settingsStore.$patch({ showTabsNavIcon: false });
+    return settingsStore.$patch({ showTabNavIcon: false });
   }
 
   if (value === TabsNavModeEnum.Popular) {
-    return settingsStore.$patch({ showTabsNavIcon: true });
+    return settingsStore.$patch({ showTabNavIcon: true });
   }
 };
 </script>

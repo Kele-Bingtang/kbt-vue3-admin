@@ -1,12 +1,12 @@
-import { useLayoutStore, usePermissionStore, useSettingsStore, useUserStore } from "@/stores";
-import { ElMessage } from "element-plus";
+import type { RouteLocationNormalizedLoaded } from "vue-router";
 import { useI18n } from "vue-i18n";
+import { ElMessage } from "element-plus";
+import { useLayoutStore, usePermissionStore, useSettingsStore, useUserStore } from "@/stores";
 import SystemConfig from "@/config";
 import { transformI18n } from "@/languages";
 import { isFunction, isString } from "@/utils";
+import { DeviceEnum, TitleModeEnum } from "@/enums/appEnum";
 import { useRoutes } from "./useRoutes";
-import type { RouteLocationNormalizedLoaded } from "vue-router";
-import { DeviceEnum } from "@/enums/appEnum";
 
 export const useLayout = () => {
   const layoutStore = useLayoutStore();
@@ -47,14 +47,14 @@ export const useLayout = () => {
     const { titleMode } = settingsStore;
 
     // 展示标题的多种模式判断
-    if (titleMode === "0") resTitle = pageTitle ? `${title} - ${pageTitle}` : title;
-    else if (titleMode === "1") {
+    if (titleMode === TitleModeEnum.ProjectPage) resTitle = pageTitle ? `${title} - ${pageTitle}` : title;
+    else if (titleMode === TitleModeEnum.UsernamePage) {
       const { username } = userStore.userInfo;
       if (username && pageTitle) resTitle = `${username} - ${pageTitle}`;
       else if (username) resTitle = `${title} - ${username}`;
       else if (!pageTitle) resTitle = title;
-    } else if (titleMode === "2") resTitle = title;
-    else if (titleMode === "3") resTitle = pageTitle + "";
+    } else if (titleMode === TitleModeEnum.Project) resTitle = title;
+    else if (titleMode === TitleModeEnum.Page) resTitle = pageTitle + "";
     window.document.title = resTitle;
   };
 

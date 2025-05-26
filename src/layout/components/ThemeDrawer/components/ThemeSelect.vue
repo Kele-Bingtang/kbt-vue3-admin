@@ -13,7 +13,7 @@ const settingsStore = useSettingsStore();
 
 // 预定义主题颜色
 const colorList = [
-  SystemConfig.themeConfig.primaryTheme,
+  SystemConfig.themeConfig.primaryColor,
   "#DAA96E",
   "#0C819F",
   "#409EFF",
@@ -39,7 +39,7 @@ const handleSwitchDark = () => {
   <div :class="ns.b()">
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.theme") }}</span>
-      <el-color-picker v-model="settingsStore.primaryTheme" :predefine="colorList" @change="changePrimary" />
+      <el-color-picker v-model="settingsStore.primaryColor" :predefine="colorList" @change="changePrimary" />
     </div>
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.darkMode") }}</span>

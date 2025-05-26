@@ -19,10 +19,10 @@ const handleTitleModeSelect = () => {
 };
 
 const titleModeOptions = [
-  { value: "0", label: t("_settings.titleModeOne") },
-  { value: "1", label: t("_settings.titleModeTwo") },
-  { value: "2", label: t("_settings.titleModeThree") },
-  { value: "3", label: t("_settings.titleModeFour") },
+  { value: "0", label: t("_settings.titleModeProjectPage") },
+  { value: "1", label: t("_settings.titleModeUsernamePage") },
+  { value: "2", label: t("_settings.titleModeProject") },
+  { value: "3", label: t("_settings.titleModePage") },
 ];
 </script>
 

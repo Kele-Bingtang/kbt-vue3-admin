@@ -77,7 +77,7 @@ const tabRemove = async (fullPath: TabPaneName) => {
           <template #label>
             <div @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)">
               <Icon
-                v-if="tab.meta.icon && settingsStore.showTabsNavIcon"
+                v-if="tab.meta.icon && settingsStore.showTabNavIcon"
                 :icon="tab.meta.icon"
                 :class="ns.em('content', 'icon')"
               />

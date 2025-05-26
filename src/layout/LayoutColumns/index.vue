@@ -93,7 +93,7 @@ const changeMenuItem = (item: RouterConfig) => {
 
     <el-aside :class="[ns.join('layout-aside'), 'flx-column', { 'not-aside': !menuItem.length }]">
       <div :class="[ns.e('logo'), ns.join('layout-logo'), 'flx-center']">
-        <span v-show="menuItem.length">{{ isCollapse ? "K" : SystemConfig.themeConfig.title }}</span>
+        <span v-show="menuItem.length">{{ isCollapse ? "K" : SystemConfig.systemInfo.name }}</span>
       </div>
 
       <el-scrollbar v-if="menuItem?.length">

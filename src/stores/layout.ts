@@ -135,20 +135,20 @@ export const useLayoutStore = defineStore(
     const settingsStore = useSettingsStore();
 
     watch(
-      () => settingsStore.recordTabsNav,
+      () => settingsStore.recordTabNav,
       () => {
-        handleRecordTabsNav(settingsStore.recordTabsNav);
+        handleRecordTabNav(settingsStore.recordTabNav);
       }
     );
     watch(
       () => tabNavList.value,
       () => {
-        handleRecordTabsNav(settingsStore.recordTabsNav);
+        handleRecordTabNav(settingsStore.recordTabNav);
       },
       { deep: true }
     );
 
-    const handleRecordTabsNav = (value: boolean) => {
+    const handleRecordTabNav = (value: boolean) => {
       if (value) useCache().setCacheTabNavList(tabNavList.value);
       else useCache().removeCacheTabNavList();
     };

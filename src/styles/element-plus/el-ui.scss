@@ -1,4 +1,4 @@
-@use "mixins/namespace" as *;
+@use "../mixins/namespace" as *;
 
 // 优化 Element Plus 组件库默认样式
 
@@ -57,18 +57,64 @@
   min-width: 80px;
 }
 
-.#{$el-namespace}-dialog__header {
-  padding: 10px 10px;
+/* el-drawer 样式 */
+.#{$el-namespace}-drawer {
+  .#{$el-namespace}-drawer__header {
+    padding: 15px 20px 14px;
+    margin-bottom: 0;
+    border-bottom: 1px solid var(--#{$el-namespace}-border-color-lighter);
+  }
+
+  .#{$el-namespace}-drawer__footer {
+    border-top: 1px solid var(--#{$el-namespace}-border-color-lighter);
+  }
+
+  /* drawer select 样式 */
+  .#{$el-namespace}-select {
+    width: 100%;
+  }
+
+  /* drawer-form 中存在两列 form-item */
+  .drawer-multiColumn-form {
+    display: flex;
+    flex-wrap: wrap;
+
+    .#{$el-namespace}-form-item {
+      width: 47%;
+
+      &:nth-child(2n-1) {
+        margin-right: 5%;
+      }
+    }
+  }
 }
 
-.#{$el-namespace}-dialog__body {
-  padding: 25px 10px !important;
+/* 自定义 el-dialog 样式 */
+.#{$el-namespace}-dialog {
+  .#{$el-namespace}-dialog__header {
+    border-bottom: 1px solid var(--#{$el-namespace}-border-color-lighter);
+  }
+
+  .#{$el-namespace}-dialog__body {
+    padding-top: 15px;
+  }
+
+  .#{$el-namespace}-dialog__footer {
+    border-top: 1px solid var(--#{$el-namespace}-border-color-lighter);
+  }
 }
 
-.#{$el-namespace}-dialog__footer {
-  padding: 10px 10px !important;
-  // border-top: 1px solid #F0F0F0;
-}
+// .#{$el-namespace}-dialog__header {
+//   padding: 10px 10px;
+// }
+
+// .#{$el-namespace}-dialog__body {
+//   padding: 25px 10px !important;
+// }
+
+// .#{$el-namespace}-dialog__footer {
+//   padding: 10px 10px !important;
+// }
 
 // ✅ el-message 样式优化
 .#{$el-namespace}-message {

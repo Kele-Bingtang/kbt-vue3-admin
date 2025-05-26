@@ -15,7 +15,7 @@ const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 
 const tabsNavMode = computed(() => settingsStore.tabsNavMode);
-const showTabsNav = computed(() => settingsStore.showTabsNav);
+const showTabNav = computed(() => settingsStore.showTabNav);
 
 const TabsNavComponents: Record<string, Component> = {
   simple: SimpleTabNav,
@@ -50,8 +50,8 @@ watchEffect(() => {
   }
 });
 
-const isFixTabsNav = computed(() => {
-  if (settingsStore.fixTabsNav) return "auto";
+const isFixTabNav = computed(() => {
+  if (settingsStore.fixTabNav) return "auto";
   return "";
 });
 </script>
@@ -59,7 +59,7 @@ const isFixTabsNav = computed(() => {
 <template>
   <Maximize v-if="settingsStore.maximize" />
   <el-main class="flx-column">
-    <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabsNav" />
+    <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabNav" />
     <router-view v-slot="{ Component, route }">
       <CustomTransition name="fade-transform">
         <keep-alive :include="layoutStore.keepAliveName">
@@ -79,7 +79,20 @@ const isFixTabsNav = computed(() => {
   .main-content {
     flex: 1;
     margin: 10px 12px;
-    overflow: v-bind(isFixTabsNav);
+    overflow: v-bind(isFixTabNav);
+  }
+}
+</style>
+
+<style lang="scss">
+/* 当前页面最大化 */
+.main-maximize {
+  .#{$admin-namespace}-columns-layout__aside,
+  .#{$el-namespace}-aside,
+  .#{$el-namespace}-header,
+  .#{$el-namespace}-footer,
+  .tabs-nav {
+    display: none !important;
   }
 }
 </style>

@@ -31,3 +31,10 @@ export enum MenuThemeEnum {
   Light = "light",
   Design = "design",
 }
+
+export enum TitleModeEnum {
+  ProjectPage = "projectPage",
+  UsernamePage = "usernamePage",
+  Project = "project",
+  Page = "page",
+}

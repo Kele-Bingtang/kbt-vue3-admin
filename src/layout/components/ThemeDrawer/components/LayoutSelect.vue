@@ -31,20 +31,24 @@ const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
       <el-switch v-model="settingsStore.showBreadcrumbIcon" />
     </div>
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.showTabsNav") }}</span>
-      <el-switch v-model="settingsStore.showTabsNav" />
+      <span>{{ $t("_settings.showTabNav") }}</span>
+      <el-switch v-model="settingsStore.showTabNav" />
     </div>
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.showTabsNavIcon") }}</span>
-      <el-switch v-model="settingsStore.showTabsNavIcon" />
+      <span>{{ $t("_settings.showTabNavIcon") }}</span>
+      <el-switch v-model="settingsStore.showTabNavIcon" />
     </div>
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.recordTabsNav") }}</span>
-      <el-switch v-model="settingsStore.recordTabsNav" />
+      <span>{{ $t("_settings.showTabNavDot") }}</span>
+      <el-switch v-model="settingsStore.showTabNavDot" />
     </div>
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.fixTabsNav") }}</span>
-      <el-switch v-model="settingsStore.fixTabsNav" />
+      <span>{{ $t("_settings.recordTabNav") }}</span>
+      <el-switch v-model="settingsStore.recordTabNav" />
+    </div>
+    <div :class="ns.e('item')">
+      <span>{{ $t("_settings.fixTabNav") }}</span>
+      <el-switch v-model="settingsStore.fixTabNav" />
     </div>
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.showLayoutLogo") }}</span>
