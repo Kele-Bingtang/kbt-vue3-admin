@@ -231,6 +231,8 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+
 @include b(message-notice) {
   @include e(list) {
     display: flex;

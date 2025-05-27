@@ -53,6 +53,9 @@ watch(
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(breadcrumb) {
   margin-left: 10px;
   overflow: hidden;

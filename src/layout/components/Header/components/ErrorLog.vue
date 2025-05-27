@@ -24,6 +24,8 @@ const openErrorLogger = () => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+
 @include b(error-badge) {
   :deep(.#{$el-namespace}-badge__content.is-fixed) {
     top: 11px;

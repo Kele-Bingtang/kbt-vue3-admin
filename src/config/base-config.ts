@@ -2,7 +2,7 @@ import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum, TitleModeEnum } from "@
 import type { SystemInfo, LayoutConfig, SystemConfig, ThemeConfig, RouterConfig, KeyConfig } from "./types";
 
 const systemInfo: SystemInfo = {
-  name: "teek-vue-admin",
+  name: "Teek Design Pro",
 };
 
 const themeConfig: ThemeConfig = {

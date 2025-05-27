@@ -92,7 +92,7 @@ watch(
         <span v-show="!isCollapse">{{ SystemConfig.systemInfo.name }}</span>
       </div>
 
-      <CollapseTrigger :class="{ 'has-trigger': !childrenMenu.length }" />
+      <CollapseTrigger :class="ns.has('trigger', !childrenMenu.length)" />
 
       <Menu
         :menu-list="headerMenu"

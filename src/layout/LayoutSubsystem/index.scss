@@ -1,3 +1,6 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(subsystem-layout) {
   @include e(drawer-bg) {
     position: absolute;

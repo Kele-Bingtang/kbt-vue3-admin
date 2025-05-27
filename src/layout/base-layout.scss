@@ -1,3 +1,6 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 /* 公共侧边栏样式（包含弹框菜单） */
 @include joins(layout-menu, layout-menu-popper) {
   --#{$el-namespace}-menu-bg-color: var(--#{$admin-namespace}-layout-aside-bg-color);

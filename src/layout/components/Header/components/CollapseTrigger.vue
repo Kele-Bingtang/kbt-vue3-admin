@@ -22,6 +22,9 @@ const toggleTrigger = () => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(collapse-trigger) {
   width: 45px;
   height: 100%;

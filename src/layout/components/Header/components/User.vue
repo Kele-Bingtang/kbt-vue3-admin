@@ -109,6 +109,8 @@ const logout = async () => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+
 @include b(user-dropdown) {
   @include e(avatar) {
     position: relative;

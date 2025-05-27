@@ -117,6 +117,9 @@ const changeLayout = (value: LayoutModeEnum) => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(layout-switch) {
   position: relative;
   display: flex;

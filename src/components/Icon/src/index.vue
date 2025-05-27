@@ -83,6 +83,8 @@ const isImg = () => isString(icon) && (iconType === "img" || icon.toLowerCase().
 </template>
 
 <style lang="scss">
+@use "@/styles/mixins/bem" as *;
+
 @include b(icon) {
   position: relative;
   display: inline-flex;

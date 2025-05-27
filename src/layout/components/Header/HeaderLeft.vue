@@ -21,6 +21,8 @@ const showBreadcrumb = computed(() => settingsStore.showBreadcrumb);
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+
 @include b(header-left) {
   height: 100%;
   padding-right: 15px;

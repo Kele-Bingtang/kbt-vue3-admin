@@ -63,6 +63,8 @@ const handleSwitchDark = () => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+
 @include b(theme-select) {
   @include e(item) {
     display: flex;

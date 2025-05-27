@@ -72,6 +72,8 @@ const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+
 @include b(layout-select) {
   @include e(item) {
     display: flex;

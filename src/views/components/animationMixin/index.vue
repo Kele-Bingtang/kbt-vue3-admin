@@ -70,7 +70,7 @@
             <TextHoverEffect
               init-color="#4dd9d5"
               :hover-color="`var(--${ns.elNamespace}-color-primary)`"
-              text="kbt-vue-admin"
+              text="Teek Design Pro"
             />
           </div>
         </el-card>
@@ -106,6 +106,13 @@ const demoRules = {
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-animation-mixin;
+$blue: #007bff;
+$light-blue: #409eff;
+$red: #e65d6e;
+$pink: #ff4081;
+$green: #43a047;
+$tiffany: #00c9b7;
+$yellow: #ffb350;
 
 .#{$prefix-class} {
   @mixin color-btn($color) {

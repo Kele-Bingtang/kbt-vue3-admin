@@ -56,7 +56,8 @@ withDefaults(defineProps<RightMenuProps>(), {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-right-menu;
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
 
 @include b(right-menu) {
   position: absolute;

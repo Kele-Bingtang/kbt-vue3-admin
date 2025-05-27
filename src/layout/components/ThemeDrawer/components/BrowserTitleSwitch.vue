@@ -4,6 +4,7 @@ import { useSettingsStore } from "@/stores";
 import { useRoute } from "vue-router";
 import { ElSelect, ElOption } from "element-plus";
 import { useI18n } from "vue-i18n";
+import { TitleModeEnum } from "@/enums/appEnum";
 
 const ns = useNamespace("browser-title-switch");
 
@@ -19,10 +20,10 @@ const handleTitleModeSelect = () => {
 };
 
 const titleModeOptions = [
-  { value: "0", label: t("_settings.titleModeProjectPage") },
-  { value: "1", label: t("_settings.titleModeUsernamePage") },
-  { value: "2", label: t("_settings.titleModeProject") },
-  { value: "3", label: t("_settings.titleModePage") },
+  { value: TitleModeEnum.ProjectPage, label: t("_settings.titleModeProjectPage") },
+  { value: TitleModeEnum.UsernamePage, label: t("_settings.titleModeUsernamePage") },
+  { value: TitleModeEnum.Project, label: t("_settings.titleModeProject") },
+  { value: TitleModeEnum.Page, label: t("_settings.titleModePage") },
 ];
 </script>
 
@@ -45,6 +46,8 @@ const titleModeOptions = [
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+
 @include b(browser-title-switch) {
   display: flex;
   flex-wrap: wrap;

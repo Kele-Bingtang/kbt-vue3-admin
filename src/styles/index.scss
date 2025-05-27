@@ -6,9 +6,6 @@
 @forward "common/transition";
 
 @forward "mixins/namespace";
-@forward "mixins/bem";
-@forward "mixins/function";
-@forward "mixins/mixins";
 
 /* 自定义原子类 */
 @for $i from 1 through 6 {

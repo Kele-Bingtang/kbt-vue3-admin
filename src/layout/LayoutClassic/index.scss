@@ -1,3 +1,6 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(classic-layout) {
   @include e(header-left) {
     gap: 20px;

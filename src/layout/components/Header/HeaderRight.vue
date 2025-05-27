@@ -46,6 +46,9 @@ const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(header-right) {
   height: 100%;
 

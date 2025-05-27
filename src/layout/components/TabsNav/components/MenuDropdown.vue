@@ -94,6 +94,8 @@ watch(
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/function" as *;
+
 .#{$el-namespace}-button {
   color: cssVar(layout-tab-text-color);
 

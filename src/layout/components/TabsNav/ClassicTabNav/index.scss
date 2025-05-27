@@ -1,3 +1,6 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 $tab-padding-top: 4px;
 $btn-width: 28px;
 

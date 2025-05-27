@@ -65,6 +65,8 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+
 @include b(frame-view) {
   z-index: 998;
   height: calc(100vh - 88px);

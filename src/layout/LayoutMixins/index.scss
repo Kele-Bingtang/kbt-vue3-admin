@@ -1,3 +1,6 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(mixins-layout) {
   .has-trigger {
     visibility: hidden;

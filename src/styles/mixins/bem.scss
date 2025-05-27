@@ -21,7 +21,7 @@ $bem-e: null;
   $current-selector: "";
 
   @each $unit in $element {
-    $current-selector: #{$current-selector + "." + $Block + $element-separator + $unit + ","};
+    $current-selector: #{$current-selector + "." + $bem-b + $element-separator + $unit + ","};
   }
 
   @if hitSpecialNestRule($selector) {
@@ -108,17 +108,14 @@ $bem-e: null;
 /* 多个元素 */
 @mixin joins($element...) {
   $bem-e: $admin-namespace + $common-separator;
-  $elector: "";
-
-  /* 去掉最后一个多余的逗号 */
-  $elector: string.slice($elector, 1, -2);
-
-  #{$elector} {
-    @content;
-  }
+  $selector: "";
 
   /* 拼接逗号 */
   @each $unit in $element {
-    $elector: #{$elector + "." + $Element + $unit + ","};
+    $selector: #{$selector + "." + $bem-e + $unit + ","};
+  }
+
+  #{string.slice($selector, 1, -2)} {
+    @content;
   }
 }

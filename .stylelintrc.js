@@ -25,6 +25,11 @@ export default {
     "no-descending-specificity": null, // 允许无降序特异性
     "keyframes-name-pattern": null, // 动画帧节点样式命名规则
     "function-name-case": null, // 指定函数名称的小写或大写
+    // 要求或不允许 at 规则前有空行
+    "at-rule-empty-line-before": [
+      "always",
+      { ignore: ["after-comment", "first-nested"], ignoreAtRules: ["forward", "use", "else", "include"] },
+    ],
     "value-keyword-case": ["lower", { ignoreFunctions: ["/v-bind$$(.*?$$)/"] }], // 指定关键字值的小写或大写
     "media-feature-range-notation": "prefix", // 指定媒体功能范围的上下文或前缀表示法
     "selector-pseudo-class-no-unknown": [true, { ignorePseudoClasses: ["global", "export", "deep"] }],
@@ -36,11 +41,6 @@ export default {
       { ignoreProperties: { "/.+/": "/v-bind|cssVar|cssVarName|cssVarWithDefault/" } },
     ],
     "function-no-unknown": null, // 忽略未知函数的错误
-    "order/order": [
-      // 排序规则：$变量(如 $primary-color: red) > 自定义属性(如 --custom-color: red) > 声明(如 color: red) > 规则集(如嵌套选择器 .a{ .b{} }) > 规则集(如 @include)
-      ["dollar-variables", "custom-properties", "declarations", "rules", "at-rules"],
-      { severity: "warning" },
-    ],
     "scss/at-function-pattern": null, // scss 的 @function 命名允许大写
   },
   ignoreFiles: [

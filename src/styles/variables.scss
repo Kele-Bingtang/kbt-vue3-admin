@@ -1,11 +1,12 @@
-@use "mixins/namespace" as *;
+/* stylelint-disable no-duplicate-selectors */
 @use "mixins/mixins" as *;
+@use "mixins/namespace" as *;
 @use "mixins/function" as *;
 
 // 基础变量
 :root {
-  --#{$admin-namespace}-card-border: rgba(var(--#{$admin-namespace}-gray-300-rgb), 0.6); // 卡片边框颜色
-  --#{$admin-namespace}-card-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.04); // 卡片阴影
+  --#{$admin-namespace}-card-border: rgb(var(--#{$admin-namespace}-gray-300-rgb), 0.6); // 卡片边框颜色
+  --#{$admin-namespace}-card-shadow: 0px 0px 4px 0px rgb(0 0 0 / 4%); // 卡片阴影
 }
 
 // 布局变量
@@ -14,7 +15,9 @@
   @include set-css-var(layout-header-bg-color, var(--#{$admin-namespace}-bg-color));
   @include set-css-var(layout-header-text-color, var(--#{$admin-namespace}-text-gray-600));
   @include set-css-var(layout-header-icon-size, 22px);
+
   // @include set-css-var(layout-header-line, 1px solid var(--#{$admin-namespace}-card-border));
+
   // 顶部左侧面包屑
   @include set-css-var(layout-header-breadcrumb-link-color, var(--#{$admin-namespace}-text-gray-500));
   @include set-css-var(layout-header-breadcrumb-text-color, var(--#{$admin-namespace}-text-gray-700));
@@ -46,7 +49,9 @@
   @include set-css-var(layout-tab-item-bg-color, var(--#{$admin-namespace}-main-bg-color));
   @include set-css-var(layout-tab-height, 38px);
   @include set-css-var(layout-tab-text-color, var(--#{$admin-namespace}-text-gray-600));
+
   // @include set-css-var(layout-tab-line, 1px solid var(--#{$admin-namespace}-card-border));
+
   @include set-css-var(layout-tab-text-size, 13px);
   @include set-css-var(layout-tab-icon-size, 14px);
   @include set-css-var(layout-tab-dot-size, 11px);
@@ -59,6 +64,7 @@
 // Light 主题变量
 :root {
   --#{$admin-namespace}-main-color: var(--#{$el-namespace}-color-primary);
+
   // Theme color
   --#{$admin-namespace}-primary: 93, 135, 255;
   --#{$admin-namespace}-secondary: 73, 190, 255;
@@ -76,11 +82,9 @@
   --#{$admin-namespace}-bg-info: 235, 243, 254;
   --#{$admin-namespace}-bg-warning: 254, 245, 229;
   --#{$admin-namespace}-bg-danger: 253, 237, 232;
-
   --#{$admin-namespace}-hoverColor: 246, 249, 252;
   --#{$admin-namespace}-grey100: 242, 246, 250;
   --#{$admin-namespace}-grey200: 234, 239, 244;
-
   --#{$admin-namespace}-color: #ffffff;
   --#{$admin-namespace}-light: #f9f9f9;
   --#{$admin-namespace}-dark: #1e2129;
@@ -124,13 +128,13 @@
   --#{$admin-namespace}-root-card-border-color: #f1f1f4;
 
   // Shadow
-  --#{$admin-namespace}-box-shadow-xs: 0 0.1rem 0.75rem 0.25rem rgba(0, 0, 0, 0.05);
-  --#{$admin-namespace}-box-shadow-sm: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
-  --#{$admin-namespace}-box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(0, 0, 0, 0.075);
-  --#{$admin-namespace}-box-shadow-lg: 0 1rem 2rem 1rem rgba(0, 0, 0, 0.1);
+  --#{$admin-namespace}-box-shadow-xs: 0 0.1rem 0.75rem 0.25rem rgb(0 0 0 / 5%);
+  --#{$admin-namespace}-box-shadow-sm: 0 0.1rem 1rem 0.25rem rgb(0 0 0 / 5%);
+  --#{$admin-namespace}-box-shadow: 0 0.5rem 1.5rem 0.5rem rgb(0 0 0 / 7.5%);
+  --#{$admin-namespace}-box-shadow-lg: 0 1rem 2rem 1rem rgb(0 0 0 / 10%);
 
   // Root card box、shadow
-  --#{$admin-namespace}-root-card-box-shadow: 0px 3px 4px 0px rgba(0, 0, 0, 0.03);
+  --#{$admin-namespace}-root-card-box-shadow: 0px 3px 4px 0px rgb(0 0 0 / 3%);
   --#{$admin-namespace}-root-card-border-color: #f1f1f4;
 
   // Theme background color
@@ -157,11 +161,9 @@ html.dark {
   --#{$admin-namespace}-bg-info: 34, 54, 98;
   --#{$admin-namespace}-bg-warning: 77, 58, 42;
   --#{$admin-namespace}-bg-danger: 100, 49, 61;
-
   --#{$admin-namespace}-hoverColor: 51, 63, 85;
   --#{$admin-namespace}-grey100: 51, 63, 85;
   --#{$admin-namespace}-grey200: 70, 86, 112;
-
   --#{$admin-namespace}-color: #000000;
   --#{$admin-namespace}-light: #1b1c22;
   --#{$admin-namespace}-dark: #272a34;
@@ -205,10 +207,10 @@ html.dark {
   --#{$admin-namespace}-root-card-border-color: #1e2027;
 
   // Shadow
-  --#{$admin-namespace}-box-shadow-xs: 0 0.1rem 0.75rem 0.25rem rgba(0, 0, 0, 0.05);
-  --#{$admin-namespace}-box-shadow-sm: 0 0.1rem 1rem 0.25rem rgba(0, 0, 0, 0.05);
-  --#{$admin-namespace}-box-shadow: 0 0.5rem 1.5rem 0.5rem rgba(0, 0, 0, 0.075);
-  --#{$admin-namespace}-box-shadow-lg: 0 1rem 2rem 1rem rgba(0, 0, 0, 0.1);
+  --#{$admin-namespace}-box-shadow-xs: 0 0.1rem 0.75rem 0.25rem rgb(0 0 0 / 5%);
+  --#{$admin-namespace}-box-shadow-sm: 0 0.1rem 1rem 0.25rem rgb(0 0 0 / 5%);
+  --#{$admin-namespace}-box-shadow: 0 0.5rem 1.5rem 0.5rem rgb(0 0 0 / 7.5%);
+  --#{$admin-namespace}-box-shadow-lg: 0 1rem 2rem 1rem rgb(0 0 0 / 10%);
 
   // Root card box、shadow
   --#{$admin-namespace}-root-card-box-shadow: none;
@@ -222,44 +224,48 @@ html.dark {
 // 媒体查询-设备尺寸
 // notebook
 $device-notebook: 1600px;
+
 // ipad pro
 $device-ipad-pro: 1180px;
+
 // ipad
 $device-ipad: 800px;
+
 // ipad-竖屏
 $device-ipad-vertical: 900px;
+
 // mobile
 $device-phone: 500px;
 
 .bg-primary {
-  background-color: rgb(var(--#{$admin-namespace}-bg-primary)) !important;
   color: rgb(var(--#{$admin-namespace}-primary)) !important;
+  background-color: rgb(var(--#{$admin-namespace}-bg-primary)) !important;
 }
 
 .bg-secondary {
-  background-color: rgb(var(--#{$admin-namespace}-bg-secondary)) !important;
   color: rgb(var(--#{$admin-namespace}-secondary)) !important;
+  background-color: rgb(var(--#{$admin-namespace}-bg-secondary)) !important;
   border: 1px solid var(--#{$admin-namespace}-secondary);
 }
 
 .bg-warning {
-  background-color: rgb(var(--#{$admin-namespace}-bg-warning)) !important;
   color: rgb(var(--#{$admin-namespace}-warning)) !important;
+  background-color: rgb(var(--#{$admin-namespace}-bg-warning)) !important;
 }
 
 .bg-error {
-  background-color: rgb(var(--#{$admin-namespace}-bg-error)) !important;
   color: rgb(var(--#{$admin-namespace}-error)) !important;
+  background-color: rgb(var(--#{$admin-namespace}-bg-error)) !important;
 }
 
 .bg-success {
-  background-color: rgb(var(--#{$admin-namespace}-bg-success)) !important;
   color: rgb(var(--#{$admin-namespace}-success)) !important;
+  background-color: rgb(var(--#{$admin-namespace}-bg-success)) !important;
 }
 
 .bg-danger {
-  background-color: rgb(var(--#{$admin-namespace}-bg-danger)) !important;
   color: rgb(var(--#{$admin-namespace}-danger)) !important;
+  background-color: rgb(var(--#{$admin-namespace}-bg-danger)) !important;
 }
 
 .bg-grey100 {

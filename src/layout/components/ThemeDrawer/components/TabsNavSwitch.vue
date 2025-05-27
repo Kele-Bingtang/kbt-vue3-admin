@@ -68,6 +68,9 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(tabs-nav-switch) {
   text-align: center;
 

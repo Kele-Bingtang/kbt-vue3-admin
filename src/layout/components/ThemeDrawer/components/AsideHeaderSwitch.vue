@@ -76,6 +76,9 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(aside-header-switch) {
   display: flex;
   flex-wrap: wrap;

@@ -148,6 +148,9 @@ onUnmounted(() => {
 </template>
 
 <style lang="scss" scoped>
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
 @include b(menu-search) {
   @include is(show) {
     width: 220px !important;
