@@ -16,8 +16,9 @@
 
   /* 垂直菜单样式 */
   .#{$el-namespace}-menu--vertical .is-active.is-only {
-    background-color: getCssVar(layout-aside-bg-active-color);
-    font-weight: getCssVar(layout-aside-text-active-weight);
+    font-weight: cssVar(layout-aside-text-active-weight);
+    background-color: cssVar(layout-aside-bg-active-color);
+
     &::before {
       position: absolute;
       top: 0;
@@ -25,7 +26,7 @@
       left: 0;
       width: 4px;
       content: "";
-      background: getCssVar(main-color);
+      background: cssVar(main-color);
     }
   }
 
@@ -38,32 +39,33 @@
     > li:not(.is-active) {
       .#{$el-namespace}-icon,
       .svg-icon {
-        color: getCssVar(layout-aside-icon-color);
+        color: cssVar(layout-aside-icon-color);
       }
     }
 
     /* 子级高亮，父级也高亮 */
     > .is-sub.is-active > .#{$el-namespace}-sub-menu__title {
-      color: getCssVar(main-color);
-      font-weight: getCssVar(layout-aside-text-active-weight);
+      font-weight: cssVar(layout-aside-text-active-weight);
+      color: cssVar(main-color);
     }
 
     :where(.#{$el-namespace}-menu-item, .#{$el-namespace}-sub-menu) {
       margin-bottom: 5px;
+
       &:last-of-type {
         margin-bottom: 0;
       }
 
       /* 父级菜单鼠标悬停样式 */
       .#{$el-namespace}-sub-menu__title:hover {
-        background-color: getCssVar(layout-aside-bg-hover-color) !important;
+        background-color: cssVar(layout-aside-bg-hover-color) !important;
       }
     }
 
     // 菜单右侧箭头
     .#{$el-namespace}-sub-menu__icon-arrow {
-      width: getCssVar(layout-aside-arrow-size);
-      font-size: getCssVar(layout-aside-arrow-size);
+      width: cssVar(layout-aside-arrow-size);
+      font-size: cssVar(layout-aside-arrow-size);
     }
   }
 }
@@ -76,18 +78,18 @@
 
   @include is(expand) {
     @include joins(layout-aside) {
-      width: getCssVar(layout-open-aside-width);
+      width: cssVar(layout-open-aside-width);
       transition-duration: 0.3s;
     }
   }
 
   @include is(collapse) {
     @include joins(layout-logo) {
-      width: calc(getCssVar(layout-close-aside-width) - 1px);
+      width: calc(cssVar(layout-close-aside-width) - 1px);
     }
 
     @include joins(layout-aside) {
-      width: getCssVar(layout-close-aside-width);
+      width: cssVar(layout-close-aside-width);
       transition-duration: 0.3s;
     }
 
@@ -95,7 +97,7 @@
       /* 折叠后的图案添加背景色 */
       .#{$el-namespace}-menu--collapse {
         > .is-active {
-          background-color: getCssVar(layout-aside-bg-active-color);
+          background-color: cssVar(layout-aside-bg-active-color);
         }
       }
     }
@@ -103,32 +105,32 @@
 
   /* 顶部栏样式 */
   @include joins(layout-header) {
-    height: getCssVar(layout-header-height);
-    color: getCssVar(layout-header-text-color);
-    background-color: getCssVar(layout-header-bg-color);
-    border-bottom: getCssVar(layout-header-line);
+    height: cssVar(layout-header-height);
     padding-left: 0;
+    color: cssVar(layout-header-text-color);
+    background-color: cssVar(layout-header-bg-color);
+    border-bottom: cssVar(layout-header-line);
   }
 
   /* 侧边栏样式 */
   @include joins(layout-aside) {
-    background: getCssVar(layout-aside-bg-color);
-    border-right: getCssVar(layout-aside-line);
     z-index: 1000;
     height: 100%;
     overflow-x: hidden;
+    background: cssVar(layout-aside-bg-color);
+    border-right: cssVar(layout-aside-line);
   }
 
   /* logo 栏样式 */
   @include joins(layout-logo) {
-    width: calc(getCssVar(layout-open-aside-width) - 1px);
-    height: getCssVar(layout-header-height);
-    cursor: pointer;
+    width: calc(cssVar(layout-open-aside-width) - 1px);
+    height: cssVar(layout-header-height);
     overflow: hidden;
+    cursor: pointer;
 
     span {
-      color: getCssVar(layout-logo-title-color);
       font-size: 20px;
+      color: cssVar(layout-logo-title-color);
       white-space: nowrap;
     }
 
@@ -141,9 +143,9 @@
 
   @include joins(layout-menu) {
     .#{$el-namespace}-menu--horizontal {
-      background-color: getCssVar(layout-header-bg-color);
       /* 水平菜单减去自身的 border，避免滚动条出现 */
-      height: calc(getCssVar(layout-header-height) - 1px);
+      height: calc(cssVar(layout-header-height) - 1px);
+      background-color: cssVar(layout-header-bg-color);
     }
   }
 }

@@ -65,7 +65,7 @@ const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
         background-color var(--#{$el-namespace}-transition-duration);
 
       &:hover {
-        background-color: getCssVar(gray-200);
+        background-color: cssVar(gray-200);
       }
     }
 

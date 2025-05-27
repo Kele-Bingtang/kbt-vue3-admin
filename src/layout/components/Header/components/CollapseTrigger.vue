@@ -31,7 +31,7 @@ const toggleTrigger = () => {
   transition: background-color var(--#{$el-namespace}-transition-duration);
 
   &:hover {
-    background-color: getCssVar(gray-200);
+    background-color: cssVar(gray-200);
   }
 }
 </style>

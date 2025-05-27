@@ -1,59 +1,4 @@
 @include b(columns-layout) {
-  /* 自定义菜单样式 */
-  @include e(aside) {
-    background-color: getCssVar(layout-aside-bg-color);
-    border-right: 1px solid getCssVar(layout-aside-line);
-    width: getCssVar(columns-layout-aside-width);
-    height: 100%;
-
-    @include e(logo) {
-      width: auto !important;
-      img {
-        width: 45% !important;
-        margin: 0 auto !important;
-      }
-    }
-
-    @include e(aside__list) {
-      margin: 0;
-      padding: 0;
-    }
-
-    @include e(aside__list-item) {
-      height: getCssVar(columns-layout-aside-item-height);
-      flex-direction: column;
-      cursor: pointer;
-      transition: all var(--#{$el-namespace}-transition-duration) ease;
-
-      &:hover {
-        background-color: getCssVar(layout-aside-bg-hover-color);
-      }
-
-      :where(.#{$el-namespace}-icon, .svg-icon) {
-        color: getCssVar(layout-aside-icon-color);
-        font-size: 20px;
-      }
-      .title {
-        color: getCssVar(layout-aside-text-color);
-        padding: 5px;
-        margin-top: 6px;
-        font-size: 12px;
-      }
-
-      @include is(active) {
-        background-color: getCssVar(layout-aside-bg-active-color);
-        font-weight: 700;
-
-        .title {
-          color: var(--#{$el-namespace}-menu-active-color);
-        }
-        :where(.#{$el-namespace}-icon, .svg-icon) {
-          color: var(--#{$el-namespace}-menu-active-color);
-        }
-      }
-    }
-  }
-
   /* 折叠按钮添加左间距 */
   .#{$el-namespace}-header {
     padding-left: 10px !important;
@@ -63,5 +8,62 @@
   .#{$el-namespace}-aside.not-aside {
     width: 0 !important;
     border: 0;
+  }
+
+  /* 自定义菜单样式 */
+  @include e(aside) {
+    width: cssVar(columns-layout-aside-width);
+    height: 100%;
+    background-color: cssVar(layout-aside-bg-color);
+    border-right: 1px solid cssVar(layout-aside-line);
+
+    @include e(logo) {
+      width: auto !important;
+
+      img {
+        width: 45% !important;
+        margin: 0 auto !important;
+      }
+    }
+
+    @include e(aside__list) {
+      padding: 0;
+      margin: 0;
+    }
+
+    @include e(aside__list-item) {
+      flex-direction: column;
+      height: cssVar(columns-layout-aside-item-height);
+      cursor: pointer;
+      transition: all var(--#{$el-namespace}-transition-duration) ease;
+
+      &:hover {
+        background-color: cssVar(layout-aside-bg-hover-color);
+      }
+
+      :where(.#{$el-namespace}-icon, .svg-icon) {
+        font-size: 20px;
+        color: cssVar(layout-aside-icon-color);
+      }
+
+      .title {
+        padding: 5px;
+        margin-top: 6px;
+        font-size: 12px;
+        color: cssVar(layout-aside-text-color);
+      }
+
+      @include is(active) {
+        font-weight: 700;
+        background-color: cssVar(layout-aside-bg-active-color);
+
+        .title {
+          color: var(--#{$el-namespace}-menu-active-color);
+        }
+        :where(.#{$el-namespace}-icon, .svg-icon) {
+          color: var(--#{$el-namespace}-menu-active-color);
+        }
+      }
+    }
   }
 }

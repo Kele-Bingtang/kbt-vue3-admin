@@ -3,22 +3,23 @@ $btn-width: 28px;
 
 @include b(classic-tabs-nav) {
   position: relative;
-  width: 100%;
-  height: getCssVar(layout-tab-height);
-  background-color: getCssVar(layout-tab-bg-color);
-  border-bottom: getCssVar(layout-tab-line);
-  white-space: nowrap;
   gap: 5px;
+  width: 100%;
+  height: cssVar(layout-tab-height);
   padding: 0 10px;
+  white-space: nowrap;
+  background-color: cssVar(layout-tab-bg-color);
+  border-bottom: cssVar(layout-tab-line);
 
   @include is(simple) {
     @include e(tab) {
       .icon-close:hover {
-        background-color: getCssVar(gray-300);
+        background-color: cssVar(gray-300);
       }
 
       @include is(active) {
-        color: getCssVar(main-color);
+        color: cssVar(main-color);
+
         .dot {
           background-color: var(--#{$el-namespace}-color-primary-light-3);
         }
@@ -30,13 +31,14 @@ $btn-width: 28px;
     @include e(tab) {
       .icon-close:hover {
         color: #ffffff;
-        background-color: getCssVar(gray-500);
+        background-color: cssVar(gray-500);
       }
 
       @include is(active) {
         color: #ffffff;
-        background-color: getCssVar(main-color);
-        border-color: getCssVar(main-color);
+        background-color: cssVar(main-color);
+        border-color: cssVar(main-color);
+
         .dot {
           background-color: #ffffff;
         }
@@ -62,31 +64,32 @@ $btn-width: 28px;
   @include e(tab) {
     display: inline-flex;
     align-items: center;
-    background-color: getCssVar(layout-tab-item-bg-color);
-    color: getCssVar(layout-tab-text-color);
-    font-size: getCssVar(layout-tab-text-size);
-    border: 1px solid getCssVar(card-border);
-    height: calc(getCssVar(layout-tab-height) - 2 * $tab-padding-top);
+    height: calc(cssVar(layout-tab-height) - 2 * $tab-padding-top);
     padding: 0 11px;
     margin-right: 8px;
     overflow: hidden;
+    font-size: cssVar(layout-tab-text-size);
+    color: cssVar(layout-tab-text-color);
     cursor: pointer;
+    background-color: cssVar(layout-tab-item-bg-color);
+    border: 1px solid cssVar(card-border);
     border-radius: 4px;
 
     &:hover {
-      color: getCssVar(main-color);
+      color: cssVar(main-color);
+
       .dot {
         background-color: var(--#{$el-namespace}-color-primary-light-3);
       }
     }
 
     .dot {
-      width: getCssVar(layout-tab-dot-size);
-      height: getCssVar(layout-tab-dot-size);
-      background-color: getCssVar(gray-300);
-      transition: background var(--#{$el-namespace}-transition-duration) ease;
+      width: cssVar(layout-tab-dot-size);
+      height: cssVar(layout-tab-dot-size);
       margin-right: 7px;
+      background-color: cssVar(gray-300);
       border-radius: 50%;
+      transition: background var(--#{$el-namespace}-transition-duration) ease;
     }
 
     .icon-close {
@@ -100,7 +103,7 @@ $btn-width: 28px;
 
     @include m(icon) {
       margin-right: 4px;
-      font-size: getCssVar(layout-tab-icon-size);
+      font-size: cssVar(layout-tab-icon-size);
     }
   }
 
@@ -108,13 +111,13 @@ $btn-width: 28px;
     height: 100%;
 
     .#{$el-namespace}-button {
-      background-color: transparent;
       width: $btn-width;
       height: 100%;
+      background-color: transparent;
       border: none;
 
       &:hover {
-        background-color: getCssVar(gray-200);
+        background-color: cssVar(gray-200);
       }
     }
   }

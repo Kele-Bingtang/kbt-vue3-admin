@@ -2,25 +2,19 @@ $btn-width: 28px;
 
 @include b(el-tabs-nav) {
   position: relative;
-  background-color: getCssVar(layout-tab-bg-color);
-  border-bottom: getCssVar(layout-tab-line);
   padding: 0 10px;
+  background-color: cssVar(layout-tab-bg-color);
+  border-bottom: cssVar(layout-tab-line);
 
   @include e(content) {
     width: 100%;
-
-    @include m(icon) {
-      top: 2px;
-      margin-right: 5px;
-      font-size: getCssVar(layout-tab-icon-size);
-    }
 
     .#{$el-namespace}-tabs {
       width: calc(100% - $btn-width);
     }
 
     .#{$el-namespace}-tabs--card > .#{$el-namespace}-tabs__header {
-      height: getCssVar(layout-tab-height);
+      height: cssVar(layout-tab-height);
       margin: 0;
       border-bottom: none;
 
@@ -34,24 +28,31 @@ $btn-width: 28px;
       }
 
       .#{$el-namespace}-tabs__item {
-        color: getCssVar(layout-tab-text-color);
-        // background-color: getCssVar(layout-tab-item-bg-color);
-        border-left: none;
         padding: 0 10px;
+        color: cssVar(layout-tab-text-color);
+
+        // background-color: cssVar(layout-tab-item-bg-color);
+        border-left: none;
 
         &:hover {
-          color: getCssVar(main-color);
+          color: cssVar(main-color);
         }
 
         &.is-active {
-          color: getCssVar(main-color);
-          border-bottom: 2px solid getCssVar(main-color);
+          color: cssVar(main-color);
+          border-bottom: 2px solid cssVar(main-color);
         }
 
         .is-icon-close svg {
           margin-top: 0.5px;
         }
       }
+    }
+
+    @include m(icon) {
+      top: 2px;
+      margin-right: 5px;
+      font-size: cssVar(layout-tab-icon-size);
     }
   }
 }

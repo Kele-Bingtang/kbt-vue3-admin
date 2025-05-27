@@ -2,79 +2,46 @@ export default {
   root: true,
   customSyntax: "postcss-html",
   extends: [
-    "stylelint-config-recommended-scss",
-    "stylelint-config-standard", // 配置stylelint拓展插件
+    "stylelint-config-standard", // 配置 stylelint拓展插件
     "stylelint-config-html/vue", // 配置 vue 中 template 样式格式化
-    "stylelint-config-standard-scss", // 配置stylelint scss插件
+    "stylelint-config-standard-scss", // 配置 stylelint scss 插件
+    "stylelint-config-recommended-scss",
     "stylelint-config-recommended-vue/scss", // 配置 vue 中 scss 样式格式化
-    "stylelint-config-recess-order", // 配置stylelint css属性书写顺序插件,
+    "stylelint-config-recess-order", // 配置 stylelint css属性书写顺序插件
   ],
   /**
-   * null  => 关闭该规则
+   * 值规则
+   *
+   * 1. null：关闭该规则
+   * 2. [xx, { ignoreXx: [] }]，指定 xx 规则，但是忽略正则匹配的值
+   * 3. [xx, { ignoreXx: {key: value} }]，指定 xx 规则，但是忽略某个属性的某个 value，支持正则
    */
   rules: {
-    "value-keyword-case": null, // 在 css 中使用 v-bind，不报错
-    "no-descending-specificity": null, // 禁止在具有较高优先级的选择器后出现被其覆盖的较低优先级的选择器
-    "function-url-quotes": "always", // 要求或禁止 URL 的引号 "always(必须加上引号)"|"never(没有引号)"
-    "color-hex-length": "long", // 指定 16 进制颜色的简写或扩写 "short(16进制简写)"|"long(16进制扩写)"
-    "font-family-no-missing-generic-family-keyword": null, // 禁止在字体族名称列表中缺少通用字体族关键字
-    "property-no-unknown": null, // 禁止未知的属性(true 为不允许)
-    "no-empty-source": null, // 禁止空源码
+    "no-empty-source": null, // 允许空样式
+    "function-url-quotes": "always", // 要求或禁止 URL 的引号，always(必须加上引号) | never(没有引号)
+    "color-hex-length": "long", // 指定 16 进制颜色的简写或扩写， short(16进制简写) | long(16进制扩写)
+    "custom-property-pattern": null, // 自定义属性命名规则
     "selector-class-pattern": null, // 强制选择器类名的格式
-    "value-no-vendor-prefix": null, // 关闭 vendor-prefix(为了解决多行省略 -webkit-box)
-    "keyframes-name-pattern": null,
-    "function-name-case": null,
-    "selector-pseudo-class-no-unknown": [
+    "no-descending-specificity": null, // 允许无降序特异性
+    "keyframes-name-pattern": null, // 动画帧节点样式命名规则
+    "function-name-case": null, // 指定函数名称的小写或大写
+    "value-keyword-case": ["lower", { ignoreFunctions: ["/v-bind$$(.*?$$)/"] }], // 指定关键字值的小写或大写
+    "media-feature-range-notation": "prefix", // 指定媒体功能范围的上下文或前缀表示法
+    "selector-pseudo-class-no-unknown": [true, { ignorePseudoClasses: ["global", "export", "deep"] }],
+    "import-notation": "string", // 为 @import 规则指定字符串或 URL 表示法
+    "unit-no-unknown": [true, { ignoreUnits: ["rpx"] }], // 禁止未知单位
+    // 不允许声明中的属性值未知
+    "declaration-property-value-no-unknown": [
       true,
-      {
-        ignorePseudoClasses: ["global", "v-deep", "deep"],
-      },
+      { ignoreProperties: { "/.+/": "/v-bind|cssVar|cssVarName|cssVarWithDefault/" } },
     ],
-    "selector-pseudo-element-no-unknown": [
-      true,
-      {
-        ignorePseudoElements: ["global", "v-deep", "deep"],
-      },
-    ],
-    "at-rule-no-unknown": [
-      true,
-      {
-        ignoreAtRules: [
-          "apply",
-          "variants",
-          "responsive",
-          "screen",
-          "function",
-          "if",
-          "each",
-          "include",
-          "mixin",
-          "extend",
-          "for",
-          "forward",
-          "use",
-        ],
-      },
-    ],
-    "media-feature-range-notation": "prefix",
-    "named-grid-areas-no-invalid": null,
-    "function-no-unknown": null,
-    "import-notation": "string",
-    "rule-empty-line-before": [
-      // 要求或禁止在规则之前的空行 "always(规则之前必须始终有一个空行)"|"never(规则前绝不能有空行)"|"always-multi-line(多行规则之前必须始终有一个空行)"|"never-multi-line(多行规则之前绝不能有空行。)"
-      "always",
-      {
-        ignore: ["after-comment", "first-nested"],
-      },
-    ],
-    "unit-no-unknown": [true, { ignoreUnits: ["rpx"] }],
-    // 不允许声明中的属性值未知。这里忽略 v-bind 和 getCssVar 报错
-    "declaration-property-value-no-unknown": [true, { ignoreProperties: { "/.+/": "/v-bind|getCssVar/" } }],
+    "function-no-unknown": null, // 忽略未知函数的错误
     "order/order": [
       // 排序规则：$变量(如 $primary-color: red) > 自定义属性(如 --custom-color: red) > 声明(如 color: red) > 规则集(如嵌套选择器 .a{ .b{} }) > 规则集(如 @include)
       ["dollar-variables", "custom-properties", "declarations", "rules", "at-rules"],
       { severity: "warning" },
     ],
+    "scss/at-function-pattern": null, // scss 的 @function 命名允许大写
   },
   ignoreFiles: [
     "**/*.js",
@@ -82,15 +49,19 @@ export default {
     "**/*.tsx",
     "**/*.ts",
     "**/*.json",
-    "src/styles/*.css",
+    "**/styles/*.css",
     "**/*.module.scss",
-    "src/assets/**/*.*",
+    "**/assets/**/*.*",
   ],
   overrides: [
     // 扫描 .vue/html 文件中的 <style> 标签内的样式
     {
       files: ["**/*.{vue,html}"],
       customSyntax: "postcss-html",
+    },
+    {
+      files: ["**/*.{css,scss}"],
+      customSyntax: "postcss-scss",
     },
   ],
 };

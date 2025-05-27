@@ -6,35 +6,35 @@
   height: 0;
 }
 
-/*滚动条的轨道*/
+/* 滚动条的轨道 */
 ::-webkit-scrollbar-track {
-  background-color: getCssVar(text-gray-100);
+  background-color: cssVar(text-gray-100);
 }
 
-/*滚动条的滑块按钮*/
+/* 滚动条的滑块按钮 */
 ::-webkit-scrollbar-thumb {
-  border-radius: 5px;
   background-color: #cccccc;
+  border-radius: 5px;
   transition: all 0.2s;
-  -webkit-transition: all 0.2s;
+  transition: all 0.2s;
 }
 
 ::-webkit-scrollbar-thumb:hover {
   background-color: #b0abab;
 }
 
-/*滚动条的上下两端的按钮*/
+/* 滚动条的上下两端的按钮 */
 ::-webkit-scrollbar-button {
-  height: 0px;
   width: 0;
+  height: 0;
 }
 
 .dark {
   ::-webkit-scrollbar-track {
-    background-color: getCssVar(bg-color);
+    background-color: cssVar(bg-color);
   }
 
   ::-webkit-scrollbar-thumb {
-    background-color: rgba(var(--#{$admin-namespace}-gray-300-rgb), 0.8);
+    background-color: rgb(var(--#{$admin-namespace}-gray-300-rgb), 0.8);
   }
 }

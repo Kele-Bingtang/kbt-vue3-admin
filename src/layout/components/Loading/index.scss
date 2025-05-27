@@ -8,18 +8,6 @@
     justify-content: center;
     padding: 98px;
 
-    @keyframes ant-rotate {
-      to {
-        transform: rotate(405deg);
-      }
-    }
-
-    @keyframes ant-spin-move {
-      to {
-        opacity: 1;
-      }
-    }
-
     .dot {
       position: relative;
       box-sizing: border-box;
@@ -36,7 +24,7 @@
       display: block;
       width: 14px;
       height: 14px;
-      background-color: getCssVar(main-color);
+      background-color: cssVar(main-color);
       border-radius: 100%;
       opacity: 0.3;
       transform: scale(0.75);
@@ -65,6 +53,18 @@
       bottom: 0;
       left: 0;
       animation-delay: 1.2s;
+    }
+
+    @keyframes ant-rotate {
+      to {
+        transform: rotate(405deg);
+      }
+    }
+
+    @keyframes ant-spin-move {
+      to {
+        opacity: 1;
+      }
     }
   }
 }

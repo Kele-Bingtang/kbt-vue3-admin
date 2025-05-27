@@ -208,7 +208,7 @@ export const setStyleVar = (key: string, value: string) => {
   document.documentElement.style.setProperty(key, value);
 };
 
-export const getCssVar = (prop: string, dom = document.documentElement) => {
+export const cssVar = (prop: string, dom = document.documentElement) => {
   return getComputedStyle(dom).getPropertyValue(prop);
 };
 

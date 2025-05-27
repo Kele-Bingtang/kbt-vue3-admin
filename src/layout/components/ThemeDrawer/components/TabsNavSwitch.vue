@@ -83,7 +83,7 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
     position: absolute;
     top: 6px;
     right: 15px;
-    color: getCssVar(main-color);
+    color: cssVar(main-color);
     transition: all var(--#{$el-namespace}-transition-duration-fast);
   }
 
@@ -130,7 +130,7 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
       }
 
       &.active {
-        background-color: getCssVar(main-color);
+        background-color: cssVar(main-color);
 
         .dot {
           background-color: #ffffff;
@@ -154,11 +154,11 @@ const handleTabsNav = (value: TabsNavModeEnum) => {
       color: #cccccc;
 
       &.active {
-        color: getCssVar(main-color);
-        border-bottom: 1px solid getCssVar(main-color);
+        color: cssVar(main-color);
+        border-bottom: 1px solid cssVar(main-color);
 
         .#{$el-namespace}-icon {
-          color: getCssVar(main-color);
+          color: cssVar(main-color);
         }
       }
 

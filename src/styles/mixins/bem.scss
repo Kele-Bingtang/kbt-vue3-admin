@@ -2,38 +2,39 @@
 @use "function" as *;
 @use "sass:string";
 
-$B: null;
-$E: null;
+$bem-b: null;
+$bem-e: null;
 
 /* Block 块 */
 @mixin b($block) {
-  $B: $admin-namespace + $common-separator + $block !global;
+  $bem-b: $admin-namespace + $common-separator + $block !global;
 
-  .#{$B} {
+  .#{$bem-b} {
     @content;
   }
 }
 
 /* Element 元素 */
 @mixin e($element) {
-  $E: $element !global;
+  $bem-e: $element !global;
   $selector: &;
-  $currentSelector: "";
+  $current-selector: "";
+
   @each $unit in $element {
-    $currentSelector: #{$currentSelector + "." + $B + $element-separator + $unit + ","};
+    $current-selector: #{$current-selector + "." + $Block + $element-separator + $unit + ","};
   }
 
-  @if hitAllSpecialNestRule($selector) {
+  @if hitSpecialNestRule($selector) {
     @at-root {
       #{$selector} {
-        #{$currentSelector} {
+        #{$current-selector} {
           @content;
         }
       }
     }
   } @else {
     @at-root {
-      #{$currentSelector} {
+      #{$current-selector} {
         @content;
       }
     }
@@ -43,13 +44,14 @@ $E: null;
 /* Modifier 修饰符 */
 @mixin m($modifier) {
   $selector: &;
-  $currentSelector: "";
+  $current-selector: "";
+
   @each $unit in $modifier {
-    $currentSelector: #{$currentSelector + $selector + $modifier-separator + $unit + ","};
+    $current-selector: #{$current-selector + $selector + $modifier-separator + $unit + ","};
   }
 
   @at-root {
-    #{$currentSelector} {
+    #{$current-selector} {
       @content;
     }
   }
@@ -57,6 +59,7 @@ $E: null;
 
 @mixin is($state, $match: true) {
   $selector: $is-state-prefix + $state;
+
   @at-root {
     @if $match {
       &.#{$selector} {
@@ -72,6 +75,7 @@ $E: null;
 
 @mixin has($state, $match: true) {
   $selector: $has-state-prefix + $state;
+
   @at-root {
     @if $match {
       &.#{$selector} {
@@ -87,6 +91,7 @@ $E: null;
 
 @mixin no($state, $match: true) {
   $selector: $no-state-prefix + $state;
+
   @at-root {
     @if $match {
       &.#{$selector} {
@@ -102,16 +107,18 @@ $E: null;
 
 /* 多个元素 */
 @mixin joins($element...) {
-  $E: $admin-namespace + $common-separator;
+  $bem-e: $admin-namespace + $common-separator;
   $elector: "";
-  /* 拼接逗号 */
-  @each $unit in $element {
-    $elector: #{$elector + "." + $E + $unit + ","};
-  }
+
   /* 去掉最后一个多余的逗号 */
   $elector: string.slice($elector, 1, -2);
 
   #{$elector} {
     @content;
+  }
+
+  /* 拼接逗号 */
+  @each $unit in $element {
+    $elector: #{$elector + "." + $Element + $unit + ","};
   }
 }

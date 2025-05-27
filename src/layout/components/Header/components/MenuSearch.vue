@@ -174,7 +174,7 @@ onUnmounted(() => {
     cursor: pointer;
 
     &:hover {
-      color: getCssVar(main-color);
+      color: cssVar(main-color);
     }
   }
 }

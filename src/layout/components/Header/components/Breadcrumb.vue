@@ -60,14 +60,14 @@ watch(
   @include e(link) {
     display: inline-flex;
     align-items: center;
-    color: getCssVar(layout-header-breadcrumb-link-color);
+    color: cssVar(layout-header-breadcrumb-link-color);
 
     &:not(.no-click):hover {
-      color: getCssVar(main-color);
+      color: cssVar(main-color);
     }
 
     @include no(click) {
-      color: getCssVar(layout-header-breadcrumb-text-color);
+      color: cssVar(layout-header-breadcrumb-text-color);
     }
   }
 

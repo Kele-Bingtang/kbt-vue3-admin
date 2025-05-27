@@ -124,7 +124,7 @@ const changeLayout = (value: LayoutModeEnum) => {
   justify-content: space-around;
 
   .is-active {
-    box-shadow: 0 0 0 2px getCssVar(main-color) !important;
+    box-shadow: 0 0 0 2px cssVar(main-color) !important;
   }
 
   @include e(item) {
@@ -140,7 +140,7 @@ const changeLayout = (value: LayoutModeEnum) => {
     transition: all var(--#{$el-namespace}-transition-duration-fast);
 
     .dark {
-      background-color: getCssVar(main-color);
+      background-color: cssVar(main-color);
       border-radius: 3px;
     }
 
@@ -151,7 +151,7 @@ const changeLayout = (value: LayoutModeEnum) => {
 
     .content {
       background-color: var(--#{$el-namespace}-color-primary-light-8);
-      border: 1px dashed getCssVar(main-color);
+      border: 1px dashed cssVar(main-color);
       border-radius: 3px;
     }
 
@@ -159,7 +159,7 @@ const changeLayout = (value: LayoutModeEnum) => {
       position: absolute;
       right: 10px;
       bottom: 10px;
-      color: getCssVar(main-color);
+      color: cssVar(main-color);
       transition: all var(--#{$el-namespace}-transition-duration-fast);
     }
 

@@ -101,7 +101,7 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
       position: absolute;
       right: 15px;
       bottom: 15px;
-      color: getCssVar(main-color);
+      color: cssVar(main-color);
       transition: all var(--#{$el-namespace}-transition-duration-fast);
     }
   }

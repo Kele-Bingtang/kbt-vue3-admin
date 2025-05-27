@@ -80,7 +80,7 @@ $prefix-class: #{$admin-namespace}-right-menu;
     cursor: pointer;
 
     &:hover {
-      color: getCssVar(main-color);
+      color: cssVar(main-color);
     }
 
     .#{$el-namespace}-icon {

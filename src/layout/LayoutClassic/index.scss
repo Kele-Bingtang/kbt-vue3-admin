@@ -5,6 +5,6 @@
 
   /* 内容区减去 header 高度，否则无法滚动 */
   @include e(content) {
-    height: calc(100% - getCssVar(layout-header-height));
+    height: calc(100% - cssVar(layout-header-height));
   }
 }
