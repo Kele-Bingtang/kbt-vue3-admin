@@ -50,6 +50,8 @@ export default {
     SimpleProSearch: "Simple ProSearch",
     UseProSearch: "Use ProSearch",
     CreateProSearch: "Create ProSearch",
+    ProSteps: "Pro Steps",
+    ProTransfer: "Pro Transfer",
     Table: "Table",
     DragTable: "Drag Table",
     DynamicTable: "Dynamic Table",

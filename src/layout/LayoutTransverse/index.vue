@@ -28,7 +28,6 @@ const settingsStore = useSettingsStore();
       <Menu
         mode="horizontal"
         :is-collapse="false"
-        :wrap-style="{ overflow: 'hidden' }"
         :class="[ns.join('layout-menu'), ns.b('menu')]"
         :popper-class="`${ns.join('layout-menu-popper')} ${ns.b('menu-popper')}`"
       />

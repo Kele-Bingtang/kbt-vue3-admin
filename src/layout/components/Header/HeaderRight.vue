@@ -11,6 +11,8 @@ import MenuSearch from "./components/MenuSearch.vue";
 import Message from "./components/Message.vue";
 import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
+import GlobalSearchInput from "./components/global-search/index.vue";
+import GlobalSearch from "./components/global-search/Search.vue";
 
 const ns = useNamespace("header-right");
 
@@ -29,8 +31,10 @@ const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
 
 <template>
   <div :class="[ns.b(), 'flx-center']">
+    <GlobalSearch />
     <div :class="[ns.e('btn'), 'flx-align-center']" :style="{ '--icon-size': ns.cssVar('layout-header-icon-size') }">
-      <MenuSearch id="menuSearch" />
+      <GlobalSearchInput id="menuSearch" />
+      <!-- <MenuSearch id="menuSearch" /> -->
       <Fullscreen id="fullscreen" v-if="!isMobile" />
       <LayoutSizeSelect id="layoutSizeSelect" />
       <LanguageSelect id="languageSelect" />
@@ -56,7 +60,7 @@ const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
     gap: 10px;
     height: 100%;
 
-    > div:not(.#{$admin-namespace}-user-dropdown) {
+    > div:not(.customize) {
       display: inline-flex;
       align-items: center;
       justify-content: center;

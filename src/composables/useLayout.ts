@@ -40,20 +40,20 @@ export const useLayout = () => {
    * @param route 当前路由
    */
   const setBrowserTitle = (route: RouteLocationNormalizedLoaded) => {
-    const { title } = SystemConfig.themeConfig;
+    const { name } = SystemConfig.systemInfo;
     const pageTitle = getTitle(route);
 
-    let resTitle = pageTitle ? `${title} - ${pageTitle}` : title; // 默认标题的模式
+    let resTitle = pageTitle ? `${name} - ${pageTitle}` : name; // 默认标题的模式
     const { titleMode } = settingsStore;
 
     // 展示标题的多种模式判断
-    if (titleMode === TitleModeEnum.ProjectPage) resTitle = pageTitle ? `${title} - ${pageTitle}` : title;
+    if (titleMode === TitleModeEnum.ProjectPage) resTitle = pageTitle ? `${name} - ${pageTitle}` : name;
     else if (titleMode === TitleModeEnum.UsernamePage) {
       const { username } = userStore.userInfo;
       if (username && pageTitle) resTitle = `${username} - ${pageTitle}`;
-      else if (username) resTitle = `${title} - ${username}`;
-      else if (!pageTitle) resTitle = title;
-    } else if (titleMode === TitleModeEnum.Project) resTitle = title;
+      else if (username) resTitle = `${name} - ${username}`;
+      else if (!pageTitle) resTitle = name;
+    } else if (titleMode === TitleModeEnum.Project) resTitle = name;
     else if (titleMode === TitleModeEnum.Page) resTitle = pageTitle + "";
     window.document.title = resTitle;
   };

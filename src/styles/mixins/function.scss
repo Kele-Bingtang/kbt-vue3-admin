@@ -48,7 +48,7 @@
 }
 
 /* 是否包含特殊嵌套规则 */
-@function hitSpecialNestRule($selector) {
+@function hitAllSpecialNestRule($selector) {
   @return containModifier($selector) or containStateFlag($selector) or containPseudoClasses($selector);
 }
 

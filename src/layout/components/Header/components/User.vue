@@ -64,7 +64,7 @@ const logout = async () => {
 </script>
 
 <template>
-  <el-dropdown trigger="click" :class="ns.b()">
+  <el-dropdown :class="[ns.b(), 'customize']" trigger="click">
     <div :class="[ns.e('avatar'), 'flx-align-center']">
       <template v-if="showAvatar">
         <el-image :src="user.avatar" :class="ns.em('avatar', 'img')" alt="头像">

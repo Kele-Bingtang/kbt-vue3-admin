@@ -1,0 +1,51 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
+.search-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  margin-right: 12px;
+
+  .search-input {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 160px;
+    height: 36px;
+    padding: 0 10px;
+    cursor: pointer;
+    border: 1px solid cssVar(border-dashed-color);
+    border-radius: calc(cssVar(radius) / 2 + 2px) !important;
+
+    .left {
+      span {
+        margin-left: 10px;
+        font-size: 13px;
+        font-weight: 400;
+        color: cssVar(--art-gray-500);
+      }
+    }
+
+    .search-keydown {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 6px;
+      color: cssVar(gray-500);
+      background-color: cssVar(bg-color);
+      border: 1px solid cssVar(border-dashed-color);
+      border-radius: 4px;
+
+      i {
+        font-size: 12px;
+      }
+
+      span {
+        margin-left: 2px;
+        font-size: 12px;
+      }
+    }
+  }
+}

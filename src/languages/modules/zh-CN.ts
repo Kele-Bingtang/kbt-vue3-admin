@@ -49,6 +49,8 @@ export default {
     SimpleProSearch: "简单 ProSearch",
     UseProSearch: "使用 ProSearch",
     CreateProSearch: "创建 ProSearch",
+    ProSteps: "超级步骤条",
+    ProTransfer: "超级穿梭框",
     Table: "表格",
     DragTable: "表格拖拽",
     DynamicTable: "动态表格添加",

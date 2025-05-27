@@ -15,7 +15,7 @@ $bem-e: null;
 }
 
 /* Element 元素 */
-@mixin e($element) {
+@mixin e($element, $nest: false) {
   $bem-e: $element !global;
   $selector: &;
   $current-selector: "";
@@ -24,8 +24,16 @@ $bem-e: null;
     $current-selector: #{$current-selector + "." + $bem-b + $element-separator + $unit + ","};
   }
 
-  @if hitSpecialNestRule($selector) {
-    @at-root {
+  @if hitAllSpecialNestRule($selector) {
+    @if $nest {
+      @at-root {
+        #{$selector} {
+          #{$current-selector} {
+            @content;
+          }
+        }
+      }
+    } @else {
       #{$selector} {
         #{$current-selector} {
           @content;
@@ -33,7 +41,13 @@ $bem-e: null;
       }
     }
   } @else {
-    @at-root {
+    @if $nest {
+      @at-root {
+        #{$current-selector} {
+          @content;
+        }
+      }
+    } @else {
       #{$current-selector} {
         @content;
       }

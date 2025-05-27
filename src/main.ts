@@ -3,7 +3,7 @@ import pinia from "@/stores";
 import App from "./App.vue";
 import router from "./router";
 import "@/styles/normalize.css"; // CSS Reset
-// import "@/styles/element-plus/el-ui.scss";
+import "@/styles/element-plus/el-ui.scss";
 import "@/styles/element-plus/el-light.scss";
 import "@/styles/element-plus/el-dark.scss";
 import directives from "@/directives";
