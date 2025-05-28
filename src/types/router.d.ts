@@ -13,8 +13,9 @@ declare module "vue-router" {
   }
 }
 
+// 全局配置，无需引入即可使用
 declare global {
-  // 路由表初始化配置类型
+  // 路由表配置类型
   type RouterConfigRaw = Omit<RouteRecordRaw, "meta" | "component" | "children"> & {
     meta?: MetaProp;
     component?: string | RouteComponent | (() => Promise<RouteComponent>);
@@ -27,6 +28,7 @@ declare global {
     children?: RouterConfig[];
   };
 
+  // 路由 Meta 类型
   interface MetaProp {
     _fullPath?: string; // 路由的完整路径，在编译阶段自动生成
     _dynamic?: boolean; // 是否是动态路由，在编译阶段自动生成

@@ -16,7 +16,8 @@ export const useLayout = () => {
   const { t } = useI18n();
 
   /**
-   * @description 是否为移动端
+   * 是否为移动端
+   *
    * @returns boolean：true 是，false 不是
    */
   const isMobile = () => {
@@ -25,7 +26,7 @@ export const useLayout = () => {
   };
 
   /**
-   * @description 计算页面尺寸
+   * 计算页面尺寸
    */
   const resizeHandler = () => {
     if (!document.hidden) {
@@ -36,7 +37,8 @@ export const useLayout = () => {
   };
 
   /**
-   * @description 根据当前跳转的路由设置显示在浏览器标签的 title
+   * 根据当前跳转的路由设置显示在浏览器标签的 title
+   *
    * @param route 当前路由
    */
   const setBrowserTitle = (route: RouteLocationNormalizedLoaded) => {
@@ -59,7 +61,7 @@ export const useLayout = () => {
   };
 
   /**
-   * @description 获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title
+   * 获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title
    * @param route 当前路由
    * @param start 是否从头开始解析出 title，因为路由在编译阶段已经解析了一部分，所以涉及路由里的配置不需要从头开始解析，具体看 ./useRoutes.ts 的 processRouteMeta 函数
    * @returns 路由的 title
@@ -74,7 +76,7 @@ export const useLayout = () => {
   };
 
   /**
-   * @description 完整获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title
+   * 完整获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title
    * @param route 当前路由
    * @returns 路由的 title
    */
@@ -87,7 +89,7 @@ export const useLayout = () => {
   };
 
   /**
-   * @description 获取 i18n 转换后的文字
+   * 获取 i18n 转换后的文字
    * @param name 路由的 name
    * @param title 需要展示的 title
    * @param titleIsFunction 路由 meta 里的 title 是否是函数
@@ -108,7 +110,7 @@ export const useLayout = () => {
   };
 
   /**
-   * @description 处理路由的 title，因为 title 支持函数格式，所以这里解析出函数的返回值
+   * 处理路由的 title，因为 title 支持函数格式，所以这里解析出函数的返回值
    * @param route 当前路由
    * @returns
    */
@@ -122,7 +124,7 @@ export const useLayout = () => {
   }
 
   /**
-   * @description 获取面包屑列表
+   * 获取面包屑列表
    * @returns 面包屑列表
    */
   const getBreadcrumbs = (route: RouteLocationNormalizedLoaded): RouteLocationNormalizedLoaded[] => {
@@ -154,7 +156,7 @@ export const useLayout = () => {
   };
 
   /**
-   * @description 通过路由表获取菜单列表
+   * 通过路由表获取菜单列表
    * @param loadRolesRoutes 权限路由
    * @returns 菜单列表
    */
@@ -176,6 +178,7 @@ export const useLayout = () => {
     });
     return menusList;
   };
+
   return {
     isMobile,
     resizeHandler,
@@ -192,7 +195,7 @@ export const useLayout = () => {
  */
 export const useLayoutNoSetup = () => {
   /**
-   * @description 获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title，不处理为函数的 title
+   * 获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title，不处理为函数的 title
    * @param route 当前路由
    * @returns 路由的 title
    */
@@ -206,7 +209,7 @@ export const useLayoutNoSetup = () => {
   };
 
   /**
-   * @description 获取 i18n 转换后的文字
+   * 获取 i18n 转换后的文字
    * @param name 路由的 name
    * @param title 需要展示的 title
    * @param titleIsFunction 路由 meta 里的 title 是否是函数

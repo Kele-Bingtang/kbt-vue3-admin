@@ -13,9 +13,9 @@ export const useCache = () => {
 
   // 标签页的 tabsNav 缓存
   const dynamicRoutesKey = SystemConfig.keyConfig.cacheDynamicRoutesKey;
-  const getCacheDynamicRoutesKey = () => getStorage(dynamicRoutesKey);
-  const setCacheDynamicRoutesKey = (dynamicRoutes: RouterConfigRaw[]) => setStorage(dynamicRoutesKey, dynamicRoutes);
-  const removeCacheDynamicRoutesKey = () => removeStorage(dynamicRoutesKey);
+  const getDynamicRoutes = (): RouterConfigRaw[] => getStorage(dynamicRoutesKey);
+  const setDynamicRoutes = (dynamicRoutes: RouterConfigRaw[]) => setStorage(dynamicRoutesKey, dynamicRoutes);
+  const removeDynamicRoutes = () => removeStorage(dynamicRoutesKey);
 
   // 版本号缓存
   const versionKey = SystemConfig.keyConfig.versionCacheKey;
@@ -32,9 +32,9 @@ export const useCache = () => {
     getCacheTabNavList,
     setCacheTabNavList,
     removeCacheTabNavList,
-    getCacheDynamicRoutesKey,
-    setCacheDynamicRoutesKey,
-    removeCacheDynamicRoutesKey,
+    getDynamicRoutes,
+    setDynamicRoutes,
+    removeDynamicRoutes,
     getCacheVersion,
     setCacheVersion,
     removeCacheVersion,

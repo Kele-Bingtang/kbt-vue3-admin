@@ -1,7 +1,7 @@
 import { ref, computed, unref } from "vue";
 import { defineStore } from "pinia";
 import { useRoutes } from "@/composables";
-import { constantRoutes, errorRouter, HOME_NAME, notFoundRouter } from "@/router/routesConfig";
+import { staticRoutes, errorRouter, HOME_NAME, notFoundRouter } from "@/router/routesConfig";
 
 export const usePermissionStore = defineStore("permissionStore", () => {
   const loadedRouteList = ref<RouterConfig[]>([]);
@@ -14,11 +14,11 @@ export const usePermissionStore = defineStore("permissionStore", () => {
 
   const loadPermissionRoutes = (routers: RouterConfig[]) => {
     loadedRouteList.value = ascending(
-      processRouteMeta(constantRoutes).concat(routers).concat(errorRouter).concat(notFoundRouter)
+      processRouteMeta(staticRoutes).concat(routers).concat(errorRouter).concat(notFoundRouter)
     );
     flatRoleRouteList.value = filterFlatRoutes(routers);
     flatRouteList.value = filterFlatRoutes(
-      processRouteMeta(constantRoutes).concat(routers).concat(errorRouter).concat(notFoundRouter) as RouterConfig[]
+      processRouteMeta(staticRoutes).concat(routers).concat(errorRouter).concat(notFoundRouter) as RouterConfig[]
     );
 
     return unref(flatRouteList);

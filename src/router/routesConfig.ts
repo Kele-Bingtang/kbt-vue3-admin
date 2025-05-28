@@ -51,7 +51,7 @@ import { HOME_URL, HOME_NAME, LOGIN_URL, LOGIN_NAME, LAYOUT_NAME, REDIRECT_NAME,
 
 export { HOME_URL, HOME_NAME, LOGIN_URL, LOGIN_NAME, LAYOUT_NAME, REDIRECT_NAME, NOT_FOUND };
 
-export const constantRoutes: RouterConfigRaw[] = [
+export const staticRoutes: RouterConfigRaw[] = [
   // 建议把 LAYOUT_NAME 路由放在第一位
   {
     path: "/",
