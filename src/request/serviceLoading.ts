@@ -27,10 +27,9 @@ const endLoading = () => {
  * */
 let needLoadingRequestCount = 0;
 export const showFullScreenLoading = () => {
-  if (needLoadingRequestCount === 0) {
-    startLoading();
-  }
+  if (needLoadingRequestCount === 0) startLoading();
   needLoadingRequestCount++;
+  return tryHideFullScreenLoading;
 };
 
 /**

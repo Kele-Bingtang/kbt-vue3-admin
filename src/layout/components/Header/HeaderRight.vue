@@ -1,22 +1,20 @@
 <script setup lang="ts" name="HeaderRight">
 import { computed } from "vue";
-import SystemConfig from "@/config";
-import { useErrorLogStore, useLayoutStore } from "@/stores";
+import SystemConfig, { mobileMaxWidthMedia } from "@/config";
+import { useErrorLogStore } from "@/stores";
 import { useNamespace } from "@/composables";
-import { DeviceEnum } from "@/enums/appEnum";
 import Fullscreen from "./components/Fullscreen.vue";
 import LanguageSelect from "./components/LanguageSelect.vue";
 import LayoutSizeSelect from "./components/LayoutSizeSelect.vue";
-import MenuSearch from "./components/MenuSearch.vue";
 import Message from "./components/Message.vue";
 import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
 import GlobalSearchInput from "./components/global-search/index.vue";
 import GlobalSearch from "./components/global-search/Search.vue";
+import { useMediaQuery } from "@vueuse/core";
 
 const ns = useNamespace("header-right");
 
-const layoutStore = useLayoutStore();
 const errorLogStore = useErrorLogStore();
 
 const errorCount = computed(() => {
@@ -26,7 +24,7 @@ const errorCount = computed(() => {
   return noReadErrorLogs.length;
 });
 
-const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
+const isMobile = useMediaQuery(mobileMaxWidthMedia);
 </script>
 
 <template>

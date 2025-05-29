@@ -12,11 +12,10 @@ import LayoutMixins from "./LayoutMixins/index.vue";
 import LayoutSubsystem from "./LayoutSubsystem/index.vue";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import { useSettingsStore, useUserStore, useWebSocketStore } from "@/stores";
-import { useLayout } from "@/composables";
+import { useBrowserTitle } from "@/composables";
 import { useNamespace } from "@/composables";
 import { addUnit, setStyleVar } from "@/utils";
-import { type Component, computed, watch, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { type Component, computed, watchEffect } from "vue";
 import { WebSocketKey } from "@/config/symbols";
 
 import "./base-layout.scss";
@@ -34,16 +33,7 @@ const ns = useNamespace("layout");
 const settingsStore = useSettingsStore();
 const layoutMode = computed(() => settingsStore.layoutMode);
 
-const route = useRoute();
-const { setBrowserTitle } = useLayout();
-
-watch(
-  () => route.fullPath,
-  () => setBrowserTitle(route), // 修改页面的 title
-  {
-    immediate: true,
-  }
-);
+useBrowserTitle();
 
 watchEffect(() => setStyleVar(ns.cssVarName("layout-open-aside-width"), addUnit(settingsStore.menuWidth)));
 watchEffect(() => setStyleVar(ns.cssVarName("layout-close-aside-width"), "64px"));
@@ -56,7 +46,7 @@ if (import.meta.env.VITE_WEBSOCKET === "true") {
   const url = import.meta.env.VITE_WEBSOCKET_URL || "";
 
   // url 后面的 ?token= 为认证信息，需要后端配合获取 token 来认证（这是普通的 GET 请求，WebSocket 无法放入请求头或者发起 POST 请求）
-  url && useWebSocket.connect(url + "?token=" + useUserStore().token);
+  url && useWebSocket.connect(url + "?token=" + useUserStore().accessToken);
 
   provide(WebSocketKey, useWebSocket);
 }

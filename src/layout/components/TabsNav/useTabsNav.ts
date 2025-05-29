@@ -1,13 +1,13 @@
-import { useLayout, useBoolean } from "@/composables";
+import { useBoolean } from "@/composables";
 import beforeClose from "@/router/beforeClose";
-import { useLayoutStore, usePermissionStore, type TabProp } from "@/stores";
+import { useLayoutStore, useRouteStore, type TabProp } from "@/stores";
 import { getUrlParams, mittBus } from "@/utils";
 import Sortable from "sortablejs";
-import SystemConfig from "@/config";
-import { HOME_URL } from "@/router/routesConfig";
+import SystemConfig, { HOME_URL } from "@/config";
 import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 import { inject, ref, reactive, computed, nextTick, watchEffect } from "vue";
 import { RefreshKey } from "@/config/symbols";
+import { formatTitle } from "@/router/helper";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";
 
@@ -24,8 +24,7 @@ export const useTabsNav = () => {
   const route = useRoute();
   const router = useRouter();
   const layoutStore = useLayoutStore();
-  const permissionStore = usePermissionStore();
-  const { getTitle } = useLayout();
+  const routeStore = useRouteStore();
   const refreshCurrentPage = inject(RefreshKey, (value?: boolean) => value);
 
   const { bool: rightMenuVisible, setFalse } = useBoolean(); // 右键菜单显示
@@ -89,7 +88,7 @@ export const useTabsNav = () => {
     return {
       path: resolveFullPath(route),
       name: (route.name as string) || route.path,
-      title: getTitle(route),
+      title: formatTitle(route),
       icon: route.meta.icon || "",
       close: !route.meta.isAffix,
       meta: route.meta,
@@ -115,7 +114,7 @@ export const useTabsNav = () => {
    * 初始化固定在标签栏的 tabs
    */
   const initTabs = () => {
-    permissionStore.flatRouteList.forEach(item => {
+    routeStore.flatRouteList.forEach(item => {
       if (item.meta?.isAffix && !item.meta?.isFull) {
         const tabParam = getOneTab(item as unknown as RouteLocationNormalizedLoaded);
         layoutStore.addTab(tabParam);
@@ -295,7 +294,7 @@ export const useTabsNav = () => {
   const toLastTab = () => {
     // 获取最后一个 tab 数据
     const lastTab = layoutStore.tabNavList.slice(-1)[0];
-    const path = lastTab ? lastTab.path : permissionStore.homeRoute?.meta?._fullPath;
+    const path = lastTab ? lastTab.path : routeStore.homeRoute?.meta?._fullPath;
     path && router.push(path).catch(err => console.warn(err));
   };
 

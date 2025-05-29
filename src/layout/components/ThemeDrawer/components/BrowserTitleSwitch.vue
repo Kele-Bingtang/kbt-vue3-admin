@@ -1,7 +1,6 @@
 <script setup lang="ts" name="BrowserTitleSwitch">
-import { useNamespace, useLayout } from "@/composables";
+import { useNamespace, useBrowserTitle } from "@/composables";
 import { useSettingsStore } from "@/stores";
-import { useRoute } from "vue-router";
 import { ElSelect, ElOption } from "element-plus";
 import { useI18n } from "vue-i18n";
 import { TitleModeEnum } from "@/enums/appEnum";
@@ -9,14 +8,13 @@ import { TitleModeEnum } from "@/enums/appEnum";
 const ns = useNamespace("browser-title-switch");
 
 const { t } = useI18n();
-const route = useRoute();
 
 const settingsStore = useSettingsStore();
-const { setBrowserTitle } = useLayout();
+const { getBrowserTitle } = useBrowserTitle();
 
 const handleTitleModeSelect = () => {
   // 根据选择的标题模式，重新渲染浏览器标题
-  setBrowserTitle(route);
+  window.document.title = getBrowserTitle();
 };
 
 const titleModeOptions = [

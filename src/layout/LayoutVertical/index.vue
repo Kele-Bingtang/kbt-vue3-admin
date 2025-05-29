@@ -1,50 +1,27 @@
 <script setup lang="ts" name="LayoutVertical">
-import { computed, watch, onMounted, onBeforeMount, onBeforeUnmount, unref } from "vue";
+import { computed, watch } from "vue";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
-import { useLayout } from "@/composables";
-import { useLayoutStore, useSettingsStore } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
-import SystemConfig from "@/config";
-import { HOME_URL } from "@/router/routesConfig";
+import SystemConfig, { HOME_URL, mobileMaxWidthMedia } from "@/config";
 import { useNamespace } from "@/composables";
-import { useRoute, useRouter } from "vue-router";
-import { DeviceEnum } from "@/enums/appEnum";
+import { useRouter } from "vue-router";
+import { useMediaQuery } from "@vueuse/core";
 
 import "./index.scss";
 
 const ns = useNamespace("vertical-layout");
 
-const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
-const layoutStore = useLayoutStore();
-const { resizeHandler } = useLayout();
 
 const isCollapse = computed(() => settingsStore.isCollapse);
-const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
+const isMobile = useMediaQuery(mobileMaxWidthMedia);
 
-// 监听路由的变化，判断是移动端还是桌面端
-watch(
-  () => route.fullPath,
-  () => {
-    if (layoutStore.device === DeviceEnum.Mobile && !unref(isCollapse)) {
-      settingsStore.closeSideMenu();
-    }
-  }
-);
-
-onMounted(() => {
-  resizeHandler();
-});
-
-onBeforeMount(() => {
-  window.addEventListener("resize", resizeHandler);
-});
-
-onBeforeUnmount(() => {
-  window.removeEventListener("resize", resizeHandler);
+watch(isMobile, newVal => {
+  if (newVal) settingsStore.closeSideMenu();
 });
 
 const handleClickOutSide = () => {

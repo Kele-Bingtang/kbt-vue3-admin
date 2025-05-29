@@ -11,7 +11,7 @@
 
 <script setup lang="ts">
 import { useRouter } from "vue-router";
-import { HOME_URL } from "@/router/routesConfig";
+import { HOME_URL } from "@/config";
 import { useNamespace } from "@/composables";
 
 defineOptions({ name: "403" });

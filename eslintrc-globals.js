@@ -88,4 +88,5 @@ export default {
   ExtractPropTypes: "readonly",
   log: "readonly",
   useTemplateRef: "readonly",
+  storeToRefs: "readonly",
 };

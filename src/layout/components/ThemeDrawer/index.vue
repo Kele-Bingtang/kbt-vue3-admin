@@ -1,12 +1,12 @@
 <script setup lang="tsx" name="ThemeDrawer">
-import { ref, computed, watch, defineComponent } from "vue";
+import { ref, watch, defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import { ElButton, ElDivider, ElDrawer, ElIcon, ElMessage } from "element-plus";
 import { Notification, Menu, ColdDrink, Setting, Box, Refresh } from "@element-plus/icons-vue";
-import { useSettingsStore, useLayoutStore } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
-import { DeviceEnum, LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
+import { LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
 import {
   LayoutSwitch,
   AsideHeaderSwitch,
@@ -15,14 +15,15 @@ import {
   LayoutSelect,
   BrowserTitleSwitch,
 } from "./components";
+import { useMediaQuery } from "@vueuse/core";
+import { mobileMaxWidthMedia } from "@/config";
 
 const ns = useNamespace("theme-drawer");
-const layoutStore = useLayoutStore();
 
 const { t } = useI18n();
 const settingsStore = useSettingsStore();
 
-const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
+const isMobile = useMediaQuery(mobileMaxWidthMedia);
 
 // 重置缓存
 const resetSettings = () => {

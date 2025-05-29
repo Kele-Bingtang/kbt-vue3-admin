@@ -1,6 +1,6 @@
 import type { Component, ComponentPublicInstance } from "vue";
 import type { IconifyIcon } from "@iconify/vue";
-import { DeviceEnum, LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
+import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
 
 // LayoutState
 export interface TabProp {
@@ -16,7 +16,6 @@ export type LayoutSizeType = "default" | "small" | "large";
 export type LanguageType = "zh-CN" | "en-US";
 
 export interface LayoutState {
-  device: DeviceEnum; // 设备类型
   tabNavList: TabProp[]; // 标签栏列表
   keepAliveName: string[]; // 缓存的路由组件名
   layoutSize: LayoutSizeType; // 布局大小

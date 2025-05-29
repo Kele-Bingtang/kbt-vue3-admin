@@ -3,15 +3,15 @@ import { ref, watch, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { ElMenuItem, ElSubMenu } from "element-plus";
 import { isExternal } from "@/utils";
-import { useLayout, useNamespace } from "@/composables";
+import { useNamespace } from "@/composables";
 import { Tooltip } from "@/components";
 import { useLayoutStore } from "@/stores";
 import SystemConfig from "@/config";
+import { formatTitle } from "@/router/helper";
 
 defineProps<{ menuItem: RouterConfig }>();
 
 const ns = useNamespace();
-const { getTitle } = useLayout();
 const router = useRouter();
 const layoutStore = useLayoutStore();
 
@@ -23,7 +23,7 @@ const handleMenuClick = (menuItem: RouterConfig) => {
 };
 
 const title = (menuItem: RouterConfig) => {
-  const title = getTitle(menuItem, isSwitchLanguage.value);
+  const title = formatTitle(menuItem, isSwitchLanguage.value);
   menuItem.meta.title = title;
   return title;
 };

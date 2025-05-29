@@ -1,14 +1,13 @@
 <script setup lang="ts" name="LayoutVertical">
 import { computed, watch, ref, unref } from "vue";
 import { ElContainer, ElAside, ElHeader, ElScrollbar } from "element-plus";
-import { useSettingsStore, usePermissionStore } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
-import { useLayout } from "@/composables";
-import SystemConfig from "@/config";
+import { useMenu } from "@/composables";
+import SystemConfig, { HOME_URL } from "@/config";
 import Menu from "@/layout/components/Menu/index.vue";
 import { Tooltip } from "@/components";
-import { HOME_URL } from "@/router/routesConfig";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
@@ -19,8 +18,7 @@ const ns = useNamespace("columns-layout");
 const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
-const permissionStore = usePermissionStore();
-const { getMenuListByRouter } = useLayout();
+const { menuList } = useMenu();
 
 // 子菜单
 const menuItem = ref<RouterConfig[]>([]);
@@ -28,13 +26,6 @@ const menuItem = ref<RouterConfig[]>([]);
 const active = ref<string>("");
 
 const isCollapse = computed(() => settingsStore.isCollapse);
-
-const menuList = computed(() => {
-  if (SystemConfig.layoutConfig.moreRouteChildrenHideInMenuThenOnlyOne) {
-    const menu = getMenuListByRouter(permissionStore.loadedRouteList);
-    return getMenuListByRouter(menu);
-  } else return getMenuListByRouter(permissionStore.loadedRouteList);
-});
 
 watch(
   route,

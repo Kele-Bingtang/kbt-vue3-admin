@@ -1,10 +1,5 @@
 // 系统级别枚举
 
-export enum DeviceEnum {
-  Mobile = "mobile", // 移动端
-  Desktop = "desktop", // 桌面端
-}
-
 export enum LayoutModeEnum {
   Vertical = "vertical",
   Classic = "classic",
@@ -37,4 +32,10 @@ export enum TitleModeEnum {
   UsernamePage = "usernamePage",
   Project = "project",
   Page = "page",
+}
+
+// Language
+export enum LanguageEnum {
+  ZhCn = "zh-CN",
+  EnUs = "en-US",
 }

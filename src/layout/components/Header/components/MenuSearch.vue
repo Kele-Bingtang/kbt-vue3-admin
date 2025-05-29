@@ -1,24 +1,23 @@
 <script setup lang="ts" name="MenuSearch">
 import { computed, ref, onUnmounted, nextTick } from "vue";
 import { ElAutocomplete, ElTooltip, ElIcon } from "element-plus";
-import { useLayout } from "@/composables";
-import { usePermissionStore } from "@/stores";
+import { useRouteStore } from "@/stores";
 import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils";
 import { Search } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
+import { formatTitle } from "@/router/helper";
 
 const ns = useNamespace("menu-search");
 
 const router = useRouter();
-const permissionStore = usePermissionStore();
-const { getTitle } = useLayout();
+const routeStore = useRouteStore();
 const nestMode = ref(true);
 const menuList = computed(() =>
   nestMode.value
-    ? createNestMenuSearchList(permissionStore.loadedRouteList)
-    : permissionStore.flatRouteList.filter(item => !item.meta.hideInMenu)
+    ? createNestMenuSearchList(routeStore.loadedRouteList)
+    : routeStore.flatRouteList.filter(item => !item.meta.hideInMenu)
 );
 
 const handleSearchMenuList = (queryString: string, callback: (result: any) => void) => {
@@ -78,7 +77,7 @@ const filterNodeMethod = (queryString: string) => {
   return (restaurant: RouteLocationNormalizedLoaded) => {
     return (
       restaurant.meta._fullPath.toLowerCase().indexOf(queryString.toLowerCase()) > -1 ||
-      getTitle(restaurant)?.toLowerCase().indexOf(queryString.toLowerCase()) > -1
+      formatTitle(restaurant)?.toLowerCase().indexOf(queryString.toLowerCase()) > -1
     );
   };
 };
@@ -99,7 +98,7 @@ const createNestMenuSearchList = (menuList: RouterConfig[]) => {
   const res: (RouterConfigRaw & { title: string[] })[] = [];
   menuList.forEach(menu => {
     if (menu.meta.hideInMenu) return res;
-    const item = { ...menu, title: [getTitle(menu)] };
+    const item = { ...menu, title: [formatTitle(menu)] };
     if (item.children && item.children.length) {
       const menuListChild = createNestMenuSearchList(item.children);
       menuListChild.forEach(child => {

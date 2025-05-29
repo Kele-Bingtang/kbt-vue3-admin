@@ -12,12 +12,11 @@
 
 <script setup lang="ts" name="Layout">
 import { useSettingsStore } from "@/stores";
-import { useLayout } from "@/composables";
+import { useBrowserTitle } from "@/composables";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
 import { addUnit, setStyleVar } from "@/utils";
-import { type Component, defineAsyncComponent, computed, watch, watchEffect } from "vue";
-import { useRoute } from "vue-router";
+import { type Component, defineAsyncComponent, computed, watchEffect } from "vue";
 
 import "./base-layout.scss";
 
@@ -33,16 +32,7 @@ const LayoutComponents: Record<string, Component> = {
 const settingsStore = useSettingsStore();
 const layoutMode = computed(() => settingsStore.layoutMode);
 
-const route = useRoute();
-const { setBrowserTitle } = useLayout();
-
-watch(
-  () => route.fullPath,
-  () => setBrowserTitle(route), // 修改页面的 title
-  {
-    immediate: true,
-  }
-);
+useBrowserTitle();
 
 watchEffect(() => setStyleVar("--aside-width", addUnit(settingsStore.menuWidth)));
 

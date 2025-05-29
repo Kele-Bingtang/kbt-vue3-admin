@@ -4,16 +4,16 @@ const getValueType = (value: any) => {
   return type.slice(8, -1);
 };
 
-export const useStorage = (type: "sessionStorage" | "localStorage" = "sessionStorage") => {
-  const getStorage = (key: string) => {
+export const useStorage = <T = any>(type: "sessionStorage" | "localStorage" = "localStorage") => {
+  const getStorage = (key: string): T | undefined => {
     const value = window[type].getItem(key);
     if (value) {
       const { value: val } = JSON.parse(value);
       return val;
-    } else return value;
+    }
   };
 
-  const setStorage = (key: string, value: any) => {
+  const setStorage = (key: string, value: T) => {
     const valueType = getValueType(value);
     window[type].setItem(key, JSON.stringify({ _type: valueType, value }));
   };

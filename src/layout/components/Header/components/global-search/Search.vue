@@ -1,19 +1,17 @@
 <script setup lang="ts">
-import { storeToRefs } from "pinia";
 import { ArrowUp, ArrowDown, Back, Close } from "@element-plus/icons-vue";
-import { useLayout, useNamespace } from "@/composables";
-import { usePermissionStore } from "@/stores";
+import { useMenu, useNamespace } from "@/composables";
 import { useEventListener } from "@vueuse/core";
 import { mittBus } from "@/utils";
 
 import "./search.scss";
+import { formatTitle } from "@/router/helper";
 
 defineOptions({ name: "GlobalSearch" });
 
 const router = useRouter();
 const ns = useNamespace("global-search");
-const { getTitle, getMenuListByRouter } = useLayout();
-const { loadedRouteList } = storeToRefs(usePermissionStore());
+const { menuList } = useMenu();
 
 const showSearchDialog = ref(false);
 const isKeyboardNavigating = ref(false);
@@ -86,7 +84,7 @@ const focusInput = () => {
 };
 
 const handleSearch = (val: string) => {
-  if (val) searchResult.value = flattenAndFilterMenuItems(getMenuListByRouter(loadedRouteList.value), val);
+  if (val) searchResult.value = flattenAndFilterMenuItems(menuList.value, val);
   else searchResult.value = [];
 };
 
@@ -97,7 +95,7 @@ const flattenAndFilterMenuItems = (items: RouterConfig[], val: string) => {
   const flattenAndMatch = (item: RouterConfig) => {
     if (item.meta?.hideInMenu) return;
 
-    const lowerItemTitle = getTitle(item).toLowerCase();
+    const lowerItemTitle = formatTitle(item).toLowerCase();
 
     if (item.children && item.children.length > 0) {
       item.children.forEach(flattenAndMatch);
@@ -297,7 +295,7 @@ const deleteHistory = (index: number) => {
               @click="handleGoPage(item)"
               @mouseenter="highlightOnHover(index)"
             >
-              {{ getTitle(item) }}
+              {{ formatTitle(item) }}
               <el-icon class="selected-icon" v-show="isHighlighted(index)"><Back /></el-icon>
             </div>
           </li>
@@ -316,7 +314,7 @@ const deleteHistory = (index: number) => {
               @click="handleGoPage(item)"
               @mouseenter="highlightOnHoverHistory(index)"
             >
-              {{ getTitle(item) }}
+              {{ formatTitle(item) }}
               <el-icon class="selected-icon" @click.stop="deleteHistory(index)"><Close /></el-icon>
             </li>
           </ul>

@@ -137,7 +137,7 @@ onMounted(() => {
 <template>
   <!-- 三个 tab：通知、消息、代办。三个的 DOM 结构基本一样，所以可以写一个 Item 组件进行封装，然后循环传入即可 -->
   <div :class="ns.b()">
-    <el-popover placement="bottom" :width="330" trigger="click" popper-class="message-popover">
+    <el-popover placement="bottom" :width="330" trigger="click" :popper-class="ns.b()">
       <template #reference>
         <div class="flx-center" style="width: 100%; height: 100%">
           <el-badge :value="messageLength">
@@ -294,7 +294,9 @@ onMounted(() => {
 </style>
 
 <style lang="scss">
-.message-popover {
+@use "@/styles/mixins/bem" as *;
+
+@include b(message-notice) {
   padding: 0 !important;
 
   .#{$el-namespace}-tabs__header {

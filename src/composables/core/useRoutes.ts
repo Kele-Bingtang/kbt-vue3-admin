@@ -2,26 +2,27 @@ import type { RouteRecordRaw } from "vue-router";
 import { isProxy, toRaw } from "vue";
 import { ElNotification } from "element-plus";
 import router from "@/router";
-import { HOME_NAME, LAYOUT_NAME, LOGIN_URL, notFoundRouter, rolesRoutes } from "@/router/routesConfig";
-import { usePermissionStore, useUserStore } from "@/stores";
-import { isValidURL, isType } from "@/utils";
+import { notFoundRouter, rolesRoutes } from "@/router/routesConfig";
+import { useRouteStore, useUserStore } from "@/stores";
+import { isValidURL, isType, isFunction } from "@/utils";
 import { useCache } from "@/composables";
-import SystemConfig from "@/config";
-import { useLayoutNoSetup } from "./useLayout";
+import SystemConfig, { HOME_NAME, LAYOUT_NAME, LOGIN_URL } from "@/config";
+import { translateTitle } from "@/router/helper";
 
-type BackendApi = () => Promise<RouterConfigRaw[]>;
+type BackendApi = () => RouterConfigRaw[] | Promise<RouterConfigRaw[]>;
 
+// 扫描 views 下的所有组件
 const modules = import.meta.glob("@/views/**/*.vue");
+
+// Iframe 组件
 const FrameView = () => import("@/layout/components/FrameLayout/FrameView.vue");
 const FrameBlank = () => import("@/layout/components/FrameLayout/BlankFrame.vue");
 
 export const useRoutes = () => {
-  const permissionStore = usePermissionStore();
-  const userStore = useUserStore();
-  const { getLayoutTitle } = useLayoutNoSetup();
-  const { getDynamicRoutes, removeDynamicRoutes, setDynamicRoutes } = useCache();
-
   const { cacheDynamicRoutes } = SystemConfig.routerConfig;
+  const routeStore = useRouteStore();
+  const userStore = useUserStore();
+  const { getDynamicRoutes, removeDynamicRoutes, setDynamicRoutes } = useCache();
 
   /**
    * 初始化动态路由
@@ -34,20 +35,19 @@ export const useRoutes = () => {
 
     if (routeList && routeList.length) return loadDynamicRoutes(routeList, roles || []);
 
-    ElNotification({
+    ElNotification.warning({
       title: "无权限访问",
       message: "当前账号无任何菜单权限，请联系系统管理员！",
-      type: "warning",
       duration: 3000,
     });
 
-    userStore.resetToken();
+    userStore.clearPermission();
     router.replace(LOGIN_URL);
     return Promise.reject("No permission");
   };
 
   /**
-   * 从浏览器 storage 缓存拿后台路由
+   * 从浏览器 storage 缓存获取动态路由
    */
   const getDynamicRoutesFromStorage = () => {
     if (cacheDynamicRoutes) return getDynamicRoutes();
@@ -55,7 +55,7 @@ export const useRoutes = () => {
   };
 
   /**
-   * 从后台拿到路由
+   * 从后台接口获取动态路由
    */
   const getDynamicRoutesFromBackend = async (api: BackendApi) => {
     const routeList = await api();
@@ -68,7 +68,7 @@ export const useRoutes = () => {
   };
 
   /**
-   * 动态加载路由
+   * 加载动态路由
    *
    * @param routers 路由表信息
    * @param roles 权限角色
@@ -77,8 +77,8 @@ export const useRoutes = () => {
   const loadDynamicRoutes = (routers: RouterConfigRaw[], roles: string[], r = router) => {
     const rolesRoutes = filterOnlyRolesRoutes(routers, roles);
     const resolveRouters = processDynamicRoutes(processRouteMeta(rolesRoutes));
-    // 传到 permissionStore 持久化，并拿到扁平化的路由数组（所有二级以上的路由拍成一级，keep-alive 只支持到二级缓存（Layout 默认是一级，加起来就是二级））
-    const flatRouteList = permissionStore.loadPermissionRoutes(resolveRouters as RouterConfig[]);
+    // 传到 routeStore 持久化，并拿到扁平化的路由数组（所有二级以上的路由拍成一级，keep-alive 只支持到二级缓存（Layout 默认是一级，加起来就是二级））
+    const flatRouteList = routeStore.loadPermissionRoutes(resolveRouters as RouterConfig[]);
 
     flatRouteList.forEach(flatRoute => {
       // 解除响应式
@@ -133,12 +133,12 @@ export const useRoutes = () => {
    * @returns 处理后的路由表
    */
   const processRouteMeta = (routers: RouterConfigRaw[], basePath = "/") => {
-    routers.forEach(router => {
-      const fullPath = router.path.startsWith("/") ? router.path : (basePath + "/" + router.path).replace(/\/+/g, "/");
+    routers.forEach(route => {
+      const fullPath = route.path.startsWith("/") ? route.path : (basePath + "/" + route.path).replace(/\/+/g, "/");
 
       // 处理成后面布局要用到的 title。title 如果为函数，则只能访问时处理，这里无法处理
-      if (router.meta) {
-        const { useI18n, isKeepAlive, isFull, useTooltip } = router.meta;
+      if (route.meta) {
+        const { title, useI18n, isKeepAlive, isFull, useTooltip } = route.meta;
         const {
           routeUseI18n,
           isKeepAlive: isKeepAliveGlobal,
@@ -146,21 +146,22 @@ export const useRoutes = () => {
           routeUseTooltip,
         } = SystemConfig.routerConfig;
 
-        router.meta._fullPath = fullPath;
-        // 这两个顺序不能互换，因为 getLayoutTitle 函数需要 useI18n
-        if (useI18n === undefined && routeUseI18n !== undefined) router.meta.useI18n = routeUseI18n;
-        router.meta.title = getLayoutTitle(router);
+        route.meta._fullPath = fullPath;
+        // 这两个顺序不能互换，因为 translateTitle 函数需要 route.meta.useI18n
+        if (useI18n === undefined && routeUseI18n !== undefined) route.meta.useI18n = routeUseI18n;
+        if (!isFunction(title)) route.meta.title = translateTitle(title + "", route.name as string, route.meta.useI18n);
 
-        if (isKeepAlive === undefined && isKeepAliveGlobal !== undefined) router.meta.isKeepAlive = isKeepAliveGlobal;
-        if (isFull === undefined && isFullGlobal !== undefined) router.meta.isFull = isFullGlobal;
-        if (useTooltip === undefined && routeUseTooltip !== undefined) router.meta.useTooltip = routeUseTooltip;
+        if (isKeepAlive === undefined && isKeepAliveGlobal !== undefined) route.meta.isKeepAlive = isKeepAliveGlobal;
+        if (isFull === undefined && isFullGlobal !== undefined) route.meta.isFull = isFullGlobal;
+        if (useTooltip === undefined && routeUseTooltip !== undefined) route.meta.useTooltip = routeUseTooltip;
       }
 
-      if (router.children && router.children.length) {
-        if (isValidURL(fullPath)) router.children = processRouteMeta(router.children, "");
-        else router.children = processRouteMeta(router.children, fullPath);
+      if (route.children && route.children.length) {
+        if (isValidURL(fullPath)) route.children = processRouteMeta(route.children, "");
+        else route.children = processRouteMeta(route.children, fullPath);
       }
     });
+
     return routers;
   };
 

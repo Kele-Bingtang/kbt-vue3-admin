@@ -34,22 +34,20 @@
  * @param render ==> 自定义 Render 菜单元素（TSX 语法）
  */
 
-import componentRoutes from "./modules/components";
-import detailsRoutes from "./modules/details";
-import directiveRoutes from "./modules/directive";
-import errorRoutes from "./modules/error";
-import excelRoutes from "./modules/excel";
-import frameRoutes from "./modules/frame";
-import nestedRoutes from "./modules/nested";
-import outerChainRoutes from "./modules/outerChain";
-import permissionRoutes from "./modules/permission";
-import tableRoutes from "./modules/table";
-import proComponentsRoutes from "./modules/proComponents";
-import toolsRoutes from "./modules/tool";
+import componentRoutes from "./routes/components";
+import detailsRoutes from "./routes/details";
+import directiveRoutes from "./routes/directive";
+import errorRoutes from "./routes/error";
+import excelRoutes from "./routes/excel";
+import frameRoutes from "./routes/frame";
+import nestedRoutes from "./routes/nested";
+import outerChainRoutes from "./routes/outerChain";
+import permissionRoutes from "./routes/permission";
+import tableRoutes from "./routes/table";
+import proComponentsRoutes from "./routes/proComponents";
+import toolsRoutes from "./routes/tool";
 import { User, Bell, HomeFilled, StarFilled, Document } from "@element-plus/icons-vue";
 import { HOME_URL, HOME_NAME, LOGIN_URL, LOGIN_NAME, LAYOUT_NAME, REDIRECT_NAME, NOT_FOUND } from "@/config/constant";
-
-export { HOME_URL, HOME_NAME, LOGIN_URL, LOGIN_NAME, LAYOUT_NAME, REDIRECT_NAME, NOT_FOUND };
 
 export const staticRoutes: RouterConfigRaw[] = [
   // 建议把 LAYOUT_NAME 路由放在第一位

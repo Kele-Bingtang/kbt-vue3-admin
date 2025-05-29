@@ -57,9 +57,8 @@ import { useRouter } from "vue-router";
 import { ElNotification, type FormInstance } from "element-plus";
 import { useUserStore } from "@/stores";
 import { getTimeState } from "@/utils";
-import SystemConfig from "@/config";
+import SystemConfig, { HOME_URL } from "@/config";
 import { ImageVerifyCode } from "@/components";
-import { HOME_URL } from "@/router/routesConfig";
 import { User, Lock, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 

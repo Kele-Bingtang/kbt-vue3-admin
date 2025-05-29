@@ -1,15 +1,14 @@
 <script setup lang="ts" name="LayoutSelect">
-import { DeviceEnum } from "@/enums/appEnum";
 import { useNamespace } from "@/composables";
-import { useSettingsStore, useLayoutStore } from "@/stores";
-import { computed } from "vue";
+import { useSettingsStore } from "@/stores";
+import { useMediaQuery } from "@vueuse/core";
+import { mobileMaxWidthMedia } from "@/config";
 
 const ns = useNamespace("layout-select");
 
 const settingsStore = useSettingsStore();
-const layoutStore = useLayoutStore();
 
-const isMobile = computed(() => layoutStore.device === DeviceEnum.Mobile);
+const isMobile = useMediaQuery(mobileMaxWidthMedia);
 </script>
 
 <template>

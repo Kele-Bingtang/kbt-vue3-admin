@@ -11,8 +11,7 @@ import { ElConfigProvider } from "element-plus";
 import { useLayoutStore } from "./stores/layout";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
-import { getBrowserLang } from "@/utils";
-import { useTheme } from "./composables/useTheme";
+import { useTheme } from "./composables/core/useTheme";
 import { useFrame } from "./layout/components/FrameLayout/useFrame";
 import SystemConfig from "@/config";
 import { useSettingsStore } from "@/stores";
@@ -38,7 +37,7 @@ const config = reactive({
 const i18nLocale = computed(() => {
   if (layoutStore.language === "zh-CN") return zhCn;
   if (layoutStore.language === "en-US") return en;
-  return getBrowserLang() === "zh-CN" ? zhCn : en;
+  return document.documentElement.lang === "zh-CN" ? zhCn : en;
 });
 
 // 配置全局组件大小

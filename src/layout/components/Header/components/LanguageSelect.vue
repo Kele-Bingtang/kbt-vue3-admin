@@ -2,9 +2,8 @@
 import type { LanguageType } from "@/stores";
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessage } from "element-plus";
-import { useLayout } from "@/composables";
+import { useBrowserTitle } from "@/composables";
 import { useLayoutStore } from "@/stores";
 
 const localList = [
@@ -13,9 +12,8 @@ const localList = [
 ];
 
 const i18n = useI18n();
-const route = useRoute();
 const layoutStore = useLayoutStore();
-const { setBrowserTitle } = useLayout();
+const { getBrowserTitle } = useBrowserTitle();
 
 const language = computed(() => layoutStore.language);
 
@@ -23,7 +21,7 @@ const handleSelectLanguage = (lang: LanguageType) => {
   i18n.locale.value = lang;
   layoutStore.setLanguage(lang);
   document.documentElement.lang = lang;
-  setBrowserTitle(route);
+  window.document.title = getBrowserTitle();
 
   let message = i18n.t("_headerBar.changeLanguage");
   message = message === "_headerBar.changeLanguage" ? "修改语言成功！" : message;

@@ -19,7 +19,7 @@
         filterable
         default-expand-all
         :props="{
-          label: (data: any) => getTitle(data),
+          label: (data: any) => formatTitle(data),
           value: 'id',
           children: 'children',
           disabled: 'disabled',
@@ -29,7 +29,7 @@
         style="width: 240px"
       >
         <template #default="{ data }">
-          <span>{{ getTitle(data) }}</span>
+          <span>{{ formatTitle(data) }}</span>
         </template>
       </el-tree-select>
       <el-button @click="onCloseTags">关闭标签</el-button>
@@ -81,14 +81,15 @@
 <script setup lang="ts" name="Tabs">
 import { appendFieldById, deleteChildren, getNodeById } from "@/utils";
 import { useDetail } from "./hooks";
-import { usePermissionStore, useLayoutStore } from "@/stores";
-import { useLayout } from "@/composables";
+import { useLayoutStore } from "@/stores";
+import { useMenu } from "@/composables";
 import { copyObj } from "@/utils";
+import { formatTitle } from "@/router/helper";
 
 const layoutStore = useLayoutStore();
-const { getTitle, getMenuListByRouter } = useLayout();
 const { toDetail, router } = useDetail();
-const routesTreeData = copyObj(getMenuListByRouter(usePermissionStore().loadedRouteList));
+const { menuList } = useMenu();
+const routesTreeData = copyObj(menuList.value);
 
 const treeData = computed(() => {
   return appendFieldById(deleteChildren(routesTreeData), 0, {

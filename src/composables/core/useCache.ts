@@ -3,7 +3,7 @@ import type { TabProp } from "@/stores";
 import { useStorage } from "@/composables";
 
 export const useCache = () => {
-  const { getStorage, setStorage, removeStorage, removeStorages } = useStorage("localStorage");
+  const { getStorage, setStorage, removeStorage, removeStorages } = useStorage();
 
   // 标签页的 tabsNav 缓存
   const tabsNavKey = SystemConfig.keyConfig.tabsNavCacheKey;

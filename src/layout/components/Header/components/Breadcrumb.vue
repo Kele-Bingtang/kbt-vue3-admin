@@ -1,24 +1,13 @@
 <script setup lang="ts" name="Breadcrumb">
-import type { RouteLocationNormalizedLoaded } from "vue-router";
-import { ref, watch } from "vue";
-import { useRoute } from "vue-router";
 import { ElBreadcrumb, ElBreadcrumbItem } from "element-plus";
 import { ArrowRight } from "@element-plus/icons-vue";
-import { useLayout, useNamespace } from "@/composables";
+import { useBreadcrumbs, useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
 
 const ns = useNamespace("breadcrumb");
 
-const route = useRoute();
 const settingsStore = useSettingsStore();
-const { getBreadcrumbs } = useLayout();
-
-const breadcrumbList = ref<RouteLocationNormalizedLoaded[]>([]);
-watch(
-  () => route.fullPath,
-  () => (breadcrumbList.value = getBreadcrumbs(route)),
-  { immediate: true }
-);
+const { breadcrumbList } = useBreadcrumbs();
 </script>
 
 <template>

@@ -5,10 +5,10 @@ import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessa
 import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
 import { useSettingsStore, useUserStore } from "@/stores";
 import { mittBus } from "@/utils";
-import { LOGIN_URL } from "@/router/routesConfig";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 import defaultAvatar from "@/assets/images/default.png";
+import { LOGIN_URL } from "@/config";
 
 const ns = useNamespace("user-dropdown");
 

@@ -1,9 +1,8 @@
 import type { Router } from "vue-router";
 import { NProgress } from "@/utils";
 import { useRoutes } from "@/composables";
-import { usePermissionStore, useUserStore } from "@/stores";
-import SystemConfig from "@/config";
-import { LOGIN_URL } from "../routesConfig";
+import { useRouteStore, useUserStore } from "@/stores";
+import SystemConfig, { LOGIN_URL } from "@/config";
 import { resetRouter } from "..";
 
 export const beforeEach = (router: Router) => {
@@ -12,9 +11,9 @@ export const beforeEach = (router: Router) => {
    **/
   router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
-    const permissionStore = usePermissionStore();
+    const routeStore = useRouteStore();
     const { initDynamicRoutes } = useRoutes();
-    const token = userStore.token;
+    const accessToken = userStore.accessToken;
 
     // 白名单
     const whiteList = SystemConfig.routerConfig.whiteList;
@@ -23,14 +22,14 @@ export const beforeEach = (router: Router) => {
 
     // 判断是访问登陆页，有 Token 就在当前页面，没有 Token 重置路由并放行到登陆页
     if (to.path === LOGIN_URL) {
-      if (token) return next(from.fullPath);
+      if (accessToken) return next(from.fullPath);
       resetRouter();
       return next();
     }
 
     // 判断访问页面是否在路由白名单地址中，如果存在直接放行
     if (whiteList.includes("*")) {
-      if (!permissionStore.loadedRouteList.length) {
+      if (!routeStore.loadedRouteList.length) {
         await initDynamicRoutes(["*"]);
         return next({ ...to, replace: true });
       }
@@ -39,16 +38,16 @@ export const beforeEach = (router: Router) => {
     } else if (whiteList.includes("next") || whiteList.includes(to.path)) return next();
 
     // 判断是否有 Token，没有重定向到 login
-    if (!token) return next({ path: LOGIN_URL, replace: true });
+    if (!accessToken) return next({ path: LOGIN_URL, replace: true });
 
     // 判断是否存在角色或加载过路由，如果不存在，则加载路由
-    if (!permissionStore.loadedRouteList.length) {
+    if (!routeStore.loadedRouteList.length) {
       try {
-        const roles = await userStore.getUserInfo();
-        await initDynamicRoutes(roles);
+        const userInfo = await userStore.getUserInfo();
+        await initDynamicRoutes(userInfo.roles);
         return next({ ...to, replace: true });
       } catch (error) {
-        userStore.resetToken();
+        userStore.clearPermission();
         router.replace(LOGIN_URL);
         return Promise.reject(error);
       }

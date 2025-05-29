@@ -142,8 +142,8 @@ const findHiddenIndex = () => {
       return prev;
     }, 0);
     if (!find) hiddenIndex.value = -1;
-  } catch (e) {
-    console.error(e);
+  } catch {
+    /* empty */
   }
 };
 

@@ -14,3 +14,5 @@ export const tableStatusFilter = (status: string): "success" | "info" | "danger"
   };
   return statusMap[status];
 };
+
+export const mobileMaxWidthMedia = "(max-width: 768px)";

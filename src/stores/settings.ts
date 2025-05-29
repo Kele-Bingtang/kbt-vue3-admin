@@ -42,7 +42,7 @@ export const useSettingsStore = defineStore(
     };
 
     const resetSettings = () => {
-      const { removeStorage } = useStorage("localStorage");
+      const { removeStorage } = useStorage();
       removeStorage(`${layoutConfig.cacheKeyPrefix}:settingsStore`);
       if (!recordTabNav.value) useCache().removeCacheTabNavList();
     };

@@ -264,7 +264,7 @@ const getComponentWidth = ({ width, props: componentProps }: FormSchemaProps) =>
 };
 
 // 获取标题样式
-const getTitleFontStyle = ({ labelSize }: FormSchemaProps) => {
+const formatTitleFontStyle = ({ labelSize }: FormSchemaProps) => {
   if (!labelSize || labelSize === "default") return { fontSize: "16px", fontWeight: 600 };
   if (labelSize === "small") return { fontSize: "14px", fontWeight: 600 };
   if (labelSize === "large") return { fontSize: "18px", fontWeight: 600 };
@@ -349,7 +349,7 @@ const renderFormItemWrap = () => {
       return useDivider ? (
         <>
           <Component {...item.props}>
-            <span style={getTitleFontStyle(item)}>{parseLabel(item.label)}</span>
+            <span style={formatTitleFontStyle(item)}>{parseLabel(item.label)}</span>
           </Component>
         </>
       ) : useCol ? (

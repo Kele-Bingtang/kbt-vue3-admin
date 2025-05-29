@@ -1,10 +1,11 @@
 import type { RouteRecordRaw, RouterHistory } from "vue-router";
 import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { NProgress } from "@/utils";
-import { LOGIN_NAME, staticRoutes } from "./routesConfig";
+import { staticRoutes } from "./routesConfig";
 import { beforeEach } from "./guards/beforeEach";
 import { afterEach } from "./guards/afterEach";
-import { usePermissionStore } from "@/stores";
+import { useRouteStore } from "@/stores";
+import { LOGIN_NAME } from "@/config";
 
 /**
  * 初始化路由
@@ -64,7 +65,7 @@ function getHistoryMode(routerHistory: string): RouterHistory {
  * 重置路由
  **/
 export function resetRouter(retainStaticRoutes = false) {
-  const permissionStore = usePermissionStore();
+  const routeStore = useRouteStore();
 
   router.getRoutes().forEach(route => {
     const { name, meta } = route;
@@ -73,7 +74,7 @@ export function resetRouter(retainStaticRoutes = false) {
     }
   });
 
-  permissionStore.$patch({
+  routeStore.$patch({
     loadedRouteList: [],
     flatRouteList: [],
   });

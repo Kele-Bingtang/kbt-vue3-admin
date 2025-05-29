@@ -1,9 +1,10 @@
 import { ref, computed, unref } from "vue";
 import { defineStore } from "pinia";
 import { useRoutes } from "@/composables";
-import { staticRoutes, errorRouter, HOME_NAME, notFoundRouter } from "@/router/routesConfig";
+import { staticRoutes, errorRouter, notFoundRouter } from "@/router/routesConfig";
+import { HOME_NAME } from "@/config";
 
-export const usePermissionStore = defineStore("permissionStore", () => {
+export const useRouteStore = defineStore("routeStore", () => {
   const loadedRouteList = ref<RouterConfig[]>([]);
   const flatRoleRouteList = ref<RouterConfig[]>([]);
   const flatRouteList = ref<RouterConfig[]>([]);

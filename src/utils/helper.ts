@@ -1,4 +1,4 @@
-import { isNumber, isString, isStringNumber } from "./layout/is";
+import { isNumber, isString, isStringNumber } from "./core/is";
 
 /**
  * @description 数据解耦后，再返回（深拷贝函数）
@@ -70,25 +70,6 @@ export function removeDuplicateObj<T>(arr: Array<T>, removeKeys: string[], keyIs
   } catch {
     return arr;
   }
-}
-
-/**
- * @description 获取浏览器默认语言
- * @return string
- */
-export function getBrowserLang() {
-  const browserLang = navigator.language ? navigator.language : navigator.browserLanguage;
-  let defaultBrowserLang = "";
-  if (
-    browserLang.toLowerCase() === "cn" ||
-    browserLang.toLowerCase() === "zh" ||
-    browserLang.toLowerCase() === "zh-cn"
-  ) {
-    defaultBrowserLang = "zh-CN";
-  } else {
-    defaultBrowserLang = "en-US";
-  }
-  return defaultBrowserLang;
 }
 
 /**

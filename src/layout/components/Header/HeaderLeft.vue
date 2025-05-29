@@ -1,22 +1,24 @@
 <script setup lang="ts" name="HeaderLeft">
 import { computed } from "vue";
-import { useSettingsStore, useLayoutStore } from "@/stores";
+import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
-import { DeviceEnum } from "@/enums/appEnum";
 import Breadcrumb from "./components/Breadcrumb.vue";
 import CollapseTrigger from "./components/CollapseTrigger.vue";
+import { useMediaQuery } from "@vueuse/core";
+import { mobileMaxWidthMedia } from "@/config";
 
 const ns = useNamespace("header-left");
 
-const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 const showBreadcrumb = computed(() => settingsStore.showBreadcrumb);
+
+const isMobile = useMediaQuery(mobileMaxWidthMedia);
 </script>
 
 <template>
   <div :class="[ns.b(), 'flx-center']">
     <CollapseTrigger />
-    <Breadcrumb v-if="showBreadcrumb && layoutStore.device !== DeviceEnum.Mobile" />
+    <Breadcrumb v-if="showBreadcrumb && !isMobile" />
   </div>
 </template>
 

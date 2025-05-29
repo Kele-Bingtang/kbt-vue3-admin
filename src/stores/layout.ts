@@ -3,7 +3,6 @@ import type { Frame } from "@/layout/components/FrameLayout/useFrame";
 import { ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { useCache } from "@/composables";
-import { DeviceEnum } from "@/enums/appEnum";
 import SystemConfig from "@/config";
 import { useSettingsStore } from "./settings";
 
@@ -12,22 +11,13 @@ export const useLayoutStore = defineStore(
   () => {
     const tabNavList = ref<TabProp[]>(useCache().getCacheTabNavList() || []);
     const keepAliveName = ref<string[]>([]);
-    const device = ref(DeviceEnum.Desktop);
     const layoutSize = ref<LayoutSizeType>(SystemConfig.layoutConfig.layoutSize);
     const language = ref(SystemConfig.layoutConfig.language);
     const frameList = ref<Frame[]>([]);
 
-    const toggleDevice = (deviceParam: DeviceEnum) => {
-      device.value = deviceParam;
-    };
+    const setLayoutSize = (layoutSizeParam: LayoutSizeType) => (layoutSize.value = layoutSizeParam);
 
-    const setLayoutSize = (layoutSizeParam: LayoutSizeType) => {
-      layoutSize.value = layoutSizeParam;
-    };
-
-    const setLanguage = (languageParam: LanguageType) => {
-      language.value = languageParam;
-    };
+    const setLanguage = (languageParam: LanguageType) => (language.value = languageParam);
 
     const addTab = async (tab: TabProp) => {
       const path = tab.path;
@@ -156,12 +146,10 @@ export const useLayoutStore = defineStore(
     return {
       tabNavList,
       keepAliveName,
-      device,
       layoutSize,
       language,
       frameList,
 
-      toggleDevice,
       setLayoutSize,
       setLanguage,
       addTab,

@@ -5,10 +5,10 @@ import { showFullScreenLoading, tryHideFullScreenLoading } from "@/request/servi
 import { isArray, isExternal, message } from "@/utils";
 import { useErrorLogStore, useUserStore } from "@/stores";
 import router from "@/router";
-import { LOGIN_URL } from "@/router/routesConfig";
 import { ContentTypeEnum, ResultEnum } from "./httpEnum";
 import { AxiosCanceler } from "./axiosCancel";
 import { checkStatus } from "./checkStatus";
+import { LOGIN_URL } from "@/config";
 
 type AxiosRequestConfigProp<D = any> = AxiosRequestConfig<D> & {
   method: "get" | "post" | "delete" | "put" | "download";
@@ -57,7 +57,7 @@ class RequestHttp {
         config.params?._type && config.method?.toLocaleLowerCase() === "post" && processParamsType(config);
         config.params?._type === "multi" && processArray(config);
         config.params && delete config.params._type;
-        config.headers.token = userStore.token;
+        config.headers.token = userStore.accessToken;
         return config;
       },
       (error: AxiosError) => {

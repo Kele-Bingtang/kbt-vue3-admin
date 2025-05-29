@@ -50,12 +50,13 @@
 </template>
 
 <script setup lang="ts" name="RolePermission">
-import { usePermissionStore, useUserStore } from "@/stores";
-import { useLayout, useRoutes } from "@/composables";
+import { useRouteStore, useUserStore } from "@/stores";
+import { useMenu, useRoutes } from "@/composables";
 import { ElMessage, ElMessageBox, ElNotification, ElTree } from "element-plus";
 import type { TreeKey } from "element-plus/es/components/tree/src/tree.type";
 import router, { resetRouter } from "@/router";
 import { ref, reactive, shallowRef, computed, onMounted, nextTick } from "vue";
+import { formatTitle } from "@/router/helper";
 
 interface Role {
   key: number; // 角色 id
@@ -82,13 +83,12 @@ const dialogTitle: Record<string, string> = {
   add: "角色创建",
 };
 
-const permissionStore = usePermissionStore();
+const routeStore = useRouteStore();
 const userStore = useUserStore();
-const { getTitle, getMenuListByRouter } = useLayout();
-const { filterFlatRoutes, loadDynamicRouters } = useRoutes();
+const { menuList, getMenuList } = useMenu();
+const { filterFlatRoutes, loadDynamicRoutes } = useRoutes();
 const role = ref(defaultRole);
 const serviceRoutes = ref<RouterConfig[]>([]); // 所有的路由，以供选择
-const reshapedRoutes = ref<RouterConfig[]>([]); // 重组后的路由，重组过程去掉一些路由，如 alwaysShowRoot，hideInMenu 的路由
 const rolesList = ref<Role[]>([]); // 当前用户的角色信息，包含角色路由
 const dialogVisible = ref(false);
 const dialogStatus = ref("add");
@@ -99,7 +99,7 @@ const defaultProps = reactive({
 });
 const treeRef = shallowRef<InstanceType<typeof ElTree>>();
 
-const routesTreeData = computed(() => generateTreeData(reshapedRoutes.value));
+const routesTreeData = computed(() => generateTreeData(menuList.value));
 
 onMounted(() => {
   getRoutes();
@@ -107,8 +107,7 @@ onMounted(() => {
 });
 
 const getRoutes = async () => {
-  serviceRoutes.value = permissionStore.loadedRouteList;
-  reshapedRoutes.value = getMenuListByRouter(permissionStore.loadedRouteList);
+  serviceRoutes.value = routeStore.loadedRouteList;
 };
 /**
  * 获取当前用户的信息
@@ -119,7 +118,7 @@ const getRoleList = async () => {
       key: parseInt(Math.random() * 1000 + ""), // 随机 ID
       name: role,
       description: role === "admin" ? "超级管理员" : role === "visitor" ? "游客" : "",
-      routes: permissionStore.loadedRouteList, // 这里应该填角色实际拥有的路由权限
+      routes: routeStore.loadedRouteList, // 这里应该填角色实际拥有的路由权限
     };
     rolesList.value.push(item);
   });
@@ -136,7 +135,7 @@ const generateTreeData = (routes: RouterConfig[]) => {
       title: "",
       path: "",
     };
-    temp.title = getTitle(route);
+    temp.title = formatTitle(route);
     temp.path = (route.meta._fullPath || route.name || route.path) as string;
     if (route.children) temp.children = generateTreeData(route.children);
     data.push(temp);
@@ -157,7 +156,7 @@ const handleEdit = (row: any) => {
   checkStrictly.value = true;
   role.value = { ...row };
   nextTick(() => {
-    const routes = filterFlatRoutes(getMenuListByRouter(role.value.routes as RouterConfig[]));
+    const routes = filterFlatRoutes(getMenuList(role.value.routes as RouterConfig[]));
     const treeData = generateTreeData(routes);
     const treeDataKeys = treeData.map(t => t.path);
     treeRef.value?.setCheckedKeys(treeDataKeys);
@@ -199,7 +198,7 @@ const confirmRole = () => {
   // 更新路由
   if (userStore.roles.includes(role.value.name)) {
     resetRouter();
-    loadDynamicRouters(role.value.routes, [role.value.name], router);
+    loadDynamicRoutes(role.value.routes, [role.value.name], router);
   }
 
   const { description, key, name } = role.value;

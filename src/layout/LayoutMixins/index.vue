@@ -1,14 +1,13 @@
 <script setup lang="ts" name="LayoutMixins">
 import { computed, watch, ref } from "vue";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
-import { useSettingsStore, usePermissionStore } from "@/stores";
+import { useSettingsStore, useRouteStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
-import { useLayout, useRoutes } from "@/composables";
-import SystemConfig from "@/config";
+import { useMenu, useRoutes } from "@/composables";
+import SystemConfig, { HOME_URL } from "@/config";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import Menu from "@/layout/components/Menu/index.vue";
 import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
-import { HOME_URL } from "@/router/routesConfig";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
@@ -19,17 +18,16 @@ const ns = useNamespace("mixins-layout");
 const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
-const permissionStore = usePermissionStore();
+const routeStore = useRouteStore();
 
-const { getMenuListByRouter } = useLayout();
 const { findParentRoutesByPath } = useRoutes();
+const { menuList } = useMenu();
 
 // 子菜单
 const activeMenu = ref("");
 const childrenMenu = ref<RouterConfig[]>([]);
 
 const isCollapse = computed(() => settingsStore.isCollapse);
-const menuList = ref<RouterConfig[]>([]);
 
 const headerMenu = computed(() => {
   const parentMenu: RouterConfig[] = [];
@@ -44,18 +42,6 @@ const headerMenu = computed(() => {
   return parentMenu;
 });
 
-const initMenuList = () => {
-  if (SystemConfig.layoutConfig.moreRouteChildrenHideInMenuThenOnlyOne) {
-    const menu = getMenuListByRouter(permissionStore.loadedRouteList);
-    return getMenuListByRouter(menu);
-  }
-  return getMenuListByRouter(permissionStore.loadedRouteList);
-};
-
-onMounted(() => {
-  menuList.value = initMenuList();
-});
-
 watch(
   () => route.path,
   async () => {
@@ -67,8 +53,8 @@ watch(
       item =>
         [route.path, `/${route.path.split("/")[1]}`].includes(item.path) ||
         route.path === item.redirect ||
-        findParentRoutesByPath(route.path, permissionStore.loadedRouteList, "path")[0] === item.path ||
-        findParentRoutesByPath(`/${route.path.split("/")[1]}`, permissionStore.loadedRouteList, "path")[0] === item.path
+        findParentRoutesByPath(route.path, routeStore.loadedRouteList, "path")[0] === item.path ||
+        findParentRoutesByPath(`/${route.path.split("/")[1]}`, routeStore.loadedRouteList, "path")[0] === item.path
     );
 
     activeMenu.value = item[0]?.path || "";
