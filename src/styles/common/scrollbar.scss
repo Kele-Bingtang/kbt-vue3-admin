@@ -1,4 +1,5 @@
 @use "../mixins/namespace" as *;
+@use "../mixins/function" as *;
 
 /* 滚动条 */
 ::-webkit-scrollbar {

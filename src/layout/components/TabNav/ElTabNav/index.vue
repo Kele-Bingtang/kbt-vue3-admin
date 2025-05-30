@@ -66,7 +66,7 @@ const tabRemove = async (fullPath: TabPaneName) => {
 </script>
 
 <template>
-  <div ref="tabsNavRef" :class="ns.b()">
+  <div ref="tabsNavRef" :class="[ns.b(), 'tab-nav']">
     <div :class="[ns.e('content'), 'flx-align-center']">
       <el-tabs v-model="tabsNavValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
         <el-tab-pane

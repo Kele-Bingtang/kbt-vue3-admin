@@ -39,3 +39,11 @@ export enum LanguageEnum {
   ZhCn = "zh-CN",
   EnUs = "en-US",
 }
+
+export enum PageTransitionEnum {
+  None = "",
+  Fade = "fade",
+  SlideLeft = "slide-left",
+  SlideTop = "Slide-top",
+  SlideBottom = "slide-bottom",
+}

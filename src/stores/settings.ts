@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { useStorage, useCache } from "@/composables";
-import { LayoutModeEnum, MenuThemeEnum, TabNavModeEnum } from "@/enums/appEnum";
+import { LayoutModeEnum, MenuThemeEnum, PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
 import SystemConfig from "@/config";
 
 export const useSettingsStore = defineStore(
@@ -14,6 +14,7 @@ export const useSettingsStore = defineStore(
     const layoutMode = ref(themeConfig.layoutMode || LayoutModeEnum.Classic);
     const tabNavMode = ref(themeConfig.tabNavMode || TabNavModeEnum.Simple);
     const menuTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
+    const pageTransition = ref(themeConfig.pageTransition || PageTransitionEnum.SlideLeft);
     const showSettings = ref(themeConfig.showSettings);
     const showTabNav = ref(themeConfig.showTabNav);
     const recordTabNav = ref(themeConfig.recordTabNav);
@@ -32,6 +33,7 @@ export const useSettingsStore = defineStore(
     const maximize = ref(themeConfig.maximize);
     const menuWidth = ref(themeConfig.menuWidth);
     const headerHeight = ref(themeConfig.headerHeight);
+    const radius = ref(themeConfig.radius);
 
     const closeSideMenu = () => {
       isCollapse.value = true;
@@ -53,6 +55,7 @@ export const useSettingsStore = defineStore(
       layoutMode,
       tabNavMode,
       menuTheme,
+      pageTransition,
       showSettings,
       showTabNav,
       recordTabNav,
@@ -71,6 +74,7 @@ export const useSettingsStore = defineStore(
       maximize,
       menuWidth,
       headerHeight,
+      radius,
 
       closeSideMenu,
       toggleSideMenu,

@@ -2,7 +2,7 @@
   <div style="padding: 30px">
     <el-alert :closable="false" title="menu 1-3" type="success">
       <router-view v-slot="{ Component }">
-        <transition name="fade-transform">
+        <transition name="fade">
           <component :is="Component" />
         </transition>
       </router-view>

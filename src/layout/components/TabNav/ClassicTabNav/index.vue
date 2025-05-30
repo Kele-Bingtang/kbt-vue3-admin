@@ -139,7 +139,7 @@ watch(
 </script>
 
 <template>
-  <div :class="[ns.b(), 'flx-align-center', ns.is(type)]" ref="tabsNavRef">
+  <div :class="[ns.b(), ns.is(type), 'flx-align-center', 'tab-nav']" ref="tabsNavRef">
     <div v-show="hasScroll" :class="[ns.e('btn'), ns.is('left')]">
       <el-button plain @click="handleScroll(240)">
         <Icon><ArrowLeft /></Icon>

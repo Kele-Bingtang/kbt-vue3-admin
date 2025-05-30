@@ -4,7 +4,7 @@ import { useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
 import { mobileMaxWidthMedia } from "@/config";
 import { useI18n } from "vue-i18n";
-import { TabNavModeEnum } from "@/enums/appEnum";
+import { PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
 
 defineOptions({ name: "LayoutSelect" });
 
@@ -19,27 +19,61 @@ const tabNavModeOptions = [
   { value: TabNavModeEnum.Classic, label: t("_settings.tabNavModeSelect.classic") },
   { value: TabNavModeEnum.Element, label: t("_settings.tabNavModeSelect.element") },
 ];
+
+const pageTransitionOps = computed(() => [
+  { value: PageTransitionEnum.None, label: t("_settings.pageTransitionSelect.none") },
+  { value: PageTransitionEnum.Fade, label: t("_settings.pageTransitionSelect.fade") },
+  { value: PageTransitionEnum.SlideLeft, label: t("_settings.pageTransitionSelect.slideLeft") },
+  { value: PageTransitionEnum.SlideTop, label: t("_settings.pageTransitionSelect.slideTop") },
+  { value: PageTransitionEnum.SlideBottom, label: t("_settings.pageTransitionSelect.slideBottom") },
+]);
+
+const customRadiusOptions = [
+  { value: "0", label: "0" },
+  { value: "0.25", label: "0.25" },
+  { value: "0.5", label: "0.5" },
+  { value: "0.75", label: "0.75" },
+  { value: "1", label: "1" },
+  { value: "1.25", label: "1.25" },
+  { value: "1.5", label: "1.5" },
+  { value: "1.75", label: "1.75" },
+  { value: "2", label: "2" },
+];
 </script>
 
 <template>
   <div :class="ns.b()">
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.tabNavMode") }}</span>
-      <el-select v-model="settingsStore.tabNavMode" placeholder="Select" size="default">
+      <el-select v-model="settingsStore.tabNavMode" placeholder="Select">
         <el-option v-for="item in tabNavModeOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
 
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.headerHeight") }}</span>
-      <el-input-number :min="30" :max="70" :step="2" v-model="settingsStore.headerHeight" controls-position="right" />
+      <el-input-number v-model="settingsStore.headerHeight" :min="30" :max="70" :step="2" controls-position="right" />
       <!-- <el-slider v-model="settingsStore.headerHeight" :min="30" :max="70" /> -->
     </div>
 
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.menuWidth") }}</span>
-      <el-input-number :min="100" :max="400" :step="10" v-model="settingsStore.menuWidth" controls-position="right" />
+      <el-input-number v-model="settingsStore.menuWidth" :min="100" :max="400" :step="10" controls-position="right" />
       <!-- <el-slider v-model="settingsStore.menuWidth" :min="100" :max="400" /> -->
+    </div>
+
+    <div :class="ns.e('item')">
+      <span>{{ $t("_settings.pageTransition") }}</span>
+      <el-select v-model="settingsStore.pageTransition" placeholder="Select">
+        <el-option v-for="item in pageTransitionOps" :key="item.value" :label="item.label" :value="item.value" />
+      </el-select>
+    </div>
+
+    <div :class="ns.e('item')">
+      <span>{{ $t("_settings.radius") }}</span>
+      <el-select v-model="settingsStore.radius" placeholder="Select">
+        <el-option v-for="item in customRadiusOptions" :key="item.value" :label="item.label" :value="item.value" />
+      </el-select>
     </div>
 
     <div :class="ns.e('item')">

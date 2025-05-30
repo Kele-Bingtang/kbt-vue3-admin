@@ -1,4 +1,4 @@
-import { LayoutModeEnum, MenuThemeEnum, TabNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
+import { LayoutModeEnum, MenuThemeEnum, PageTransitionEnum, TabNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
 import type { SystemInfo, LayoutConfig, SystemConfig, ThemeConfig, RouterConfig, KeyConfig } from "./types";
 
 const systemInfo: SystemInfo = {
@@ -11,6 +11,7 @@ const themeConfig: ThemeConfig = {
   layoutMode: LayoutModeEnum.Vertical,
   tabNavMode: TabNavModeEnum.Simple,
   menuTheme: MenuThemeEnum.Light,
+  pageTransition: PageTransitionEnum.SlideLeft,
   showSettings: true,
   showBreadcrumb: true,
   showTabNav: true,
@@ -28,6 +29,7 @@ const themeConfig: ThemeConfig = {
   maximize: false,
   menuWidth: 240,
   headerHeight: 55,
+  radius: 0.75,
 };
 
 const layoutConfig: LayoutConfig = {

@@ -12,10 +12,8 @@
 
 <script setup lang="ts">
 import type { Component } from "vue";
-import { defineAsyncComponent, computed, watchEffect } from "vue";
+import { defineAsyncComponent, computed } from "vue";
 import { useSettingsStore } from "@/stores";
-import { useBrowserTitle } from "@/composables";
-import { addUnit, setStyleVar } from "@/utils";
 import { LayoutModeEnum } from "@/enums/appEnum";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
@@ -35,10 +33,4 @@ const LayoutComponents: Record<string, Component> = {
 
 const settingsStore = useSettingsStore();
 const layoutMode = computed(() => settingsStore.layoutMode);
-
-useBrowserTitle();
-
-watchEffect(() => setStyleVar("--aside-width", addUnit(settingsStore.menuWidth)));
-
-watchEffect(() => setStyleVar("--header-height", addUnit(settingsStore.headerHeight)));
 </script>

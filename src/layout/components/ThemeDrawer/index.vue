@@ -72,7 +72,15 @@ const Divider = defineComponent({
 </script>
 
 <template>
-  <el-drawer v-model="drawerVisible" title="布局设置" size="300px" :class="ns.b()">
+  <el-drawer
+    v-model="drawerVisible"
+    size="300px"
+    :lock-scroll="false"
+    :with-header="false"
+    close-on-click-modal
+    :class="ns.b()"
+    :modal-class="ns.b('modal')"
+  >
     <!-- 布局切换 -->
     <Divider>
       <Icon class="icon"><Notification /></Icon>
@@ -152,12 +160,27 @@ const Divider = defineComponent({
   </el-drawer>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use "@/styles/mixins/bem" as *;
 
+@include b(theme-drawer-modal) {
+  background-color: transparent;
+}
+
 @include b(theme-drawer) {
+  // 背景滤镜
+  background: rgba($color: #ffffff, $alpha: 50%);
+  box-shadow: 0 0 30px rgb(0 0 0 / 10%);
+  backdrop-filter: blur(25px);
+
   @include e(divider) {
     margin-top: 15px;
+
+    > div {
+      width: 100%;
+      text-align: center;
+      background-color: transparent;
+    }
 
     .icon {
       position: relative;

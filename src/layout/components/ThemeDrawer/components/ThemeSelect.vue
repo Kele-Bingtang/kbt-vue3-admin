@@ -43,6 +43,7 @@ const handleSwitchDark = () => {
       <span>{{ $t("_settings.theme") }}</span>
       <el-color-picker v-model="settingsStore.primaryColor" :predefine="colorList" @change="changePrimary" />
     </div>
+
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.darkMode") }}</span>
       <el-switch
@@ -53,10 +54,12 @@ const handleSwitchDark = () => {
         :inactive-icon="Moon"
       />
     </div>
+
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.greyMode") }}</span>
       <el-switch v-model="settingsStore.isGrey" @change="changeGreyOrWeak($event as boolean, 'grey')" />
     </div>
+
     <div :class="ns.e('item')">
       <span>{{ $t("_settings.weakMode") }}</span>
       <el-switch v-model="settingsStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />

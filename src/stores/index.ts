@@ -1,7 +1,6 @@
 import { createPinia } from "pinia";
 import { createPersistedState } from "pinia-plugin-persistedstate";
 import SystemConfig from "@/config";
-import { useStorage } from "@/composables";
 
 export * from "./interface";
 export * from "./errorLog";
@@ -12,11 +11,19 @@ export * from "./user";
 export * from "./message";
 export * from "./websocket";
 
-const { getStorage, setStorage } = useStorage();
-
+// 搭配 useStorage 使用
 const customStorage = {
-  getItem: getStorage,
-  setItem: setStorage,
+  getItem: (key: string) => {
+    const value = localStorage.getItem(key);
+    if (!value) return value;
+
+    const { value: val } = JSON.parse(value);
+    return JSON.stringify(val);
+  },
+  setItem: (key: string, value: string) => {
+    const valueType = Object.prototype.toString.call(value).slice(8, -1);
+    localStorage.setItem(key, JSON.stringify({ _type: valueType, value: JSON.parse(value) }));
+  },
 };
 
 const pinia = createPinia();

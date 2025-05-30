@@ -8,7 +8,6 @@ import { TabNavModeEnum } from "@/enums/appEnum";
 import SimpleTabNav from "@/layout/components/TabNav/SimpleTabNav/index.vue";
 import ClassicTabNav from "@/layout/components/TabNav/ClassicTabNav/index.vue";
 import ElTabNav from "@/layout/components/TabNav/ElTabNav/index.vue";
-import CustomTransition from "./components/CustomTransition.vue";
 import Maximize from "./components/Maximize.vue";
 import FrameLayout from "../FrameLayout/index.vue";
 
@@ -27,13 +26,13 @@ const TabNavComponents: Record<string, Component> = {
 };
 
 // 刷新当前页面
-const isRouterShow = ref(true);
+const isRefreshRoute = ref(true);
 const refreshCurrentPage = (value?: boolean) => {
-  if (value !== undefined) isRouterShow.value = value;
-  isRouterShow.value = false;
+  if (value !== undefined) isRefreshRoute.value = value;
+  isRefreshRoute.value = false;
 
   nextTick(() => {
-    isRouterShow.value = true;
+    isRefreshRoute.value = true;
   });
 };
 provide(RefreshKey, refreshCurrentPage);
@@ -65,11 +64,11 @@ const isFixTabNav = computed(() => {
     <component :is="TabNavComponents[tabNavMode]" v-if="showTabNav" />
 
     <router-view v-slot="{ Component, route }">
-      <CustomTransition name="fade-transform">
-        <keep-alive :include="layoutStore.keepAliveName">
-          <component :is="Component" :key="route.path" v-if="isRouterShow" class="main-content" />
+      <Transition :name="settingsStore.pageTransition" mode="out-in" appear>
+        <keep-alive :max="10" :include="layoutStore.keepAliveName">
+          <component v-if="isRefreshRoute" :is="Component" :key="route.path" class="main-content" />
         </keep-alive>
-      </CustomTransition>
+      </Transition>
     </router-view>
     <FrameLayout />
   </el-main>
@@ -95,7 +94,7 @@ const isFixTabNav = computed(() => {
   .#{$el-namespace}-aside,
   .#{$el-namespace}-header,
   .#{$el-namespace}-footer,
-  .tabs-nav {
+  .tab-nav {
     display: none !important;
   }
 }

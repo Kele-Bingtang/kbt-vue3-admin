@@ -76,7 +76,7 @@ $btn-width: 28px;
     cursor: pointer;
     background-color: cssVar(layout-tab-item-bg-color);
     border: 1px solid cssVar(card-border);
-    border-radius: 4px;
+    border-radius: calc(cssVar(radius) / 2.5 + 2px);
 
     &:hover {
       color: cssVar(main-color);

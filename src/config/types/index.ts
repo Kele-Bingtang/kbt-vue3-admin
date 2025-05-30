@@ -1,4 +1,11 @@
-import type { LayoutModeEnum, MenuThemeEnum, SystemThemeEnum, TabNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
+import type {
+  LayoutModeEnum,
+  MenuThemeEnum,
+  PageTransitionEnum,
+  SystemThemeEnum,
+  TabNavModeEnum,
+  TitleModeEnum,
+} from "@/enums/appEnum";
 import type { LayoutSizeType, LanguageType } from "@/stores/interface";
 
 export interface SystemConfig {
@@ -18,6 +25,7 @@ export interface ThemeConfig {
   layoutMode: LayoutModeEnum; // 布局设置
   tabNavMode: TabNavModeEnum; // 标签页设置
   menuTheme: MenuThemeEnum; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
+  pageTransition: PageTransitionEnum; // 进入页面过渡动画
   showSettings: boolean; // 是否显示设置
   showBreadcrumb: boolean; // 是否使用 Breadcrumb
   showTabNav: boolean; // 是否使用 tagsNav
@@ -36,6 +44,7 @@ export interface ThemeConfig {
   primaryColor: string; // 主题色
   menuWidth: number; // 菜单宽度
   headerHeight: number; // 顶部高度
+  radius: number; // 圆角
 }
 
 export interface LayoutConfig {
