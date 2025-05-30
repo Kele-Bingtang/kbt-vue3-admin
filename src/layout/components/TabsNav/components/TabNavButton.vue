@@ -1,4 +1,4 @@
-<script setup lang="ts" name="MenuButton">
+<script setup lang="ts">
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon, ElButton } from "element-plus";
@@ -15,6 +15,8 @@ import {
 import { useDebounceFn } from "@vueuse/core";
 import { useSettingsStore } from "@/stores";
 import { useTabsNav } from "../useTabsNav";
+
+defineOptions({ name: "TabNavButton" });
 
 const {
   contextMenuCondition,

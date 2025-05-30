@@ -3,22 +3,25 @@
   <ThemeDrawer />
 </template>
 
-<script setup lang="ts" name="Layout">
+<script setup lang="ts">
+import type { Component } from "vue";
+import { computed, watchEffect } from "vue";
+import { useSettingsStore, useUserStore, useWebSocketStore } from "@/stores";
+import { useBrowserTitle } from "@/composables";
+import { useNamespace } from "@/composables";
+import { addUnit, setStyleVar } from "@/utils";
+import { WebSocketKey } from "@/config/symbols";
+import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import LayoutVertical from "./LayoutVertical/index.vue";
 import LayoutClassic from "./LayoutClassic/index.vue";
 import LayoutTransverse from "./LayoutTransverse/index.vue";
 import LayoutColumns from "./LayoutColumns/index.vue";
 import LayoutMixins from "./LayoutMixins/index.vue";
 import LayoutSubsystem from "./LayoutSubsystem/index.vue";
-import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
-import { useSettingsStore, useUserStore, useWebSocketStore } from "@/stores";
-import { useBrowserTitle } from "@/composables";
-import { useNamespace } from "@/composables";
-import { addUnit, setStyleVar } from "@/utils";
-import { type Component, computed, watchEffect } from "vue";
-import { WebSocketKey } from "@/config/symbols";
 
 import "./base-layout.scss";
+
+defineOptions({ name: "Layout" });
 
 const LayoutComponents: Record<string, Component> = {
   vertical: LayoutVertical,

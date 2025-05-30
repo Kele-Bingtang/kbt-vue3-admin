@@ -1,4 +1,4 @@
-<script setup lang="ts" name="TabsNav">
+<script setup lang="ts">
 import { ref, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { ElButton, ElIcon } from "element-plus";
@@ -6,10 +6,12 @@ import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
 import { useLayoutStore, useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
 import { useTabsNav } from "../useTabsNav";
-import MenuDropdown from "../components/MenuDropdown.vue";
+import TabNavButton from "../components/TabNavButton.vue";
 import RightMenu from "../components/RightMenu.vue";
 
 import "./index.scss";
+
+defineOptions({ name: "ClassicTabNav" });
 
 const ns = useNamespace("classic-tabs-nav");
 
@@ -180,7 +182,7 @@ watch(
       </el-button>
     </div>
 
-    <MenuDropdown :class="ns.e('menu-dropdown')"></MenuDropdown>
+    <TabNavButton :class="ns.e('menu-dropdown')" />
 
     <transition name="el-zoom-in-top">
       <RightMenu

@@ -1,4 +1,4 @@
-<script setup lang="ts" name="User">
+<script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox, ElIcon } from "element-plus";
@@ -9,6 +9,8 @@ import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 import defaultAvatar from "@/assets/images/default.png";
 import { LOGIN_URL } from "@/config";
+
+defineOptions({ name: "User" });
 
 const ns = useNamespace("user-dropdown");
 

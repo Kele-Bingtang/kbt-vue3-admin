@@ -1,19 +1,20 @@
-<script setup lang="ts" name="LayoutVertical">
+<script setup lang="ts">
 import { computed, watch } from "vue";
+import { useRouter } from "vue-router";
+import { useMediaQuery } from "@vueuse/core";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useSettingsStore } from "@/stores";
+import { useNamespace } from "@/composables";
+import SystemConfig, { HOME_URL, mobileMaxWidthMedia } from "@/config";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
-import SystemConfig, { HOME_URL, mobileMaxWidthMedia } from "@/config";
-import { useNamespace } from "@/composables";
-import { useRouter } from "vue-router";
-import { useMediaQuery } from "@vueuse/core";
 
 import "./index.scss";
 
-const ns = useNamespace("vertical-layout");
+defineOptions({ name: "LayoutVertical" });
 
+const ns = useNamespace("vertical-layout");
 const router = useRouter();
 const settingsStore = useSettingsStore();
 

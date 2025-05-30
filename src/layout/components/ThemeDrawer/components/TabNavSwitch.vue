@@ -1,9 +1,11 @@
-<script setup lang="ts" name="TabsNavSwitch">
+<script setup lang="ts">
+import { ElIcon } from "element-plus";
+import { CircleCheckFilled, Menu, Close, HomeFilled } from "@element-plus/icons-vue";
 import { TabsNavModeEnum } from "@/enums/appEnum";
 import { useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
-import { CircleCheckFilled, Menu, Close, HomeFilled } from "@element-plus/icons-vue";
-import { ElIcon } from "element-plus";
+
+defineOptions({ name: "TabNavSwitch" });
 
 const ns = useNamespace("tabs-nav-switch");
 

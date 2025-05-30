@@ -1,9 +1,11 @@
-<script setup lang="ts" name="RightMenu">
+<script setup lang="ts">
 import { ElIcon } from "element-plus";
 import type { TabProp } from "@/stores";
 import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
 import { Refresh, Close, ArrowLeft, ArrowRight, SemiSelect, FolderDelete } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
+
+defineOptions({ name: "RightMenu" });
 
 const ns = useNamespace("right-menu");
 

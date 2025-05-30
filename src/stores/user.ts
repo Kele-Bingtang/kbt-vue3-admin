@@ -3,7 +3,7 @@ import type { LoginParams } from "@/api/user";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { resetRouter } from "@/router";
-import { useRoutes } from "@/composables";
+import { useRouteFn } from "@/composables";
 import { useLayoutStore } from "./layout";
 
 export const useUserStore = defineStore(
@@ -90,7 +90,7 @@ export const useUserStore = defineStore(
       setRoles(rolesParam); // 正常不是直接赋予角色，而是调用 this.getUserInfo(token)，根据 token 重新获取对应的角色
       // await this.getUserInfo(token);
       resetRouter();
-      useRoutes().initDynamicRoutes(rolesParam);
+      useRouteFn().initDynamicRoutes(rolesParam);
     };
 
     const setToken = (newAccessToken: string, newRefreshToken?: string) => {

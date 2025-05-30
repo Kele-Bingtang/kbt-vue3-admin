@@ -1,5 +1,7 @@
-<script setup lang="ts" name="Loading">
+<script setup lang="ts">
 import { useNamespace } from "@/composables";
+
+defineOptions({ name: "Loading" });
 
 const ns = useNamespace("layout-loading");
 </script>

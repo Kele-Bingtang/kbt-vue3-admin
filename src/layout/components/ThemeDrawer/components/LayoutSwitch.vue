@@ -1,9 +1,11 @@
-<script setup lang="ts" name="LayoutSwitch">
+<script setup lang="ts">
+import { ElIcon } from "element-plus";
+import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { LayoutModeEnum } from "@/enums/appEnum";
 import { useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
-import { CircleCheckFilled } from "@element-plus/icons-vue";
-import { ElIcon } from "element-plus";
+
+defineOptions({ name: "LayoutSwitch" });
 
 const ns = useNamespace("layout-switch");
 

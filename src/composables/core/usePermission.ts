@@ -9,6 +9,7 @@ export const usePermission = () => {
   const getRoleList = () => {
     return userStore.roles;
   };
+
   const hasRole = (value: string | string[]) => {
     if (!value) return false;
     const roleList = getRoleList();
@@ -20,10 +21,13 @@ export const usePermission = () => {
     const route = useRoute();
     return route.meta.auths;
   };
+
   const hasAuth = (value: string | string[]) => {
     if (!value) return false;
+
     const authList = getAuthList();
     if (!authList) return false;
+
     return isString(value) ? authList.includes(value) : isIncludeAll(authList, value);
   };
 
@@ -42,6 +46,7 @@ export const usePermissionNoSetup = () => {
   const getAuthList = () => {
     return router.currentRoute.value.meta.auths as string[];
   };
+
   const hasAuth = (value: string | string[]) => {
     if (!value) return false;
     const authList = getAuthList();

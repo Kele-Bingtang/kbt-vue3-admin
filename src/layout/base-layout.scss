@@ -145,10 +145,15 @@
   }
 
   @include joins(layout-menu) {
+    flex: 1;
     .#{$el-namespace}-menu--horizontal {
       /* 水平菜单减去自身的 border，避免滚动条出现 */
       height: calc(cssVar(layout-header-height) - 1px);
       background-color: cssVar(layout-header-bg-color);
+
+      > .#{$el-namespace}-sub-menu {
+        padding: 0;
+      }
     }
   }
 }

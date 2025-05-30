@@ -1,10 +1,12 @@
-<script setup lang="ts" name="Menu">
+<script setup lang="ts">
 import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { ElScrollbar, ElMenu } from "element-plus";
 import { useMenu } from "@/composables";
 import { useSettingsStore } from "@/stores";
 import MenuItem from "./MenuItem.vue";
+
+defineOptions({ name: "AsideMenu" });
 
 interface MenuProps {
   menuList?: RouterConfig[];
@@ -23,7 +25,7 @@ const settingsStore = useSettingsStore();
 const { menuList: menuListRef } = useMenu();
 
 const activeMenu = computed(() =>
-  props.activeMenu ? props.activeMenu : ((route.meta.activeMenu || route.meta._fullPath || route.path) as string)
+  props.activeMenu ? props.activeMenu : route.meta.activeMenu || route.meta._fullPath || route.path
 );
 const isCollapse = computed(() => (props.isCollapse === undefined ? settingsStore.isCollapse : props.isCollapse));
 

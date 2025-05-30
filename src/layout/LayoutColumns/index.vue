@@ -1,20 +1,21 @@
-<script setup lang="ts" name="LayoutVertical">
+<script setup lang="ts">
 import { computed, watch, ref, unref } from "vue";
+import { useRoute, useRouter } from "vue-router";
 import { ElContainer, ElAside, ElHeader, ElScrollbar } from "element-plus";
 import { useSettingsStore } from "@/stores";
-import MainContent from "@/layout/components/MainContent/index.vue";
-import Header from "@/layout/components/Header/index.vue";
 import { useMenu } from "@/composables";
-import SystemConfig, { HOME_URL } from "@/config";
-import Menu from "@/layout/components/Menu/index.vue";
 import { Tooltip } from "@/components";
 import { useNamespace } from "@/composables";
-import { useRoute, useRouter } from "vue-router";
+import SystemConfig, { HOME_URL } from "@/config";
+import MainContent from "@/layout/components/MainContent/index.vue";
+import Header from "@/layout/components/Header/index.vue";
+import Menu from "@/layout/components/Menu/index.vue";
 
 import "./index.scss";
 
-const ns = useNamespace("columns-layout");
+defineOptions({ name: "LayoutVertical" });
 
+const ns = useNamespace("columns-layout");
 const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();

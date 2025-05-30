@@ -1,8 +1,10 @@
-<script setup lang="ts" name="Breadcrumb">
+<script setup lang="ts" name="">
 import { ElBreadcrumb, ElBreadcrumbItem } from "element-plus";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { useBreadcrumbs, useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
+
+defineOptions({ name: "Breadcrumb" });
 
 const ns = useNamespace("breadcrumb");
 

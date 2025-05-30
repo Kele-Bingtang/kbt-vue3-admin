@@ -1,6 +1,6 @@
 import { ref, computed, unref } from "vue";
 import { defineStore } from "pinia";
-import { useRoutes } from "@/composables";
+import { useRouteFn } from "@/composables";
 import { staticRoutes, errorRouter, notFoundRouter } from "@/router/routesConfig";
 import { HOME_NAME } from "@/config";
 
@@ -9,7 +9,7 @@ export const useRouteStore = defineStore("routeStore", () => {
   const flatRoleRouteList = ref<RouterConfig[]>([]);
   const flatRouteList = ref<RouterConfig[]>([]);
 
-  const { processRouteMeta, findRouteByName, filterFlatRoutes, ascending } = useRoutes();
+  const { processRouteMeta, findRouteByName, filterFlatRoutes, ascending } = useRouteFn();
 
   const homeRoute = computed(() => findRouteByName(loadedRouteList.value, HOME_NAME)); // 路由里首页的 name 值，必须填且正确，默认为 Home
 

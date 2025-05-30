@@ -2,13 +2,14 @@
 import { computed } from "vue";
 import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
-import Breadcrumb from "./components/Breadcrumb.vue";
-import CollapseTrigger from "./components/CollapseTrigger.vue";
 import { useMediaQuery } from "@vueuse/core";
 import { mobileMaxWidthMedia } from "@/config";
+import Breadcrumb from "./components/Breadcrumb.vue";
+import CollapseTrigger from "./components/CollapseTrigger.vue";
+
+defineOptions({ name: "HeaderLeft" });
 
 const ns = useNamespace("header-left");
-
 const settingsStore = useSettingsStore();
 const showBreadcrumb = computed(() => settingsStore.showBreadcrumb);
 

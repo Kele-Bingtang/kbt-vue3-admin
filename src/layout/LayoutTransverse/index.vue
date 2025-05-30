@@ -1,17 +1,18 @@
-<script setup lang="ts" name="LayoutTransverse">
+<script setup lang="ts">
 import { ElContainer, ElHeader } from "element-plus";
-import MainContent from "@/layout/components/MainContent/index.vue";
-import Menu from "@/layout/components/Menu/index.vue";
-import SystemConfig, { HOME_URL } from "@/config";
-import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
+import { useRouter } from "vue-router";
 import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
-import { useRouter } from "vue-router";
+import SystemConfig, { HOME_URL } from "@/config";
+import MainContent from "@/layout/components/MainContent/index.vue";
+import Menu from "@/layout/components/Menu/index.vue";
+import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 
 import "./index.scss";
 
-const ns = useNamespace("transverse-layout");
+defineOptions({ name: "LayoutTransverse" });
 
+const ns = useNamespace("transverse-layout");
 const router = useRouter();
 const settingsStore = useSettingsStore();
 </script>

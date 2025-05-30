@@ -1,8 +1,10 @@
-<script setup lang="ts" name="Maximize">
+<script setup lang="ts">
 import { ElIcon } from "element-plus";
 import { Close } from "@element-plus/icons-vue";
 import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
+
+defineOptions({ name: "CustomTransition" });
 
 const ns = useNamespace("maximize");
 

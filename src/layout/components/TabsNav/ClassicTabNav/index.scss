@@ -15,7 +15,7 @@ $btn-width: 28px;
   border-bottom: cssVar(layout-tab-line);
 
   @include is(simple) {
-    @include e(tab) {
+    @include e(tab, true) {
       .icon-close:hover {
         background-color: cssVar(gray-300);
       }

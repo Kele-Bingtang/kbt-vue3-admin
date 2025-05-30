@@ -1,18 +1,19 @@
-<script setup lang="ts" name="LayoutSubsystem">
+<script setup lang="ts">
 import { computed, watch } from "vue";
+import { useRouter } from "vue-router";
 import { ElContainer, ElAside } from "element-plus";
+import { useMediaQuery } from "@vueuse/core";
 import { useSettingsStore } from "@/stores";
+import { useNamespace } from "@/composables";
+import SystemConfig, { HOME_URL, mobileMaxWidthMedia } from "@/config";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
-import SystemConfig, { HOME_URL, mobileMaxWidthMedia } from "@/config";
-import { useNamespace } from "@/composables";
-import { useRouter } from "vue-router";
 
 import "./index.scss";
-import { useMediaQuery } from "@vueuse/core";
+
+defineOptions({ name: "LayoutSubsystem" });
 
 const ns = useNamespace("subsystem-layout");
-
 const router = useRouter();
 const settingsStore = useSettingsStore();
 

@@ -51,7 +51,7 @@
 
 <script setup lang="ts" name="RolePermission">
 import { useRouteStore, useUserStore } from "@/stores";
-import { useMenu, useRoutes } from "@/composables";
+import { useMenu, useRouteFn } from "@/composables";
 import { ElMessage, ElMessageBox, ElNotification, ElTree } from "element-plus";
 import type { TreeKey } from "element-plus/es/components/tree/src/tree.type";
 import router, { resetRouter } from "@/router";
@@ -86,7 +86,7 @@ const dialogTitle: Record<string, string> = {
 const routeStore = useRouteStore();
 const userStore = useUserStore();
 const { menuList, getMenuList } = useMenu();
-const { filterFlatRoutes, loadDynamicRoutes } = useRoutes();
+const { filterFlatRoutes, loadDynamicRoutes } = useRouteFn();
 const role = ref(defaultRole);
 const serviceRoutes = ref<RouterConfig[]>([]); // 所有的路由，以供选择
 const rolesList = ref<Role[]>([]); // 当前用户的角色信息，包含角色路由

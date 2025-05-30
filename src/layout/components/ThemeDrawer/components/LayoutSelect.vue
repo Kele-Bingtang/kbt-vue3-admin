@@ -1,8 +1,10 @@
-<script setup lang="ts" name="LayoutSelect">
+<script setup lang="ts">
+import { useMediaQuery } from "@vueuse/core";
 import { useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
-import { useMediaQuery } from "@vueuse/core";
 import { mobileMaxWidthMedia } from "@/config";
+
+defineOptions({ name: "LayoutSelect" });
 
 const ns = useNamespace("layout-select");
 

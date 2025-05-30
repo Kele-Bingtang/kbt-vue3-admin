@@ -1,10 +1,11 @@
-<script setup lang="ts" name="ErrorLog">
+<script setup lang="ts">
 import { ElBadge } from "element-plus";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
-const ns = useNamespace("error-badge");
+defineOptions({ name: "ErrorLog" });
 
+const ns = useNamespace("error-badge");
 const route = useRoute();
 const router = useRouter();
 const props = defineProps<{ errorCount: number }>();

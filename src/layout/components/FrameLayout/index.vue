@@ -1,10 +1,12 @@
-<script setup lang="ts" name="FrameLayout">
+<script setup lang="ts" n>
 import type { Frame } from "./useFrame";
 import { computed, unref, watch } from "vue";
 import { useRoute } from "vue-router";
 import { useLayoutStore } from "@/stores";
 import { useFrame } from "./useFrame";
 import FrameView from "./FrameView.vue";
+
+defineOptions({ name: "FrameLayout" });
 
 const route = useRoute();
 const layoutStore = useLayoutStore();

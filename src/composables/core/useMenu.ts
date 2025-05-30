@@ -37,9 +37,9 @@ export const useMenu = () => {
      * 场景：alwaysShowRoot 为 false
      *    如果一个路由有一个子路由，那么菜单只渲染出该子路由
      *    如果一个路由有两个子路由，其中一个子路由为 hideInMenu 为 true，那么菜单只渲染出另一个子路由
-     * 如果一个路由有两个子路由，且都不是 hideInMenu，那么两个子路由为二级菜单
+     *    如果一个路由有两个子路由，且都不是 hideInMenu，那么两个子路由为二级菜单
      *
-     * 如果您确保您的路由不会出现：多个子路由且只有一个 hideInMenu 不为 true，可以只过滤一次提升性能，即直接 return this.getMenuListByRouter(PermissionModule.loadedRouteList);
+     * 如果您确保您的路由不会出现：多个子路由且只有一个 hideInMenu 不为 true，可以只过滤一次提升性能
      */
     if (SystemConfig.layoutConfig.moreRouteChildrenHideInMenuThenOnlyOne)
       return formatRoutesToMenu(formatRoutesToMenu(routes));

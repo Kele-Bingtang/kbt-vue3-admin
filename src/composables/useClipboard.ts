@@ -1,5 +1,5 @@
-import { ref } from "vue";
 import { isClient } from "@/utils";
+import { ref } from "vue";
 
 /**
  * 复制文本到剪贴板
@@ -13,8 +13,6 @@ export const useClipboard = (timeout = 1500) => {
   else isSupported.value = true;
 
   const copy = async (str: string, size = -1) => {
-    if (!isClient) return;
-
     if (navigator.clipboard) {
       return await navigator.clipboard.writeText(str).then(() => {
         text.value = str;

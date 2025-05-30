@@ -1,11 +1,12 @@
-<script setup lang="ts" name="FrameView">
+<script setup lang="ts">
 import { nextTick, ref, onMounted, computed, unref } from "vue";
 import { useRoute } from "vue-router";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 
-const ns = useNamespace("frame-view");
+defineOptions({ name: "FrameView" });
 
+const ns = useNamespace("frame-view");
 const loading = ref(true);
 const route = useRoute();
 const frameRef = ref<HTMLElement | null>(null);

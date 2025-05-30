@@ -2,14 +2,14 @@ import type { RouteLocationNormalizedLoaded } from "vue-router";
 import { ElMessage } from "element-plus";
 import { useRoute } from "vue-router";
 import { useRouteStore } from "@/stores";
-import { useRoutes } from "./useRoutes";
+import { useRouteFn } from "./useRouteFn";
 import { tryOnScopeDispose } from "@vueuse/core";
 import { formatTitle } from "@/router/helper";
 
 export const useBreadcrumbs = () => {
   const breadcrumbList = ref<RouteLocationNormalizedLoaded[]>([]);
   const { homeRoute, loadedRouteList } = useRouteStore();
-  const { findParentRoutesByPath } = useRoutes();
+  const { findParentRoutesByPath } = useRouteFn();
   const route = useRoute();
 
   /**

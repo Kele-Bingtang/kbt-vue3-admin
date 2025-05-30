@@ -121,12 +121,12 @@ $bem-e: null;
 
 /* 多个元素 */
 @mixin joins($element...) {
-  $bem-e: $admin-namespace + $common-separator;
+  $b: $admin-namespace + $common-separator;
   $selector: "";
 
   /* 拼接逗号 */
   @each $unit in $element {
-    $selector: #{$selector + "." + $bem-e + $unit + ","};
+    $selector: #{$selector + "." + $b + $unit + ","};
   }
 
   #{string.slice($selector, 1, -2)} {

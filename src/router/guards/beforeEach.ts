@@ -1,6 +1,6 @@
 import type { Router } from "vue-router";
 import { NProgress } from "@/utils";
-import { useRoutes } from "@/composables";
+import { useRouteFn } from "@/composables";
 import { useRouteStore, useUserStore } from "@/stores";
 import SystemConfig, { LOGIN_URL } from "@/config";
 import { resetRouter } from "..";
@@ -12,7 +12,7 @@ export const beforeEach = (router: Router) => {
   router.beforeEach(async (to, from, next) => {
     const userStore = useUserStore();
     const routeStore = useRouteStore();
-    const { initDynamicRoutes } = useRoutes();
+    const { initDynamicRoutes } = useRouteFn();
     const accessToken = userStore.accessToken;
 
     // 白名单
@@ -40,7 +40,7 @@ export const beforeEach = (router: Router) => {
     // 判断是否有 Token，没有重定向到 login
     if (!accessToken) return next({ path: LOGIN_URL, replace: true });
 
-    // 判断是否存在角色或加载过路由，如果不存在，则加载路由
+    // 判断是否加载过路由，如果没有则加载路由
     if (!routeStore.loadedRouteList.length) {
       try {
         const userInfo = await userStore.getUserInfo();

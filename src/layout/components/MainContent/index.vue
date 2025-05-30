@@ -1,4 +1,4 @@
-<script setup lang="ts" name="MainContent">
+<script setup lang="ts">
 import { computed, ref, nextTick, provide, watchEffect, type Component } from "vue";
 import { ElMain } from "element-plus";
 import { RefreshKey } from "@/config/symbols";
@@ -10,6 +10,8 @@ import ElTabNav from "@/layout/components/TabsNav/ElTabNav/index.vue";
 import CustomTransition from "./components/CustomTransition.vue";
 import Maximize from "./components/Maximize.vue";
 import FrameLayout from "../FrameLayout/index.vue";
+
+defineOptions({ name: "MainContent" });
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();

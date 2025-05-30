@@ -1,5 +1,5 @@
-import SystemConfig from "@/config";
 import type { TabProp } from "@/stores";
+import SystemConfig from "@/config";
 import { useStorage } from "@/composables";
 
 export const useCache = () => {

@@ -31,6 +31,7 @@ interface ImportMetaEnv {
   VITE_ROUTER_MODE: string; // 路由模式，默认 H5
   VITE_WEBSOCKET: boolean | string; // 是否启用 WebSocket
   VITE_WEBSOCKET_URL: string; // WebSocket 连接 URL，仅当 VITE_WEBSOCKET 为 true 生效
+  VITE_ROUTE_ACCESS_MODE: "frontend" | "backend" | "both"; // 路由权限模式，默认前端 frontend
 }
 
 declare global {

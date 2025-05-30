@@ -6,6 +6,8 @@ import SystemConfig from "@/config";
 import { Tooltip } from "@/components";
 import { useNamespace } from "@/composables";
 
+defineOptions({ name: "Message" });
+
 const ns = useNamespace("message-notice");
 
 interface Notice {

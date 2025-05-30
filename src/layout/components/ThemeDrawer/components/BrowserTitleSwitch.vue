@@ -1,9 +1,11 @@
-<script setup lang="ts" name="BrowserTitleSwitch">
-import { useNamespace, useBrowserTitle } from "@/composables";
-import { useSettingsStore } from "@/stores";
+<script setup lang="ts">
 import { ElSelect, ElOption } from "element-plus";
 import { useI18n } from "vue-i18n";
+import { useNamespace, useBrowserTitle } from "@/composables";
+import { useSettingsStore } from "@/stores";
 import { TitleModeEnum } from "@/enums/appEnum";
+
+defineOptions({ name: "BrowserTitleSwitch" });
 
 const ns = useNamespace("browser-title-switch");
 

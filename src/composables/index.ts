@@ -1,4 +1,4 @@
-export * from "./core/useRoutes";
+export * from "./core/useRouteFn";
 export * from "./core/useMenu";
 export * from "./core/useBreadcrumb";
 export * from "./core/useBrowserTitle";

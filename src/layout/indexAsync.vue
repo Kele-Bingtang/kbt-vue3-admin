@@ -10,15 +10,18 @@
   <ThemeDrawer />
 </template>
 
-<script setup lang="ts" name="Layout">
+<script setup lang="ts">
+import type { Component } from "vue";
+import { defineAsyncComponent, computed, watchEffect } from "vue";
 import { useSettingsStore } from "@/stores";
 import { useBrowserTitle } from "@/composables";
+import { addUnit, setStyleVar } from "@/utils";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
-import { addUnit, setStyleVar } from "@/utils";
-import { type Component, defineAsyncComponent, computed, watchEffect } from "vue";
 
 import "./base-layout.scss";
+
+defineOptions({ name: "Layout" });
 
 const LayoutComponents: Record<string, Component> = {
   vertical: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),

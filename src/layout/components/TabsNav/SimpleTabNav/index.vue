@@ -1,6 +1,8 @@
-<script setup lang="ts" name="SimpleTabNav">
+<script setup lang="ts">
 import { useSettingsStore } from "@/stores";
 import ClassicTabNav from "../ClassicTabNav/index.vue";
+
+defineOptions({ name: "SimpleTabNav" });
 
 const settingsStore = useSettingsStore();
 

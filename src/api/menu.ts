@@ -1,4 +1,4 @@
-import http from "@/request";
+// import http from "@/request";
 
 export interface BackstageMenuList {
   imageIcon: string;
@@ -18,14 +18,4 @@ export const getMenuList = () => {
   //   url: "/getMenuList",
   //   method: "get",
   // });
-};
-
-export const test = () => {
-  return http.request({
-    url: "/test",
-    method: "post",
-    headers: {
-      mapping: true,
-    },
-  });
 };

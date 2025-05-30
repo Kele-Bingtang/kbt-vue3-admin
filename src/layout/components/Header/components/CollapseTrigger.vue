@@ -1,12 +1,13 @@
-<script setup lang="ts" name="CollapseTrigger">
+<script setup lang="ts">
 import { computed } from "vue";
 import { ElIcon } from "element-plus";
 import { Expand, Fold } from "@element-plus/icons-vue";
 import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
 
-const ns = useNamespace("collapse-trigger");
+defineOptions({ name: "CollapseTrigger" });
 
+const ns = useNamespace("collapse-trigger");
 const settingsStore = useSettingsStore();
 const isCollapse = computed(() => settingsStore.isCollapse);
 

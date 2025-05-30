@@ -1,14 +1,16 @@
-<script setup lang="ts" name="ElTabsNav">
+<script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { ElTabs, ElTabPane, type TabPaneName, type TabsPaneContext } from "element-plus";
 import { useSettingsStore } from "@/stores";
 import { useTabsNav } from "../useTabsNav";
 import RightMenu from "../components/RightMenu.vue";
-import MenuButton from "../components/MenuDropdown.vue";
+import TabNavButton from "../components/TabNavButton.vue";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 
 import "./index.scss";
+
+defineOptions({ name: "ElTabNav" });
 
 const ns = useNamespace("el-tabs-nav");
 
@@ -87,7 +89,7 @@ const tabRemove = async (fullPath: TabPaneName) => {
         </el-tab-pane>
       </el-tabs>
 
-      <MenuButton />
+      <TabNavButton />
     </div>
 
     <transition name="el-zoom-in-top">

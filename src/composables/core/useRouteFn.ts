@@ -3,26 +3,26 @@ import { isProxy, toRaw } from "vue";
 import { ElNotification } from "element-plus";
 import router from "@/router";
 import { notFoundRouter, rolesRoutes } from "@/router/routesConfig";
+import { translateTitle } from "@/router/helper";
 import { useRouteStore, useUserStore } from "@/stores";
 import { isValidURL, isType, isFunction } from "@/utils";
 import { useCache } from "@/composables";
 import SystemConfig, { HOME_NAME, LAYOUT_NAME, LOGIN_URL } from "@/config";
-import { translateTitle } from "@/router/helper";
 
 type BackendApi = () => RouterConfigRaw[] | Promise<RouterConfigRaw[]>;
 
-// 扫描 views 下的所有组件
-const modules = import.meta.glob("@/views/**/*.vue");
-
-// Iframe 组件
-const FrameView = () => import("@/layout/components/FrameLayout/FrameView.vue");
-const FrameBlank = () => import("@/layout/components/FrameLayout/BlankFrame.vue");
-
-export const useRoutes = () => {
+export const useRouteFn = () => {
   const { cacheDynamicRoutes } = SystemConfig.routerConfig;
   const routeStore = useRouteStore();
   const userStore = useUserStore();
   const { getDynamicRoutes, removeDynamicRoutes, setDynamicRoutes } = useCache();
+
+  // 扫描 views 下的所有组件
+  const modules = import.meta.glob("@/views/**/*.vue");
+
+  // Iframe 组件
+  const FrameView = () => import("@/layout/components/FrameLayout/FrameView.vue");
+  const FrameBlank = () => import("@/layout/components/FrameLayout/BlankFrame.vue");
 
   /**
    * 初始化动态路由
@@ -31,9 +31,22 @@ export const useRoutes = () => {
    * @param api 接口
    */
   const initDynamicRoutes = async (roles?: string[], api?: BackendApi) => {
-    const routeList = getDynamicRoutesFromStorage() || (api ? await getDynamicRoutesFromBackend(api) : rolesRoutes);
+    let routeList = getDynamicRoutesFromStorage();
 
-    if (routeList && routeList.length) return loadDynamicRoutes(routeList, roles || []);
+    if (!routeList) {
+      const isFrontendMode = import.meta.env.VITE_ROUTE_ACCESS_MODE === "frontend";
+      const isBackendMode = import.meta.env.VITE_ROUTE_ACCESS_MODE === "backend";
+      const isBothMode = import.meta.env.VITE_ROUTE_ACCESS_MODE === "both";
+
+      // 前端控制模式
+      if (isFrontendMode) routeList = rolesRoutes;
+      // 后端控制模式
+      else if (isBackendMode) routeList = api ? await getDynamicRoutesFromBackend(api) : [];
+      // 前后端控制模式
+      else if (isBothMode) routeList = [...rolesRoutes, ...(api ? await getDynamicRoutesFromBackend(api) : [])];
+    }
+
+    if (routeList?.length) return loadDynamicRoutes(routeList, roles || []);
 
     ElNotification.warning({
       title: "无权限访问",
@@ -43,7 +56,6 @@ export const useRoutes = () => {
 
     userStore.clearPermission();
     router.replace(LOGIN_URL);
-    return Promise.reject("No permission");
   };
 
   /**
@@ -224,7 +236,7 @@ export const useRoutes = () => {
       if (!r.meta) r.meta = {};
       // 当 rank 不存在时，根据顺序自动创建，首页路由永远在第一位
       if (r.name === HOME_NAME && !r.meta?.rank) r.meta.rank = 0;
-      else if (handRank(r)) r.meta.rank = index + 2;
+      else if (handRank(r)) r.meta.rank = index + 5;
     });
     return routeList.sort((a: { meta: { rank: number } }, b: { meta: { rank: number } }) => {
       return a?.meta.rank - b?.meta.rank;
@@ -233,6 +245,8 @@ export const useRoutes = () => {
 
   /**
    * 过滤不需要的排序的路由
+   *
+   * @param route 路由
    */
   const handRank = (route: RouterConfigRaw) => {
     const { name, path, meta } = route;

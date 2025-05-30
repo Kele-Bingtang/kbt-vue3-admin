@@ -1,4 +1,4 @@
-<script setup lang="ts" name="MenuItem">
+<script setup lang="ts">
 import { ref, watch, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { ElMenuItem, ElSubMenu } from "element-plus";
@@ -8,6 +8,8 @@ import { Tooltip } from "@/components";
 import { useLayoutStore } from "@/stores";
 import SystemConfig from "@/config";
 import { formatTitle } from "@/router/helper";
+
+defineOptions({ name: "AsideMenuItem" });
 
 defineProps<{ menuItem: RouterConfig }>();
 

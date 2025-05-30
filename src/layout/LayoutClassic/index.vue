@@ -1,19 +1,20 @@
-<script setup lang="ts" name="LayoutVertical">
+<script setup lang="ts">
 import { computed } from "vue";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
+import { useRouter } from "vue-router";
+import SystemConfig, { HOME_URL } from "@/config";
+import { useNamespace } from "@/composables";
 import { useSettingsStore } from "@/stores";
+import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
 import Menu from "@/layout/components/Menu/index.vue";
-import SystemConfig, { HOME_URL } from "@/config";
-import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
-import { useNamespace } from "@/composables";
-import { useRouter } from "vue-router";
 
 import "./index.scss";
 
-const ns = useNamespace("classic-layout");
+defineOptions({ name: "LayoutClassic" });
 
+const ns = useNamespace("classic-layout");
 const router = useRouter();
 const settingsStore = useSettingsStore();
 

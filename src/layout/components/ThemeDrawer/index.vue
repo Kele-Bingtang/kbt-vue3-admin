@@ -1,22 +1,24 @@
-<script setup lang="tsx" name="ThemeDrawer">
+<script setup lang="tsx">
 import { ref, watch, defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
+import { useMediaQuery } from "@vueuse/core";
 import { ElButton, ElDivider, ElDrawer, ElIcon, ElMessage } from "element-plus";
 import { Notification, Menu, ColdDrink, Setting, Box, Refresh } from "@element-plus/icons-vue";
 import { useSettingsStore } from "@/stores";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 import { LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
+import { mobileMaxWidthMedia } from "@/config";
 import {
   LayoutSwitch,
   AsideHeaderSwitch,
-  TabsNavSwitch,
+  TabNavSwitch,
   ThemeSelect,
   LayoutSelect,
   BrowserTitleSwitch,
 } from "./components";
-import { useMediaQuery } from "@vueuse/core";
-import { mobileMaxWidthMedia } from "@/config";
+
+defineOptions({ name: "ThemeDrawer" });
 
 const ns = useNamespace("theme-drawer");
 
@@ -133,7 +135,7 @@ const Divider = defineComponent({
       <el-icon><Menu /></el-icon>
       {{ $t("_settings.tabsNavSwitch") }}
     </Divider>
-    <TabsNavSwitch />
+    <TabNavSwitch />
 
     <!-- 全局主题 -->
     <Divider>

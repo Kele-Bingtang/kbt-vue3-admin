@@ -1,9 +1,9 @@
-<script setup lang="ts" name="LayoutMixins">
+<script setup lang="ts">
 import { computed, watch, ref } from "vue";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useSettingsStore, useRouteStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
-import { useMenu, useRoutes } from "@/composables";
+import { useMenu, useRouteFn } from "@/composables";
 import SystemConfig, { HOME_URL } from "@/config";
 import CollapseTrigger from "@/layout/components/Header/components/CollapseTrigger.vue";
 import Menu from "@/layout/components/Menu/index.vue";
@@ -13,14 +13,15 @@ import { useRoute, useRouter } from "vue-router";
 
 import "./index.scss";
 
-const ns = useNamespace("mixins-layout");
+defineOptions({ name: "LayoutMixins" });
 
+const ns = useNamespace("mixins-layout");
 const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
 const routeStore = useRouteStore();
 
-const { findParentRoutesByPath } = useRoutes();
+const { findParentRoutesByPath } = useRouteFn();
 const { menuList } = useMenu();
 
 // 子菜单

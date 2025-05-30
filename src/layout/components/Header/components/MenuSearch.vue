@@ -1,4 +1,4 @@
-<script setup lang="ts" name="MenuSearch">
+<script setup lang="ts">
 import { computed, ref, onUnmounted, nextTick } from "vue";
 import { ElAutocomplete, ElTooltip, ElIcon } from "element-plus";
 import { useRouteStore } from "@/stores";
@@ -8,6 +8,8 @@ import { Search } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 import { formatTitle } from "@/router/helper";
+
+defineOptions({ name: "MenuSearch" });
 
 const ns = useNamespace("menu-search");
 

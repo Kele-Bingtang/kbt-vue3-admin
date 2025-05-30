@@ -1,8 +1,9 @@
-<script setup lang="ts" name="HeaderRight">
+<script setup lang="ts">
 import { computed } from "vue";
-import SystemConfig, { mobileMaxWidthMedia } from "@/config";
+import { useMediaQuery } from "@vueuse/core";
 import { useErrorLogStore } from "@/stores";
 import { useNamespace } from "@/composables";
+import SystemConfig, { mobileMaxWidthMedia } from "@/config";
 import Fullscreen from "./components/Fullscreen.vue";
 import LanguageSelect from "./components/LanguageSelect.vue";
 import LayoutSizeSelect from "./components/LayoutSizeSelect.vue";
@@ -11,10 +12,10 @@ import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
 import GlobalSearchInput from "./components/global-search/index.vue";
 import GlobalSearch from "./components/global-search/Search.vue";
-import { useMediaQuery } from "@vueuse/core";
+
+defineOptions({ name: "HeaderRight" });
 
 const ns = useNamespace("header-right");
-
 const errorLogStore = useErrorLogStore();
 
 const errorCount = computed(() => {
