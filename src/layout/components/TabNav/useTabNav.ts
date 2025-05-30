@@ -20,7 +20,7 @@ export interface ContextMenuCondition {
   all: boolean;
 }
 
-export const useTabsNav = () => {
+export const useTabNav = () => {
   const route = useRoute();
   const router = useRouter();
   const layoutStore = useLayoutStore();

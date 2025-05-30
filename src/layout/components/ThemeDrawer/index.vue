@@ -2,21 +2,14 @@
 import { ref, watch, defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMediaQuery } from "@vueuse/core";
-import { ElButton, ElDivider, ElDrawer, ElIcon, ElMessage } from "element-plus";
+import { ElButton, ElDivider, ElDrawer, ElMessage } from "element-plus";
 import { Notification, Menu, ColdDrink, Setting, Box, Refresh } from "@element-plus/icons-vue";
 import { useSettingsStore } from "@/stores";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 import { LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
 import { mobileMaxWidthMedia } from "@/config";
-import {
-  LayoutSwitch,
-  AsideHeaderSwitch,
-  TabNavSwitch,
-  ThemeSelect,
-  LayoutSelect,
-  BrowserTitleSwitch,
-} from "./components";
+import { LayoutSwitch, AsideHeaderSwitch, ThemeSelect, LayoutSelect, BrowserTitleSwitch } from "./components";
 
 defineOptions({ name: "ThemeDrawer" });
 
@@ -82,7 +75,7 @@ const Divider = defineComponent({
   <el-drawer v-model="drawerVisible" title="布局设置" size="300px" :class="ns.b()">
     <!-- 布局切换 -->
     <Divider>
-      <ElIcon><Notification /></ElIcon>
+      <Icon class="icon"><Notification /></Icon>
       {{ $t("_settings.layoutSwitch") }}
     </Divider>
     <template v-if="!isMobile">
@@ -91,7 +84,7 @@ const Divider = defineComponent({
       <template v-if="[LayoutModeEnum.Subsystem].includes(settingsStore.layoutMode)">
         <!-- 菜单主题切换 -->
         <Divider>
-          <el-icon><Menu /></el-icon>
+          <Icon class="icon"><Menu /></Icon>
           {{ $t("_settings.menuSwitch") }}
         </Divider>
         <AsideHeaderSwitch useAside />
@@ -100,7 +93,7 @@ const Divider = defineComponent({
       <template v-if="[LayoutModeEnum.Transverse, LayoutModeEnum.Mixins].includes(settingsStore.layoutMode)">
         <!-- 头部主题切换 -->
         <Divider>
-          <el-icon><Menu /></el-icon>
+          <Icon class="icon"><Menu /></Icon>
           {{ $t("_settings.headerSwitch") }}
         </Divider>
         <AsideHeaderSwitch useHeader />
@@ -115,14 +108,14 @@ const Divider = defineComponent({
         <AsideHeaderSwitch useAll>
           <template #aside>
             <Divider>
-              <el-icon><Menu /></el-icon>
+              <Icon class="icon"><Menu /></Icon>
               {{ $t("_settings.menuSwitch") }}
             </Divider>
           </template>
 
           <template #header>
             <Divider>
-              <el-icon><Menu /></el-icon>
+              <Icon class="icon"><Menu /></Icon>
               {{ $t("_settings.headerSwitch") }}
             </Divider>
           </template>
@@ -130,30 +123,23 @@ const Divider = defineComponent({
       </template>
     </template>
 
-    <!-- 标签页切换 -->
-    <Divider>
-      <el-icon><Menu /></el-icon>
-      {{ $t("_settings.tabsNavSwitch") }}
-    </Divider>
-    <TabNavSwitch />
-
     <!-- 全局主题 -->
     <Divider>
-      <el-icon><ColdDrink /></el-icon>
+      <Icon class="icon"><ColdDrink /></Icon>
       {{ $t("_settings.globalTheme") }}
     </Divider>
     <ThemeSelect />
 
     <!-- 界面设置 -->
     <Divider>
-      <el-icon><Setting /></el-icon>
+      <Icon class="icon"><Setting /></Icon>
       {{ $t("_settings.interfaceSettings") }}
     </Divider>
     <LayoutSelect />
 
     <!-- 标题设置 -->
     <Divider>
-      <el-icon><Box /></el-icon>
+      <Icon class="icon"><Box /></Icon>
       {{ $t("_settings.titleSwitch") }}
     </Divider>
     <BrowserTitleSwitch />
@@ -173,7 +159,7 @@ const Divider = defineComponent({
   @include e(divider) {
     margin-top: 15px;
 
-    .#{$el-namespace}-icon {
+    .icon {
       position: relative;
       top: 2px;
       right: 5px;

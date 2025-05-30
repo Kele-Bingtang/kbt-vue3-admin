@@ -1,7 +1,6 @@
 <script setup lang="ts">
-import { ElIcon } from "element-plus";
 import type { TabProp } from "@/stores";
-import { useTabsNav, type ContextMenuCondition } from "../useTabsNav";
+import { useTabNav, type ContextMenuCondition } from "../useTabNav";
 import { Refresh, Close, ArrowLeft, ArrowRight, SemiSelect, FolderDelete } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 
@@ -9,8 +8,7 @@ defineOptions({ name: "RightMenu" });
 
 const ns = useNamespace("right-menu");
 
-const { refreshSelectedTab, closeCurrentTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } =
-  useTabsNav();
+const { refreshSelectedTab, closeCurrentTab, closeLeftTab, closeRightTab, closeOthersTabs, closeAllTabs } = useTabNav();
 
 interface RightMenuProps {
   selectedTab: TabProp;
@@ -31,28 +29,28 @@ withDefaults(defineProps<RightMenuProps>(), {
 <template>
   <ul v-show="visible" :style="{ left: `${left}px`, top: `${top}px` }" :class="ns.b()">
     <li v-if="condition.refresh" @click="refreshSelectedTab(selectedTab)">
-      <el-icon><Refresh /></el-icon>
-      {{ $t("_tabsNav.refresh") }}
+      <Icon class="right-menu-icon"><Refresh /></Icon>
+      {{ $t("_tabNav.refresh") }}
     </li>
     <li v-if="condition.current" @click="closeCurrentTab(selectedTab)">
-      <el-icon><Close /></el-icon>
-      {{ $t("_tabsNav.closeCurrent") }}
+      <Icon class="right-menu-icon"><Close /></Icon>
+      {{ $t("_tabNav.closeCurrent") }}
     </li>
     <li v-if="condition.left" @click="closeLeftTab(selectedTab)">
-      <el-icon><ArrowLeft /></el-icon>
-      {{ $t("_tabsNav.closeLeft") }}
+      <Icon class="right-menu-icon"><ArrowLeft /></Icon>
+      {{ $t("_tabNav.closeLeft") }}
     </li>
     <li v-if="condition.right" @click="closeRightTab(selectedTab)">
-      <el-icon><ArrowRight /></el-icon>
-      {{ $t("_tabsNav.closeRight") }}
+      <Icon class="right-menu-icon"><ArrowRight /></Icon>
+      {{ $t("_tabNav.closeRight") }}
     </li>
     <li v-if="condition.other" @click="closeOthersTabs(selectedTab)">
-      <el-icon><SemiSelect /></el-icon>
-      {{ $t("_tabsNav.closeOthers") }}
+      <Icon class="right-menu-icon"><SemiSelect /></Icon>
+      {{ $t("_tabNav.closeOthers") }}
     </li>
     <li v-if="condition.all" @click="closeAllTabs()">
-      <el-icon><FolderDelete /></el-icon>
-      {{ $t("_tabsNav.closeAll") }}
+      <Icon class="right-menu-icon"><FolderDelete /></Icon>
+      {{ $t("_tabNav.closeAll") }}
     </li>
   </ul>
 </template>
@@ -86,7 +84,7 @@ withDefaults(defineProps<RightMenuProps>(), {
       color: cssVar(main-color);
     }
 
-    .#{$el-namespace}-icon {
+    .right-menu-icon {
       margin-right: 8px;
     }
   }

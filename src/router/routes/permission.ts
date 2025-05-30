@@ -1,4 +1,4 @@
-import { StarFilled } from "@element-plus/icons-vue";
+import { StarFilled, Lock } from "@element-plus/icons-vue";
 
 const permissionRoutes = {
   path: "/permission",
@@ -6,7 +6,7 @@ const permissionRoutes = {
   name: "Permission",
   meta: {
     title: "权限",
-    icon: "SVG-lock",
+    icon: Lock,
     roles: ["admin", "visitor"],
     alwaysShowRoot: true,
   },

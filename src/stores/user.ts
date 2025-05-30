@@ -22,6 +22,7 @@ export const useUserStore = defineStore(
       registerTime: "2022-10-01 19:07:27",
     });
     const roles = ref<string[]>([]);
+    const searchHistory = ref<RouterConfig[]>([]);
 
     const login = async (loginParams: LoginParams) => {
       // 模拟调用登录接口拿到 token
@@ -107,11 +108,14 @@ export const useUserStore = defineStore(
 
     const setRoles = (rolesParam: string[]) => (roles.value = rolesParam);
 
+    const setSearchHistory = (searchHistoryParam: RouterConfig[]) => (searchHistory.value = searchHistoryParam);
+
     return {
       accessToken,
       refreshToken,
       userInfo,
       roles,
+      searchHistory,
 
       login,
       logout,
@@ -121,11 +125,12 @@ export const useUserStore = defineStore(
       setUserInfo,
       setToken,
       setRoles,
+      setSearchHistory,
     };
   },
   {
     persist: {
-      pick: ["accessToken", "refreshToken"],
+      pick: ["accessToken", "refreshToken", "searchHistory"],
     },
   }
 );

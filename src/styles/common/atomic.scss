@@ -18,9 +18,9 @@
 
 .flx-column-center {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  flex-direction: column;
 }
 
 .flx-align-center {
@@ -85,9 +85,9 @@
   display: -webkit-box;
   overflow: hidden;
   text-overflow: ellipsis;
-  -webkit-box-orient: vertical;
-  line-clamp: 2;
   -webkit-line-clamp: 2;
+  line-clamp: 2;
+  -webkit-box-orient: vertical;
 }
 
 .text-center {
@@ -100,8 +100,8 @@
 
 .clearfix {
   &::after {
-    display: table;
     clear: both;
+    display: table;
     content: "";
   }
 }

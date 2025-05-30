@@ -10,8 +10,8 @@ import LayoutSizeSelect from "./components/LayoutSizeSelect.vue";
 import Message from "./components/Message.vue";
 import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
-import GlobalSearchInput from "./components/global-search/index.vue";
-import GlobalSearch from "./components/global-search/Search.vue";
+import GlobalSearchInput from "./components/global-search/input.vue";
+import GlobalSearch from "./components/global-search/index.vue";
 
 defineOptions({ name: "HeaderRight" });
 
@@ -31,6 +31,7 @@ const isMobile = useMediaQuery(mobileMaxWidthMedia);
 <template>
   <div :class="[ns.b(), 'flx-center']">
     <GlobalSearch />
+
     <div :class="[ns.e('btn'), 'flx-align-center']" :style="{ '--icon-size': ns.cssVar('layout-header-icon-size') }">
       <GlobalSearchInput id="menuSearch" />
       <!-- <MenuSearch id="menuSearch" /> -->

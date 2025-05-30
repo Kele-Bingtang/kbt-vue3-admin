@@ -6,7 +6,7 @@ defineOptions({ name: "SimpleTabNav" });
 
 const settingsStore = useSettingsStore();
 
-const type = computed(() => settingsStore.tabsNavMode as "simple" | "classic");
+const type = computed(() => settingsStore.tabNavMode as "simple" | "classic");
 </script>
 
 <template>

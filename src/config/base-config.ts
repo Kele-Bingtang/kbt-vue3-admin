@@ -1,4 +1,4 @@
-import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
+import { LayoutModeEnum, MenuThemeEnum, TabNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
 import type { SystemInfo, LayoutConfig, SystemConfig, ThemeConfig, RouterConfig, KeyConfig } from "./types";
 
 const systemInfo: SystemInfo = {
@@ -9,7 +9,7 @@ const themeConfig: ThemeConfig = {
   primaryColor: "#395AE3",
   titleMode: TitleModeEnum.ProjectPage,
   layoutMode: LayoutModeEnum.Vertical,
-  tabsNavMode: TabsNavModeEnum.Simple,
+  tabNavMode: TabNavModeEnum.Simple,
   menuTheme: MenuThemeEnum.Light,
   showSettings: true,
   showBreadcrumb: true,

@@ -2,7 +2,7 @@
 import { ref, onMounted, watch } from "vue";
 import { ElTabs, ElTabPane, type TabPaneName, type TabsPaneContext } from "element-plus";
 import { useSettingsStore } from "@/stores";
-import { useTabsNav } from "../useTabsNav";
+import { useTabNav } from "../useTabNav";
 import RightMenu from "../components/RightMenu.vue";
 import TabNavButton from "../components/TabNavButton.vue";
 import { useNamespace } from "@/composables";
@@ -31,7 +31,7 @@ const {
   resolveFullPath,
   closeCurrentTab,
   openRightMenu,
-} = useTabsNav();
+} = useTabNav();
 
 const tabsNavValue = ref(resolveFullPath(route));
 const tabsNavRef = ref<HTMLElement>(); // 根标签

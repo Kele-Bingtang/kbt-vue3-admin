@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed } from "vue";
 import { useI18n } from "vue-i18n";
-import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox, ElIcon } from "element-plus";
+import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox } from "element-plus";
 import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
 import { useSettingsStore, useUserStore } from "@/stores";
 import { mittBus } from "@/utils";
@@ -78,7 +78,7 @@ const logout = async () => {
         <span :class="ns.em('avatar', 'username')">{{ user.username }}</span>
       </template>
 
-      <el-icon><ArrowDownBold /></el-icon>
+      <Icon size="1em"><ArrowDownBold /></Icon>
     </div>
 
     <template #dropdown>

@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { useStorage, useCache } from "@/composables";
-import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum } from "@/enums/appEnum";
+import { LayoutModeEnum, MenuThemeEnum, TabNavModeEnum } from "@/enums/appEnum";
 import SystemConfig from "@/config";
 
 export const useSettingsStore = defineStore(
@@ -12,7 +12,7 @@ export const useSettingsStore = defineStore(
     const primaryColor = ref(themeConfig.primaryColor);
     const titleMode = ref(themeConfig.titleMode);
     const layoutMode = ref(themeConfig.layoutMode || LayoutModeEnum.Classic);
-    const tabsNavMode = ref(themeConfig.tabsNavMode || TabsNavModeEnum.Popular);
+    const tabNavMode = ref(themeConfig.tabNavMode || TabNavModeEnum.Simple);
     const menuTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
     const showSettings = ref(themeConfig.showSettings);
     const showTabNav = ref(themeConfig.showTabNav);
@@ -51,7 +51,7 @@ export const useSettingsStore = defineStore(
       primaryColor,
       titleMode,
       layoutMode,
-      tabsNavMode,
+      tabNavMode,
       menuTheme,
       showSettings,
       showTabNav,

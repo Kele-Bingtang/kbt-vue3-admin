@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ElIcon } from "element-plus";
 import { Close } from "@element-plus/icons-vue";
 import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
@@ -17,7 +16,7 @@ const exitMaximize = () => {
 
 <template>
   <div :class="ns.b()" @click="exitMaximize">
-    <el-icon><Close /></el-icon>
+    <Icon class="close-icon"><Close /></Icon>
   </div>
 </template>
 
@@ -41,7 +40,7 @@ const exitMaximize = () => {
     background-color: cssVar(gray-700);
   }
 
-  .#{$el-namespace}-icon {
+  .close-icon {
     position: relative;
     top: 68%;
     left: 32%;

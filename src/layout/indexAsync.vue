@@ -16,6 +16,7 @@ import { defineAsyncComponent, computed, watchEffect } from "vue";
 import { useSettingsStore } from "@/stores";
 import { useBrowserTitle } from "@/composables";
 import { addUnit, setStyleVar } from "@/utils";
+import { LayoutModeEnum } from "@/enums/appEnum";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
 
@@ -24,12 +25,12 @@ import "./base-layout.scss";
 defineOptions({ name: "Layout" });
 
 const LayoutComponents: Record<string, Component> = {
-  vertical: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),
-  classic: defineAsyncComponent(() => import("./LayoutClassic/index.vue")),
-  transverse: defineAsyncComponent(() => import("./LayoutTransverse/index.vue")),
-  columns: defineAsyncComponent(() => import("./LayoutColumns/index.vue")),
-  mixins: defineAsyncComponent(() => import("./LayoutMixins/index.vue")),
-  subsystem: defineAsyncComponent(() => import("./LayoutSubsystem/index.vue")),
+  [LayoutModeEnum.Vertical]: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),
+  [LayoutModeEnum.Classic]: defineAsyncComponent(() => import("./LayoutClassic/index.vue")),
+  [LayoutModeEnum.Transverse]: defineAsyncComponent(() => import("./LayoutTransverse/index.vue")),
+  [LayoutModeEnum.Columns]: defineAsyncComponent(() => import("./LayoutColumns/index.vue")),
+  [LayoutModeEnum.Mixins]: defineAsyncComponent(() => import("./LayoutMixins/index.vue")),
+  [LayoutModeEnum.Subsystem]: defineAsyncComponent(() => import("./LayoutSubsystem/index.vue")),
 };
 
 const settingsStore = useSettingsStore();

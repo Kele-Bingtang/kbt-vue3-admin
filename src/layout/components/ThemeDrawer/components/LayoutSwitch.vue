@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ElIcon } from "element-plus";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { LayoutModeEnum } from "@/enums/appEnum";
 import { useNamespace } from "@/composables";
@@ -34,7 +33,7 @@ const changeLayout = (value: LayoutModeEnum) => {
           <div class="light"></div>
           <div class="content"></div>
         </div>
-        <el-icon v-if="settingsStore.layoutMode == LayoutModeEnum.Vertical"><CircleCheckFilled /></el-icon>
+        <Icon class="icon" v-if="settingsStore.layoutMode == LayoutModeEnum.Vertical"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
@@ -52,7 +51,7 @@ const changeLayout = (value: LayoutModeEnum) => {
           <div class="light"></div>
           <div class="content"></div>
         </div>
-        <el-icon v-if="settingsStore.layoutMode == LayoutModeEnum.Classic"><CircleCheckFilled /></el-icon>
+        <Icon class="icon" v-if="settingsStore.layoutMode == LayoutModeEnum.Classic"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
@@ -67,7 +66,7 @@ const changeLayout = (value: LayoutModeEnum) => {
       >
         <div class="dark"></div>
         <div class="content"></div>
-        <el-icon v-if="settingsStore.layoutMode == LayoutModeEnum.Transverse"><CircleCheckFilled /></el-icon>
+        <Icon class="icon" v-if="settingsStore.layoutMode == LayoutModeEnum.Transverse"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
@@ -83,7 +82,7 @@ const changeLayout = (value: LayoutModeEnum) => {
         <div class="dark"></div>
         <div class="light"></div>
         <div class="content"></div>
-        <el-icon v-if="settingsStore.layoutMode === LayoutModeEnum.Columns"><CircleCheckFilled /></el-icon>
+        <Icon class="icon" v-if="settingsStore.layoutMode === LayoutModeEnum.Columns"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
@@ -97,7 +96,7 @@ const changeLayout = (value: LayoutModeEnum) => {
           <div class="dark"></div>
           <div class="content"></div>
         </div>
-        <el-icon v-if="settingsStore.layoutMode == LayoutModeEnum.Mixins"><CircleCheckFilled /></el-icon>
+        <Icon class="icon" v-if="settingsStore.layoutMode == LayoutModeEnum.Mixins"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
@@ -112,7 +111,7 @@ const changeLayout = (value: LayoutModeEnum) => {
       >
         <div class="dark"></div>
         <div class="content"></div>
-        <el-icon v-if="settingsStore.layoutMode === LayoutModeEnum.Subsystem"><CircleCheckFilled /></el-icon>
+        <Icon class="icon" v-if="settingsStore.layoutMode === LayoutModeEnum.Subsystem"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
   </div>
@@ -160,7 +159,7 @@ const changeLayout = (value: LayoutModeEnum) => {
       border-radius: 3px;
     }
 
-    .#{$el-namespace}-icon {
+    .icon {
       position: absolute;
       right: 10px;
       bottom: 10px;

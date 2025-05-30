@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, onMounted } from "vue";
 import { ElPopover, ElTabs, ElTabPane, ElScrollbar, ElButton, ElBadge, ElTag } from "element-plus";
+import { Bell } from "@element-plus/icons-vue";
 import { useMessageStore } from "@/stores";
 import SystemConfig from "@/config";
 import { Tooltip } from "@/components";
@@ -143,7 +144,7 @@ onMounted(() => {
       <template #reference>
         <div class="flx-center" style="width: 100%; height: 100%">
           <el-badge :value="messageLength">
-            <Icon icon="bell" />
+            <Icon :icon="Bell" />
           </el-badge>
         </div>
       </template>

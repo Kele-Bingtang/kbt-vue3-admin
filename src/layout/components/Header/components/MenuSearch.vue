@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref, onUnmounted, nextTick } from "vue";
-import { ElAutocomplete, ElTooltip, ElIcon } from "element-plus";
+import { ElAutocomplete, ElTooltip } from "element-plus";
 import { useRouteStore } from "@/stores";
 import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils";
@@ -134,13 +134,13 @@ onUnmounted(() => {
     >
       <template #prefix>
         <el-tooltip effect="dark" content="切换查询模式" placement="left" :show-after="100">
-          <el-icon :class="ns.e('icon')" @click.stop="handleSwitchMode"><Search /></el-icon>
+          <Icon :class="ns.e('icon')" @click.stop="handleSwitchMode"><Search /></Icon>
         </el-tooltip>
       </template>
 
       <template #default="{ item }">
         <template v-if="!isFunction(item.meta.title)">
-          <Icon :icon="item.meta.icon" />
+          <Icon class="icon" :icon="item.meta.icon" />
           <span>{{ nestMode ? item.title.join(" > ") : item.meta.title }}</span>
         </template>
       </template>
@@ -184,7 +184,7 @@ onUnmounted(() => {
 }
 
 .#{$el-namespace}-autocomplete__popper {
-  .#{$el-namespace}-icon {
+  .icon {
     position: relative;
     top: 2px;
     font-size: 16px;

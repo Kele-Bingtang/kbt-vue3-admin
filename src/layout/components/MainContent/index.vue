@@ -4,9 +4,10 @@ import { ElMain } from "element-plus";
 import { RefreshKey } from "@/config/symbols";
 import { getUrlParams, mittBus } from "@/utils";
 import { useLayoutStore, useSettingsStore } from "@/stores";
-import SimpleTabNav from "@/layout/components/TabsNav/SimpleTabNav/index.vue";
-import ClassicTabNav from "@/layout/components/TabsNav/ClassicTabNav/index.vue";
-import ElTabNav from "@/layout/components/TabsNav/ElTabNav/index.vue";
+import { TabNavModeEnum } from "@/enums/appEnum";
+import SimpleTabNav from "@/layout/components/TabNav/SimpleTabNav/index.vue";
+import ClassicTabNav from "@/layout/components/TabNav/ClassicTabNav/index.vue";
+import ElTabNav from "@/layout/components/TabNav/ElTabNav/index.vue";
 import CustomTransition from "./components/CustomTransition.vue";
 import Maximize from "./components/Maximize.vue";
 import FrameLayout from "../FrameLayout/index.vue";
@@ -16,13 +17,13 @@ defineOptions({ name: "MainContent" });
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 
-const tabsNavMode = computed(() => settingsStore.tabsNavMode);
+const tabNavMode = computed(() => settingsStore.tabNavMode);
 const showTabNav = computed(() => settingsStore.showTabNav);
 
-const TabsNavComponents: Record<string, Component> = {
-  simple: SimpleTabNav,
-  classic: ClassicTabNav,
-  popular: ElTabNav,
+const TabNavComponents: Record<string, Component> = {
+  [TabNavModeEnum.Simple]: SimpleTabNav,
+  [TabNavModeEnum.Classic]: ClassicTabNav,
+  [TabNavModeEnum.Element]: ElTabNav,
 };
 
 // 刷新当前页面
@@ -61,7 +62,8 @@ const isFixTabNav = computed(() => {
 <template>
   <Maximize v-if="settingsStore.maximize" />
   <el-main class="flx-column">
-    <component :is="TabsNavComponents[tabsNavMode]" v-if="showTabNav" />
+    <component :is="TabNavComponents[tabNavMode]" v-if="showTabNav" />
+
     <router-view v-slot="{ Component, route }">
       <CustomTransition name="fade-transform">
         <keep-alive :include="layoutStore.keepAliveName">

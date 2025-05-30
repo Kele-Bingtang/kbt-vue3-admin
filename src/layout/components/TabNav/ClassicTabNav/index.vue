@@ -1,11 +1,11 @@
 <script setup lang="ts">
 import { ref, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
-import { ElButton, ElIcon } from "element-plus";
+import { ElButton } from "element-plus";
 import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
 import { useLayoutStore, useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
-import { useTabsNav } from "../useTabsNav";
+import { useTabNav } from "../useTabNav";
 import TabNavButton from "../components/TabNavButton.vue";
 import RightMenu from "../components/RightMenu.vue";
 
@@ -42,7 +42,7 @@ const {
   addOneTab,
   openRightMenu,
   closeCurrentTab,
-} = useTabsNav();
+} = useTabNav();
 
 onMounted(() => {
   tabsDrop(`.${ns.e("scroll-body")}`, `.${ns.e("tab")}`);
@@ -70,7 +70,7 @@ const findTargetTab = async () => {
   }
 };
 
-// 移动到目标 tab，如果目标 tab 在 TabsNav 可视区域外面，则有滚动的动画效果
+// 移动到目标 tab，如果目标 tab 在 TabNav 可视区域外面，则有滚动的动画效果
 const moveToTargetTab = (tabElement: HTMLElement) => {
   const outerWidth = scrollContainerDom.value?.offsetWidth || 0;
   const bodyWidth = scrollBodyDom.value?.offsetWidth || 0;
@@ -142,7 +142,7 @@ watch(
   <div :class="[ns.b(), 'flx-align-center', ns.is(type)]" ref="tabsNavRef">
     <div v-show="hasScroll" :class="[ns.e('btn'), ns.is('left')]">
       <el-button plain @click="handleScroll(240)">
-        <el-icon><ArrowLeft /></el-icon>
+        <Icon><ArrowLeft /></Icon>
       </el-button>
     </div>
 
@@ -169,16 +169,16 @@ watch(
             :class="ns.em('tab', 'icon')"
           />
           <span>{{ tab.title }}</span>
-          <el-icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
+          <Icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
             <Close />
-          </el-icon>
+          </Icon>
         </router-link>
       </div>
     </div>
 
     <div v-show="hasScroll" :class="[ns.e('btn'), ns.is('right')]">
       <el-button plain @click="handleScroll(-240)">
-        <el-icon><ArrowRight /></el-icon>
+        <Icon><ArrowRight /></Icon>
       </el-button>
     </div>
 

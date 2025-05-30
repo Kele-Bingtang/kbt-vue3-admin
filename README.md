@@ -131,13 +131,13 @@ Kbt-Vue3-Admin
 
 ### 布局
 
-Admin 的布局组件有顶栏、面包屑、侧边菜单栏、标签栏、内容区，位于 `src/layout` 下，分别位为 components 目录的 Header、Menu、TabsNav、MainContent 下。
+Admin 的布局组件有顶栏、面包屑、侧边菜单栏、标签栏、内容区，位于 `src/layout` 下，分别位为 components 目录的 Header、Menu、TabNav、MainContent 下。
 
 内容区（MainContent）根据路由进行组件的跳转，可视化页面的组件在 `src/views` 下。
 
-布局支持 6 种形式，所以使用了 `<compoment is=""></component>` 内置组件来动态切换，具体请看 `src/layout/index.vue` 内容。
+布局支持 6 种形式，所以使用了 `<component is=""></component>` 内置组件来动态切换，具体请看 `src/layout/index.vue` 内容。
 
-标签栏支持两种形式，一种是保留了 Vue2 Admin 的经典版，另一种是使用了 Element Plus 提供的 `el-tabs` 组件。也采用了 components 内置组件来动态切换，具体请看 `layout/components/TabsNav` 内容。
+标签栏支持两种形式，一种是保留了 Vue2 Admin 的经典版，另一种是使用了 Element Plus 提供的 `el-tabs` 组件。也采用了 components 内置组件来动态切换，具体请看 `layout/components/TabNav` 内容。
 
 关于 Vue3 Admin 为什么保留标签栏的 Vue2 Admin 经典版，我引用最近很火的一个梗：
 

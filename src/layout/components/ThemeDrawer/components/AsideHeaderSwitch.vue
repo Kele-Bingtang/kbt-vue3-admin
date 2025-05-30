@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import { ElIcon } from "element-plus";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { MenuThemeEnum } from "@/enums/appEnum";
 import { useNamespace } from "@/composables";
@@ -39,7 +38,7 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="ns.e('item')" @click="handleAsideTheme(MenuThemeEnum.Light)">
             <img src="@/assets/icons/menu-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.menuTheme === MenuThemeEnum.Light"><CircleCheckFilled /></el-icon>
+            <Icon class="icon" v-if="settingsStore.menuTheme === MenuThemeEnum.Light"><CircleCheckFilled /></Icon>
           </div>
         </div>
       </el-tooltip>
@@ -48,7 +47,7 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="ns.e('item')" @click="handleAsideTheme(MenuThemeEnum.Dark)">
             <img src="@/assets/icons/menu-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.menuTheme === MenuThemeEnum.Dark"><CircleCheckFilled /></el-icon>
+            <Icon class="icon" v-if="settingsStore.menuTheme === MenuThemeEnum.Dark"><CircleCheckFilled /></Icon>
           </div>
         </div>
       </el-tooltip>
@@ -61,7 +60,7 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="ns.e('item')" @click="handleHeaderTheme(MenuThemeEnum.Light)">
             <img src="@/assets/icons/header-light.svg" alt="亮色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.headerTheme === MenuThemeEnum.Light"><CircleCheckFilled /></el-icon>
+            <Icon class="icon" v-if="settingsStore.headerTheme === MenuThemeEnum.Light"><CircleCheckFilled /></Icon>
           </div>
         </div>
       </el-tooltip>
@@ -69,7 +68,7 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
         <div :class="{ 'is-dark': settingsStore.isDark }">
           <div :class="ns.e('item')" @click="handleHeaderTheme(MenuThemeEnum.Dark)">
             <img src="@/assets/icons/header-dark.svg" alt="暗色主题" style="width: 95px; height: 67px" />
-            <el-icon v-if="settingsStore.headerTheme === MenuThemeEnum.Dark"><CircleCheckFilled /></el-icon>
+            <Icon class="icon" v-if="settingsStore.headerTheme === MenuThemeEnum.Dark"><CircleCheckFilled /></Icon>
           </div>
         </div>
       </el-tooltip>
@@ -102,7 +101,7 @@ const handleHeaderTheme = (value: MenuThemeEnum) => {
     cursor: pointer;
     border-radius: 2px;
 
-    .#{$el-namespace}-icon {
+    .icon {
       position: absolute;
       right: 15px;
       bottom: 15px;

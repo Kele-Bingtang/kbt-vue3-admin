@@ -9,10 +9,10 @@ export enum LayoutModeEnum {
   Mixins = "mixins",
 }
 
-export enum TabsNavModeEnum {
+export enum TabNavModeEnum {
   Simple = "simple",
   Classic = "classic",
-  Popular = "popular",
+  Element = "el",
 }
 
 export enum SystemThemeEnum {

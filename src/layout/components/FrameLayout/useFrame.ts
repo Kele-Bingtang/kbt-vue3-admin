@@ -1,5 +1,5 @@
 import { useLayoutStore } from "@/stores";
-import { useTabsNav } from "../TabsNav/useTabsNav";
+import { useTabNav } from "../TabNav/useTabNav";
 import { unref } from "vue";
 import { useRoute, useRouter } from "vue-router";
 
@@ -14,7 +14,7 @@ export interface Frame {
 
 export const useFrame = () => {
   const layoutStore = useLayoutStore();
-  const { closeSelectedTab } = useTabsNav();
+  const { closeSelectedTab } = useTabNav();
   const route = useRoute();
   const router = useRouter();
 

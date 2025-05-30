@@ -11,6 +11,7 @@ import { useBrowserTitle } from "@/composables";
 import { useNamespace } from "@/composables";
 import { addUnit, setStyleVar } from "@/utils";
 import { WebSocketKey } from "@/config/symbols";
+import { LayoutModeEnum } from "@/enums/appEnum";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import LayoutVertical from "./LayoutVertical/index.vue";
 import LayoutClassic from "./LayoutClassic/index.vue";
@@ -24,12 +25,12 @@ import "./base-layout.scss";
 defineOptions({ name: "Layout" });
 
 const LayoutComponents: Record<string, Component> = {
-  vertical: LayoutVertical,
-  classic: LayoutClassic,
-  transverse: LayoutTransverse,
-  columns: LayoutColumns,
-  mixins: LayoutMixins,
-  subsystem: LayoutSubsystem,
+  [LayoutModeEnum.Vertical]: LayoutVertical,
+  [LayoutModeEnum.Classic]: LayoutClassic,
+  [LayoutModeEnum.Transverse]: LayoutTransverse,
+  [LayoutModeEnum.Columns]: LayoutColumns,
+  [LayoutModeEnum.Mixins]: LayoutMixins,
+  [LayoutModeEnum.Subsystem]: LayoutSubsystem,
 };
 
 const ns = useNamespace("layout");

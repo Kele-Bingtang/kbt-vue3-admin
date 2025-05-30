@@ -115,7 +115,7 @@ export default {
     Notes: "我的博客",
     Document: "使用文档",
   },
-  _tabsNav: {
+  _tabNav: {
     refresh: "刷新当前标签页",
     closeCurrent: "关闭当前标签页",
     closeLeft: "关闭左侧标签页",
@@ -126,6 +126,7 @@ export default {
     maximize: "内容区域最大化",
   },
   _headerBar: {
+    search: "搜索",
     changeLanguage: "修改语言成功！",
     changeSize: "修改全局 Size 成功！",
     profile: "我的主页",
@@ -155,6 +156,12 @@ export default {
     recordTabNav: "持久化标签页",
     fixTabNav: "固定标签页",
     showLayoutLogo: "显示侧边菜单 Logo",
+    tabNavMode: "标签页风格",
+    tabNavModeSelect: {
+      simple: "简洁",
+      classic: "经典",
+      element: "元素",
+    },
     headerHeight: "顶部高度",
     menuWidth: "菜单宽度",
     titleModeProjectPage: "项目 Title + 页面 Title",
@@ -165,5 +172,12 @@ export default {
     changeTheme: "正在修改主题色",
     resetSettingsTitle: "重置配置",
     resetSettings: "正在清除设置缓存并刷新，请稍候...",
+  },
+  _search: {
+    placeholder: "搜索页面",
+    historyTitle: "搜索历史",
+    switchKeydown: "切换",
+    selectKeydown: "选择",
+    closeKeyDown: "关闭",
   },
 };

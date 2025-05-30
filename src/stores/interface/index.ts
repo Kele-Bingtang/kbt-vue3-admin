@@ -1,6 +1,6 @@
 import type { Component, ComponentPublicInstance } from "vue";
 import type { IconifyIcon } from "@iconify/vue";
-import { LayoutModeEnum, MenuThemeEnum, TabsNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
+import { LayoutModeEnum, MenuThemeEnum, TabNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
 
 // LayoutState
 export interface TabProp {
@@ -33,7 +33,7 @@ export interface SettingsState {
   theme: string; // Element UI 主题色
   titleMode: TitleModeEnum; // 标题在浏览器标签上的多种模式。0：title + 页面 title，1：用户名 + 页面 title，2：title，3：页面 title
   layoutMode: LayoutModeEnum; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
-  tabsNavMode: TabsNavModeEnum; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
+  tabNavMode: TabNavModeEnum; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
   menuTheme: MenuThemeEnum; // 侧边菜单栏主题色
   isCollapse: boolean; // 侧边菜单
   showSettings: boolean; // 是否显示 settings 配置

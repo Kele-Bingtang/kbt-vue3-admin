@@ -1,6 +1,5 @@
 <script setup lang="ts">
 import { computed } from "vue";
-import { ElIcon } from "element-plus";
 import { Expand, Fold } from "@element-plus/icons-vue";
 import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
@@ -17,9 +16,9 @@ const toggleTrigger = () => {
 </script>
 
 <template>
-  <el-icon :class="ns.b()" @click.stop="toggleTrigger">
+  <Icon :class="ns.b()" @click.stop="toggleTrigger">
     <component :is="isCollapse ? Expand : Fold"></component>
-  </el-icon>
+  </Icon>
 </template>
 
 <style lang="scss" scoped>

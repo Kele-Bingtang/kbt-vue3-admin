@@ -1,4 +1,4 @@
-import type { LayoutModeEnum, MenuThemeEnum, SystemThemeEnum, TabsNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
+import type { LayoutModeEnum, MenuThemeEnum, SystemThemeEnum, TabNavModeEnum, TitleModeEnum } from "@/enums/appEnum";
 import type { LayoutSizeType, LanguageType } from "@/stores/interface";
 
 export interface SystemConfig {
@@ -16,7 +16,7 @@ export interface SystemInfo {
 export interface ThemeConfig {
   titleMode: TitleModeEnum; // 标题在浏览器标签上的多种模式
   layoutMode: LayoutModeEnum; // 布局设置
-  tabsNavMode: TabsNavModeEnum; // 标签页设置
+  tabNavMode: TabNavModeEnum; // 标签页设置
   menuTheme: MenuThemeEnum; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
   showSettings: boolean; // 是否显示设置
   showBreadcrumb: boolean; // 是否使用 Breadcrumb
@@ -24,7 +24,7 @@ export interface ThemeConfig {
   showLayoutLogo: boolean; // 是否显示布局 Logo
   showBreadcrumbIcon: boolean; // 面包屑 Icon 是否显示
   showTabNavIcon: boolean; // 标签栏 Icon 是否显示
-  showTabNavDot: boolean; // 标签栏 Dot 是否显示，优先级低于 showTabNavDot，仅在 tabsNavMode 为 simple、classic 模式生效
+  showTabNavDot: boolean; // 标签栏 Dot 是否显示，优先级低于 showTabNavDot，仅在 tabNavMode 为 simple、classic 模式生效
   recordTabNav: boolean; // 是否记录打开过（没关闭）的 tags，下次打开会加载在 tagsNav
   isCollapse: boolean; // 是否折叠菜单栏
   menuAccordion: boolean; // 是否开启菜单手风琴

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch } from "vue";
 import { useRoute } from "vue-router";
-import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon, ElButton } from "element-plus";
+import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton } from "element-plus";
 import {
   ArrowDown,
   Refresh,
@@ -14,7 +14,7 @@ import {
 } from "@element-plus/icons-vue";
 import { useDebounceFn } from "@vueuse/core";
 import { useSettingsStore } from "@/stores";
-import { useTabsNav } from "../useTabsNav";
+import { useTabNav } from "../useTabNav";
 
 defineOptions({ name: "TabNavButton" });
 
@@ -28,7 +28,7 @@ const {
   closeRightTab,
   closeOthersTabs,
   closeAllTabs,
-} = useTabsNav();
+} = useTabNav();
 
 const route = useRoute();
 const settingStore = useSettingsStore();
@@ -55,40 +55,40 @@ watch(
   <el-dropdown trigger="click" :teleported="false">
     <slot>
       <el-button text size="small" type="primary" @click="expandDropdown">
-        <span>{{ $t("_tabsNav.more") }}</span>
-        <el-icon class="el-icon--right"><ArrowDown /></el-icon>
+        <span>{{ $t("_tabNav.more") }}</span>
+        <Icon class="el-icon--right"><ArrowDown /></Icon>
       </el-button>
     </slot>
 
     <template #dropdown>
       <el-dropdown-menu>
         <el-dropdown-item @click="refreshSelectedTab(selectedTab)" :disabled="!contextMenuCondition.refresh">
-          <el-icon><Refresh /></el-icon>
-          {{ $t("_tabsNav.refresh") }}
+          <Icon><Refresh /></Icon>
+          {{ $t("_tabNav.refresh") }}
         </el-dropdown-item>
         <el-dropdown-item @click="useMaximize">
-          <el-icon><FullScreen /></el-icon>
-          {{ $t("_tabsNav.maximize") }}
+          <Icon><FullScreen /></Icon>
+          {{ $t("_tabNav.maximize") }}
         </el-dropdown-item>
         <el-dropdown-item divided @click="closeCurrentTab(selectedTab)" :disabled="!contextMenuCondition.current">
-          <el-icon><Close /></el-icon>
-          {{ $t("_tabsNav.closeCurrent") }}
+          <Icon><Close /></Icon>
+          {{ $t("_tabNav.closeCurrent") }}
         </el-dropdown-item>
         <el-dropdown-item @click="closeLeftTab(selectedTab)" :disabled="!contextMenuCondition.left">
-          <el-icon><ArrowLeft /></el-icon>
-          {{ $t("_tabsNav.closeLeft") }}
+          <Icon><ArrowLeft /></Icon>
+          {{ $t("_tabNav.closeLeft") }}
         </el-dropdown-item>
         <el-dropdown-item @click="closeRightTab(selectedTab)" :disabled="!contextMenuCondition.right">
-          <el-icon><ArrowRight /></el-icon>
-          {{ $t("_tabsNav.closeRight") }}
+          <Icon><ArrowRight /></Icon>
+          {{ $t("_tabNav.closeRight") }}
         </el-dropdown-item>
         <el-dropdown-item @click="closeOthersTabs(selectedTab)" :disabled="!contextMenuCondition.other">
-          <el-icon><SemiSelect /></el-icon>
-          {{ $t("_tabsNav.closeOthers") }}
+          <Icon><SemiSelect /></Icon>
+          {{ $t("_tabNav.closeOthers") }}
         </el-dropdown-item>
         <el-dropdown-item @click="closeAllTabs()" :disabled="!contextMenuCondition.all">
-          <el-icon><FolderDelete /></el-icon>
-          {{ $t("_tabsNav.closeAll") }}
+          <Icon><FolderDelete /></Icon>
+          {{ $t("_tabNav.closeAll") }}
         </el-dropdown-item>
       </el-dropdown-menu>
     </template>
