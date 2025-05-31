@@ -118,7 +118,7 @@
 <script setup lang="ts" name="SwitchPermission">
 import { useUserStore } from "@/stores";
 import { usePermission } from "@/composables";
-import { RefreshPageKey } from "@/config/symbols";
+import { RefreshPageKey } from "@/config";
 
 const userStore = useUserStore();
 const { getRoleList, getAuthList, hasRole, hasAuth } = usePermission();

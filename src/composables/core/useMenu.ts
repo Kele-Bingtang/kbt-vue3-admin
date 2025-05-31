@@ -1,5 +1,5 @@
 import { useRouteStore } from "@/stores";
-import SystemConfig from "@/config";
+import SystemConfig, { LAYOUT_NAME } from "@/config";
 
 export const useMenu = () => {
   const menuList = ref<RouterConfig[]>([]);
@@ -14,7 +14,9 @@ export const useMenu = () => {
     const menusList: RouterConfig[] = [];
 
     routes.forEach(route => {
-      // 如果配置了 hideInMenu: true，则跳过该路由
+      // 如果是布局组件，则跳过
+      if (route.name === LAYOUT_NAME) return;
+      // 如果配置了 hideInMenu: true，则跳过
       if (route.meta?.hideInMenu) return;
       // 如果只有一个子路由且 alwaysShowRoot 为 false | undefined，则子路由成为一级菜单
       if (route.children?.length === 1 && !route.meta?.alwaysShowRoot) {

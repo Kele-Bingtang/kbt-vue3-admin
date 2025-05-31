@@ -48,7 +48,7 @@
 <script setup lang="ts" name="InlineTable">
 import { simpleData } from "@/mock/table";
 import { ElMessage } from "element-plus";
-import { tableStatusFilter } from "@/config/constant";
+import { tableStatusFilter } from "@/config";
 import { Refresh, Check, EditPen } from "@element-plus/icons-vue";
 
 const tableData = ref(simpleData);

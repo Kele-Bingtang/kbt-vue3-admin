@@ -58,7 +58,6 @@ const findTargetTab = async () => {
   if (!tabsRef.value || !tabsRef.value.length) return;
 
   for (const tab of tabsRef.value) {
-    console.log(tab?.to);
     if (route.path === tab?.to) {
       moveToTargetTab(tab.$el);
       // 当 query 不一样

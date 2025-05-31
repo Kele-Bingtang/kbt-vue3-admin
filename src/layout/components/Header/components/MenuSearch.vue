@@ -4,7 +4,6 @@ import { ElAutocomplete, ElTooltip } from "element-plus";
 import { useRouteStore } from "@/stores";
 import { useDebounceFn } from "@vueuse/core";
 import { isFunction } from "@/utils";
-import { Search } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 import { formatTitle } from "@/router/helper";

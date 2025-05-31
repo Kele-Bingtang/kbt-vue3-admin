@@ -3,10 +3,9 @@ import beforeClose from "@/router/beforeClose";
 import { useLayoutStore, useRouteStore, type TabProp } from "@/stores";
 import { getUrlParams, mittBus } from "@/utils";
 import Sortable from "sortablejs";
-import SystemConfig, { HOME_URL } from "@/config";
+import SystemConfig, { HOME_URL, RefreshIFrameKey, RefreshPageKey } from "@/config";
 import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
 import { inject, ref, reactive, nextTick, watchEffect } from "vue";
-import { RefreshIFrameKey, RefreshPageKey } from "@/config/symbols";
 import { formatTitle } from "@/router/helper";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";

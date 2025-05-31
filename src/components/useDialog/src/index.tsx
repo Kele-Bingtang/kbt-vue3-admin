@@ -14,7 +14,7 @@ import { addUnit } from "@/utils";
 import { Icon } from "@/components";
 import "./index.scss";
 import { useNamespace } from "@/composables";
-import { ConfigGlobalKey } from "@/config/symbols";
+import { ConfigGlobalKey } from "@/config";
 
 const ns = useNamespace("work-dialog");
 const prefixClass = ns.b();

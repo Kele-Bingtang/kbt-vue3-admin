@@ -4,7 +4,6 @@ const componentRoutes: RouterConfigRaw = {
   path: "/components",
   name: "Components",
   meta: {
-    notClickBread: true,
     title: "组件",
     icon: Opportunity,
   },

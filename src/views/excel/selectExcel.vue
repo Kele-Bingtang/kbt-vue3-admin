@@ -43,7 +43,7 @@
 import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 import { largeData } from "@/mock/table";
 import { ElMessage, ElTable } from "element-plus";
-import { tableStatusFilter } from "@/config/constant";
+import { tableStatusFilter } from "@/config";
 import { Document, Top } from "@element-plus/icons-vue";
 
 const tableData = ref(largeData);

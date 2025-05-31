@@ -47,7 +47,7 @@ import tableRoutes from "./routes/table";
 import proComponentsRoutes from "./routes/proComponents";
 import toolsRoutes from "./routes/tool";
 import { User, Bell, HomeFilled, StarFilled, Document } from "@element-plus/icons-vue";
-import { HOME_URL, HOME_NAME, LOGIN_URL, LOGIN_NAME, LAYOUT_NAME, REDIRECT_NAME, NOT_FOUND } from "@/config/constant";
+import { HOME_URL, HOME_NAME, LOGIN_URL, LOGIN_NAME, LAYOUT_NAME, REDIRECT_NAME, NOT_FOUND } from "@/config";
 
 export const staticRoutes: RouterConfigRaw[] = [
   // 建议把 LAYOUT_NAME 路由放在第一位
@@ -56,7 +56,6 @@ export const staticRoutes: RouterConfigRaw[] = [
     name: LAYOUT_NAME,
     component: () => import("@/layout/index.vue"),
     redirect: HOME_URL,
-    meta: { hideInMenu: true, hideInBread: true, isFull: true },
     children: [
       {
         path: "/error-log",

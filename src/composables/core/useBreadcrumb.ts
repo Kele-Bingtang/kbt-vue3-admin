@@ -5,6 +5,7 @@ import { useRouteStore } from "@/stores";
 import { useRouteFn } from "./useRouteFn";
 import { tryOnScopeDispose } from "@vueuse/core";
 import { formatTitle } from "@/router/helper";
+import { LAYOUT_NAME } from "@/config";
 
 export const useBreadcrumbs = () => {
   const breadcrumbList = ref<RouteLocationNormalizedLoaded[]>([]);
@@ -38,7 +39,9 @@ export const useBreadcrumbs = () => {
     // 首页加上其他页面
     matched = [homeRoute as RouteLocationNormalizedLoaded, ...matched];
     // 过滤掉 hideInBread 的配置
-    return matched.filter(item => (item.name || item.meta?.title) && !item.meta?.hideInBread);
+    return matched.filter(
+      item => (item.name || item.meta?.title) && !item.meta?.hideInBread && item.name !== LAYOUT_NAME
+    );
   };
 
   const stop = watch(

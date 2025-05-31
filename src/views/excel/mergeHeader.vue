@@ -37,7 +37,7 @@
 <script setup lang="ts" name="MergeHeader">
 import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 import { largeData } from "@/mock/table";
-import { tableStatusFilter } from "@/config/constant";
+import { tableStatusFilter } from "@/config";
 import { Top } from "@element-plus/icons-vue";
 
 const tableData = ref(largeData);

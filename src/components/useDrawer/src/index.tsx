@@ -12,7 +12,7 @@ import { ElDrawer, ElButton, type DrawerProps, ElConfigProvider } from "element-
 import { Icon } from "@/components";
 import "./index.scss";
 import { useNamespace } from "@/composables";
-import { ConfigGlobalKey } from "@/config/symbols";
+import { ConfigGlobalKey } from "@/config";
 
 const ns = useNamespace("work-drawer");
 const prefixClass = ns.b();

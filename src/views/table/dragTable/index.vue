@@ -44,7 +44,7 @@
 <script setup lang="ts" name="DragTable">
 import Sortable from "sortablejs";
 import { simpleData } from "@/mock/table";
-import { tableStatusFilter } from "@/config/constant";
+import { tableStatusFilter } from "@/config";
 import { useNamespace } from "@/composables";
 
 interface ColItem {

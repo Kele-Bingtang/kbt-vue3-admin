@@ -15,30 +15,28 @@ const { breadcrumbList } = useBreadcrumbs();
 <template>
   <el-breadcrumb :class="[ns.b(), 'flx-align-center']" :separator-icon="ArrowRight">
     <transition-group name="breadcrumb">
-      <template v-for="(breadcrumb, index) in breadcrumbList" :key="breadcrumb.path">
-        <el-breadcrumb-item>
-          <div
-            v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1"
-            :class="[ns.e('link'), ns.no('click')]"
-          >
-            <Icon
-              v-if="breadcrumb.meta?.icon && settingStore.showBreadcrumbIcon"
-              :icon="breadcrumb.meta.icon"
-              :class="ns.e('icon')"
-            />
-            <span>{{ breadcrumb.meta.title }}</span>
-          </div>
+      <el-breadcrumb-item v-for="(breadcrumb, index) in breadcrumbList" :key="breadcrumb.path">
+        <div
+          v-if="breadcrumb.meta.notClickBread || index === breadcrumbList.length - 1"
+          :class="[ns.e('link'), ns.no('click')]"
+        >
+          <Icon
+            v-if="breadcrumb.meta?.icon && settingStore.showBreadcrumbIcon"
+            :icon="breadcrumb.meta.icon"
+            :class="ns.e('icon')"
+          />
+          <span>{{ breadcrumb.meta.title }}</span>
+        </div>
 
-          <router-link v-else :to="{ path: breadcrumb.meta._fullPath || breadcrumb.path }" :class="ns.e('link')">
-            <Icon
-              v-if="breadcrumb.meta?.icon && settingStore.showBreadcrumbIcon"
-              :icon="breadcrumb.meta.icon"
-              :class="ns.e('icon')"
-            />
-            <span>{{ breadcrumb.meta.title }}</span>
-          </router-link>
-        </el-breadcrumb-item>
-      </template>
+        <router-link v-else :to="{ path: breadcrumb.meta._fullPath || breadcrumb.path }" :class="ns.e('link')">
+          <Icon
+            v-if="breadcrumb.meta?.icon && settingStore.showBreadcrumbIcon"
+            :icon="breadcrumb.meta.icon"
+            :class="ns.e('icon')"
+          />
+          <span>{{ breadcrumb.meta.title }}</span>
+        </router-link>
+      </el-breadcrumb-item>
     </transition-group>
   </el-breadcrumb>
 </template>

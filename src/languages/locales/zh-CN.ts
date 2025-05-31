@@ -151,7 +151,7 @@ export default {
       page: "页面",
       background: "背景",
       line: "线条",
-      backgroundLine: "经典",
+      backgroundLine: "背景线条",
     },
     collapseMenu: "折叠菜单",
     menuAccordion: "菜单手风琴",

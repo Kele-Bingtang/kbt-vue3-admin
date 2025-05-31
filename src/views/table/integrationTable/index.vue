@@ -177,7 +177,7 @@ import { Pagination, TableSort, pageSetting, type Paging } from "@/components";
 import { largeData } from "@/mock/table";
 import Sortable from "sortablejs";
 import { ElMessage, ElMessageBox, ElNotification, type FormInstance, type TableInstance } from "element-plus";
-import { tableStatusFilter } from "@/config/constant";
+import { tableStatusFilter } from "@/config";
 import { Search, Refresh, Plus, Check, EditPen, Delete } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 

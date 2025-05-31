@@ -31,7 +31,7 @@
 <script setup lang="ts" name="pageTable">
 import { Pagination, pageSetting, type Paging } from "@/components";
 import { largeData } from "@/mock/table";
-import { tableStatusFilter } from "@/config/constant";
+import { tableStatusFilter } from "@/config";
 
 const tableData = ref(largeData);
 const paging = reactive(pageSetting);

@@ -56,14 +56,14 @@
 </template>
 
 <script lang="ts" setup>
+import type { CSSProperties } from "vue";
+import { computed, ref, watch, inject, nextTick } from "vue";
+import { ElInput, ElPopover, ElScrollbar, ElTabs, ElTabPane, ElPagination } from "element-plus";
+import { useNamespace } from "@/composables";
+import { ConfigGlobalKey } from "@/config";
 import epIcons from "./data/icons.ep";
 import antIcons from "./data/icons.ant-design";
 import tIcons from "./data/icons.tdesign";
-import { ElInput, ElPopover, ElScrollbar, ElTabs, ElTabPane, ElPagination } from "element-plus";
-import { computed, type CSSProperties, ref, watch, inject } from "vue";
-import { nextTick } from "vue";
-import { useNamespace } from "@/composables";
-import { ConfigGlobalKey } from "@/config/symbols";
 
 defineOptions({ name: "IconPicker" });
 

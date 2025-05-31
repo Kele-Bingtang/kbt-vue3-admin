@@ -3,7 +3,7 @@ import { ref, watch, defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMediaQuery } from "@vueuse/core";
 import { ElButton, ElDivider, ElDrawer, ElMessage } from "element-plus";
-import { Notification, Menu, ColdDrink, Setting, Box, Refresh } from "@element-plus/icons-vue";
+import { Notification, Menu, ColdDrink, Setting, Box, Refresh, Loading } from "@element-plus/icons-vue";
 import { useSettingStore } from "@/stores";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
@@ -27,7 +27,7 @@ const resetSetting = () => {
   ElMessage({
     message: message,
     duration: 1000,
-    icon: "Loading",
+    icon: Loading,
   });
 
   settingStore.resetSetting();

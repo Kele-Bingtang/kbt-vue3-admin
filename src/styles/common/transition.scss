@@ -81,21 +81,12 @@ $fade-easing: ease; // 淡入淡出专用的缓动函数
 }
 
 /* 面包屑切换动画 */
-.breadcrumb-enter-active,
-.breadcrumb-leave-active {
+.breadcrumb-enter-active {
   transition: all #{$duration};
 }
 
-.breadcrumb-enter,
+.breadcrumb-enter-from,
 .breadcrumb-leave-active {
   opacity: 0;
   transform: translateX(#{$distance});
-}
-
-.breadcrumb-move {
-  transition: all #{$duration};
-}
-
-.breadcrumb-leave-active {
-  position: absolute;
 }
