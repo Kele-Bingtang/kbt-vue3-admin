@@ -21,11 +21,11 @@
     border-right: 1px solid cssVar(layout-aside-line);
 
     @include e(logo) {
-      width: auto !important;
+      width: auto;
 
       img {
-        width: 45% !important;
-        margin: 0 auto !important;
+        width: 45%;
+        margin: 0 auto;
       }
     }
 

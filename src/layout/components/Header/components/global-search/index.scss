@@ -18,7 +18,7 @@
 
   .#{$el-namespace}-dialog {
     padding: 0 15px;
-    border-radius: calc(cssVar(radius) / 2 + 8px) !important;
+    border-radius: calc(cssVar(radius) / 2 + 8px);
   }
 
   .#{$el-namespace}-input {
@@ -27,12 +27,12 @@
     .#{$el-namespace}-input__wrapper {
       background-color: rgb(cssVar(gray-200-rgb), 0.8);
       border: 1px solid cssVar(border-dashed-color);
-      border-radius: calc(cssVar(radius) / 2 + 2px) !important;
+      border-radius: calc(cssVar(radius) / 2 + 2px);
       box-shadow: none;
     }
 
     .#{$el-namespace}-input__inner {
-      color: cssVar(gray-600) !important;
+      color: cssVar(gray-600);
     }
 
     .search-keydown {
@@ -65,7 +65,6 @@
   }
 
   @include e(search-item) {
-    margin-top: 0 !important;
     font-size: 16px;
     font-weight: 500;
     line-height: 1;
@@ -87,11 +86,11 @@
       font-weight: 400;
       color: cssVar(gray-700);
       background: cssVar(gray-100);
-      border-radius: calc(cssVar(radius) / 2 + 2px) !important;
+      border-radius: calc(cssVar(radius) / 2 + 2px);
 
       @include is(highlighted) {
-        color: #ffffff !important;
-        background-color: var(--#{$el-namespace}-color-primary-light-3) !important;
+        color: #ffffff;
+        background-color: var(--#{$el-namespace}-color-primary-light-3);
       }
 
       .selected-icon {
@@ -125,14 +124,14 @@
     color: cssVar(gray-800);
     cursor: pointer;
     background: cssVar(gray-100);
-    border-radius: calc(cssVar(radius) / 2 + 2px) !important;
+    border-radius: calc(cssVar(radius) / 2 + 2px);
 
     @include is(highlighted) {
-      color: #ffffff !important;
-      background-color: var(--#{$el-namespace}-color-primary-light-3) !important;
+      color: #ffffff;
+      background-color: var(--#{$el-namespace}-color-primary-light-3);
 
       .selected-icon {
-        color: #ffffff !important;
+        color: #ffffff;
       }
     }
 
@@ -220,17 +219,17 @@
 
     @include e(search-item) {
       div {
-        color: rgba($color: #ffffff, $alpha: 60%) !important;
+        color: rgba($color: #ffffff, $alpha: 60%);
 
         &.highlighted {
-          color: #ffffff !important;
+          color: #ffffff;
         }
       }
     }
 
     .dialog-footer {
       > div {
-        color: cssVar(gray-600) !important;
+        color: cssVar(gray-600);
 
         i {
           background-color: cssVar(gray-100);

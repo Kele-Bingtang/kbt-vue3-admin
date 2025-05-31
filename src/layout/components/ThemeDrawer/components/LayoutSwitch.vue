@@ -24,7 +24,7 @@ const changeLayout = (value: LayoutModeEnum) => {
         :class="[
           ns.e('item'),
           ns.join('vertical'),
-          settingsStore.layoutMode == LayoutModeEnum.Vertical ? 'is-active' : '',
+          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Vertical),
         ]"
         @click="changeLayout(LayoutModeEnum.Vertical)"
       >
@@ -42,7 +42,7 @@ const changeLayout = (value: LayoutModeEnum) => {
         :class="[
           ns.e('item'),
           ns.join('classic'),
-          settingsStore.layoutMode === LayoutModeEnum.Classic ? 'is-active' : '',
+          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Classic),
         ]"
         @click="changeLayout(LayoutModeEnum.Classic)"
       >
@@ -60,7 +60,7 @@ const changeLayout = (value: LayoutModeEnum) => {
         :class="[
           ns.e('item'),
           ns.join('transverse'),
-          settingsStore.layoutMode === LayoutModeEnum.Transverse ? 'is-active' : '',
+          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Transverse),
         ]"
         @click="changeLayout(LayoutModeEnum.Transverse)"
       >
@@ -75,7 +75,7 @@ const changeLayout = (value: LayoutModeEnum) => {
         :class="[
           ns.e('item'),
           ns.join('columns'),
-          settingsStore.layoutMode === LayoutModeEnum.Columns ? 'is-active' : '',
+          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Columns),
         ]"
         @click="changeLayout(LayoutModeEnum.Columns)"
       >
@@ -88,7 +88,7 @@ const changeLayout = (value: LayoutModeEnum) => {
 
     <el-tooltip effect="dark" content="混合" placement="top" :show-after="200">
       <div
-        :class="[ns.e('item'), ns.join('mixins'), settingsStore.layoutMode == LayoutModeEnum.Mixins ? 'is-active' : '']"
+        :class="[ns.e('item'), ns.join('mixins'), ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Mixins)]"
         @click="changeLayout(LayoutModeEnum.Mixins)"
       >
         <div class="dark"></div>
@@ -105,7 +105,7 @@ const changeLayout = (value: LayoutModeEnum) => {
         :class="[
           ns.e('item'),
           ns.join('subsystem'),
-          settingsStore.layoutMode === LayoutModeEnum.Subsystem ? 'is-active' : '',
+          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Subsystem),
         ]"
         @click="changeLayout(LayoutModeEnum.Subsystem)"
       >

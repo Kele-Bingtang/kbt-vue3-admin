@@ -42,8 +42,8 @@
 
   & .#{$el-namespace}-message__closeBtn {
     right: 9px !important;
-    border-radius: 4px;
     outline: none;
+    border-radius: 4px;
     transition:
       background-color 0.2s,
       color 0.2s;

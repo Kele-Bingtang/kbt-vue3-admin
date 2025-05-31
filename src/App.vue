@@ -14,7 +14,7 @@ import en from "element-plus/es/locale/lang/en";
 import { useLayoutStore } from "@/stores/layout";
 import SystemConfig from "@/config";
 import { useSettingsStore, useUserStore, useWebSocketStore } from "@/stores";
-import { addUnit, setStyleVar } from "@/utils";
+import { addUnit, isFunction, setStyleVar } from "@/utils";
 import { ConfigGlobalKey, WebSocketKey } from "@/config/symbols";
 import { useNamespace, useCache, useBrowserTitle } from "@/composables";
 import { useTheme } from "@/composables/core/useTheme";
@@ -89,5 +89,5 @@ onMounted(() => {
   versionCache();
 });
 
-if (typeof log.success === "function") log.success(__APP_INFO__.pkg.version, "欢迎使用 Kbt Vue3 Admin 系统");
+if (isFunction(log.success)) log.success(__APP_INFO__.pkg.version, "欢迎使用 Teek Design Pro 系统");
 </script>
