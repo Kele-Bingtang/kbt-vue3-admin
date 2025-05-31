@@ -2,7 +2,7 @@
 import { ElSelect, ElOption } from "element-plus";
 import { useI18n } from "vue-i18n";
 import { useNamespace, useBrowserTitle } from "@/composables";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { TitleModeEnum } from "@/enums/appEnum";
 
 defineOptions({ name: "BrowserTitleSwitch" });
@@ -11,7 +11,7 @@ const ns = useNamespace("browser-title-switch");
 
 const { t } = useI18n();
 
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 const { getBrowserTitle } = useBrowserTitle();
 
 const handleTitleModeSelect = () => {
@@ -20,18 +20,18 @@ const handleTitleModeSelect = () => {
 };
 
 const titleModeOptions = [
-  { value: TitleModeEnum.ProjectPage, label: t("_settings.titleModeProjectPage") },
-  { value: TitleModeEnum.UsernamePage, label: t("_settings.titleModeUsernamePage") },
-  { value: TitleModeEnum.Project, label: t("_settings.titleModeProject") },
-  { value: TitleModeEnum.Page, label: t("_settings.titleModePage") },
+  { value: TitleModeEnum.ProjectPage, label: t("_setting.titleModeProjectPage") },
+  { value: TitleModeEnum.UsernamePage, label: t("_setting.titleModeUsernamePage") },
+  { value: TitleModeEnum.Project, label: t("_setting.titleModeProject") },
+  { value: TitleModeEnum.Page, label: t("_setting.titleModePage") },
 ];
 </script>
 
 <template>
   <div :class="ns.b()">
     <el-select
-      v-model="settingsStore.titleMode"
-      :placeholder="$t('_settings.titlePlaceholder')"
+      v-model="settingStore.titleMode"
+      :placeholder="$t('_setting.titlePlaceholder')"
       @change="handleTitleModeSelect"
     >
       <el-option
@@ -39,7 +39,7 @@ const titleModeOptions = [
         :key="item.value"
         :label="item.label"
         :value="item.value"
-        :disabled="item.value === settingsStore.titleMode"
+        :disabled="item.value === settingStore.titleMode"
       ></el-option>
     </el-select>
   </div>

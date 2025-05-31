@@ -3,7 +3,7 @@ import { computed } from "vue";
 import { useRoute } from "vue-router";
 import { ElScrollbar, ElMenu } from "element-plus";
 import { useMenu } from "@/composables";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import MenuItem from "./MenuItem.vue";
 
 defineOptions({ name: "AsideMenu" });
@@ -21,13 +21,13 @@ const props = withDefaults(defineProps<MenuProps>(), {
 });
 
 const route = useRoute();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 const { menuList: menuListRef } = useMenu();
 
 const activeMenu = computed(() =>
   props.activeMenu ? props.activeMenu : route.meta.activeMenu || route.meta._fullPath || route.path
 );
-const isCollapse = computed(() => (props.isCollapse === undefined ? settingsStore.isCollapse : props.isCollapse));
+const isCollapse = computed(() => (props.isCollapse === undefined ? settingStore.isCollapse : props.isCollapse));
 
 const menuList = computed(() => {
   if (props.menuList?.length) return props.menuList;
@@ -40,7 +40,7 @@ const menuList = computed(() => {
     <el-menu
       :default-active="activeMenu"
       :collapse="isCollapse"
-      :unique-opened="settingsStore.menuAccordion"
+      :unique-opened="settingStore.menuAccordion"
       :collapse-transition="false"
       v-bind="{ ...$attrs, class: undefined }"
     >

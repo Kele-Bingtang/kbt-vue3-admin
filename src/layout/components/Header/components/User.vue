@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox } from "element-plus";
 import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
-import { useSettingsStore, useUserStore } from "@/stores";
+import { useSettingStore, useUserStore } from "@/stores";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
@@ -20,13 +20,13 @@ withDefaults(defineProps<{ showAvatar?: boolean }>(), {
 });
 
 const userStore = useUserStore();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
 
 const { userInfo } = storeToRefs(userStore);
-const { showSettings } = storeToRefs(settingsStore);
+const { showSetting } = storeToRefs(settingStore);
 
 const profileLabel = computed(() => {
   const profile = t("_headerBar.profile");
@@ -38,9 +38,9 @@ const messageCenterLabel = computed(() => {
   return messageCenter === "_headerBar.messageCenter" ? "我的消息" : messageCenter;
 });
 
-const settingsLabel = computed(() => {
-  const settings = t("_headerBar.settings");
-  return settings === "_headerBar.settings" ? "我的设置" : settings;
+const settingLabel = computed(() => {
+  const setting = t("_headerBar.setting");
+  return setting === "_headerBar.setting" ? "我的设置" : setting;
 });
 
 const logOutLabel = computed(() => {
@@ -48,7 +48,7 @@ const logOutLabel = computed(() => {
   return logOut === "_headerBar.logOut" ? "退出登录" : logOut;
 });
 
-const openSettingsDrawer = () => {
+const openSettingDrawer = () => {
   mittBus.emit(OpenThemeDrawerKey);
 };
 
@@ -97,9 +97,9 @@ const logout = async () => {
           </el-dropdown-item>
         </router-link>
 
-        <el-dropdown-item @click="openSettingsDrawer" :icon="Setting" v-if="showSettings">
+        <el-dropdown-item @click="openSettingDrawer" :icon="Setting" v-if="showSetting">
           <span>
-            {{ settingsLabel }}
+            {{ settingLabel }}
           </span>
         </el-dropdown-item>
         <el-dropdown-item divided @click="logout" :icon="Back">

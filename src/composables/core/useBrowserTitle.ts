@@ -1,11 +1,11 @@
 import { tryOnScopeDispose } from "@vueuse/core";
-import { useSettingsStore, useUserStore } from "@/stores";
+import { useSettingStore, useUserStore } from "@/stores";
 import SystemConfig from "@/config";
 import { TitleModeEnum } from "@/enums/appEnum";
 import { formatTitle } from "@/router/helper";
 
 export const useBrowserTitle = () => {
-  const settingsStore = useSettingsStore();
+  const settingStore = useSettingStore();
   const userStore = useUserStore();
   const route = useRoute();
 
@@ -16,7 +16,7 @@ export const useBrowserTitle = () => {
    */
   const getBrowserTitle = () => {
     const { name } = SystemConfig.systemInfo;
-    const { titleMode } = settingsStore;
+    const { titleMode } = settingStore;
     const pageTitle = formatTitle(route);
 
     // 展示标题的多种模式判断

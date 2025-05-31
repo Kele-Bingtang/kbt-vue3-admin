@@ -13,7 +13,7 @@ import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import { useLayoutStore } from "@/stores/layout";
 import SystemConfig from "@/config";
-import { useSettingsStore, useUserStore, useWebSocketStore } from "@/stores";
+import { useSettingStore, useUserStore, useWebSocketStore } from "@/stores";
 import { addUnit, isFunction, setStyleVar } from "@/utils";
 import { ConfigGlobalKey, WebSocketKey } from "@/config/symbols";
 import { useNamespace, useCache, useBrowserTitle } from "@/composables";
@@ -23,7 +23,7 @@ import { useIFrame } from "@/layout/components/IFrameLayout/useIFrame";
 const ns = useNamespace();
 
 const layoutStore = useLayoutStore();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 const userStore = useUserStore();
 
 const { layoutSize, language } = storeToRefs(layoutStore);
@@ -50,10 +50,10 @@ const i18nLocale = computed(() => {
 });
 
 // 配置全局样式变量
-watchEffect(() => setStyleVar(ns.cssVarName("layout-open-aside-width"), addUnit(settingsStore.menuWidth)));
+watchEffect(() => setStyleVar(ns.cssVarName("layout-open-aside-width"), addUnit(settingStore.menuWidth)));
 watchEffect(() => setStyleVar(ns.cssVarName("layout-close-aside-width"), "64px"));
-watchEffect(() => setStyleVar(ns.cssVarName("layout-header-height"), addUnit(settingsStore.headerHeight)));
-watchEffect(() => setStyleVar(ns.cssVarName("radius"), addUnit(settingsStore.radius, "rem")));
+watchEffect(() => setStyleVar(ns.cssVarName("layout-header-height"), addUnit(settingStore.headerHeight)));
+watchEffect(() => setStyleVar(ns.cssVarName("radius"), addUnit(settingStore.radius, "rem")));
 
 // 初始化 WebSocket
 if (import.meta.env.VITE_WEBSOCKET === "true") {
@@ -74,7 +74,7 @@ const versionCache = () => {
   const cacheVersion = useCache().getCacheVersion();
   if (version && cacheVersion !== version) {
     const { layoutSize, language } = SystemConfig.layoutConfig;
-    settingsStore.$patch({ ...(SystemConfig as any), menuTheme: SystemConfig.themeConfig.menuTheme });
+    settingStore.$patch({ ...(SystemConfig as any), menuTheme: SystemConfig.themeConfig.menuTheme });
     layoutStore.$patch({
       layoutSize,
       language,

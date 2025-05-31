@@ -1,6 +1,6 @@
 <script setup lang="ts" name="HeaderLeft">
 import { storeToRefs } from "pinia";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { useNamespace } from "@/composables";
 import { useMediaQuery } from "@vueuse/core";
 import { mobileMaxWidthMedia } from "@/config";
@@ -10,8 +10,8 @@ import CollapseTrigger from "./components/CollapseTrigger.vue";
 defineOptions({ name: "HeaderLeft" });
 
 const ns = useNamespace("header-left");
-const settingsStore = useSettingsStore();
-const { showBreadcrumb } = storeToRefs(settingsStore);
+const settingStore = useSettingStore();
+const { showBreadcrumb } = storeToRefs(settingStore);
 
 const isMobile = useMediaQuery(mobileMaxWidthMedia);
 </script>

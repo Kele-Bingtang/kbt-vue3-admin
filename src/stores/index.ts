@@ -6,7 +6,7 @@ export * from "./interface";
 export * from "./errorLog";
 export * from "./layout";
 export * from "./route";
-export * from "./settings";
+export * from "./setting";
 export * from "./user";
 export * from "./message";
 export * from "./websocket";

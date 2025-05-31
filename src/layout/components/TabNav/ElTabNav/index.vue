@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onMounted, watch } from "vue";
 import { ElTabs, ElTabPane, type TabPaneName, type TabsPaneContext } from "element-plus";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { useTabNav } from "../useTabNav";
 import RightMenu from "../components/RightMenu.vue";
 import TabNavButton from "../components/TabNavButton.vue";
@@ -15,7 +15,7 @@ defineOptions({ name: "ElTabNav" });
 const ns = useNamespace("el-tabs-nav");
 const route = useRoute();
 const router = useRouter();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 
 const {
   selectedTab,
@@ -78,7 +78,7 @@ const tabRemove = async (fullPath: TabPaneName) => {
           <template #label>
             <div @contextmenu.prevent="openRightMenu($event, tab, tabNavRef)">
               <Icon
-                v-if="tab.meta.icon && settingsStore.showTabNavIcon"
+                v-if="tab.meta.icon && settingStore.showTabNavIcon"
                 :icon="tab.meta.icon"
                 :class="ns.em('content', 'icon')"
               />

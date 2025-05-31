@@ -1,16 +1,16 @@
 <script setup lang="ts">
 import { Close } from "@element-plus/icons-vue";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { useNamespace } from "@/composables";
 
 defineOptions({ name: "CustomTransition" });
 
 const ns = useNamespace("maximize");
 
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 
 const exitMaximize = () => {
-  settingsStore.$patch({ maximize: false });
+  settingStore.$patch({ maximize: false });
 };
 </script>
 

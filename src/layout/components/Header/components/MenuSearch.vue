@@ -109,7 +109,7 @@ onUnmounted(() => {
 
 <template>
   <div :class="[ns.b(), ns.is('show', isShowSearch)]">
-    <Icon v-if="!isShowSearch" icon="search" @click.stop="handleStartSearch" style="width: 100%; height: 100%" />
+    <Icon v-if="!isShowSearch" icon="search" @click.stop="handleStartSearch" />
 
     <el-autocomplete
       v-model="searchMenu"
@@ -121,7 +121,14 @@ onUnmounted(() => {
     >
       <template #prefix>
         <el-tooltip effect="dark" content="切换查询模式" placement="left" :show-after="100">
-          <Icon :class="ns.e('icon')" @click.stop="handleSwitchMode"><Search /></Icon>
+          <Icon
+            :class="ns.e('icon')"
+            icon="search"
+            pointer
+            hover
+            :hover-color="ns.cssVar('main-color')"
+            @click.stop="handleSwitchMode"
+          />
         </el-tooltip>
       </template>
 
@@ -158,14 +165,6 @@ onUnmounted(() => {
       .#{$el-namespace}-input__prefix {
         display: none;
       }
-    }
-  }
-
-  @include e(icon) {
-    cursor: pointer;
-
-    &:hover {
-      color: cssVar(main-color);
     }
   }
 }

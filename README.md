@@ -10,7 +10,7 @@ Admin 项目用到的 key 暂时只有缓存功能，如个性化配置、布局
 
 您需注意的是：Admin 使用的缓存 key 是一个确定的值，通过该 key 读取缓存内容，这样导致读取到其他用到 Admin 项目的缓存内容。
 
-所以您需要给您开发的项目一个独立的缓存 key，请前往 `src/config/settings.ts` 下，找到 `cacheKeyPrefix`，修改对应的值，最好以项目名来确保唯一性。
+所以您需要给您开发的项目一个独立的缓存 key，请前往 `src/config/base-config.ts` 下，找到 `cacheKeyPrefix`，修改对应的值，最好以项目名来确保唯一性。
 
 如：Admin 使用的 key 默认前缀是 `kbt`，如果您的项目叫做 MIT，则将 `kbt` 改为 `mit` 即可。
 
@@ -280,8 +280,8 @@ Admin 模板需要的可配置参数:
  * @param meta.transition.leaveTransition ==> 离场动画
  * @param meta.hideInTab ==> 是否不添加到标签页，默认 false
  * @param meta.dynamicLevel ==> 动态路由可打开的最大数量，默认为空
- * @param meta.useI18n ==>  是否开启 i18n。默认读取全局的 routeUseI18n（src/config/settings.ts）
- * @param meta.useTooltip ==> 菜单的文字超出后，是否使用 el-toolTip 提示，仅针二级路由及以上生效。默认读取全局的 routeUseTooltip（src/config/settings.ts）
+ * @param meta.useI18n ==>  是否开启 i18n。默认读取全局的 routeUseI18n（src/config/base-config.ts）
+ * @param meta.useTooltip ==> 菜单的文字超出后，是否使用 el-toolTip 提示，仅针二级路由及以上生效。默认读取全局的 routeUseTooltip（src/config/base-config.ts）
  */
 ```
 
@@ -346,7 +346,7 @@ export const rolesRoutes: RouterConfigRaw[] = [
 - `errorLog.ts`：错误日志 store
 - `layout.ts`：布局信息 store
 - `permission.ts`：路由权限 store
-- `settings.ts`：项目客制化 store
+- `setting.ts`：项目客制化 store
 - `user.ts`：用户信息 store
 - `websocket.ts`：WebSocket store
 
@@ -413,7 +413,7 @@ User.vue
 import mittBus from "@/utils/layout/mittBus";
 import { RefreshPageKey } from "@/config";
 
-const openSettingsDrawer = () => {
+const openSettingDrawer = () => {
   mittBus.emit(RefreshPageKey);
 };
 ```

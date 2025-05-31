@@ -6,12 +6,12 @@ import { useNamespace } from "@/composables";
 import SystemConfig, { mobileMaxWidthMedia } from "@/config";
 import Fullscreen from "./components/Fullscreen.vue";
 import LanguageSelect from "./components/LanguageSelect.vue";
-import LayoutSizeSelect from "./components/LayoutSizeSelect.vue";
 import Message from "./components/Message.vue";
 import User from "./components/User.vue";
 import ErrorLog from "./components/ErrorLog.vue";
-import GlobalSearchInput from "./components/global-search/input.vue";
+// import MenuSearch from "./components/MenuSearch.vue";
 import GlobalSearch from "./components/global-search/index.vue";
+import GlobalSearchInput from "./components/global-search/input.vue";
 
 defineOptions({ name: "HeaderRight" });
 
@@ -36,9 +36,8 @@ const isMobile = useMediaQuery(mobileMaxWidthMedia);
       <GlobalSearchInput id="menuSearch" />
       <!-- <MenuSearch id="menuSearch" /> -->
       <Fullscreen id="fullscreen" v-if="!isMobile" />
-      <LayoutSizeSelect id="layoutSizeSelect" />
-      <LanguageSelect id="languageSelect" />
       <Message id="message" />
+      <LanguageSelect id="languageSelect" />
       <ErrorLog
         id="errorLog"
         :errorCount="errorCount"

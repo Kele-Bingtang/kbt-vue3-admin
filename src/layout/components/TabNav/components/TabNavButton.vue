@@ -13,7 +13,7 @@ import {
   FolderDelete,
 } from "@element-plus/icons-vue";
 import { useDebounceFn } from "@vueuse/core";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { useTabNav } from "../useTabNav";
 
 defineOptions({ name: "TabNavButton" });
@@ -31,7 +31,7 @@ const {
 } = useTabNav();
 
 const route = useRoute();
-const settingStore = useSettingsStore();
+const settingStore = useSettingStore();
 
 const selectedTab = ref(getTabByRoute(route));
 

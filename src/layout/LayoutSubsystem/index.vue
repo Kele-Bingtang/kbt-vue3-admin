@@ -4,7 +4,7 @@ import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { ElContainer, ElAside } from "element-plus";
 import { useMediaQuery } from "@vueuse/core";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { useNamespace } from "@/composables";
 import SystemConfig, { HOME_URL, mobileMaxWidthMedia } from "@/config";
 import MainContent from "@/layout/components/MainContent/index.vue";
@@ -16,17 +16,17 @@ defineOptions({ name: "LayoutSubsystem" });
 
 const ns = useNamespace("subsystem-layout");
 const router = useRouter();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 
-const { isCollapse } = storeToRefs(settingsStore);
+const { isCollapse } = storeToRefs(settingStore);
 const isMobile = useMediaQuery(mobileMaxWidthMedia);
 
 watch(isMobile, newVal => {
-  if (newVal) settingsStore.closeSideMenu();
+  if (newVal) settingStore.closeSideMenu();
 });
 
 const handleClickOutSide = () => {
-  settingsStore.closeSideMenu();
+  settingStore.closeSideMenu();
 };
 </script>
 
@@ -42,7 +42,7 @@ const handleClickOutSide = () => {
   >
     <el-aside :class="[ns.join('layout-aside'), 'flx-column']">
       <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
-        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ SystemConfig.systemInfo.name }}</span>
       </div>
       <Menu

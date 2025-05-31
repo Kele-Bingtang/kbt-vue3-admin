@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { useMediaQuery } from "@vueuse/core";
 import { useNamespace } from "@/composables";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { mobileMaxWidthMedia } from "@/config";
 import { useI18n } from "vue-i18n";
 import { PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
@@ -10,22 +10,22 @@ defineOptions({ name: "LayoutSelect" });
 
 const ns = useNamespace("layout-select");
 
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 const isMobile = useMediaQuery(mobileMaxWidthMedia);
 const { t } = useI18n();
 
 const tabNavModeOptions = computed(() => [
-  { value: TabNavModeEnum.Simple, label: t("_settings.tabNavModeSelect.simple") },
-  { value: TabNavModeEnum.Classic, label: t("_settings.tabNavModeSelect.classic") },
-  { value: TabNavModeEnum.Element, label: t("_settings.tabNavModeSelect.element") },
+  { value: TabNavModeEnum.Simple, label: t("_setting.tabNavModeSelect.simple") },
+  { value: TabNavModeEnum.Classic, label: t("_setting.tabNavModeSelect.classic") },
+  { value: TabNavModeEnum.Element, label: t("_setting.tabNavModeSelect.element") },
 ]);
 
 const pageTransitionOps = computed(() => [
-  { value: PageTransitionEnum.None, label: t("_settings.pageTransitionSelect.none") },
-  { value: PageTransitionEnum.Fade, label: t("_settings.pageTransitionSelect.fade") },
-  { value: PageTransitionEnum.SlideLeft, label: t("_settings.pageTransitionSelect.slideLeft") },
-  { value: PageTransitionEnum.SlideTop, label: t("_settings.pageTransitionSelect.slideTop") },
-  { value: PageTransitionEnum.SlideBottom, label: t("_settings.pageTransitionSelect.slideBottom") },
+  { value: PageTransitionEnum.None, label: t("_setting.pageTransitionSelect.none") },
+  { value: PageTransitionEnum.Fade, label: t("_setting.pageTransitionSelect.fade") },
+  { value: PageTransitionEnum.SlideLeft, label: t("_setting.pageTransitionSelect.slideLeft") },
+  { value: PageTransitionEnum.SlideTop, label: t("_setting.pageTransitionSelect.slideTop") },
+  { value: PageTransitionEnum.SlideBottom, label: t("_setting.pageTransitionSelect.slideBottom") },
 ]);
 
 const customRadiusOptions = [
@@ -44,91 +44,91 @@ const customRadiusOptions = [
 <template>
   <div :class="ns.b()">
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.tabNavMode") }}</span>
-      <el-select v-model="settingsStore.tabNavMode" placeholder="Select">
+      <span>{{ $t("_setting.tabNavMode") }}</span>
+      <el-select v-model="settingStore.tabNavMode" placeholder="Select">
         <el-option v-for="item in tabNavModeOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.headerHeight") }}</span>
-      <el-input-number v-model="settingsStore.headerHeight" :min="30" :max="70" :step="2" controls-position="right" />
-      <!-- <el-slider v-model="settingsStore.headerHeight" :min="30" :max="70" /> -->
+      <span>{{ $t("_setting.headerHeight") }}</span>
+      <el-input-number v-model="settingStore.headerHeight" :min="30" :max="70" :step="2" controls-position="right" />
+      <!-- <el-slider v-model="settingStore.headerHeight" :min="30" :max="70" /> -->
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.menuWidth") }}</span>
-      <el-input-number v-model="settingsStore.menuWidth" :min="100" :max="400" :step="10" controls-position="right" />
-      <!-- <el-slider v-model="settingsStore.menuWidth" :min="100" :max="400" /> -->
+      <span>{{ $t("_setting.menuWidth") }}</span>
+      <el-input-number v-model="settingStore.menuWidth" :min="100" :max="400" :step="10" controls-position="right" />
+      <!-- <el-slider v-model="settingStore.menuWidth" :min="100" :max="400" /> -->
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.pageTransition") }}</span>
-      <el-select v-model="settingsStore.pageTransition" placeholder="Select">
+      <span>{{ $t("_setting.pageTransition") }}</span>
+      <el-select v-model="settingStore.pageTransition" placeholder="Select">
         <el-option v-for="item in pageTransitionOps" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.radius") }}</span>
-      <el-select v-model="settingsStore.radius" placeholder="Select">
+      <span>{{ $t("_setting.radius") }}</span>
+      <el-select v-model="settingStore.radius" placeholder="Select">
         <el-option v-for="item in customRadiusOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.collapseMenu") }}</span>
-      <el-switch v-model="settingsStore.isCollapse" />
+      <span>{{ $t("_setting.collapseMenu") }}</span>
+      <el-switch v-model="settingStore.isCollapse" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.menuAccordion") }}</span>
-      <el-switch v-model="settingsStore.menuAccordion" />
+      <span>{{ $t("_setting.menuAccordion") }}</span>
+      <el-switch v-model="settingStore.menuAccordion" />
     </div>
 
     <div :class="ns.e('item')" v-if="!isMobile">
-      <span>{{ $t("_settings.showBreadcrumb") }}</span>
-      <el-switch v-model="settingsStore.showBreadcrumb" />
+      <span>{{ $t("_setting.showBreadcrumb") }}</span>
+      <el-switch v-model="settingStore.showBreadcrumb" />
     </div>
 
     <div :class="ns.e('item')" v-if="!isMobile">
-      <span>{{ $t("_settings.showBreadcrumbIcon") }}</span>
-      <el-switch v-model="settingsStore.showBreadcrumbIcon" />
+      <span>{{ $t("_setting.showBreadcrumbIcon") }}</span>
+      <el-switch v-model="settingStore.showBreadcrumbIcon" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.showTabNav") }}</span>
-      <el-switch v-model="settingsStore.showTabNav" />
+      <span>{{ $t("_setting.showTabNav") }}</span>
+      <el-switch v-model="settingStore.showTabNav" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.showTabNavIcon") }}</span>
-      <el-switch v-model="settingsStore.showTabNavIcon" />
+      <span>{{ $t("_setting.showTabNavIcon") }}</span>
+      <el-switch v-model="settingStore.showTabNavIcon" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.showTabNavDot") }}</span>
-      <el-switch v-model="settingsStore.showTabNavDot" />
+      <span>{{ $t("_setting.showTabNavDot") }}</span>
+      <el-switch v-model="settingStore.showTabNavDot" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.recordTabNav") }}</span>
-      <el-switch v-model="settingsStore.recordTabNav" />
+      <span>{{ $t("_setting.recordTabNav") }}</span>
+      <el-switch v-model="settingStore.recordTabNav" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.fixTabNav") }}</span>
-      <el-switch v-model="settingsStore.fixTabNav" />
+      <span>{{ $t("_setting.fixTabNav") }}</span>
+      <el-switch v-model="settingStore.fixTabNav" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.showLayoutLogo") }}</span>
-      <el-switch v-model="settingsStore.showLayoutLogo" />
+      <span>{{ $t("_setting.showLayoutLogo") }}</span>
+      <el-switch v-model="settingStore.showLayoutLogo" />
     </div>
 
     <div :class="ns.e('item')">
       <span>{{ $t("_tabNav.maximize") }}</span>
-      <el-switch v-model="settingsStore.maximize" />
+      <el-switch v-model="settingStore.maximize" />
     </div>
   </div>
 </template>

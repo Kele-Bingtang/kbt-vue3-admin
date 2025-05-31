@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ElContainer, ElHeader } from "element-plus";
 import { useRouter } from "vue-router";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { useNamespace } from "@/composables";
 import SystemConfig, { HOME_URL } from "@/config";
 import MainContent from "@/layout/components/MainContent/index.vue";
@@ -14,14 +14,14 @@ defineOptions({ name: "LayoutTransverse" });
 
 const ns = useNamespace("transverse-layout");
 const router = useRouter();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 </script>
 
 <template>
   <el-container :class="[ns.join('layout'), ns.b()]">
     <el-header :class="[ns.join('layout-header'), 'flx-justify-between']">
       <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
-        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingStore.showLayoutLogo" />
         <span>{{ SystemConfig.systemInfo.name }}</span>
       </div>
 

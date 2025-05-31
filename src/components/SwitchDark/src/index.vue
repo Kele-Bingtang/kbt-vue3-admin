@@ -10,13 +10,13 @@
 
 <script setup lang="ts">
 import { useTheme } from "@/composables";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { ElSwitch } from "element-plus";
 
 defineOptions({ name: "SwitchDark" });
 
-const settingStore = useSettingsStore();
+const settingStore = useSettingStore();
 
 const { switchDark } = useTheme();
 

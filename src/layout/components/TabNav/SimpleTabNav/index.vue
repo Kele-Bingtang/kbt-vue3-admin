@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import ClassicTabNav from "../ClassicTabNav/index.vue";
 
 defineOptions({ name: "SimpleTabNav" });
 
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 
-const type = computed(() => settingsStore.tabNavMode as "simple" | "classic");
+const type = computed(() => settingStore.tabNavMode as "simple" | "classic");
 </script>
 
 <template>

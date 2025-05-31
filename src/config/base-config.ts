@@ -12,7 +12,7 @@ const themeConfig: ThemeConfig = {
   tabNavMode: TabNavModeEnum.Simple,
   menuTheme: MenuThemeEnum.Light,
   pageTransition: PageTransitionEnum.SlideLeft,
-  showSettings: true,
+  showSetting: true,
   showBreadcrumb: true,
   showTabNav: true,
   showLayoutLogo: true,

@@ -4,8 +4,8 @@ import { useStorage, useCache } from "@/composables";
 import { LayoutModeEnum, MenuThemeEnum, PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
 import SystemConfig from "@/config";
 
-export const useSettingsStore = defineStore(
-  "settingsStore",
+export const useSettingStore = defineStore(
+  "settingStore",
   () => {
     const { themeConfig, layoutConfig } = SystemConfig;
 
@@ -15,7 +15,7 @@ export const useSettingsStore = defineStore(
     const tabNavMode = ref(themeConfig.tabNavMode || TabNavModeEnum.Simple);
     const menuTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
     const pageTransition = ref(themeConfig.pageTransition || PageTransitionEnum.SlideLeft);
-    const showSettings = ref(themeConfig.showSettings);
+    const showSetting = ref(themeConfig.showSetting);
     const showTabNav = ref(themeConfig.showTabNav);
     const recordTabNav = ref(themeConfig.recordTabNav);
     const showLayoutLogo = ref(themeConfig.showLayoutLogo);
@@ -43,9 +43,9 @@ export const useSettingsStore = defineStore(
       isCollapse.value = !isCollapse.value;
     };
 
-    const resetSettings = () => {
+    const resetSetting = () => {
       const { removeStorage } = useStorage();
-      removeStorage(`${layoutConfig.cacheKeyPrefix}:settingsStore`);
+      removeStorage(`${layoutConfig.cacheKeyPrefix}:settingStore`);
       if (!recordTabNav.value) useCache().removeCacheTabNavList();
     };
 
@@ -56,7 +56,7 @@ export const useSettingsStore = defineStore(
       tabNavMode,
       menuTheme,
       pageTransition,
-      showSettings,
+      showSetting,
       showTabNav,
       recordTabNav,
       showLayoutLogo,
@@ -78,7 +78,7 @@ export const useSettingsStore = defineStore(
 
       closeSideMenu,
       toggleSideMenu,
-      resetSettings,
+      resetSetting,
     };
   },
   {

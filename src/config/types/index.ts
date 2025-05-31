@@ -26,7 +26,7 @@ export interface ThemeConfig {
   tabNavMode: TabNavModeEnum; // 标签页设置
   menuTheme: MenuThemeEnum; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
   pageTransition: PageTransitionEnum; // 进入页面过渡动画
-  showSettings: boolean; // 是否显示设置
+  showSetting: boolean; // 是否显示设置
   showBreadcrumb: boolean; // 是否使用 Breadcrumb
   showTabNav: boolean; // 是否使用 tagsNav
   showLayoutLogo: boolean; // 是否显示布局 Logo

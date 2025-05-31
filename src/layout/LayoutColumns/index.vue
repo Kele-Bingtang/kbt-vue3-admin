@@ -3,7 +3,7 @@ import { watch, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { ElContainer, ElAside, ElHeader, ElScrollbar } from "element-plus";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { useMenu } from "@/composables";
 import { Tooltip } from "@/components";
 import { useNamespace } from "@/composables";
@@ -19,7 +19,7 @@ defineOptions({ name: "LayoutVertical" });
 const ns = useNamespace("columns-layout");
 const route = useRoute();
 const router = useRouter();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 const { menuList } = useMenu();
 
 // 子菜单
@@ -27,7 +27,7 @@ const menuItem = ref<RouterConfig[]>([]);
 // 菜单是否激活
 const active = ref<string>("");
 
-const { isCollapse } = storeToRefs(settingsStore);
+const { isCollapse } = storeToRefs(settingStore);
 
 watch(
   route,
@@ -58,7 +58,7 @@ const changeMenuItem = (item: RouterConfig) => {
   <el-container :class="[ns.join('layout'), ns.b(), ns.is('collapse', isCollapse), ns.is('expand', !isCollapse)]">
     <div :class="[ns.e('aside'), 'flx-column']">
       <div :class="[ns.e('logo'), ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
-        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingStore.showLayoutLogo" />
       </div>
 
       <el-scrollbar>

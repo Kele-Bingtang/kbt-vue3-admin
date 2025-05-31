@@ -19,7 +19,7 @@ const { language } = storeToRefs(layoutStore);
 
 const handleSelectLanguage = (lang: LanguageType) => {
   i18n.locale.value = lang;
-  layoutStore.setLanguage(lang);
+  layoutStore.$patch({ language: lang });
   document.documentElement.lang = lang;
   window.document.title = getBrowserTitle();
 

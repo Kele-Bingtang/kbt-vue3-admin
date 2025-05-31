@@ -14,7 +14,7 @@
 import type { Component } from "vue";
 import { defineAsyncComponent } from "vue";
 import { storeToRefs } from "pinia";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { LayoutModeEnum } from "@/enums/appEnum";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
 import Loading from "./components/Loading/index.vue";
@@ -32,6 +32,6 @@ const LayoutComponents: Record<string, Component> = {
   [LayoutModeEnum.Subsystem]: defineAsyncComponent(() => import("./LayoutSubsystem/index.vue")),
 };
 
-const settingsStore = useSettingsStore();
-const { layoutMode } = storeToRefs(settingsStore);
+const settingStore = useSettingStore();
+const { layoutMode } = storeToRefs(settingStore);
 </script>

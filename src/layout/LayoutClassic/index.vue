@@ -4,7 +4,7 @@ import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useRouter } from "vue-router";
 import SystemConfig, { HOME_URL } from "@/config";
 import { useNamespace } from "@/composables";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import HeaderLeft from "@/layout/components/Header/HeaderLeft.vue";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import Header from "@/layout/components/Header/index.vue";
@@ -16,9 +16,9 @@ defineOptions({ name: "LayoutClassic" });
 
 const ns = useNamespace("classic-layout");
 const router = useRouter();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 
-const { isCollapse } = storeToRefs(settingsStore);
+const { isCollapse } = storeToRefs(settingStore);
 </script>
 
 <template>
@@ -29,7 +29,7 @@ const { isCollapse } = storeToRefs(settingsStore);
         <template #left>
           <div :class="[ns.e('header-left'), 'flx-align-center']">
             <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
-              <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+              <img src="@/assets/images/logo.png" alt="logo" v-if="settingStore.showLayoutLogo" />
               <span v-show="!isCollapse">{{ SystemConfig.systemInfo.name }}</span>
             </div>
             <HeaderLeft />

@@ -3,7 +3,7 @@ import { ref, onMounted, watch, nextTick } from "vue";
 import { useRoute } from "vue-router";
 import { ElButton } from "element-plus";
 import { Close, ArrowLeft, ArrowRight } from "@element-plus/icons-vue";
-import { useLayoutStore, useSettingsStore } from "@/stores";
+import { useLayoutStore, useSettingStore } from "@/stores";
 import { useNamespace } from "@/composables";
 import { useTabNav } from "../useTabNav";
 import TabNavButton from "../components/TabNavButton.vue";
@@ -18,7 +18,7 @@ const { type = "simple" } = defineProps<{ type?: "simple" | "classic" }>();
 const ns = useNamespace("classic-tabs-nav");
 const route = useRoute();
 const layoutStore = useLayoutStore();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 
 const tabBodyLeft = ref(0); // tabNav 滚动
 const tabNavRef = useTemplateRef("tabNavRef"); // 导航栏标签
@@ -165,11 +165,11 @@ const handleScroll = (offset: number) => {
           @contextmenu.prevent="openRightMenu($event, tab, tabNavRef)"
         >
           <Icon
-            v-if="tab.meta.icon && settingsStore.showTabNavIcon"
+            v-if="tab.meta.icon && settingStore.showTabNavIcon"
             :icon="tab.meta.icon"
             :class="ns.em('tab', 'icon')"
           />
-          <span class="dot" v-else-if="settingsStore.showTabNavDot || !tab.meta.icon" />
+          <span class="dot" v-else-if="settingStore.showTabNavDot || !tab.meta.icon" />
           <span>{{ tab.title }}</span>
           <Icon class="icon-close" v-if="tab.close" @click.prevent.stop="closeCurrentTab(tab)">
             <Close />

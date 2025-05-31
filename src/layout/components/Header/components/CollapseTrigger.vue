@@ -1,17 +1,17 @@
 <script setup lang="ts">
 import { storeToRefs } from "pinia";
 import { Expand, Fold } from "@element-plus/icons-vue";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 import { useNamespace } from "@/composables";
 
 defineOptions({ name: "CollapseTrigger" });
 
 const ns = useNamespace("collapse-trigger");
-const settingsStore = useSettingsStore();
-const { isCollapse } = storeToRefs(settingsStore);
+const settingStore = useSettingStore();
+const { isCollapse } = storeToRefs(settingStore);
 
 const toggleTrigger = () => {
-  settingsStore.toggleSideMenu();
+  settingStore.toggleSideMenu();
 };
 </script>
 

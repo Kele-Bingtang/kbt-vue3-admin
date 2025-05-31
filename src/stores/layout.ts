@@ -1,10 +1,10 @@
-import type { LanguageType, LayoutSizeType, TabProp } from "./interface";
+import type { LayoutSizeType, TabProp } from "./interface";
 import type { IFrame } from "@/layout/components/IFrameLayout/useIFrame";
 import { ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { useCache } from "@/composables";
 import SystemConfig from "@/config";
-import { useSettingsStore } from "./settings";
+import { useSettingStore } from "./setting";
 
 export const useLayoutStore = defineStore(
   "layoutStore",
@@ -14,10 +14,6 @@ export const useLayoutStore = defineStore(
     const layoutSize = ref<LayoutSizeType>(SystemConfig.layoutConfig.layoutSize);
     const language = ref(SystemConfig.layoutConfig.language);
     const iframeList = ref<IFrame[]>([]);
-
-    const setLayoutSize = (layoutSizeParam: LayoutSizeType) => (layoutSize.value = layoutSizeParam);
-
-    const setLanguage = (languageParam: LanguageType) => (language.value = languageParam);
 
     const addTab = async (tab: TabProp) => {
       const path = tab.path;
@@ -127,18 +123,18 @@ export const useLayoutStore = defineStore(
       }
     };
 
-    const settingsStore = useSettingsStore();
+    const settingStore = useSettingStore();
 
     watch(
-      () => settingsStore.recordTabNav,
+      () => settingStore.recordTabNav,
       () => {
-        handleRecordTabNav(settingsStore.recordTabNav);
+        handleRecordTabNav(settingStore.recordTabNav);
       }
     );
     watch(
       () => tabNavList.value,
       () => {
-        handleRecordTabNav(settingsStore.recordTabNav);
+        handleRecordTabNav(settingStore.recordTabNav);
       },
       { deep: true }
     );
@@ -155,8 +151,6 @@ export const useLayoutStore = defineStore(
       language,
       iframeList,
 
-      setLayoutSize,
-      setLanguage,
       addTab,
       removeCurrentTab,
       removeBatchTab,

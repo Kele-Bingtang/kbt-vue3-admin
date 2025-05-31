@@ -2,13 +2,13 @@
 import { ElBreadcrumb, ElBreadcrumbItem } from "element-plus";
 import { ArrowRight } from "@element-plus/icons-vue";
 import { useBreadcrumbs, useNamespace } from "@/composables";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 
 defineOptions({ name: "Breadcrumb" });
 
 const ns = useNamespace("breadcrumb");
 
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 const { breadcrumbList } = useBreadcrumbs();
 </script>
 
@@ -22,7 +22,7 @@ const { breadcrumbList } = useBreadcrumbs();
             :class="[ns.e('link'), ns.no('click')]"
           >
             <Icon
-              v-if="breadcrumb.meta?.icon && settingsStore.showBreadcrumbIcon"
+              v-if="breadcrumb.meta?.icon && settingStore.showBreadcrumbIcon"
               :icon="breadcrumb.meta.icon"
               :class="ns.e('icon')"
             />
@@ -31,7 +31,7 @@ const { breadcrumbList } = useBreadcrumbs();
 
           <router-link v-else :to="{ path: breadcrumb.meta._fullPath || breadcrumb.path }" :class="ns.e('link')">
             <Icon
-              v-if="breadcrumb.meta?.icon && settingsStore.showBreadcrumbIcon"
+              v-if="breadcrumb.meta?.icon && settingStore.showBreadcrumbIcon"
               :icon="breadcrumb.meta.icon"
               :class="ns.e('icon')"
             />

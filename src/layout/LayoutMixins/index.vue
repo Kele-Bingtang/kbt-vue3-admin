@@ -2,7 +2,7 @@
 import { computed, watch, ref } from "vue";
 import { storeToRefs } from "pinia";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
-import { useSettingsStore, useRouteStore } from "@/stores";
+import { useSettingStore, useRouteStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
 import { useMenu, useRouteFn } from "@/composables";
 import SystemConfig, { HOME_URL } from "@/config";
@@ -19,7 +19,7 @@ defineOptions({ name: "LayoutMixins" });
 const ns = useNamespace("mixins-layout");
 const route = useRoute();
 const router = useRouter();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 const routeStore = useRouteStore();
 
 const { findParentRoutesByPath } = useRouteFn();
@@ -29,7 +29,7 @@ const { menuList } = useMenu();
 const activeMenu = ref("");
 const childrenMenu = ref<RouterConfig[]>([]);
 
-const { isCollapse } = storeToRefs(settingsStore);
+const { isCollapse } = storeToRefs(settingStore);
 
 const headerMenu = computed(() => {
   const parentMenu: RouterConfig[] = [];
@@ -65,7 +65,7 @@ watch(
     else {
       childrenMenu.value = [];
       // 关闭菜单栏折叠功能
-      settingsStore.$patch({ isCollapse: false });
+      settingStore.$patch({ isCollapse: false });
     }
   },
   { immediate: true }
@@ -76,7 +76,7 @@ watch(
   <el-container :class="[ns.join('layout'), ns.b(), ns.is('collapse', isCollapse), ns.is('expand', !isCollapse)]">
     <el-header :class="[ns.join('layout-header'), 'flx-justify-between']">
       <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
-        <img src="@/assets/images/logo.png" alt="logo" v-if="settingsStore.showLayoutLogo" />
+        <img src="@/assets/images/logo.png" alt="logo" v-if="settingStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ SystemConfig.systemInfo.name }}</span>
       </div>
 

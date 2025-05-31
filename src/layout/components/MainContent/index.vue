@@ -5,7 +5,7 @@ import { storeToRefs } from "pinia";
 import { ElMain } from "element-plus";
 import { RefreshPageKey } from "@/config";
 import { getUrlParams, mittBus } from "@/utils";
-import { useLayoutStore, useSettingsStore } from "@/stores";
+import { useLayoutStore, useSettingStore } from "@/stores";
 import { TabNavModeEnum } from "@/enums/appEnum";
 import SimpleTabNav from "@/layout/components/TabNav/SimpleTabNav/index.vue";
 import ClassicTabNav from "@/layout/components/TabNav/ClassicTabNav/index.vue";
@@ -16,9 +16,9 @@ import FrameLayout from "../IFrameLayout/index.vue";
 defineOptions({ name: "MainContent" });
 
 const layoutStore = useLayoutStore();
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 
-const { tabNavMode, showTabNav } = storeToRefs(settingsStore);
+const { tabNavMode, showTabNav } = storeToRefs(settingStore);
 
 const TabNavComponents: Record<string, Component> = {
   [TabNavModeEnum.Simple]: SimpleTabNav,
@@ -48,24 +48,24 @@ watchEffect(() => {
   if (urlParams.get("_maximize")) {
     if (!app?.className.includes("main-maximize")) app?.classList.add("main-maximize");
   } else {
-    if (settingsStore.maximize) app?.classList.add("main-maximize");
+    if (settingStore.maximize) app?.classList.add("main-maximize");
     else app?.classList.remove("main-maximize");
   }
 });
 
 const isFixTabNav = computed(() => {
-  if (settingsStore.fixTabNav) return "auto";
+  if (settingStore.fixTabNav) return "auto";
   return "";
 });
 </script>
 
 <template>
-  <Maximize v-if="settingsStore.maximize" />
+  <Maximize v-if="settingStore.maximize" />
   <el-main class="flx-column">
     <component :is="TabNavComponents[tabNavMode]" v-if="showTabNav" />
 
     <router-view v-slot="{ Component, route }">
-      <Transition :name="settingsStore.pageTransition" mode="out-in" appear>
+      <Transition :name="settingStore.pageTransition" mode="out-in" appear>
         <keep-alive :max="10" :include="layoutStore.keepAliveName">
           <component v-if="isRefreshRoute" :is="Component" :key="route.path" class="main-content" />
         </keep-alive>

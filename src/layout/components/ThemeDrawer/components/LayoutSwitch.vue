@@ -2,16 +2,16 @@
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { LayoutModeEnum } from "@/enums/appEnum";
 import { useNamespace } from "@/composables";
-import { useSettingsStore } from "@/stores";
+import { useSettingStore } from "@/stores";
 
 defineOptions({ name: "LayoutSwitch" });
 
 const ns = useNamespace("layout-switch");
 
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
 
 const changeLayout = (value: LayoutModeEnum) => {
-  settingsStore.$patch({
+  settingStore.$patch({
     layoutMode: value,
   });
 };
@@ -24,7 +24,7 @@ const changeLayout = (value: LayoutModeEnum) => {
         :class="[
           ns.e('item'),
           ns.join('vertical'),
-          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Vertical),
+          ns.is('active', settingStore.layoutMode === LayoutModeEnum.Vertical),
         ]"
         @click="changeLayout(LayoutModeEnum.Vertical)"
       >
@@ -33,17 +33,13 @@ const changeLayout = (value: LayoutModeEnum) => {
           <div class="light"></div>
           <div class="content"></div>
         </div>
-        <Icon class="icon" v-if="settingsStore.layoutMode == LayoutModeEnum.Vertical"><CircleCheckFilled /></Icon>
+        <Icon class="icon" v-if="settingStore.layoutMode == LayoutModeEnum.Vertical"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
     <el-tooltip effect="dark" content="经典" placement="top" :show-after="200">
       <div
-        :class="[
-          ns.e('item'),
-          ns.join('classic'),
-          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Classic),
-        ]"
+        :class="[ns.e('item'), ns.join('classic'), ns.is('active', settingStore.layoutMode === LayoutModeEnum.Classic)]"
         @click="changeLayout(LayoutModeEnum.Classic)"
       >
         <div class="dark"></div>
@@ -51,7 +47,7 @@ const changeLayout = (value: LayoutModeEnum) => {
           <div class="light"></div>
           <div class="content"></div>
         </div>
-        <Icon class="icon" v-if="settingsStore.layoutMode == LayoutModeEnum.Classic"><CircleCheckFilled /></Icon>
+        <Icon class="icon" v-if="settingStore.layoutMode == LayoutModeEnum.Classic"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
@@ -60,35 +56,31 @@ const changeLayout = (value: LayoutModeEnum) => {
         :class="[
           ns.e('item'),
           ns.join('transverse'),
-          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Transverse),
+          ns.is('active', settingStore.layoutMode === LayoutModeEnum.Transverse),
         ]"
         @click="changeLayout(LayoutModeEnum.Transverse)"
       >
         <div class="dark"></div>
         <div class="content"></div>
-        <Icon class="icon" v-if="settingsStore.layoutMode == LayoutModeEnum.Transverse"><CircleCheckFilled /></Icon>
+        <Icon class="icon" v-if="settingStore.layoutMode == LayoutModeEnum.Transverse"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
     <el-tooltip effect="dark" content="分栏" placement="top" :show-after="200">
       <div
-        :class="[
-          ns.e('item'),
-          ns.join('columns'),
-          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Columns),
-        ]"
+        :class="[ns.e('item'), ns.join('columns'), ns.is('active', settingStore.layoutMode === LayoutModeEnum.Columns)]"
         @click="changeLayout(LayoutModeEnum.Columns)"
       >
         <div class="dark"></div>
         <div class="light"></div>
         <div class="content"></div>
-        <Icon class="icon" v-if="settingsStore.layoutMode === LayoutModeEnum.Columns"><CircleCheckFilled /></Icon>
+        <Icon class="icon" v-if="settingStore.layoutMode === LayoutModeEnum.Columns"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
     <el-tooltip effect="dark" content="混合" placement="top" :show-after="200">
       <div
-        :class="[ns.e('item'), ns.join('mixins'), ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Mixins)]"
+        :class="[ns.e('item'), ns.join('mixins'), ns.is('active', settingStore.layoutMode === LayoutModeEnum.Mixins)]"
         @click="changeLayout(LayoutModeEnum.Mixins)"
       >
         <div class="dark"></div>
@@ -96,7 +88,7 @@ const changeLayout = (value: LayoutModeEnum) => {
           <div class="dark"></div>
           <div class="content"></div>
         </div>
-        <Icon class="icon" v-if="settingsStore.layoutMode == LayoutModeEnum.Mixins"><CircleCheckFilled /></Icon>
+        <Icon class="icon" v-if="settingStore.layoutMode == LayoutModeEnum.Mixins"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
 
@@ -105,13 +97,13 @@ const changeLayout = (value: LayoutModeEnum) => {
         :class="[
           ns.e('item'),
           ns.join('subsystem'),
-          ns.is('active', settingsStore.layoutMode === LayoutModeEnum.Subsystem),
+          ns.is('active', settingStore.layoutMode === LayoutModeEnum.Subsystem),
         ]"
         @click="changeLayout(LayoutModeEnum.Subsystem)"
       >
         <div class="dark"></div>
         <div class="content"></div>
-        <Icon class="icon" v-if="settingsStore.layoutMode === LayoutModeEnum.Subsystem"><CircleCheckFilled /></Icon>
+        <Icon class="icon" v-if="settingStore.layoutMode === LayoutModeEnum.Subsystem"><CircleCheckFilled /></Icon>
       </div>
     </el-tooltip>
   </div>

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useNamespace, useTheme } from "@/composables";
-import { useSettingsStore } from "@/stores";
+import { useLayoutStore, useSettingStore } from "@/stores";
 import SystemConfig from "@/config";
 import { MenuThemeEnum } from "@/enums/appEnum";
 
@@ -11,7 +11,8 @@ const ns = useNamespace("theme-select");
 
 const { changePrimary, changeGreyOrWeak, switchDark } = useTheme();
 
-const settingsStore = useSettingsStore();
+const settingStore = useSettingStore();
+const layoutStore = useLayoutStore();
 
 // 预定义主题颜色
 const colorList = [
@@ -27,10 +28,16 @@ const colorList = [
   "#9b59b6",
 ];
 
+const sizeOptions = [
+  { label: "Large", value: "large" },
+  { label: "Default", value: "default" },
+  { label: "Small", value: "small" },
+];
+
 const handleSwitchDark = () => {
   const isDark = switchDark();
   const theme = isDark ? MenuThemeEnum.Dark : MenuThemeEnum.Light;
-  settingsStore.$patch({
+  settingStore.$patch({
     menuTheme: theme,
     headerTheme: theme,
   });
@@ -40,14 +47,14 @@ const handleSwitchDark = () => {
 <template>
   <div :class="ns.b()">
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.theme") }}</span>
-      <el-color-picker v-model="settingsStore.primaryColor" :predefine="colorList" @change="changePrimary" />
+      <span>{{ $t("_setting.theme") }}</span>
+      <el-color-picker v-model="settingStore.primaryColor" :predefine="colorList" @change="changePrimary" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.darkMode") }}</span>
+      <span>{{ $t("_setting.darkMode") }}</span>
       <el-switch
-        v-model="settingsStore.isDark"
+        v-model="settingStore.isDark"
         @change="handleSwitchDark"
         inline-prompt
         :active-icon="Sunny"
@@ -56,13 +63,20 @@ const handleSwitchDark = () => {
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.greyMode") }}</span>
-      <el-switch v-model="settingsStore.isGrey" @change="changeGreyOrWeak($event as boolean, 'grey')" />
+      <span>{{ $t("_setting.greyMode") }}</span>
+      <el-switch v-model="settingStore.isGrey" @change="changeGreyOrWeak($event as boolean, 'grey')" />
     </div>
 
     <div :class="ns.e('item')">
-      <span>{{ $t("_settings.weakMode") }}</span>
-      <el-switch v-model="settingsStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />
+      <span>{{ $t("_setting.weakMode") }}</span>
+      <el-switch v-model="settingStore.isWeak" @change="changeGreyOrWeak($event as boolean, 'weak')" />
+    </div>
+
+    <div :class="ns.e('item')">
+      <span>{{ $t("_setting.epSize") }}</span>
+      <el-select v-model="layoutStore.layoutSize" placeholder="Select">
+        <el-option v-for="item in sizeOptions" :key="item.value" :label="item.label" :value="item.value" />
+      </el-select>
     </div>
   </div>
 </template>
@@ -79,6 +93,10 @@ const handleSwitchDark = () => {
 
     span {
       font-size: 14px;
+    }
+
+    .#{$el-namespace}-select {
+      width: 40%;
     }
   }
 }

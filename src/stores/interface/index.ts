@@ -29,14 +29,14 @@ export interface PermissionState {
   flatRouteList: RouterConfigRaw[]; // 扁平化路由
 }
 
-export interface SettingsState {
+export interface SettingState {
   theme: string; // Element UI 主题色
   titleMode: TitleModeEnum; // 标题在浏览器标签上的多种模式。0：title + 页面 title，1：用户名 + 页面 title，2：title，3：页面 title
   layoutMode: LayoutModeEnum; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
   tabNavMode: TabNavModeEnum; // 布局设置，0：SideMenu 占屏幕左侧，Header 和 Main Content 占右侧，1：Header 占顶部一行，SideMenu 占下方左侧，Main Content 占下方右侧
   menuTheme: MenuThemeEnum; // 侧边菜单栏主题色
   isCollapse: boolean; // 侧边菜单
-  showSettings: boolean; // 是否显示 settings 配置
+  showSetting: boolean; // 是否显示 setting 配置
   showTabNav: boolean; // 是否显示标签页
   recordTabNav: boolean; // 是否记录打开过（没关闭）的 tags，下次打开会加载在 tagsNav
   showLayoutLogo: boolean; // 是否显示侧边菜单栏的 Logo

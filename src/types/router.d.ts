@@ -62,8 +62,8 @@ declare global {
     };
     hideInTab?: boolean; // 是否不添加到标签页，默认 false
     dynamicLevel?: number; // 动态路由可打开的最大数量
-    useI18n?: boolean; // 是否开启 i18n，默认读取全局的 routeUseI18n（src/config/settings.ts）
-    useTooltip?: boolean; // 菜单的文字超出后，是否使用 el-toolTip 提示，默认读取全局的 routeUseTooltip（src/config/settings.ts）
+    useI18n?: boolean; // 是否开启 i18n，默认读取全局的 routeUseI18n（src/config/base-config.ts）
+    useTooltip?: boolean; // 菜单的文字超出后，是否使用 el-toolTip 提示，默认读取全局的 routeUseTooltip（src/config/base-config.ts）
     render?: () => VNode | string; // 自定义 Render 菜单元素（TSX 语法）
   }
 }
