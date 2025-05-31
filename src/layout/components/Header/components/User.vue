@@ -9,7 +9,7 @@ import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 import defaultAvatar from "@/assets/images/default.png";
-import { LOGIN_URL, OpenThemeDrawerKey } from "@/config";
+import { LOGIN_URL, OpenThemePanelKey } from "@/config";
 
 defineOptions({ name: "User" });
 
@@ -49,7 +49,7 @@ const logOutLabel = computed(() => {
 });
 
 const openSettingDrawer = () => {
-  mittBus.emit(OpenThemeDrawerKey);
+  mittBus.emit(OpenThemePanelKey);
 };
 
 const logout = async () => {

@@ -1,6 +1,6 @@
 <template>
   <component :is="LayoutComponents[layoutMode]" />
-  <ThemeDrawer />
+  <ThemePanel />
 </template>
 
 <script setup lang="ts">
@@ -8,7 +8,7 @@ import type { Component } from "vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores";
 import { LayoutModeEnum } from "@/enums/appEnum";
-import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
+import ThemePanel from "@/layout/components/ThemePanel/index.vue";
 import LayoutVertical from "./LayoutVertical/index.vue";
 import LayoutClassic from "./LayoutClassic/index.vue";
 import LayoutTransverse from "./LayoutTransverse/index.vue";

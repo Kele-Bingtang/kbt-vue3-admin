@@ -189,6 +189,16 @@ export const setStyleVar = (key: string, value: string) => {
   document.documentElement.style.setProperty(key, value);
 };
 
+/**
+ * 删除 css var 需要的变量
+ * @param keys key 数组
+ */
+export const removeStyleVar = (keys: string[]) => {
+  keys.forEach(key => {
+    document.documentElement.style.removeProperty(key);
+  });
+};
+
 export const cssVar = (prop: string, dom = document.documentElement) => {
   return getComputedStyle(dom).getPropertyValue(prop);
 };

@@ -1,7 +1,7 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { useStorage, useCache } from "@/composables";
-import { LayoutModeEnum, MenuThemeEnum, PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
+import { HeaderStyleEnum, LayoutModeEnum, MenuThemeEnum, PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
 import SystemConfig from "@/config";
 
 export const useSettingStore = defineStore(
@@ -15,6 +15,7 @@ export const useSettingStore = defineStore(
     const tabNavMode = ref(themeConfig.tabNavMode || TabNavModeEnum.Simple);
     const menuTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
     const pageTransition = ref(themeConfig.pageTransition || PageTransitionEnum.SlideLeft);
+    const headerStyle = ref(themeConfig.headerStyle || HeaderStyleEnum.Page);
     const showSetting = ref(themeConfig.showSetting);
     const showTabNav = ref(themeConfig.showTabNav);
     const recordTabNav = ref(themeConfig.recordTabNav);
@@ -55,6 +56,7 @@ export const useSettingStore = defineStore(
       layoutMode,
       tabNavMode,
       menuTheme,
+      headerStyle,
       pageTransition,
       showSetting,
       showTabNav,

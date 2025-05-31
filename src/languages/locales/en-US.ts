@@ -146,6 +146,13 @@ export default {
     greyMode: "Grey Mode",
     weakMode: "Weak Mode",
     epSize: "EP Component Size",
+    headerStyle: "Header Style",
+    headerStyleSelect: {
+      page: "Page",
+      background: "Background",
+      line: "Line",
+      backgroundLine: "Background Line",
+    },
     collapseMenu: "Collapse Menu",
     menuAccordion: "Accordion Menu",
     showBreadcrumb: "Show Breadcrumb",

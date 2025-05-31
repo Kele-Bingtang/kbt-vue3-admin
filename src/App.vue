@@ -13,8 +13,9 @@ import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import { useLayoutStore } from "@/stores/layout";
 import SystemConfig from "@/config";
+import { HeaderStyleEnum } from "@/enums/appEnum";
 import { useSettingStore, useUserStore, useWebSocketStore } from "@/stores";
-import { addUnit, isFunction, setStyleVar } from "@/utils";
+import { addUnit, isFunction, removeStyleVar, setStyleVar } from "@/utils";
 import { ConfigGlobalKey, WebSocketKey } from "@/config/symbols";
 import { useNamespace, useCache, useBrowserTitle } from "@/composables";
 import { useTheme } from "@/composables/core/useTheme";
@@ -54,6 +55,38 @@ watchEffect(() => setStyleVar(ns.cssVarName("layout-open-aside-width"), addUnit(
 watchEffect(() => setStyleVar(ns.cssVarName("layout-close-aside-width"), "64px"));
 watchEffect(() => setStyleVar(ns.cssVarName("layout-header-height"), addUnit(settingStore.headerHeight)));
 watchEffect(() => setStyleVar(ns.cssVarName("radius"), addUnit(settingStore.radius, "rem")));
+watchEffect(() => {
+  const headerBg = ns.cssVarName("layout-header-bg-color");
+  const tabBg = ns.cssVarName("layout-tab-bg-color");
+  const bgStyle = `var(--${ns.namespace}-main-bg-color)`;
+
+  const headerLine = ns.cssVarName("layout-header-line");
+  const tabLine = ns.cssVarName("layout-tab-line");
+  const borderStyle = `1px solid var(--${ns.namespace}-card-border)`;
+
+  if (settingStore.headerStyle === HeaderStyleEnum.Page) return removeStyleVar([headerBg, tabBg, headerLine, tabLine]);
+
+  if (settingStore.headerStyle === HeaderStyleEnum.Bg) {
+    removeStyleVar([headerLine, tabLine]);
+
+    setStyleVar(headerBg, bgStyle);
+    setStyleVar(tabBg, bgStyle);
+  }
+
+  if (settingStore.headerStyle === HeaderStyleEnum.Line) {
+    removeStyleVar([headerBg, tabBg]);
+
+    setStyleVar(headerLine, borderStyle);
+    setStyleVar(tabLine, borderStyle);
+  }
+
+  if (settingStore.headerStyle === HeaderStyleEnum.BgLine) {
+    setStyleVar(headerBg, bgStyle);
+    setStyleVar(tabBg, bgStyle);
+    setStyleVar(headerLine, borderStyle);
+    setStyleVar(tabLine, borderStyle);
+  }
+});
 
 // 初始化 WebSocket
 if (import.meta.env.VITE_WEBSOCKET === "true") {

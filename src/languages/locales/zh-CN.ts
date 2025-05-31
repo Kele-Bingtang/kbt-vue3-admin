@@ -146,6 +146,13 @@ export default {
     greyMode: "灰色模式",
     weakMode: "色弱模式",
     epSize: "EP 组件尺寸",
+    headerStyle: "顶部样式",
+    headerStyleSelect: {
+      page: "页面",
+      background: "背景",
+      line: "线条",
+      backgroundLine: "经典",
+    },
     collapseMenu: "折叠菜单",
     menuAccordion: "菜单手风琴",
     showBreadcrumb: "显示面包屑",

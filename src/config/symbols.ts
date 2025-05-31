@@ -10,4 +10,4 @@ export const RefreshPageKey: InjectionKey<(value?: boolean) => void> = Symbol("R
 export const WebSocketKey: InjectionKey<WebSocketStore> = Symbol("WebSocket");
 export const RefreshIFrameKey: InjectionKey<WebSocketStore> = Symbol("RefreshIFrameKey");
 export const OpenSearchDialogKey: InjectionKey<WebSocketStore> = Symbol("OpenSearchDialog");
-export const OpenThemeDrawerKey: InjectionKey<WebSocketStore> = Symbol("OpenThemeDrawer");
+export const OpenThemePanelKey: InjectionKey<WebSocketStore> = Symbol("OpenThemePanel");

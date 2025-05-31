@@ -4,7 +4,7 @@ import { useNamespace } from "@/composables";
 import { useSettingStore } from "@/stores";
 import { mobileMaxWidthMedia } from "@/config";
 import { useI18n } from "vue-i18n";
-import { PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
+import { HeaderStyleEnum, PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
 
 defineOptions({ name: "LayoutSelect" });
 
@@ -20,12 +20,19 @@ const tabNavModeOptions = computed(() => [
   { value: TabNavModeEnum.Element, label: t("_setting.tabNavModeSelect.element") },
 ]);
 
-const pageTransitionOps = computed(() => [
+const pageTransitionOptions = computed(() => [
   { value: PageTransitionEnum.None, label: t("_setting.pageTransitionSelect.none") },
   { value: PageTransitionEnum.Fade, label: t("_setting.pageTransitionSelect.fade") },
   { value: PageTransitionEnum.SlideLeft, label: t("_setting.pageTransitionSelect.slideLeft") },
   { value: PageTransitionEnum.SlideTop, label: t("_setting.pageTransitionSelect.slideTop") },
   { value: PageTransitionEnum.SlideBottom, label: t("_setting.pageTransitionSelect.slideBottom") },
+]);
+
+const headerStyleOptions = computed(() => [
+  { value: HeaderStyleEnum.Page, label: t("_setting.headerStyleSelect.page") },
+  { value: HeaderStyleEnum.Bg, label: t("_setting.headerStyleSelect.background") },
+  { value: HeaderStyleEnum.Line, label: t("_setting.headerStyleSelect.line") },
+  { value: HeaderStyleEnum.BgLine, label: t("_setting.headerStyleSelect.backgroundLine") },
 ]);
 
 const customRadiusOptions = [
@@ -43,6 +50,13 @@ const customRadiusOptions = [
 
 <template>
   <div :class="ns.b()">
+    <div :class="ns.e('item')">
+      <span>{{ $t("_setting.headerStyle") }}</span>
+      <el-select v-model="settingStore.headerStyle" placeholder="Select">
+        <el-option v-for="item in headerStyleOptions" :key="item.value" :label="item.label" :value="item.value" />
+      </el-select>
+    </div>
+
     <div :class="ns.e('item')">
       <span>{{ $t("_setting.tabNavMode") }}</span>
       <el-select v-model="settingStore.tabNavMode" placeholder="Select">
@@ -65,7 +79,7 @@ const customRadiusOptions = [
     <div :class="ns.e('item')">
       <span>{{ $t("_setting.pageTransition") }}</span>
       <el-select v-model="settingStore.pageTransition" placeholder="Select">
-        <el-option v-for="item in pageTransitionOps" :key="item.value" :label="item.label" :value="item.value" />
+        <el-option v-for="item in pageTransitionOptions" :key="item.value" :label="item.label" :value="item.value" />
       </el-select>
     </div>
 

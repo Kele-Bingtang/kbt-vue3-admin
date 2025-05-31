@@ -1,4 +1,5 @@
 import type {
+  HeaderStyleEnum,
   LayoutModeEnum,
   MenuThemeEnum,
   PageTransitionEnum,
@@ -26,6 +27,7 @@ export interface ThemeConfig {
   tabNavMode: TabNavModeEnum; // 标签页设置
   menuTheme: MenuThemeEnum; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
   pageTransition: PageTransitionEnum; // 进入页面过渡动画
+  headerStyle: HeaderStyleEnum; // 顶部样式
   showSetting: boolean; // 是否显示设置
   showBreadcrumb: boolean; // 是否使用 Breadcrumb
   showTabNav: boolean; // 是否使用 tagsNav
@@ -73,7 +75,7 @@ export interface RouterConfig {
   routeUseI18n: boolean; // 「路由」布局是否使用国际化，默认为 false，如果不使用，则需要在路由中给需要在菜单中展示的路由设置 meta: {title: 'xxx'} 用来在菜单中显示文字
   /**
    * 白名单额三种模式：["*"]、["next"]、[to.path, ...]
-   * * 代表加载所有路由；next 代表直接放行，但不加载权限路由；to.path 表示指定的路由可以放行，可以填多个
+   * '*' 代表加载所有路由；next 代表直接放行，但不加载权限路由；to.path 表示指定的路由可以放行，可以填多个
    * 优先级：* > next > to.path
    */
   isKeepAlive: boolean; // 路由是否开启缓存

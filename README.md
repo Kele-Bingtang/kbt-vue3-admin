@@ -395,7 +395,7 @@ Admin 使用了 mittBus 实现事件总栈。
 
 注册一个事件到事件总栈：
 
-ThemeDrawer.vue
+ThemePanel.vue
 
 ```typescript
 import mittBus from "@/utils/layout/mittBus";

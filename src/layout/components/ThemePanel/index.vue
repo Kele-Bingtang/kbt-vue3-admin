@@ -8,10 +8,10 @@ import { useSettingStore } from "@/stores";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 import { LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
-import { mobileMaxWidthMedia, OpenThemeDrawerKey } from "@/config";
+import { mobileMaxWidthMedia, OpenThemePanelKey } from "@/config";
 import { LayoutSwitch, AsideHeaderSwitch, ThemeSelect, LayoutSelect, BrowserTitleSwitch } from "./components";
 
-defineOptions({ name: "ThemeDrawer" });
+defineOptions({ name: "ThemePanel" });
 
 const ns = useNamespace("theme-drawer");
 
@@ -36,7 +36,7 @@ const resetSetting = () => {
 
 // 打开主题设置
 const drawerVisible = ref(false);
-mittBus.on(OpenThemeDrawerKey, () => (drawerVisible.value = true));
+mittBus.on(OpenThemePanelKey, () => (drawerVisible.value = true));
 
 // 监听布局变化，在 body 上添加相对应的 layout class
 watch(
@@ -74,7 +74,7 @@ const Divider = defineComponent({
 <template>
   <el-drawer
     v-model="drawerVisible"
-    size="300px"
+    :size="300"
     :lock-scroll="false"
     :with-header="false"
     close-on-click-modal
@@ -113,7 +113,7 @@ const Divider = defineComponent({
         "
       >
         <!-- 菜单主题 & 头部主题切换 -->
-        <AsideHeaderSwitch useAll>
+        <!-- <AsideHeaderSwitch useAll>
           <template #aside>
             <Divider>
               <Icon class="icon"><Menu /></Icon>
@@ -127,7 +127,7 @@ const Divider = defineComponent({
               {{ $t("_setting.headerSwitch") }}
             </Divider>
           </template>
-        </AsideHeaderSwitch>
+        </AsideHeaderSwitch> -->
       </template>
     </template>
 
@@ -169,7 +169,7 @@ const Divider = defineComponent({
 
 @include b(theme-drawer) {
   // 背景滤镜
-  background: rgba($color: #ffffff, $alpha: 50%);
+  background-color: rgb(255 255 255 / 0%);
   box-shadow: 0 0 30px rgb(0 0 0 / 10%);
   backdrop-filter: blur(25px);
 
@@ -188,6 +188,11 @@ const Divider = defineComponent({
       right: 5px;
       font-size: 15px;
     }
+  }
+
+  .#{$el-namespace}-select__wrapper,
+  .#{$el-namespace}-input__wrapper {
+    background-color: rgb(255 255 255 / 0%);
   }
 }
 </style>

@@ -34,7 +34,6 @@ export enum TitleModeEnum {
   Page = "page",
 }
 
-// Language
 export enum LanguageEnum {
   ZhCn = "zh-CN",
   EnUs = "en-US",
@@ -46,4 +45,11 @@ export enum PageTransitionEnum {
   SlideLeft = "slide-left",
   SlideTop = "Slide-top",
   SlideBottom = "slide-bottom",
+}
+
+export enum HeaderStyleEnum {
+  Page = "page",
+  Bg = "bg",
+  Line = "line",
+  BgLine = "bgLine",
 }

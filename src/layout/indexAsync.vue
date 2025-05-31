@@ -7,7 +7,7 @@
       <Loading />
     </template>
   </suspense>
-  <ThemeDrawer />
+  <ThemePanel />
 </template>
 
 <script setup lang="ts">
@@ -16,7 +16,7 @@ import { defineAsyncComponent } from "vue";
 import { storeToRefs } from "pinia";
 import { useSettingStore } from "@/stores";
 import { LayoutModeEnum } from "@/enums/appEnum";
-import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
+import ThemePanel from "@/layout/components/ThemePanel/index.vue";
 import Loading from "./components/Loading/index.vue";
 
 import "./base-layout.scss";
