@@ -1,4 +1,4 @@
-import { ref, computed, unref } from "vue";
+import { ref, computed } from "vue";
 import { defineStore } from "pinia";
 import { useRouteFn } from "@/composables";
 import { staticRoutes, errorRouter, notFoundRouter } from "@/router/routesConfig";
@@ -22,7 +22,7 @@ export const useRouteStore = defineStore("routeStore", () => {
       processRouteMeta(staticRoutes).concat(routers).concat(errorRouter).concat(notFoundRouter) as RouterConfig[]
     );
 
-    return unref(flatRouteList);
+    return flatRouteList.value;
   };
 
   return {

@@ -1,5 +1,5 @@
 <script setup lang="ts" name="HeaderLeft">
-import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { useSettingsStore } from "@/stores";
 import { useNamespace } from "@/composables";
 import { useMediaQuery } from "@vueuse/core";
@@ -11,7 +11,7 @@ defineOptions({ name: "HeaderLeft" });
 
 const ns = useNamespace("header-left");
 const settingsStore = useSettingsStore();
-const showBreadcrumb = computed(() => settingsStore.showBreadcrumb);
+const { showBreadcrumb } = storeToRefs(settingsStore);
 
 const isMobile = useMediaQuery(mobileMaxWidthMedia);
 </script>

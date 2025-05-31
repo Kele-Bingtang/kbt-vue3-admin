@@ -41,7 +41,7 @@ export const useProForm = () => {
 
   const getForm = async () => {
     await nextTick();
-    const form = unref(formRef);
+    const form = formRef.value;
     if (!form) {
       console.error("The form is not registered. Please use the register method to register");
     }
@@ -145,7 +145,7 @@ export const useProForm = () => {
      */
     getElFormExpose: async () => {
       await getForm();
-      return unref(elFormRef);
+      return elFormRef.value;
     },
 
     /**
@@ -154,7 +154,7 @@ export const useProForm = () => {
      */
     getFormExpose: async () => {
       await getForm();
-      return unref(formRef);
+      return formRef.value;
     },
   };
 
@@ -179,7 +179,7 @@ export const useProForm = () => {
       const proFormInstance = createVNode(ProForm, { ...proFormProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(
         ElConfigProvider,
-        { namespace: ns.elNamespace, size: unref(layoutSize) },
+        { namespace: ns.elNamespace, size: layoutSize.value },
         { default: () => proFormInstance }
       );
       await nextTick();
@@ -193,8 +193,8 @@ export const useProForm = () => {
 
   return {
     formElState: {
-      formRef: unref(formRef),
-      elFormRef: unref(elFormRef),
+      formRef: formRef.value,
+      elFormRef: elFormRef.value,
     },
     formMethods: methods,
     formRegister: register,

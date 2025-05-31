@@ -32,7 +32,7 @@ const RenderProForm = (_: any, context: Record<string, any>) => {
   return createFormComponent(
     {
       schema: schema,
-      modelValue: unref(model1),
+      modelValue: model1.value,
       elFormProps,
       onValidate: formValidate,
     },
@@ -43,7 +43,7 @@ const RenderProForm = (_: any, context: Record<string, any>) => {
 onMounted(() => {
   createForm("proFormRef", {
     schema: schema,
-    modelValue: unref(model2),
+    modelValue: model2.value,
     elFormProps,
     onValidate: formValidate,
   });

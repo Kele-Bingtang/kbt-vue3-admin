@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, watch, ref, unref } from "vue";
+import { watch, ref } from "vue";
+import { storeToRefs } from "pinia";
 import { useRoute, useRouter } from "vue-router";
 import { ElContainer, ElAside, ElHeader, ElScrollbar } from "element-plus";
 import { useSettingsStore } from "@/stores";
@@ -26,15 +27,15 @@ const menuItem = ref<RouterConfig[]>([]);
 // 菜单是否激活
 const active = ref<string>("");
 
-const isCollapse = computed(() => settingsStore.isCollapse);
+const { isCollapse } = storeToRefs(settingsStore);
 
 watch(
   route,
   () => {
     // 当前菜单没有数据直接 return
-    if (!unref(menuList).length) return;
+    if (!menuList.value.length) return;
     active.value = route.path;
-    const item = unref(menuList).filter(item => [route.path, `/${route.path.split("/")[1]}`].includes(item.path));
+    const item = menuList.value.filter(item => [route.path, `/${route.path.split("/")[1]}`].includes(item.path));
 
     if (item[0] && item[0].children?.length) return (menuItem.value = item[0].children);
     menuItem.value = [];

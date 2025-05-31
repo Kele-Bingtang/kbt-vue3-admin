@@ -32,7 +32,7 @@
 
 <script setup lang="ts">
 import DragDrawerTrigger from "./DragDrawerTrigger.vue";
-import { computed, onBeforeUnmount, onMounted, ref, unref, type StyleValue } from "vue";
+import { computed, onBeforeUnmount, onMounted, ref, type StyleValue } from "vue";
 import { ElDrawer } from "element-plus";
 import { useNamespace } from "@/composables";
 
@@ -71,7 +71,7 @@ const wrapperWidth = ref(0);
 const wrapperLeft = ref(0);
 
 const outerClasses = computed(() => {
-  const classesArray = [props.inner ? `${prefixClass}__inner` : "", unref(canMove) ? "no-select" : ""];
+  const classesArray = [props.inner ? `${prefixClass}__inner` : "", canMove.value ? "no-select" : ""];
   return classesArray.join(" ");
 });
 
@@ -90,7 +90,7 @@ const direction = computed(() => {
 
 const innerWidth = computed(() => {
   const width = props.minWidth as number;
-  return width <= 100 ? (unref(wrapperWidth) * width) / 100 : width;
+  return width <= 100 ? (wrapperWidth.value * width) / 100 : width;
 });
 
 const triggerStyle = computed(() => {
@@ -107,7 +107,7 @@ const triggerStyle = computed(() => {
   //   direction = "bottom";
   // }
   return {
-    [d]: `${unref(innerWidth)}px`,
+    [d]: `${innerWidth.value}px`,
     position: props.inner ? "absolute" : "fixed",
   } as StyleValue;
 });
@@ -136,17 +136,17 @@ const handleTriggerMousedown = (event: Event) => {
 };
 
 const handleMousemove = (event: any) => {
-  if (!unref(canMove)) return;
+  if (!canMove.value) return;
   // 更新容器宽度和距离左侧页面距离，如果是 window 则距左侧距离为 0
   setWrapperWidth();
-  const left = event.pageX - unref(wrapperLeft);
+  const left = event.pageX - wrapperLeft.value;
   // 如果抽屉方向为右边，宽度计算需用容器宽度减去 left
-  let width = direction.value === "rtl" ? unref(wrapperWidth) - left : left;
+  let width = direction.value === "rtl" ? wrapperWidth.value - left : left;
   // 限定做小宽度
   width = Math.max(width, parseFloat(props.minWidth as string));
   event.atMin = width === parseFloat(props.minWidth as string);
   // 如果当前 width 不大于 100，视为百分比
-  if (width <= 100) width = (width / unref(wrapperWidth)) * 100;
+  if (width <= 100) width = (width / wrapperWidth.value) * 100;
   drawerWidth.value = width;
   emits("onResize", event);
 };
@@ -157,7 +157,7 @@ const handleMouseup = () => {
 };
 
 const setWrapperWidth = () => {
-  const { width, left } = drawerRef.value && unref(drawerRef).$el.nextElementSibling.getBoundingClientRect();
+  const { width, left } = drawerRef.value && drawerRef.value.$el.nextElementSibling.getBoundingClientRect();
   wrapperWidth.value = width;
   wrapperLeft.value = left;
 };

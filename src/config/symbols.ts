@@ -1,8 +1,8 @@
 import type { LayoutSizeType, WebSocketStore } from "@/stores";
-import type { InjectionKey, ComputedRef } from "vue";
+import type { InjectionKey, Ref } from "vue";
 
 interface ConfigGlobal {
-  size: ComputedRef<LayoutSizeType>;
+  size: Ref<LayoutSizeType>;
 }
 
 export const ConfigGlobalKey: InjectionKey<ConfigGlobal> = Symbol("ConfigGlobal");

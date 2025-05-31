@@ -40,7 +40,7 @@
 
 <script setup lang="ts">
 import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
-import { ref, unref, shallowRef } from "vue";
+import { ref, shallowRef } from "vue";
 import { Icon } from "@/components";
 import { useNamespace } from "@/composables";
 
@@ -76,16 +76,16 @@ const isFullscreen = ref(props.fullscreen);
 const elDrawerRef = shallowRef<DrawerProps | null>(null);
 
 const toggleFull = () => {
-  isFullscreen.value = !unref(isFullscreen);
+  isFullscreen.value = !isFullscreen.value;
 };
 
 const handleClose = () => {
-  emits("close", unref(elDrawerRef));
+  emits("close", elDrawerRef.value);
   drawerVisible.value = false;
 };
 
 const handleConfirm = () => {
-  emits("confirm", unref(elDrawerRef));
+  emits("confirm", elDrawerRef.value);
   drawerVisible.value = false;
 };
 

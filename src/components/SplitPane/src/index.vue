@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef, ref, computed, watch, onMounted, nextTick, unref } from "vue";
+import { shallowRef, ref, computed, watch, onMounted, nextTick } from "vue";
 import SplitLine from "./SplitLine.vue";
 import { useNamespace } from "@/composables";
 
@@ -64,9 +64,9 @@ const oldOffset = ref<unknown>(0);
 const isMoving = ref(false);
 
 const isHorizontal = computed(() => props.mode === "horizontal");
-const anotherOffset = computed(() => 100 - unref(offset));
-const valueIsString = computed(() => typeof unref(modelValue) === "string");
-const offsetSize = computed(() => (unref(isHorizontal) ? "offsetHeight" : "offsetWidth"));
+const anotherOffset = computed(() => 100 - offset.value);
+const valueIsString = computed(() => typeof modelValue.value === "string");
+const offsetSize = computed(() => (isHorizontal.value ? "offsetHeight" : "offsetWidth"));
 const computedMin = computed(() => getComputedThresholdValue("min"));
 const computedMax = computed(() => getComputedThresholdValue("max"));
 
@@ -79,9 +79,9 @@ onMounted(() => {
 });
 
 const init = () => {
-  const value = unref(valueIsString)
-    ? px2percent(unref(modelValue) as string, unref(splitPaneRef)[unref(offsetSize)])
-    : unref(modelValue);
+  const value = valueIsString.value
+    ? px2percent(modelValue.value as string, splitPaneRef.value[offsetSize.value])
+    : modelValue.value;
   offset.value = ((value as number) * 10000) / 100;
 };
 
@@ -93,46 +93,46 @@ const getComputedThresholdValue = (type: string) => {
   let value: NumOrStr = "";
   if (type === "min") value = props.min;
   else if (type === "max") value = props.max;
-  const size = unref(splitPaneRef)[unref(offsetSize)];
-  if (unref(valueIsString)) return typeof value === "string" ? value : size * value;
+  const size = splitPaneRef.value[offsetSize.value];
+  if (valueIsString.value) return typeof value === "string" ? value : size * value;
   else return typeof value === "string" ? px2percent(value, size) : value;
 };
 
 // eslint-disable-next-line no-unused-vars
 const getMin = (value1: NumOrStr, value2: NumOrStr) => {
-  if (unref(valueIsString)) return `${Math.min(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
+  if (valueIsString.value) return `${Math.min(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
   else return Math.min(value1 as number, value2 as number);
 };
 
 const getMax = (value1: NumOrStr, value2: NumOrStr) => {
-  if (unref(valueIsString)) return `${Math.max(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
+  if (valueIsString.value) return `${Math.max(parseFloat(value1 as string), parseFloat(value2 as string))}px`;
   else return Math.max(value1 as number, value2 as number);
 };
 
 const getAnotherOffset = (value: NumOrStr) => {
   let res: NumOrStr = "0";
-  if (unref(valueIsString)) res = `${unref(splitPaneRef)[unref(offsetSize)] - parseFloat(value as string)}px`;
+  if (valueIsString.value) res = `${splitPaneRef.value[offsetSize.value] - parseFloat(value as string)}px`;
   else res = 1 - (value as number);
   return res;
 };
 
 const handleMove = (e: MouseEvent) => {
-  const pageOffset = unref(isHorizontal) ? e.pageY : e.pageX;
-  const offset = pageOffset - unref(initOffset);
-  const outerWidth = unref(splitPaneRef)[unref(offsetSize)];
-  let value = unref(valueIsString)
-    ? `${parseFloat(unref(oldOffset) + "") + offset}px`
-    : px2percent(outerWidth * (unref(oldOffset) as number) + offset + "", outerWidth);
-  console.log(px2percent(outerWidth * (unref(oldOffset) as number) + offset + "", outerWidth));
+  const pageOffset = isHorizontal.value ? e.pageY : e.pageX;
+  const offset = pageOffset - initOffset.value;
+  const outerWidth = splitPaneRef.value[offsetSize.value];
+  let value = valueIsString.value
+    ? `${parseFloat(oldOffset.value + "") + offset}px`
+    : px2percent(outerWidth * (oldOffset.value as number) + offset + "", outerWidth);
+  console.log(px2percent(outerWidth * (oldOffset.value as number) + offset + "", outerWidth));
   const anotherValue = getAnotherOffset(value);
-  if (parseFloat(value + "") <= parseFloat(unref(computedMin) + "")) value = getMax(value, unref(computedMin));
-  if (parseFloat(anotherValue + "") <= parseFloat(unref(computedMax) + "")) {
-    value = getAnotherOffset(getMax(anotherValue, unref(computedMax)));
+  if (parseFloat(value + "") <= parseFloat(computedMin.value + "")) value = getMax(value, computedMin.value);
+  if (parseFloat(anotherValue + "") <= parseFloat(computedMax.value + "")) {
+    value = getAnotherOffset(getMax(anotherValue, computedMax.value));
   }
-  (e as any).atMin = modelValue.value === unref(computedMin);
-  (e as any).atMax = unref(valueIsString)
-    ? getAnotherOffset(unref(modelValue)) === unref(computedMax)
-    : (getAnotherOffset(unref(modelValue)) as number).toFixed(5) === (unref(computedMax) as number).toFixed(5);
+  (e as any).atMin = modelValue.value === computedMin.value;
+  (e as any).atMax = valueIsString.value
+    ? getAnotherOffset(modelValue.value) === computedMax.value
+    : (getAnotherOffset(modelValue.value) as number).toFixed(5) === (computedMax.value as number).toFixed(5);
   modelValue.value = value;
   emits("moving", e);
 };
@@ -145,8 +145,8 @@ const handleUp = () => {
 };
 
 const handleMousedown = (e: MouseEvent) => {
-  initOffset.value = unref(isHorizontal) ? e.pageY : e.pageX;
-  oldOffset.value = unref(modelValue);
+  initOffset.value = isHorizontal.value ? e.pageY : e.pageX;
+  oldOffset.value = modelValue.value;
   isMoving.value = true;
   document.addEventListener("mousemove", handleMove);
   document.addEventListener("mouseup", handleUp);

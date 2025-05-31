@@ -99,7 +99,7 @@ const treeData = computed(() => {
 
 const currentValues = ref<string[]>([]);
 
-const tabNavList = computed(() => layoutStore.tabNavList);
+const { tabNavList } = storeToRefs(layoutStore);
 
 function onCloseTags() {
   if (currentValues.value.length === 0) return;

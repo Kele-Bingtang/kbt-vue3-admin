@@ -8,13 +8,13 @@
 
 <script setup lang="ts">
 import { ElTransfer } from "element-plus";
-import { ref, computed, unref } from "vue";
+import { ref, computed } from "vue";
 
 defineOptions({ name: "ProTransfer" });
 
 const transferRef = ref();
 
-const clearQuery = computed(() => unref(transferRef).clearQuery);
+const clearQuery = computed(() => transferRef.value.clearQuery);
 
 // 抛出实例
 defineExpose({ el: transferRef, clearQuery });

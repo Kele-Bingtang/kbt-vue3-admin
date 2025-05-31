@@ -38,7 +38,7 @@ export const useWebSocketStore = defineStore("webSocketStore", () => {
    * WebSocket 连接成功事件
    */
   const websocketOpen = () => {
-    const ws = unref(websocket);
+    const ws = websocket.value;
     if (!ws) return;
 
     ws.onopen = openEvent => {
@@ -52,7 +52,7 @@ export const useWebSocketStore = defineStore("webSocketStore", () => {
    * WebSocket 接收数据
    */
   const websocketMessage = () => {
-    const ws = unref(websocket);
+    const ws = websocket.value;
     if (!ws) return;
 
     ws.onmessage = messageEvent => {
@@ -72,7 +72,7 @@ export const useWebSocketStore = defineStore("webSocketStore", () => {
    * WebSocket 断开链接
    */
   const websocketClose = () => {
-    const ws = unref(websocket);
+    const ws = websocket.value;
     if (!ws) return;
 
     ws.onclose = closeEvent => {
@@ -85,7 +85,7 @@ export const useWebSocketStore = defineStore("webSocketStore", () => {
    * WebSocket 连接失败事件
    */
   const websocketError = () => {
-    const ws = unref(websocket);
+    const ws = websocket.value;
     if (!ws) return;
 
     ws.onerror = errorEvent => {
@@ -98,12 +98,12 @@ export const useWebSocketStore = defineStore("webSocketStore", () => {
    * WebSocket 心跳发送
    */
   const startHeartBeat = () => {
-    const ws = unref(websocket);
+    const ws = websocket.value;
     if (!ws) return;
 
     heartBeatTimer = setInterval(() => {
       // 如果连接正常则发送心跳
-      if (ws.readyState === 1 || unref(status) === SocketStatus.Connected) {
+      if (ws.readyState === 1 || status.value === SocketStatus.Connected) {
         ws.send(heartBeatData);
         // 心跳次数 +1
         heartBeatSendCount = heartBeatSendCount + 1;
@@ -133,7 +133,7 @@ export const useWebSocketStore = defineStore("webSocketStore", () => {
       heartBeatTimer && clearInterval(heartBeatTimer);
 
       // 重新连接 Websocket
-      connect(unref(websocketUrl));
+      connect(websocketUrl.value);
 
       // 失败次数 +1
       heartBeatErrorCount = heartBeatErrorCount + 1;
@@ -148,7 +148,7 @@ export const useWebSocketStore = defineStore("webSocketStore", () => {
    * 断开 WebSocket 连接
    */
   const disconnect = () => {
-    const ws = unref(websocket);
+    const ws = websocket.value;
     if (!ws) return;
 
     if (ws && (ws.OPEN || ws.CONNECTING)) {
@@ -168,7 +168,7 @@ export const useWebSocketStore = defineStore("webSocketStore", () => {
    * @param data 数据
    */
   const sendMessage = (data: any) => {
-    const ws = unref(websocket);
+    const ws = websocket.value;
     if (!ws) return;
 
     ws.send(data);

@@ -84,7 +84,7 @@ const mergeProps = ref<ProFormProps>({});
 
 const getProps = computed(() => {
   const propsObj = { ...props };
-  Object.assign(propsObj, unref(mergeProps));
+  Object.assign(propsObj, mergeProps.value);
   return propsObj;
 });
 
@@ -94,7 +94,7 @@ const enumMap = ref(props.enumMapProps || new Map<string, Record<string, any>[]>
 const setEnumMap = async ({ enum: enumValue, prop, useCacheEnum = true }: FormSchemaProps) => {
   if (!enumValue) return;
 
-  const enumMapConst = unref(enumMap);
+  const enumMapConst = enumMap.value;
 
   // 如果当前 enumMap 存在相同的值 return & 开启缓存功能
   if (
@@ -112,7 +112,7 @@ const setEnumMap = async ({ enum: enumValue, prop, useCacheEnum = true }: FormSc
   enumMapConst.set(prop!, []);
 
   // 如果当前 enum 为后台数据需要请求数据，则调用该请求接口，并存储到 enumMap
-  let data = await enumValue(unref(model), enumMapConst);
+  let data = await enumValue(model.value, enumMapConst);
   // 适配 enum 接口返回 data 以及自定义函数返回数组
   data = data?.data || data;
 
@@ -122,7 +122,7 @@ provide(formEnumMapKey, enumMap);
 
 // 初始化默认值
 const initDefaultValue = async ({ defaultValue, fieldNames, prop }: FormSchemaProps) => {
-  const formConst = unref(model);
+  const formConst = model.value;
   const value = getProp(formConst, prop);
 
   if (value || value === false || value === 0) return;
@@ -132,11 +132,11 @@ const initDefaultValue = async ({ defaultValue, fieldNames, prop }: FormSchemaPr
   if (defaultValueConst !== undefined && defaultValueConst !== null) {
     if (typeof defaultValueConst !== "function") return setProp(formConst, prop, defaultValueConst);
 
-    return setProp(formConst, prop, await defaultValueConst(formConst, unref(enumMap)));
+    return setProp(formConst, prop, await defaultValueConst(formConst, enumMap.value));
   }
 
   // 如果没有设置默认值，则判断后台是否返回 isDefault 为 Y 的枚举
-  const enumData = unref(enumMap).get(prop);
+  const enumData = enumMap.value.get(prop);
   if (enumData?.length) {
     // 找出 isDefault 为 Y 的 value
     const data = enumData.filter(item => item.isDefault === "Y");
@@ -153,11 +153,11 @@ const cascadeEnum = ({ prop, el, subProp, subEnum }: FormSchemaProps) => {
     if (typeof subProp !== "string") return;
     // 监听级联下拉变化
     watch(
-      () => getProp(unref(model), prop),
+      () => getProp(model.value, prop),
       async (newVal: string) => {
-        const enumMapConst = unref(enumMap);
+        const enumMapConst = enumMap.value;
         // 选择时将级联的 subProp 置空
-        if (unref(model)[subProp!]) unref(model)[subProp!] = "";
+        if (model.value[subProp!]) model.value[subProp!] = "";
 
         if (!subEnum) return;
         if (!newVal) return enumMapConst.set(subProp!, []);
@@ -181,7 +181,7 @@ const cascadeEnum = ({ prop, el, subProp, subEnum }: FormSchemaProps) => {
         const formEnum = enumMapConst.get(prop) || [];
         const [enumValue] = formEnum.filter(item => item.value === newVal);
         // 如果选中的字典有 subValue，则直接赋值给 subProp
-        if (enumValue?.subValue) unref(model)[subProp!] = enumValue.subValue;
+        if (enumValue?.subValue) model.value[subProp!] = enumValue.subValue;
       },
       { immediate: true }
     );
@@ -193,7 +193,7 @@ const cascadeEnum = ({ prop, el, subProp, subEnum }: FormSchemaProps) => {
  */
 const isHidden = (item: FormSchemaProps) => {
   const { hidden } = item;
-  if (typeof hidden === "function") return hidden(unref(model));
+  if (typeof hidden === "function") return hidden(model.value);
   return hidden;
 };
 
@@ -202,26 +202,26 @@ const isHidden = (item: FormSchemaProps) => {
  */
 const isDestroy = (item: FormSchemaProps) => {
   let destroy: boolean;
-  if (typeof item.destroy === "function") destroy = item.destroy(unref(model));
+  if (typeof item.destroy === "function") destroy = item.destroy(model.value);
   else destroy = item.destroy || false;
 
   // 如果不销毁，则初始化表单默认值，反之则重置为空
   if (!destroy) initDefaultValue(item);
-  else deleteObjProperty(unref(model), item.prop);
+  else deleteObjProperty(model.value, item.prop);
 
   return destroy;
 };
 
 const parseLabel = (label: ValueType | ((model: Record<string, any>) => string) | ComputedRef<ValueType>) => {
-  if (typeof label === "function") return label(unref(model));
+  if (typeof label === "function") return label(model.value);
   return unref(label) + "";
 };
 
 // 监听表单结构化数组，重新组装 schema
 watch(
-  () => unref(getProps).schema,
+  () => getProps.value.schema,
   (schema = []) => {
-    unref(schema).forEach((item, index) => {
+    schema.forEach((item, index) => {
       // 设置枚举
       setEnumMap(item);
       // 级联下拉监听
@@ -235,16 +235,16 @@ watch(
     });
 
     // 排序表单项
-    unref(schema).sort((a, b) => a.order! - b.order!);
+    schema.sort((a, b) => a.order! - b.order!);
 
-    if (unref(getProps).dynamicModel) {
+    if (getProps.value.dynamicModel) {
       // 如果 schema 对应的 prop 不存在，则删除 model 中的对应的 prop
-      Object.keys(unref(model)).forEach(key => {
+      Object.keys(model.value).forEach(key => {
         const isExist = schema.some(
           item =>
-            item.prop === key || item.renderUseProp?.includes(key) || unref(getProps).includeModelKeys?.includes(key)
+            item.prop === key || item.renderUseProp?.includes(key) || getProps.value.includeModelKeys?.includes(key)
         );
-        if (!isExist) delete unref(model)[key];
+        if (!isExist) delete model.value[key];
       });
     }
   },
@@ -256,7 +256,7 @@ watch(
 
 // 获取每个表单的宽度
 const getComponentWidth = ({ width, props: componentProps }: FormSchemaProps) => {
-  const { elFormProps = {} } = unref(getProps);
+  const { elFormProps = {} } = getProps.value;
   const style = componentProps?.style || { width: "100%" }; // 默认宽度 100%
   if (width) return { ...style, width: addUnit(width) };
   if (elFormProps.fixWidth) return { ...style, width: addUnit(elFormProps.width || elFormProps.inline ? 220 : "100%") };
@@ -285,9 +285,9 @@ const setGridProp = (col: Partial<ColProps> = {}) => {
 const slots = useSlots();
 
 const RenderFormWrap = () => {
-  const { elFormProps, onlyRenderComponent, schema } = unref(getProps);
+  const { elFormProps, onlyRenderComponent, schema } = getProps.value;
   return !onlyRenderComponent ? (
-    <ElForm ref={elFormRef} {...elFormProps} class={prefixClass} model={unref(model)}>
+    <ElForm ref={elFormRef} {...elFormProps} class={prefixClass} model={model.value}>
       {{
         default: () => {
           // 如果存在自定义插槽，则直接返回自定义插槽的 Render
@@ -295,20 +295,20 @@ const RenderFormWrap = () => {
           return (
             <>
               {RenderForm()}
-              {slots.operation ? <ElFormItem>{slots.operation(unref(model))}</ElFormItem> : undefined}
+              {slots.operation ? <ElFormItem>{slots.operation(model.value)}</ElFormItem> : undefined}
             </>
           );
         },
       }}
     </ElForm>
   ) : (
-    unref(schema)
+    schema
       .filter(item => !isDestroy(item))
       .map(item => {
         return (
           <div v-show={!isHidden(item)}>
             <ProFormItem
-              ref={(el: any) => (unref(proFormItemRefs)[item.prop] = el)}
+              ref={(el: any) => (proFormItemRefs.value[item.prop] = el)}
               column={item}
               v-model={model.value}
               style={getComponentWidth(item)}
@@ -321,7 +321,7 @@ const RenderFormWrap = () => {
 
 // 渲染 ELForm
 const RenderForm = () => {
-  const { useCol, rowProps } = unref(getProps);
+  const { useCol, rowProps } = getProps.value;
   // 如果需要栅格，需要包裹 ElCol
   return useCol ? (
     // 默认 gutter 20，可以被传来的 rowProps 替换
@@ -335,10 +335,10 @@ const RenderForm = () => {
 
 // 渲染 FormItem 上一层
 const renderFormItemWrap = () => {
-  const { schema = [], useCol, rowProps, colRow } = unref(getProps);
+  const { schema = [], useCol, rowProps, colRow } = getProps.value;
   const col = colRow ? { span: 24 } : {};
 
-  return unref(schema)
+  return schema
     .filter(item => !isDestroy(item))
     .map(item => {
       // 如果有 title
@@ -374,7 +374,7 @@ const renderFormItem = (item: FormSchemaProps) => {
   return (
     <ElFormItem
       v-show={!isHidden(item)}
-      ref={(el: any) => (unref(formItemComponentsRef)[item.prop] = el)}
+      ref={(el: any) => (formItemComponentsRef.value[item.prop] = el)}
       {...(item.formItem || {})}
       prop={item.prop}
       label={parseLabel(item.label)}
@@ -382,7 +382,7 @@ const renderFormItem = (item: FormSchemaProps) => {
       {{
         default: () => (
           <ProFormItem
-            ref={(el: any) => (unref(proFormItemRefs)[item.prop] = el)}
+            ref={(el: any) => (proFormItemRefs.value[item.prop] = el)}
             column={item}
             v-model={model.value}
             style={getComponentWidth(item)}
@@ -421,12 +421,12 @@ export type ProFormOnEmits = keyOnPrefix<ProFormEmits>;
 const emits = defineEmits<ProFormEmits>();
 
 onMounted(() => {
-  emits("register", unref(elFormRef)?.$parent, unref(elFormRef));
+  emits("register", elFormRef.value?.$parent, elFormRef.value);
 });
 
 // 设置 form 的值
 const setValues = (data: Record<string, any> = {}) => {
-  model.value = Object.assign(unref(model), data);
+  model.value = Object.assign(model.value, data);
 };
 
 // 设置 ProForm 组件的 props
@@ -436,7 +436,7 @@ const setProps = (props: Partial<ProFormProps> = {}) => {
 
 // 设置 schema
 const setSchema = (schemaSet: FormSetProps[]) => {
-  const { schema } = unref(getProps);
+  const { schema } = getProps.value;
   for (const v of schema) {
     for (const item of schemaSet) {
       if (v.prop === item.prop) {
@@ -448,7 +448,7 @@ const setSchema = (schemaSet: FormSetProps[]) => {
 
 // 添加 schema
 const addSchema = (formSchema: FormSchemaProps, prop?: number | string, position: "before" | "after" = "after") => {
-  const { schema } = unref(getProps);
+  const { schema } = getProps.value;
 
   if (isString(prop)) {
     return schema.forEach((s, i) => {
@@ -461,7 +461,7 @@ const addSchema = (formSchema: FormSchemaProps, prop?: number | string, position
 
 // 删除 schema
 const delSchema = (prop: string) => {
-  const { schema } = unref(getProps);
+  const { schema } = getProps.value;
 
   const index = schema.findIndex(item => item.prop === prop);
   if (index > -1) schema.splice(index, 1);
@@ -469,12 +469,12 @@ const delSchema = (prop: string) => {
 
 // 获取表单组件实例
 const getComponentExpose = (prop: string) => {
-  return unref(proFormItemRefs)[prop].formComponentRef;
+  return proFormItemRefs.value[prop].formComponentRef;
 };
 
 // 获取 formItem 实例
 const getFormItemExpose = (prop: string) => {
-  return unref(formItemComponentsRef)[prop];
+  return formItemComponentsRef.value[prop];
 };
 
 defineExpose({

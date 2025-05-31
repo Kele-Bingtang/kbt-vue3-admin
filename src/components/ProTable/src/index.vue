@@ -221,12 +221,12 @@ const mergeProps = ref<ProTableProps>({});
 const getProps = computed(() => {
   // 将 columns 转为响应式对象
   const propsObj = { ...props, columns: isReactive(props.columns) ? props.columns : reactive(props.columns) };
-  Object.assign(propsObj, unref(mergeProps));
+  Object.assign(propsObj, mergeProps.value);
   return propsObj;
 });
 
 // 表格多选 Hooks
-const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(unref(getProps).rowKey);
+const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(getProps.value.rowKey);
 
 // 表格操作 Hooks
 const {
@@ -242,28 +242,28 @@ const {
   isBackPage,
   isFrontPage,
 } = useTable(
-  unref(getProps).requestApi,
-  unref(getProps).initRequestParam,
-  unref(getProps).pagination,
-  unref(getProps).pageConfig,
-  unref(getProps).beforeSearch,
+  getProps.value.requestApi,
+  getProps.value.initRequestParam,
+  getProps.value.pagination,
+  getProps.value.pageConfig,
+  getProps.value.beforeSearch,
   data => {
     if (!data) return;
     // 配置 _enum 字典信息
     if (isBackPage()) data.list = enumCallback(data.list) || data.list;
     else data = enumCallback(data) || data;
-    const { dataCallback } = unref(getProps);
+    const { dataCallback } = getProps.value;
     dataCallback && (data = dataCallback(data) || data);
     return data;
   },
-  unref(getProps).requestError,
-  unref(getProps).columns
+  getProps.value.requestError,
+  getProps.value.columns
 );
 
 // 配置 _enum 字典信息
 const enumCallback = (data: Record<string, any>[]) => {
-  unref(getProps).columns.forEach(async col => {
-    const enumObj = unref(enumMap).get(col.prop!);
+  getProps.value.columns.forEach(async col => {
+    const enumObj = enumMap.value.get(col.prop!);
     // 如果字段有配置枚举信息，则存放到 _enum[col.prop] 里
     if (enumObj && col.isFilterEnum) {
       data = data?.map(row => {
@@ -282,41 +282,41 @@ const enumCallback = (data: Record<string, any>[]) => {
 
 // 表格所有数据
 const allTableData = computed(() => {
-  const { data } = unref(getProps);
+  const { data } = getProps.value;
   if (data?.length) return data;
-  return unref(tableData);
+  return tableData.value;
 });
 
 // 表格实际渲染的数据
 const currentTableData = computed(() => {
-  const { pagination } = unref(getProps);
-  const { pageNum, pageSize } = unref(paging);
+  const { pagination } = getProps.value;
+  const { pageNum, pageSize } = paging.value;
 
-  const tableDataConst = unref(allTableData);
+  const tableDataConst = allTableData.value;
   if (!isFrontPage(pagination)) return tableDataConst;
 
   return tableDataConst?.slice((pageNum - 1) * pageSize, pageNum * pageSize);
 });
 
 const pageTotal = computed(() => {
-  const { data, pagination } = unref(getProps);
+  const { data, pagination } = getProps.value;
 
   if (data?.length) return data?.length;
-  if (isFrontPage(pagination)) return data?.length || unref(tableData)?.length;
-  if (isBackPage(pagination)) return unref(paging)?.total || unref(tableData)?.length;
+  if (isFrontPage(pagination)) return data?.length || tableData.value?.length;
+  if (isBackPage(pagination)) return paging.value?.total || tableData.value?.length;
   return 0;
 });
 
 // 初始化请求
 onMounted(() => {
   dragSort();
-  unref(getProps).requestAuto && getTableList();
+  getProps.value.requestAuto && getTableList();
 });
 
 // 监听页面 initRequestParam 改化，重新获取表格数据
 watch(
-  () => [unref(mergeProps).initRequestParam, props.initRequestParam],
-  () => getTableList(unref(getProps).initRequestParam),
+  () => [mergeProps.value.initRequestParam, props.initRequestParam],
+  () => getTableList(getProps.value.initRequestParam),
   { deep: true }
 );
 
@@ -326,7 +326,7 @@ const enumMap = ref(new Map<string, Record<string, any>[]>());
 const setEnumMap = async ({ enum: enumValue, prop, search: { key } = {} }: TableColumnProps) => {
   if (!enumValue) return;
 
-  const enumMapConst = unref(enumMap);
+  const enumMapConst = enumMap.value;
 
   // 如果当前 enumMap 存在相同的值 return & 开启缓存功能
   if (enumMapConst.has(prop!) && (typeof enumValue === "function" || enumMapConst.get(prop!) === enumValue)) return;
@@ -365,11 +365,11 @@ const flatColumnsFunc = (columns: TableColumnProps[], flatArr: TableColumnProps[
   return flatArr.filter(item => !item._children?.length);
 };
 
-const flatColumns = computed<TableColumnProps[]>(() => flatColumnsFunc(unref(getProps).columns));
+const flatColumns = computed<TableColumnProps[]>(() => flatColumnsFunc(getProps.value.columns));
 
 // 过滤需要搜索的配置项 & 组装搜索表单配置项
 const searchColumns = computed(() => {
-  const column = unref(flatColumns)?.filter(item => item.search?.el || item.search?.render);
+  const column = flatColumns.value?.filter(item => item.search?.el || item.search?.render);
 
   const searchColumns: ProSearchSchemaProps[] = [];
 
@@ -378,8 +378,8 @@ const searchColumns = computed(() => {
     const key = item.search?.key ?? lastProp(item.prop!);
     const defaultValue = unref(item.search?.defaultValue);
     if (defaultValue !== undefined && defaultValue !== null) {
-      if (typeof defaultValue !== "function") unref(searchInitParam)[key] = defaultValue;
-      else unref(searchInitParam)[key] = await defaultValue(unref(searchParam), unref(enumMap));
+      if (typeof defaultValue !== "function") searchInitParam.value[key] = defaultValue;
+      else searchInitParam.value[key] = await defaultValue(searchParam.value, enumMap.value);
     }
 
     // 组装搜索表单配置项
@@ -419,7 +419,7 @@ watch(currentTableData, () => (filterTableData.value = undefined));
 const columnFilterRule = computed(() => {
   // key 为 prop，value 为过滤规则
   const filterRule: Record<string, FilterRule> = {};
-  unref(getProps).columns.forEach(item => {
+  getProps.value.columns.forEach(item => {
     if (item.renderUseProp?.length) {
       item.renderUseProp.forEach(prop => {
         filterRule[prop] = item.filterConfig?.rule;
@@ -431,16 +431,16 @@ const columnFilterRule = computed(() => {
 
 const filterProps = reactive({
   searchParam,
-  filter: ["filter", "useFilter", "all", "allAndUseFilter"].includes(unref(getProps).searchModel!),
-  useFilter: ["useFilter", "allAndUseFilter"].includes(unref(getProps).searchModel!),
+  filter: ["filter", "useFilter", "all", "allAndUseFilter"].includes(getProps.value.searchModel!),
+  useFilter: ["useFilter", "allAndUseFilter"].includes(getProps.value.searchModel!),
   search: (searchParam: Record<string, any>) => {
     // 后端过滤
-    if (unref(getProps).filterRule === "back") return search(searchParam, unref(getProps).searchProps?.removeNoValue);
+    if (getProps.value.filterRule === "back") return search(searchParam, getProps.value.searchProps?.removeNoValue);
 
     // 前端过滤
-    const data = unref(getProps).filterAllData ? unref(allTableData) : unref(currentTableData);
-    const filterData = frontFilter(searchParam, data, unref(columnFilterRule));
-    const { pageNum, pageSize } = unref(paging);
+    const data = getProps.value.filterAllData ? allTableData.value : currentTableData.value;
+    const filterData = frontFilter(searchParam, data, columnFilterRule.value);
+    const { pageNum, pageSize } = paging.value;
 
     filterTableData.value = filterData.slice((pageNum - 1) * pageSize, pageNum * pageSize);
   },
@@ -456,28 +456,28 @@ provide(filterKey, filterProps);
 const editModelList = ref(new Map<string | number, Record<string, any>>());
 provide(editKey, {
   editModelList,
-  rowKey: unref(getProps).rowKey,
-  editRow: unref(getProps).editRow,
+  rowKey: getProps.value.rowKey,
+  editRow: getProps.value.editRow,
 });
 
 // 获取行内编辑指定的 model
 const getEditModel = (key: string | number) => {
-  return unref(editModelList).get(key);
+  return editModelList.value.get(key);
 };
 
 // 获取行内编辑所有的 model
 const getEditModelValues = () => {
-  return [...unref(editModelList).values()];
+  return [...editModelList.value.values()];
 };
 
 // 获取行内编辑所有 model 对应的 key
 const getEditModelKeys = () => {
-  return [...unref(editModelList).keys()];
+  return [...editModelList.value.keys()];
 };
 
 // 设置行内编辑的 model
 const setEditModel = (key: string | number, model: Record<string, any>) => {
-  unref(editModelList).set(key, model);
+  editModelList.value.set(key, model);
 };
 
 // 清除行内编辑的 model
@@ -489,17 +489,17 @@ const clearEditModel = () => {
 const removeEditModel = (key: string | number | string[] | number[]) => {
   if (Array.isArray(key)) {
     return key.forEach(i => {
-      unref(editModelList).delete(i);
+      editModelList.value.delete(i);
     });
   }
-  return unref(editModelList).delete(key);
+  return editModelList.value.delete(key);
 };
 
 // ------- 列设置 ==> 过滤掉不需要设置的列 -------
 const colSettingVisible = ref(false);
 const colSetting = computed(() =>
-  unref(getProps)
-    .columns?.filter(item => !columnTypes.includes(item.type!) && item.prop !== "operation")
+  getProps.value.columns
+    ?.filter(item => !columnTypes.includes(item.type!) && item.prop !== "operation")
     .map(item => {
       // 初始化 filter 过滤器
       !item.filterConfig ? (item.filterConfig = {}) : undefined;
@@ -510,14 +510,14 @@ const colSetting = computed(() =>
     })
 );
 
-const toggleColSetting = (show = !unref(colSettingVisible)) => (colSettingVisible.value = show);
+const toggleColSetting = (show = !colSettingVisible.value) => (colSettingVisible.value = show);
 
 // 导出事件
 const handleExport = () => {
-  const { data, exportFile, columns, exportKey } = unref(getProps);
+  const { data, exportFile, columns, exportKey } = getProps.value;
 
-  const d = data ?? unref(tableData);
-  if (exportFile) return exportFile(d, unref(searchParam));
+  const d = data ?? tableData.value;
+  if (exportFile) return exportFile(d, searchParam.value);
 
   exportExcel(columns, d, "export", exportKey, "确认导出数据?");
 };
@@ -530,18 +530,18 @@ provide(dialogFormInstanceKey, dialogFormRef);
 const handleEdit = (scope: any, item: TableColumnProps) => {
   if (item.handleEdit) return item.handleEdit(scope, expose);
 
-  unref(dialogFormRef)?.handleEdit(scope.row);
+  dialogFormRef.value?.handleEdit(scope.row);
 };
 
 // 删除事件
 const handleRemove = (scope: any, item: TableColumnProps) => {
   if (item.handleRemove) item.handleRemove(scope, expose);
-  unref(dialogFormRef)?.handleRemove(scope.row);
+  dialogFormRef.value?.handleRemove(scope.row);
 };
 
 // 批量删除事件
 const handleRemoveBatch = () => {
-  unref(dialogFormRef)?.handleRemoveBatch(unref(selectedListIds), unref(selectedList), () => {
+  dialogFormRef.value?.handleRemoveBatch(selectedListIds.value, selectedList.value, () => {
     clearSelection();
     getTableList();
   });
@@ -549,7 +549,7 @@ const handleRemoveBatch = () => {
 
 // ------- 表格样式 -------
 // 如果是 mini，则取 ElTableSize 为 default，反之默认
-const elTableSize = computed(() => (unref(getProps).size === TableSizeEnum.Mini ? "default" : unref(getProps).size));
+const elTableSize = computed(() => (getProps.value.size === TableSizeEnum.Mini ? "default" : getProps.value.size));
 const rowStyle = ref<CSSProperties>({});
 const cellStyle = ref<CSSProperties>({});
 const headerCellStyle = ref<CSSProperties>({});
@@ -574,21 +574,21 @@ const getStyle = (tableInfo: any, styleName: string[], styleRef: any) => {
 
 // 获取行样式
 const getRowStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, ["rowStyle", "row-style"], unref(rowStyle));
+  return getStyle(tableInfo, ["rowStyle", "row-style"], rowStyle.value);
 };
 
 // 获取单元格样式
 const getCellStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, ["cellStyle", "cell-style"], unref(cellStyle));
+  return getStyle(tableInfo, ["cellStyle", "cell-style"], cellStyle.value);
 };
 
 // 获取表头样式
 const getHeaderCellStyle = (tableInfo: any) => {
-  return getStyle(tableInfo, ["headerCellStyle", "header-cell-style"], unref(headerCellStyle));
+  return getStyle(tableInfo, ["headerCellStyle", "header-cell-style"], headerCellStyle.value);
 };
 
 // 清空选中数据列表
-const clearSelection = () => unref(tableMainRef)?.table?.clearSelection();
+const clearSelection = () => tableMainRef.value?.table?.clearSelection();
 
 // ------- Emits 事件 -------
 type ProTableEmits = {
@@ -623,7 +623,7 @@ const searchRegister = (ref?: ProSearchExpose) => {
 
 onMounted(() => {
   // 注册实例
-  emits("register", unref(tableMainRef)?.$parent, unref(tableMainRef)?.table, unref(proSearchRef));
+  emits("register", tableMainRef.value?.$parent, tableMainRef.value?.table, proSearchRef.value);
 });
 
 const _search = (model: Record<string, any>) => {
@@ -646,8 +646,8 @@ const dragSort = () => {
       animation: 300,
       onEnd({ newIndex, oldIndex }) {
         if (typeof oldIndex !== "undefined" && typeof newIndex !== "undefined") {
-          const [removedItem] = unref(currentTableData).splice(oldIndex!, 1);
-          unref(currentTableData).splice(newIndex!, 0, removedItem);
+          const [removedItem] = currentTableData.value.splice(oldIndex!, 1);
+          currentTableData.value.splice(newIndex!, 0, removedItem);
           emits("dargSort", { newIndex, oldIndex });
         }
       },
@@ -662,7 +662,7 @@ const setProps = (props: ProTableProps = {}) => {
 
 // 修改 Column
 const setColumn = (columnSet: TableSetProps[], columnsChildren?: TableColumnProps[]) => {
-  const { columns } = unref(getProps);
+  const { columns } = getProps.value;
   for (const column of columnsChildren || columns) {
     for (const item of columnSet) {
       if (column.prop === item.prop) {
@@ -676,7 +676,7 @@ const setColumn = (columnSet: TableSetProps[], columnsChildren?: TableColumnProp
 
 // 添加 Column
 const addColumn = (column: TableColumnProps, prop?: number | string, position: "before" | "after" = "after") => {
-  const { columns } = unref(getProps);
+  const { columns } = getProps.value;
   if (Object.prototype.toString.call(prop) === "[object String]") {
     return columns.forEach((column, i) => {
       if (column.prop === prop) position === "after" ? columns.splice(i + 1, 0, column) : columns.splice(i, 0, column);
@@ -688,14 +688,14 @@ const addColumn = (column: TableColumnProps, prop?: number | string, position: "
 
 // 删除 Column
 const delColumn = (prop: string) => {
-  const { columns } = unref(getProps);
+  const { columns } = getProps.value;
   const index = columns.findIndex(item => item.prop === prop);
   if (index > -1) columns.splice(index, 1);
 };
 
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 const expose = {
-  element: unref(tableMainRef)?.table,
+  element: tableMainRef.value?.table,
   searchEl: proSearchRef,
   dialogFormEl: dialogFormRef,
   tableData,

@@ -1,5 +1,5 @@
 <script lang="tsx">
-import { defineComponent, type PropType, computed, h, unref } from "vue";
+import { defineComponent, type PropType, computed, h } from "vue";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace();
@@ -65,7 +65,7 @@ export default defineComponent({
       const textArray = parseText(node as string);
       const regexp = /^[0-9]*$/;
       const nodes = textArray.map(t => {
-        if (regexp.test(t)) return unref(keyNodes)[t as any] || t;
+        if (regexp.test(t)) return keyNodes.value[t as any] || t;
         return t;
       });
       return h(props.tag, nodes);

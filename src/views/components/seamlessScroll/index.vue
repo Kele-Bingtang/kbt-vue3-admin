@@ -122,8 +122,8 @@ const classOption = reactive({
 });
 
 function changeDirection(val: string) {
-  (unref(scroll) as any).reset();
-  unref(classOption).direction = val;
+  (scroll.value as any).reset();
+  classOption.direction = val;
 }
 </script>
 

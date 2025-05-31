@@ -128,7 +128,7 @@ const arList: Ar[] = [
 const messageStore = useMessageStore();
 
 const activeName = ref("first");
-const messageList = computed(() => messageStore.unreadMessageList);
+const { unreadMessageList: messageList } = storeToRefs(messageStore);
 const messageLength = computed(() => noticeList.length + messageList.value.length);
 
 onMounted(() => {

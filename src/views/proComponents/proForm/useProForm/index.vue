@@ -322,20 +322,20 @@ const setSelectLabel = () => {
 };
 
 const addFormItem = () => {
-  if (unref(index) % 2 === 0) {
+  if (index.value % 2 === 0) {
     addSchema({
-      prop: `input${unref(index)}`,
-      label: `输入框 ${unref(index)}`,
+      prop: `input${index.value}`,
+      label: `输入框 ${index.value}`,
       el: "el-input",
     });
   } else {
     addSchema(
       {
-        prop: `input${unref(index)}`,
-        label: `输入框 ${unref(index)}`,
+        prop: `input${index.value}`,
+        label: `输入框 ${index.value}`,
         el: "el-input",
       },
-      unref(index)
+      index.value
     );
   }
   index.value++;

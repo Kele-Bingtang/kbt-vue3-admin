@@ -1,6 +1,6 @@
 <script setup lang="ts" name="LanguageSelect">
 import type { LanguageType } from "@/stores";
-import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessage } from "element-plus";
 import { useBrowserTitle } from "@/composables";
@@ -15,7 +15,7 @@ const i18n = useI18n();
 const layoutStore = useLayoutStore();
 const { getBrowserTitle } = useBrowserTitle();
 
-const language = computed(() => layoutStore.language);
+const { language } = storeToRefs(layoutStore);
 
 const handleSelectLanguage = (lang: LanguageType) => {
   i18n.locale.value = lang;

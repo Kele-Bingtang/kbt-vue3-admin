@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed, watch, ref } from "vue";
+import { storeToRefs } from "pinia";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useSettingsStore, useRouteStore } from "@/stores";
 import MainContent from "@/layout/components/MainContent/index.vue";
@@ -28,7 +29,7 @@ const { menuList } = useMenu();
 const activeMenu = ref("");
 const childrenMenu = ref<RouterConfig[]>([]);
 
-const isCollapse = computed(() => settingsStore.isCollapse);
+const { isCollapse } = storeToRefs(settingsStore);
 
 const headerMenu = computed(() => {
   const parentMenu: RouterConfig[] = [];

@@ -5,7 +5,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, inject, type Ref, ref, useAttrs, watch, unref } from "vue";
+import { computed, inject, type Ref, ref, useAttrs, watch } from "vue";
 import type { BreakPoint } from "../index.vue";
 
 defineOptions({ name: "GridItem" });
@@ -46,7 +46,7 @@ const breakPoint = inject<Ref<BreakPoint>>("breakPoint", ref("xl"));
 const shouldHiddenIndex = inject<Ref<number>>("shouldHiddenIndex", ref(-1));
 
 watch(
-  () => [unref(shouldHiddenIndex), unref(breakPoint)],
+  () => [shouldHiddenIndex.value, breakPoint.value],
   nv => {
     if (attrs.index) {
       isShow.value = !(nv[0] !== -1 && parseInt(attrs.index) >= Number(nv[0]));
@@ -59,16 +59,16 @@ const gap = inject("gap", 0);
 const cols = inject("cols", ref(4));
 
 const style = computed(() => {
-  const span = props[unref(breakPoint)]?.span ?? props.span;
-  const offset = props[unref(breakPoint)]?.offset ?? props.offset;
+  const span = props[breakPoint.value]?.span ?? props.span;
+  const offset = props[breakPoint.value]?.offset ?? props.offset;
   if (props.suffix) {
     return {
-      gridColumnStart: unref(cols) - span - offset + 1,
+      gridColumnStart: cols.value - span - offset + 1,
       gridColumnEnd: `span ${span + offset}`,
       marginLeft: offset !== 0 ? `calc(((100% + ${gap}px) / ${span + offset}) * ${offset})` : "unset",
     };
   } else {
-    const c = unref(cols);
+    const c = cols.value;
     return {
       gridColumn: `span ${span + offset > c ? c : span + offset}/span ${span + offset > c ? c : span + offset}`,
       marginLeft: offset !== 0 ? `calc(((100% + ${gap}px) / ${span + offset}) * ${offset})` : "unset",

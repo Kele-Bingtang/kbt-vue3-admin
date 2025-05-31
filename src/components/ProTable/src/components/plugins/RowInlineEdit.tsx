@@ -2,7 +2,7 @@ import { ProForm, setProp, getProp } from "@/components";
 import { type TableColumnProps, editKey, type TableRenderScope } from "../../interface";
 import { lastProp } from "../../helper";
 import { ElMessage } from "element-plus";
-import { ref, inject, computed, unref, nextTick } from "vue";
+import { ref, inject, computed, nextTick } from "vue";
 
 export const useRowInlineEdit = (column: TableColumnProps) => {
   const { editConfig = {} } = column;
@@ -25,7 +25,7 @@ export const useRowInlineEdit = (column: TableColumnProps) => {
   const renderRowInlineEdit = ({ row }: TableRenderScope<any>) => {
     const { editConfig = {} } = column;
 
-    const editModelListConst = unref(editModelList);
+    const editModelListConst = editModelList.value;
 
     // 存在多级 prop 时，要么自定义 key，要么取 prop 的最有一级（表单不使用多级 prop 当 key）
     const prop = editConfig?.key || column.search?.key || lastProp(column.prop!);
@@ -44,7 +44,7 @@ export const useRowInlineEdit = (column: TableColumnProps) => {
 
     const model = computed(() => {
       // 可编辑的最大行数判断
-      if (editRow && unref(editModelList).size > editRow) {
+      if (editRow && editModelList.value.size > editRow) {
         row._edit = false;
         const key = Array.from(editModelList.value.keys()).pop();
         key && editModelListConst.delete(key);
@@ -117,7 +117,7 @@ export const useRowInlineEdit = (column: TableColumnProps) => {
   return {
     renderRowInlineEdit,
     useEdit,
-    editModelList: unref(editModelList),
+    editModelList: editModelList.value,
     editRow,
   };
 };

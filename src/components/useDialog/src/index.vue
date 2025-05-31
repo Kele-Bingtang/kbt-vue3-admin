@@ -47,7 +47,7 @@
 <script setup lang="ts">
 import { ElDialog, ElScrollbar, ElButton, type DialogProps } from "element-plus";
 import { Icon } from "@/components";
-import { nextTick, ref, unref, watch, useSlots, shallowRef } from "vue";
+import { nextTick, ref, watch, useSlots, shallowRef } from "vue";
 import { addUnit } from "@/utils";
 import { useNamespace } from "@/composables";
 
@@ -88,7 +88,7 @@ const isFullscreen = ref(false);
 const elDialogRef = shallowRef<DialogProps | null>(null);
 
 const toggleFull = () => {
-  isFullscreen.value = !unref(isFullscreen);
+  isFullscreen.value = !isFullscreen.value;
 };
 
 const dialogHeight = ref(addUnit(props.height));
@@ -110,12 +110,12 @@ watch(
 );
 
 const handleClose = () => {
-  emits("close", unref(elDialogRef));
+  emits("close", elDialogRef.value);
   dialogVisible.value = false;
 };
 
 const handleConfirm = () => {
-  emits("confirm", unref(elDialogRef));
+  emits("confirm", elDialogRef.value);
   dialogVisible.value = false;
 };
 

@@ -3,7 +3,7 @@
 </template>
 
 <script setup lang="tsx">
-import { inject, ref, useSlots, unref } from "vue";
+import { inject, ref, useSlots } from "vue";
 import { type TableColumnProps, type TableRenderScope, type HeaderRenderScope, tableEnumMapKey } from "../interface";
 import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
 import { ElCheckTag, ElTag, ElTableColumn, ElButton } from "element-plus";
@@ -19,13 +19,13 @@ const slots = useSlots();
 const enumMap = inject(tableEnumMapKey, ref(new Map<string, Record<string, any>[]>()));
 
 const getEnumData = (item: TableColumnProps, scope: TableRenderScope<any>) => {
-  return unref(enumMap).get(item.prop!) && item.isFilterEnum
-    ? filterEnum(handleRowAccordingToProp(scope.row, item.prop!), unref(enumMap).get(item.prop!), item.fieldNames)
+  return enumMap.value.get(item.prop!) && item.isFilterEnum
+    ? filterEnum(handleRowAccordingToProp(scope.row, item.prop!), enumMap.value.get(item.prop!), item.fieldNames)
     : "";
 };
 
 const renderCellData = (item: TableColumnProps, scope: TableRenderScope<any>, enumData: any) => {
-  return unref(enumMap).get(item.prop!) && item.isFilterEnum
+  return enumMap.value.get(item.prop!) && item.isFilterEnum
     ? filterEnumLabel(enumData, item.fieldNames)
     : formatValue(handleRowAccordingToProp(scope.row, item.prop!));
 };
@@ -70,7 +70,7 @@ const RenderTableColumn = (item: TableColumnProps) => {
           {{
             default: (scope: TableRenderScope<any>) => {
               // 行内编辑功能
-              if (unref(useEdit) && scope.row._edit) return renderRowInlineEdit(scope);
+              if (useEdit.value && scope.row._edit) return renderRowInlineEdit(scope);
               if (item._children) return item._children.map(child => RenderTableColumn(child));
               if (item.render) return item.render(scope);
               if (slots[lastProp(item.prop!)]) return slots[lastProp(item.prop!)]!(scope);
@@ -110,7 +110,7 @@ const RenderTableColumn = (item: TableColumnProps) => {
               return (
                 <>
                   {headerSlot}
-                  {unref(useFilter) ? renderHeaderFilter() : undefined}
+                  {useFilter.value ? renderHeaderFilter() : undefined}
                 </>
               );
             },

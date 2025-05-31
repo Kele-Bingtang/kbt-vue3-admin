@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
 import { useRouter } from "vue-router";
 import SystemConfig, { HOME_URL } from "@/config";
@@ -18,7 +18,7 @@ const ns = useNamespace("classic-layout");
 const router = useRouter();
 const settingsStore = useSettingsStore();
 
-const isCollapse = computed(() => settingsStore.isCollapse);
+const { isCollapse } = storeToRefs(settingsStore);
 </script>
 
 <template>

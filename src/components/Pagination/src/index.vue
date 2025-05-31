@@ -16,7 +16,7 @@
 
 <script lang="ts">
 import { scrollTo } from "@/utils";
-import { nextTick, unref } from "vue";
+import { nextTick } from "vue";
 import { ElPagination } from "element-plus";
 
 export const pageSetting = { pageNum: 1, pageSizes: [10, 20, 50, 100, 200], pageSize: 20 };
@@ -61,9 +61,9 @@ const emits = defineEmits<PaginationEmits>();
 
 const pageObj = defineModel<Paging>({ required: true });
 
-if (!unref(pageObj).pageNum) pageObj.value.pageNum = pageSetting.pageNum;
-if (!unref(pageObj).pageSizes) pageObj.value.pageSizes = pageSetting.pageSizes;
-if (!unref(pageObj).pageSize) pageObj.value.pageSize = pageSetting.pageSize;
+if (!pageObj.value.pageNum) pageObj.value.pageNum = pageSetting.pageNum;
+if (!pageObj.value.pageSizes) pageObj.value.pageSizes = pageSetting.pageSizes;
+if (!pageObj.value.pageSize) pageObj.value.pageSize = pageSetting.pageSize;
 
 const handleSizeChange = (value: number) => {
   if (props.reset) handleCurrentChange(1);
@@ -77,8 +77,7 @@ const handleCurrentChange = (value: number) => {
 };
 
 const afterChange = () => {
-  pageObj.value = unref(pageObj);
-  emits("pagination", unref(pageObj));
+  emits("pagination", pageObj.value);
   if (props.autoScroll) {
     nextTick(() => {
       scrollTo(`${ns.elNamespace}-table__body-wrapper`, 0, 700);

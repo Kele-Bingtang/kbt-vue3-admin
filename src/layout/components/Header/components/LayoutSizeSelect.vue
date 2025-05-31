@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem } from "element-plus";
 import { useLayoutStore, type LayoutSizeType } from "@/stores";
 import { ElMessage } from "element-plus";
@@ -14,7 +14,7 @@ const sizeOptions = [
 ];
 const { t } = useI18n();
 const layoutStore = useLayoutStore();
-const layoutSize = computed(() => layoutStore.layoutSize);
+const { layoutSize } = storeToRefs(layoutStore);
 
 const handleSetSize = (layoutSize: LayoutSizeType) => {
   layoutStore.setLayoutSize(layoutSize);

@@ -15,7 +15,7 @@
 import QRCode, { type QRCodeRenderersOptions } from "qrcode";
 import { isString } from "@/utils";
 import { RefreshRight } from "@element-plus/icons-vue";
-import { ref, computed, nextTick, unref, watch } from "vue";
+import { ref, computed, nextTick, watch } from "vue";
 import { useNamespace } from "@/composables";
 
 defineOptions({ name: "QrCode" });
@@ -76,10 +76,10 @@ const initQrCode = async () => {
   const options = JSON.parse(JSON.stringify(props.options) || "{}");
   if (props.tag === "canvas") {
     // 容错率，默认对内容少的二维码采用高容错率，内容多的二维码采用低容错率
-    options.errorCorrectionLevel = options.errorCorrectionLevel || getErrorCorrectionLevel(unref(renderText));
-    const _width: number = await getOriginWidth(unref(renderText), options);
+    options.errorCorrectionLevel = options.errorCorrectionLevel || getErrorCorrectionLevel(renderText.value);
+    const _width: number = await getOriginWidth(renderText.value, options);
     options.scale = props.width === 0 ? undefined : (props.width / _width) * 4;
-    const canvasRef: any = await toCanvas(unref(wrapRef) as HTMLCanvasElement, unref(renderText), options);
+    const canvasRef: any = await toCanvas(wrapRef.value as HTMLCanvasElement, renderText.value, options);
 
     if (props.logo) {
       const url = (await createLogoCode(canvasRef)) as string;
@@ -96,7 +96,7 @@ const initQrCode = async () => {
       ...options,
     });
 
-    (unref(wrapRef) as any).src = url;
+    (wrapRef.value as any).src = url;
     emits("done", url as unknown as string);
     loading.value = false;
   }

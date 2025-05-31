@@ -60,7 +60,7 @@ import epIcons from "./data/icons.ep";
 import antIcons from "./data/icons.ant-design";
 import tIcons from "./data/icons.tdesign";
 import { ElInput, ElPopover, ElScrollbar, ElTabs, ElTabPane, ElPagination } from "element-plus";
-import { computed, type CSSProperties, ref, unref, watch, inject } from "vue";
+import { computed, type CSSProperties, ref, watch, inject } from "vue";
 import { nextTick } from "vue";
 import { useNamespace } from "@/composables";
 import { ConfigGlobalKey } from "@/config/symbols";
@@ -84,7 +84,7 @@ const init = async (icon?: string) => {
   const index = filterItemIcons(icons[wrapIndex]?.icons || []).findIndex(item => item === icon);
   // 计算当前icon的页码
   await nextTick();
-  currentPage.value = Math.ceil((index + 1) / unref(pageSize));
+  currentPage.value = Math.ceil((index + 1) / pageSize.value);
 };
 
 const modelValue = defineModel<string>();
@@ -93,9 +93,9 @@ const size = computed(() => configGlobal?.size.value || "default");
 
 const iconSize = computed(() => {
   const { elNamespace } = ns;
-  return unref(size) === "small"
+  return size.value === "small"
     ? `var(--${elNamespace}-component-size-small)`
-    : unref(size) === "large"
+    : size.value === "large"
       ? `var(--${elNamespace}-component-size-large)`
       : `var(--${elNamespace}-component-size)`;
 });
@@ -103,8 +103,8 @@ const iconSize = computed(() => {
 const iconWrapStyle = computed((): CSSProperties => {
   const { elNamespace } = ns;
   return {
-    width: unref(iconSize),
-    height: unref(iconSize),
+    width: iconSize.value,
+    height: iconSize.value,
     display: "flex",
     alignItems: "center",
     justifyContent: "center",
@@ -120,7 +120,7 @@ const icons = [epIcons, antIcons, tIcons];
 const iconName = ref(icons[0].prefix);
 
 const currentIconNameIndex = computed(() => {
-  return icons.findIndex(item => item.prefix === unref(iconName));
+  return icons.findIndex(item => item.prefix === iconName.value);
 });
 
 const tabChange = () => {
@@ -132,8 +132,8 @@ const pageSize = ref(49);
 const currentPage = ref(1);
 
 const filterIcons = (icons: string[]) => {
-  const start = (unref(currentPage) - 1) * unref(pageSize);
-  const end = unref(currentPage) * unref(pageSize);
+  const start = (currentPage.value - 1) * pageSize.value;
+  const end = currentPage.value * pageSize.value;
   return icons.slice(start, end);
 };
 
@@ -149,12 +149,12 @@ watch(
 );
 
 const popoverShow = () => {
-  init(unref(modelValue));
+  init(modelValue.value);
 };
 
 const iconSelect = (icon: string) => {
   // 如果是同一个 icon 则不做处理，则相当于点击了清空按钮
-  if (icon === unref(modelValue)) {
+  if (icon === modelValue.value) {
     modelValue.value = "";
     return;
   }
@@ -164,11 +164,11 @@ const iconSelect = (icon: string) => {
 const search = ref("");
 
 const filterItemIcons = (icons: string[]) => {
-  return icons.filter(item => item.includes(unref(search)));
+  return icons.filter(item => item.includes(search.value));
 };
 
 const inputClear = () => {
-  init(unref(modelValue));
+  init(modelValue.value);
 };
 </script>
 

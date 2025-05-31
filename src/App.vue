@@ -26,6 +26,11 @@ const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 const userStore = useUserStore();
 
+const { layoutSize, language } = storeToRefs(layoutStore);
+
+// 自定义注入全局参数。ElConfigProvider 会自动使用 provide 全局注入它的 props 到项目里，可以通过 configProviderContextKey 来 inject 获取（先从 element-plus 引入，然后 const config = inject(configProviderContextKey)）
+provide(ConfigGlobalKey, { size: layoutSize });
+
 useIFrame(SystemConfig.layoutConfig.watchFrame);
 
 useBrowserTitle();
@@ -39,16 +44,10 @@ const config = reactive({ autoInsertSpace: false });
 
 // element 语言配置
 const i18nLocale = computed(() => {
-  if (layoutStore.language === "zh-CN") return zhCn;
-  if (layoutStore.language === "en-US") return en;
+  if (language.value === "zh-CN") return zhCn;
+  if (language.value === "en-US") return en;
   return document.documentElement.lang === "zh-CN" ? zhCn : en;
 });
-
-// 配置全局组件大小
-const layoutSize = computed(() => layoutStore.layoutSize);
-
-// 自定义注入全局参数。ElConfigProvider 会自动使用 provide 全局注入它的 props 到项目里，可以通过 configProviderContextKey 来 inject 获取（先从 element-plus 引入，然后 const config = inject(configProviderContextKey)）
-provide(ConfigGlobalKey, { size: layoutSize });
 
 // 配置全局样式变量
 watchEffect(() => setStyleVar(ns.cssVarName("layout-open-aside-width"), addUnit(settingsStore.menuWidth)));

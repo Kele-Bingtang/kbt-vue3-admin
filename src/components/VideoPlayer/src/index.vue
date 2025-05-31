@@ -4,7 +4,7 @@
 
 <script setup lang="ts">
 import Player from "xgplayer";
-import { ref, unref, onMounted, watch, onBeforeUnmount, nextTick } from "vue";
+import { ref, onMounted, watch, onBeforeUnmount, nextTick } from "vue";
 import "xgplayer/dist/index.min.css";
 
 defineOptions({ name: "VideoPlayer" });
@@ -23,11 +23,11 @@ const playerRef = ref<Player>();
 const videoRef = ref<HTMLDivElement>();
 
 const intiPlayer = () => {
-  if (!unref(videoRef)) return;
+  if (!videoRef.value) return;
   new Player({
     autoplay: false,
     ...props,
-    el: unref(videoRef),
+    el: videoRef.value,
   });
 };
 
@@ -40,7 +40,7 @@ watch(
   async newProps => {
     await nextTick();
     if (newProps) {
-      unref(playerRef)?.setConfig(newProps);
+      playerRef.value?.setConfig(newProps);
     }
   },
   {
@@ -49,10 +49,10 @@ watch(
 );
 
 onBeforeUnmount(() => {
-  unref(playerRef)?.destroy();
+  playerRef.value?.destroy();
 });
 
 defineExpose({
-  playerExpose: () => unref(playerRef),
+  playerExpose: () => playerRef.value,
 });
 </script>

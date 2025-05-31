@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ElButton, ElMessage } from "element-plus";
-import { ref, reactive, shallowRef, unref } from "vue";
+import { ref, reactive, shallowRef } from "vue";
 import { read, utils } from "xlsx";
 import { useNamespace } from "@/composables";
 
@@ -50,7 +50,7 @@ const generateData = (header: any, results: any) => {
 const handleDrop = (e: DragEvent) => {
   e.stopPropagation();
   e.preventDefault();
-  if (unref(loading)) return;
+  if (loading.value) return;
   if (!e.dataTransfer) return;
   const files = e.dataTransfer.files;
   if (files.length !== 1) {
@@ -77,7 +77,7 @@ const handleDragover = (e: DragEvent) => {
 };
 
 const handleUpload = () => {
-  unref(excelUploadInputRef).click();
+  excelUploadInputRef.value.click();
 };
 
 const handleClick = (e: Event) => {

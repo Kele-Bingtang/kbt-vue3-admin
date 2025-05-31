@@ -1,5 +1,6 @@
 <script setup lang="ts">
-import { computed, watch } from "vue";
+import { watch } from "vue";
+import { storeToRefs } from "pinia";
 import { useRouter } from "vue-router";
 import { useMediaQuery } from "@vueuse/core";
 import { ElContainer, ElAside, ElHeader } from "element-plus";
@@ -18,7 +19,7 @@ const ns = useNamespace("vertical-layout");
 const router = useRouter();
 const settingsStore = useSettingsStore();
 
-const isCollapse = computed(() => settingsStore.isCollapse);
+const { isCollapse } = storeToRefs(settingsStore);
 const isMobile = useMediaQuery(mobileMaxWidthMedia);
 
 watch(isMobile, newVal => {

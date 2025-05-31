@@ -15,7 +15,7 @@
 </template>
 
 <script setup lang="tsx">
-import { computed, inject, ref, unref, resolveComponent } from "vue";
+import { computed, inject, ref, resolveComponent } from "vue";
 import { ComponentNameEnum, formEnumMapKey, type FormSchemaProps, type PascalCaseComponentName } from "../interface";
 import Tree from "./Tree.vue";
 import { getProp, hyphenToCamelCase, setComponentSlots, setProp } from "../helper";
@@ -54,21 +54,21 @@ const columnEnum = computed(() => {
 
   if (useEnumMap) {
     if (typeof useEnumMap === "function") {
-      return useEnumMap(unref(enumMap));
+      return useEnumMap(enumMap.value);
     }
 
-    const data = unref(enumMap).get(useEnumMap);
+    const data = enumMap.value.get(useEnumMap);
     if (!data) return [];
     if (enumKey) return data[enumKey] || [];
     return data;
   }
 
-  let enumData = unref(enumMap).get(prop);
+  let enumData = enumMap.value.get(prop);
 
   if (!enumData) return [];
   if (hyphenToCamelCase(el) === ComponentNameEnum.EL_SELECT_V2) {
     enumData = enumData.map((item: Record<string, any>) => {
-      return { ...item, label: item[unref(fieldNames).label], value: item[unref(fieldNames).value] };
+      return { ...item, label: item[fieldNames.value.label], value: item[fieldNames.value.value] };
     });
   }
   if (enumKey) return enumData[enumKey] || [];
@@ -77,9 +77,9 @@ const columnEnum = computed(() => {
 
 // 处理透传的 formProps (el 为 tree-select、cascader 的时候需要给下默认 label && value && children)
 const formProps = computed(() => {
-  const label = unref(fieldNames).label;
-  const value = unref(fieldNames).value;
-  const children = unref(fieldNames).children;
+  const label = fieldNames.value.label;
+  const value = fieldNames.value.value;
+  const children = fieldNames.value.children;
   const formEl = hyphenToCamelCase(props.column?.el);
   let formProps = props.column.props ?? {};
 
@@ -121,7 +121,7 @@ const clearable = computed(() => {
 });
 
 const isDisabled = () => {
-  if (typeof props.column.disabled === "function") return props.column.disabled(unref(model));
+  if (typeof props.column.disabled === "function") return props.column.disabled(model.value);
   return props.column.disabled;
 };
 
@@ -129,8 +129,8 @@ const { renderComponent: RenderComponent } = useRenderComponent(
   model,
   formProps,
   props.column,
-  unref(columnEnum),
-  unref(fieldNames)
+  columnEnum.value,
+  fieldNames.value
 );
 const { renderSelectOptions } = useRenderSelect();
 const { renderRadioOptions } = useRenderRadio();
@@ -140,9 +140,9 @@ const { renderCheckboxOptions } = useRenderCheckbox();
 const RenderSlots = () => {
   const { column } = props;
   return column.render!({
-    model: unref(model),
-    data: getProp(unref(model), column.prop),
-    enumData: unref(columnEnum),
+    model: model.value,
+    data: getProp(model.value, column.prop),
+    enumData: columnEnum.value,
   });
 };
 
@@ -169,10 +169,10 @@ const RenderElComponents = () => {
 
   const componentModel = computed({
     get: () => {
-      return getProp(unref(model), prop, valueFormat);
+      return getProp(model.value, prop, valueFormat);
     },
     set: val => {
-      setProp(unref(model), prop, val);
+      setProp(model.value, prop, val);
     },
   });
 
@@ -183,9 +183,9 @@ const RenderElComponents = () => {
         v-model:file-list={componentModel.value}
         ref={formComponentRef}
         disabled={isDisabled()}
-        clearable={unref(clearable)}
-        {...unref(formProps)}
-        {...unref(placeholder)}
+        clearable={clearable.value}
+        {...formProps.value}
+        {...placeholder.value}
         style={style}
       >
         {{ ...slotsMap }}
@@ -195,13 +195,13 @@ const RenderElComponents = () => {
         v-model={componentModel.value}
         ref={formComponentRef}
         disabled={isDisabled()}
-        clearable={unref(clearable)}
-        {...unref(formProps)}
-        {...unref(placeholder)}
-        data={rootEl === ComponentNameEnum.EL_TREE_SELECT ? unref(columnEnum) : []}
+        clearable={clearable.value}
+        {...formProps.value}
+        {...placeholder.value}
+        data={rootEl === ComponentNameEnum.EL_TREE_SELECT ? columnEnum.value : []}
         options={
           [ComponentNameEnum.EL_CASCADER, ComponentNameEnum.EL_SELECT_V2].includes(rootEl as ComponentNameEnum)
-            ? unref(columnEnum)
+            ? columnEnum.value
             : []
         }
         style={style}
@@ -217,21 +217,21 @@ const getDefaultSlot = (rootEl: string) => {
   const { slots = {} } = column;
 
   // 如果自定义插槽，则返回自定义插槽
-  if (slots.default) return () => slots.default(unref(columnEnum), unref(fieldNames));
+  if (slots.default) return () => slots.default(columnEnum.value, fieldNames.value);
 
   // 下拉框
-  if (rootEl === ComponentNameEnum.EL_SELECT) return () => renderSelectOptions(unref(columnEnum), unref(fieldNames));
+  if (rootEl === ComponentNameEnum.EL_SELECT) return () => renderSelectOptions(columnEnum.value, fieldNames.value);
 
   // 单选框组和按钮样式
   if ([ComponentNameEnum.EL_RADIO_GROUP, ComponentNameEnum.EL_RADIO_BUTTON].includes(rootEl as ComponentNameEnum)) {
-    return () => renderRadioOptions(unref(columnEnum), unref(fieldNames), column);
+    return () => renderRadioOptions(columnEnum.value, fieldNames.value, column);
   }
 
   // 多选框组和按钮样式
   if (
     [ComponentNameEnum.EL_CHECKBOX_GROUP, ComponentNameEnum.EL_CHECKBOX_BUTTON].includes(rootEl as ComponentNameEnum)
   ) {
-    return () => renderCheckboxOptions(unref(columnEnum), unref(fieldNames), column);
+    return () => renderCheckboxOptions(columnEnum.value, fieldNames.value, column);
   }
 
   // 虚拟列表

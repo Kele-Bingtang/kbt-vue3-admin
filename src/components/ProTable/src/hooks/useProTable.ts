@@ -44,26 +44,26 @@ export const useProTable = () => {
   };
 
   const tableState = {
-    tableData: unref(tableRef)?.tableData, // 表格数据
-    paging: unref(tableRef)?.paging, // 分页信息
-    enumMap: unref(tableRef)?.enumMap, // 字典枚举
-    editModelList: unref(tableRef)?.editModelList, // 行内编辑 Map
+    tableData: tableRef.value?.tableData, // 表格数据
+    paging: tableRef.value?.paging, // 分页信息
+    enumMap: tableRef.value?.enumMap, // 字典枚举
+    editModelList: tableRef.value?.editModelList, // 行内编辑 Map
   };
 
   const searchState = {
-    searchParam: unref(tableRef)?.searchParam, // 搜索参数
-    searchInitParam: unref(tableRef)?.searchInitParam, // 搜索参数初始值
+    searchParam: tableRef.value?.searchParam, // 搜索参数
+    searchInitParam: tableRef.value?.searchInitParam, // 搜索参数初始值
   };
 
   const selectState = {
-    isSelected: unref(tableRef)?.isSelected, // 是否选中至少一行表格数据
-    selectedList: unref(tableRef)?.selectedList, // 选中的表格数据
-    selectedListIds: unref(tableRef)?.selectedListIds, // 选中的表格数据 ID 列表
+    isSelected: tableRef.value?.isSelected, // 是否选中至少一行表格数据
+    selectedList: tableRef.value?.selectedList, // 选中的表格数据
+    selectedListIds: tableRef.value?.selectedListIds, // 选中的表格数据 ID 列表
   };
 
   const getTable = async () => {
     await nextTick();
-    const table = unref(tableRef);
+    const table = tableRef.value;
     if (!table) console.error("The proTable is not registered. Please use the register method to register");
     return table;
   };
@@ -161,7 +161,7 @@ export const useProTable = () => {
      */
     getSearchRef: async () => {
       await getTable();
-      return unref(searchRef);
+      return searchRef.value;
     },
 
     /**
@@ -225,7 +225,7 @@ export const useProTable = () => {
      */
     getElTableExpose: async () => {
       await getTable();
-      return unref(elTableRef);
+      return elTableRef.value;
     },
 
     /**
@@ -234,7 +234,7 @@ export const useProTable = () => {
      */
     getTableExpose: async () => {
       await getTable();
-      return unref(tableRef);
+      return tableRef.value;
     },
   };
 
@@ -262,7 +262,7 @@ export const useProTable = () => {
       const proTableInstance = createVNode(ProTable, { ...proTableProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(
         ElConfigProvider,
-        { namespace: ns.elNamespace, size: unref(layoutSize) },
+        { namespace: ns.elNamespace, size: layoutSize.value },
         { default: () => proTableInstance }
       );
       await nextTick();
@@ -277,9 +277,9 @@ export const useProTable = () => {
   return {
     tableRegister: register,
     tableRefState: {
-      tableRef: unref(tableRef),
-      elTableRef: unref(elTableRef),
-      searchRef: unref(searchRef),
+      tableRef: tableRef.value,
+      elTableRef: elTableRef.value,
+      searchRef: searchRef.value,
     },
     tableState,
     searchState,

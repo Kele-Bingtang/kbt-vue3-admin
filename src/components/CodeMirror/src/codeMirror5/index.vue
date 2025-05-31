@@ -9,6 +9,7 @@
 </template>
 
 <script setup lang="ts">
+import { shallowRef, computed, onMounted } from "vue";
 import Codemirror from "codemirror-editor-vue3";
 import "codemirror/lib/codemirror.css";
 // 编辑器代码格式
@@ -17,7 +18,6 @@ import "codemirror/addon/display/autorefresh";
 import "./config";
 import "./theme";
 import "./mode";
-import { shallowRef, computed, onMounted, unref } from "vue";
 
 defineOptions({ name: "CodeMirror" });
 
@@ -99,7 +99,7 @@ const onCmBlur = (cm: any) => {
     }
     code.value = formatStrInJson(editorValue);
   }
-  emits("on-blur", unref(code));
+  emits("on-blur", code.value);
 };
 
 // 重置检查格式
@@ -130,9 +130,9 @@ const onCmBlur = (cm: any) => {
 
 const onPaste = () => {
   if (cmOptions.value.mode === "application/json") {
-    const oldCode = unref(code);
-    emits("update:modelValue", formatStrInJson(unref(code)));
-    emits("on-paste", unref(code), oldCode);
+    const oldCode = code.value;
+    emits("update:modelValue", formatStrInJson(code.value));
+    emits("on-paste", code.value, oldCode);
   }
 };
 

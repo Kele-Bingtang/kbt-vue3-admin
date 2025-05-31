@@ -86,7 +86,7 @@
 </template>
 
 <script setup lang="ts" name="QrCodeDemo">
-import { ref, unref } from "vue";
+import { ref } from "vue";
 import { message } from "@/utils";
 import { QrCode } from "@/components";
 
@@ -94,7 +94,7 @@ const qrCodeText = "kbt-vue3-admin";
 
 const asyncTitle = ref("");
 setTimeout(() => {
-  asyncTitle.value = unref(qrCodeText);
+  asyncTitle.value = qrCodeText;
 }, 3000);
 const codeClick = () => {
   message("点击事件", { type: "info" });

@@ -1,5 +1,7 @@
 <script setup lang="ts">
-import { computed, ref, nextTick, provide, watchEffect, type Component } from "vue";
+import type { Component } from "vue";
+import { computed, ref, nextTick, provide, watchEffect } from "vue";
+import { storeToRefs } from "pinia";
 import { ElMain } from "element-plus";
 import { RefreshPageKey } from "@/config";
 import { getUrlParams, mittBus } from "@/utils";
@@ -16,8 +18,7 @@ defineOptions({ name: "MainContent" });
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 
-const tabNavMode = computed(() => settingsStore.tabNavMode);
-const showTabNav = computed(() => settingsStore.showTabNav);
+const { tabNavMode, showTabNav } = storeToRefs(settingsStore);
 
 const TabNavComponents: Record<string, Component> = {
   [TabNavModeEnum.Simple]: SimpleTabNav,

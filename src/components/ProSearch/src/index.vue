@@ -143,7 +143,7 @@ const schemaForm = computed(() =>
       const destroy = formRef?.isDestroy(item) || item.destroy;
       const hidden = formRef?.isHidden(item) || item.hidden;
 
-      if (destroy) delete unref(model)[item.prop];
+      if (destroy) delete model.value[item.prop];
 
       return !(destroy || hidden);
     })
@@ -160,7 +160,7 @@ const mergeProps = ref<ProSearchProps>({});
 
 const getProps = computed(() => {
   const propsObj = { ...props };
-  Object.assign(propsObj, unref(mergeProps));
+  Object.assign(propsObj, mergeProps.value);
   return propsObj;
 });
 
@@ -179,26 +179,26 @@ const getResponsive = (item: ProSearchSchemaProps) => {
 
 // 获取响应式断点
 const gridRef = shallowRef<GridInstance>();
-const breakPoint = computed<BreakPoint>(() => unref(gridRef)?.breakPoint || "xl");
+const breakPoint = computed<BreakPoint>(() => gridRef.value?.breakPoint || "xl");
 
 const rowSpan = computed(() => {
-  const { searchCols } = unref(getProps);
+  const { searchCols } = getProps.value;
   if (typeof searchCols === "number") return searchCols;
-  return searchCols[unref(breakPoint)];
+  return searchCols[breakPoint.value];
 });
 
 // 判断是否显示 展开/合并 按钮
 const showCollapse = computed(() => {
-  const { schema, searchCols } = unref(getProps);
+  const { schema, searchCols } = getProps.value;
 
   let show = false;
   schema.reduce((prev, current) => {
     prev +=
-      ((current.grid && current.grid[unref(breakPoint)]?.span) ?? current.grid?.span ?? 1) +
-      ((current.grid && current.grid[unref(breakPoint)]?.offset) ?? current.grid?.offset ?? 0);
+      ((current.grid && current.grid[breakPoint.value]?.span) ?? current.grid?.span ?? 1) +
+      ((current.grid && current.grid[breakPoint.value]?.offset) ?? current.grid?.offset ?? 0);
 
     if (typeof searchCols !== "number") {
-      if (prev >= searchCols[unref(breakPoint)]) show = true;
+      if (prev >= searchCols[breakPoint.value]) show = true;
     } else {
       if (prev >= searchCols) show = true;
     }
@@ -208,17 +208,17 @@ const showCollapse = computed(() => {
 });
 
 const isRightPosition = computed(() => {
-  const { position } = unref(getProps);
+  const { position } = getProps.value;
   return position === "right";
 });
 
 const isBlock = computed(() => {
-  const { position = "right" } = unref(getProps);
+  const { position = "right" } = getProps.value;
   return ["block-left", "block-center", "block-right"].includes(position);
 });
 
 const style = computed(() => {
-  const { position = "right" } = unref(getProps);
+  const { position = "right" } = getProps.value;
   const style = {
     display: "flex",
     alignItems: "center",
@@ -233,7 +233,7 @@ const style = computed(() => {
 
 const filterModel = async () => {
   const model = await getFormData();
-  if (unref(getProps).removeNoValue) {
+  if (getProps.value.removeNoValue) {
     // 使用 reduce 过滤空值，并返回一个新对象
     return Object.keys(model).reduce((prev: any, next: any) => {
       const value = model[next];
@@ -270,7 +270,7 @@ const onFormValidate = (prop: FormItemProp, isValid: boolean, message: string) =
 };
 
 const toggleCollapsed = (isCollapsed?: boolean) => {
-  const { collapsed } = unref(getProps);
+  const { collapsed } = getProps.value;
 
   if (isCollapsed === undefined) return setProps({ collapsed: !collapsed });
   return setProps({ collapsed: isCollapsed });
@@ -278,7 +278,7 @@ const toggleCollapsed = (isCollapsed?: boolean) => {
 
 // 设置 form 的值
 const setValues = async (data: Record<string, any> = {}) => {
-  model.value = Object.assign(unref(model), data);
+  model.value = Object.assign(model.value, data);
   const formExpose = await getFormExpose();
   formExpose?.setValues(data);
 };
@@ -290,7 +290,7 @@ const setProps = (props: ProSearchProps = {}) => {
 
 // 设置 schema
 const setSchema = (schemaProps: FormSetProps[]) => {
-  const { schema } = unref(getProps);
+  const { schema } = getProps.value;
   for (const v of schema) {
     for (const item of schemaProps) {
       if (v.prop === item.prop) {
@@ -302,7 +302,7 @@ const setSchema = (schemaProps: FormSetProps[]) => {
 
 // 添加 schema
 const addSchema = (formSchema: FormSchemaProps, prop?: number | string, position: "before" | "after" = "after") => {
-  const { schema } = unref(getProps);
+  const { schema } = getProps.value;
 
   if (isString(prop)) {
     return schema.forEach((s, i) => {
@@ -315,7 +315,7 @@ const addSchema = (formSchema: FormSchemaProps, prop?: number | string, position
 
 // 删除 schema
 const delSchema = (prop: string) => {
-  const { schema } = unref(getProps);
+  const { schema } = getProps.value;
 
   const index = schema.findIndex(item => item.prop === prop);
   if (index > -1) {

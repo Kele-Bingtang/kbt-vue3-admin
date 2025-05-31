@@ -1,11 +1,10 @@
 import { ElOption, ElOptionGroup } from "element-plus";
 import type { FormFieldNamesProps } from "../interface";
-import { unref } from "vue";
 
 export const useRenderSelect = () => {
   // 渲染 select options
   const renderSelectOptions = (columnEnum: Record<string, any>[], fieldNames: FormFieldNamesProps) => {
-    return unref(columnEnum).map(col => {
+    return columnEnum.map(col => {
       if (col?.options?.length) {
         return (
           <ElOptionGroup label={col[fieldNames.label]} key={col[fieldNames.value]}>

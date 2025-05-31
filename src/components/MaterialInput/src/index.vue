@@ -118,7 +118,7 @@
 
 <script setup lang="ts">
 import type { IconifyIcon } from "@iconify/vue";
-import { computed, getCurrentInstance, onMounted, ref, unref, type Component } from "vue";
+import { computed, getCurrentInstance, onMounted, ref, type Component } from "vue";
 
 defineOptions({ name: "MaterialInput" });
 
@@ -185,20 +185,20 @@ const themeColor = computed(() => {
   return "";
 });
 const computedClasses = computed(() => ({
-  "material--active": unref(focus),
+  "material--active": focus.value,
   "material--disabled": props.disabled,
-  "material--raised": Boolean(unref(focus) || unref(valueCopy)),
+  "material--raised": Boolean(focus.value || valueCopy.value),
 }));
 
 const filledPlaceholder = computed(() => {
-  if (unref(focus)) {
+  if (focus.value) {
     return props.placeholder;
   }
   return "";
 });
 
 onMounted(() => {
-  const activeColor = unref(themeColor) ? unref(themeColor) : props.activeColor;
+  const activeColor = themeColor.value ? themeColor.value : props.activeColor;
   document.styleSheets[0].insertRule(
     `.material-input-component.material--active .material-label { color: ${activeColor} !important}`,
     0
@@ -229,7 +229,7 @@ const handleBlur = (event: FocusEvent) => {
   if ((instance?.parent as any).type.name === "ElFormItem") {
     if (props.validateEvent) {
       // See https://github.com/ElemeFE/element/blob/dev/packages/form/src/form-item.vue#L292
-      (instance?.parent as any).$emit("el.form.blur", [unref(valueCopy)]);
+      (instance?.parent as any).$emit("el.form.blur", [valueCopy.value]);
     }
   }
 };

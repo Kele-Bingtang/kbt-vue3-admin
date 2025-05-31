@@ -36,7 +36,7 @@ export const useProSearch = () => {
 
   const getSearch = async () => {
     await nextTick();
-    const search = unref(searchRef);
+    const search = searchRef.value;
     if (!search) {
       console.error("The Search is not registered. Please use the register method to register");
     }
@@ -133,7 +133,7 @@ export const useProSearch = () => {
       const proSearchInstance = createVNode(ProSearch, { ...proSearchProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(
         ElConfigProvider,
-        { namespace: ns.elNamespace, size: unref(layoutSize) },
+        { namespace: ns.elNamespace, size: layoutSize.value },
         { default: () => proSearchInstance }
       );
 
@@ -148,7 +148,7 @@ export const useProSearch = () => {
 
   return {
     searchElState: {
-      searchRef: unref(searchRef),
+      searchRef: searchRef.value,
     },
     searchMethods: methods,
     searchRegister: register,

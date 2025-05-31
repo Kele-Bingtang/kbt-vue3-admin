@@ -12,7 +12,8 @@
 
 <script setup lang="ts">
 import type { Component } from "vue";
-import { defineAsyncComponent, computed } from "vue";
+import { defineAsyncComponent } from "vue";
+import { storeToRefs } from "pinia";
 import { useSettingsStore } from "@/stores";
 import { LayoutModeEnum } from "@/enums/appEnum";
 import ThemeDrawer from "@/layout/components/ThemeDrawer/index.vue";
@@ -32,5 +33,5 @@ const LayoutComponents: Record<string, Component> = {
 };
 
 const settingsStore = useSettingsStore();
-const layoutMode = computed(() => settingsStore.layoutMode);
+const { layoutMode } = storeToRefs(settingsStore);
 </script>

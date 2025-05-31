@@ -22,7 +22,7 @@
 <script setup lang="ts">
 import { isNumber } from "@/utils";
 import { ElTable, type TableInstance } from "element-plus";
-import { useSlots, ref, computed, unref } from "vue";
+import { useSlots, ref, computed } from "vue";
 import TableSort from "./index.vue";
 
 defineOptions({ name: "TableSort" });
@@ -46,7 +46,7 @@ const sortOrder = ref<any[]>([]);
 const tableData = computed(() => props.data);
 
 const handleHeaderCellClassName = ({ column }: any) => {
-  unref(sortOrder).forEach(element => {
+  sortOrder.value.forEach(element => {
     if (element.prop === column.property) column.order = element.order;
   });
   return "";
@@ -61,7 +61,7 @@ const handleSort = ({ prop, order }: any) => {
   // 参与排序
   if (order) {
     let propIsExist = false;
-    unref(sortOrder).forEach(element => {
+    sortOrder.value.forEach(element => {
       if (element.prop === prop) {
         element.order = order;
         propIsExist = true;
@@ -69,7 +69,7 @@ const handleSort = ({ prop, order }: any) => {
     });
     // 添加排序
     if (!propIsExist) {
-      unref(sortOrder).push({
+      sortOrder.value.push({
         prop: prop,
         order: order,
       });
@@ -77,15 +77,15 @@ const handleSort = ({ prop, order }: any) => {
   } else {
     // 更新排序
     let orderIndex = 0;
-    unref(sortOrder).forEach((element, index) => {
+    sortOrder.value.forEach((element, index) => {
       if (element.prop === prop) orderIndex = index;
     });
-    unref(sortOrder).splice(orderIndex, 1);
+    sortOrder.value.splice(orderIndex, 1);
   }
-  const array = unref(sortOrder).slice();
-  const sameList = [0, unref(tableData).length - 1];
+  const array = sortOrder.value.slice();
+  const sameList = [0, tableData.value.length - 1];
   // 进行多项排序
-  multiSort(unref(tableData), sameList, array);
+  multiSort(tableData.value, sameList, array);
 };
 
 /**

@@ -18,7 +18,7 @@
         v-model="content"
         :height="400"
         :disabled="disabled"
-        :lang="lang"
+        :lang="language"
         :theme="theme"
         @img-upload="handleImgUpload"
         @file-upload="handleFileUpload"
@@ -81,7 +81,7 @@ const tinymceActive = ref(true);
 const disabled = ref(false);
 const theme = ref<UITheme>("default");
 
-const lang = computed(() => layoutStore.language);
+const { language } = storeToRefs(layoutStore);
 
 onActivated(() => {
   tinymceActive.value = true;

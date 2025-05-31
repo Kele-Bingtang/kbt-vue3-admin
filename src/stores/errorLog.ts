@@ -8,12 +8,12 @@ export const useErrorLogStore = defineStore("errorLogStore", () => {
 
   const addErrorLog = (errorLog: ErrorLog) => {
     const userStore = useUserStore();
-    const { userInfo, token, roles } = userStore;
+    const { userInfo, accessToken, roles } = userStore;
     const log: ErrorLog = {
       ...errorLog,
       userId: userInfo.userId,
       username: userInfo.username,
-      token,
+      accessToken,
       roles,
       time: new Date().getTime(),
     };

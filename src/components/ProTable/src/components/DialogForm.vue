@@ -110,8 +110,8 @@ const enumMap = inject(tableEnumMapKey);
 const dialogProps = computed(() => {
   const { dialog } = props;
 
-  const title = typeof dialog?.title === "function" ? dialog?.title(unref(model), unref(status)) : dialog?.title;
-  const height = typeof dialog?.height === "function" ? dialog.height(unref(model), unref(status)) : dialog?.height;
+  const title = typeof dialog?.title === "function" ? dialog?.title(model.value, status.value) : dialog?.title;
+  const height = typeof dialog?.height === "function" ? dialog.height(model.value, status.value) : dialog?.height;
   return { ...dialog, title, height };
 });
 
@@ -157,16 +157,16 @@ const handleAdd = async (row?: any) => {
   const { cache, id = "id", clickAdd } = props;
 
   status.value = "add";
-  unref(proFormRef)?.form?.resetFields();
+  proFormRef.value?.form?.resetFields();
   // 过滤掉 Event 类型
   if (row && !(row instanceof Event)) model.value = deepClone(row);
   else if (!cache) model.value = {};
   else if (Array.isArray(id)) {
     id.forEach(key => {
-      delete unref(model)[key];
+      delete model.value[key];
     });
-  } else id && delete unref(model)[id];
-  clickAdd && (model.value = (await clickAdd(unref(model))) ?? unref(model));
+  } else id && delete model.value[id];
+  clickAdd && (model.value = (await clickAdd(model.value)) ?? model.value);
   dialogFormVisible.value = true;
 };
 
@@ -180,9 +180,9 @@ const handleEdit = async (row: any) => {
   const { clickEdit } = props;
 
   status.value = "edit";
-  unref(proFormRef)?.form?.resetFields();
+  proFormRef.value?.form?.resetFields();
   if (!(row instanceof Event)) model.value = deepClone(row);
-  clickEdit && (model.value = (await clickEdit(unref(model))) ?? unref(model));
+  clickEdit && (model.value = (await clickEdit(model.value)) ?? model.value);
   dialogFormVisible.value = true;
 };
 
@@ -205,7 +205,7 @@ const handleFormConfirm = (data: any, status: DialogStatus) => {
  * 执行新增事件
  */
 const handleDoAdd = (data: any) => {
-  const formRef = unref(proFormRef)?.form as FormInstance;
+  const formRef = proFormRef.value?.form as FormInstance;
 
   formRef.validate(async valid => {
     if (valid) {
@@ -237,9 +237,9 @@ const handleDoAdd = (data: any) => {
           afterAdd && (await afterAdd({ ...addCarryParams, data }, res));
           if (!cache) model.value = {};
           dialogFormVisible.value = false;
-          afterConfirm && afterConfirm(unref(status), true);
+          afterConfirm && afterConfirm(status.value, true);
         },
-        () => afterConfirm && afterConfirm(unref(status), false)
+        () => afterConfirm && afterConfirm(status.value, false)
       );
     }
   });
@@ -249,7 +249,7 @@ const handleDoAdd = (data: any) => {
  * 执行编辑事件
  */
 const handleDoEdit = (data: any) => {
-  const formRef = unref(proFormRef)?.form as FormInstance;
+  const formRef = proFormRef.value?.form as FormInstance;
 
   formRef.validate(async valid => {
     if (valid) {
@@ -281,9 +281,9 @@ const handleDoEdit = (data: any) => {
           if (!cache) model.value = {};
           dialogFormVisible.value = false;
           // 回调
-          afterConfirm && afterConfirm(unref(status), res);
+          afterConfirm && afterConfirm(status.value, res);
         },
-        () => afterConfirm && afterConfirm(unref(status), false)
+        () => afterConfirm && afterConfirm(status.value, false)
       );
     }
   });
@@ -326,9 +326,9 @@ const handleRemove = async (row: any) => {
     async res => {
       afterRemove && (await afterRemove(model, res));
       if (!cache) model.value = {};
-      afterConfirm && afterConfirm(unref(status), res);
+      afterConfirm && afterConfirm(status.value, res);
     },
-    () => afterConfirm && afterConfirm(unref(status), false)
+    () => afterConfirm && afterConfirm(status.value, false)
   );
 };
 
@@ -372,10 +372,10 @@ const handleRemoveBatch = async (selectedListIds: string[], selectedList: any, f
       async res => {
         afterRemoveBatch && (await afterRemoveBatch(model, res));
         if (!cache) model.value = {};
-        afterConfirm && afterConfirm(unref(status), res);
+        afterConfirm && afterConfirm(status.value, res);
         fallback();
       },
-      () => afterConfirm && afterConfirm(unref(status), false)
+      () => afterConfirm && afterConfirm(status.value, false)
     );
   });
 };

@@ -76,7 +76,7 @@ const changeUsername = () => {
     {
       prop: "username",
       field: "label",
-      value: `用户姓名 ${unref(index)}`,
+      value: `用户姓名 ${index.value}`,
     },
   ]);
   index.value++;
@@ -100,7 +100,7 @@ const selectAllNone = async () => {
 const showAction = ref(true);
 
 const delOrAddAction = () => {
-  if (unref(showAction)) {
+  if (showAction.value) {
     delColumn("operation");
     showAction.value = false;
   } else {
@@ -129,14 +129,14 @@ const delOrAddAction = () => {
 const showStripe = ref(false);
 const showOrHiddenStripe = () => {
   setProps({
-    stripe: !unref(showStripe),
+    stripe: !showStripe.value,
   });
-  showStripe.value = !unref(showStripe);
+  showStripe.value = !showStripe.value;
 };
 
 const height = ref<string | number>("auto");
 const fixedHeaderOrAuto = () => {
-  if (unref(height) === "auto") {
+  if (height.value === "auto") {
     setProps({
       height: 300,
     });

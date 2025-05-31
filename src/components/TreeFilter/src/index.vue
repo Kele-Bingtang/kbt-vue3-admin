@@ -35,7 +35,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onBeforeMount, unref } from "vue";
+import { ref, watch, onBeforeMount } from "vue";
 import { ElInput, ElScrollbar, ElTree } from "element-plus";
 import { useNamespace } from "@/composables";
 import type { TreeFilter } from "..";
@@ -111,7 +111,7 @@ const initTreeData = async () => {
 };
 
 watch(filterText, val => {
-  unref(treeRef)!.filter(val);
+  treeRef.value!.filter(val);
 });
 
 // 过滤
@@ -142,7 +142,7 @@ const handleNodeClick = (data: Record<string, any>) => {
 
 // 多选
 const handleCheckChange = () => {
-  emit("change", unref(treeRef)?.getCheckedKeys());
+  emit("change", treeRef.value?.getCheckedKeys());
 };
 
 // 暴露给父组件使用

@@ -1,7 +1,6 @@
 import {
   render,
   getCurrentInstance,
-  unref,
   type Component,
   type ComponentInternalInstance,
   type VNode,
@@ -76,11 +75,11 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
       `${`#${prefixClass}-${id}`} .${prefixClass}.${ns.elNamespace}-drawer`
     ) as HTMLElement;
     if (elDrawerEl) elDrawerEl.classList.toggle("is-fullscreen");
-    isFullscreen.value = !unref(isFullscreen);
+    isFullscreen.value = !isFullscreen.value;
   };
 
   const vm = (
-    <ElConfigProvider namespace={ns.elNamespace} size={unref(layoutSize)}>
+    <ElConfigProvider namespace={ns.elNamespace} size={layoutSize}>
       <ElDrawer
         modelValue
         title="弹框"
@@ -104,7 +103,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
                 <span class={`${ns.elNamespace}-drawer__title`}>{drawerProps.title}</span>
                 {drawerProps.fullscreenIcon !== false && (
                   <Icon
-                    name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
+                    name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
                     onClick={() => toggleFull()}
                     width="18px"
                     height="18px"
@@ -149,7 +148,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
 export const initDrawer = (ctx?: ComponentInternalInstance) => {
   const { appContext } = ctx || getCurrentInstance() || {};
   appContextConst = appContext;
-  layoutSize = unref(inject(ConfigGlobalKey)?.size);
+  layoutSize = inject(ConfigGlobalKey)?.size.value;
 
   return { showDrawer };
 };

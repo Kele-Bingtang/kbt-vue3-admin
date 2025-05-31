@@ -43,7 +43,7 @@ export const exportExcelByLabel = async (columns: Record<string, any>[], data: a
   const flatData = filterFlatData(data);
 
   exportColumns.forEach((item: any) => {
-    if (unref(exportLabel).includes(item.label)) {
+    if (exportLabel.value.includes(item.label)) {
       propName.push(item.prop!);
       tHeader.push(item.label!);
     }

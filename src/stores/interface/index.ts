@@ -76,7 +76,7 @@ export interface ErrorLog {
   time?: number; // 发生错误的时间
   userId?: string; // 用户 ID
   username?: string; // 用户名
-  token?: string; // 用户 token
+  accessToken?: string; // 用户 token
   roles?: string[]; // 用户的角色
 }
 

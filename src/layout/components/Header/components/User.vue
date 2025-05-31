@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import { computed } from "vue";
+import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElImage, ElMessage, ElMessageBox } from "element-plus";
 import { ArrowDownBold, User, Bell, Setting, Back } from "@element-plus/icons-vue";
@@ -24,8 +25,9 @@ const route = useRoute();
 const router = useRouter();
 const { t } = useI18n();
 
-const user = computed(() => userStore.userInfo);
-const showSettings = computed(() => settingsStore.showSettings);
+const { userInfo } = storeToRefs(userStore);
+const { showSettings } = storeToRefs(settingsStore);
+
 const profileLabel = computed(() => {
   const profile = t("_headerBar.profile");
   return profile === "_headerBar.profile" ? "我的主页" : profile;
@@ -69,13 +71,13 @@ const logout = async () => {
   <el-dropdown :class="[ns.b(), 'customize']" trigger="click">
     <div :class="[ns.e('avatar'), 'flx-align-center']">
       <template v-if="showAvatar">
-        <el-image :src="user.avatar" :class="ns.em('avatar', 'img')" alt="头像">
+        <el-image :src="userInfo.avatar" :class="ns.em('avatar', 'img')" alt="头像">
           <template #error>
             <el-image :src="defaultAvatar" alt="头像" />
           </template>
         </el-image>
 
-        <span :class="ns.em('avatar', 'username')">{{ user.username }}</span>
+        <span :class="ns.em('avatar', 'username')">{{ userInfo.username }}</span>
       </template>
 
       <Icon size="1em"><ArrowDownBold /></Icon>

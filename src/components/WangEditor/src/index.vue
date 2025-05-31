@@ -26,7 +26,7 @@ import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
 import attachmentModule from "@wangeditor/plugin-upload-attachment"; // wangeditor 的附件插件
 import "@wangeditor/editor/dist/css/style.css";
 import { toolbarKeys as toolbarKeysConfig } from "./config";
-import { onMounted, watch, onBeforeUnmount, unref, computed, shallowRef, reactive } from "vue";
+import { onMounted, watch, onBeforeUnmount, computed, shallowRef, reactive } from "vue";
 import { useNamespace } from "@/composables";
 
 defineOptions({ name: "WangEditor" });
@@ -168,8 +168,8 @@ const toolbarConfig = computed(() => {
 watch(
   () => props.disabled,
   () => {
-    if (unref(editorRef)) {
-      props.disabled ? unref(editorRef).disable() : unref(editorRef).enable();
+    if (editorRef.value) {
+      props.disabled ? editorRef.value.disable() : editorRef.value.enable();
     }
   }
 );
@@ -184,7 +184,7 @@ onMounted(() => {
 
 const handleCreated = (editor: IDomEditor) => {
   editorRef.value = editor;
-  props.disabled ? unref(editorRef).disable() : unref(editorRef).enable();
+  props.disabled ? editorRef.value.disable() : editorRef.value.enable();
   emits("onCreated", editor);
 };
 
@@ -193,8 +193,8 @@ const handlePaste = (editor: IDomEditor, event: ClipboardEvent) => {
 };
 
 onBeforeUnmount(() => {
-  if (!unref(editorRef)) return;
-  unref(editorRef).destroy(); // 组件销毁时，及时销毁编辑器
+  if (!editorRef.value) return;
+  editorRef.value.destroy(); // 组件销毁时，及时销毁编辑器
 });
 
 defineExpose({

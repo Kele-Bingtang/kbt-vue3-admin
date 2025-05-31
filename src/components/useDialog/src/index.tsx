@@ -1,7 +1,6 @@
 import {
   render,
   getCurrentInstance,
-  unref,
   type Component,
   type ComponentInternalInstance,
   type VNode,
@@ -83,13 +82,13 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
       `${`#${prefixClass}-${id}`} .${prefixClass}.${ns.elNamespace}-dialog`
     ) as HTMLElement;
     if (elDialogEl) elDialogEl.classList.toggle("is-fullscreen");
-    isFullscreen.value = !unref(isFullscreen);
+    isFullscreen.value = !isFullscreen.value;
   };
 
   const contentHeight = ref(addUnit(dialogProps.height || 400));
 
   watch(
-    () => unref(isFullscreen),
+    () => isFullscreen.value,
     async (val: boolean) => {
       await nextTick();
       if (val) {
@@ -106,7 +105,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
   );
 
   const vm = (
-    <ElConfigProvider namespace={ns.elNamespace} size={unref(layoutSize)}>
+    <ElConfigProvider namespace={ns.elNamespace} size={layoutSize}>
       <ElDialog
         modelValue
         title="弹框"
@@ -125,13 +124,13 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
           default: () => {
             if (dialogProps.render) {
               return (
-                <ElScrollbar height={unref(contentHeight)} maxHeight={dialogProps.maxHeight}>
+                <ElScrollbar height={contentHeight.value} maxHeight={dialogProps.maxHeight}>
                   {dialogProps.render()}
                 </ElScrollbar>
               );
             }
             return (
-              <ElScrollbar height={unref(contentHeight)} maxHeight={dialogProps.maxHeight}>
+              <ElScrollbar height={contentHeight.value} maxHeight={dialogProps.maxHeight}>
                 <component is={component} {...componentsProps}></component>
               </ElScrollbar>
             );
@@ -145,7 +144,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
                 </span>
                 {dialogProps.fullscreenIcon !== false && (
                   <Icon
-                    name={unref(isFullscreen) ? "fullscreen-exit" : "fullscreen"}
+                    name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
                     onClick={() => toggleFull()}
                     width="15px"
                     height="15px"
@@ -186,7 +185,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
 export const initDialog = (ctx?: ComponentInternalInstance) => {
   const { appContext } = ctx || getCurrentInstance() || {};
   appContextConst = appContext;
-  layoutSize = unref(inject(ConfigGlobalKey)?.size);
+  layoutSize = inject(ConfigGlobalKey)?.size.value;
 
   return { showDialog };
 };
