@@ -5,13 +5,13 @@ import { useStorage } from "@/composables";
 export const useCache = () => {
   const { getStorage, setStorage, removeStorage, removeStorages } = useStorage();
 
-  // 标签页的 tabsNav 缓存
-  const tabsNavKey = SystemConfig.keyConfig.tabsNavCacheKey;
-  const getCacheTabNavList = () => getStorage(tabsNavKey);
-  const setCacheTabNavList = (tabsNavList: TabProp[]) => setStorage(tabsNavKey, tabsNavList);
-  const removeCacheTabNavList = () => removeStorage(tabsNavKey);
+  // 标签页的 tabNav 缓存
+  const tabNavKey = SystemConfig.keyConfig.tabNavCacheKey;
+  const getCacheTabNavList = () => getStorage(tabNavKey);
+  const setCacheTabNavList = (tabNavList: TabProp[]) => setStorage(tabNavKey, tabNavList);
+  const removeCacheTabNavList = () => removeStorage(tabNavKey);
 
-  // 标签页的 tabsNav 缓存
+  // 标签页的 tabNav 缓存
   const dynamicRoutesKey = SystemConfig.keyConfig.cacheDynamicRoutesKey;
   const getDynamicRoutes = (): RouterConfigRaw[] => getStorage(dynamicRoutesKey);
   const setDynamicRoutes = (dynamicRoutes: RouterConfigRaw[]) => setStorage(dynamicRoutesKey, dynamicRoutes);
@@ -24,8 +24,8 @@ export const useCache = () => {
   const removeCacheVersion = () => removeStorage(versionKey);
 
   const removeProjectsCache = () => {
-    const { tabsNavCacheKey, cacheDynamicRoutesKey, versionCacheKey } = SystemConfig.keyConfig;
-    removeStorages([tabsNavCacheKey, cacheDynamicRoutesKey, versionCacheKey]);
+    const { tabNavCacheKey, cacheDynamicRoutesKey, versionCacheKey } = SystemConfig.keyConfig;
+    removeStorages([tabNavCacheKey, cacheDynamicRoutesKey, versionCacheKey]);
   };
 
   return {

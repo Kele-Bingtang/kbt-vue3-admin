@@ -118,11 +118,11 @@
 <script setup lang="ts" name="SwitchPermission">
 import { useUserStore } from "@/stores";
 import { usePermission } from "@/composables";
-import { RefreshKey } from "@/config/symbols";
+import { RefreshPageKey } from "@/config/symbols";
 
 const userStore = useUserStore();
 const { getRoleList, getAuthList, hasRole, hasAuth } = usePermission();
-const refreshCurrentPage = inject(RefreshKey, (value?: boolean) => value);
+const refreshCurrentPage = inject(RefreshPageKey, (value?: boolean) => value);
 
 const roleList = computed(() => getRoleList());
 const switchRole = computed({

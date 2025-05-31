@@ -13,7 +13,6 @@ import "./index.scss";
 defineOptions({ name: "ElTabNav" });
 
 const ns = useNamespace("el-tabs-nav");
-
 const route = useRoute();
 const router = useRouter();
 const settingsStore = useSettingsStore();
@@ -26,20 +25,20 @@ const {
   rightMenuLeft,
   rightMenuTop,
   tabsDrop,
-  initTabs,
-  addOneTab,
-  resolveFullPath,
+  initAffixTabs,
+  addTabByRoute,
+  getRouteFullPath,
   closeCurrentTab,
   openRightMenu,
 } = useTabNav();
 
-const tabsNavValue = ref(resolveFullPath(route));
-const tabsNavRef = ref<HTMLElement>(); // 根标签
+const tabNavValue = ref(getRouteFullPath(route));
+const tabNavRef = ref<HTMLElement>(); // 根标签
 
 onMounted(() => {
   tabsDrop(`.${ns.elNamespace}-tabs__nav`, `.${ns.elNamespace}-tabs__item`);
-  initTabs();
-  addOneTab();
+  initAffixTabs();
+  addTabByRoute();
 });
 
 // 监听路由的变化
@@ -47,8 +46,8 @@ watch(
   () => route.fullPath,
   () => {
     if (route.meta.isFull) return;
-    tabsNavValue.value = resolveFullPath(route);
-    addOneTab();
+    tabNavValue.value = getRouteFullPath(route);
+    addTabByRoute();
   }
 );
 
@@ -66,9 +65,9 @@ const tabRemove = async (fullPath: TabPaneName) => {
 </script>
 
 <template>
-  <div ref="tabsNavRef" :class="[ns.b(), 'tab-nav']">
+  <div ref="tabNavRef" :class="[ns.b(), 'tab-nav']">
     <div :class="[ns.e('content'), 'flx-align-center']">
-      <el-tabs v-model="tabsNavValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
+      <el-tabs v-model="tabNavValue" type="card" @tab-click="tabClick" @tab-remove="tabRemove">
         <el-tab-pane
           v-for="tab in tabNavList"
           :key="tab.path"
@@ -77,7 +76,7 @@ const tabRemove = async (fullPath: TabPaneName) => {
           :closable="tab.close"
         >
           <template #label>
-            <div @contextmenu.prevent="openRightMenu($event, tab, tabsNavRef)">
+            <div @contextmenu.prevent="openRightMenu($event, tab, tabNavRef)">
               <Icon
                 v-if="tab.meta.icon && settingsStore.showTabNavIcon"
                 :icon="tab.meta.icon"
@@ -92,7 +91,7 @@ const tabRemove = async (fullPath: TabPaneName) => {
       <TabNavButton />
     </div>
 
-    <transition name="el-zoom-in-top">
+    <transition :name="`${ns.elNamespace}-zoom-in-top`">
       <RightMenu
         :selected-tab="selectedTab"
         :visible="rightMenuVisible"

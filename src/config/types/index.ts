@@ -83,9 +83,9 @@ export interface RouterConfig {
 }
 
 export interface KeyConfig {
-  tabsNavCacheKey: string; // 缓存标签页的 key
+  tabNavCacheKey: string; // 缓存标签页的 key
   versionCacheKey: string; // 缓存版本号的 key
-  tabActiveExcludes: string[]; // 当 URL 携带 ? 的参数时，标签页的 path 也会携带参数，当 recordTabNav 为 true 时，会造成多个重复的只是 ? 参数不一样的标签页，该选项指定当出现指定参数不会加载到 path，即该标签的 path 只保留 ? 前面的链接。当存在多个条件，满足任意一个即可
+  tabExcludesUrlKey: string[]; // 当 URL 携带参数时，标签页会出现多个重复且名字一样的 tab，该配置可指定忽略哪些参数生成新的 tab，如果为 * 则忽略所有参数
   cacheDynamicRoutesKey: string; // 缓存路由的 key
 }
 

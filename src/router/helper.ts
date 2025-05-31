@@ -6,7 +6,7 @@ import { isFunction } from "@/utils";
 type Route = RouteLocationNormalizedLoaded | RouterConfigRaw;
 
 /**
- * 获取页面标题、侧边菜单、面包屑、tabsNav 展示的 title
+ * 获取页面标题、侧边菜单、面包屑、tabNav 展示的 title
  *
  * @param route 当前路由
  * @param reTranslate 是否从头开始翻译 title，因为路由在编译阶段已经翻译了一部分，所以涉及路由里的配置不需要从头开始翻译，具体看 ./useRoutes.ts 的 processRouteMeta 函数

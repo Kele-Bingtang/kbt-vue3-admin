@@ -14,8 +14,8 @@ const frameRoutes: RouterConfigRaw = {
       meta: {
         title: "Kbt Vue2 Admin（新标签打开）",
         icon: HotWater,
-        frameSrc: "https://vue2-admin.youngkbt.cn/",
-        frameOpen: true,
+        iframeSrc: "https://vue2-admin.youngkbt.cn/",
+        iframeOpen: true,
         useTooltip: true,
       },
     },
@@ -25,7 +25,7 @@ const frameRoutes: RouterConfigRaw = {
       meta: {
         title: "Kbt Vue2 Admin",
         icon: HotWater,
-        frameSrc: "https://vue2-admin.youngkbt.cn/",
+        iframeSrc: "https://vue2-admin.youngkbt.cn/",
       },
     },
     {
@@ -34,7 +34,7 @@ const frameRoutes: RouterConfigRaw = {
       meta: {
         title: "Element Plus 文档",
         icon: HotWater,
-        frameSrc: "https://element-plus.org/zh-CN/",
+        iframeSrc: "https://element-plus.org/zh-CN/",
       },
     },
     {
@@ -43,8 +43,8 @@ const frameRoutes: RouterConfigRaw = {
       meta: {
         title: "Vue3 文档",
         icon: HotWater,
-        frameSrc: "https://cn.vuejs.org/",
-        frameKeepAlive: true,
+        iframeSrc: "https://cn.vuejs.org/",
+        iframeKeepAlive: true,
       },
     },
     {
@@ -53,7 +53,8 @@ const frameRoutes: RouterConfigRaw = {
       meta: {
         title: "Vite 文档",
         icon: HotWater,
-        frameSrc: "https://cn.vitejs.dev/",
+        iframeSrc: "https://cn.vitejs.dev/",
+        iframeLoading: false,
       },
     },
     {
@@ -62,7 +63,7 @@ const frameRoutes: RouterConfigRaw = {
       meta: {
         title: "Pinia 文档",
         icon: HotWater,
-        frameSrc: "https://pinia.vuejs.org/zh/index.html",
+        iframeSrc: "https://pinia.vuejs.org/zh/index.html",
       },
     },
     {
@@ -71,7 +72,7 @@ const frameRoutes: RouterConfigRaw = {
       meta: {
         title: "Vue Router 文档",
         icon: HotWater,
-        frameSrc: "https://router.vuejs.org/zh/",
+        iframeSrc: "https://router.vuejs.org/zh/",
       },
     },
   ],

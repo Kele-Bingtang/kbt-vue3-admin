@@ -6,5 +6,6 @@ interface ConfigGlobal {
 }
 
 export const ConfigGlobalKey: InjectionKey<ConfigGlobal> = Symbol("ConfigGlobal");
-export const RefreshKey: InjectionKey<(value?: boolean) => void> = Symbol("Refresh");
+export const RefreshPageKey: InjectionKey<(value?: boolean) => void> = Symbol("RefreshPage");
 export const WebSocketKey: InjectionKey<WebSocketStore> = Symbol("WebSocket");
+export const RefreshIFrameKey: InjectionKey<WebSocketStore> = Symbol("RefreshIFrameKey");

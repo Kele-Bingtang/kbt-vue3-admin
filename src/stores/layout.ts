@@ -1,5 +1,5 @@
 import type { LanguageType, LayoutSizeType, TabProp } from "./interface";
-import type { Frame } from "@/layout/components/FrameLayout/useFrame";
+import type { IFrame } from "@/layout/components/IFrameLayout/useIFrame";
 import { ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { useCache } from "@/composables";
@@ -13,7 +13,7 @@ export const useLayoutStore = defineStore(
     const keepAliveName = ref<string[]>([]);
     const layoutSize = ref<LayoutSizeType>(SystemConfig.layoutConfig.layoutSize);
     const language = ref(SystemConfig.layoutConfig.language);
-    const frameList = ref<Frame[]>([]);
+    const iframeList = ref<IFrame[]>([]);
 
     const setLayoutSize = (layoutSizeParam: LayoutSizeType) => (layoutSize.value = layoutSizeParam);
 
@@ -21,10 +21,12 @@ export const useLayoutStore = defineStore(
 
     const addTab = async (tab: TabProp) => {
       const path = tab.path;
+
       if (tab.meta.hideInTab) return;
       if (tabNavList.value.some(v => v.path === path || v.path + "/" === path)) return;
       // 判断动态路由的可打开最大数量
       const dynamicLevel = tab.meta.dynamicLevel ?? -1;
+
       if (dynamicLevel > 0 && tabNavList.value.filter(t => t.name === tab.name).length >= dynamicLevel) {
         // 如果当前已打开的动态路由数大于 dynamicLevel，替换第一个动态路由标签
         const index = tabNavList.value.findIndex(t => t.name === tab.name);
@@ -37,7 +39,7 @@ export const useLayoutStore = defineStore(
       for (const [i, v] of tabNavList.value.entries()) {
         if (v.path === tab.path) {
           tabNavList.value.splice(i, 1);
-          removeFrame(tab);
+          removeIFrame(tab);
           break;
         }
       }
@@ -52,9 +54,10 @@ export const useLayoutStore = defineStore(
     const removeLeftTab = async (tab: TabProp) => {
       const index = tabNavList.value.findIndex(v => v.path === tab.path);
       if (index === -1) return;
-      const frameNameList = frameList.value.map(e => e.name);
+
+      const iframeNameList = iframeList.value.map(e => e.name);
       tabNavList.value = tabNavList.value.filter((item, i) => {
-        if (frameNameList.includes(item.name)) removeFrame(item);
+        if (iframeNameList.includes(item.name)) removeIFrame(item);
         if (i >= index || (item.meta && item.meta.isAffix)) return true;
         if (tab.meta.isKeepAlive) removeKeepAliveName(tab.name);
         return false;
@@ -64,9 +67,10 @@ export const useLayoutStore = defineStore(
     const removeRightTab = async (tab: TabProp) => {
       const index = tabNavList.value.findIndex(v => v.path === tab.path);
       if (index === -1) return;
-      const frameNameList = frameList.value.map(e => e.name);
+
+      const iframeNameList = iframeList.value.map(e => e.name);
       tabNavList.value = tabNavList.value.filter((item, i) => {
-        if (frameNameList.includes(item.name)) removeFrame(item);
+        if (iframeNameList.includes(item.name)) removeIFrame(item);
         if (i <= index || (item.meta && item.meta.isAffix)) return true;
         if (tab.meta.isKeepAlive) removeKeepAliveName(tab.name);
         return false;
@@ -77,7 +81,8 @@ export const useLayoutStore = defineStore(
       tabNavList.value = tabNavList.value.filter(v => {
         return !v.close || v.path === tab.path;
       });
-      frameList.value = frameList.value.filter(v => {
+
+      iframeList.value = iframeList.value.filter(v => {
         return v.name === tab.name;
       });
     };
@@ -85,7 +90,7 @@ export const useLayoutStore = defineStore(
     const removeAllTabs = async () => {
       const fixedTabs = tabNavList.value.filter(tab => !tab.close);
       tabNavList.value = fixedTabs;
-      frameList.value = [];
+      iframeList.value = [];
     };
 
     const updateTab = (tab: TabProp) => {
@@ -109,14 +114,14 @@ export const useLayoutStore = defineStore(
       keepAliveName.value = keepAliveNameList;
     };
 
-    const addFrame = (obj: Frame) => {
-      frameList.value.push(obj);
+    const addIFrame = (obj: IFrame) => {
+      iframeList.value.push(obj);
     };
 
-    const removeFrame = (tab: TabProp) => {
-      for (const [i, v] of frameList.value.entries()) {
+    const removeIFrame = (tab: TabProp) => {
+      for (const [i, v] of iframeList.value.entries()) {
         if (v.name === tab.name) {
-          frameList.value.splice(i, 1);
+          iframeList.value.splice(i, 1);
           break;
         }
       }
@@ -148,7 +153,7 @@ export const useLayoutStore = defineStore(
       keepAliveName,
       layoutSize,
       language,
-      frameList,
+      iframeList,
 
       setLayoutSize,
       setLanguage,
@@ -163,8 +168,8 @@ export const useLayoutStore = defineStore(
       addKeepAliveName,
       removeKeepAliveName,
       setKeepAliveName,
-      addFrame,
-      removeFrame,
+      addIFrame,
+      removeIFrame,
     };
   },
   {

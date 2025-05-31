@@ -21,8 +21,8 @@ export const useRouteFn = () => {
   const modules = import.meta.glob("@/views/**/*.vue");
 
   // Iframe 组件
-  const FrameView = () => import("@/layout/components/FrameLayout/FrameView.vue");
-  const FrameBlank = () => import("@/layout/components/FrameLayout/BlankFrame.vue");
+  const IFrameView = () => import("@/layout/components/IFrameLayout/IFrameView.vue");
+  const IFrameBlank = () => import("@/layout/components/IFrameLayout/BlankIFrame.vue");
 
   /**
    * 初始化动态路由
@@ -196,10 +196,10 @@ export const useRouteFn = () => {
         if (!r.name) r.name = (r.children[0].name as string) + "Parent";
       }
 
-      if (r.meta?.frameOpen && r.meta.frameSrc && isValidURL(r.meta.frameSrc)) r.path = r.meta.frameSrc;
+      if (r.meta?.iframeOpen && r.meta.iframeSrc && isValidURL(r.meta.iframeSrc)) r.path = r.meta.iframeSrc;
       else {
-        if (r.meta?.frameKeepAlive) r.component = FrameBlank;
-        else if (!r.meta?.frameKeepAlive && r.meta?.frameSrc) r.component = FrameView;
+        if (r.meta?.iframeKeepAlive) r.component = IFrameBlank;
+        else if (!r.meta?.iframeKeepAlive && r.meta?.iframeSrc) r.component = IFrameView;
         else {
           // 如果动态路由的 component 存在且为 string，则必须是 views 下的目录，以 / 分割，如果/home/index，则是 views/home/index.vue 组件，如果不存在 component，则读取 path 来获取 component
           if (r.component) {

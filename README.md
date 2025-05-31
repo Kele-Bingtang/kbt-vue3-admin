@@ -270,10 +270,10 @@ Admin 模板需要的可配置参数:
  * @param meta.activeMenu ==> Restful 路由搭配使用，当前路由为详情页时，需要高亮的菜单
  * @param meta.beforeCloseName ==> 关闭路由前的回调，如果设置该字段，则在关闭当前 tab 页时会去 @/router/before-close.js 里寻找该字段名「对应」的方法，作为关闭前的钩子函数，无默认值
  * @param meta.rank ==> 路由在左侧菜单的排序，rank 值越高越靠后，当 rank 不存在时，根据顺序自动创建，首页路由永远在第一位，当 rank 存在时，可以插入指定的菜单位置，默认不存在
- * @param meta.frameSrc ==> IFrame 链接，填写后该路由将打开 IFrame 指定的链接
- * @param meta.frameLoading ==> IFrame 页是否开启首次加载动画（默认 true）
- * @param meta.frameKeepAlive ==> IFrame 页是否开启缓（默认 false）
- * @param meta.frameOpen ==> IFrame 页是否开新标签页打开，true 以新标签页打开，false 不打开（默认 false）
+ * @param meta.iframeSrc ==> IFrame 链接，填写后该路由将打开 IFrame 指定的链接
+ * @param meta.iframeLoading ==> IFrame 页是否开启首次加载动画（默认 true）
+ * @param meta.iframeKeepAlive ==> IFrame 页是否开启缓（默认 false）
+ * @param meta.iframeOpen ==> IFrame 页是否开新标签页打开，true 以新标签页打开，false 不打开（默认 false）
  * @param meta.transition ==> 页面加载动画（有两种形式，一种直接采用 vue 内置的 transitions 动画，另一种是使用 animate.css 写进、离场动画）
  * @param meta.transition.name ==> 当前路由动画效果
  * @param meta.transition.enterTransition ==> 进场动画
@@ -431,12 +431,12 @@ Admin 内置错误日志，当项目抛出 1 个 Error 的时候，Admin 会将�
 相关代码：`layout/components/MainContent/index.vue`
 
 ```typescript
-export const RefreshKey: InjectionKey<(value?: boolean) => boolean> = Symbol("Refresh");
+export const RefreshPageKey: InjectionKey<(value?: boolean) => boolean> = Symbol("Refresh");
 
 const refreshCurrentPage: RefreshFunction = (value?: boolean) => {
   // ...
 };
-provide(RefreshKey, refreshCurrentPage);
+provide(RefreshPageKey, refreshCurrentPage);
 ```
 
 使用的方式有两种：
@@ -446,9 +446,9 @@ provide(RefreshKey, refreshCurrentPage);
 接收的是一个函数，如果您调用该函数时，可以传入参数，参数类型为 boolean 值
 
 ```typescript
-import { RefreshKey } from "@/config/symbols";
+import { RefreshPageKey } from "@/config/symbols";
 
-const refreshCurrentPage = inject(RefreshKey);
+const refreshCurrentPage = inject(RefreshPageKey);
 refreshCurrentPage(false);
 nextTick(() => {
   refreshCurrentPage(true);
@@ -462,9 +462,9 @@ nextTick(() => {
 您可以直接调用该函数，如果不传入参数，则函数内部自动实现刷新功能
 
 ```typescript
-import { RefreshKey } from "@/config/symbols";
+import { RefreshPageKey } from "@/config/symbols";
 
-const refreshCurrentPage = inject(RefreshKey);
+const refreshCurrentPage = inject(RefreshPageKey);
 refreshCurrentPage();
 ```
 
@@ -503,7 +503,7 @@ router.replace("/redirect" + route.fullPath);
 
 除了项目的组件，你可能需要打开外部的链接，那么就有 IFrame 嵌入功能。
 
-你只需要在写路由的时候在 meta 传入 frameSrc 即可。
+你只需要在写路由的时候在 meta 传入 iframeSrc 即可。
 
 ```typescript
 {
@@ -512,12 +512,12 @@ router.replace("/redirect" + route.fullPath);
   meta: {
 		title: "Vue2 Template IFrame",
 		icon: "HotWater",
-		frameSrc: "http://172.16.49.41/vue2-template",
+		iframeSrc: "http://172.16.49.41/vue2-template",
   },
 }
 ```
 
-此时点击左侧菜单的该菜单，则会打开这个嵌入的 frameSrc 网页。
+此时点击左侧菜单的该菜单，则会打开这个嵌入的 iframeSrc 网页。
 
 ### 新窗口打开
 

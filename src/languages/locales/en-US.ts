@@ -139,7 +139,6 @@ export default {
     layoutSwitch: "Layout Switch",
     menuSwitch: "Menu Switch",
     headerSwitch: "Header Switch",
-    tabsNavSwitch: "TabNav Switch",
     interfaceSettings: "Interface Settings",
     globalTheme: "Global Theme",
     titleSwitch: "Title Switch",

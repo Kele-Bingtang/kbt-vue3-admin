@@ -138,7 +138,6 @@ export default {
     layoutSwitch: "布局切换",
     menuSwitch: "菜单切换",
     headerSwitch: "头部切换",
-    tabsNavSwitch: "标签切换",
     interfaceSettings: "界面配置",
     globalTheme: "全局主题",
     titleSwitch: "标题切换",

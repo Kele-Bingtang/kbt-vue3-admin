@@ -5,8 +5,8 @@ import { getUrlParams, mittBus } from "@/utils";
 import Sortable from "sortablejs";
 import SystemConfig, { HOME_URL } from "@/config";
 import { useRoute, useRouter, type RouteLocationNormalizedLoaded } from "vue-router";
-import { inject, ref, reactive, computed, nextTick, watchEffect } from "vue";
-import { RefreshKey } from "@/config/symbols";
+import { inject, ref, reactive, nextTick, watchEffect } from "vue";
+import { RefreshIFrameKey, RefreshPageKey } from "@/config/symbols";
 import { formatTitle } from "@/router/helper";
 
 type ContextMenu = "refresh" | "current" | "left" | "right" | "other" | "all";
@@ -25,7 +25,7 @@ export const useTabNav = () => {
   const router = useRouter();
   const layoutStore = useLayoutStore();
   const routeStore = useRouteStore();
-  const refreshCurrentPage = inject(RefreshKey, (value?: boolean) => value);
+  const refreshCurrentPage = inject(RefreshPageKey, (value?: boolean) => value);
 
   const { bool: rightMenuVisible, setFalse } = useBoolean(); // 右键菜单显示
 
@@ -52,12 +52,7 @@ export const useTabNav = () => {
   const rightMenuLeft = ref(0);
   const rightMenuTop = ref(0);
 
-  const tabNavList = computed(() => layoutStore.tabNavList);
-
-  const isActive = (tab: TabProp) => {
-    const fullPath = resolveFullPath(route);
-    return fullPath === tab.path || fullPath === tab.path + "/";
-  };
+  const { tabNavList } = storeToRefs(layoutStore);
 
   /**
    * 标签拖拽排序
@@ -82,11 +77,19 @@ export const useTabNav = () => {
   };
 
   /**
-   * 判断当前激活的 tab
+   *  判断当前 tab 是否激活
    */
-  const getOneTab = (route: RouteLocationNormalizedLoaded) => {
+  const isActive = (tab: TabProp) => {
+    const fullPath = getRouteFullPath(route);
+    return fullPath === tab.path || fullPath === tab.path + "/";
+  };
+
+  /**
+   * 获取指定 route 的 tab
+   */
+  const getTabByRoute = (route: RouteLocationNormalizedLoaded) => {
     return {
-      path: resolveFullPath(route),
+      path: getRouteFullPath(route),
       name: (route.name as string) || route.path,
       title: formatTitle(route),
       icon: route.meta.icon || "",
@@ -98,25 +101,33 @@ export const useTabNav = () => {
   /**
    * 判断 tab 的地址，因为携带不同的参数可以引起多个重复的标签，这里可以设置当同一个 path 携带参数不一样，只渲染一个 tab，原理就是去掉 ? 后面的参数
    */
-  const resolveFullPath = (r: RouteLocationNormalizedLoaded) => {
-    if (r.path !== route.path || r.path === HOME_URL) return r.meta._fullPath;
+  const getRouteFullPath = (r: RouteLocationNormalizedLoaded) => {
+    const fullPath = r.fullPath || r.meta._fullPath;
+    if (r.path !== route.path || r.path === HOME_URL) return fullPath;
+
+    const tabExcludesUrlKey = SystemConfig.keyConfig.tabExcludesUrlKey;
+    if (tabExcludesUrlKey.includes("*")) return fullPath;
+
     const urlParams = getUrlParams();
     if (urlParams.size) {
       // 如果存在 key=value，则判断是否完全匹配 key
-      urlParams.forEach((_, key) => {
-        if (SystemConfig.keyConfig.tabActiveExcludes.includes(key)) return r.meta?._fullPath;
-      });
+      for (const key of urlParams.keys()) {
+        if (tabExcludesUrlKey.includes(key)) {
+          return r.meta?._fullPath;
+        }
+      }
     }
-    return r.fullPath || r.meta._fullPath;
+
+    return fullPath;
   };
 
   /**
    * 初始化固定在标签栏的 tabs
    */
-  const initTabs = () => {
+  const initAffixTabs = () => {
     routeStore.flatRouteList.forEach(item => {
       if (item.meta?.isAffix && !item.meta?.isFull) {
-        const tabParam = getOneTab(item as unknown as RouteLocationNormalizedLoaded);
+        const tabParam = getTabByRoute(item as RouteLocationNormalizedLoaded);
         layoutStore.addTab(tabParam);
         item.meta.isKeepAlive && layoutStore.addKeepAliveName(item.name as string);
       }
@@ -126,9 +137,9 @@ export const useTabNav = () => {
   /**
    * 添加一个 tab
    */
-  const addOneTab = () => {
+  const addTabByRoute = () => {
     if (route.name) {
-      const tab: TabProp = getOneTab(route);
+      const tab: TabProp = getTabByRoute(route);
       layoutStore.addTab(tab);
       route.meta.isKeepAlive && layoutStore.addKeepAliveName(route.name as string);
     }
@@ -198,12 +209,12 @@ export const useTabNav = () => {
   /**
    * 打开右键菜单，并初始化菜单布局、内容
    */
-  const openRightMenu = (e: MouseEvent, tab: TabProp, tabsNavRef?: HTMLElement) => {
+  const openRightMenu = (e: MouseEvent, tab: TabProp, tabNavRef?: HTMLElement) => {
     initContextMenu(tab);
 
     const menuMinWidth = 0;
-    const offsetLeft = tabsNavRef?.getBoundingClientRect().left || 0; // margin-left 的数值
-    const offsetWidth = tabsNavRef?.offsetWidth || 0; //  width 数值
+    const offsetLeft = tabNavRef?.getBoundingClientRect().left || 0; // margin-left 的数值
+    const offsetWidth = tabNavRef?.offsetWidth || 0; //  width 数值
     const maxLeft = offsetWidth - menuMinWidth;
     const left = e.clientX - offsetLeft + 14;
 
@@ -242,7 +253,7 @@ export const useTabNav = () => {
    * 刷新选中的 tab
    */
   const refreshSelectedTab = async (tab: TabProp) => {
-    if (tab.meta?.frameSrc) mittBus.emit("refreshFrame");
+    if (tab.meta?.iframeSrc) mittBus.emit(RefreshIFrameKey);
     else {
       layoutStore.removeKeepAliveName(tab.name);
 
@@ -280,7 +291,7 @@ export const useTabNav = () => {
   };
 
   /**
-   * 关闭除固定在 tabsNav 的所有其他 tabs
+   * 关闭除固定在 tabNav 的所有其他 tabs
    */
   const closeAllTabs = () => {
     layoutStore.removeAllTabs();
@@ -314,10 +325,10 @@ export const useTabNav = () => {
 
     isActive,
     tabsDrop,
-    initTabs,
-    getOneTab,
-    addOneTab,
-    resolveFullPath,
+    initAffixTabs,
+    getTabByRoute,
+    addTabByRoute,
+    getRouteFullPath,
     openRightMenu,
     initContextMenu,
     closeCurrentTab,

@@ -20,7 +20,7 @@ defineOptions({ name: "TabNavButton" });
 
 const {
   contextMenuCondition,
-  getOneTab,
+  getTabByRoute,
   initContextMenu,
   refreshSelectedTab,
   closeCurrentTab,
@@ -33,7 +33,7 @@ const {
 const route = useRoute();
 const settingStore = useSettingsStore();
 
-const selectedTab = ref(getOneTab(route));
+const selectedTab = ref(getTabByRoute(route));
 
 const expandDropdown = () => {
   useDebounceFn(() => {
@@ -47,7 +47,7 @@ const useMaximize = () => {
 
 watch(
   () => route.fullPath,
-  () => (selectedTab.value = getOneTab(route))
+  () => (selectedTab.value = getTabByRoute(route))
 );
 </script>
 

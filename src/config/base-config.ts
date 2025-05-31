@@ -52,10 +52,10 @@ const routerConfig: RouterConfig = {
 };
 
 const keyConfig: KeyConfig = {
-  tabsNavCacheKey: `${layoutConfig.cacheKeyPrefix}:tabsNav`,
+  tabNavCacheKey: `${layoutConfig.cacheKeyPrefix}:tabNav`,
   cacheDynamicRoutesKey: `${layoutConfig.cacheKeyPrefix}:dynamic:routes`,
   versionCacheKey: `${layoutConfig.cacheKeyPrefix}:version`,
-  tabActiveExcludes: ["layoutMode"],
+  tabExcludesUrlKey: ["layoutMode"],
 };
 
 export const createBaseConfig = (): SystemConfig => ({

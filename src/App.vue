@@ -18,13 +18,15 @@ import { addUnit, setStyleVar } from "@/utils";
 import { ConfigGlobalKey, WebSocketKey } from "@/config/symbols";
 import { useNamespace, useCache, useBrowserTitle } from "@/composables";
 import { useTheme } from "@/composables/core/useTheme";
-import { useFrame } from "@/layout/components/FrameLayout/useFrame";
+import { useIFrame } from "@/layout/components/IFrameLayout/useIFrame";
 
 const ns = useNamespace();
 
 const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 const userStore = useUserStore();
+
+useIFrame(SystemConfig.layoutConfig.watchFrame);
 
 useBrowserTitle();
 
@@ -65,15 +67,6 @@ if (import.meta.env.VITE_WEBSOCKET === "true") {
   provide(WebSocketKey, useWebSocket);
 }
 
-const { acceptFrameMsg } = useFrame();
-/**
- * 接收 frame 传来的消息，执行该消息（如果把 admin 作为门户来嵌入各个系统，则用到）
- * 消息：需要打开的连接
- */
-const handleMsgFromFrame = () => {
-  if (SystemConfig.layoutConfig.watchFrame) window.addEventListener("message", acceptFrameMsg);
-};
-
 /**
  * 根据版本号进行缓存
  */
@@ -94,7 +87,6 @@ const versionCache = () => {
 };
 
 onMounted(() => {
-  handleMsgFromFrame();
   versionCache();
 });
 

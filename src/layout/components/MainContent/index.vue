@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, nextTick, provide, watchEffect, type Component } from "vue";
 import { ElMain } from "element-plus";
-import { RefreshKey } from "@/config/symbols";
+import { RefreshPageKey } from "@/config/symbols";
 import { getUrlParams, mittBus } from "@/utils";
 import { useLayoutStore, useSettingsStore } from "@/stores";
 import { TabNavModeEnum } from "@/enums/appEnum";
@@ -9,7 +9,7 @@ import SimpleTabNav from "@/layout/components/TabNav/SimpleTabNav/index.vue";
 import ClassicTabNav from "@/layout/components/TabNav/ClassicTabNav/index.vue";
 import ElTabNav from "@/layout/components/TabNav/ElTabNav/index.vue";
 import Maximize from "./components/Maximize.vue";
-import FrameLayout from "../FrameLayout/index.vue";
+import FrameLayout from "../IFrameLayout/index.vue";
 
 defineOptions({ name: "MainContent" });
 
@@ -35,7 +35,7 @@ const refreshCurrentPage = (value?: boolean) => {
     isRefreshRoute.value = true;
   });
 };
-provide(RefreshKey, refreshCurrentPage);
+provide(RefreshPageKey, refreshCurrentPage);
 
 mittBus.on("refreshCurrentPage", () => refreshCurrentPage());
 

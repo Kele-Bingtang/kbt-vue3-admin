@@ -14,11 +14,11 @@ const settingsStore = useSettingsStore();
 const isMobile = useMediaQuery(mobileMaxWidthMedia);
 const { t } = useI18n();
 
-const tabNavModeOptions = [
+const tabNavModeOptions = computed(() => [
   { value: TabNavModeEnum.Simple, label: t("_settings.tabNavModeSelect.simple") },
   { value: TabNavModeEnum.Classic, label: t("_settings.tabNavModeSelect.classic") },
   { value: TabNavModeEnum.Element, label: t("_settings.tabNavModeSelect.element") },
-];
+]);
 
 const pageTransitionOps = computed(() => [
   { value: PageTransitionEnum.None, label: t("_settings.pageTransitionSelect.none") },
