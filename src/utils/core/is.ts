@@ -1,9 +1,4 @@
 /**
- * 是否为合法的 URL 前缀
- */
-export const isExternal = (path: string) => /^(http?:|https?:|mailto:|tel:)/.test(path);
-
-/**
  * 是否是有效的 URL
  */
 export const isValidURL = (url: string) => {

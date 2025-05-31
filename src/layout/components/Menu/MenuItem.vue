@@ -2,7 +2,7 @@
 import { ref, watch, nextTick } from "vue";
 import { useRouter } from "vue-router";
 import { ElMenuItem, ElSubMenu } from "element-plus";
-import { isExternal } from "@/utils";
+import { isValidURL } from "@/utils";
 import { useNamespace } from "@/composables";
 import { Tooltip } from "@/components";
 import { useLayoutStore } from "@/stores";
@@ -20,7 +20,7 @@ const layoutStore = useLayoutStore();
 const isSwitchLanguage = ref(false);
 
 const handleMenuClick = (menuItem: RouterConfig) => {
-  if (isExternal(menuItem.path)) return window.open(menuItem.path, "_blank");
+  if (isValidURL(menuItem.path)) return window.open(menuItem.path, "_blank");
   router.push(menuItem.meta._fullPath || menuItem.path || "");
 };
 

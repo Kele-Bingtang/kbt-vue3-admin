@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, ref, nextTick, provide, watchEffect, type Component } from "vue";
 import { ElMain } from "element-plus";
-import { RefreshPageKey } from "@/config/symbols";
+import { RefreshPageKey } from "@/config";
 import { getUrlParams, mittBus } from "@/utils";
 import { useLayoutStore, useSettingsStore } from "@/stores";
 import { TabNavModeEnum } from "@/enums/appEnum";
@@ -37,7 +37,7 @@ const refreshCurrentPage = (value?: boolean) => {
 };
 provide(RefreshPageKey, refreshCurrentPage);
 
-mittBus.on("refreshCurrentPage", () => refreshCurrentPage());
+mittBus.on(RefreshPageKey, () => refreshCurrentPage());
 
 // 监听当前页是否最大化，动态添加 class
 watchEffect(() => {

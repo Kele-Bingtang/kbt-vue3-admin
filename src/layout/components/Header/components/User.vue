@@ -8,7 +8,7 @@ import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 import { useRoute, useRouter } from "vue-router";
 import defaultAvatar from "@/assets/images/default.png";
-import { LOGIN_URL } from "@/config";
+import { LOGIN_URL, OpenThemeDrawerKey } from "@/config";
 
 defineOptions({ name: "User" });
 
@@ -47,7 +47,7 @@ const logOutLabel = computed(() => {
 });
 
 const openSettingsDrawer = () => {
-  mittBus.emit("openThemeDrawer");
+  mittBus.emit(OpenThemeDrawerKey);
 };
 
 const logout = async () => {

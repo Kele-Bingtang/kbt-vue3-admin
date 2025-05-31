@@ -4,9 +4,10 @@ import { useMenu, useNamespace } from "@/composables";
 import { useEventListener } from "@vueuse/core";
 import { mittBus } from "@/utils";
 import { formatTitle } from "@/router/helper";
+import { useUserStore } from "@/stores";
+import { OpenSearchDialogKey } from "@/config";
 
 import "./index.scss";
-import { useUserStore } from "@/stores";
 
 defineOptions({ name: "GlobalSearch" });
 
@@ -29,7 +30,7 @@ const searchInputRef = useTemplateRef("searchInputRef");
 const searchResultScrollbarRef = useTemplateRef("searchResultScrollbarRef");
 
 onMounted(() => {
-  mittBus.on("openSearchDialog", openSearchDialog);
+  mittBus.on(OpenSearchDialogKey, openSearchDialog);
 });
 
 /**

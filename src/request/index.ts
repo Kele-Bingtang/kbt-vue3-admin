@@ -2,7 +2,7 @@ import { ElNotification } from "element-plus";
 import axios, { type AxiosInstance, AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios";
 import qs from "qs";
 import { showFullScreenLoading, tryHideFullScreenLoading } from "@/request/serviceLoading";
-import { isArray, isExternal, message } from "@/utils";
+import { isArray, isValidURL, message } from "@/utils";
 import { useErrorLogStore, useUserStore } from "@/stores";
 import router from "@/router";
 import { ContentTypeEnum, ResultEnum } from "./httpEnum";
@@ -215,7 +215,7 @@ function processError(error: AxiosError) {
     const {
       config: { baseURL, url, params, method, data },
     } = JSON.parse(e);
-    const requestURL = isExternal(baseURL) ? baseURL + url : url;
+    const requestURL = isValidURL(baseURL) ? baseURL + url : url;
     let { message } = error;
     message = message + "，token 不存在或者失效了";
     let stack = "您发送的请求为 " + method.toUpperCase() + "，您请求的地址为 " + requestURL;

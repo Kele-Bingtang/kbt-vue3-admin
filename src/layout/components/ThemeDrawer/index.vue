@@ -8,7 +8,7 @@ import { useSettingsStore } from "@/stores";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 import { LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
-import { mobileMaxWidthMedia } from "@/config";
+import { mobileMaxWidthMedia, OpenThemeDrawerKey } from "@/config";
 import { LayoutSwitch, AsideHeaderSwitch, ThemeSelect, LayoutSelect, BrowserTitleSwitch } from "./components";
 
 defineOptions({ name: "ThemeDrawer" });
@@ -36,7 +36,7 @@ const resetSettings = () => {
 
 // 打开主题设置
 const drawerVisible = ref(false);
-mittBus.on("openThemeDrawer", () => (drawerVisible.value = true));
+mittBus.on(OpenThemeDrawerKey, () => (drawerVisible.value = true));
 
 // 监听布局变化，在 body 上添加相对应的 layout class
 watch(

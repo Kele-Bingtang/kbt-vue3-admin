@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
+import { OpenSearchDialogKey } from "@/config";
 
 import "./input.scss";
 
@@ -11,7 +12,7 @@ const ns = useNamespace("global-search-input");
 const isWindows = navigator.userAgent.includes("Windows");
 
 const openSearchDialog = () => {
-  mittBus.emit("openSearchDialog");
+  mittBus.emit(OpenSearchDialogKey);
 };
 </script>
 

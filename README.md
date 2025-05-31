@@ -399,9 +399,10 @@ ThemeDrawer.vue
 
 ```typescript
 import mittBus from "@/utils/layout/mittBus";
+import { RefreshPageKey } from "@/config";
 
 const drawerVisible = ref(false);
-mittBus.on("openThemeDrawer", () => (drawerVisible.value = true));
+mittBus.on(RefreshPageKey, () => (drawerVisible.value = true));
 ```
 
 从事件总栈触发该事件：
@@ -410,9 +411,10 @@ User.vue
 
 ```typescript
 import mittBus from "@/utils/layout/mittBus";
+import { RefreshPageKey } from "@/config";
 
 const openSettingsDrawer = () => {
-  mittBus.emit("openThemeDrawer");
+  mittBus.emit(RefreshPageKey);
 };
 ```
 
