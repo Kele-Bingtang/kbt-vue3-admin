@@ -62,7 +62,7 @@ const emits = defineEmits<QrCodeEmits>();
 
 const { toCanvas, toDataURL } = QRCode;
 const loading = ref(true);
-const wrapRef = ref<HTMLCanvasElement | HTMLImageElement | null>(null);
+const wrapRef = useTemplateRef("wrapRef");
 const renderText = computed(() => String(props.text));
 const wrapStyle = computed(() => {
   return {
@@ -79,7 +79,7 @@ const initQrCode = async () => {
     options.errorCorrectionLevel = options.errorCorrectionLevel || getErrorCorrectionLevel(renderText.value);
     const _width: number = await getOriginWidth(renderText.value, options);
     options.scale = props.width === 0 ? undefined : (props.width / _width) * 4;
-    const canvasRef: any = await toCanvas(wrapRef.value as HTMLCanvasElement, renderText.value, options);
+    const canvasRef: any = await toCanvas(wrapRef.value, renderText.value, options);
 
     if (props.logo) {
       const url = (await createLogoCode(canvasRef)) as string;

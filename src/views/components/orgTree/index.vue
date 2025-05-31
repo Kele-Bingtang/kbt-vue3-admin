@@ -108,7 +108,7 @@ import { useNamespace } from "@/composables";
 const ns = useNamespace("org-tree-demo");
 const prefixClass = ns.b();
 
-const treeRef = ref();
+const treeRef = useTemplateRef<any>("treeRef");
 const data = ref({
   id: 1,
   title: "公司名",
@@ -173,7 +173,7 @@ const defineMenus = (e: MouseEvent, node: any) => {
 };
 
 const filter = () => {
-  treeRef.value.filter(keyword.value);
+  treeRef.value?.filter(keyword.value);
 };
 // 对树节点进行筛选时执行的方法，返回 true 表示这个节点的子节点可以显示，返回 false 则表示这个节点的所有子节点会被隐藏
 const filterNodeMethod = (value: string, data: any) => {

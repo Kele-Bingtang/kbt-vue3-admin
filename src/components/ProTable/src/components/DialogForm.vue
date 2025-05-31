@@ -34,7 +34,7 @@
 <script setup lang="ts">
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
 import { ProForm, WorkDialog, type ProFormProps, type FormSchemaProps, type ProFormInstance } from "@/components";
-import { shallowRef, ref, computed, unref } from "vue";
+import { ref, computed, unref } from "vue";
 import { tableEnumMapKey } from "../interface";
 import { deepClone } from "@/utils";
 
@@ -98,7 +98,7 @@ export interface DialogFormProps<T = any> {
 }
 
 const props = defineProps<DialogFormProps>();
-const proFormRef = shallowRef<ProFormInstance>();
+const proFormRef = useTemplateRef<ProFormInstance>("proFormRef");
 const dialogFormVisible = ref(false);
 
 // 表单

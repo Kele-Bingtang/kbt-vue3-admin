@@ -65,7 +65,7 @@ const emits = defineEmits<DragDrawerEmits>();
 
 const drawerVisible = defineModel<boolean>({ required: true });
 const drawerWidth = defineModel<number>("width", { default: 200 });
-const drawerRef = ref();
+const drawerRef = useTemplateRef("drawerRef");
 const canMove = ref(false);
 const wrapperWidth = ref(0);
 const wrapperLeft = ref(0);

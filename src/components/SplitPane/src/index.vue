@@ -24,7 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef, ref, computed, watch, onMounted, nextTick } from "vue";
+import { ref, computed, watch, onMounted, nextTick } from "vue";
 import SplitLine from "./SplitLine.vue";
 import { useNamespace } from "@/composables";
 
@@ -57,7 +57,7 @@ const emits = defineEmits<SplitPaneEmits>();
 
 const modelValue = defineModel<NumOrStr>({ default: 0.5 });
 
-const splitPaneRef = shallowRef();
+const splitPaneRef = useTemplateRef("splitPaneRef");
 const offset = ref(0);
 const initOffset = ref(0);
 const oldOffset = ref<unknown>(0);
@@ -80,7 +80,7 @@ onMounted(() => {
 
 const init = () => {
   const value = valueIsString.value
-    ? px2percent(modelValue.value as string, splitPaneRef.value[offsetSize.value])
+    ? px2percent(modelValue.value as string, splitPaneRef.value?.[offsetSize.value] + "")
     : modelValue.value;
   offset.value = ((value as number) * 10000) / 100;
 };
@@ -93,9 +93,9 @@ const getComputedThresholdValue = (type: string) => {
   let value: NumOrStr = "";
   if (type === "min") value = props.min;
   else if (type === "max") value = props.max;
-  const size = splitPaneRef.value[offsetSize.value];
+  const size = splitPaneRef.value?.[offsetSize.value] || 0;
   if (valueIsString.value) return typeof value === "string" ? value : size * value;
-  else return typeof value === "string" ? px2percent(value, size) : value;
+  else return typeof value === "string" ? px2percent(value, size + "") : value;
 };
 
 // eslint-disable-next-line no-unused-vars
@@ -111,7 +111,7 @@ const getMax = (value1: NumOrStr, value2: NumOrStr) => {
 
 const getAnotherOffset = (value: NumOrStr) => {
   let res: NumOrStr = "0";
-  if (valueIsString.value) res = `${splitPaneRef.value[offsetSize.value] - parseFloat(value as string)}px`;
+  if (valueIsString.value) res = `${(splitPaneRef.value?.[offsetSize.value] || 0) - parseFloat(value as string)}px`;
   else res = 1 - (value as number);
   return res;
 };
@@ -119,11 +119,11 @@ const getAnotherOffset = (value: NumOrStr) => {
 const handleMove = (e: MouseEvent) => {
   const pageOffset = isHorizontal.value ? e.pageY : e.pageX;
   const offset = pageOffset - initOffset.value;
-  const outerWidth = splitPaneRef.value[offsetSize.value];
+  const outerWidth = splitPaneRef.value?.[offsetSize.value] || 0;
   let value = valueIsString.value
     ? `${parseFloat(oldOffset.value + "") + offset}px`
-    : px2percent(outerWidth * (oldOffset.value as number) + offset + "", outerWidth);
-  console.log(px2percent(outerWidth * (oldOffset.value as number) + offset + "", outerWidth));
+    : px2percent(outerWidth * (oldOffset.value as number) + offset + "", outerWidth + "");
+  console.log(px2percent(outerWidth * (oldOffset.value as number) + offset + "", outerWidth + ""));
   const anotherValue = getAnotherOffset(value);
   if (parseFloat(value + "") <= parseFloat(computedMin.value + "")) value = getMax(value, computedMin.value);
   if (parseFloat(anotherValue + "") <= parseFloat(computedMax.value + "")) {

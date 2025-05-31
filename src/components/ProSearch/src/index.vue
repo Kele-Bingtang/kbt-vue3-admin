@@ -52,7 +52,7 @@
 </template>
 
 <script setup lang="ts">
-import { computed, onMounted, ref, shallowRef, unref } from "vue";
+import { computed, onMounted, ref, unref } from "vue";
 import {
   Grid,
   GridItem,
@@ -178,7 +178,7 @@ const getResponsive = (item: ProSearchSchemaProps) => {
 };
 
 // 获取响应式断点
-const gridRef = shallowRef<GridInstance>();
+const gridRef = useTemplateRef<GridInstance>("gridRef");
 const breakPoint = computed<BreakPoint>(() => gridRef.value?.breakPoint || "xl");
 
 const rowSpan = computed(() => {

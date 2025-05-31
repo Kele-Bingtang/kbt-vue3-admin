@@ -285,8 +285,7 @@ export enum TableSizeEnum {
  */
 export const proTablePrefixClassKey: InjectionKey<string> = Symbol("ProTablePrefixClass");
 export const tableEnumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> = Symbol("EnumMap");
-export const dialogFormInstanceKey: InjectionKey<ShallowRef<DialogFormInstance | undefined>> =
-  Symbol("DialogFormInstance");
+export const dialogFormInstanceKey: InjectionKey<ShallowRef<DialogFormInstance | null>> = Symbol("DialogFormInstance");
 export const filterKey: InjectionKey<{
   searchParam: Record<string, any>;
   filter: boolean;

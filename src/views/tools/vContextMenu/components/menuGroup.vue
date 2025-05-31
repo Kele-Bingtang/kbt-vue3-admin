@@ -29,7 +29,7 @@
 <script setup lang="ts" name="MenuGroup">
 import { directive, Contextmenu, ContextmenuItem, ContextmenuDivider, ContextmenuGroup } from "v-contextmenu";
 
-const contextmenu = shallowRef();
+const contextmenu = useTemplateRef("contextmenu");
 const vContextmenu = directive;
 </script>
 

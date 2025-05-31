@@ -80,7 +80,7 @@ type CountToEmits = {
 
 const emits = defineEmits<CountToEmits>();
 
-const countRef = ref();
+const countRef = useTemplateRef("countRef");
 const counter = ref<any>();
 const unitText = ref("");
 
@@ -119,11 +119,7 @@ const initCountUp = () => {
     separator: props.separator,
     decimal: props.decimal,
   });
-  if (countRefConst.error) {
-    console.error(countRefConst.error);
-    return;
-  }
-  emits("init", countRefConst);
+  emits("init", counter.value);
 };
 
 const getValue = (val: number) => {

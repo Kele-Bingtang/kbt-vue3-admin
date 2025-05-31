@@ -289,9 +289,9 @@ const customUnit = [
   { value: 5, label: "十万多" },
 ];
 
-const countRef = ref();
+const countRef = useTemplateRef("countRef");
 const asyncEndVal = ref(199);
-const timer = ref<NodeJS.Timer | null>(null);
+let timer: ReturnType<typeof setInterval> | null;
 const countToParams = reactive({
   startVal: 0,
   endVal: 1999,
@@ -352,15 +352,21 @@ onActivated(() => {
 });
 
 onDeactivated(() => {
-  timer.value = null;
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
 });
 
 onBeforeUnmount(() => {
-  timer.value = null;
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
 });
 
 const init = () => {
-  timer.value = setInterval(() => {
+  timer = setInterval(() => {
     asyncEndVal.value += parseInt(Math.random() * 30 + "");
   }, 2000);
 };

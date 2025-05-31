@@ -50,7 +50,7 @@ const tableData = ref(largeData);
 const multipleSelection = ref([]);
 const downloadLoading = ref(false);
 const filename = ref("");
-const multipleTableRef = shallowRef<InstanceType<typeof ElTable>>();
+const multipleTableRef = useTemplateRef<InstanceType<typeof ElTable>>("multipleTableRef");
 
 const handleSelectionChange = (value: any) => {
   multipleSelection.value = value;

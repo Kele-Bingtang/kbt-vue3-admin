@@ -10,7 +10,7 @@
       Excel Export
     </el-button>
 
-    <el-table :data="tableData" border highlight-current-row row-key="id" style="width: 100%" ref="table">
+    <el-table :data="tableData" border highlight-current-row row-key="id" style="width: 100%">
       <el-table-column prop="id" label="ID" width="70" align="center" sortable></el-table-column>
       <el-table-column prop="date" label="日期" width="180px"></el-table-column>
       <el-table-column label="Info" align="center">

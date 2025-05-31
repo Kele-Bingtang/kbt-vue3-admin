@@ -1,7 +1,7 @@
 <template>
   <div class="simple-pro-table-container">
     <ProTable
-      ref="proTable"
+      ref="proTableRef"
       :data="data"
       :columns="columns"
       row-key="id"
@@ -92,7 +92,7 @@ export interface ResUserList {
 const { hasAuth } = usePermission();
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
-const proTable = ref<ProTableInstance>();
+const proTableRef = useTemplateRef<ProTableInstance>("proTableRef");
 const data = ref(tableData);
 
 const columns: TableColumnProps<ResUserList>[] = [
@@ -239,7 +239,7 @@ const deleteAccount = async (params: ResUserList) => {
   await useHandleData(() => {
     data.value = data.value.filter(item => item.id !== params.id);
   }, `删除【${params.username}】用户`);
-  proTable.value?.getTableList();
+  proTableRef.value?.getTableList();
 };
 
 // 批量删除用户信息
@@ -247,14 +247,14 @@ const batchDelete = async (id: string[]) => {
   await useHandleData(() => {
     data.value = data.value.filter(item => !id.includes(item.id));
   }, "删除所选用户信息");
-  proTable.value?.clearSelection();
-  proTable.value?.getTableList();
+  proTableRef.value?.clearSelection();
+  proTableRef.value?.getTableList();
 };
 
 // 重置用户密码
 const resetPass = async (params: ResUserList) => {
   await useHandleData(() => {}, `重置【${params.username}】用户密码`);
-  proTable.value?.getTableList();
+  proTableRef.value?.getTableList();
 };
 
 // 切换用户状态
@@ -280,7 +280,7 @@ const downloadFile = async () => {
 // 取消行内编辑
 const cancelEdit = (row: any) => {
   row._edit = false;
-  proTable.value?.removeEditModel(row.id);
+  proTableRef.value?.removeEditModel(row.id);
 };
 
 const confirmEdit = (row: any) => {
@@ -288,10 +288,10 @@ const confirmEdit = (row: any) => {
     if (isValid) {
       row._edit = false;
       ElMessage.success({
-        message: `编辑成功，内容为 ${JSON.stringify(proTable.value?.getEditModel(row.id))}`,
+        message: `编辑成功，内容为 ${JSON.stringify(proTableRef.value?.getEditModel(row.id))}`,
         plain: true,
       });
-      proTable.value?.removeEditModel(row.id);
+      proTableRef.value?.removeEditModel(row.id);
     } else {
       ElMessage.warning({
         message: `${label} 为必填项`,

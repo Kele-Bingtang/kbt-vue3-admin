@@ -190,7 +190,7 @@ interface TableTransferProps {
   filterable?: boolean;
   // 是否可搜索
   filterPlaceholder?: string; // 搜索框提示文字
-  filterMethod?: () => void; // 自定义搜索方法
+  filterMethod?: (queryString: string, row: any) => void; // 自定义搜索方法
   showPagination?: boolean; // 是否展示分页
 }
 
@@ -216,8 +216,8 @@ const props = withDefaults(defineProps<TableTransferProps>(), {
 });
 
 // 行点击的时候也设置选中
-const leftTableRef = ref();
-const rightTableRef = ref();
+const leftTableRef = useTemplateRef<InstanceType<typeof TableMain>>("leftTableRef");
+const rightTableRef = useTemplateRef<InstanceType<typeof TableMain>>("rightTableRef");
 // 已选行
 const selectValueLeft = ref<Option[]>([]);
 const selectValueRight = ref<Option[]>([]);
@@ -229,11 +229,11 @@ const leftCheckAll = ref(false);
 const rightCheckAll = ref(false);
 
 const checkTopAllLeft = () => {
-  leftTableRef.value?.table.toggleAllSelection();
+  leftTableRef.value?.table?.toggleAllSelection();
 };
 
 const checkTopAllRight = () => {
-  rightTableRef.value?.table.toggleAllSelection();
+  rightTableRef.value?.table?.toggleAllSelection();
 };
 
 const tableDataLeft = ref<object[]>([]);
@@ -370,11 +370,11 @@ watch(
 );
 
 const handleRowClickLeft = (row: any) => {
-  leftTableRef.value?.el.toggleRowSelection(row, undefined);
+  leftTableRef.value?.$el.toggleRowSelection(row, undefined);
 };
 
 const handleRowClickRight = (row: any) => {
-  if (!props.isAutoSelect) rightTableRef.value?.el.toggleRowSelection(row, undefined);
+  if (!props.isAutoSelect) rightTableRef.value?.$el.toggleRowSelection(row, undefined);
 };
 
 // 为选中项添加行背景色;
@@ -553,7 +553,7 @@ const handleCancelSelect = (row?: any) => {
             font-size: 1rem;
             font-weight: normal;
             color: var(--pro-color-regular-6);
-            transform: translate3 d(0, -50%, 0);
+            transform: translate3d(0, -50%, 0);
           }
         }
       }

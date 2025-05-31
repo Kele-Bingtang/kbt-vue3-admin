@@ -1,17 +1,17 @@
 import type { FormInstance, FormItemProp } from "element-plus";
 
-const isDisabled = ref(false);
-const timer = ref<NodeJS.Timer | undefined>(undefined);
-const text = ref("");
-
 export const useVerifyCode = () => {
-  const start = async (formEl: FormInstance | undefined, props: FormItemProp, time = 60) => {
+  const isDisabled = ref(false);
+  const text = ref("");
+  let timer: ReturnType<typeof setInterval> | null;
+
+  const start = async (formEl: FormInstance | null, props: FormItemProp, time = 60) => {
     if (!formEl) return;
     const initTime = time;
     await formEl.validateField(props, isValid => {
       if (isValid) {
-        clearInterval(timer.value);
-        timer.value = setInterval(() => {
+        stop();
+        timer = setInterval(() => {
           if (time > 0) {
             text.value = `${time}`;
             isDisabled.value = true;
@@ -19,7 +19,7 @@ export const useVerifyCode = () => {
           } else {
             text.value = "";
             isDisabled.value = false;
-            clearInterval(timer.value);
+            stop();
             time = initTime;
           }
         }, 1000);
@@ -27,15 +27,21 @@ export const useVerifyCode = () => {
     });
   };
 
+  const stop = () => {
+    if (timer) {
+      clearInterval(timer);
+      timer = null;
+    }
+  };
+
   const end = () => {
     text.value = "";
     isDisabled.value = false;
-    clearInterval(timer.value);
+    stop();
   };
 
   return {
     isDisabled,
-    timer,
     text,
     start,
     end,

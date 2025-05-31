@@ -90,7 +90,7 @@
 </template>
 
 <script setup lang="ts">
-import { inject, ref } from "vue";
+import { inject } from "vue";
 import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon, type TableColumnCtx } from "element-plus";
 import { Edit, Delete, DCaret } from "@element-plus/icons-vue";
 import TableColumn from "./TableColumn.vue";
@@ -125,7 +125,7 @@ const emits = defineEmits<TableMainEmits>();
 
 const dialogFormRef = inject(dialogFormInstanceKey, undefined);
 
-const tableRef = ref<InstanceType<typeof ElTable>>();
+const tableRef = useTemplateRef<InstanceType<typeof ElTable>>("tableRef");
 
 // 编辑回调
 const handleEdit = (scope: any, item: TableColumnProps) => {

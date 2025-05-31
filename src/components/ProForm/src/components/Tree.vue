@@ -59,7 +59,7 @@ const indeterminate = ref(false); // 处于全选和全不选期间的状态
 const checkStrictly = ref(true); // 父子联动
 const defaultExpandedKeys = ref<string[]>([]); // 默认展开的节点 nodeKey
 const filterText = ref(""); // 搜索的文本
-const treeRef = ref<InstanceType<typeof ElTree>>();
+const treeRef = useTemplateRef<InstanceType<typeof ElTree>>("treeRef");
 
 watch(defaultExpandAll, val => {
   const nodes = treeRef.value?.store._getAllNodes();

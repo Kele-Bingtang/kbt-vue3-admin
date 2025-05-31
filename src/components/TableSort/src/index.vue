@@ -146,7 +146,7 @@ const singleSort = (data: any, sortProp: string, sortOrder: string, sortSameArr:
   }
 };
 
-const elTableRef = shallowRef<TableInstance | null>(null);
+const elTableRef = useTemplateRef<TableInstance>("elTableRef");
 
 defineExpose({
   handleHeaderCellClassName,

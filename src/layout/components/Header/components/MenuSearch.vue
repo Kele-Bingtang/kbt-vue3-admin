@@ -28,36 +28,23 @@ const handleSearchMenuList = (queryString: string, callback: (result: any) => vo
 };
 
 const isShowSearch = ref(false);
-const autocompleteRef = ref();
+const autocompleteRef = useTemplateRef("autocompleteRef");
 const searchMenu = ref("");
-// 手动实现防抖
-// let timer: NodeJS.Timeout | null = null;
 
 // 关闭搜索菜单
 const handleCloseSearch = () => {
   isShowSearch.value = false;
   document.body.removeEventListener("click", handleCloseSearch);
-  autocompleteRef.value && (autocompleteRef.value as HTMLElement).blur();
+  autocompleteRef.value && autocompleteRef.value.blur();
 };
 
 // 打开搜索菜单
 const handleStartSearch = () => {
   isShowSearch.value = true;
   searchMenu.value = "";
-  // 手动实现防抖
-  // if (timer) {
-  //   document.body.removeEventListener("click", handleCloseSearch);
-  //   clearInterval(timer);
-  // }
-  // nextTick(() => {
-  //   timer = setTimeout(() => {
-  //     autocompleteRef.value && (autocompleteRef.value as HTMLElement).focus();
-  //     document.body.addEventListener("click", handleCloseSearch);
-  //   }, 250);
-  // });
   // 工具实现防抖
   useDebounceFn(() => {
-    autocompleteRef.value && (autocompleteRef.value as HTMLElement).focus();
+    autocompleteRef.value && autocompleteRef.value.focus();
     document.body.addEventListener("click", handleCloseSearch);
   }, 250)();
 };
@@ -68,7 +55,7 @@ const handleSwitchMode = () => {
     autocompleteRef.value.close();
     nextTick(() => {
       setTimeout(() => {
-        (autocompleteRef.value as HTMLElement).focus();
+        autocompleteRef.value?.focus();
       }, 800);
     });
   }

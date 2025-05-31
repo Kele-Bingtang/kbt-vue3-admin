@@ -144,7 +144,7 @@
 <script setup lang="ts" name="OperateTable">
 import { Pagination, pageSetting, type Paging } from "@/components";
 import { largeData } from "@/mock/table";
-import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
+import { ElMessage, ElMessageBox, ElNotification, type FormInstance, type TableInstance } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
 import { Search, Refresh, Plus, Check, EditPen, Delete } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
@@ -193,8 +193,8 @@ const paging = reactive(pageSetting);
 const dialogFormVisible = ref(false);
 const dialogStatus = ref("");
 const tempTableDate = ref(defaultTableData);
-const tableRef = shallowRef();
-const formRef = shallowRef<FormInstance>();
+const tableRef = useTemplateRef<TableInstance>("tableRef");
+const formRef = useTemplateRef<FormInstance>("formRef");
 
 onMounted(() => {
   tableData.value.map((item: any) => {

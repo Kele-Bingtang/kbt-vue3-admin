@@ -127,7 +127,7 @@ const thirdParty = [
   },
 ];
 
-const loginFormRef = shallowRef<FormInstance>();
+const loginFormRef = useTemplateRef<FormInstance>("loginFormRef");
 
 const imgCode = ref("");
 const loading = ref(false);

@@ -209,7 +209,7 @@ export const useTabNav = () => {
   /**
    * 打开右键菜单，并初始化菜单布局、内容
    */
-  const openRightMenu = (e: MouseEvent, tab: TabProp, tabNavRef?: HTMLElement) => {
+  const openRightMenu = (e: MouseEvent, tab: TabProp, tabNavRef: HTMLElement | null) => {
     initContextMenu(tab);
 
     const menuMinWidth = 0;

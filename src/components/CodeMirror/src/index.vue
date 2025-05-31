@@ -1,3 +1,4 @@
+<!-- vue-codemirror6 1.3.0 -->
 <template>
   <component :is="tag" ref="editorRef" :class="prefixClass">
     <template v-if="mergeConfig && mergeConfig.header">
@@ -158,7 +159,7 @@ type CodeMirror6Emits = {
 const emits = defineEmits<CodeMirror6Emits>();
 
 // 编辑器 DOM 元素引用
-const editorRef = ref<HTMLElement | undefined>();
+const editorRef = useTemplateRef<HTMLElement | undefined>("editorRef");
 
 // v-model
 const doc = defineModel<string | Text>({ default: "" });

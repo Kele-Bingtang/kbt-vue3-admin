@@ -5,7 +5,7 @@
 <script setup lang="ts" name="ChartPie">
 import * as echarts from "echarts";
 import { useEcharts } from "@/composables";
-import { shallowRef, onMounted } from "vue";
+import { onMounted } from "vue";
 
 export interface PieData {
   name: string;
@@ -27,7 +27,7 @@ const props = withDefaults(defineProps<ChartBarProps>(), {
   height: "300px",
 });
 
-const echartsRef = shallowRef();
+const echartsRef = useTemplateRef("echartsRef");
 
 onMounted(() => {
   initChart();

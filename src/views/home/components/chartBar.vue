@@ -5,7 +5,7 @@
 <script setup lang="ts" name="ChartBar">
 import * as echarts from "echarts";
 import { useEcharts } from "@/composables";
-import { onMounted, shallowRef } from "vue";
+import { onMounted } from "vue";
 
 interface BarData {
   title: string;
@@ -23,7 +23,7 @@ const props = withDefaults(defineProps<ChartBarProps>(), {
   height: "300px",
 });
 
-const echartsRef = shallowRef();
+const echartsRef = useTemplateRef("echartsRef");
 
 onMounted(() => {
   initChart();

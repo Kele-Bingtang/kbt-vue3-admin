@@ -34,7 +34,7 @@
 <script setup lang="ts" name="Basic">
 import { directive, Contextmenu, ContextmenuItem, ContextmenuDivider, ContextmenuSubmenu } from "v-contextmenu";
 
-const contextmenu = shallowRef();
+const contextmenu = useTemplateRef("contextmenu");
 
 // 局部指令：vXxxx ==> v-xxx
 const vContextmenu = directive;

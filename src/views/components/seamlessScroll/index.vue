@@ -85,7 +85,7 @@
 <script setup lang="ts" name="seamlessScroll">
 import { SeamlessScroll } from "@/components";
 
-const scroll = ref();
+const scroll = useTemplateRef("scroll");
 
 const listData = ref([
   {

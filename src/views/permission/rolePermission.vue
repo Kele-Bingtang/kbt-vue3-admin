@@ -97,7 +97,7 @@ const defaultProps = reactive({
   children: "children",
   label: "title",
 });
-const treeRef = shallowRef<InstanceType<typeof ElTree>>();
+const treeRef = useTemplateRef<InstanceType<typeof ElTree>>("treeRef");
 
 const routesTreeData = computed(() => generateTreeData(menuList.value));
 

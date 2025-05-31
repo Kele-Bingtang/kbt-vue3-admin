@@ -12,7 +12,6 @@
 ## 优化
 
 - 可以打开的最大动态路由 tab 优化
-- dom ref 统一用 useTemplateRef 优化
 
 ## Bug
 

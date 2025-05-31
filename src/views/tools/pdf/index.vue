@@ -56,7 +56,7 @@
 import VuePdfEmbed from "vue-pdf-embed";
 import { Refresh, Printer } from "@element-plus/icons-vue";
 
-const pdfRef = ref<any>();
+const pdfRef = useTemplateRef<any>("pdfRef");
 const pageCount = ref(1);
 const loading = ref(true);
 const currentPage = ref<number>(1);
@@ -76,7 +76,7 @@ const showAllPagesChange = () => {
 };
 
 const onPrint = () => {
-  pdfRef.value.print();
+  pdfRef.value?.print();
 };
 </script>
 

@@ -33,7 +33,7 @@ const {
 } = useTabNav();
 
 const tabNavValue = ref(getRouteFullPath(route));
-const tabNavRef = ref<HTMLElement>(); // 根标签
+const tabNavRef = useTemplateRef("tabNavRef"); // 导航栏标签
 
 onMounted(() => {
   tabsDrop(`.${ns.elNamespace}-tabs__nav`, `.${ns.elNamespace}-tabs__item`);

@@ -20,7 +20,7 @@ const props = withDefaults(defineProps<PlayerProps>(), {
 
 const playerRef = ref<Player>();
 
-const videoRef = ref<HTMLDivElement>();
+const videoRef = useTemplateRef("videoRef");
 
 const intiPlayer = () => {
   if (!videoRef.value) return;

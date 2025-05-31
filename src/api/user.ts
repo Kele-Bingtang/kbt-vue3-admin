@@ -2,8 +2,9 @@ import type { UserInfo } from "@/stores";
 import request from "@/request";
 
 export interface LoginParams {
-  userName: string;
+  username: string;
   password: string;
+  verifyCode?: string;
 }
 
 export interface Token {

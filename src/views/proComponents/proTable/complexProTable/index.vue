@@ -1,7 +1,7 @@
 <template>
   <div class="complex-pro-table-container">
     <ProTable
-      ref="proTable"
+      ref="proTableRef"
       highlight-current-row
       :data="data"
       :columns="columns"
@@ -13,7 +13,7 @@
     >
       <!-- 表格 header 按钮 -->
       <template #tableHeader="scope">
-        <el-button type="primary" :icon="CirclePlus" @click="proTable?.element?.toggleAllSelection">
+        <el-button type="primary" :icon="CirclePlus" @click="proTableRef?.element?.toggleAllSelection">
           全选 / 全不选
         </el-button>
         <el-button type="primary" :icon="Pointer" plain @click="setCurrent">选中第五行</el-button>
@@ -55,7 +55,7 @@ import type { ResUserList } from "../simpleProTable/index.vue";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace();
-const proTable = ref<ProTableInstance>();
+const proTableRef = useTemplateRef<ProTableInstance>("proTableRef");
 const data = ref(tableData);
 
 // 自定义渲染表头（使用tsx语法）
@@ -107,7 +107,7 @@ const columns: TableColumnProps<ResUserList>[] = [
 
 // 选择行
 const setCurrent = () => {
-  proTable.value?.element?.setCurrentRow(proTable.value?.tableData[4]);
+  proTableRef.value?.element?.setCurrentRow(proTableRef.value?.tableData[4]);
 };
 
 // 表尾合计行（自行根据条件计算）
@@ -158,7 +158,7 @@ const deleteAccount = async (params: ResUserList) => {
   await useHandleData(() => {
     data.value = data.value.filter(item => item.id !== params.id);
   }, `删除【${params.username}】用户`);
-  proTable.value?.getTableList();
+  proTableRef.value?.getTableList();
 };
 
 // 批量删除用户信息
@@ -166,14 +166,14 @@ const batchDelete = async (id: string[]) => {
   await useHandleData(() => {
     data.value = data.value.filter(item => !id.includes(item.id));
   }, "删除所选用户信息");
-  proTable.value?.clearSelection();
-  proTable.value?.getTableList();
+  proTableRef.value?.clearSelection();
+  proTableRef.value?.getTableList();
 };
 
 // 重置用户密码
 const resetPass = async (params: ResUserList) => {
   await useHandleData(() => {}, `重置【${params.username}】用户密码`);
-  proTable.value?.getTableList();
+  proTableRef.value?.getTableList();
 };
 </script>
 

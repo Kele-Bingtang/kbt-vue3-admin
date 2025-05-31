@@ -5,7 +5,7 @@
 <script setup lang="ts" name="ChartLine">
 import * as echarts from "echarts";
 import { useEcharts } from "@/composables";
-import { onMounted, shallowRef } from "vue";
+import { onMounted } from "vue";
 
 interface ChartBarProps {
   width?: string;
@@ -17,7 +17,7 @@ withDefaults(defineProps<ChartBarProps>(), {
   height: "300px",
 });
 
-const echartsRef = shallowRef();
+const echartsRef = useTemplateRef("echartsRef");
 
 onMounted(() => {
   initChart();

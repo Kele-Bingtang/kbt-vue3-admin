@@ -33,7 +33,7 @@ const { user } = toRefs(props);
 const emit = defineEmits<{ resetUser: [] }>();
 
 const userStore = useUserStore();
-const formRef = ref();
+const formRef = useTemplateRef("formRef");
 const rules = {
   username: [{ required: true, message: "用户名称不能为空", trigger: "blur" }],
   phone: [
@@ -50,20 +50,20 @@ const rules = {
   ],
 } as any;
 
-const submit = (formRef: FormInstance) => {
-  formRef.validate(valid => {
+const submit = (formRef: FormInstance | null) => {
+  formRef?.validate(valid => {
     if (valid) {
       userStore.setUserInfo({ ...user.value });
       ElMessage({
         message: "修改成功",
         type: "success",
       });
-      formRef.clearValidate();
+      formRef?.clearValidate();
     }
   });
 };
-const reset = (formRef: FormInstance) => {
-  formRef.clearValidate();
+const reset = (formRef: FormInstance | null) => {
+  formRef?.clearValidate();
   emit("resetUser");
 };
 </script>

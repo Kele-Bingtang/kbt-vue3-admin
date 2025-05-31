@@ -176,7 +176,7 @@
 import { Pagination, TableSort, pageSetting, type Paging } from "@/components";
 import { largeData } from "@/mock/table";
 import Sortable from "sortablejs";
-import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
+import { ElMessage, ElMessageBox, ElNotification, type FormInstance, type TableInstance } from "element-plus";
 import { tableStatusFilter } from "@/config/constant";
 import { Search, Refresh, Plus, Check, EditPen, Delete } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
@@ -261,8 +261,8 @@ const dialogFormVisible = ref(false);
 const dialogStatus = ref("");
 const tempTableDate = ref(defaultTableData);
 const sortable = shallowRef();
-const tableRef = shallowRef();
-const formRef = shallowRef();
+const tableRef = useTemplateRef("tableRef");
+const formRef = useTemplateRef<FormInstance>("formRef");
 
 watch(
   () => showAddress.value,
@@ -287,7 +287,7 @@ onMounted(() => {
 });
 
 const rowDrop = () => {
-  const el = tableRef.value.el.$el.querySelector(
+  const el = tableRef.value?.el?.$el.querySelector(
     `.${ns.elNamespace}-table__body-wrapper .${ns.elNamespace}-scrollbar__view > table > tbody`
   ) as HTMLElement;
   sortable.value = Sortable.create(el, {
@@ -356,19 +356,19 @@ const handleSearch = (type: "single" | "multiple") => {
 const handleReset = () => {
   tableData.value = largeData;
 };
-const handleAdd = (formRef: FormInstance) => {
+const handleAdd = (formRef: FormInstance | null) => {
   tempTableDate.value = defaultTableData;
   dialogStatus.value = "add";
   dialogFormVisible.value = true;
   nextTick(() => {
     setTimeout(() => {
-      formRef.clearValidate();
+      formRef?.clearValidate();
     }, 100);
   });
 };
 
-const addData = (formRef: FormInstance) => {
-  formRef.validate(async valid => {
+const addData = (formRef: FormInstance | null) => {
+  formRef?.validate(async valid => {
     if (valid) {
       const tableDataTemp = tempTableDate.value;
       tableDataTemp.id = Math.round(Math.random() * 100) + 1024 + ""; // 随机一个 id
@@ -403,26 +403,26 @@ const confirmEdit = (row: any) => {
   ElMessage.success("标题已编辑！");
 };
 
-const handleLook = (row: any, formRef: FormInstance) => {
+const handleLook = (row: any, formRef: FormInstance | null) => {
   tempTableDate.value = Object.assign({}, row);
   dialogStatus.value = "look";
   dialogFormVisible.value = true;
   nextTick(() => {
-    formRef.clearValidate();
+    formRef?.clearValidate();
   });
 };
 
-const handleEdit = (row: any, formRef: FormInstance) => {
+const handleEdit = (row: any, formRef: FormInstance | null) => {
   tempTableDate.value = Object.assign({}, row);
   dialogStatus.value = "edit";
   dialogFormVisible.value = true;
   nextTick(() => {
-    formRef.clearValidate();
+    formRef?.clearValidate();
   });
 };
 
-const editData = (formRef: FormInstance) => {
-  formRef.validate(async valid => {
+const editData = (formRef: FormInstance | null) => {
+  formRef?.validate(async valid => {
     if (valid) {
       const tempData = Object.assign({}, tempTableDate.value);
       const index = tableData.value.findIndex(v => v.id === tempData.id);

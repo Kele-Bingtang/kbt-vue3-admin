@@ -2,7 +2,7 @@
   <div class="main-box">
     <TreeFilter label="name" title="部门列表(单选)" :data="department" @change="changeTreeFilter" />
     <div class="table-box">
-      <ProTable ref="proTable" :data="data" :columns="columns" :search-col="{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }">
+      <ProTable ref="proTableRef" :data="data" :columns="columns" :search-col="{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }">
         <!-- 表格 header 按钮 -->
         <template #tableHeader="scope">
           <el-button type="primary" :icon="CirclePlus">新增用户</el-button>
@@ -40,13 +40,13 @@ import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@e
 import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 import type { ResUserList } from "../simpleProTable/index.vue";
 
-const proTable = ref<ProTableInstance>();
+const proTableRef = useTemplateRef<ProTableInstance>("proTableRef");
 const data = ref(tableData);
 
 // 树形筛选切换
 const changeTreeFilter = () => {
   ElMessage.success("演示点击功能，实际去后台获取该部的所有用户信息 ☺");
-  proTable.value!.paging.pageNum = 1;
+  proTableRef.value!.paging.pageNum = 1;
 };
 
 // 表格配置项
@@ -82,7 +82,7 @@ const deleteAccount = async (params: ResUserList) => {
   await useHandleData(() => {
     data.value = data.value.filter(item => item.id !== params.id);
   }, `删除【${params.username}】用户`);
-  proTable.value?.getTableList();
+  proTableRef.value?.getTableList();
 };
 
 // 批量删除用户信息
@@ -90,14 +90,14 @@ const batchDelete = async (id: string[]) => {
   await useHandleData(() => {
     data.value = data.value.filter(item => !id.includes(item.id));
   }, "删除所选用户信息");
-  proTable.value?.clearSelection();
-  proTable.value?.getTableList();
+  proTableRef.value?.clearSelection();
+  proTableRef.value?.getTableList();
 };
 
 // 重置用户密码
 const resetPass = async (params: ResUserList) => {
   await useHandleData(() => {}, `重置【${params.username}】用户密码`);
-  proTable.value?.getTableList();
+  proTableRef.value?.getTableList();
 };
 
 // 导出用户列表

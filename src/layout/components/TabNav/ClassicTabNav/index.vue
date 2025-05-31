@@ -21,10 +21,10 @@ const layoutStore = useLayoutStore();
 const settingsStore = useSettingsStore();
 
 const tabBodyLeft = ref(0); // tabNav 滚动
-const tabNavRef = ref<HTMLElement>(); // 根标签
-const scrollContainerDom = ref<HTMLElement>(); // 滚动栏标签
-const scrollBodyDom = ref<HTMLElement>(); // tabNav 滚动栏
-const tabsDom = ref(); // tab 标签
+const tabNavRef = useTemplateRef("tabNavRef"); // 导航栏标签
+const scrollContainerRef = useTemplateRef("scrollContainerRef"); // 滚动栏标签
+const scrollBodyRef = useTemplateRef("scrollBodyRef"); // tabNav 滚动栏
+const tabsRef = useTemplateRef<any>("tabsRef"); // tab 标签
 const hasScroll = ref(false); // 是否出现滚动条
 
 const {
@@ -55,10 +55,11 @@ onMounted(() => {
 const findTargetTab = async () => {
   await nextTick();
 
-  if (!tabsDom.value) return;
+  if (!tabsRef.value || !tabsRef.value.length) return;
 
-  for (const tab of tabsDom.value) {
-    if (route.path === tab.to) {
+  for (const tab of tabsRef.value) {
+    console.log(tab?.to);
+    if (route.path === tab?.to) {
       moveToTargetTab(tab.$el);
       // 当 query 不一样
       if (tab.to.path !== route.fullPath) {
@@ -83,8 +84,8 @@ watch(
  * 移动到目标 tab，如果目标 tab 在 TabNav 可视区域外面，则有滚动的动画效果
  */
 const moveToTargetTab = (tabElement: HTMLElement) => {
-  const outerWidth = scrollContainerDom.value?.offsetWidth || 0;
-  const bodyWidth = scrollBodyDom.value?.offsetWidth || 0;
+  const outerWidth = scrollContainerRef.value?.offsetWidth || 0;
+  const bodyWidth = scrollBodyRef.value?.offsetWidth || 0;
   hasScroll.value = bodyWidth > outerWidth;
 
   if (bodyWidth <= outerWidth) {
@@ -127,8 +128,8 @@ const handleScrollOnDom = (e: MouseEvent & { wheelDelta: number }) => {
 
 // TagsNav 滚动回调
 const handleScroll = (offset: number) => {
-  const outerWidth = scrollContainerDom.value?.offsetWidth as number;
-  const bodyWidth = scrollBodyDom.value?.offsetWidth as number;
+  const outerWidth = scrollContainerRef.value?.offsetWidth as number;
+  const bodyWidth = scrollBodyRef.value?.offsetWidth as number;
 
   if (offset > 0) tabBodyLeft.value = Math.min(0, tabBodyLeft.value + offset);
   else if (outerWidth < bodyWidth) {
@@ -147,16 +148,16 @@ const handleScroll = (offset: number) => {
       </el-button>
     </div>
 
-    <div :class="ns.e('scroll')" ref="scrollContainerDom">
+    <div :class="ns.e('scroll')" ref="scrollContainerRef">
       <div
-        ref="scrollBodyDom"
+        ref="scrollBodyRef"
         :class="ns.e('scroll-body')"
         :style="{ left: tabBodyLeft + 'px' }"
         @DOMMouseScroll="handleScrollOnDom"
         @mousewheel="handleScrollOnDom"
       >
         <router-link
-          ref="tabsDom"
+          ref="tabsRef"
           v-for="tab in tabNavList"
           :key="tab.path"
           :to="tab.path"

@@ -24,7 +24,7 @@ const user = reactive({
   newPassword: "",
   confirmPassword: "",
 });
-const formRef = ref();
+const formRef = useTemplateRef("formRef");
 
 const equalToPassword = (rule: any, value: string, callback: (info?: string) => void) => {
   if (user.newPassword !== value) {
@@ -46,8 +46,8 @@ const rules = {
   ],
 };
 
-const submit = async (formRef: FormInstance) => {
-  await formRef.validate(valid => {
+const submit = async (formRef: FormInstance | null) => {
+  await formRef?.validate(valid => {
     if (valid) {
       ElMessage({
         message: "修改密码成功！",
@@ -59,8 +59,8 @@ const submit = async (formRef: FormInstance) => {
   });
 };
 
-const reset = (formRef: FormInstance) => {
-  formRef.resetFields();
+const reset = (formRef: FormInstance | null) => {
+  formRef?.resetFields();
   user.oldPassword = "";
   user.newPassword = "";
   user.confirmPassword = "";

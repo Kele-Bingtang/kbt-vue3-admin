@@ -237,7 +237,7 @@ const fromModel1 = ref({
   idCard: "",
   email: "",
 });
-const ruleFormRef = ref<FormInstance>();
+const ruleFormRef = useTemplateRef<FormInstance>("ruleFormRef");
 const submit = () => {
   ruleFormRef.value!.validate(valid => {
     console.log(valid);

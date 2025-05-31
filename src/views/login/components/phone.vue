@@ -50,11 +50,11 @@ const ruleForm = reactive({
   phone: "",
   verifyCode: "",
 });
-const ruleFormRef = shallowRef<FormInstance>();
+const ruleFormRef = useTemplateRef<FormInstance>("ruleFormRef");
 const { isDisabled, text } = useVerifyCode();
 const switchFormMode = inject("switchFormMode") as (mode: string) => {};
 
-const onLogin = async (formEl: FormInstance | undefined) => {
+const onLogin = async (formEl: FormInstance | null) => {
   loading.value = true;
   if (!formEl) return;
   await formEl.validate((valid, fields) => {

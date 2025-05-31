@@ -75,7 +75,7 @@ const defaultProps = {
 };
 
 const filterText = ref<string>("");
-const treeRef = ref<InstanceType<typeof ElTree>>();
+const treeRef = useTemplateRef<InstanceType<typeof ElTree>>("treeRef");
 const treeData = ref<Record<string, any>[]>([]);
 const treeAllData = ref<Record<string, any>[]>([]);
 // 选中的值

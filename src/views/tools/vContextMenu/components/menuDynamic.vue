@@ -44,7 +44,7 @@ import {
   ContextmenuGroup,
 } from "v-contextmenu";
 
-const contextmenu = shallowRef();
+const contextmenu = useTemplateRef("contextmenu");
 const extra = ref<string[]>([]);
 const vContextmenu = directive;
 </script>

@@ -9,7 +9,7 @@
 </template>
 
 <script setup lang="ts">
-import { shallowRef, computed, onMounted } from "vue";
+import { computed, onMounted } from "vue";
 import Codemirror from "codemirror-editor-vue3";
 import "codemirror/lib/codemirror.css";
 // 编辑器代码格式
@@ -47,7 +47,7 @@ type CodeMirrorEmits = {
 
 const emits = defineEmits<CodeMirrorEmits>();
 
-const codemirrorRef = shallowRef();
+const codemirrorRef = useTemplateRef("codemirrorRef");
 const code = computed({
   get() {
     return props.modelValue || "";

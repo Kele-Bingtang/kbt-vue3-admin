@@ -16,7 +16,7 @@
 
 <script setup lang="ts">
 import { ElButton, ElMessage } from "element-plus";
-import { ref, reactive, shallowRef } from "vue";
+import { ref, reactive } from "vue";
 import { read, utils } from "xlsx";
 import { useNamespace } from "@/composables";
 
@@ -39,7 +39,7 @@ const excelData = reactive({
   header: [],
   results: null,
 });
-const excelUploadInputRef = shallowRef();
+const excelUploadInputRef = useTemplateRef("excelUploadInputRef");
 
 const generateData = (header: any, results: any) => {
   excelData.header = header;
@@ -77,7 +77,7 @@ const handleDragover = (e: DragEvent) => {
 };
 
 const handleUpload = () => {
-  excelUploadInputRef.value.click();
+  excelUploadInputRef.value?.click();
 };
 
 const handleClick = (e: Event) => {
@@ -89,7 +89,7 @@ const handleClick = (e: Event) => {
 };
 
 const upload = (rawFile: File) => {
-  excelUploadInputRef.value.value = ""; // 上传新的 excel 前，清空当前表格的数据，如果追加数据，则可以去掉
+  if (excelUploadInputRef.value) excelUploadInputRef.value.value = ""; // 上传新的 excel 前，清空当前表格的数据，如果追加数据，则可以去掉
   if (!props.beforeUpload) {
     readerData(rawFile);
     return;

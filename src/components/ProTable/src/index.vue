@@ -105,7 +105,6 @@ import {
   onMounted,
   computed,
   useAttrs,
-  shallowRef,
   unref,
   type CSSProperties,
   type ComponentPublicInstance,
@@ -210,8 +209,8 @@ const props = withDefaults(defineProps<ProTableProps>(), {
 });
 
 // 表格 DOM 元素
-const tableMainRef = ref<InstanceType<typeof TableMain>>();
-const proSearchRef = ref<ProSearchInstance>();
+const tableMainRef = useTemplateRef<InstanceType<typeof TableMain>>("tableMainRef");
+const proSearchRef = useTemplateRef<ProSearchInstance>("proSearchRef");
 
 // column 列类型
 const columnTypes: TypeProps[] = ["selection", "radio", "index", "expand", "sort"];
@@ -523,7 +522,7 @@ const handleExport = () => {
 };
 
 // ------- 按钮点击事件 -------
-const dialogFormRef = shallowRef<DialogFormInstance>();
+const dialogFormRef = useTemplateRef<DialogFormInstance>("dialogFormRef");
 provide(dialogFormInstanceKey, dialogFormRef);
 
 // 编辑事件
@@ -593,9 +592,9 @@ const clearSelection = () => tableMainRef.value?.table?.clearSelection();
 // ------- Emits 事件 -------
 type ProTableEmits = {
   register: [
-    proTableRef?: ComponentPublicInstance | null | any,
-    elTableRef?: TableInstance,
-    proSearch?: ProSearchInstance,
+    proTableRef: ComponentPublicInstance | null | any,
+    elTableRef: TableInstance | undefined,
+    proSearch: ProSearchInstance | null,
   ];
   formRegister: [proFormRef?: ComponentPublicInstance | null | any, elFormRef?: FormInstance];
   searchRegister: [proFormRef?: ProSearchExpose];

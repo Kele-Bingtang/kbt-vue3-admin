@@ -58,7 +58,14 @@
   </div>
 </template>
 <script setup lang="tsx" name="CommonTicket">
-import { ProTable, Grid, GridItem, type TableColumnProps, type DialogFormSchemaProps } from "@/components";
+import {
+  ProTable,
+  Grid,
+  GridItem,
+  type TableColumnProps,
+  type DialogFormSchemaProps,
+  type ProTableInstance,
+} from "@/components";
 // import ProForm from "@/components";
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
 import { schema, elFormProps } from "@/views/proComponents/proForm/detailProForm/options";
@@ -202,7 +209,7 @@ const dialogForm = {
   dialog: { title: "测试", width: "90%", top: "2vh", closeOnClickModal: false, height: 700 },
 };
 
-const proTableRef = shallowRef();
+const proTableRef = useTemplateRef<ProTableInstance>("proTableRef");
 // const form = ref({});
 const expandAll = ref(true);
 const expandKeys = ref<string[]>([]);

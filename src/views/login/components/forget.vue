@@ -56,7 +56,7 @@ const ruleForm = reactive({
   password: "",
   repeatPassword: "",
 });
-const ruleFormRef = ref<FormInstance>();
+const ruleFormRef = useTemplateRef<FormInstance>("ruleFormRef");
 const { isDisabled, text } = useVerifyCode();
 const switchFormMode = inject("switchFormMode") as (mode: string) => {};
 const repeatPasswordRule = [
@@ -74,7 +74,7 @@ const repeatPasswordRule = [
   },
 ];
 
-const onUpdate = async (formEl: FormInstance | undefined) => {
+const onUpdate = async (formEl: FormInstance | null) => {
   loading.value = true;
   if (!formEl) return;
   await formEl.validate((valid, fields) => {

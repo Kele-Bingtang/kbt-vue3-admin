@@ -57,7 +57,7 @@ import { ElMessage, ElButton, type UploadRequestOptions } from "element-plus";
 import { VueCropper } from "vue-cropper";
 import "vue-cropper/dist/index.css";
 import { Upload, ZoomIn, ZoomOut, Download } from "@element-plus/icons-vue";
-import { toRefs, ref, reactive, shallowRef, onMounted } from "vue";
+import { toRefs, ref, reactive, onMounted } from "vue";
 import { useNamespace } from "@/composables";
 
 defineOptions({ name: "Cropper" });
@@ -129,7 +129,7 @@ const options = reactive({
   mode: "contain", // 图片默认渲染方式
 });
 
-const cropperRef = shallowRef();
+const cropperRef = useTemplateRef("cropperRef");
 
 onMounted(() => {
   options.autoCropWidth = cropWidth.value || 200;
