@@ -95,7 +95,7 @@ watch(
     </el-header>
 
     <el-container :class="ns.e('content')">
-      <el-aside v-if="childrenMenu.length" :class="ns.join('layout-aside')">
+      <el-aside v-if="childrenMenu.length" :class="[ns.join('layout-aside'), ns.is(settingStore.menuTheme)]">
         <Menu
           :menu-list="childrenMenu"
           :class="[ns.join('layout-menu'), ns.e('aside-menu')]"

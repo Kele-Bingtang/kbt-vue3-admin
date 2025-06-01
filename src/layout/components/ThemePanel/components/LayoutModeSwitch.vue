@@ -5,9 +5,9 @@ import { LayoutModeEnum } from "@/enums/appEnum";
 import { useNamespace } from "@/composables";
 import { useSettingStore } from "@/stores";
 
-defineOptions({ name: "LayoutSwitch" });
+defineOptions({ name: "LayoutModeSwitch" });
 
-const ns = useNamespace("layout-switch");
+const ns = useNamespace("layout-mode-switch");
 const settingStore = useSettingStore();
 const { t } = useI18n();
 
@@ -15,32 +15,32 @@ const { layoutMode } = storeToRefs(settingStore);
 
 const layoutModeList = [
   {
-    name: t("_setting.layoutSwitchSelect.vertical"),
+    name: t("_setting.layoutModeSelect.vertical"),
     mode: LayoutModeEnum.Vertical,
     content: `<div class="dark"></div> <div class="container"> <div class="light"></div><div class="content"></div> </div>`,
   },
   {
-    name: t("_setting.layoutSwitchSelect.classic"),
+    name: t("_setting.layoutModeSelect.classic"),
     mode: LayoutModeEnum.Classic,
     content: `<div class="dark"></div> <div class="container"> <div class="light"></div><div class="content"></div> </div>`,
   },
   {
-    name: t("_setting.layoutSwitchSelect.horizontal"),
+    name: t("_setting.layoutModeSelect.horizontal"),
     mode: LayoutModeEnum.Horizontal,
     content: `<div class="dark"></div> <div class="content"></div>`,
   },
   {
-    name: t("_setting.layoutSwitchSelect.columns"),
+    name: t("_setting.layoutModeSelect.columns"),
     mode: LayoutModeEnum.Columns,
     content: `<div class="dark"></div> <div class="light"></div> <div class="content"></div>`,
   },
   {
-    name: t("_setting.layoutSwitchSelect.mixins"),
+    name: t("_setting.layoutModeSelect.mixins"),
     mode: LayoutModeEnum.Mixins,
     content: `<div class="dark"></div> <div class="container"> <div class="dark"></div><div class="content"></div> </div>`,
   },
   {
-    name: t("_setting.layoutSwitchSelect.iframe"),
+    name: t("_setting.layoutModeSelect.iframe"),
     mode: LayoutModeEnum.IFrame,
     content: `<div class="dark"></div> <div class="content"></div>`,
   },
@@ -68,7 +68,7 @@ const switchLayoutMode = (layoutMode: LayoutModeEnum) => {
 @use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/function" as *;
 
-@include b(layout-switch) {
+@include b(layout-mode-switch) {
   @include e(item) {
     position: relative;
     width: calc(100% / 3 - 10px);

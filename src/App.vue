@@ -13,10 +13,9 @@ import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import { useLayoutStore } from "@/stores/layout";
 import SystemConfig, { ConfigGlobalKey, WebSocketKey } from "@/config";
-import { HeaderStyleEnum } from "@/enums/appEnum";
 import { useSettingStore, useUserStore, useWebSocketStore } from "@/stores";
-import { addUnit, isFunction, removeStyleVar, setCssVar } from "@/utils";
-import { useNamespace, useCache, useBrowserTitle } from "@/composables";
+import { isFunction } from "@/utils";
+import { useNamespace, useCache, useBrowserTitle, useWatchCssVar } from "@/composables";
 import { useTheme } from "@/composables/core/useTheme";
 import { useIFrame } from "@/layout/components/IFrameLayout/useIFrame";
 
@@ -31,13 +30,14 @@ const { layoutSize, language } = storeToRefs(layoutStore);
 // 自定义注入全局参数。ElConfigProvider 会自动使用 provide 全局注入它的 props 到项目里，可以通过 configProviderContextKey 来 inject 获取（先从 element-plus 引入，然后 const config = inject(configProviderContextKey)）
 provide(ConfigGlobalKey, { size: layoutSize });
 
-useIFrame(SystemConfig.layoutConfig.watchFrame);
-
-useBrowserTitle();
-
 // 初始化主题配置
-const { initTheme } = useTheme();
-initTheme();
+useTheme().initTheme();
+// 浏览器标题
+useBrowserTitle();
+// 监听布局样式变量
+useWatchCssVar();
+// IFrame 通信
+useIFrame(SystemConfig.layoutConfig.watchFrame);
 
 // 配置 element 按钮文字中间是否有空格
 const config = reactive({ autoInsertSpace: false });
@@ -47,44 +47,6 @@ const i18nLocale = computed(() => {
   if (language.value === "zh-CN") return zhCn;
   if (language.value === "en-US") return en;
   return document.documentElement.lang === "zh-CN" ? zhCn : en;
-});
-
-// 配置全局样式变量
-watchEffect(() => setCssVar(ns.cssVarName("layout-open-aside-width"), addUnit(settingStore.menuWidth)));
-watchEffect(() => setCssVar(ns.cssVarName("layout-close-aside-width"), "64px"));
-watchEffect(() => setCssVar(ns.cssVarName("layout-header-height"), addUnit(settingStore.headerHeight)));
-watchEffect(() => setCssVar(ns.cssVarName("radius"), addUnit(settingStore.radius, "rem")));
-watchEffect(() => {
-  const headerBg = ns.cssVarName("layout-header-bg-color");
-  const tabBg = ns.cssVarName("layout-tab-bg-color");
-  const bgStyle = `var(--${ns.namespace}-main-bg-color)`;
-
-  const headerLine = ns.cssVarName("layout-header-line");
-  const tabLine = ns.cssVarName("layout-tab-line");
-  const borderStyle = `1px solid var(--${ns.namespace}-card-border)`;
-
-  if (settingStore.headerStyle === HeaderStyleEnum.Page) return removeStyleVar([headerBg, tabBg, headerLine, tabLine]);
-
-  if (settingStore.headerStyle === HeaderStyleEnum.Bg) {
-    removeStyleVar([headerLine, tabLine]);
-
-    setCssVar(headerBg, bgStyle);
-    setCssVar(tabBg, bgStyle);
-  }
-
-  if (settingStore.headerStyle === HeaderStyleEnum.Line) {
-    removeStyleVar([headerBg, tabBg]);
-
-    setCssVar(headerLine, borderStyle);
-    setCssVar(tabLine, borderStyle);
-  }
-
-  if (settingStore.headerStyle === HeaderStyleEnum.BgLine) {
-    setCssVar(headerBg, bgStyle);
-    setCssVar(tabBg, bgStyle);
-    setCssVar(headerLine, borderStyle);
-    setCssVar(tabLine, borderStyle);
-  }
 });
 
 // 初始化 WebSocket

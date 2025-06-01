@@ -1,4 +1,4 @@
-@use "../mixins/function" as *;
+@use "../mixins/namespace" as *;
 
 /* Global scss */
 body {
@@ -10,7 +10,7 @@ body {
     "Microsoft YaHei", Arial, sans-serif;
   -moz-osx-font-smoothing: grayscale;
   -webkit-font-smoothing: antialiased;
-  color: cssVar(text-gray-700);
+  color: var(--#{$admin-namespace}-text-gray-700);
 }
 
 html {

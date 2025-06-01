@@ -40,7 +40,7 @@ const handleClickOutSide = () => {
       { mobile: isMobile },
     ]"
   >
-    <el-aside :class="[ns.join('layout-aside'), 'flx-column']">
+    <el-aside :class="[ns.join('layout-aside'), ns.is(settingStore.menuTheme), 'flx-column']">
       <div :class="[ns.join('layout-logo'), 'flx-center']" @click="router.push(HOME_URL)">
         <img src="@/assets/images/logo.png" alt="logo" v-if="settingStore.showLayoutLogo" />
         <span v-show="!isCollapse">{{ SystemConfig.systemInfo.name }}</span>

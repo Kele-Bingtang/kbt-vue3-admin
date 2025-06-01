@@ -8,7 +8,7 @@ import { HeaderStyleEnum, PageTransitionEnum, TabNavModeEnum } from "@/enums/app
 
 defineOptions({ name: "BaseConfigSwitch" });
 
-const ns = useNamespace("base-config-select");
+const ns = useNamespace("base-config-switch");
 
 const settingStore = useSettingStore();
 const isMobile = useMediaQuery(mobileMaxWidthMedia);
@@ -150,7 +150,7 @@ const customRadiusOptions = [
 <style lang="scss" scoped>
 @use "@/styles/mixins/bem" as *;
 
-@include b(base-config-select) {
+@include b(base-config-switch) {
   @include e(item) {
     display: flex;
     align-items: center;

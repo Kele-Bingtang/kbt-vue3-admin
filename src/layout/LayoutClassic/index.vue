@@ -39,7 +39,7 @@ const { isCollapse } = storeToRefs(settingStore);
     </el-header>
 
     <el-container :class="ns.e('content')">
-      <el-aside :class="ns.join('layout-aside')">
+      <el-aside :class="[ns.join('layout-aside'), ns.is(settingStore.menuTheme)]">
         <Menu
           :class="[ns.join('layout-menu'), ns.b('menu')]"
           :popper-class="`${ns.join('layout-menu-popper')} ${ns.b('menu-popper')}`"

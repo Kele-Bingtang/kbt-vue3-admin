@@ -7,6 +7,7 @@ export * from "./core/useTheme";
 export * from "./core/useNamespace";
 export * from "./core/useStorage";
 export * from "./core/useCache";
+export * from "./core/useWatchCssVar";
 
 export * from "./useBoolean";
 export * from "./useEcharts";

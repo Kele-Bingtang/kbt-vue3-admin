@@ -37,7 +37,6 @@ export const useSettingStore = defineStore(
     const fixTabNav = ref(themeConfig.fixTabNav);
     const isWeak = ref(themeConfig.isWeak);
     const isGrey = ref(themeConfig.isGrey);
-    const headerTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
     const maximize = ref(themeConfig.maximize);
     const menuWidth = ref(themeConfig.menuWidth);
     const headerHeight = ref(themeConfig.headerHeight);
@@ -89,7 +88,6 @@ export const useSettingStore = defineStore(
       isDark,
       isWeak,
       isGrey,
-      headerTheme,
       maximize,
       menuWidth,
       headerHeight,

@@ -135,8 +135,8 @@ export default {
     logOut: "Log Out",
   },
   _setting: {
-    layoutSwitch: "Layout Switch",
-    layoutSwitchSelect: {
+    layoutMode: "Layout Mode",
+    layoutModeSelect: {
       vertical: "Vertical",
       horizontal: "Horizontal",
       classic: "Classic",
@@ -144,11 +144,14 @@ export default {
       mixins: "Mixins",
       iframe: "IFrame",
     },
-    menuSwitch: "Menu Switch",
-    headerSwitch: "Header Switch",
+    menuTheme: "Menu Theme",
+    menuThemeSelect: {
+      light: "Light",
+      dark: "Dark",
+    },
     baseConfig: "Base Config",
     globalTheme: "Global Theme",
-    titleSwitch: "Title Switch",
+    titleMode: "Title Mode",
     theme: "Theme",
     systemThemeModeSelect: {
       light: "Light",

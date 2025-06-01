@@ -37,6 +37,7 @@
   @include set-css-var(layout-aside-bg-color, var(--#{$admin-namespace}-main-bg-color));
   @include set-css-var(layout-aside-bg-active-color, var(--#{$el-namespace}-color-primary-light-9));
   @include set-css-var(layout-aside-bg-hover-color, var(--#{$el-namespace}-color-primary-light-9));
+  @include set-css-var(layout-aside-left-bg-color, var(--#{$admin-namespace}-main-color));
   @include set-css-var(layout-aside-text-color, var(--#{$admin-namespace}-text-gray-700));
   @include set-css-var(layout-aside-text-active-color, var(--#{$admin-namespace}-main-color));
   @include set-css-var(layout-aside-text-hover-color, var(--#{$admin-namespace}-main-color));
@@ -56,6 +57,9 @@
 }
 
 :root.dark {
+  @include set-css-var(layout-aside-text-color, var(--#{$el-namespace}-text-color-regular));
+  @include set-css-var(layout-aside-icon-color, var(--#{$el-namespace}-text-color-regular));
+
   @include set-css-var(layout-aside-text-active-weight, 400);
 }
 
@@ -141,7 +145,7 @@
 }
 
 // Dark 主题变量
-html.dark {
+:root.dark {
   // Theme color
   --#{$admin-namespace}-primary: 93, 135, 255;
   --#{$admin-namespace}-secondary: 73, 190, 255;

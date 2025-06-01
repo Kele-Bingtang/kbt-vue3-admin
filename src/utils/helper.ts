@@ -185,22 +185,22 @@ export const isIncludeSome = (arr: string[], value: string[]) => {
  * @param key key
  * @param value value
  */
-export const setCssVar = (key: string, value: string) => {
-  document.documentElement.style.setProperty(key, value);
+export const setCssVar = (key: string, value: string | number, el: any = document.documentElement) => {
+  el.style.setProperty(key, value);
 };
 
 /**
  * 删除 css var 需要的变量
  * @param keys key 数组
  */
-export const removeStyleVar = (keys: string[]) => {
+export const removeStyleVar = (keys: string[], el: any = document.documentElement) => {
   keys.forEach(key => {
-    document.documentElement.style.removeProperty(key);
+    el.style.removeProperty(key);
   });
 };
 
-export const cssVar = (prop: string, dom = document.documentElement) => {
-  return getComputedStyle(dom).getPropertyValue(prop);
+export const cssVar = (prop: string, el: any = document.documentElement) => {
+  return getComputedStyle(el).getPropertyValue(prop);
 };
 
 /**

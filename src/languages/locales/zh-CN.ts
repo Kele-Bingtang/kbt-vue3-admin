@@ -135,8 +135,8 @@ export default {
     logOut: "退出登录",
   },
   _setting: {
-    layoutSwitch: "布局切换",
-    layoutSwitchSelect: {
+    layoutMode: "布局模式",
+    layoutModeSelect: {
       vertical: "纵向",
       horizontal: "横向",
       classic: "经典",
@@ -144,11 +144,14 @@ export default {
       mixins: "混合",
       iframe: "嵌入",
     },
-    menuSwitch: "菜单切换",
-    headerSwitch: "头部切换",
+    menuTheme: "菜单主题",
+    menuThemeSelect: {
+      light: "亮色",
+      dark: "暗色",
+    },
     baseConfig: "基础配置",
     globalTheme: "全局主题",
-    titleSwitch: "标题切换",
+    titleMode: "标题模式",
     systemThemeModeSelect: {
       light: "亮色",
       dark: "暗色",

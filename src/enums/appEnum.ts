@@ -1,5 +1,4 @@
 // 系统级别枚举
-
 export enum LayoutModeEnum {
   Vertical = "vertical",
   Classic = "classic",
@@ -12,7 +11,7 @@ export enum LayoutModeEnum {
 export enum TabNavModeEnum {
   Simple = "simple",
   Classic = "classic",
-  Element = "el",
+  Element = "element",
 }
 
 export enum SystemThemeEnum {
@@ -24,7 +23,6 @@ export enum SystemThemeEnum {
 export enum MenuThemeEnum {
   Dark = "dark",
   Light = "light",
-  Design = "design",
 }
 
 export enum TitleModeEnum {
