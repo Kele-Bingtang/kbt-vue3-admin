@@ -20,13 +20,13 @@ const openSearchDialog = () => {
   <div :class="[ns.b(), 'customize']">
     <div :class="ns.e('input')" @click="openSearchDialog">
       <div :class="[ns.e('content'), 'flx-align-center']">
-        <Icon icon="search" :size="17" />
+        <Icon icon="core-search" :size="17" />
         <span>{{ $t("_headerBar.search") }}</span>
       </div>
 
       <div :class="ns.e('keydown')">
         <span v-if="isWindows">Crtl</span>
-        <Icon v-else icon="command" :size="13"></Icon>
+        <Icon v-else icon="core-command" :size="13"></Icon>
         <span>k</span>
       </div>
     </div>

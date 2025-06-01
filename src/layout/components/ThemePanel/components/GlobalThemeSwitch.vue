@@ -1,15 +1,13 @@
 <script setup lang="ts">
-import { Sunny, Moon } from "@element-plus/icons-vue";
 import { useNamespace, useTheme } from "@/composables";
 import { useLayoutStore, useSettingStore } from "@/stores";
 import SystemConfig from "@/config";
-import { MenuThemeEnum } from "@/enums/appEnum";
 
-defineOptions({ name: "ThemeSelect" });
+defineOptions({ name: "GlobalThemeSwitch" });
 
-const ns = useNamespace("theme-select");
+const ns = useNamespace("global-theme-select");
 
-const { changePrimary, changeGreyOrWeak, switchDark } = useTheme();
+const { changePrimary, changeGreyOrWeak } = useTheme();
 
 const settingStore = useSettingStore();
 const layoutStore = useLayoutStore();
@@ -33,15 +31,6 @@ const sizeOptions = [
   { label: "Default", value: "default" },
   { label: "Small", value: "small" },
 ];
-
-const handleSwitchDark = () => {
-  const isDark = switchDark();
-  const theme = isDark ? MenuThemeEnum.Dark : MenuThemeEnum.Light;
-  settingStore.$patch({
-    menuTheme: theme,
-    headerTheme: theme,
-  });
-};
 </script>
 
 <template>
@@ -49,17 +38,6 @@ const handleSwitchDark = () => {
     <div :class="ns.e('item')">
       <span>{{ $t("_setting.theme") }}</span>
       <el-color-picker v-model="settingStore.primaryColor" :predefine="colorList" @change="changePrimary" />
-    </div>
-
-    <div :class="ns.e('item')">
-      <span>{{ $t("_setting.darkMode") }}</span>
-      <el-switch
-        v-model="settingStore.isDark"
-        @change="handleSwitchDark"
-        inline-prompt
-        :active-icon="Sunny"
-        :inactive-icon="Moon"
-      />
     </div>
 
     <div :class="ns.e('item')">
@@ -84,7 +62,7 @@ const handleSwitchDark = () => {
 <style lang="scss" scoped>
 @use "@/styles/mixins/bem" as *;
 
-@include b(theme-select) {
+@include b(global-theme-select) {
   @include e(item) {
     display: flex;
     align-items: center;

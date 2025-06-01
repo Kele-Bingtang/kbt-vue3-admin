@@ -3,9 +3,9 @@
 export enum LayoutModeEnum {
   Vertical = "vertical",
   Classic = "classic",
-  Transverse = "transverse",
+  Horizontal = "horizontal",
   Columns = "columns",
-  Subsystem = "subsystem",
+  IFrame = "iframe",
   Mixins = "mixins",
 }
 
@@ -18,7 +18,7 @@ export enum TabNavModeEnum {
 export enum SystemThemeEnum {
   Dark = "dark",
   Light = "light",
-  Auto = "auto",
+  System = "system",
 }
 
 export enum MenuThemeEnum {

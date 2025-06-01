@@ -10,9 +10,9 @@ import HeaderRight from "@/layout/components/Header/HeaderRight.vue";
 
 import "./index.scss";
 
-defineOptions({ name: "LayoutTransverse" });
+defineOptions({ name: "LayoutHorizontal" });
 
-const ns = useNamespace("transverse-layout");
+const ns = useNamespace("horizontal-layout");
 const router = useRouter();
 const settingStore = useSettingStore();
 </script>

@@ -108,7 +108,7 @@ onUnmounted(() => {
 
 <template>
   <div :class="[ns.b(), ns.is('show', isShowSearch)]">
-    <Icon v-if="!isShowSearch" icon="search" @click.stop="handleStartSearch" />
+    <Icon v-if="!isShowSearch" icon="core-search" @click.stop="handleStartSearch" />
 
     <el-autocomplete
       v-model="searchMenu"

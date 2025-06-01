@@ -12,9 +12,9 @@ import Menu from "@/layout/components/Menu/index.vue";
 
 import "./index.scss";
 
-defineOptions({ name: "LayoutSubsystem" });
+defineOptions({ name: "LayoutIFrame" });
 
-const ns = useNamespace("subsystem-layout");
+const ns = useNamespace("iframe-layout");
 const router = useRouter();
 const settingStore = useSettingStore();
 

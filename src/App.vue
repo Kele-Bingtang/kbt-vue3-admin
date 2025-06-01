@@ -15,7 +15,7 @@ import { useLayoutStore } from "@/stores/layout";
 import SystemConfig, { ConfigGlobalKey, WebSocketKey } from "@/config";
 import { HeaderStyleEnum } from "@/enums/appEnum";
 import { useSettingStore, useUserStore, useWebSocketStore } from "@/stores";
-import { addUnit, isFunction, removeStyleVar, setStyleVar } from "@/utils";
+import { addUnit, isFunction, removeStyleVar, setCssVar } from "@/utils";
 import { useNamespace, useCache, useBrowserTitle } from "@/composables";
 import { useTheme } from "@/composables/core/useTheme";
 import { useIFrame } from "@/layout/components/IFrameLayout/useIFrame";
@@ -50,10 +50,10 @@ const i18nLocale = computed(() => {
 });
 
 // 配置全局样式变量
-watchEffect(() => setStyleVar(ns.cssVarName("layout-open-aside-width"), addUnit(settingStore.menuWidth)));
-watchEffect(() => setStyleVar(ns.cssVarName("layout-close-aside-width"), "64px"));
-watchEffect(() => setStyleVar(ns.cssVarName("layout-header-height"), addUnit(settingStore.headerHeight)));
-watchEffect(() => setStyleVar(ns.cssVarName("radius"), addUnit(settingStore.radius, "rem")));
+watchEffect(() => setCssVar(ns.cssVarName("layout-open-aside-width"), addUnit(settingStore.menuWidth)));
+watchEffect(() => setCssVar(ns.cssVarName("layout-close-aside-width"), "64px"));
+watchEffect(() => setCssVar(ns.cssVarName("layout-header-height"), addUnit(settingStore.headerHeight)));
+watchEffect(() => setCssVar(ns.cssVarName("radius"), addUnit(settingStore.radius, "rem")));
 watchEffect(() => {
   const headerBg = ns.cssVarName("layout-header-bg-color");
   const tabBg = ns.cssVarName("layout-tab-bg-color");
@@ -68,22 +68,22 @@ watchEffect(() => {
   if (settingStore.headerStyle === HeaderStyleEnum.Bg) {
     removeStyleVar([headerLine, tabLine]);
 
-    setStyleVar(headerBg, bgStyle);
-    setStyleVar(tabBg, bgStyle);
+    setCssVar(headerBg, bgStyle);
+    setCssVar(tabBg, bgStyle);
   }
 
   if (settingStore.headerStyle === HeaderStyleEnum.Line) {
     removeStyleVar([headerBg, tabBg]);
 
-    setStyleVar(headerLine, borderStyle);
-    setStyleVar(tabLine, borderStyle);
+    setCssVar(headerLine, borderStyle);
+    setCssVar(tabLine, borderStyle);
   }
 
   if (settingStore.headerStyle === HeaderStyleEnum.BgLine) {
-    setStyleVar(headerBg, bgStyle);
-    setStyleVar(tabBg, bgStyle);
-    setStyleVar(headerLine, borderStyle);
-    setStyleVar(tabLine, borderStyle);
+    setCssVar(headerBg, bgStyle);
+    setCssVar(tabBg, bgStyle);
+    setCssVar(headerLine, borderStyle);
+    setCssVar(tabLine, borderStyle);
   }
 });
 

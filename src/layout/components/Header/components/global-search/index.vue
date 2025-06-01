@@ -293,7 +293,7 @@ const deleteHistory = (index: number) => {
         @blur="handleSearchBlur"
       >
         <template #prefix>
-          <Icon icon="search" :size="17" />
+          <Icon icon="core-search" :size="17" />
         </template>
         <template #suffix>
           <div class="search-keydown">

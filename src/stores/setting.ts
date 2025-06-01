@@ -1,7 +1,14 @@
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { useStorage, useCache } from "@/composables";
-import { HeaderStyleEnum, LayoutModeEnum, MenuThemeEnum, PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
+import {
+  HeaderStyleEnum,
+  LayoutModeEnum,
+  MenuThemeEnum,
+  PageTransitionEnum,
+  SystemThemeEnum,
+  TabNavModeEnum,
+} from "@/enums/appEnum";
 import SystemConfig from "@/config";
 
 export const useSettingStore = defineStore(
@@ -16,6 +23,7 @@ export const useSettingStore = defineStore(
     const menuTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
     const pageTransition = ref(themeConfig.pageTransition || PageTransitionEnum.SlideLeft);
     const headerStyle = ref(themeConfig.headerStyle || HeaderStyleEnum.Page);
+    const systemThemeMode = ref(themeConfig.systemThemeMode || SystemThemeEnum.System);
     const showSetting = ref(themeConfig.showSetting);
     const showTabNav = ref(themeConfig.showTabNav);
     const recordTabNav = ref(themeConfig.recordTabNav);
@@ -27,7 +35,6 @@ export const useSettingStore = defineStore(
     const isCollapse = ref(themeConfig.isCollapse);
     const menuAccordion = ref(themeConfig.menuAccordion);
     const fixTabNav = ref(themeConfig.fixTabNav);
-    const isDark = ref(themeConfig.isDark);
     const isWeak = ref(themeConfig.isWeak);
     const isGrey = ref(themeConfig.isGrey);
     const headerTheme = ref(themeConfig.menuTheme || MenuThemeEnum.Light);
@@ -35,6 +42,15 @@ export const useSettingStore = defineStore(
     const menuWidth = ref(themeConfig.menuWidth);
     const headerHeight = ref(themeConfig.headerHeight);
     const radius = ref(themeConfig.radius);
+
+    const isDark = computed(() => {
+      if (systemThemeMode.value === SystemThemeEnum.System) {
+        // 自动识别系统主题
+        return window.matchMedia("(prefers-color-scheme: dark)").matches;
+      }
+
+      return systemThemeMode.value === SystemThemeEnum.Dark;
+    });
 
     const closeSideMenu = () => {
       isCollapse.value = true;
@@ -57,6 +73,7 @@ export const useSettingStore = defineStore(
       tabNavMode,
       menuTheme,
       headerStyle,
+      systemThemeMode,
       pageTransition,
       showSetting,
       showTabNav,

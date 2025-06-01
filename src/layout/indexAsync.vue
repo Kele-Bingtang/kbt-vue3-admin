@@ -26,10 +26,10 @@ defineOptions({ name: "Layout" });
 const LayoutComponents: Record<string, Component> = {
   [LayoutModeEnum.Vertical]: defineAsyncComponent(() => import("./LayoutVertical/index.vue")),
   [LayoutModeEnum.Classic]: defineAsyncComponent(() => import("./LayoutClassic/index.vue")),
-  [LayoutModeEnum.Transverse]: defineAsyncComponent(() => import("./LayoutTransverse/index.vue")),
+  [LayoutModeEnum.Horizontal]: defineAsyncComponent(() => import("./LayoutHorizontal/index.vue")),
   [LayoutModeEnum.Columns]: defineAsyncComponent(() => import("./LayoutColumns/index.vue")),
   [LayoutModeEnum.Mixins]: defineAsyncComponent(() => import("./LayoutMixins/index.vue")),
-  [LayoutModeEnum.Subsystem]: defineAsyncComponent(() => import("./LayoutSubsystem/index.vue")),
+  [LayoutModeEnum.IFrame]: defineAsyncComponent(() => import("./LayoutIFrame/index.vue")),
 };
 
 const settingStore = useSettingStore();

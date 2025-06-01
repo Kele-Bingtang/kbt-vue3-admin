@@ -1,7 +1,7 @@
 @use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/function" as *;
 
-@include b(subsystem-layout) {
+@include b(iframe-layout) {
   @include e(drawer-bg) {
     position: absolute;
     top: 0;

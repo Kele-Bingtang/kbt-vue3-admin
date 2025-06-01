@@ -35,7 +35,7 @@ Print.prototype = {
    */
   init: function (): void {
     const content = this.getStyle() + this.getHtml();
-    this.writeIframe(content);
+    this.writeIFrame(content);
   },
   /**
    * Configuration property extension
@@ -116,12 +116,12 @@ Print.prototype = {
   /**
     create iframe
   */
-  writeIframe: function (content: string) {
+  writeIFrame: function (content: string) {
     let w: Document | Window | null = null;
     let doc: Document | null = null;
     const iframe: HTMLIFrameElement = document.createElement("iframe");
     const f: HTMLIFrameElement = document.body.appendChild(iframe);
-    iframe.id = "myIframe";
+    iframe.id = "myIFrame";
     iframe.setAttribute("style", "position:absolute;width:0;height:0;top:-10px;left:-10px;");
     w = f.contentWindow || f.contentDocument;
     doc = f.contentDocument || f.contentWindow?.document || null;

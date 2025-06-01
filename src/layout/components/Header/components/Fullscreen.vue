@@ -11,6 +11,6 @@ const { toggle, isFullscreen } = useFullscreen();
 
 <template>
   <div :class="ns.b()" @click.stop="toggle">
-    <Icon :icon="isFullscreen ? 'fullscreen-exit' : 'fullscreen'" />
+    <Icon :icon="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'" />
   </div>
 </template>

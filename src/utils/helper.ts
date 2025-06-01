@@ -185,7 +185,7 @@ export const isIncludeSome = (arr: string[], value: string[]) => {
  * @param key key
  * @param value value
  */
-export const setStyleVar = (key: string, value: string) => {
+export const setCssVar = (key: string, value: string) => {
   document.documentElement.style.setProperty(key, value);
 };
 

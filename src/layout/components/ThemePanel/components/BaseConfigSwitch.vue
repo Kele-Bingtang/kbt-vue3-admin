@@ -6,9 +6,9 @@ import { mobileMaxWidthMedia } from "@/config";
 import { useI18n } from "vue-i18n";
 import { HeaderStyleEnum, PageTransitionEnum, TabNavModeEnum } from "@/enums/appEnum";
 
-defineOptions({ name: "LayoutSelect" });
+defineOptions({ name: "BaseConfigSwitch" });
 
-const ns = useNamespace("layout-select");
+const ns = useNamespace("base-config-select");
 
 const settingStore = useSettingStore();
 const isMobile = useMediaQuery(mobileMaxWidthMedia);
@@ -150,7 +150,7 @@ const customRadiusOptions = [
 <style lang="scss" scoped>
 @use "@/styles/mixins/bem" as *;
 
-@include b(layout-select) {
+@include b(base-config-select) {
   @include e(item) {
     display: flex;
     align-items: center;

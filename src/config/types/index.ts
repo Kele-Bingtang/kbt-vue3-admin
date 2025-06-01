@@ -28,6 +28,7 @@ export interface ThemeConfig {
   menuTheme: MenuThemeEnum; // 侧边菜单栏的主题色，暗色和亮色，默认为暗色
   pageTransition: PageTransitionEnum; // 进入页面过渡动画
   headerStyle: HeaderStyleEnum; // 顶部样式
+  systemThemeMode: SystemThemeEnum; // 系统主题
   showSetting: boolean; // 是否显示设置
   showBreadcrumb: boolean; // 是否使用 Breadcrumb
   showTabNav: boolean; // 是否使用 tagsNav

@@ -3,6 +3,7 @@ import {
   LayoutModeEnum,
   MenuThemeEnum,
   PageTransitionEnum,
+  SystemThemeEnum,
   TabNavModeEnum,
   TitleModeEnum,
 } from "@/enums/appEnum";
@@ -20,6 +21,7 @@ const themeConfig: ThemeConfig = {
   menuTheme: MenuThemeEnum.Light,
   pageTransition: PageTransitionEnum.SlideLeft,
   headerStyle: HeaderStyleEnum.Page,
+  systemThemeMode: SystemThemeEnum.System,
   showSetting: true,
   showBreadcrumb: true,
   showTabNav: true,

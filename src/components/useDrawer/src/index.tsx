@@ -103,7 +103,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
                 <span class={`${ns.elNamespace}-drawer__title`}>{drawerProps.title}</span>
                 {drawerProps.fullscreenIcon !== false && (
                   <Icon
-                    name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
+                    name={isFullscreen.value ? "core-fullscreen-exit" : "core-fullscreen"}
                     onClick={() => toggleFull()}
                     width="18px"
                     height="18px"

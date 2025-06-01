@@ -9,18 +9,22 @@
 </template>
 
 <script setup lang="ts">
-import { useTheme } from "@/composables";
-import { useSettingStore } from "@/stores";
-import { Sunny, Moon } from "@element-plus/icons-vue";
 import { ElSwitch } from "element-plus";
+import { Sunny, Moon } from "@element-plus/icons-vue";
+import { useTheme } from "@/composables";
+import { SystemThemeEnum } from "@/enums/appEnum";
+import { useSettingStore } from "@/stores";
 
 defineOptions({ name: "SwitchDark" });
 
 const settingStore = useSettingStore();
 
-const { switchDark } = useTheme();
+const { Dark, Light } = SystemThemeEnum;
 
 const onAddDarkChange = () => {
-  switchDark();
+  const { switchSystemTheme } = useTheme();
+  const { isDark } = useSettingStore();
+
+  switchSystemTheme(isDark ? Dark : Light);
 };
 </script>

@@ -3,13 +3,20 @@ import { ref, watch, defineComponent } from "vue";
 import { useI18n } from "vue-i18n";
 import { useMediaQuery } from "@vueuse/core";
 import { ElButton, ElDivider, ElDrawer, ElMessage } from "element-plus";
-import { Notification, Menu, ColdDrink, Setting, Box, Refresh, Loading } from "@element-plus/icons-vue";
+import { Notification, ColdDrink, Setting, Box, Refresh, Loading } from "@element-plus/icons-vue";
 import { useSettingStore } from "@/stores";
 import { mittBus } from "@/utils";
 import { useNamespace } from "@/composables";
 import { LayoutModeEnum, MenuThemeEnum } from "@/enums/appEnum";
 import { mobileMaxWidthMedia, OpenThemePanelKey } from "@/config";
-import { LayoutSwitch, AsideHeaderSwitch, ThemeSelect, LayoutSelect, BrowserTitleSwitch } from "./components";
+import {
+  LayoutSwitch,
+  // AsideHeaderSwitch,
+  GlobalThemeSwitch,
+  BaseConfigSwitch,
+  BrowserTitleSwitch,
+  SystemThemeSwitch,
+} from "./components";
 
 defineOptions({ name: "ThemePanel" });
 
@@ -43,18 +50,18 @@ watch(
   () => settingStore.layoutMode,
   () => {
     const { layoutMode, headerTheme, isDark } = settingStore;
-    const { Subsystem, Transverse, Mixins } = LayoutModeEnum;
+    const { IFrame, Horizontal, Mixins } = LayoutModeEnum;
     const { Light, Dark } = MenuThemeEnum;
 
     const body = document.body as HTMLElement;
     body.setAttribute("class", layoutMode);
 
     if (!isDark) {
-      if ([Transverse, Mixins].includes(layoutMode)) {
+      if ([Horizontal, Mixins].includes(layoutMode)) {
         if (headerTheme === Light) settingStore.$patch({ menuTheme: Light, isCollapse: false });
         else settingStore.$patch({ menuTheme: Dark, isCollapse: false });
       }
-      if (layoutMode === Subsystem) settingStore.$patch({ headerTheme: Light });
+      if (layoutMode === IFrame) settingStore.$patch({ headerTheme: Light });
     }
   },
   { immediate: true }
@@ -63,9 +70,12 @@ watch(
 const Divider = defineComponent({
   setup(_, { slots }) {
     return () => (
-      <ElDivider class={ns.e("divider")} content-position="center">
+      <>
+        <ElDivider class={ns.e("divider")} content-position="center">
+          {slots.title?.()}
+        </ElDivider>
         {slots.default?.()}
-      </ElDivider>
+      </>
     );
   },
 });
@@ -81,39 +91,48 @@ const Divider = defineComponent({
     :class="ns.b()"
     :modal-class="ns.b('modal')"
   >
-    <!-- 布局切换 -->
-    <Divider>
-      <Icon class="icon"><Notification /></Icon>
-      {{ $t("_setting.layoutSwitch") }}
-    </Divider>
     <template v-if="!isMobile">
-      <LayoutSwitch />
+      <!-- 布局切换 -->
+      <Divider>
+        <template #title>
+          <Icon class="icon"><Notification /></Icon>
+          {{ $t("_setting.layoutSwitch") }}
+        </template>
 
-      <template v-if="[LayoutModeEnum.Subsystem].includes(settingStore.layoutMode)">
-        <!-- 菜单主题切换 -->
+        <LayoutSwitch />
+      </Divider>
+
+      <!-- 菜单主题切换 -->
+      <!-- <template v-if="[LayoutModeEnum.IFrame].includes(settingStore.layoutMode)">
         <Divider>
-          <Icon class="icon"><Menu /></Icon>
-          {{ $t("_setting.menuSwitch") }}
-        </Divider>
-        <AsideHeaderSwitch useAside />
-      </template>
+          <template #title>
+            <Icon class="icon"><Menu /></Icon>
+            {{ $t("_setting.menuSwitch") }}
+          </template>
 
-      <template v-if="[LayoutModeEnum.Transverse, LayoutModeEnum.Mixins].includes(settingStore.layoutMode)">
-        <!-- 头部主题切换 -->
+          <AsideHeaderSwitch useAside />
+        </Divider>
+      </template> -->
+
+      <!-- 头部主题切换 -->
+      <!-- <template v-if="[LayoutModeEnum.Horizontal, LayoutModeEnum.Mixins].includes(settingStore.layoutMode)">
         <Divider>
-          <Icon class="icon"><Menu /></Icon>
-          {{ $t("_setting.headerSwitch") }}
-        </Divider>
-        <AsideHeaderSwitch useHeader />
-      </template>
+          <template #title>
+            <Icon class="icon"><Menu /></Icon>
+            {{ $t("_setting.headerSwitch") }}
+          </template>
 
-      <template
+          <AsideHeaderSwitch useHeader />
+        </Divider>
+      </template> -->
+
+      <!-- 菜单主题 & 头部主题切换 -->
+      <!-- <template
         v-if="
           [LayoutModeEnum.Vertical, LayoutModeEnum.Classic, LayoutModeEnum.Columns].includes(settingStore.layoutMode)
         "
       >
-        <!-- 菜单主题 & 头部主题切换 -->
-        <!-- <AsideHeaderSwitch useAll>
+        <AsideHeaderSwitch useAll>
           <template #aside>
             <Divider>
               <Icon class="icon"><Menu /></Icon>
@@ -127,30 +146,40 @@ const Divider = defineComponent({
               {{ $t("_setting.headerSwitch") }}
             </Divider>
           </template>
-        </AsideHeaderSwitch> -->
-      </template>
+        </AsideHeaderSwitch>
+      </template> -->
     </template>
 
     <!-- 全局主题 -->
     <Divider>
-      <Icon class="icon"><ColdDrink /></Icon>
-      {{ $t("_setting.globalTheme") }}
+      <template #title>
+        <Icon class="icon"><ColdDrink /></Icon>
+        {{ $t("_setting.globalTheme") }}
+      </template>
+
+      <SystemThemeSwitch />
+      <GlobalThemeSwitch />
     </Divider>
-    <ThemeSelect />
 
     <!-- 界面设置 -->
     <Divider>
-      <Icon class="icon"><Setting /></Icon>
-      {{ $t("_setting.baseConfig") }}
+      <template #title>
+        <Icon class="icon"><Setting /></Icon>
+        {{ $t("_setting.baseConfig") }}
+      </template>
+
+      <BaseConfigSwitch />
     </Divider>
-    <LayoutSelect />
 
     <!-- 标题设置 -->
     <Divider>
-      <Icon class="icon"><Box /></Icon>
-      {{ $t("_setting.titleSwitch") }}
+      <template #title>
+        <Icon class="icon"><Box /></Icon>
+        {{ $t("_setting.titleSwitch") }}
+      </template>
+
+      <BrowserTitleSwitch />
     </Divider>
-    <BrowserTitleSwitch />
 
     <Divider />
 

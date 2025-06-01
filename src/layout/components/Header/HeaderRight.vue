@@ -12,6 +12,7 @@ import ErrorLog from "./components/ErrorLog.vue";
 // import MenuSearch from "./components/MenuSearch.vue";
 import GlobalSearch from "./components/global-search/index.vue";
 import GlobalSearchInput from "./components/global-search/input.vue";
+import LightDarkSwitch from "./components/light-dark-switch/index.vue";
 
 defineOptions({ name: "HeaderRight" });
 
@@ -43,6 +44,7 @@ const isMobile = useMediaQuery(mobileMaxWidthMedia);
         :errorCount="errorCount"
         v-if="SystemConfig.layoutConfig.errorLog.showInHeader && errorCount > 0 && !isMobile"
       />
+      <LightDarkSwitch id="lightDarkSwitch" />
       <User id="user" />
     </div>
   </div>

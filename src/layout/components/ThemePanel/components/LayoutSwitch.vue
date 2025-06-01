@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { useI18n } from "vue-i18n";
 import { CircleCheckFilled } from "@element-plus/icons-vue";
 import { LayoutModeEnum } from "@/enums/appEnum";
 import { useNamespace } from "@/composables";
@@ -7,161 +8,117 @@ import { useSettingStore } from "@/stores";
 defineOptions({ name: "LayoutSwitch" });
 
 const ns = useNamespace("layout-switch");
-
 const settingStore = useSettingStore();
+const { t } = useI18n();
 
-const changeLayout = (value: LayoutModeEnum) => {
-  settingStore.$patch({
-    layoutMode: value,
-  });
+const { layoutMode } = storeToRefs(settingStore);
+
+const layoutModeList = [
+  {
+    name: t("_setting.layoutSwitchSelect.vertical"),
+    mode: LayoutModeEnum.Vertical,
+    content: `<div class="dark"></div> <div class="container"> <div class="light"></div><div class="content"></div> </div>`,
+  },
+  {
+    name: t("_setting.layoutSwitchSelect.classic"),
+    mode: LayoutModeEnum.Classic,
+    content: `<div class="dark"></div> <div class="container"> <div class="light"></div><div class="content"></div> </div>`,
+  },
+  {
+    name: t("_setting.layoutSwitchSelect.horizontal"),
+    mode: LayoutModeEnum.Horizontal,
+    content: `<div class="dark"></div> <div class="content"></div>`,
+  },
+  {
+    name: t("_setting.layoutSwitchSelect.columns"),
+    mode: LayoutModeEnum.Columns,
+    content: `<div class="dark"></div> <div class="light"></div> <div class="content"></div>`,
+  },
+  {
+    name: t("_setting.layoutSwitchSelect.mixins"),
+    mode: LayoutModeEnum.Mixins,
+    content: `<div class="dark"></div> <div class="container"> <div class="dark"></div><div class="content"></div> </div>`,
+  },
+  {
+    name: t("_setting.layoutSwitchSelect.iframe"),
+    mode: LayoutModeEnum.IFrame,
+    content: `<div class="dark"></div> <div class="content"></div>`,
+  },
+];
+
+const switchLayoutMode = (layoutMode: LayoutModeEnum) => {
+  settingStore.$patch({ layoutMode });
 };
 </script>
 
 <template>
-  <div :class="ns.b()">
-    <el-tooltip effect="dark" content="纵向" placement="top" :show-after="200">
+  <div :class="[ns.b(), 'flx', 'flx-wrap', 'gap-15']">
+    <div v-for="item in layoutModeList" :key="item.mode" :class="ns.e('item')" @click="switchLayoutMode(item.mode)">
       <div
-        :class="[
-          ns.e('item'),
-          ns.join('vertical'),
-          ns.is('active', settingStore.layoutMode === LayoutModeEnum.Vertical),
-        ]"
-        @click="changeLayout(LayoutModeEnum.Vertical)"
-      >
-        <div class="dark"></div>
-        <div class="container">
-          <div class="light"></div>
-          <div class="content"></div>
-        </div>
-        <Icon class="icon" v-if="settingStore.layoutMode == LayoutModeEnum.Vertical"><CircleCheckFilled /></Icon>
-      </div>
-    </el-tooltip>
-
-    <el-tooltip effect="dark" content="经典" placement="top" :show-after="200">
-      <div
-        :class="[ns.e('item'), ns.join('classic'), ns.is('active', settingStore.layoutMode === LayoutModeEnum.Classic)]"
-        @click="changeLayout(LayoutModeEnum.Classic)"
-      >
-        <div class="dark"></div>
-        <div class="container">
-          <div class="light"></div>
-          <div class="content"></div>
-        </div>
-        <Icon class="icon" v-if="settingStore.layoutMode == LayoutModeEnum.Classic"><CircleCheckFilled /></Icon>
-      </div>
-    </el-tooltip>
-
-    <el-tooltip effect="dark" content="横向" placement="top" :show-after="200">
-      <div
-        :class="[
-          ns.e('item'),
-          ns.join('transverse'),
-          ns.is('active', settingStore.layoutMode === LayoutModeEnum.Transverse),
-        ]"
-        @click="changeLayout(LayoutModeEnum.Transverse)"
-      >
-        <div class="dark"></div>
-        <div class="content"></div>
-        <Icon class="icon" v-if="settingStore.layoutMode == LayoutModeEnum.Transverse"><CircleCheckFilled /></Icon>
-      </div>
-    </el-tooltip>
-
-    <el-tooltip effect="dark" content="分栏" placement="top" :show-after="200">
-      <div
-        :class="[ns.e('item'), ns.join('columns'), ns.is('active', settingStore.layoutMode === LayoutModeEnum.Columns)]"
-        @click="changeLayout(LayoutModeEnum.Columns)"
-      >
-        <div class="dark"></div>
-        <div class="light"></div>
-        <div class="content"></div>
-        <Icon class="icon" v-if="settingStore.layoutMode === LayoutModeEnum.Columns"><CircleCheckFilled /></Icon>
-      </div>
-    </el-tooltip>
-
-    <el-tooltip effect="dark" content="混合" placement="top" :show-after="200">
-      <div
-        :class="[ns.e('item'), ns.join('mixins'), ns.is('active', settingStore.layoutMode === LayoutModeEnum.Mixins)]"
-        @click="changeLayout(LayoutModeEnum.Mixins)"
-      >
-        <div class="dark"></div>
-        <div class="container">
-          <div class="dark"></div>
-          <div class="content"></div>
-        </div>
-        <Icon class="icon" v-if="settingStore.layoutMode == LayoutModeEnum.Mixins"><CircleCheckFilled /></Icon>
-      </div>
-    </el-tooltip>
-
-    <el-tooltip effect="dark" content="子系统" placement="top" :show-after="200">
-      <div
-        :class="[
-          ns.e('item'),
-          ns.join('subsystem'),
-          ns.is('active', settingStore.layoutMode === LayoutModeEnum.Subsystem),
-        ]"
-        @click="changeLayout(LayoutModeEnum.Subsystem)"
-      >
-        <div class="dark"></div>
-        <div class="content"></div>
-        <Icon class="icon" v-if="settingStore.layoutMode === LayoutModeEnum.Subsystem"><CircleCheckFilled /></Icon>
-      </div>
-    </el-tooltip>
+        :class="[ns.e('box'), ns.join(item.mode), ns.is('active', item.mode === layoutMode)]"
+        v-html="item.content"
+      ></div>
+      <Icon :class="ns.m('icon')" v-show="item.mode === layoutMode"><CircleCheckFilled /></Icon>
+      <p :class="ns.m('name')">{{ item.name }}</p>
+    </div>
   </div>
 </template>
 
-<style lang="scss" scoped>
+<style lang="scss">
 @use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/function" as *;
 
 @include b(layout-switch) {
-  position: relative;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: space-around;
-
-  .is-active {
-    box-shadow: 0 0 0 2px cssVar(main-color) !important;
-  }
-
   @include e(item) {
     position: relative;
-    box-sizing: border-box;
-    width: 95px;
-    height: 67px;
-    padding: 6px;
-    margin-bottom: 20px;
+    width: calc(100% / 3 - 10px);
     cursor: pointer;
-    border-radius: 5px;
-    box-shadow: 0 0 5px 1px var(--#{$el-namespace}-border-color-lighter);
+
+    @include e(box) {
+      height: 55px;
+      padding: 6px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px 0 cssVar(gray-400);
+      transition: box-shadow var(--#{$el-namespace}-transition-duration-fast);
+
+      &:hover {
+        box-shadow: 0 2px 8px 0 cssVar(gray-600);
+      }
+
+      @include is(active) {
+        box-shadow: 0 0 0 2px cssVar(main-color) !important;
+      }
+
+      .dark {
+        background-color: cssVar(main-color);
+        border-radius: 3px;
+      }
+
+      .light {
+        background-color: var(--#{$el-namespace}-color-primary-light-5);
+        border-radius: 3px;
+      }
+
+      .content {
+        background-color: var(--#{$el-namespace}-color-primary-light-8);
+        border: 1px dashed cssVar(main-color);
+        border-radius: 3px;
+      }
+    }
+  }
+
+  @include m(icon) {
+    position: absolute;
+    top: 30px;
+    right: 10px;
+    color: cssVar(main-color);
     transition: all var(--#{$el-namespace}-transition-duration-fast);
+  }
 
-    .dark {
-      background-color: cssVar(main-color);
-      border-radius: 3px;
-    }
-
-    .light {
-      background-color: var(--#{$el-namespace}-color-primary-light-5);
-      border-radius: 3px;
-    }
-
-    .content {
-      background-color: var(--#{$el-namespace}-color-primary-light-8);
-      border: 1px dashed cssVar(main-color);
-      border-radius: 3px;
-    }
-
-    .icon {
-      position: absolute;
-      right: 10px;
-      bottom: 10px;
-      color: cssVar(main-color);
-      transition: all var(--#{$el-namespace}-transition-duration-fast);
-    }
-
-    &:hover {
-      box-shadow: 0 0 5px 1px var(--#{$el-namespace}-border-color-darker);
-    }
+  @include m(name) {
+    margin: 10px 0;
+    font-size: 14px;
+    text-align: center;
   }
 
   @include joins(vertical) {
@@ -212,7 +169,7 @@ const changeLayout = (value: LayoutModeEnum) => {
     }
   }
 
-  @include joins(transverse) {
+  @include joins(horizontal) {
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -268,7 +225,7 @@ const changeLayout = (value: LayoutModeEnum) => {
     }
   }
 
-  @include joins(subsystem) {
+  @include joins(iframe) {
     display: flex;
     justify-content: space-between;
 

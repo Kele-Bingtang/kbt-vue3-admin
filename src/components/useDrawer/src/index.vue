@@ -15,7 +15,7 @@
           </slot>
           <Icon
             v-if="fullscreenIcon"
-            :name="isFullscreen ? 'fullscreen-exit' : 'fullscreen'"
+            :name="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
             @click="toggleFull"
             width="18px"
             height="18px"

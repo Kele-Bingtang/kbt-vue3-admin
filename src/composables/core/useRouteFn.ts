@@ -20,7 +20,7 @@ export const useRouteFn = () => {
   // 扫描 views 下的所有组件
   const modules = import.meta.glob("@/views/**/*.vue");
 
-  // Iframe 组件
+  // IFrame 组件
   const IFrameView = () => import("@/layout/components/IFrameLayout/IFrameView.vue");
   const IFrameBlank = () => import("@/layout/components/IFrameLayout/BlankIFrame.vue");
 

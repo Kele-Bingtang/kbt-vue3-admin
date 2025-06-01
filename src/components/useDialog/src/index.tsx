@@ -144,7 +144,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
                 </span>
                 {dialogProps.fullscreenIcon !== false && (
                   <Icon
-                    name={isFullscreen.value ? "fullscreen-exit" : "fullscreen"}
+                    name={isFullscreen.value ? "core-fullscreen-exit" : "core-fullscreen"}
                     onClick={() => toggleFull()}
                     width="15px"
                     height="15px"
