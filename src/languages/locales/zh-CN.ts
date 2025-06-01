@@ -157,7 +157,7 @@ export default {
       dark: "暗色",
       system: "系统",
     },
-    theme: "主题色",
+    primaryColor: "主题色",
     greyMode: "灰色模式",
     weakMode: "色弱模式",
     epSize: "EP 组件尺寸",

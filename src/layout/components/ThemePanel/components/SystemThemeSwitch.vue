@@ -14,7 +14,7 @@ const ns = useNamespace("system-theme-switch");
 const settingStore = useSettingStore();
 const { t } = useI18n();
 
-const { switchSystemTheme } = useTheme();
+const { changeSystemTheme } = useTheme();
 
 const { systemThemeMode } = storeToRefs(settingStore);
 
@@ -31,7 +31,7 @@ const systemThemeModeList = [
       v-for="item in systemThemeModeList"
       :key="item.theme"
       :class="ns.e('item')"
-      @click="switchSystemTheme(item.theme)"
+      @click="changeSystemTheme(item.theme)"
     >
       <div :class="[ns.e('box'), ns.is('active', item.theme === systemThemeMode)]">
         <img :src="item.img" />

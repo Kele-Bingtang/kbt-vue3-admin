@@ -1,7 +1,7 @@
 export * from "./core/errorHandler";
 export * from "./core/message";
 export * from "./core/scrollTo";
-export * from "./core/themeTool";
+export * from "./core/color";
 export * from "./core/is";
 
 export * from "./component/install";

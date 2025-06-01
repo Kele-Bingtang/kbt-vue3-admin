@@ -7,7 +7,7 @@ defineOptions({ name: "GlobalThemeSwitch" });
 
 const ns = useNamespace("global-theme-select");
 
-const { changePrimary, changeGreyOrWeak } = useTheme();
+const { changePrimaryColor, changeGreyOrWeak } = useTheme();
 
 const settingStore = useSettingStore();
 const layoutStore = useLayoutStore();
@@ -17,7 +17,7 @@ const colorList = [
   SystemConfig.themeConfig.primaryColor,
   "#DAA96E",
   "#0C819F",
-  "#409EFF",
+  "#5D87FF",
   "#27ae60",
   "#ff5c93",
   "#e74c3c",
@@ -36,8 +36,8 @@ const sizeOptions = [
 <template>
   <div :class="ns.b()">
     <div :class="ns.e('item')">
-      <span>{{ $t("_setting.theme") }}</span>
-      <el-color-picker v-model="settingStore.primaryColor" :predefine="colorList" @change="changePrimary" />
+      <span>{{ $t("_setting.primaryColor") }}</span>
+      <el-color-picker v-model="settingStore.primaryColor" :predefine="colorList" @change="changePrimaryColor()" />
     </div>
 
     <div :class="ns.e('item')">

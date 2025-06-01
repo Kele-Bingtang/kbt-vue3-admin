@@ -1,8 +1,6 @@
-import { ElMessage } from "element-plus";
-import { getLightColor, getDarkColor, setCssVar } from "@/utils";
+import { getLightColor, getDarkColor, setCssVar, colorBlend } from "@/utils";
 import { useSettingStore } from "@/stores";
 import { useNamespace } from "@/composables";
-import SystemConfig from "@/config";
 import { SystemThemeEnum } from "@/enums/appEnum";
 
 /**
@@ -42,11 +40,11 @@ export const useTheme = () => {
   /**
    * 修改系统主题
    */
-  const switchSystemTheme = (theme: SystemThemeEnum) => {
+  const changeSystemTheme = (theme = settingStore.systemThemeMode) => {
     // 临时禁用过渡效果
     disableTransitions();
 
-    settingStore.$patch({ systemThemeMode: theme });
+    if (theme !== settingStore.systemThemeMode) settingStore.$patch({ systemThemeMode: theme });
 
     const currentTheme = systemThemeStyle[isDark.value ? Dark : Light];
     if (currentTheme) document.documentElement.setAttribute("class", currentTheme.className);
@@ -72,30 +70,27 @@ export const useTheme = () => {
   /**
    * 修改主题颜色
    */
-  const changePrimary = (value: string | null) => {
-    if (!value) {
-      value = SystemConfig.themeConfig.primaryColor;
-      ElMessage.success(`主题颜色已重置为 ${settingStore.primaryColor}`);
-    }
-    settingStore.$patch({ primaryColor: value });
+  const changePrimaryColor = (color = settingStore.primaryColor) => {
+    if (color !== settingStore.primaryColor) settingStore.$patch({ primaryColor: color });
 
-    // 为了兼容暗黑模式下主题颜色也正常，以下方法计算主题颜色 由深到浅的具体颜色
-    setCssVar(`--${ns.elNamespace}-color-primary`, settingStore.primaryColor);
-    setCssVar(
-      `--${ns.elNamespace}-color-primary-dark-2`,
-      settingStore.isDark
-        ? `${getLightColor(settingStore.primaryColor, 0.2)}`
-        : `${getDarkColor(settingStore.primaryColor, 0.3)}`
-    );
+    // 兼容暗黑模式，自动计算主题颜色由深到浅的其他颜色
+    setCssVar(`--${ns.elNamespace}-color-primary`, color);
 
     // 颜色加深或变浅
     for (let i = 1; i <= 9; i++) {
       setCssVar(
         `--${ns.elNamespace}-color-primary-light-${i}`,
-        settingStore.isDark
-          ? `${getDarkColor(settingStore.primaryColor, i / 10)}`
-          : `${getLightColor(settingStore.primaryColor, i / 10)}`
+        settingStore.isDark ? `${getDarkColor(color, i / 10)}` : `${getLightColor(color, i / 10)}`
       );
+    }
+    for (let i = 1; i <= 9; i++) {
+      setCssVar(`--${ns.elNamespace}-color-primary-dark-${i}`, `${getDarkColor(color, i / 10)}`);
+    }
+
+    // 生成更淡的颜色
+    for (let i = 1; i < 16; i++) {
+      const itemColor = colorBlend(color, "#ffffff", i / 16);
+      setCssVar(`--el-color-primary-lighter-${i}`, itemColor);
     }
   };
 
@@ -113,7 +108,9 @@ export const useTheme = () => {
 
   // 初始化 primaryColor 配置
   const initTheme = () => {
-    switchSystemTheme(settingStore.systemThemeMode);
+    changePrimaryColor();
+    changeSystemTheme();
+
     if (settingStore.isGrey) changeGreyOrWeak(true, "grey");
     if (settingStore.isWeak) changeGreyOrWeak(true, "weak");
 
@@ -127,8 +124,8 @@ export const useTheme = () => {
 
   return {
     initTheme,
-    switchSystemTheme,
-    changePrimary,
+    changePrimaryColor,
     changeGreyOrWeak,
+    changeSystemTheme,
   };
 };

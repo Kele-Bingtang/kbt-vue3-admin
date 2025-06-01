@@ -27,8 +27,8 @@ export const switchThemeWithAnimation = (e: any) => {
  * 切换主题
  */
 const toggleTheme = () => {
-  const { switchSystemTheme } = useTheme();
+  const { changeSystemTheme } = useTheme();
   const { isDark } = useSettingStore();
 
-  switchSystemTheme(isDark ? Light : Dark);
+  changeSystemTheme(isDark ? Light : Dark);
 };

@@ -22,9 +22,9 @@ const settingStore = useSettingStore();
 const { Dark, Light } = SystemThemeEnum;
 
 const onAddDarkChange = () => {
-  const { switchSystemTheme } = useTheme();
+  const { changeSystemTheme } = useTheme();
   const { isDark } = useSettingStore();
 
-  switchSystemTheme(isDark ? Dark : Light);
+  changeSystemTheme(isDark ? Dark : Light);
 };
 </script>

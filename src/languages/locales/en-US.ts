@@ -152,7 +152,7 @@ export default {
     baseConfig: "Base Config",
     globalTheme: "Global Theme",
     titleMode: "Title Mode",
-    theme: "Theme",
+    primaryColor: "Primary Color",
     systemThemeModeSelect: {
       light: "Light",
       dark: "Dark",
