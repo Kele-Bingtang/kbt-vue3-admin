@@ -1,0 +1,99 @@
+<script setup lang="tsx">
+import { useI18n } from "vue-i18n";
+import { ElImage, ElMessage, ElMessageBox } from "element-plus";
+import { User, Bell, Setting, Back, View } from "@element-plus/icons-vue";
+import { useNamespace } from "@/composables";
+import defaultAvatar from "@/assets/images/default.png";
+import { useUserStore } from "@/stores";
+import { mittBus } from "@/utils";
+import { LOGIN_URL, OpenThemePanelKey } from "@/config";
+
+import "./index.scss";
+
+defineOptions({ name: "UserAvatar" });
+
+const ns = useNamespace("user-avatar");
+const userStore = useUserStore();
+const { t } = useI18n();
+const router = useRouter();
+
+const { userInfo } = storeToRefs(userStore);
+
+const menuList = computed(() => [
+  { label: t("_headerBar.profile"), icon: User, click: () => toPage("/profile") },
+  { label: t("_headerBar.messageCenter"), icon: Bell, click: () => toPage("/message-center") },
+  { label: t("_headerBar.setting"), icon: Setting, click: openThemePanel },
+  {
+    label: "Github",
+    click: () => window.open("https://github.com/Kele-Bingtang/kbt-vue3-admin"),
+  },
+]);
+
+const toPage = (path: string) => {
+  router.push(path);
+};
+
+const openThemePanel = () => {
+  mittBus.emit(OpenThemePanelKey);
+};
+
+const logout = async () => {
+  ElMessageBox.confirm(t("_headerBar.logout.confirm"), t("_headerBar.logout.confirmTitle"), {
+    type: "warning",
+  }).then(async () => {
+    // 调用退出登录接口
+    await userStore.logout();
+    // 重定向到登陆页
+    router.push(`${LOGIN_URL}?redirect=${router.currentRoute.value.path}`);
+
+    ElMessage.success(t("_headerBar.logout.success"));
+  });
+};
+
+const Avatar = () => {
+  return (
+    <ElImage src={userInfo.value.avatar} class={ns.e("avatar")}>
+      {{
+        error: () => <ElImage src={defaultAvatar} />,
+      }}
+    </ElImage>
+  );
+};
+</script>
+
+<template>
+  <div :class="ns.b()">
+    <el-popover placement="bottom-end" trigger="hover" :width="240" :hide-after="0" :offset="10" :popper-class="ns.b()">
+      <template #reference>
+        <Avatar />
+      </template>
+
+      <div :class="ns.e('wrapper')">
+        <div :class="[ns.e('head'), 'flx-align-center']">
+          <Avatar />
+          <div :class="ns.e('info')">
+            <span class="name sle">{{ userInfo.username }}</span>
+            <span class="email sle">{{ userInfo.email }}</span>
+          </div>
+        </div>
+
+        <el-divider />
+
+        <ul :class="[ns.e('menu'), 'flx-column']">
+          <li
+            :class="[ns.e('menu-item'), 'flx-align-center']"
+            v-for="item in menuList"
+            :key="item.label"
+            @click="item.click"
+          >
+            <Icon :icon="item.icon || View" class="icon" />
+            <span class="label">{{ item.label }}</span>
+          </li>
+
+          <el-divider />
+          <el-button plain :icon="Back" @click="logout">{{ t("_headerBar.logout.label") }}</el-button>
+        </ul>
+      </div>
+    </el-popover>
+  </div>
+</template>

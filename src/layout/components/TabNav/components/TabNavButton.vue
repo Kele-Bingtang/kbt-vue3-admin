@@ -54,7 +54,7 @@ watch(
 <template>
   <el-dropdown trigger="click" :teleported="false">
     <slot>
-      <el-button text size="small" type="primary" @click="expandDropdown">
+      <el-button text size="small" @click="expandDropdown">
         <span>{{ $t("_tabNav.more") }}</span>
         <Icon class="el-icon--right"><ArrowDown /></Icon>
       </el-button>

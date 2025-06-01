@@ -132,7 +132,12 @@ export default {
     profile: "My Profile",
     setting: "My Setting",
     messageCenter: "My Message",
-    logOut: "Log Out",
+    logout: {
+      label: " Logout",
+      confirmTitle: "Tips",
+      confirm: "Are you sure to logout?",
+      success: " Logout success!",
+    },
   },
   _setting: {
     layoutMode: "Layout Mode",
@@ -195,6 +200,7 @@ export default {
       slideBottom: "Slide Bottom",
     },
     radius: "Radius",
+    watermark: "Watermark",
     titleModeProjectPage: "Project Title + Page Title",
     titleModeUsernamePage: "User Name + Page Title",
     titleModeProject: "Project Title",

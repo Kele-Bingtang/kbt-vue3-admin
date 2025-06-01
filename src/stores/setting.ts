@@ -24,7 +24,6 @@ export const useSettingStore = defineStore(
     const pageTransition = ref(themeConfig.pageTransition || PageTransitionEnum.SlideLeft);
     const headerStyle = ref(themeConfig.headerStyle || HeaderStyleEnum.Page);
     const systemThemeMode = ref(themeConfig.systemThemeMode || SystemThemeEnum.System);
-    const showSetting = ref(themeConfig.showSetting);
     const showTabNav = ref(themeConfig.showTabNav);
     const recordTabNav = ref(themeConfig.recordTabNav);
     const showLayoutLogo = ref(themeConfig.showLayoutLogo);
@@ -41,6 +40,7 @@ export const useSettingStore = defineStore(
     const menuWidth = ref(themeConfig.menuWidth);
     const headerHeight = ref(themeConfig.headerHeight);
     const radius = ref(themeConfig.radius);
+    const watermark = ref(themeConfig.watermark);
 
     const isDark = computed(() => {
       if (systemThemeMode.value === SystemThemeEnum.System) {
@@ -74,7 +74,6 @@ export const useSettingStore = defineStore(
       headerStyle,
       systemThemeMode,
       pageTransition,
-      showSetting,
       showTabNav,
       recordTabNav,
       showLayoutLogo,
@@ -92,6 +91,7 @@ export const useSettingStore = defineStore(
       menuWidth,
       headerHeight,
       radius,
+      watermark,
 
       closeSideMenu,
       toggleSideMenu,

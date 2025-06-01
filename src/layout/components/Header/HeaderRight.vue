@@ -7,9 +7,8 @@ import SystemConfig, { mobileMaxWidthMedia } from "@/config";
 import Fullscreen from "./components/Fullscreen.vue";
 import LanguageSelect from "./components/LanguageSelect.vue";
 import Message from "./components/Message.vue";
-import User from "./components/User.vue";
+import UserAvatar from "./components/user-avatar/index.vue";
 import ErrorLog from "./components/ErrorLog.vue";
-// import MenuSearch from "./components/MenuSearch.vue";
 import GlobalSearch from "./components/global-search/index.vue";
 import GlobalSearchInput from "./components/global-search/input.vue";
 import LightDarkSwitch from "./components/light-dark-switch/index.vue";
@@ -35,7 +34,6 @@ const isMobile = useMediaQuery(mobileMaxWidthMedia);
 
     <div :class="[ns.e('btn'), 'flx-align-center']" :style="{ '--icon-size': ns.cssVar('layout-header-icon-size') }">
       <GlobalSearchInput id="menuSearch" />
-      <!-- <MenuSearch id="menuSearch" /> -->
       <Fullscreen id="fullscreen" v-if="!isMobile" />
       <Message id="message" />
       <LanguageSelect id="languageSelect" />
@@ -45,7 +43,7 @@ const isMobile = useMediaQuery(mobileMaxWidthMedia);
         v-if="SystemConfig.layoutConfig.errorLog.showInHeader && errorCount > 0 && !isMobile"
       />
       <LightDarkSwitch id="lightDarkSwitch" />
-      <User id="user" />
+      <UserAvatar id="user" />
     </div>
   </div>
 </template>

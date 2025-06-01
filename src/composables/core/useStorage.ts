@@ -1,3 +1,5 @@
+import SystemConfig from "@/config";
+
 // 获取传入的值的类型
 const getValueType = (value: any) => {
   const type = Object.prototype.toString.call(value);
@@ -5,8 +7,23 @@ const getValueType = (value: any) => {
 };
 
 export const useStorage = <T = any>(type: "sessionStorage" | "localStorage" = "localStorage") => {
+  const { version } = __APP_INFO__.pkg;
+  const cacheKeyPrefix = SystemConfig.keyConfig.cacheKeyPrefix;
+
+  /**
+   * 获取规范化的 key 值
+   */
+  const normalizeKey = (key: string) => {
+    if (key.includes("userStore")) return `${cacheKeyPrefix}:userStore`;
+
+    const keySlot = "{key}";
+    return `${cacheKeyPrefix}:v${version}:${keySlot}`.replace(keySlot, key);
+  };
+
+  const defaultExcludes = [""];
+
   const getStorage = (key: string): T | undefined => {
-    const value = window[type].getItem(key);
+    const value = window[type].getItem(normalizeKey(key));
     if (value) {
       const { value: val } = JSON.parse(value);
       return val;
@@ -15,27 +32,28 @@ export const useStorage = <T = any>(type: "sessionStorage" | "localStorage" = "l
 
   const setStorage = (key: string, value: T) => {
     const valueType = getValueType(value);
-    window[type].setItem(key, JSON.stringify({ _type: valueType, value }));
+    window[type].setItem(normalizeKey(key), JSON.stringify({ _type: valueType, value }));
   };
 
   const removeStorage = (key: string) => {
-    window[type].removeItem(key);
+    window[type].removeItem(normalizeKey(key));
   };
 
   const removeStorages = (key: string[]) => {
-    key.forEach(key => window[type].removeItem(key));
+    key.forEach(key => window[type].removeItem(normalizeKey(key)));
   };
 
   const clear = (excludes?: string[]) => {
     // 获取排除项
     const keys = Object.keys(window[type]);
-    const defaultExcludes = ["dynamicRouter", "serverDynamicRouter"];
-    const excludesArr = excludes ? [...excludes, ...defaultExcludes] : defaultExcludes;
-    const excludesKeys = excludesArr ? keys.filter(key => !excludesArr.includes(key)) : keys;
+    const excludesArr = (excludes ? [...excludes, ...defaultExcludes] : defaultExcludes).map(key => normalizeKey(key));
+    console.log(excludesArr);
+    const includesKeys = excludesArr.length
+      ? keys.filter(key => !excludesArr.includes(key) && key.startsWith(cacheKeyPrefix))
+      : keys;
+
     // 排除项不清除
-    excludesKeys.forEach(key => {
-      window[type].removeItem(key);
-    });
+    includesKeys.forEach(key => window[type].removeItem(key));
   };
 
   return {

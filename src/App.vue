@@ -7,22 +7,21 @@
 </template>
 
 <script setup lang="ts" name="App">
-import { reactive, computed, provide, onMounted } from "vue";
+import { reactive, computed, provide } from "vue";
 import { ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
 import { useLayoutStore } from "@/stores/layout";
 import SystemConfig, { ConfigGlobalKey, WebSocketKey } from "@/config";
-import { useSettingStore, useUserStore, useWebSocketStore } from "@/stores";
+import { useUserStore, useWebSocketStore } from "@/stores";
 import { isFunction } from "@/utils";
-import { useNamespace, useCache, useBrowserTitle, useWatchCssVar } from "@/composables";
+import { useNamespace, useBrowserTitle, useWatchCssVar } from "@/composables";
 import { useTheme } from "@/composables/core/useTheme";
 import { useIFrame } from "@/layout/components/IFrameLayout/useIFrame";
 
 const ns = useNamespace();
 
 const layoutStore = useLayoutStore();
-const settingStore = useSettingStore();
 const userStore = useUserStore();
 
 const { layoutSize, language } = storeToRefs(layoutStore);
@@ -59,29 +58,6 @@ if (import.meta.env.VITE_WEBSOCKET === "true") {
 
   provide(WebSocketKey, useWebSocket);
 }
-
-/**
- * 根据版本号进行缓存
- */
-const versionCache = () => {
-  const { version } = __APP_INFO__.pkg;
-  const cacheVersion = useCache().getCacheVersion();
-  if (version && cacheVersion !== version) {
-    const { layoutSize, language } = SystemConfig.layoutConfig;
-    settingStore.$patch({ ...(SystemConfig as any), menuTheme: SystemConfig.themeConfig.menuTheme });
-    layoutStore.$patch({
-      layoutSize,
-      language,
-    });
-    layoutStore.removeAllTabs();
-    useCache().removeProjectsCache();
-    useCache().setCacheVersion(version);
-  }
-};
-
-onMounted(() => {
-  versionCache();
-});
 
 if (isFunction(log.success)) log.success(__APP_INFO__.pkg.version, "欢迎使用 Teek Design Pro 系统");
 </script>

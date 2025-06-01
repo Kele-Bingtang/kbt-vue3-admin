@@ -29,7 +29,6 @@ export interface ThemeConfig {
   pageTransition: PageTransitionEnum; // 进入页面过渡动画
   headerStyle: HeaderStyleEnum; // 顶部样式
   systemThemeMode: SystemThemeEnum; // 系统主题
-  showSetting: boolean; // 是否显示设置
   showBreadcrumb: boolean; // 是否使用 Breadcrumb
   showTabNav: boolean; // 是否使用 tagsNav
   showLayoutLogo: boolean; // 是否显示布局 Logo
@@ -48,6 +47,7 @@ export interface ThemeConfig {
   menuWidth: number; // 菜单宽度
   headerHeight: number; // 顶部高度
   radius: number; // 圆角
+  watermark: boolean; // 是否开启水印
 }
 
 export interface LayoutConfig {
@@ -68,7 +68,6 @@ export interface LayoutConfig {
   layoutSize: LayoutSizeType;
   language: LanguageType;
   watchFrame: boolean; // 是否监听 IFrame 传来的通信，用于 Portal 门户系统，来监听门户所有 IFrame 嵌入系统的通信，比如 A 系统想打开 B 系统，则告诉 Portal 门户帮忙打开
-  cacheKeyPrefix: string; // 缓存 key 前缀
 }
 
 export interface RouterConfig {
@@ -86,6 +85,7 @@ export interface RouterConfig {
 }
 
 export interface KeyConfig {
+  cacheKeyPrefix: string; // 缓存 key 前缀
   tabNavCacheKey: string; // 缓存标签页的 key
   versionCacheKey: string; // 缓存版本号的 key
   tabExcludesUrlKey: string[]; // 当 URL 携带参数时，标签页会出现多个重复且名字一样的 tab，该配置可指定忽略哪些参数生成新的 tab，如果为 * 则忽略所有参数

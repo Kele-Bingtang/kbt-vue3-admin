@@ -144,6 +144,11 @@ const customRadiusOptions = [
       <span>{{ $t("_tabNav.maximize") }}</span>
       <el-switch v-model="settingStore.maximize" />
     </div>
+
+    <div :class="ns.e('item')">
+      <span>{{ $t("_setting.watermark") }}</span>
+      <el-switch v-model="settingStore.watermark" />
+    </div>
   </div>
 </template>
 

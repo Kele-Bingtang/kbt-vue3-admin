@@ -8,6 +8,7 @@ export * from "./core/useNamespace";
 export * from "./core/useStorage";
 export * from "./core/useCache";
 export * from "./core/useWatchCssVar";
+export * from "./core/useUpgrade";
 
 export * from "./useBoolean";
 export * from "./useEcharts";

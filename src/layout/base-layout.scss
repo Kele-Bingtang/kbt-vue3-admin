@@ -118,7 +118,6 @@
 
   /* 侧边栏样式 */
   @include joins(layout-aside) {
-    z-index: 1000;
     height: 100%;
     overflow-x: hidden;
     background: cssVar(layout-aside-bg-color);

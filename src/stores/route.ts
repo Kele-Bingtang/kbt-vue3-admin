@@ -6,7 +6,6 @@ import { HOME_NAME } from "@/config";
 
 export const useRouteStore = defineStore("routeStore", () => {
   const loadedRouteList = ref<RouterConfig[]>([]);
-  const flatRoleRouteList = ref<RouterConfig[]>([]);
   const flatRouteList = ref<RouterConfig[]>([]);
 
   const { processRouteMeta, findRouteByName, filterFlatRoutes, ascending } = useRouteFn();
@@ -17,7 +16,6 @@ export const useRouteStore = defineStore("routeStore", () => {
     loadedRouteList.value = ascending(
       processRouteMeta(staticRoutes).concat(routers).concat(errorRouter).concat(notFoundRouter)
     );
-    flatRoleRouteList.value = filterFlatRoutes(routers);
     flatRouteList.value = filterFlatRoutes(
       processRouteMeta(staticRoutes).concat(routers).concat(errorRouter).concat(notFoundRouter) as RouterConfig[]
     );

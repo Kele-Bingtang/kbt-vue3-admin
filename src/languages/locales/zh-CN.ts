@@ -132,7 +132,12 @@ export default {
     profile: "我的主页",
     messageCenter: "我的消息",
     setting: "我的设置",
-    logOut: "退出登录",
+    logout: {
+      label: " 退出登录",
+      confirmTitle: "温馨提示",
+      confirm: "确定退出登录吗？",
+      success: " 退出成功！",
+    },
   },
   _setting: {
     layoutMode: "布局模式",
@@ -195,6 +200,7 @@ export default {
       slideBottom: "底部滑入",
     },
     radius: "圆角大小",
+    watermark: "全局水印",
     titleModeProjectPage: "项目 Title + 页面 Title",
     titleModeUsernamePage: "用户名 + 页面 Title",
     titleModeProject: "项目 Title",

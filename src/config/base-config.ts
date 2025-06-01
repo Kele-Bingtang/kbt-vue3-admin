@@ -22,7 +22,6 @@ const themeConfig: ThemeConfig = {
   pageTransition: PageTransitionEnum.SlideLeft,
   headerStyle: HeaderStyleEnum.Page,
   systemThemeMode: SystemThemeEnum.System,
-  showSetting: true,
   showBreadcrumb: true,
   showTabNav: true,
   showLayoutLogo: true,
@@ -40,6 +39,7 @@ const themeConfig: ThemeConfig = {
   menuWidth: 240,
   headerHeight: 55,
   radius: 0.75,
+  watermark: false,
 };
 
 const layoutConfig: LayoutConfig = {
@@ -49,7 +49,6 @@ const layoutConfig: LayoutConfig = {
   layoutSize: "default",
   language: "zh-CN",
   watchFrame: false,
-  cacheKeyPrefix: "teek",
 };
 
 const routerConfig: RouterConfig = {
@@ -61,10 +60,13 @@ const routerConfig: RouterConfig = {
   routeUseTooltip: false,
 };
 
+const cacheKeyPrefix = "teek";
+
 const keyConfig: KeyConfig = {
-  tabNavCacheKey: `${layoutConfig.cacheKeyPrefix}:tabNav`,
-  cacheDynamicRoutesKey: `${layoutConfig.cacheKeyPrefix}:dynamic:routes`,
-  versionCacheKey: `${layoutConfig.cacheKeyPrefix}:version`,
+  cacheKeyPrefix,
+  tabNavCacheKey: "tabNav",
+  cacheDynamicRoutesKey: "dynamicRoutes",
+  versionCacheKey: "version",
   tabExcludesUrlKey: ["layoutMode"],
 };
 
