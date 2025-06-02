@@ -28,7 +28,7 @@ import { Document } from "@element-plus/icons-vue";
 import { useClipboard as vueuseClipboard } from "@vueuse/core";
 
 const { toClipboard } = useClipboard();
-const content = ref("https://github.com/Kele-Bingtang/kbt-vue3-admin");
+const content = ref("https://github.com/Kele-Bingtang/teek-design-pro");
 
 const doClipboard = () => {
   toClipboard(content.value) // 复制该内容前，你可以添加以前额外的信息，如个人版权声明
@@ -55,6 +55,6 @@ const clipboardFailed = () => {
   });
 };
 
-const source = ref("https://github.com/Kele-Bingtang/kbt-vue3-admin");
+const source = ref("https://github.com/Kele-Bingtang/teek-design-pro");
 const { text, copy, copied, isSupported } = vueuseClipboard({ source });
 </script>

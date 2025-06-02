@@ -20,14 +20,14 @@ Admin 项目用到的 key 暂时只有缓存功能，如个性化配置、布局
 
 ## 效果预览
 
-[kbt-vue3-admin](https://vue3-admin.youngkbt.cn/)
+[teek-design-pro](https://vue3-admin.youngkbt.cn/)
 
 ## 使用流程
 
 Clone code：拉取代码
 
 ```sh
-git clone https://github.com/Kele-Bingtang/kbt-vue3-admin
+git clone https://github.com/Kele-Bingtang/teek-design-pro
 ```
 
 Project setup：安装依赖
@@ -77,7 +77,7 @@ pnpm czp
 ## 文件资源目录 📚
 
 ```text
-Kbt-Vue3-Admin
+teek-design-pro
 ├─ .husky                 # git commit 钩子
 ├─ .vscode                # VSCode 推荐配置
 ├─ build                  # Vite 构建配置
@@ -529,7 +529,7 @@ router.replace("/redirect" + route.fullPath);
 
 ```typescript
 {
-	path: "https://github.com/Kele-Bingtang/kbt-vue3-admin",
+	path: "https://github.com/Kele-Bingtang/teek-design-pro",
 	name: "Github",
 	meta: {
 		title: "Github",

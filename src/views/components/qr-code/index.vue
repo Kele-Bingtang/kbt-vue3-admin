@@ -90,7 +90,7 @@ import { ref } from "vue";
 import { message } from "@/utils";
 import { QrCode } from "@/components";
 
-const qrCodeText = "kbt-vue3-admin";
+const qrCodeText = "teek-design-pro";
 
 const asyncTitle = ref("");
 setTimeout(() => {

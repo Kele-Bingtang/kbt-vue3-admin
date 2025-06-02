@@ -32,7 +32,7 @@ const menuList = computed(() => [
   { label: t("_headerBar.setting"), icon: Setting, click: openThemePanel },
   {
     label: "Github",
-    click: () => window.open("https://github.com/Kele-Bingtang/kbt-vue3-admin"),
+    click: () => window.open("https://github.com/Kele-Bingtang/teek-design-pro"),
   },
 ]);
 

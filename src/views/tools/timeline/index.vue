@@ -31,7 +31,7 @@
             :type="activity.type"
           >
             <div class="message">
-              kbt-vue3-admin 是基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 编写的一套后台管理系统
+              teek-design-pro 是基于 Vue3.2、TypeScript、Vite4、Pinia、Element-Plus 编写的一套后台管理系统
             </div>
           </el-timeline-item>
         </el-timeline>
