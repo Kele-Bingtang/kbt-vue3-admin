@@ -8,9 +8,6 @@ import { useCache } from "@/composables";
 import SystemConfig from "@/config";
 import { useSettingStore } from "./setting";
 
-export type LayoutSizeType = "default" | "small" | "large";
-export type LanguageType = "zh-CN" | "en-US";
-
 // LayoutState
 export interface TabProp {
   path: string; // 路由的 path
@@ -26,7 +23,7 @@ export const useLayoutStore = defineStore(
   () => {
     const tabNavList = ref<TabProp[]>(useCache().getCacheTabNavList() || []);
     const keepAliveName = ref<string[]>([]);
-    const layoutSize = ref<LayoutSizeType>(SystemConfig.layoutConfig.layoutSize);
+    const layoutSize = ref(SystemConfig.layoutConfig.layoutSize);
     const language = ref(SystemConfig.layoutConfig.language);
     const iframeList = ref<IFrame[]>([]);
 

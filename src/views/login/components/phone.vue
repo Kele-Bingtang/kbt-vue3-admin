@@ -1,40 +1,3 @@
-<template>
-  <el-form ref="ruleFormRef" :model="ruleForm" :rules="phoneRules" size="large">
-    <el-form-item prop="phone">
-      <el-input clearable v-model="ruleForm.phone" placeholder="手机号码" :prefix-icon="Phone" />
-    </el-form-item>
-    <el-form-item prop="verifyCode">
-      <div style="display: flex; justify-content: space-between; width: 100%">
-        <el-input
-          clearable
-          v-model="ruleForm.verifyCode"
-          placeholder="请输入验证码"
-          :prefix-icon="WarnTriangleFilled"
-        />
-        <el-button :disabled="isDisabled" @click="useVerifyCode().start(ruleFormRef, 'phone')">
-          {{ text.length > 0 ? text + " 秒后重新获取" : "获取验证码" }}
-        </el-button>
-      </div>
-    </el-form-item>
-
-    <el-form-item>
-      <div :class="`${prefixClass}__btn`">
-        <el-button
-          :icon="UserFilled"
-          round
-          @click="onLogin(ruleFormRef)"
-          size="large"
-          type="primary"
-          :loading="loading"
-        >
-          登录
-        </el-button>
-        <el-button :icon="CircleClose" round @click="onBack" size="large">返回</el-button>
-      </div>
-    </el-form-item>
-  </el-form>
-</template>
-
 <script setup lang="ts" name="Phone">
 import { ElMessage, type FormInstance } from "element-plus";
 import { useVerifyCode } from "../verifyCode";
@@ -42,8 +5,7 @@ import { phoneRules } from "../rules";
 import { Phone, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 
-const ns = useNamespace("login");
-const prefixClass = ns.b();
+const ns = useNamespace("login-form");
 
 const loading = ref(false);
 const ruleForm = reactive({
@@ -52,12 +14,12 @@ const ruleForm = reactive({
 });
 const ruleFormRef = useTemplateRef<FormInstance>("ruleFormRef");
 const { isDisabled, text } = useVerifyCode();
-const switchFormMode = inject("switchFormMode") as (mode: string) => {};
 
-const onLogin = async (formEl: FormInstance | null) => {
+const login = async () => {
   loading.value = true;
-  if (!formEl) return;
-  await formEl.validate((valid, fields) => {
+  if (!ruleFormRef.value) return;
+
+  await ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       // 模拟登录请求，需根据实际开发进行修改
       setTimeout(() => {
@@ -71,12 +33,46 @@ const onLogin = async (formEl: FormInstance | null) => {
   });
 };
 
+const switchLoginMode = inject("switchLoginMode") as (mode: string) => void;
+
 const onBack = () => {
   useVerifyCode().end();
-  switchFormMode("login");
+  switchLoginMode("login");
 };
 </script>
 
+<template>
+  <el-form ref="ruleFormRef" :model="ruleForm" :rules="phoneRules" size="large" :class="ns.b()">
+    <el-form-item prop="phone">
+      <el-input clearable v-model="ruleForm.phone" placeholder="手机号码" :prefix-icon="Phone" />
+    </el-form-item>
+
+    <el-form-item prop="verifyCode">
+      <div style="display: flex; justify-content: space-between; width: 100%">
+        <el-input
+          clearable
+          v-model="ruleForm.verifyCode"
+          placeholder="请输入验证码"
+          :prefix-icon="WarnTriangleFilled"
+          @keydown.enter="login"
+        />
+        <el-button :disabled="isDisabled" @click="useVerifyCode().start(ruleFormRef, 'phone')">
+          {{ text.length > 0 ? text + " 秒后重新获取" : "获取验证码" }}
+        </el-button>
+      </div>
+    </el-form-item>
+
+    <el-form-item>
+      <div :class="[ns.e('btn'), 'flx-justify-between']">
+        <el-button :icon="UserFilled" round size="large" type="primary" :loading="loading" @click="login">
+          登录
+        </el-button>
+        <el-button :icon="CircleClose" round size="large" @click="onBack">返回</el-button>
+      </div>
+    </el-form-item>
+  </el-form>
+</template>
+
 <style lang="scss" scoped>
-@use "../index";
+@use "../loginForm";
 </style>

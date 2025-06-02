@@ -1,15 +1,17 @@
 <template>
-  <div :class="prefixClass">
-    <SwitchDark class="dark" />
-    <div :class="`${prefixClass}__box`">
-      <div :class="`${prefixClass}__box--left`">
+  <div :class="ns.b()">
+    <SwitchDark :class="ns.e('dark')" />
+    <div :class="ns.e('wrapper')">
+      <div :class="ns.e('left')">
         <img src="@/assets/images/login/login_left.png" alt="login" />
       </div>
-      <div :class="`${prefixClass}__box__form`">
-        <div :class="`${prefixClass}__box__form--logo`">
-          <img :class="`${prefixClass}__box__form--logo__img`" src="@/assets/images/logo.png" alt="" />
-          <h2 :class="`${prefixClass}__box__form--logo__text`">{{ SystemConfig.systemInfo.name }}</h2>
+
+      <div :class="ns.e('right')">
+        <div :class="[ns.e('right__header'), 'flx-center']">
+          <img src="@/assets/images/logo.png" alt="" />
+          <h2 class="title">{{ SystemConfig.systemInfo.name }}</h2>
         </div>
+
         <component :is="formComponents[formMode]" />
       </div>
     </div>
@@ -27,7 +29,6 @@ import Forget from "./components/forget.vue";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("login");
-const prefixClass = ns.b();
 
 const formComponents: Record<string, Component> = {
   login: LoginForm,
@@ -39,11 +40,11 @@ const formComponents: Record<string, Component> = {
 
 const formMode = ref("login");
 
-const switchFormMode = (mode: string) => {
+const switchLoginMode = (mode: string) => {
   formMode.value = mode;
 };
 
-provide("switchFormMode", switchFormMode);
+provide("switchLoginMode", switchLoginMode);
 </script>
 
 <style lang="scss" scoped>

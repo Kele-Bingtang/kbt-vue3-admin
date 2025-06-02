@@ -1,35 +1,39 @@
+@use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/namespace" as *;
+@use "@/styles/mixins/function" as *;
+@use "@/styles/variables" as *;
 
-$prefix-class: #{$admin-namespace}-login;
-
-.#{$prefix-class} {
+@include b(login) {
   position: relative;
-  min-width: 520px;
-  height: 100%;
-  min-height: 520px;
+  height: 100vh;
+  min-height: 550px;
+  padding: 30px;
   background-color: #eeeeee;
   background-image: url("@/assets/images/login/login_bg.svg");
-  background-size: 100% 100%;
   background-size: cover;
 
-  .dark {
+  @include e(dark) {
     position: absolute;
     top: 4.5%;
     right: 3.2%;
   }
 
-  &__box {
-    box-sizing: border-box;
+  @include e(wrapper) {
     display: flex;
     align-items: center;
     justify-content: space-around;
-    width: 99%;
-    height: 98%;
+    width: 100%;
+    height: 100%;
     padding: 0 50px;
-    background-color: hsl(0deg 0% 100% / 80%);
+    background-color: #ffffffcc;
     border-radius: 10px;
 
-    &--left {
+    @media (max-width: $device-ipad) {
+      padding: 0;
+      background-color: transparent;
+    }
+
+    @include e(left) {
       width: 900px;
 
       img {
@@ -38,78 +42,42 @@ $prefix-class: #{$admin-namespace}-login;
       }
     }
 
-    &__form {
-      width: 450px;
+    @include e(right) {
+      min-width: 450px;
+      max-height: 100%;
       padding: 50px 40px 45px;
-      background-color: #ffffff;
+      overflow: auto;
+      background-color: cssVar("main-bg-color");
       border-radius: 10px;
       box-shadow: 2px 3px 7px rgb(0 0 0 / 20%);
 
-      &--logo {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        margin-bottom: 45px;
+      @media (max-width: $device-phone) {
+        min-width: 100%;
+      }
 
-        &__img {
+      @include e(right__header) {
+        flex-wrap: wrap;
+        gap: 15px;
+        margin-bottom: 30px;
+
+        img {
           width: 60px;
-          height: 52px;
         }
 
-        &__text {
-          padding: 0 0 0 25px;
+        .title {
           margin: 0;
           font-size: 42px;
-          font-weight: bold;
-          color: #34495e;
-          white-space: nowrap;
-        }
-      }
+          font-weight: 700;
+          line-height: 1;
+          color: cssVar(text-gray-700);
+          white-space: wrap;
 
-      .#{$el-namespace}-form-item {
-        margin-bottom: 20px;
-
-        .#{$prefix-class}__item {
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-          width: 100%;
-        }
-
-        .#{$prefix-class}__third--item {
-          display: flex;
-          align-items: center;
-          justify-content: space-evenly;
-          width: 100%;
-          cursor: pointer;
-
-          .svg-icon:hover {
-            color: var(--#{$el-namespace}-color-primary);
+          @media (max-width: 640px) {
+            font-size: 24px;
+            text-align: center;
           }
         }
-
-        :deep(.#{$el-namespace}-input-group__append) {
-          padding: 0;
-        }
       }
     }
-  }
-
-  /* 多个登录表单需要，所以放到外面 */
-  &__btn {
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    white-space: nowrap;
-
-    .#{$el-namespace}-button {
-      width: 185px;
-    }
-  }
-}
-
-@media screen and (max-width: 1100px) {
-  .login-left {
-    display: none;
   }
 }

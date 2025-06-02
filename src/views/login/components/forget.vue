@@ -1,44 +1,3 @@
-<template>
-  <el-form ref="ruleFormRef" :model="ruleForm" :rules="updateRules" size="large">
-    <el-form-item prop="phone">
-      <el-input clearable v-model="ruleForm.phone" placeholder="手机号码" :prefix-icon="Phone" />
-    </el-form-item>
-
-    <el-form-item prop="verifyCode">
-      <div style="display: flex; justify-content: space-between; width: 100%">
-        <el-input clearable v-model="ruleForm.verifyCode" placeholder="短信验证码" :prefix-icon="WarnTriangleFilled" />
-        <el-button :disabled="isDisabled" class="ml-2" @click="useVerifyCode().start(ruleFormRef, 'phone')">
-          {{ text.length > 0 ? text + " 秒后重新获取" : "获取验证码" }}
-        </el-button>
-      </div>
-    </el-form-item>
-
-    <el-form-item prop="password">
-      <el-input clearable show-password v-model="ruleForm.password" placeholder="新密码" :prefix-icon="Lock" />
-    </el-form-item>
-
-    <el-form-item :rules="repeatPasswordRule" prop="repeatPassword">
-      <el-input clearable show-password v-model="ruleForm.repeatPassword" placeholder="确认密码" :prefix-icon="Lock" />
-    </el-form-item>
-
-    <el-form-item>
-      <div :class="`${prefixClass}__btn`">
-        <el-button
-          icon="UserFilled"
-          round
-          @click="onUpdate(ruleFormRef)"
-          size="large"
-          type="primary"
-          :loading="loading"
-        >
-          登录
-        </el-button>
-        <el-button icon="CircleClose" round @click="onBack" size="large">返回</el-button>
-      </div>
-    </el-form-item>
-  </el-form>
-</template>
-
 <script setup lang="ts" name="Forget">
 import { ElMessage, type FormInstance } from "element-plus";
 import { useVerifyCode } from "../verifyCode";
@@ -46,8 +5,8 @@ import { updateRules } from "../rules";
 import { Phone, Lock, WarnTriangleFilled } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 
-const ns = useNamespace("login");
-const prefixClass = ns.b();
+const ns = useNamespace("login-form");
+const { isDisabled, text } = useVerifyCode();
 
 const loading = ref(false);
 const ruleForm = reactive({
@@ -56,12 +15,12 @@ const ruleForm = reactive({
   password: "",
   repeatPassword: "",
 });
+
 const ruleFormRef = useTemplateRef<FormInstance>("ruleFormRef");
-const { isDisabled, text } = useVerifyCode();
-const switchFormMode = inject("switchFormMode") as (mode: string) => {};
+
 const repeatPasswordRule = [
   {
-    validator: (rule: any, value: string, callback: (error?: string | Error | undefined) => void) => {
+    validator: (_: any, value: string, callback: (error?: string | Error | undefined) => void) => {
       if (value === "") {
         callback(new Error("请输入确认密码"));
       } else if (ruleForm.password !== value) {
@@ -74,10 +33,12 @@ const repeatPasswordRule = [
   },
 ];
 
-const onUpdate = async (formEl: FormInstance | null) => {
+const login = async () => {
   loading.value = true;
-  if (!formEl) return;
-  await formEl.validate((valid, fields) => {
+
+  if (!ruleFormRef.value) return;
+
+  await ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       // 模拟请求，需根据实际开发进行修改
       setTimeout(() => {
@@ -91,12 +52,68 @@ const onUpdate = async (formEl: FormInstance | null) => {
   });
 };
 
-function onBack() {
+const switchLoginMode = inject("switchLoginMode") as (mode: string) => void;
+
+const onBack = () => {
   useVerifyCode().end();
-  switchFormMode("login");
-}
+  switchLoginMode("login");
+};
 </script>
 
+<template>
+  <el-form ref="ruleFormRef" :model="ruleForm" :rules="updateRules" size="large" :class="ns.b()">
+    <el-form-item prop="phone">
+      <el-input clearable v-model="ruleForm.phone" placeholder="手机号码" :prefix-icon="Phone" />
+    </el-form-item>
+
+    <el-form-item prop="verifyCode">
+      <div style="display: flex; justify-content: space-between; width: 100%">
+        <el-input
+          clearable
+          v-model="ruleForm.verifyCode"
+          placeholder="短信验证码"
+          :prefix-icon="WarnTriangleFilled"
+          @keydown.enter="login"
+        />
+        <el-button :disabled="isDisabled" class="ml-2" @click="useVerifyCode().start(ruleFormRef, 'phone')">
+          {{ text.length > 0 ? text + " 秒后重新获取" : "获取验证码" }}
+        </el-button>
+      </div>
+    </el-form-item>
+
+    <el-form-item prop="password">
+      <el-input
+        clearable
+        show-password
+        v-model="ruleForm.password"
+        placeholder="新密码"
+        :prefix-icon="Lock"
+        @keydown.enter="login"
+      />
+    </el-form-item>
+
+    <el-form-item :rules="repeatPasswordRule" prop="repeatPassword">
+      <el-input
+        clearable
+        show-password
+        v-model="ruleForm.repeatPassword"
+        placeholder="确认密码"
+        :prefix-icon="Lock"
+        @keydown.enter="login"
+      />
+    </el-form-item>
+
+    <el-form-item>
+      <div :class="[ns.e('btn'), 'flx-justify-between']">
+        <el-button icon="UserFilled" round size="large" type="primary" :loading="loading" @click="login">
+          登录
+        </el-button>
+        <el-button icon="CircleClose" round size="large" @click="onBack">返回</el-button>
+      </div>
+    </el-form-item>
+  </el-form>
+</template>
+
 <style lang="scss" scoped>
-@use "../index";
+@use "../loginForm";
 </style>

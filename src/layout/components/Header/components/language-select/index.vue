@@ -1,10 +1,10 @@
 <script setup lang="ts" name="LanguageSelect">
-import type { LanguageType } from "@/stores";
 import { storeToRefs } from "pinia";
 import { useI18n } from "vue-i18n";
 import { ElDropdown, ElDropdownMenu, ElDropdownItem, ElMessage } from "element-plus";
 import { useBrowserTitle } from "@/composables";
 import { useLayoutStore } from "@/stores";
+import type { LanguageEnum } from "@/enums/appEnum";
 
 const localList = [
   { label: "中文简体", value: "zh-CN" },
@@ -17,7 +17,7 @@ const { getBrowserTitle } = useBrowserTitle();
 
 const { language } = storeToRefs(layoutStore);
 
-const handleSelectLanguage = (lang: LanguageType) => {
+const handleSelectLanguage = (lang: LanguageEnum) => {
   i18n.locale.value = lang;
   layoutStore.$patch({ language: lang });
   document.documentElement.lang = lang;

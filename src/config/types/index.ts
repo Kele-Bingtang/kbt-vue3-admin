@@ -1,13 +1,14 @@
 import type {
   HeaderStyleEnum,
+  LanguageEnum,
   LayoutModeEnum,
+  LayoutSizeEnum,
   MenuThemeEnum,
   PageTransitionEnum,
   SystemThemeEnum,
   TabNavModeEnum,
   TitleModeEnum,
 } from "@/enums/appEnum";
-import type { LayoutSizeType, LanguageType } from "@/stores";
 
 export interface SystemConfig {
   systemInfo: SystemInfo;
@@ -65,8 +66,8 @@ export interface LayoutConfig {
    */
   moreRouteChildrenHideInMenuThenOnlyOne: boolean;
   tooltipEffect: "light" | "dark"; // 布局的 el-toolTip 风格
-  layoutSize: LayoutSizeType;
-  language: LanguageType;
+  layoutSize: LayoutSizeEnum;
+  language: LanguageEnum;
   watchFrame: boolean; // 是否监听 IFrame 传来的通信，用于 Portal 门户系统，来监听门户所有 IFrame 嵌入系统的通信，比如 A 系统想打开 B 系统，则告诉 Portal 门户帮忙打开
 }
 

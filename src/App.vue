@@ -15,6 +15,7 @@ import { useLayoutStore } from "@/stores/layout";
 import SystemConfig, { ConfigGlobalKey, WebSocketKey } from "@/config";
 import { useUserStore, useWebSocketStore } from "@/stores";
 import { isFunction } from "@/utils";
+import { LanguageEnum } from "@/enums/appEnum";
 import { useNamespace, useBrowserTitle, useWatchCssVar } from "@/composables";
 import { useTheme } from "@/composables/core/useTheme";
 import { useIFrame } from "@/layout/components/iframe/use-iframe";
@@ -43,20 +44,20 @@ const config = reactive({ autoInsertSpace: false });
 
 // element 语言配置
 const i18nLocale = computed(() => {
-  if (language.value === "zh-CN") return zhCn;
-  if (language.value === "en-US") return en;
+  if (language.value === LanguageEnum.ZhCn) return zhCn;
+  if (language.value === LanguageEnum.EnUs) return en;
   return document.documentElement.lang === "zh-CN" ? zhCn : en;
 });
 
 // 初始化 WebSocket
 if (import.meta.env.VITE_WEBSOCKET === "true") {
-  const useWebSocket = useWebSocketStore();
+  const webSocketStore = useWebSocketStore();
   const url = import.meta.env.VITE_WEBSOCKET_URL || "";
 
   // url 后面的 ?token= 为认证信息，需要后端配合获取 token 来认证（这是普通的 GET 请求，WebSocket 无法放入请求头或者发起 POST 请求）
-  url && useWebSocket.connect(url + "?token=" + userStore.accessToken);
+  url && webSocketStore.connect(url + "?token=" + userStore.accessToken);
 
-  provide(WebSocketKey, useWebSocket);
+  provide(WebSocketKey, webSocketStore);
 }
 
 if (isFunction(log.success)) log.success(__APP_INFO__.pkg.version, "欢迎使用 Teek Design Pro 系统");

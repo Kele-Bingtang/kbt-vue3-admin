@@ -1,57 +1,3 @@
-<template>
-  <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large">
-    <el-form-item prop="username">
-      <el-input v-model="loginForm.username" placeholder="用户名（任意）" :prefix-icon="User"></el-input>
-    </el-form-item>
-    <el-form-item prop="password">
-      <el-input
-        type="password"
-        v-model="loginForm.password"
-        placeholder="密码（任意）"
-        show-password
-        autocomplete="new-password"
-        :prefix-icon="Lock"
-      ></el-input>
-    </el-form-item>
-    <el-form-item prop="verifyCode">
-      <el-input clearable v-model="loginForm.verifyCode" placeholder="验证码" :prefix-icon="WarnTriangleFilled">
-        <template #append>
-          <ImageVerifyCode v-model="imgCode" />
-        </template>
-      </el-input>
-    </el-form-item>
-    <el-form-item>
-      <div :class="`${prefixClass}__item`">
-        <el-checkbox v-model="checked">记住密码</el-checkbox>
-        <el-button link type="primary" @click="handleForgetPwd">忘记密码?</el-button>
-      </div>
-    </el-form-item>
-    <el-form-item>
-      <div :class="`${prefixClass}__btn`">
-        <el-button :icon="CircleClose" round @click="resetForm()" size="large">重置</el-button>
-        <el-button :icon="UserFilled" round @click="startLogin()" size="large" type="primary" :loading="loading">
-          登录
-        </el-button>
-      </div>
-    </el-form-item>
-    <el-form-item>
-      <div :class="`${prefixClass}__item`">
-        <el-button v-for="(item, index) in operates" :key="index" @click="switchFormMode(item.mode)" size="default">
-          {{ item.title }}
-        </el-button>
-      </div>
-    </el-form-item>
-    <el-form-item>
-      <el-divider>第三方登录</el-divider>
-      <div :class="`${prefixClass}__third--item`">
-        <span v-for="(item, index) in thirdParty" :key="index" :title="item.title">
-          <Icon :icon="item.icon" width="20" height="20" />
-        </span>
-      </div>
-    </el-form-item>
-  </el-form>
-</template>
-
 <script setup lang="ts" name="LoginForm">
 import { useRouter } from "vue-router";
 import { ElNotification, type FormInstance } from "element-plus";
@@ -62,26 +8,25 @@ import { ImageVerifyCode } from "@/components";
 import { User, Lock, WarnTriangleFilled, CircleClose, UserFilled } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 
-const ns = useNamespace("login");
-const prefixClass = ns.b();
-
 interface LoginForm {
   username: string;
   password: string;
   verifyCode: string;
 }
 
+const ns = useNamespace("login-form");
+
 const route = useRoute();
 const router = useRouter();
 const userStore = useUserStore();
-const switchFormMode = inject("switchFormMode") as (mode: string) => void;
+const switchLoginMode = inject("switchLoginMode") as (mode: string) => void;
 
 const loginRules = {
   username: [{ required: true, message: "请输入用户名", trigger: "blur" }],
   password: [{ required: true, message: "请输入密码", trigger: "blur" }],
   verifyCode: [
     {
-      validator: (rule: any, value: string, callback: (e?: Error) => void) => {
+      validator: (_: any, value: string, callback: (e?: Error) => void) => {
         if (value === "") {
           callback(new Error("请输入验证码"));
         } else if (imgCode.value !== value) {
@@ -94,37 +39,18 @@ const loginRules = {
     },
   ],
 };
+
 const operates = [
-  {
-    title: "手机登录",
-    mode: "phone",
-  },
-  {
-    title: "二维码登录登录",
-    mode: "qrCode",
-  },
-  {
-    title: "注册登录",
-    mode: "register",
-  },
+  { title: "手机登录", mode: "phone" },
+  { title: "二维码登录登录", mode: "qrCode" },
+  { title: "注册登录", mode: "register" },
 ];
+
 const thirdParty = [
-  {
-    title: "微信登录",
-    icon: "wechat",
-  },
-  {
-    title: "QQ登录",
-    icon: "qq",
-  },
-  {
-    title: "支付宝登录",
-    icon: "alipay",
-  },
-  {
-    title: "微博登录",
-    icon: "weibo",
-  },
+  { title: "微信登录", icon: "login-wechat" },
+  { title: "QQ登录", icon: "login-qq" },
+  { title: "支付宝登录", icon: "login-alipay" },
+  { title: "微博登录", icon: "login-weibo" },
 ];
 
 const loginFormRef = useTemplateRef<FormInstance>("loginFormRef");
@@ -134,22 +60,11 @@ const loading = ref(false);
 const loginForm = reactive<LoginForm>({ username: "", password: "", verifyCode: "" });
 const checked = ref(false);
 
-onMounted(() => {
-  // 监听 enter 事件（调用登录）
-  document.onkeydown = (e: any) => {
-    e = window.event || e;
-    if (e.code === "Enter" || e.code === "enter" || e.code === "NumpadEnter") {
-      if (loading.value) return;
-      startLogin();
-    }
-  };
-});
-
 const handleForgetPwd = () => {
-  switchFormMode("forget");
+  switchLoginMode("forget");
 };
 
-const startLogin = () => {
+const login = () => {
   loginFormRef.value?.validate(async valid => {
     if (!valid) return;
     loading.value = true;
@@ -169,15 +84,17 @@ const startLogin = () => {
       // 跳转到首页或者 URL 携带的 redirect 页（优先级高）
       let path = HOME_URL;
       const { query } = route;
+
       if (query.redirect) path = query.redirect as string;
+
       const otherQuery = getOtherQuery(query);
       // otherQuery 不能是 {}，否则无法跳转
       if (Object.keys(otherQuery).length === 0) router.push(path);
       else router.push({ path, query: otherQuery });
-      ElNotification({
+
+      ElNotification.success({
         title: `欢迎登录 ${SystemConfig.systemInfo.name}`,
         message: getTimeState(),
-        type: "success",
         duration: 3000,
       });
     } finally {
@@ -188,19 +105,88 @@ const startLogin = () => {
 
 const getOtherQuery = (query: any) => {
   return Object.keys(query).reduce((acc: any, cur) => {
-    if (cur !== "redirect") {
-      acc[cur] = query[cur];
-    }
+    if (cur !== "redirect") acc[cur] = query[cur];
     return acc;
   }, {});
 };
 
-// resetForm
 const resetForm = () => {
   loginFormRef.value?.resetFields();
 };
 </script>
 
+<template>
+  <el-form ref="loginFormRef" :model="loginForm" :rules="loginRules" size="large" :class="ns.b()">
+    <el-form-item prop="username">
+      <el-input
+        v-model="loginForm.username"
+        placeholder="用户名（任意）"
+        :prefix-icon="User"
+        @keydown.enter="login"
+      ></el-input>
+    </el-form-item>
+
+    <el-form-item prop="password">
+      <el-input
+        type="password"
+        v-model="loginForm.password"
+        placeholder="密码（任意）"
+        show-password
+        autocomplete="new-password"
+        :prefix-icon="Lock"
+        @keydown.enter="login"
+      ></el-input>
+    </el-form-item>
+
+    <el-form-item prop="verifyCode">
+      <el-input
+        clearable
+        v-model="loginForm.verifyCode"
+        placeholder="验证码"
+        :prefix-icon="WarnTriangleFilled"
+        @keydown.enter="login"
+      >
+        <template #append>
+          <ImageVerifyCode v-model="imgCode" />
+        </template>
+      </el-input>
+    </el-form-item>
+
+    <el-form-item>
+      <div :class="[ns.e('item'), 'flx-justify-between']">
+        <el-checkbox v-model="checked">记住密码</el-checkbox>
+        <el-button link type="primary" @click="handleForgetPwd">忘记密码?</el-button>
+      </div>
+    </el-form-item>
+
+    <el-form-item>
+      <div :class="[ns.e('btn'), 'flx-justify-between']">
+        <el-button :icon="CircleClose" round @click="resetForm()" size="large">重置</el-button>
+        <el-button :icon="UserFilled" round @click="login()" size="large" type="primary" :loading="loading">
+          登录
+        </el-button>
+      </div>
+    </el-form-item>
+
+    <el-form-item>
+      <div :class="[ns.e('item'), 'flx-justify-between']">
+        <el-button v-for="(item, index) in operates" :key="index" @click="switchLoginMode(item.mode)" size="default">
+          {{ item.title }}
+        </el-button>
+      </div>
+    </el-form-item>
+
+    <el-form-item>
+      <el-divider>第三方登录</el-divider>
+      <div :class="ns.e('third-item')">
+        <span v-for="(item, index) in thirdParty" :key="index" :title="item.title">
+          <Icon :icon="item.icon" width="20" height="20" />
+        </span>
+      </div>
+    </el-form-item>
+  </el-form>
+</template>
+
 <style lang="scss" scoped>
-@use "./index";
+@use "./loginForm";
 </style>

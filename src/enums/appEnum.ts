@@ -37,6 +37,12 @@ export enum LanguageEnum {
   EnUs = "en-US",
 }
 
+export enum LayoutSizeEnum {
+  Default = "default",
+  Small = "small",
+  Large = "large",
+}
+
 export enum PageTransitionEnum {
   None = "",
   Fade = "fade",
