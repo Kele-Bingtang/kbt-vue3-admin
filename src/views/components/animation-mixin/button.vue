@@ -2,11 +2,10 @@
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("custom-button");
-const prefixClass = ns.b();
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <el-button class="btn java">JAVA攻城狮</el-button>
     <el-button class="btn golang">Golang工程师</el-button>
     <el-button class="btn js"><span>js攻城狮</span></el-button>
@@ -41,9 +40,9 @@ const prefixClass = ns.b();
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-custom-button;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(custom-button) {
   @keyframes sheen {
     0% {
       transform: skewY(-45deg) translateX(0);

@@ -1,8 +1,7 @@
+@use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/namespace" as *;
 
-$prefix-class: #{$admin-namespace}-point-flicker;
-
-.#{$prefix-class} {
+@include b(point-flicker) {
   position: relative;
   width: var(--point-width);
   height: var(--point-height);

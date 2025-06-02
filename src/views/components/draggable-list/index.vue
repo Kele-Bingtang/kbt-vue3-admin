@@ -6,7 +6,6 @@ import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("draggable-list-demo");
-const prefixClass = ns.b();
 
 const listData1 = ref(list1);
 const listData2 = ref(list2);
@@ -24,9 +23,9 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
 </script>
 
 <template>
-  <div :class="prefixClass">
-    <el-card :class="`${prefixClass}__card`">
-      <div :class="`${prefixClass}__card--box`">
+  <div :class="ns.b()">
+    <el-card :class="ns.e('card')">
+      <div :class="ns.e('box')">
         <!-- 切记设置 list1 和 list2 属性时，一定要添加 .sync 修饰符 -->
         <DraggableList :left-list="listData1" :right-list="listData2" :drag-class="dragClass" @on-change="handleChange">
           <template #leftTitle>
@@ -56,18 +55,18 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
         </DraggableList>
       </div>
 
-      <el-card :class="`${prefixClass}__handle`">
+      <el-card :class="ns.e('handle')">
         <template #header>
           <span>操作记录</span>
         </template>
-        <div :class="`${prefixClass}__handle--inner`">
+        <div :class="ns.em('handle', 'inner')">
           <p v-for="(item, index) in handleList" :key="`handle_item_${index}`">{{ item }}</p>
         </div>
       </el-card>
-      <el-card :class="`${prefixClass}__handle--show`">
+      <el-card :class="ns.em('handle', 'show')">
         <pre>{{ listData1 }}</pre>
       </el-card>
-      <el-card :class="`${prefixClass}__handle--show`">
+      <el-card :class="ns.em('handle', 'show')">
         <pre>{{ listData2 }}</pre>
       </el-card>
     </el-card>
@@ -100,30 +99,30 @@ const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-draggable-list-demo;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(draggable-list-demo) {
   width: 100%;
   height: 100%;
   padding: 20px;
 
-  &__card {
+  @include e(card) {
     width: 100%;
     height: 100%;
-
-    &--box {
-      display: inline-block;
-      width: 40%;
-      height: 100%;
-    }
   }
 
-  &__handle {
+  @include e(box) {
+    display: inline-block;
+    width: 40%;
+    height: 100%;
+  }
+
+  @include e(handle) {
     display: inline-block;
     width: 220px;
     height: 100%;
 
-    &--inner {
+    @include m(inner) {
       p {
         padding: 7px 0;
         margin: 0 7px;
@@ -131,7 +130,7 @@ $prefix-class: #{$admin-namespace}-draggable-list-demo;
       }
     }
 
-    &--show {
+    @include m(show) {
       display: inline-block;
       width: 370px;
       height: 100%;
@@ -140,18 +139,19 @@ $prefix-class: #{$admin-namespace}-draggable-list-demo;
   }
 }
 </style>
-<style lang="scss">
-$prefix-class: #{$admin-namespace}-draggable-list-demo;
 
-.#{$prefix-class} {
-  &__card {
+<style lang="scss">
+@use "@/styles/mixins/bem" as *;
+
+@include b(draggable-list-demo) {
+  @include e(card) {
     .#{$el-namespace}-card__body {
       width: 100%;
       height: 100%;
     }
   }
 
-  &--box {
+  @include e(box) {
     height: calc(100% - 60px);
     margin-right: 10px;
   }

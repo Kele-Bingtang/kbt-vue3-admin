@@ -1,5 +1,5 @@
 <script setup lang="ts" name="Home">
-import CardItem from "./components/cardItem.vue";
+import CardItem from "./components/card-item.vue";
 import { CountTo } from "@/components";
 import ChartPie from "./components/chart-pie.vue";
 import ChartBar from "./components/chart-bar.vue";

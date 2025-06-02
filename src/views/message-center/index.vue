@@ -5,7 +5,6 @@ import { Delete, RefreshLeft } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("message-center");
-const prefixClass = ns.b();
 
 type MessageType = "unread" | "hasRead" | "recycle";
 
@@ -120,9 +119,9 @@ const handleOperate = (message: MessageItem) => {
 </script>
 
 <template>
-  <div :class="prefixClass">
-    <el-card :class="`${prefixClass}__card`">
-      <div :class="`${prefixClass}__card--page ${prefixClass}__card--category`">
+  <div :class="ns.b()">
+    <el-card :class="ns.e('card')">
+      <div :class="[ns.e('page'), ns.e('category')]">
         <el-menu default-active="unread" @select="handleCategorySelect">
           <el-menu-item index="unread">
             <span class="category">
@@ -145,7 +144,7 @@ const handleOperate = (message: MessageItem) => {
         </el-menu>
       </div>
 
-      <div :class="`${prefixClass}__card--page ${prefixClass}__card--list`" v-loading="listLoading">
+      <div :class="[ns.e('page'), ns.e('list')]" v-loading="listLoading">
         <el-menu
           default-active="1"
           @select="handleListSelect"
@@ -172,14 +171,10 @@ const handleOperate = (message: MessageItem) => {
         </el-menu>
       </div>
 
-      <div
-        :class="`${prefixClass}__card--page ${prefixClass}__card--content`"
-        v-loading="contentLoading"
-        element-loading-text="拼命加载中 ..."
-      >
-        <div :class="`${prefixClass}__card--content__header`">
-          <h2 :class="`${prefixClass}__card--content__header--title`">{{ selectedMessageItem.title }}</h2>
-          <time :class="`${prefixClass}__card--content__header--time`">{{ selectedMessageItem.createTime }}</time>
+      <div :class="[ns.e('page'), ns.e('content')]" v-loading="contentLoading" element-loading-text="拼命加载中 ...">
+        <div :class="ns.e('content-header')">
+          <h2 :class="ns.em('content-header', 'title')">{{ selectedMessageItem.title }}</h2>
+          <time :class="ns.em('content-header', 'time')">{{ selectedMessageItem.createTime }}</time>
         </div>
         <div v-html="selectedMessageItem.content"></div>
       </div>
@@ -188,12 +183,12 @@ const handleOperate = (message: MessageItem) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-message-center;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(message-center) {
   height: 100%;
 
-  &__card {
+  @include e(card) {
     height: 100%;
 
     :deep(.#{$el-namespace}-card__body) {
@@ -201,150 +196,138 @@ $prefix-class: #{$admin-namespace}-message-center;
       overflow: auto;
       white-space: nowrap;
     }
+  }
 
-    &--page {
-      position: relative;
-      display: inline-block;
-      height: 100%;
-      vertical-align: top;
-      border-right: 1px solid #e6e6e6;
+  @include e(page) {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+    vertical-align: top;
+    border-right: 1px solid #e6e6e6;
 
-      // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
-      .#{$el-namespace}-menu {
-        width: auto;
+    // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
+    .#{$el-namespace}-menu {
+      width: auto;
 
-        .#{$el-namespace}-menu-item.is-active {
-          // background-color: #f0faff;
-          &::after {
-            position: absolute;
-            top: 0;
-            right: -1px;
-            bottom: 0;
-            display: block;
-            width: 2px;
-            content: "";
-            background: var(--#{$el-namespace}-color-primary);
-          }
-
-          .list-dot {
-            background-color: var(--#{$el-namespace}-color-primary) !important;
-          }
+      .#{$el-namespace}-menu-item.is-active {
+        // background-color: #f0faff;
+        &::after {
+          position: absolute;
+          top: 0;
+          right: -1px;
+          bottom: 0;
+          display: block;
+          width: 2px;
+          content: "";
+          background: var(--#{$el-namespace}-color-primary);
         }
 
-        .#{$el-namespace}-badge {
-          margin-left: 10px;
+        .list-dot {
+          background-color: var(--#{$el-namespace}-color-primary) !important;
+        }
+      }
+
+      .#{$el-namespace}-badge {
+        margin-left: 10px;
+        vertical-align: middle;
+
+        :deep(.#{$el-namespace}-badge__content) {
           vertical-align: middle;
-
-          :deep(.#{$el-namespace}-badge__content) {
-            vertical-align: middle;
-          }
-        }
-      }
-    }
-
-    &--category {
-      width: 200px;
-    }
-
-    &--list {
-      width: 230px;
-
-      .#{$el-namespace}-menu-item {
-        display: block;
-        height: auto;
-        padding: 14px 20px;
-        line-height: 21px;
-        white-space: normal;
-
-        .list-title {
-          padding: 0;
-          margin: 0;
-        }
-
-        .list-time {
-          display: inline-block;
-
-          .list-dot {
-            position: relative;
-            top: -1px;
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            vertical-align: middle;
-            background-color: #e6e8f1;
-            border-radius: 50%;
-          }
-
-          .list-text {
-            display: inline-block;
-            margin-left: 6px;
-            font-size: 12px;
-            color: #515a6e;
-          }
-        }
-
-        .list-operate {
-          float: right;
-          align-items: normal;
-          padding-top: 3px;
-          margin-right: 17px;
-        }
-
-        :deep(.#{$el-namespace}-icon) {
-          display: none;
-          font-size: 13px;
-          color: #909399;
-
-          &:hover {
-            color: var(--#{$el-namespace}-color-primary);
-          }
-        }
-
-        &:hover {
-          :deep(.#{$el-namespace}-icon) {
-            display: inline-block;
-          }
-        }
-      }
-
-      .unread-list {
-        .#{$el-namespace}-menu-item:not(.is-active) {
-          color: #aaa9a9;
-        }
-      }
-    }
-
-    &--content {
-      width: calc(100% - 450px);
-      padding: 12px 20px 0;
-      overflow: auto;
-
-      &__header {
-        margin-bottom: 20px;
-
-        &--title {
-          display: inline-block;
-          padding: 0;
-          margin: 0;
-          color: #515a6e;
-        }
-
-        &--time {
-          margin-left: 20px;
         }
       }
     }
   }
-}
-</style>
 
-<style lang="scss">
-$prefix-class: #{$admin-namespace}-message-center;
+  @include e(category) {
+    width: 200px;
+  }
 
-.mobile {
-  .#{$prefix-class} {
-    .message-content {
-      width: 100% !important;
+  @include e(list) {
+    width: 230px;
+
+    .#{$el-namespace}-menu-item {
+      display: block;
+      height: auto;
+      padding: 14px 20px;
+      line-height: 21px;
+      white-space: normal;
+
+      .list-title {
+        padding: 0;
+        margin: 0;
+      }
+
+      .list-time {
+        display: inline-block;
+
+        .list-dot {
+          position: relative;
+          top: -1px;
+          display: inline-block;
+          width: 6px;
+          height: 6px;
+          vertical-align: middle;
+          background-color: #e6e8f1;
+          border-radius: 50%;
+        }
+
+        .list-text {
+          display: inline-block;
+          margin-left: 6px;
+          font-size: 12px;
+          color: #515a6e;
+        }
+      }
+
+      .list-operate {
+        float: right;
+        align-items: normal;
+        padding-top: 3px;
+        margin-right: 17px;
+      }
+
+      :deep(.#{$el-namespace}-icon) {
+        display: none;
+        font-size: 13px;
+        color: #909399;
+
+        &:hover {
+          color: var(--#{$el-namespace}-color-primary);
+        }
+      }
+
+      &:hover {
+        :deep(.#{$el-namespace}-icon) {
+          display: inline-block;
+        }
+      }
+    }
+
+    .unread-list {
+      .#{$el-namespace}-menu-item:not(.is-active) {
+        color: #aaa9a9;
+      }
+    }
+  }
+
+  @include e(content) {
+    width: calc(100% - 450px);
+    padding: 12px 20px 0;
+    overflow: auto;
+  }
+
+  @include e(content-header) {
+    margin-bottom: 20px;
+
+    @include m(title) {
+      display: inline-block;
+      padding: 0;
+      margin: 0;
+      color: #515a6e;
+    }
+
+    @include m(time) {
+      margin-left: 20px;
     }
   }
 }

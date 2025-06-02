@@ -17,7 +17,7 @@ import { useNamespace } from "@/composables";
 import { ConfigGlobalKey } from "@/config";
 
 const ns = useNamespace("work-dialog");
-const prefixClass = ns.b();
+const blockClass = ns.b();
 
 let id = 0;
 
@@ -49,7 +49,7 @@ export interface WorkDialogProps extends Partial<DialogProps> {
  * @description 关闭弹框
  */
 export const closeDialog = () => {
-  const vm = document.querySelector(`#${prefixClass}-${id--}`) as HTMLElement;
+  const vm = document.querySelector(`#${blockClass}-${id--}`) as HTMLElement;
   vm && getFather().removeChild(vm);
 };
 
@@ -79,7 +79,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
 
   const toggleFull = () => {
     const elDialogEl = document.querySelector(
-      `${`#${prefixClass}-${id}`} .${prefixClass}.${ns.elNamespace}-dialog`
+      `${`#${blockClass}-${id}`} .${blockClass}.${ns.elNamespace}-dialog`
     ) as HTMLElement;
     if (elDialogEl) elDialogEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !isFullscreen.value;
@@ -115,7 +115,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
         close-on-click-modal={false}
         draggable
         {...dialogProps}
-        class={prefixClass}
+        class={blockClass}
       >
         {{
           default: () => {
@@ -141,7 +141,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
                 </span>
                 {dialogProps.fullscreenIcon !== false && (
                   <Icon
-                    name={isFullscreen.value ? "core-fullscreen-exit" : "core-fullscreen"}
+                    icon={isFullscreen.value ? "core-fullscreen-exit" : "core-fullscreen"}
                     onClick={() => toggleFull()}
                     width="15px"
                     height="15px"
@@ -174,7 +174,7 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
   vm.children?.length && (vm.children[0].appContext = appContextConst);
 
   const container = document.createElement("div");
-  container.id = `${prefixClass}-${++id}`;
+  container.id = `${blockClass}-${++id}`;
   getFather().appendChild(container);
   render(vm, container);
 };

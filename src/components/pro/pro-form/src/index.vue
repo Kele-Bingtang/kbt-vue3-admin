@@ -43,7 +43,6 @@ import { addUnit, isString } from "@/utils";
 defineOptions({ name: "ProForm" });
 
 const ns = useNamespace("pro-form");
-const prefixClass = ns.b();
 
 export interface ProFormProps {
   modelValue?: Record<string, any>;
@@ -283,7 +282,7 @@ const slots = useSlots();
 const RenderFormWrap = () => {
   const { elFormProps, onlyRenderComponent, schema } = getProps.value;
   return !onlyRenderComponent ? (
-    <ElForm ref={elFormRef} {...elFormProps} class={prefixClass} model={model.value}>
+    <ElForm ref={elFormRef} {...elFormProps} class={ns.b()} model={model.value}>
       {{
         default: () => {
           // 如果存在自定义插槽，则直接返回自定义插槽的 Render

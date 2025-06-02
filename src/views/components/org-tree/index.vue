@@ -3,7 +3,6 @@ import { ElMessage } from "element-plus";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("org-tree-demo");
-const prefixClass = ns.b();
 
 const treeRef = useTemplateRef<any>("treeRef");
 const data = ref({
@@ -97,7 +96,7 @@ const onNodeClick = (e: MouseEvent, data: any) => {
 </script>
 
 <template>
-  <el-space fill :class="prefixClass">
+  <el-space fill :class="ns.b()">
     <el-card shadow="never">
       <template #header>
         <el-link
@@ -200,9 +199,9 @@ const onNodeClick = (e: MouseEvent, data: any) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-org-tree-demo;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(org-tree-demo) {
   .tree-org-node__text {
     font-size: 14px;
     text-align: left;

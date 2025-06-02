@@ -1,0 +1,11 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/namespace" as *;
+
+@include b(pagination) {
+  padding: 15px 2px 0;
+  background: #ffffff;
+
+  @include is(hidden) {
+    display: none;
+  }
+}

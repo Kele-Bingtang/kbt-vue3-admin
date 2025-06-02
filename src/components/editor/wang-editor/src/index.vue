@@ -10,7 +10,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "WangEditor" });
 
 const ns = useNamespace("wang-editor");
-const prefixClass = ns.b();
 
 export type ImageInsertFnType = (url: string, alt: string) => void;
 export type VideoInsertFnType = (url: string, poster: string) => void;
@@ -181,16 +180,16 @@ defineExpose({
 </script>
 
 <template>
-  <div :class="[prefixClass, { disabled }]">
+  <div :class="[ns.b(), { disabled }]">
     <Toolbar
-      :class="`${prefixClass}__toolbar`"
+      :class="ns.e('toolbar')"
       :editor="editorRef"
       :defaultConfig="toolbarConfig"
       :mode="mode"
       v-if="!hideToolBar"
     />
     <Editor
-      :class="`${prefixClass}__content`"
+      :class="ns.e('content')"
       :style="{ height: typeof height == 'string' ? height : `${height}px`, overflowY: 'hidden' }"
       v-model="content"
       :defaultConfig="editorConfig"
@@ -203,17 +202,17 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-wang-editor;
+@use "@/styles/mixins/bem" as *;
 
 /* 富文本组件校验失败样式 */
 .is-error {
-  .#{$prefix-class} {
+  @include b(wang-editor) {
     border-color: var(--#{$el-namespace}-color-danger);
   }
 }
 
 /* 富文本组件样式 */
-.#{$prefix-class} {
+@include b(wang-editor) {
   /* 防止富文本编辑器全屏时 tabs 组件 在其层级之上 */
   z-index: 1100;
   width: 100%;
@@ -224,11 +223,11 @@ $prefix-class: #{$admin-namespace}-wang-editor;
     cursor: not-allowed !important;
   }
 
-  &__toolbar {
+  @include e(toolbar) {
     border-bottom: 1px solid #cccccc;
   }
 
-  &__content {
+  @include e(content) {
     overflow-y: hidden;
   }
 }

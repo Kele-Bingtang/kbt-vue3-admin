@@ -27,7 +27,6 @@ export interface PaginationProps {
 defineOptions({ name: "Pagination" });
 
 const ns = useNamespace("pagination");
-const prefixClass = ns.b();
 
 const props = withDefaults(defineProps<PaginationProps>(), {
   layout: "total, sizes, prev, pager, next, jumper",
@@ -74,7 +73,7 @@ defineExpose({ paging: pageSetting });
 </script>
 
 <template>
-  <div :class="[prefixClass, { hidden: hidden }]" class="pagination-component">
+  <div :class="[ns.b(), ns.is('hidden', hidden)]">
     <el-pagination
       :background="background"
       v-model:current-page="pageObj.pageNum"
@@ -90,14 +89,5 @@ defineExpose({ paging: pageSetting });
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-pagination;
-
-.#{$prefix-class} {
-  padding: 15px 2px 0;
-  background: #ffffff;
-
-  &.hidden {
-    display: none;
-  }
-}
+@use "./index";
 </style>

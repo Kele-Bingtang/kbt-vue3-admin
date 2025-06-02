@@ -3,7 +3,6 @@ import { Cropper } from "@/components";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("cropper-demo");
-const prefixClass = ns.b();
 
 const uploadImage = (imgData: FormData) => {
   console.log(imgData);
@@ -12,7 +11,7 @@ const uploadImage = (imgData: FormData) => {
 
 <template>
   <el-space fill>
-    <el-card shadow="never" :class="prefixClass">
+    <el-card shadow="never" :class="ns.b()">
       <template #header>
         <el-link href="https://github.xyxiao.cn/vue-cropper/" target="_blank" underline="never" style="font-size: 20px">
           Cropper
@@ -56,9 +55,9 @@ const uploadImage = (imgData: FormData) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-cropper-demo;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(cropper-demo) {
   width: 1000px;
 }
 </style>

@@ -21,7 +21,6 @@ import { isEmpty, isObject, isString } from "@/utils";
 defineOptions({ name: "ProSearch" });
 
 const ns = useNamespace("search-form");
-const prefixClass = ns.b();
 
 export type ProSearchExpose = typeof defaultExpose;
 
@@ -290,7 +289,7 @@ defineExpose(defaultExpose);
 </script>
 
 <template>
-  <div v-if="schema.length" :class="`card ${prefixClass}`">
+  <div v-if="schema.length" :class="`card ${ns.b()}`">
     <ProForm :schema="schema" v-model="model" @register="formRegister" @validate="onFormValidate" :enum-map-props>
       <template #default="{ parseLabel, getComponentWidth }">
         <Grid
@@ -343,9 +342,9 @@ defineExpose(defaultExpose);
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-search-form;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(search-form) {
   padding: 18px 18px 0;
   margin-bottom: 10px;
 }

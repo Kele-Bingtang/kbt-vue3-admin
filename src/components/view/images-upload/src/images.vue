@@ -1,48 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <el-upload
-      action="#"
-      list-type="picture-card"
-      :class="[`${prefixClass}__upload`, self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
-      v-model:file-list="imagesList"
-      :multiple="true"
-      :disabled="self_disabled"
-      :limit="limit"
-      :http-request="handleHttpUpload"
-      :before-upload="beforeUpload"
-      :on-exceed="handleExceed"
-      :on-success="uploadSuccess"
-      :on-error="uploadError"
-      :drag="drag"
-      :accept="fileType.join(',')"
-    >
-      <div :class="`${prefixClass}__empty`">
-        <slot name="empty">
-          <el-icon><Plus /></el-icon>
-          <!-- <span>请上传图片</span> -->
-        </slot>
-      </div>
-      <template #file="{ file }">
-        <img :src="file.url" :class="`${prefixClass}__image`" />
-        <div :class="`${prefixClass}__handle`" @click.stop>
-          <div :class="`${prefixClass}__handle--icon`" @click="handlePictureCardPreview(file)">
-            <el-icon><ZoomIn /></el-icon>
-            <span>查看</span>
-          </div>
-          <div :class="`${prefixClass}__handle--icon`" @click="handleRemove(file)" v-if="!self_disabled">
-            <el-icon><Delete /></el-icon>
-            <span>删除</span>
-          </div>
-        </div>
-      </template>
-    </el-upload>
-    <div :class="`${ns.elNamespace}-upload__tip`">
-      <slot name="tip"></slot>
-    </div>
-    <el-image-viewer v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[viewImageUrl]" />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { Plus, ZoomIn, Delete } from "@element-plus/icons-vue";
 import {
@@ -63,7 +18,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "ImagesUpload" });
 
 const ns = useNamespace("images-upload");
-const prefixClass = ns.b();
 
 export type SuccessFun = (response: string) => void;
 
@@ -201,6 +155,51 @@ const handlePictureCardPreview: UploadProps["onPreview"] = uploadFile => {
   imgViewVisible.value = true;
 };
 </script>
+
+<template>
+  <div :class="ns.b()">
+    <el-upload
+      action="#"
+      list-type="picture-card"
+      :class="[ns.e('upload'), self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
+      v-model:file-list="imagesList"
+      :multiple="true"
+      :disabled="self_disabled"
+      :limit="limit"
+      :http-request="handleHttpUpload"
+      :before-upload="beforeUpload"
+      :on-exceed="handleExceed"
+      :on-success="uploadSuccess"
+      :on-error="uploadError"
+      :drag="drag"
+      :accept="fileType.join(',')"
+    >
+      <div :class="ns.e('empty')">
+        <slot name="empty">
+          <el-icon><Plus /></el-icon>
+          <!-- <span>请上传图片</span> -->
+        </slot>
+      </div>
+      <template #file="{ file }">
+        <img :src="file.url" :class="ns.e('image')" />
+        <div :class="ns.e('handle')" @click.stop>
+          <div :class="ns.em('handle', 'icon')" @click="handlePictureCardPreview(file)">
+            <el-icon><ZoomIn /></el-icon>
+            <span>查看</span>
+          </div>
+          <div :class="ns.em('handle', 'icon')" @click="handleRemove(file)" v-if="!self_disabled">
+            <el-icon><Delete /></el-icon>
+            <span>删除</span>
+          </div>
+        </div>
+      </template>
+    </el-upload>
+    <div :class="`${ns.elNamespace}-upload__tip`">
+      <slot name="tip"></slot>
+    </div>
+    <el-image-viewer v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[viewImageUrl]" />
+  </div>
+</template>
 
 <style scoped lang="scss">
 $prefix-class: #{$admin-namespace}-images-upload;

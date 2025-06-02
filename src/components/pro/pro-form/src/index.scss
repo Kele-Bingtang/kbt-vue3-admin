@@ -1,15 +1,10 @@
+@use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/namespace" as *;
 
-$prefix-class: #{$admin-namespace}-pro-form;
-
 // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
-.#{$prefix-class} {
+@include b(pro-form) {
   &.#{$el-namespace}-form {
     width: 100%;
     margin-top: 10px;
-  }
-
-  &__title {
-    margin-bottom: 15px;
   }
 }

@@ -1,12 +1,17 @@
+@use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/namespace" as *;
 
-$prefix-class: #{$admin-namespace}-work-dialog;
+@include b(work-dialog) {
+  &.#{$el-namespace}-dialog.is-fullscreen {
+    --#{$el-namespace}-dialog-width: 100% !important;
+    --#{$el-namespace}-dialog-margin-top: 0 !important;
 
-.#{$prefix-class}.#{$el-namespace}-dialog.is-fullscreen {
-  --#{$el-namespace}-dialog-width: 100% !important;
-  --#{$el-namespace}-dialog-margin-top: 0 !important;
+    height: 100%;
+    margin-bottom: 0;
+    overflow: auto;
+  }
 
-  height: 100%;
-  margin-bottom: 0;
-  overflow: auto;
+  .tk-icon {
+    margin-top: -7px;
+  }
 }

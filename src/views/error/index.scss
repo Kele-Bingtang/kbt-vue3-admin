@@ -1,19 +1,14 @@
+@use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/namespace" as *;
+@use "@/styles/mixins/function" as *;
+@use "@/styles/variables" as *;
 
-$prefix-class: #{$admin-namespace}-error-page;
-
-.#{$prefix-class} {
-  display: flex;
-  align-items: center;
-  justify-content: center;
+@include b(error-page) {
+  gap: 120px;
   width: 100%;
   height: 100%;
 
-  &__img {
-    margin-right: 120px;
-  }
-
-  &__detail {
+  @include e(detail) {
     display: flex;
     flex-direction: column;
 
@@ -25,19 +20,30 @@ $prefix-class: #{$admin-namespace}-error-page;
 
     h2 {
       font-size: 60px;
-      color: var(--#{$el-namespace}-text-color-primary);
+      line-height: 1;
+      color: cssVar(text-gray-700);
     }
 
     h4 {
-      margin: 30px 0 20px;
+      margin: 10px 0 20px;
       font-size: 19px;
       font-weight: normal;
-      color: var(--#{$el-namespace}-text-color-regular);
+      color: cssVar(text-gray-500);
     }
 
     // #{$el-namespace} 默认为 el，如果组件迁移到其他项目，且项目架构与此项目不同，则请修改 #{$el-namespace} 为 el
     .#{$el-namespace}-button {
       width: 100px;
+    }
+  }
+
+  @media (max-width: $device-ipad) {
+    flex-direction: column;
+    gap: 60px;
+    margin: 0 !important;
+
+    @include e(detail) {
+      align-items: center;
     }
   }
 }

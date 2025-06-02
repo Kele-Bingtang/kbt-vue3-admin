@@ -7,7 +7,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "WorkDrawer" });
 
 const ns = useNamespace("work-drawer");
-const prefixClass = ns.b();
 
 interface WorkDrawerProps {
   title?: string; // 顶部标题
@@ -59,7 +58,7 @@ defineExpose({ elDrawerRef });
     :title="title"
     size="30%"
     v-bind="$attrs"
-    :class="[prefixClass, { 'is-fullscreen': isFullscreen }]"
+    :class="[ns.b(), ns.is('fullscreen', isFullscreen)]"
   >
     <template #header="scope">
       <slot name="header" v-bind="scope">
@@ -69,7 +68,7 @@ defineExpose({ elDrawerRef });
           </slot>
           <Icon
             v-if="fullscreenIcon"
-            :name="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
+            :icon="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
             @click="toggleFull"
             width="18px"
             height="18px"

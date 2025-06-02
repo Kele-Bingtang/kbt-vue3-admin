@@ -8,7 +8,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "WorkDialog" });
 
 const ns = useNamespace("work-dialog");
-const prefixClass = ns.b();
 
 interface WorkDialogProps {
   title?: string; // 顶部标题
@@ -87,7 +86,7 @@ defineExpose({ elDialogRef });
     :close-on-click-modal="false"
     draggable
     v-bind="$attrs"
-    :class="prefixClass"
+    :class="ns.b()"
   >
     <template #header="scope">
       <slot name="header" v-bind="scope">
@@ -97,7 +96,7 @@ defineExpose({ elDialogRef });
           </slot>
           <Icon
             v-if="fullscreenIcon"
-            :name="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
+            :icon="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
             @click="toggleFull"
             width="15px"
             height="15px"

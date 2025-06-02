@@ -8,7 +8,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "QrCode" });
 
 const ns = useNamespace("qrcode");
-const prefixClass = ns.b();
 
 interface QrCodeLogo {
   src?: string;
@@ -226,11 +225,11 @@ const disabledClick = () => {
 </script>
 
 <template>
-  <div v-loading="loading" :class="prefixClass" :style="wrapStyle">
+  <div v-loading="loading" :class="ns.b()" :style="wrapStyle">
     <canvas ref="wrapRef" @click="clickCode" v-if="props.tag === 'canvas'"></canvas>
     <img v-else ref="wrapRef" @click="clickCode" />
-    <div v-if="props.disabled" :class="`${prefixClass}--disabled`" @click="disabledClick">
-      <div :class="`${prefixClass}__icon`" :color="`var(--${ns.elNamespace}-color-primary)`">
+    <div v-if="props.disabled" :class="ns.m('disabled')" @click="disabledClick">
+      <div :class="ns.e('icon')" :color="`var(--${ns.elNamespace}-color-primary)`">
         <el-icon style="cursor: pointer" :size="30"><RefreshRight /></el-icon>
         <div>{{ props.disabledText }}</div>
       </div>
@@ -239,13 +238,13 @@ const disabledClick = () => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-qrcode;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(qrcode) {
   position: relative;
   display: inline-block;
 
-  &--disabled {
+  @include m(disabled) {
     position: absolute;
     top: 0;
     left: 0;
@@ -257,7 +256,7 @@ $prefix-class: #{$admin-namespace}-qrcode;
     background: #fffffff2;
   }
 
-  &__icon {
+  @include e(icon) {
     position: absolute;
     top: 50%;
     left: 50%;

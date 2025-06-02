@@ -1,15 +1,14 @@
+@use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/namespace" as *;
 
-$prefix-class: #{$admin-namespace}-tree-filter;
-
-.#{$prefix-class} {
+@include e(tree-filter) {
   box-sizing: border-box;
   width: 220px;
   height: 100%;
   padding: 18px;
   margin-right: 10px;
 
-  &__title {
+  @include e(title) {
     margin: 0 0 15px;
     font-size: 18px;
     font-weight: bold;

@@ -43,7 +43,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "Tinymce" });
 
 const ns = useNamespace("tinymce");
-const prefixClass = ns.b();
 
 export type UITheme = "default" | "dark" | "tinymce-5" | "tinymce-5-dark";
 export type ContentTheme = "" | "default" | "dark" | "document" | "tinymce-5" | "tinymce-5-dark";
@@ -228,15 +227,15 @@ watch(
 </script>
 
 <template>
-  <div :class="[prefixClass, { fullscreen: fullscreen }]">
+  <div :class="[ns.b(), ns.is('fullscreen', fullscreen)]">
     <TinymceEditor :id="id" v-model="tinymceContent" :init="initOptions" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-tinymce;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(tinymce) {
   position: relative;
   line-height: normal;
 

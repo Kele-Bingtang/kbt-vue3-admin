@@ -11,7 +11,6 @@ import tIcons from "./data/icons.tdesign";
 defineOptions({ name: "IconPicker" });
 
 const ns = useNamespace("icon-picker");
-const prefixClass = ns.b();
 
 defineProps<{ tip?: boolean }>();
 
@@ -116,10 +115,10 @@ const inputClear = () => {
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <ElInput disabled v-model="modelValue" clearable v-bind="$attrs" />
     <ElPopover
-      :popper-class="`${prefixClass}__popover`"
+      :popper-class="ns.b()"
       placement="bottom"
       trigger="click"
       :width="450"
@@ -135,7 +134,7 @@ const inputClear = () => {
         <ElInput v-model="search" clearable placeholder="搜索图标" @clear="inputClear" style="margin-bottom: 20px" />
         <ElTabs tab-position="left" v-model="iconName" @tab-change="tabChange">
           <ElTabPane v-for="item in icons" :key="item.name" :label="item.name" :name="item.prefix">
-            <div :class="`${prefixClass}__icons`">
+            <div :class="ns.e('icons')">
               <div
                 v-for="icon in filterIcons(filterItemIcons(item.icons))"
                 :key="icon"
@@ -144,7 +143,7 @@ const inputClear = () => {
                   height: iconSize,
                   border: `1px solid ${icon === modelValue ? `var(--${ns.elNamespace}-color-primary)` : `var(--${ns.elNamespace}-border-color)`}`,
                 }"
-                :class="`${prefixClass}__icon`"
+                :class="ns.e('icon')"
                 @click="iconSelect(icon)"
                 v-copy="tip ? modelValue : undefined"
               >
@@ -157,7 +156,7 @@ const inputClear = () => {
           </ElTabPane>
         </ElTabs>
       </ElScrollbar>
-      <div :class="`${prefixClass}__pagination`">
+      <div :class="ns.e('pagination')">
         <ElPagination
           v-model:current-page="currentPage"
           v-model:page-size="pageSize"

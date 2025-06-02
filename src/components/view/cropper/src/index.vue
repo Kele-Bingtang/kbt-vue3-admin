@@ -9,7 +9,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "Cropper" });
 
 const ns = useNamespace("cropper");
-const prefixClass = ns.b();
 
 interface CropperProps {
   imgLink?: string; // 图片链接
@@ -161,8 +160,8 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
 </script>
 
 <template>
-  <div :class="prefixClass" :style="{ height: cropContainerHeight + 'px' }">
-    <div :class="`${prefixClass}__img`">
+  <div :class="ns.b()" :style="{ height: cropContainerHeight + 'px' }">
+    <div :class="ns.e('box')">
       <VueCropper
         ref="cropperRef"
         :img="options.img"
@@ -184,74 +183,66 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
         @crop-moving="emits('cropMoving')"
       />
     </div>
-    <div :class="`${prefixClass}__img ${prefixClass}__img--previews`" v-if="previews.url">
-      <div :class="`${prefixClass}--previews__img`" :style="previews.div">
+    <div :class="[ns.e('box'), ns.e('previews')]" v-if="previews.url">
+      <div :class="ns.em('previews', 'img')" :style="previews.div">
         <img :src="previews.url" :style="previews.img" class="img" alt="头像" />
       </div>
     </div>
   </div>
 
-  <div :class="`${prefixClass}__btn`">
-    <div>
-      <el-upload
-        action="#"
-        :http-request="handleHttpRequest"
-        :show-file-list="false"
-        :before-upload="beforeUpload"
-        :class="`${prefixClass}__btn--upload`"
-      >
-        <el-button type="primary" plain :icon="Upload">选择</el-button>
-      </el-upload>
-      <el-button type="primary" plain :icon="ZoomIn" @click="changeScale(1)">放大</el-button>
-      <el-button type="primary" plain :icon="ZoomOut" @click="changeScale(-1)">缩小</el-button>
-      <el-button type="primary" plain @click="rotateLeft">↺ 左旋转</el-button>
-      <el-button type="primary" plain @click="rotateRight">↻ 右旋转</el-button>
-      <el-button type="primary" plain :icon="Download" @click="downloadImg('blob')">下载</el-button>
-      <el-button type="primary" :icon="Upload" @click="uploadImage" :class="`${prefixClass}__btn--submit`">
-        提交
-      </el-button>
-    </div>
+  <div :class="ns.e('btn')">
+    <el-upload
+      action="#"
+      :http-request="handleHttpRequest"
+      :show-file-list="false"
+      :before-upload="beforeUpload"
+      :class="ns.em('btn', 'upload')"
+    >
+      <el-button type="primary" plain :icon="Upload">选择</el-button>
+    </el-upload>
+    <el-button type="primary" plain :icon="ZoomIn" @click="changeScale(1)">放大</el-button>
+    <el-button type="primary" plain :icon="ZoomOut" @click="changeScale(-1)">缩小</el-button>
+    <el-button type="primary" plain @click="rotateLeft">↺ 左旋转</el-button>
+    <el-button type="primary" plain @click="rotateRight">↻ 右旋转</el-button>
+    <el-button type="primary" plain :icon="Download" @click="downloadImg('blob')">下载</el-button>
+    <el-button type="primary" :icon="Upload" @click="uploadImage" :class="ns.em('btn', 'submit')">提交</el-button>
   </div>
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-cropper;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(cropper) {
   display: flex;
 
-  &__img {
+  @include e(box) {
     position: relative;
     width: 50%;
     height: 100%;
-
-    &--previews {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding-left: 10px;
-      overflow: hidden;
-
-      &__img {
-        overflow: hidden;
-        border-radius: 50%;
-        box-shadow: 0 0 4px #cccccc;
-      }
-    }
   }
 
-  &__btn {
+  @include e(previews) {
     display: flex;
-    margin-top: 50px;
+    align-items: center;
+    justify-content: center;
+    padding-left: 10px;
+    overflow: hidden;
 
-    &--upload {
-      display: inline-block;
-      margin-right: 30px;
+    @include m(img) {
+      overflow: hidden;
+      border-radius: 50%;
+      box-shadow: 0 0 4px #cccccc;
     }
+  }
+}
 
-    &--submit {
-      margin-left: 30px;
-    }
+@include e(btn) {
+  display: flex;
+  gap: 20px;
+  margin-top: 30px;
+
+  .#{$el-namespace}-button {
+    margin-left: 0;
   }
 }
 </style>

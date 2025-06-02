@@ -89,7 +89,6 @@ export interface CodeMirrorProps {
 defineOptions({ name: "CodeMirror6" });
 
 const ns = useNamespace("code-mirror");
-const prefixClass = ns.b();
 
 const props = withDefaults(defineProps<CodeMirrorProps>(), {
   fontSize: 14,
@@ -106,7 +105,7 @@ const props = withDefaults(defineProps<CodeMirrorProps>(), {
   forceLinting: false,
   gutter: false,
   tag: "div",
-  fullScreen: false,
+  fullScreen: true,
 });
 
 type CodeMirror6Emits = {
@@ -135,6 +134,7 @@ const editorRef = useTemplateRef<HTMLElement | undefined>("editorRef");
 
 // v-model
 const doc = defineModel<string | Text>({ default: "" });
+const isFullscreen = ref(false);
 
 /**
  * CodeMirror 的 EditorEditorView
@@ -542,8 +542,7 @@ defineExpose({
 
 // 全屏事件
 const toggleFullScreen = () => {
-  const codeMirrorEl = document.querySelector(`.${prefixClass}`) as HTMLElement;
-  if (codeMirrorEl) codeMirrorEl.classList.toggle("is-fullscreen");
+  isFullscreen.value = !isFullscreen.value;
 };
 
 const codeMirrorWidth = computed(() => addUnit(props.width));
@@ -607,17 +606,17 @@ const defaultPhrases = {
 </script>
 
 <template>
-  <component :is="tag" ref="editorRef" :class="prefixClass">
+  <component :is="tag" ref="editorRef" :class="[ns.b(), ns.is('fullscreen', isFullscreen)]">
     <template v-if="mergeConfig && mergeConfig.header">
       <slot name="header">
-        <div :class="`${prefixClass}__merge--header`">
+        <div :class="ns.e('header')">
           <slot name="headerLeft">
-            <div :class="`${prefixClass}__merge--header__left`">
+            <div :class="ns.em('header', 'left')">
               <slot name="leftTitle">{{ mergeConfig.leftTitle || "Before" }}</slot>
             </div>
           </slot>
           <slot name="headerRight">
-            <div :class="`${prefixClass}__merge--header__right`">
+            <div :class="ns.em('header', 'right')">
               <slot name="rightTitle">{{ mergeConfig.rightTitle || "After" }}</slot>
             </div>
           </slot>
@@ -625,7 +624,7 @@ const defaultPhrases = {
       </slot>
     </template>
 
-    <div v-if="fullScreen" :class="`${prefixClass}__full-screen`">
+    <div v-if="fullScreen" :class="ns.e('fullscreen-btn')">
       <el-button size="small" plain @click="toggleFullScreen">
         <el-icon><FullScreen /></el-icon>
       </el-button>
@@ -636,14 +635,26 @@ const defaultPhrases = {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-code-mirror;
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/namespace" as *;
 
-.#{$prefix-class} {
+@include b(code-mirror) {
   position: relative;
   width: v-bind(codeMirrorWidth);
   height: v-bind(codeMirrorHeight);
   max-height: v-bind(codeMirrorMaxHeight);
   font-size: v-bind(codeMirrorFontSize);
+
+  @include is(fullscreen) {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 100;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: #ffffff;
+  }
 
   // CodeMirror 实际高度
   :deep(.cm-editor) {
@@ -679,12 +690,20 @@ $prefix-class: #{$admin-namespace}-code-mirror;
     height: 100%;
   }
 
-  &__merge--header {
+  @include e(header) {
     display: flex;
     align-items: stretch;
 
-    &__left,
-    &__right {
+    @include m(left) {
+      flex-grow: 1;
+      flex-basis: 0;
+      padding: 8px 11px;
+      text-align: center;
+      background-color: v-bind(mergeCmBgColor);
+      border: 1px solid v-bind(mergeCmBorderColor);
+    }
+
+    @include m(right) {
       flex-grow: 1;
       flex-basis: 0;
       padding: 8px 11px;
@@ -694,7 +713,7 @@ $prefix-class: #{$admin-namespace}-code-mirror;
     }
   }
 
-  &__full-screen {
+  @include e(fullscreen-btn) {
     position: absolute;
     right: 5px;
     bottom: 5px;
@@ -708,16 +727,6 @@ $prefix-class: #{$admin-namespace}-code-mirror;
         font-size: 16px;
       }
     }
-  }
-
-  &.is-fullscreen {
-    position: fixed;
-    top: 0;
-    left: 0;
-    z-index: 1990;
-    width: 100%;
-    height: 100%;
-    overflow: auto;
   }
 }
 </style>

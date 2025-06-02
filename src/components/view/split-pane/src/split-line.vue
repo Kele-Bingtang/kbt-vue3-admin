@@ -1,9 +1,3 @@
-<template>
-  <div :class="[prefixClass, classes]">
-    <div :class="`${prefixClass}__bar ${barConClasses}`"></div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed } from "vue";
 import { useNamespace } from "@/composables";
@@ -11,21 +5,27 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "SplitLine" });
 
 const ns = useNamespace("split-trigger");
-const prefixClass = ns.b();
 
 const props = defineProps<{ mode: "vertical" | "horizontal" }>();
 
 const isVertical = computed(() => props.mode === "vertical");
-const classes = computed(() => (isVertical.value ? `${prefixClass}__vertical` : `${prefixClass}__horizontal`));
+const classes = computed(() => (isVertical.value ? ns.e("vertical") : ns.e("horizontal")));
 const barConClasses = computed(() => (isVertical.value ? "vertical" : "horizontal"));
 </script>
 
+<template>
+  <div :class="[ns.b(), classes]">
+    <div :class="`${ns.e('bar')} ${barConClasses}`"></div>
+  </div>
+</template>
+
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-split-trigger;
+@use "@/styles/mixins/bem" as *;
+
 $trigger-background: #f8f8f9;
 
-.#{$prefix-class} {
-  &__bar {
+@include b(split-trigger) {
+  @include e(bar) {
     position: absolute;
     overflow: hidden;
 
@@ -38,13 +38,13 @@ $trigger-background: #f8f8f9;
     }
   }
 
-  &__vertical {
+  @include e(vertical, true) {
     width: 5px;
     height: 100%;
     cursor: col-resize;
     background: $trigger-background;
 
-    .#{$prefix-class}__bar {
+    @include e(bar) {
       position: absolute;
       left: 3px;
       z-index: 1;
@@ -57,7 +57,7 @@ $trigger-background: #f8f8f9;
     }
   }
 
-  &__horizontal {
+  @include e(horizontal, true) {
     width: 100%;
     height: 3px;
     cursor: row-resize;

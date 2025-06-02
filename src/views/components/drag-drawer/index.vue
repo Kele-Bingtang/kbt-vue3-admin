@@ -3,7 +3,6 @@ import { DragDrawer } from "@/components";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("darg-drawer-demo");
-const prefixClass = ns.b();
 
 const visible1 = ref(false);
 const visible2 = ref(false);
@@ -19,23 +18,23 @@ const handleResize = (event: any) => {
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <el-card shadow="never" header="">
-      <div :class="`${prefixClass}__header`">
+      <div :class="ns.e('header')">
         <el-switch
           v-model="placement"
           active-text="右"
           inactive-text="左"
           active-value="right"
           inactive-value="left"
-          :class="`${prefixClass}__header--switch`"
+          :class="ns.em('header', 'switch')"
         ></el-switch>
         <el-switch v-model="draggable" active-text="是否可拖拽"></el-switch>
         <el-button @click="visible1 = true" type="primary" style="margin-left: 16px">打开容器内抽屉</el-button>
         <el-button @click="visible2 = true" type="primary" style="margin-left: 16px">打开全屏抽屉</el-button>
       </div>
 
-      <div :class="`${prefixClass}__inner`">
+      <div :class="ns.e('inner')">
         <DragDrawer
           v-model="visible1"
           :placement="placement"
@@ -84,18 +83,18 @@ const handleResize = (event: any) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-darg-drawer-demo;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
-  &__header {
+@include b(darg-drawer-demo) {
+  @include e(header) {
     margin-bottom: 30px;
 
-    &--switch {
+    @include m(switch) {
       margin-right: 30px;
     }
   }
 
-  &__inner {
+  @include e(inner) {
     position: relative;
     width: 500px;
     height: 400px;

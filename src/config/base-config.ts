@@ -1,6 +1,8 @@
 import {
   HeaderStyleEnum,
+  LanguageEnum,
   LayoutModeEnum,
+  LayoutSizeEnum,
   MenuThemeEnum,
   PageTransitionEnum,
   SystemThemeEnum,
@@ -46,8 +48,8 @@ const layoutConfig: LayoutConfig = {
   errorLog: { showInHeader: true, env: [""] },
   moreRouteChildrenHideInMenuThenOnlyOne: false,
   tooltipEffect: "light",
-  layoutSize: "default",
-  language: "zh-CN",
+  layoutSize: LayoutSizeEnum.Default,
+  language: LanguageEnum.ZhCn,
   watchFrame: false,
 };
 

@@ -15,7 +15,7 @@ import { useNamespace } from "@/composables";
 import { ConfigGlobalKey } from "@/config";
 
 const ns = useNamespace("work-drawer");
-const prefixClass = ns.b();
+const blockClass = ns.b();
 
 let id = 0;
 
@@ -42,7 +42,7 @@ export interface WorkDrawerProps extends Partial<DrawerProps> {
 }
 
 export const closeDrawer = () => {
-  const vm = document.querySelector(`#${prefixClass}-${id--}`) as HTMLElement;
+  const vm = document.querySelector(`#${blockClass}-${id--}`) as HTMLElement;
   vm && getFather().removeChild(vm);
 };
 
@@ -72,7 +72,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
 
   const toggleFull = () => {
     const elDrawerEl = document.querySelector(
-      `${`#${prefixClass}-${id}`} .${prefixClass}.${ns.elNamespace}-drawer`
+      `${`#${blockClass}-${id}`} .${blockClass}.${ns.elNamespace}-drawer`
     ) as HTMLElement;
     if (elDrawerEl) elDrawerEl.classList.toggle("is-fullscreen");
     isFullscreen.value = !isFullscreen.value;
@@ -89,7 +89,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
         render
         headerRender
         footerRender
-        class={prefixClass}
+        class={blockClass}
       >
         {{
           default: () => {
@@ -103,7 +103,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
                 <span class={`${ns.elNamespace}-drawer__title`}>{drawerProps.title}</span>
                 {drawerProps.fullscreenIcon !== false && (
                   <Icon
-                    name={isFullscreen.value ? "core-fullscreen-exit" : "core-fullscreen"}
+                    icon={isFullscreen.value ? "core-fullscreen-exit" : "core-fullscreen"}
                     onClick={() => toggleFull()}
                     width="18px"
                     height="18px"
@@ -136,7 +136,7 @@ export const showDrawer = (drawerProps: WorkDrawerProps, component?: Component, 
   vm.children?.length && (vm.children[0].appContext = appContextConst);
 
   const container = document.createElement("div");
-  container.id = `${prefixClass}-${++id}`;
+  container.id = `${blockClass}-${++id}`;
   getFather().appendChild(container);
   render(vm, container);
 

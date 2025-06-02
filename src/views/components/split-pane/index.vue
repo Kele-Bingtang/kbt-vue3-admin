@@ -3,7 +3,6 @@ import { SplitPane } from "@/components";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("split-pane-demo");
-const prefixClass = ns.b();
 
 /**
  * SplitPane 接收的插槽位置为 left、right、top、bottom，即 <div slot="left/right/top/bottom">位置</div>
@@ -39,16 +38,16 @@ const handleMoving = (e: any) => {
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <split-pane v-model="offset1" mode="vertical" @on-moving="handleMoving">
       <template #left>
-        <div :class="`${prefixClass}__pane left-pane`">
+        <div :class="`${ns.e('pane')} left-pane`">
           <split-pane v-model="offset2" mode="horizontal" @on-moving="handleMoving">
             <template #top>
-              <div :class="`${prefixClass}__pane top-pane`"></div>
+              <div :class="`${ns.e('pane')} top-pane`"></div>
             </template>
             <template #bottom>
-              <div :class="`${prefixClass}__pane bottom-pane`"></div>
+              <div :class="`${ns.e('pane')} bottom-pane`"></div>
             </template>
           </split-pane>
         </div>
@@ -57,10 +56,10 @@ const handleMoving = (e: any) => {
       <template #right>
         <split-pane v-model="offset3" class="pane right-pane" mode="vertical">
           <template #left>
-            <div :class="`${prefixClass}__pane left-pane`"></div>
+            <div :class="`${ns.e('pane')} left-pane`"></div>
           </template>
           <template #right>
-            <div :class="`${prefixClass}__pane right-pane`"></div>
+            <div :class="`${ns.e('pane')} right-pane`"></div>
           </template>
         </split-pane>
       </template>
@@ -69,13 +68,13 @@ const handleMoving = (e: any) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-split-pane-demo;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(split-pane-demo) {
   height: 100%;
   padding: 20px;
 
-  &__pane {
+  @include e(pane) {
     width: 100%;
     height: 100%;
 

@@ -6,7 +6,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "SplitPane" });
 
 const ns = useNamespace("split-pane");
-const prefixClass = ns.b();
 
 type NumOrStr = number | string;
 
@@ -130,39 +129,47 @@ const handleMousedown = (e: MouseEvent) => {
 </script>
 
 <template>
-  <div ref="splitPaneRef" :class="[prefixClass, { 'no-select': isMoving }]">
-    <div v-if="isHorizontal" :class="`${prefixClass}__horizontal`">
-      <div :style="{ bottom: `${anotherOffset}%` }" :class="`${prefixClass}__item top-pane`">
+  <div ref="splitPaneRef" :class="[ns.b(), { 'no-select': isMoving }]">
+    <div v-if="isHorizontal" :class="ns.e('horizontal')">
+      <div :style="{ bottom: `${anotherOffset}%` }" :class="`${ns.e('item')} top-pane`">
         <slot name="top" />
       </div>
-      <div :class="`${prefixClass}__container`" :style="{ top: `${offset}%` }" @mousedown="handleMousedown">
+      <div
+        :class="[ns.e('container'), ns.em('horizontal', 'container')]"
+        :style="{ top: `${offset}%` }"
+        @mousedown="handleMousedown"
+      >
         <slot name="line">
           <split-line mode="horizontal" />
         </slot>
       </div>
-      <div :style="{ top: `${offset}%` }" :class="`${prefixClass}__item bottom-pane`"><slot name="bottom" /></div>
+      <div :style="{ top: `${offset}%` }" :class="`${ns.e('item')} bottom-pane`"><slot name="bottom" /></div>
     </div>
-    <div v-else :class="`${prefixClass}__vertical`">
-      <div :style="{ right: `${anotherOffset}%` }" :class="`${prefixClass}__item left-pane`"><slot name="left" /></div>
-      <div :class="`${prefixClass}__container`" :style="{ left: `${offset}%` }" @mousedown="handleMousedown">
+    <div v-else :class="ns.e('vertical')">
+      <div :style="{ right: `${anotherOffset}%` }" :class="`${ns.e('item')} left-pane`"><slot name="left" /></div>
+      <div
+        :class="[ns.e('container'), ns.em('vertical', 'container')]"
+        :style="{ left: `${offset}%` }"
+        @mousedown="handleMousedown"
+      >
         <slot name="line">
           <split-line mode="vertical" />
         </slot>
       </div>
-      <div :style="{ left: `${offset}%` }" :class="`${prefixClass}__item right-pane`"><slot name="right" /></div>
+      <div :style="{ left: `${offset}%` }" :class="`${ns.e('item')} right-pane`"><slot name="right" /></div>
     </div>
   </div>
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-split-pane;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(split-pane) {
   position: relative;
   width: 100%;
   height: 100%;
 
-  &__item {
+  @include e(item) {
     position: absolute;
 
     &.left-pane,
@@ -194,10 +201,10 @@ $prefix-class: #{$admin-namespace}-split-pane;
     }
   }
 
-  &__vertical {
+  @include e(vertical) {
     height: 100%;
 
-    .#{$prefix-class}__container {
+    @include m(container) {
       top: 50%;
       left: 50%;
       width: 0;
@@ -205,16 +212,16 @@ $prefix-class: #{$admin-namespace}-split-pane;
     }
   }
 
-  &__container {
+  @include e(container) {
     position: absolute;
     z-index: 10;
     transform: translate(-50%, -50%);
   }
 
-  &__horizontal {
+  @include e(horizontal) {
     width: 100%;
 
-    .#{$prefix-class}__container {
+    @include m(container) {
       position: absolute;
       top: 50%;
       left: 50%;

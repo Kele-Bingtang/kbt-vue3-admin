@@ -7,7 +7,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "DragDrawer" });
 
 const ns = useNamespace("drag-drawer");
-const prefixClass = ns.b();
 
 interface DragDrawerProps {
   placement?: string; // 抽屉打开位置
@@ -39,7 +38,7 @@ const wrapperWidth = ref(0);
 const wrapperLeft = ref(0);
 
 const outerClasses = computed(() => {
-  const classesArray = [props.inner ? `${prefixClass}__inner` : "", canMove.value ? "no-select" : ""];
+  const classesArray = [props.inner ? "inner" : "", canMove.value ? "no-select" : ""];
   return classesArray.join(" ");
 });
 
@@ -132,7 +131,7 @@ const setWrapperWidth = () => {
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <el-drawer
       ref="drawerRef"
       v-model="drawerVisible"
@@ -146,17 +145,12 @@ const setWrapperWidth = () => {
         <slot name="header"></slot>
       </template>
       <slot></slot>
-      <div
-        v-if="draggable"
-        :style="triggerStyle"
-        :class="`${prefixClass}__trigger`"
-        @mousedown="handleTriggerMousedown"
-      >
+      <div v-if="draggable" :style="triggerStyle" :class="ns.e('trigger')" @mousedown="handleTriggerMousedown">
         <slot name="trigger">
           <DragDrawerTrigger></DragDrawerTrigger>
         </slot>
       </div>
-      <div v-if="$slots.footer" :class="`${prefixClass}__footer`">
+      <div v-if="$slots.footer" :class="ns.e('footer')">
         <slot name="footer"></slot>
       </div>
     </el-drawer>
@@ -164,14 +158,14 @@ const setWrapperWidth = () => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-drag-drawer;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(drag-drawer) {
   .no-select {
     pointer-events: none;
     user-select: none;
 
-    .#{$prefix-class}__trigger {
+    @include e(trigger) {
       pointer-events: all;
     }
   }
@@ -181,13 +175,13 @@ $prefix-class: #{$admin-namespace}-drag-drawer;
     transition: none;
   }
 
-  &__trigger {
+  @include e(trigger) {
     top: 0;
     width: 0;
     height: 100%;
   }
 
-  &__footer {
+  @include e(footer) {
     bottom: 0;
     left: 0;
     flex-grow: 1;
@@ -197,7 +191,7 @@ $prefix-class: #{$admin-namespace}-drag-drawer;
     border-top: 1px solid #e8e8e8;
   }
 
-  :deep(.#{$prefix-class}__inner) {
+  :deep(.inner) {
     position: absolute;
     overflow: visible;
 

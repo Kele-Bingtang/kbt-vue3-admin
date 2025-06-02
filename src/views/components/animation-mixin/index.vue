@@ -1,5 +1,29 @@
+<script setup lang="ts" name="AnimationMixin">
+import { MaterialInput, TextHoverEffect } from "@/components";
+import Button from "./button.vue";
+import { Search } from "@element-plus/icons-vue";
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace("animation-mixin");
+
+const demo = reactive({
+  title: "",
+});
+const validateLength = (rule: any, value: string, callback: (e?: Error) => void) => {
+  if (value.length !== 6) {
+    callback(new Error("请输入六个字符"));
+  } else {
+    callback();
+  }
+};
+
+const demoRules = {
+  title: [{ validator: validateLength, trigger: "change" }],
+};
+</script>
+
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <el-card class="box-card">
       <template #header>
         <span>按钮</span>
@@ -79,33 +103,9 @@
   </div>
 </template>
 
-<script setup lang="ts" name="AnimationMixin">
-import { MaterialInput, TextHoverEffect } from "@/components";
-import Button from "./button.vue";
-import { Search } from "@element-plus/icons-vue";
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace("animation-mixin");
-const prefixClass = ns.b();
-
-const demo = reactive({
-  title: "",
-});
-const validateLength = (rule: any, value: string, callback: (e?: Error) => void) => {
-  if (value.length !== 6) {
-    callback(new Error("请输入六个字符"));
-  } else {
-    callback();
-  }
-};
-
-const demoRules = {
-  title: [{ validator: validateLength, trigger: "change" }],
-};
-</script>
-
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-animation-mixin;
+@use "@/styles/mixins/bem" as *;
+
 $blue: #007bff;
 $light-blue: #409eff;
 $red: #e65d6e;
@@ -114,20 +114,20 @@ $green: #43a047;
 $tiffany: #00c9b7;
 $yellow: #ffb350;
 
-.#{$prefix-class} {
-  @mixin color-btn($color) {
-    background: $color;
+@mixin color-btn($color) {
+  background: $color;
 
-    &:hover {
-      color: $color;
+  &:hover {
+    color: $color;
 
-      &::before,
-      &::after {
-        background: $color;
-      }
+    &::before,
+    &::after {
+      background: $color;
     }
   }
+}
 
+@include b(animation-mixin) {
   height: 100%;
 
   .mixin-col {

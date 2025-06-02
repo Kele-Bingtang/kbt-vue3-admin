@@ -7,7 +7,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "UploadExcel" });
 
 const ns = useNamespace("excel-upload");
-const prefixClass = ns.b();
 
 export type ExcelData = { results: any; header: string[] };
 
@@ -125,15 +124,9 @@ const isExcel = (file: File) => {
 </script>
 
 <template>
-  <div :class="prefixClass">
-    <input
-      ref="excelUploadInputRef"
-      :class="`${prefixClass}__input`"
-      type="file"
-      accept=".xlsx, .xls"
-      @change="handleClick"
-    />
-    <div :class="`${prefixClass}__drop`" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
+  <div :class="ns.b()">
+    <input ref="excelUploadInputRef" :class="ns.e('input')" type="file" accept=".xlsx, .xls" @change="handleClick" />
+    <div :class="ns.e('drop')" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
       上传 Excel 文件
       <el-button :loading="loading" style="margin-left: 16px" type="primary" @click="handleUpload">浏览</el-button>
     </div>
@@ -141,15 +134,15 @@ const isExcel = (file: File) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-excel-upload;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
-  &__input {
+@include b(excel-upload) {
+  @include e(input) {
     z-index: -9999;
     display: none;
   }
 
-  &__drop {
+  @include e(drop) {
     position: relative;
     width: 600px;
     height: 160px;

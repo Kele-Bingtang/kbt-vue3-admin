@@ -17,7 +17,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "ImgUpload" });
 
 const ns = useNamespace("image-upload");
-const prefixClass = ns.b();
 
 export type SuccessFun = (response: string) => void;
 
@@ -158,11 +157,11 @@ const uploadError = () => {
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <el-upload
       action="#"
       :id="uuid"
-      :class="[`${prefixClass}__upload`, self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
+      :class="[ns.e('upload'), self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
       :multiple="false"
       :disabled="self_disabled"
       :show-file-list="false"
@@ -174,24 +173,24 @@ const uploadError = () => {
       :accept="fileType.join(',')"
     >
       <template v-if="imageUrl">
-        <img :src="imageUrl" :class="`${prefixClass}__image`" />
-        <div :class="`${prefixClass}__handle`" @click.stop>
-          <div :class="`${prefixClass}__handle--icon`" @click="editImg" v-if="!self_disabled">
+        <img :src="imageUrl" :class="ns.e('image')" />
+        <div :class="ns.e('handle')" @click.stop>
+          <div :class="ns.em('handle', 'icon')" @click="editImg" v-if="!self_disabled">
             <el-icon><Edit /></el-icon>
             <span>编辑</span>
           </div>
-          <div :class="`${prefixClass}__handle--icon`" @click="imgViewVisible = true">
+          <div :class="ns.em('handle', 'icon')" @click="imgViewVisible = true">
             <el-icon><ZoomIn /></el-icon>
             <span>查看</span>
           </div>
-          <div :class="`${prefixClass}__handle--icon`" @click="deleteImg" v-if="!self_disabled">
+          <div :class="ns.em('handle', 'icon')" @click="deleteImg" v-if="!self_disabled">
             <el-icon><Delete /></el-icon>
             <span>删除</span>
           </div>
         </div>
       </template>
       <template v-else>
-        <div :class="`${prefixClass}__empty`">
+        <div :class="ns.e('empty')">
           <slot name="empty">
             <el-icon><Plus /></el-icon>
             <!-- <span>请上传图片</span> -->
@@ -199,7 +198,7 @@ const uploadError = () => {
         </div>
       </template>
     </el-upload>
-    <div class="el-upload__tip">
+    <div :class="`${ns.elNamespace}-upload__tip`">
       <slot name="tip"></slot>
     </div>
     <el-image-viewer v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[imageUrl]" />

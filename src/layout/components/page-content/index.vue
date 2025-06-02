@@ -65,11 +65,11 @@ const isFixTabNav = computed(() => {
     <component :is="TabNavComponents[tabNavMode]" v-if="showTabNav" />
 
     <router-view v-slot="{ Component, route }">
-      <Transition :name="settingStore.pageTransition" mode="out-in" appear>
+      <transition :name="settingStore.pageTransition" mode="out-in" appear>
         <keep-alive :max="10" :include="layoutStore.keepAliveName">
           <component v-if="isRefreshRoute" :is="Component" :key="route.path" class="main-content" />
         </keep-alive>
-      </Transition>
+      </transition>
     </router-view>
     <FrameLayout />
   </el-main>

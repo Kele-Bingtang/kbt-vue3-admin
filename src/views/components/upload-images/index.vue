@@ -7,7 +7,6 @@ import { Avatar, Picture } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("images-upload-demo");
-const prefixClass = ns.b();
 
 const fileList = ref([{ name: "img", url: "https://i.imgtg.com/2023/01/16/QRBHS.jpg" }]);
 const fileList1 = ref([]);
@@ -56,11 +55,11 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <!-- 单图上传 -->
-    <div :class="`${prefixClass}__card ${prefixClass}__box`">
+    <div :class="[ns.e('card'), ns.e('box')]">
       <h2>单图片上传组件 🍓🍇🍈🍉</h2>
-      <div :class="`${prefixClass}__card--list`">
+      <div :class="ns.e('list')">
         <ImageUpload v-model="avatar1" @upload-img="uploadImg" :fileSize="3">
           <template #tip>上传图片最大为 3M</template>
         </ImageUpload>
@@ -116,9 +115,9 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
       </el-descriptions>
     </div>
     <!-- 多图上传 -->
-    <div :class="`${prefixClass}__card ${prefixClass}__box`">
+    <div :class="[ns.e('card'), ns.e('box')]">
       <h2>多图片上传组件 🍓🍇🍈🍉</h2>
-      <div :class="`${prefixClass}__card--list`">
+      <div :class="ns.e('list')">
         <ImagesUpload v-model="fileList" @upload-img="uploadImg" :drag="false" borderRadius="50%">
           <template #empty>
             <el-icon><Picture /></el-icon>
@@ -150,8 +149,8 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
       </el-descriptions>
     </div>
     <!-- 表单使用 -->
-    <div :class="`${prefixClass}__form`">
-      <div :class="`${prefixClass}__form--card`">
+    <div :class="ns.e('form')">
+      <div :class="ns.em('form', 'card')">
         <el-alert
           title="图片上传组件在 form 表单中使用，上传之后成功会自动重新校验"
           type="warning"
@@ -200,7 +199,7 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
           </el-form-item>
         </el-form>
       </div>
-      <div :class="`${prefixClass}__form--card`">
+      <div :class="ns.em('form', 'card')">
         <el-alert
           title="图片上传组件在 form 表单中使用，如果该表单禁用，则上传组件会自动禁用"
           type="warning"
@@ -253,12 +252,12 @@ const uploadImg = async (file: File, callback: SuccessFun) => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-images-upload-demo;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(images-upload-demo) {
   height: auto;
 
-  &__card {
+  @include e(card) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -266,30 +265,30 @@ $prefix-class: #{$admin-namespace}-images-upload-demo;
     padding: 20px;
     background-color: #ffffff;
 
-    &--list {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-around;
-      width: 90%;
-      margin: 10px 0;
-    }
-
     :deep(.#{$el-namespace}-descriptions) {
       width: 100%;
       padding: 40px 0 0;
     }
   }
 
-  &__box {
+  @include e(list) {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    width: 90%;
+    margin: 10px 0;
+  }
+
+  @include e(box) {
     margin-bottom: 10px;
   }
 
-  &__form {
+  @include e(form) {
     display: flex;
     justify-content: space-around;
     width: 100%;
 
-    &--card {
+    @include m(card) {
       display: flex;
       flex-direction: column;
       align-items: center;

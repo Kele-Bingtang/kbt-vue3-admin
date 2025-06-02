@@ -7,7 +7,6 @@ import type { TreeFilter } from "..";
 defineOptions({ name: "TreeFilter" });
 
 const ns = useNamespace("tree-filter");
-const prefixClass = ns.b();
 
 export type TreeFilterInstance = Omit<
   InstanceType<typeof TreeFilter>,
@@ -114,9 +113,9 @@ defineExpose({ treeData, treeAllData, initTreeData });
 </script>
 
 <template>
-  <div :class="`${prefixClass} card`">
+  <div :class="`${ns.b()} card`">
     <slot name="title">
-      <h4 :class="`${prefixClass}__title sle`" v-if="title">{{ title }}</h4>
+      <h4 :class="`${ns.e('title')} sle`" v-if="title">{{ title }}</h4>
     </slot>
     <el-input v-model="filterText" placeholder="输入关键字进行过滤" clearable />
     <el-scrollbar :style="{ height: title ? `calc(100% - 95px)` : `calc(100% - 56px)` }">

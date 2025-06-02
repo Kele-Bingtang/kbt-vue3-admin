@@ -5,7 +5,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "DraggableItem" });
 
 const ns = useNamespace("drag-item");
-const prefixClass = ns.b();
 
 export interface DragItemList {
   id: string;
@@ -30,13 +29,13 @@ withDefaults(defineProps<DraggableItemProps>(), {
 </script>
 
 <template>
-  <div :class="prefixClass">
-    <div :class="`${prefixClass}__header ${titleClass}`" :style="{ backgroundColor: titleBgColor }">
+  <div :class="ns.b()">
+    <div :class="`${ns.e('header')} ${titleClass}`" :style="{ backgroundColor: titleBgColor }">
       <slot name="title">{{ title }}</slot>
     </div>
-    <draggable :list="list" v-bind="$attrs" :class="`${prefixClass}__content ${dragClass}`" itemKey="id">
+    <draggable :list="list" v-bind="$attrs" :class="`${ns.e('content')} ${dragClass}`" itemKey="id">
       <template #item="{ element }">
-        <div :class="`${prefixClass}__content--item`">
+        <div :class="ns.em('content', 'item')">
           <slot name="content" :item="element">{{ element }}</slot>
         </div>
       </template>
@@ -45,9 +44,9 @@ withDefaults(defineProps<DraggableItemProps>(), {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-drag-item;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(drag-item) {
   min-width: 300px;
   height: auto;
   min-height: 100px;
@@ -55,7 +54,7 @@ $prefix-class: #{$admin-namespace}-drag-item;
   background: #f0f0f0;
   border-radius: 3px;
 
-  &__header {
+  @include e(header) {
     height: 50px;
     padding: 0 20px;
     overflow: hidden;
@@ -66,7 +65,7 @@ $prefix-class: #{$admin-namespace}-drag-item;
     border-radius: 3px 3px 0 0;
   }
 
-  &__content {
+  @include e(content) {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -76,7 +75,7 @@ $prefix-class: #{$admin-namespace}-drag-item;
     overflow: hidden;
     border: 10px solid transparent;
 
-    &--item {
+    @include m(item) {
       box-sizing: border-box;
       width: 100%;
       height: 64px;

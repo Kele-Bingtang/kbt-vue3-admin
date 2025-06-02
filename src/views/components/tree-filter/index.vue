@@ -4,7 +4,6 @@ import { TreeFilter } from "@/components";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("tree-filter-demo");
-const prefixClass = ns.b();
 
 interface Tree {
   id: number;
@@ -77,7 +76,7 @@ const data: Tree[] = [
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <TreeFilter
       label="label"
       title="部门列表(单选)"
@@ -93,7 +92,7 @@ const data: Tree[] = [
       :defaultValue="treeFilterValue1.departmentId"
       @change="changeTreeFilter1"
     />
-    <el-card :class="`${prefixClass}__descriptions`">
+    <el-card :class="ns.e('descriptions')">
       <h2>树形筛选器 🍓🍇🍈🍉</h2>
       <el-descriptions title="配置项 📚" :column="1" border>
         <el-descriptions-item label="requestApi">请求分类数据的 api</el-descriptions-item>
@@ -109,15 +108,15 @@ const data: Tree[] = [
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-tree-filter-demo;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(tree-filter-demo) {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   height: 100%;
 
-  &__descriptions {
+  @include e(descriptions) {
     flex: 1;
     height: 100%;
   }

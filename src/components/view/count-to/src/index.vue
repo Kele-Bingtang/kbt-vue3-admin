@@ -6,7 +6,6 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "CountTo" });
 
 const ns = useNamespace("count-to");
-const prefixClass = ns.b();
 
 interface Unit {
   value: number;
@@ -210,11 +209,11 @@ defineExpose({
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <slot name="prefix">
       <span v-if="prefix">{{ prefix }}</span>
     </slot>
-    <p :class="`${prefixClass}__content--outer`">
+    <p :class="ns.e('outer')">
       <span ref="countRef" :class="[countClass]">{{ init }}</span>
       <span :class="[unitClass]">{{ unitText }}</span>
     </p>
@@ -225,10 +224,10 @@ defineExpose({
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-count-to;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
-  &__content--outer {
+@include b(count-to) {
+  @include e(outer) {
     display: inline-block;
     margin: 0;
   }

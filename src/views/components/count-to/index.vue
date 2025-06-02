@@ -3,7 +3,6 @@ import { CountTo } from "@/components";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("count-to-demo");
-const prefixClass = ns.b();
 
 const customUnit = [
   { value: 3, label: "千多" },
@@ -105,7 +104,7 @@ const reset = () => {
 </script>
 
 <template>
-  <div :class="prefixClass">
+  <div :class="ns.b()">
     <el-card shadow="never" style="margin-bottom: 10px">
       <template #header>
         <el-link
@@ -383,9 +382,9 @@ const reset = () => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-count-to-demo;
+@use "@/styles/mixins/bem" as *;
 
-.#{$prefix-class} {
+@include b(count-to-demo) {
   .count-to-row {
     margin-top: 20px;
   }

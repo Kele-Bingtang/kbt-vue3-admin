@@ -3,7 +3,6 @@ import "./index.scss";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace("point-flicker");
-const prefixClass = ns.b();
 
 export interface attrsType {
   width?: string; // 可选 string 宽
@@ -23,7 +22,7 @@ export const useFlicker = (attrs?: attrsType): Component => {
       return h(
         "div",
         {
-          class: `${prefixClass}`,
+          class: `${ns.b()}`,
           style: {
             "--point-width": attrs?.width ?? "12px",
             "--point-height": attrs?.height ?? "12px",

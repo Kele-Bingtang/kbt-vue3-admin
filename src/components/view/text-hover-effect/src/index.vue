@@ -5,7 +5,7 @@ import { useNamespace } from "@/composables";
 defineOptions({ name: "TextHoverEffect" });
 
 const ns = useNamespace("link-hover");
-const prefixClass = ns.b();
+const blockClass = ns.b();
 
 interface TextHoverEffectProps {
   className?: string;
@@ -21,13 +21,13 @@ const props = withDefaults(defineProps<TextHoverEffectProps>(), {
 });
 
 onMounted(() => {
-  document.styleSheets[0].insertRule(`.${prefixClass}::before { background: ${props.hoverColor} !important}`, 0);
-  document.styleSheets[0].insertRule(`.${prefixClass} span::before { color: ${props.hoverColor} !important}`, 0);
+  document.styleSheets[0].insertRule(`.${blockClass}::before { background: ${props.hoverColor} !important}`, 0);
+  document.styleSheets[0].insertRule(`.${blockClass} span::before { color: ${props.hoverColor} !important}`, 0);
 });
 </script>
 
 <template>
-  <a :class="[prefixClass, className]" :style="{ color: initColor }" href="#">
+  <a :class="[blockClass, className]" :style="{ color: initColor }" href="#">
     <slot>
       {{ text }}
     </slot>
@@ -37,10 +37,9 @@ onMounted(() => {
 </template>
 
 <style lang="scss" scoped>
-$prefix-class: #{$admin-namespace}-link-hover;
+@use "@/styles/mixins/bem" as *;
 
-/* hover */
-.#{$prefix-class} {
+@include b(link-hover) {
   position: relative;
   display: inline-block;
   overflow: hidden;
