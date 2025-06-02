@@ -10,7 +10,7 @@ const outerChainRoutes: RouterConfigRaw = {
   },
   children: [
     {
-      path: "https://github.com/Kele-Bingtang/teek-design-pro",
+      path: "https://github.com/Kele-Bingtang/teek-design-vue3",
       name: "Github",
       meta: {
         title: "Github",

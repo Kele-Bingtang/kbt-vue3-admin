@@ -25,7 +25,7 @@ const menuList = computed(() => [
   { label: t("_headerBar.setting"), icon: Setting, click: openThemePanel },
   {
     label: "Github",
-    click: () => window.open("https://github.com/Kele-Bingtang/teek-design-pro"),
+    click: () => window.open("https://github.com/Kele-Bingtang/teek-design-vue3"),
   },
 ]);
 

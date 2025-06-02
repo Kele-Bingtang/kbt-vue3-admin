@@ -19,5 +19,5 @@
 
 <script setup lang="ts" name="Copy">
 const router = useRouter();
-const data = ref<string>("https://github.com/Kele-Bingtang/teek-design-pro");
+const data = ref<string>("https://github.com/Kele-Bingtang/teek-design-vue3");
 </script>
