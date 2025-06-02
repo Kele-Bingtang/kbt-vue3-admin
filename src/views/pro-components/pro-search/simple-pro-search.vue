@@ -1,10 +1,3 @@
-<template>
-  <el-space fill>
-    <ProSearch :schema="schema" v-model="model" />
-    {{ model }}
-  </el-space>
-</template>
-
 <script setup lang="ts" name="SimpleProSearch">
 import { ProSearch, type ProSearchSchemaProps } from "@/components";
 
@@ -78,3 +71,10 @@ const loadAll = () => {
   ];
 };
 </script>
+
+<template>
+  <el-space fill>
+    <ProSearch :schema="schema" v-model="model" />
+    {{ model }}
+  </el-space>
+</template>

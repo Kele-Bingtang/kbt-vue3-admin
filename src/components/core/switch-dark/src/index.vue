@@ -1,13 +1,3 @@
-<template>
-  <el-switch
-    v-model="settingStore.isDark"
-    @change="onAddDarkChange"
-    inline-prompt
-    :active-icon="Sunny"
-    :inactive-icon="Moon"
-  />
-</template>
-
 <script setup lang="ts">
 import { ElSwitch } from "element-plus";
 import { Sunny, Moon } from "@element-plus/icons-vue";
@@ -28,3 +18,13 @@ const onAddDarkChange = () => {
   changeSystemTheme(isDark ? Dark : Light);
 };
 </script>
+
+<template>
+  <el-switch
+    v-model="settingStore.isDark"
+    @change="onAddDarkChange"
+    inline-prompt
+    :active-icon="Sunny"
+    :inactive-icon="Moon"
+  />
+</template>

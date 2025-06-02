@@ -1,3 +1,31 @@
+<script setup lang="ts" name="PdfPreview">
+import VuePdfEmbed from "vue-pdf-embed";
+import { Refresh, Printer } from "@element-plus/icons-vue";
+
+const pdfRef = useTemplateRef<any>("pdfRef");
+const pageCount = ref(1);
+const loading = ref(true);
+const currentPage = ref<number>(1);
+const currentRotation = ref(0);
+const showAllPages = ref(false);
+const rotations = [0, 90, 180, 270];
+
+const source = "https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/index/Nginx_day01.pdf";
+
+const handleDocumentRender = () => {
+  loading.value = false;
+  pageCount.value = pdfRef.value.pageCount;
+};
+
+const showAllPagesChange = () => {
+  currentPage.value = (showAllPages.value ? null : 1) as number;
+};
+
+const onPrint = () => {
+  pdfRef.value?.print();
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" class="pdf-preview-container">
@@ -51,34 +79,6 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="PdfPreview">
-import VuePdfEmbed from "vue-pdf-embed";
-import { Refresh, Printer } from "@element-plus/icons-vue";
-
-const pdfRef = useTemplateRef<any>("pdfRef");
-const pageCount = ref(1);
-const loading = ref(true);
-const currentPage = ref<number>(1);
-const currentRotation = ref(0);
-const showAllPages = ref(false);
-const rotations = [0, 90, 180, 270];
-
-const source = "https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/index/Nginx_day01.pdf";
-
-const handleDocumentRender = () => {
-  loading.value = false;
-  pageCount.value = pdfRef.value.pageCount;
-};
-
-const showAllPagesChange = () => {
-  currentPage.value = (showAllPages.value ? null : 1) as number;
-};
-
-const onPrint = () => {
-  pdfRef.value?.print();
-};
-</script>
 
 <style lang="scss" scoped>
 .pdf-preview-container {

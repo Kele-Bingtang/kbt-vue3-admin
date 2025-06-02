@@ -1,11 +1,4 @@
-<template>
-  <Fragment v-if="hasRole(value) && $slots.default">
-    <slot></slot>
-  </Fragment>
-</template>
-
-<script setup lang="ts" name="Role">
-import { Fragment } from "vue";
+<script setup lang="ts">
 import { usePermission } from "@/composables";
 
 defineOptions({ name: "Role" });
@@ -20,3 +13,7 @@ withDefaults(defineProps<RoleProps>(), {
 
 const { hasRole } = usePermission();
 </script>
+
+<template>
+  <slot v-if="hasRole(value)" />
+</template>

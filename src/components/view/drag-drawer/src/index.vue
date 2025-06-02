@@ -1,35 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <el-drawer
-      ref="drawerRef"
-      v-model="drawerVisible"
-      :size="width"
-      :direction="direction"
-      :before-close="handleBeforeClose"
-      v-bind="$attrs"
-      :class="outerClasses"
-    >
-      <template #header>
-        <slot name="header"></slot>
-      </template>
-      <slot></slot>
-      <div
-        v-if="draggable"
-        :style="triggerStyle"
-        :class="`${prefixClass}__trigger`"
-        @mousedown="handleTriggerMousedown"
-      >
-        <slot name="trigger">
-          <DragDrawerTrigger></DragDrawerTrigger>
-        </slot>
-      </div>
-      <div v-if="$slots.footer" :class="`${prefixClass}__footer`">
-        <slot name="footer"></slot>
-      </div>
-    </el-drawer>
-  </div>
-</template>
-
 <script setup lang="ts">
 import DragDrawerTrigger from "./drag-drawer-trigger.vue";
 import { computed, onBeforeUnmount, onMounted, ref, type StyleValue } from "vue";
@@ -162,6 +130,38 @@ const setWrapperWidth = () => {
   wrapperLeft.value = left;
 };
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <el-drawer
+      ref="drawerRef"
+      v-model="drawerVisible"
+      :size="width"
+      :direction="direction"
+      :before-close="handleBeforeClose"
+      v-bind="$attrs"
+      :class="outerClasses"
+    >
+      <template #header>
+        <slot name="header"></slot>
+      </template>
+      <slot></slot>
+      <div
+        v-if="draggable"
+        :style="triggerStyle"
+        :class="`${prefixClass}__trigger`"
+        @mousedown="handleTriggerMousedown"
+      >
+        <slot name="trigger">
+          <DragDrawerTrigger></DragDrawerTrigger>
+        </slot>
+      </div>
+      <div v-if="$slots.footer" :class="`${prefixClass}__footer`">
+        <slot name="footer"></slot>
+      </div>
+    </el-drawer>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-drag-drawer;

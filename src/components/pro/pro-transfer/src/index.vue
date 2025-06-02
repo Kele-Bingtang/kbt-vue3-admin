@@ -1,11 +1,3 @@
-<template>
-  <el-transfer ref="transferRef" v-bind="$attrs">
-    <template v-for="(_value, name) in $slots" #[name]="slotData">
-      <slot :name="name" v-bind="slotData || {}"></slot>
-    </template>
-  </el-transfer>
-</template>
-
 <script setup lang="ts">
 import { ElTransfer } from "element-plus";
 import { computed } from "vue";
@@ -19,6 +11,14 @@ const clearQuery = computed(() => transferRef.value?.clearQuery);
 // 抛出实例
 defineExpose({ el: transferRef, clearQuery });
 </script>
+
+<template>
+  <el-transfer ref="transferRef" v-bind="$attrs">
+    <template v-for="(_value, name) in $slots" #[name]="slotData">
+      <slot :name="name" v-bind="slotData || {}"></slot>
+    </template>
+  </el-transfer>
+</template>
 
 <style lang="scss" scoped>
 :deep(.el-transfer-panel) {

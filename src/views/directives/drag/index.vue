@@ -1,3 +1,5 @@
+<script setup lang="ts" name="Drag"></script>
+
 <template>
   <div class="drag-container">
     <h2>拖拽指令</h2>
@@ -5,8 +7,6 @@
     <div v-draggable class="drag-box">我可以拖拽哦~</div>
   </div>
 </template>
-
-<script setup lang="ts" name="Drag"></script>
 
 <style lang="scss" scoped>
 .drag-container {

@@ -1,18 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <div :class="`${prefixClass}__header ${titleClass}`" :style="{ backgroundColor: titleBgColor }">
-      <slot name="title">{{ title }}</slot>
-    </div>
-    <draggable :list="list" v-bind="$attrs" :class="`${prefixClass}__content ${dragClass}`" itemKey="id">
-      <template #item="{ element }">
-        <div :class="`${prefixClass}__content--item`">
-          <slot name="content" :item="element">{{ element }}</slot>
-        </div>
-      </template>
-    </draggable>
-  </div>
-</template>
-
 <script setup lang="ts">
 import Draggable from "vuedraggable";
 import { useNamespace } from "@/composables";
@@ -43,6 +28,21 @@ withDefaults(defineProps<DraggableItemProps>(), {
   dragClass: "",
 });
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <div :class="`${prefixClass}__header ${titleClass}`" :style="{ backgroundColor: titleBgColor }">
+      <slot name="title">{{ title }}</slot>
+    </div>
+    <draggable :list="list" v-bind="$attrs" :class="`${prefixClass}__content ${dragClass}`" itemKey="id">
+      <template #item="{ element }">
+        <div :class="`${prefixClass}__content--item`">
+          <slot name="content" :item="element">{{ element }}</slot>
+        </div>
+      </template>
+    </draggable>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-drag-item;

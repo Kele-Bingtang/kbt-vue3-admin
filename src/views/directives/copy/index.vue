@@ -1,3 +1,8 @@
+<script setup lang="ts" name="Copy">
+const router = useRouter();
+const data = ref<string>("https://github.com/Kele-Bingtang/teek-design-vue3");
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="自定义复制指令">
@@ -16,8 +21,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="Copy">
-const router = useRouter();
-const data = ref<string>("https://github.com/Kele-Bingtang/teek-design-vue3");
-</script>

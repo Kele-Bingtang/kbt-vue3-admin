@@ -1,36 +1,3 @@
-<template>
-  <el-space fill>
-    <el-card shadow="never" header="UseTable 操作">
-      <el-space wrap>
-        <el-button @click="showSearch(false)">隐藏搜索</el-button>
-        <el-button @click="showSearch(true)">显示搜索</el-button>
-        <el-button @click="showTableButton(false)">隐藏表格头部按钮</el-button>
-        <el-button @click="showTableButton(true)">显示表格头部按钮</el-button>
-        <el-button @click="showSelections(false)">隐藏多选</el-button>
-        <el-button @click="showSelections(true)">显示多选</el-button>
-        <el-button @click="showPagination(false)">隐藏分页</el-button>
-        <el-button @click="showPagination(true)">显示分页</el-button>
-        <el-button @click="pagination({ pageNum: 2 })">切换到第二个页</el-button>
-        <el-button @click="changeUsername">修改用户姓名</el-button>
-        <el-button @click="showExpandedRows(false)">隐藏展开行</el-button>
-        <el-button @click="showExpandedRows(true)">显示展开行</el-button>
-        <el-button @click="selectAllNone">全选/全不选</el-button>
-        <el-button @click="clearSelection">清空选择</el-button>
-        <el-button @click="delOrAddAction">删除/添加操作列</el-button>
-        <el-button @click="showOrHiddenStripe">删除/隐藏斑马纹</el-button>
-        <el-button @click="fixedHeaderOrAuto">固定表头/自动</el-button>
-      </el-space>
-    </el-card>
-
-    <ProTable
-      :requestApi="getTicketList"
-      :pagination="{ enabled: true, fake: true }"
-      :columns="columns"
-      @register="tableRegister"
-    ></ProTable>
-  </el-space>
-</template>
-
 <script setup lang="tsx" name="useProTable">
 import { useProTable, ProTable, type TableColumnProps } from "@/components";
 import { tableData } from "@/mock/pro-table";
@@ -249,3 +216,36 @@ const columns: TableColumnProps<ResUserList>[] = reactive([
   },
 ]);
 </script>
+
+<template>
+  <el-space fill>
+    <el-card shadow="never" header="UseTable 操作">
+      <el-space wrap>
+        <el-button @click="showSearch(false)">隐藏搜索</el-button>
+        <el-button @click="showSearch(true)">显示搜索</el-button>
+        <el-button @click="showTableButton(false)">隐藏表格头部按钮</el-button>
+        <el-button @click="showTableButton(true)">显示表格头部按钮</el-button>
+        <el-button @click="showSelections(false)">隐藏多选</el-button>
+        <el-button @click="showSelections(true)">显示多选</el-button>
+        <el-button @click="showPagination(false)">隐藏分页</el-button>
+        <el-button @click="showPagination(true)">显示分页</el-button>
+        <el-button @click="pagination({ pageNum: 2 })">切换到第二个页</el-button>
+        <el-button @click="changeUsername">修改用户姓名</el-button>
+        <el-button @click="showExpandedRows(false)">隐藏展开行</el-button>
+        <el-button @click="showExpandedRows(true)">显示展开行</el-button>
+        <el-button @click="selectAllNone">全选/全不选</el-button>
+        <el-button @click="clearSelection">清空选择</el-button>
+        <el-button @click="delOrAddAction">删除/添加操作列</el-button>
+        <el-button @click="showOrHiddenStripe">删除/隐藏斑马纹</el-button>
+        <el-button @click="fixedHeaderOrAuto">固定表头/自动</el-button>
+      </el-space>
+    </el-card>
+
+    <ProTable
+      :requestApi="getTicketList"
+      :pagination="{ enabled: true, fake: true }"
+      :columns="columns"
+      @register="tableRegister"
+    ></ProTable>
+  </el-space>
+</template>

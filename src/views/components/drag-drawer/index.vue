@@ -1,3 +1,23 @@
+<script setup lang="ts" name="DragDrawerDemo">
+import { DragDrawer } from "@/components";
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace("darg-drawer-demo");
+const prefixClass = ns.b();
+
+const visible1 = ref(false);
+const visible2 = ref(false);
+const placement = ref("right");
+const width1 = ref(200);
+const width2 = ref(300);
+const draggable = ref(true);
+
+const handleResize = (event: any) => {
+  const { atMin } = event;
+  console.log(atMin);
+};
+</script>
+
 <template>
   <div :class="prefixClass">
     <el-card shadow="never" header="">
@@ -62,26 +82,6 @@
     </el-card>
   </div>
 </template>
-
-<script setup lang="ts" name="DragDrawerDemo">
-import { DragDrawer } from "@/components";
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace("darg-drawer-demo");
-const prefixClass = ns.b();
-
-const visible1 = ref(false);
-const visible2 = ref(false);
-const placement = ref("right");
-const width1 = ref(200);
-const width2 = ref(300);
-const draggable = ref(true);
-
-const handleResize = (event: any) => {
-  const { atMin } = event;
-  console.log(atMin);
-};
-</script>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-darg-drawer-demo;

@@ -1,28 +1,3 @@
-<template>
-  <div ref="splitPaneRef" :class="[prefixClass, { 'no-select': isMoving }]">
-    <div v-if="isHorizontal" :class="`${prefixClass}__horizontal`">
-      <div :style="{ bottom: `${anotherOffset}%` }" :class="`${prefixClass}__item top-pane`">
-        <slot name="top" />
-      </div>
-      <div :class="`${prefixClass}__container`" :style="{ top: `${offset}%` }" @mousedown="handleMousedown">
-        <slot name="line">
-          <split-line mode="horizontal" />
-        </slot>
-      </div>
-      <div :style="{ top: `${offset}%` }" :class="`${prefixClass}__item bottom-pane`"><slot name="bottom" /></div>
-    </div>
-    <div v-else :class="`${prefixClass}__vertical`">
-      <div :style="{ right: `${anotherOffset}%` }" :class="`${prefixClass}__item left-pane`"><slot name="left" /></div>
-      <div :class="`${prefixClass}__container`" :style="{ left: `${offset}%` }" @mousedown="handleMousedown">
-        <slot name="line">
-          <split-line mode="vertical" />
-        </slot>
-      </div>
-      <div :style="{ left: `${offset}%` }" :class="`${prefixClass}__item right-pane`"><slot name="right" /></div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, computed, watch, onMounted, nextTick } from "vue";
 import SplitLine from "./split-line.vue";
@@ -153,6 +128,31 @@ const handleMousedown = (e: MouseEvent) => {
   emits("moveStart");
 };
 </script>
+
+<template>
+  <div ref="splitPaneRef" :class="[prefixClass, { 'no-select': isMoving }]">
+    <div v-if="isHorizontal" :class="`${prefixClass}__horizontal`">
+      <div :style="{ bottom: `${anotherOffset}%` }" :class="`${prefixClass}__item top-pane`">
+        <slot name="top" />
+      </div>
+      <div :class="`${prefixClass}__container`" :style="{ top: `${offset}%` }" @mousedown="handleMousedown">
+        <slot name="line">
+          <split-line mode="horizontal" />
+        </slot>
+      </div>
+      <div :style="{ top: `${offset}%` }" :class="`${prefixClass}__item bottom-pane`"><slot name="bottom" /></div>
+    </div>
+    <div v-else :class="`${prefixClass}__vertical`">
+      <div :style="{ right: `${anotherOffset}%` }" :class="`${prefixClass}__item left-pane`"><slot name="left" /></div>
+      <div :class="`${prefixClass}__container`" :style="{ left: `${offset}%` }" @mousedown="handleMousedown">
+        <slot name="line">
+          <split-line mode="vertical" />
+        </slot>
+      </div>
+      <div :style="{ left: `${offset}%` }" :class="`${prefixClass}__item right-pane`"><slot name="right" /></div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-split-pane;

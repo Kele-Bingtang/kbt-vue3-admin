@@ -1,71 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <el-card :class="`${prefixClass}__card`">
-      <div :class="`${prefixClass}__card--page ${prefixClass}__card--category`">
-        <el-menu default-active="unread" @select="handleCategorySelect">
-          <el-menu-item index="unread">
-            <span class="category">
-              未读消息
-              <el-badge :value="unreadCount" type="danger" :max="99"></el-badge>
-            </span>
-          </el-menu-item>
-          <el-menu-item index="hasRead">
-            <span class="category">
-              已读消息
-              <el-badge :value="readCount" type="success"></el-badge>
-            </span>
-          </el-menu-item>
-          <el-menu-item index="recycle">
-            <span class="category">
-              回收站
-              <el-badge :value="recycleCount" type="info"></el-badge>
-            </span>
-          </el-menu-item>
-        </el-menu>
-      </div>
-
-      <div :class="`${prefixClass}__card--page ${prefixClass}__card--list`" v-loading="listLoading">
-        <el-menu
-          default-active="1"
-          @select="handleListSelect"
-          :class="{
-            'unread-list': selectedMessageType === 'hasRead',
-            'recycle-list': selectedMessageType === 'recycle',
-          }"
-        >
-          <el-menu-item v-for="message in messageList" :key="`message_${message.id}`" :index="message.id">
-            <p class="list-title">{{ message.title }}</p>
-            <div class="list-time">
-              <span class="list-dot"></span>
-              <span class="list-text">{{ message.createTime }}</span>
-            </div>
-            <el-button
-              link
-              class="list-operate operate-icon"
-              :loading="message.loading"
-              :icon="selectedMessageType === 'hasRead' ? Delete : RefreshLeft"
-              @click.stop="handleOperate(message)"
-              v-if="selectedMessageType !== 'unread'"
-            ></el-button>
-          </el-menu-item>
-        </el-menu>
-      </div>
-
-      <div
-        :class="`${prefixClass}__card--page ${prefixClass}__card--content`"
-        v-loading="contentLoading"
-        element-loading-text="拼命加载中 ..."
-      >
-        <div :class="`${prefixClass}__card--content__header`">
-          <h2 :class="`${prefixClass}__card--content__header--title`">{{ selectedMessageItem.title }}</h2>
-          <time :class="`${prefixClass}__card--content__header--time`">{{ selectedMessageItem.createTime }}</time>
-        </div>
-        <div v-html="selectedMessageItem.content"></div>
-      </div>
-    </el-card>
-  </div>
-</template>
-
 <script setup lang="ts" name="MessageCenter">
 import { useMessageStore, type MessageItem } from "@/stores";
 import { ElMessage, ElMessageBox } from "element-plus";
@@ -186,6 +118,74 @@ const handleOperate = (message: MessageItem) => {
   }
 };
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <el-card :class="`${prefixClass}__card`">
+      <div :class="`${prefixClass}__card--page ${prefixClass}__card--category`">
+        <el-menu default-active="unread" @select="handleCategorySelect">
+          <el-menu-item index="unread">
+            <span class="category">
+              未读消息
+              <el-badge :value="unreadCount" type="danger" :max="99"></el-badge>
+            </span>
+          </el-menu-item>
+          <el-menu-item index="hasRead">
+            <span class="category">
+              已读消息
+              <el-badge :value="readCount" type="success"></el-badge>
+            </span>
+          </el-menu-item>
+          <el-menu-item index="recycle">
+            <span class="category">
+              回收站
+              <el-badge :value="recycleCount" type="info"></el-badge>
+            </span>
+          </el-menu-item>
+        </el-menu>
+      </div>
+
+      <div :class="`${prefixClass}__card--page ${prefixClass}__card--list`" v-loading="listLoading">
+        <el-menu
+          default-active="1"
+          @select="handleListSelect"
+          :class="{
+            'unread-list': selectedMessageType === 'hasRead',
+            'recycle-list': selectedMessageType === 'recycle',
+          }"
+        >
+          <el-menu-item v-for="message in messageList" :key="`message_${message.id}`" :index="message.id">
+            <p class="list-title">{{ message.title }}</p>
+            <div class="list-time">
+              <span class="list-dot"></span>
+              <span class="list-text">{{ message.createTime }}</span>
+            </div>
+            <el-button
+              link
+              class="list-operate operate-icon"
+              :loading="message.loading"
+              :icon="selectedMessageType === 'hasRead' ? Delete : RefreshLeft"
+              @click.stop="handleOperate(message)"
+              v-if="selectedMessageType !== 'unread'"
+            ></el-button>
+          </el-menu-item>
+        </el-menu>
+      </div>
+
+      <div
+        :class="`${prefixClass}__card--page ${prefixClass}__card--content`"
+        v-loading="contentLoading"
+        element-loading-text="拼命加载中 ..."
+      >
+        <div :class="`${prefixClass}__card--content__header`">
+          <h2 :class="`${prefixClass}__card--content__header--title`">{{ selectedMessageItem.title }}</h2>
+          <time :class="`${prefixClass}__card--content__header--time`">{{ selectedMessageItem.createTime }}</time>
+        </div>
+        <div v-html="selectedMessageItem.content"></div>
+      </div>
+    </el-card>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-message-center;
@@ -337,6 +337,7 @@ $prefix-class: #{$admin-namespace}-message-center;
   }
 }
 </style>
+
 <style lang="scss">
 $prefix-class: #{$admin-namespace}-message-center;
 

@@ -1,158 +1,3 @@
-<template>
-  <div class="pro-transfer">
-    <!-- 左侧 -->
-    <div class="pro-transfer-panel" :style="{ width: `${width}px` }">
-      <div class="pro-transfer-panel__header">
-        <slot name="headerLeft" v-if="$slots.headerLeft"></slot>
-        <el-checkbox v-else :indeterminate="indeterminateLeft" v-model="leftCheckAll" @change="checkTopAllLeft">
-          {{ titles[0] }}
-          <span class="proportion">{{ countLeft }}</span>
-        </el-checkbox>
-      </div>
-      <div class="pro-transfer-panel__body" :class="!showPagination ? 'body-radius' : ''">
-        <slot name="bodyLeft" v-if="$slots.bodyLeft"></slot>
-        <template v-else>
-          <slot name="searchLeft">
-            <el-input
-              v-if="filterable"
-              v-model.trim="queryStringLeft"
-              clearable
-              :placeholder="filterPlaceholder"
-              size="large"
-              class="icon-search"
-              :prefix-icon="Search"
-              @input="(val: string | number) => queryInput(val, 'left')"
-            />
-          </slot>
-          <TableMain
-            stripe
-            ref="leftTableRef"
-            v-bind="tableAttrs"
-            :row-key="rowKey"
-            :height="tableHeight"
-            :emptyText="emptyText"
-            :data="tableShowDataLeft"
-            :columns="columnLeft.length ? columnLeft : column"
-            :highlightCurrentRow="false"
-            :row-class-name="tableRowClassLeft"
-            @row-click="handleRowClickLeft"
-            @selectionChange="selectionChangeLeft"
-            @select-all="selectAllLeft"
-          ></TableMain>
-        </template>
-      </div>
-      <div class="pro-transfer-panel__footer">
-        <slot name="footerLeft">
-          <el-pagination
-            v-if="showPagination"
-            v-model:pageSize="pageSizeLeft"
-            v-model:current-page="currentLeft"
-            @current-change="changeLeft"
-            :total="totalLeft"
-            mode="simpleA"
-            size="small"
-          ></el-pagination>
-        </slot>
-      </div>
-    </div>
-    <!-- 中间箭头 -->
-    <div v-if="!isAutoSelect" class="pro-transfer__buttons">
-      <div class="icon-btn icon-btn-right'" :class="disabledRight ? 'is-disabled' : ''" @click="submitRight">
-        <span v-if="buttonTexts[0]">{{ buttonTexts[0] }}</span>
-        <el-icon><ArrowRight /></el-icon>
-      </div>
-      <div class="icon-btn icon-btn-left" :class="disabledLeft ? 'is-disabled' : ''" @click="submitLeft">
-        <span v-if="buttonTexts[1]">{{ buttonTexts[1] }}</span>
-        <el-icon><ArrowLeft /></el-icon>
-      </div>
-    </div>
-    <div v-else class="pro-transfer__buttons"><img class="icon" src="./icons/switch.svg" /></div>
-    <!-- 右侧 -->
-    <div class="pro-transfer-panel" :style="{ width: `${width}px` }">
-      <div class="pro-transfer-panel__header">
-        <slot name="headerRight">
-          <el-checkbox
-            v-if="!isAutoSelect"
-            :indeterminate="indeterminateRight"
-            v-model="rightCheckAll"
-            @change="checkTopAllRight"
-          >
-            {{ titles[1] }}
-            <span class="proportion">{{ countRight }}</span>
-          </el-checkbox>
-
-          <div v-else class="proportion-auto">
-            <span class="title">{{ "已选（" + tableDataRight.length + ")" }}</span>
-            <el-button
-              type="primary"
-              link
-              @click="handleCancelSelect"
-              style="justify-content: flex-end; font-size: 14px"
-            >
-              全部清除
-            </el-button>
-          </div>
-        </slot>
-      </div>
-      <div class="pro-transfer-panel__body" :class="!showPagination ? 'body-radius' : ''">
-        <slot name="bodyRight" v-if="$slots.bodyRight"></slot>
-        <template v-else>
-          <slot name="searchRight">
-            <el-input
-              v-if="filterable"
-              v-model.trim="queryStringRight"
-              clearable
-              :placeholder="filterPlaceholder"
-              size="large"
-              class="icon-search"
-              :prefix-icon="Search"
-              @input="(val: string | number) => queryInput(val, 'right')"
-            />
-          </slot>
-          <TableMain
-            stripe
-            ref="rightTableRef"
-            v-bind="tableAttrs"
-            :row-key="rowKey"
-            :height="tableHeight"
-            :emptyText="emptyText"
-            :data="tableShowDataRight"
-            :columns="columnRight.length ? columnRight : column"
-            :row-class-name="tableRowClassRight"
-            :highlightCurrentRow="false"
-            @row-click="handleRowClickRight"
-            @selectionChange="selectionChangeRight"
-            @select-all="selectAllRight"
-          >
-            <template v-if="isAutoSelect" #suffixColumn>
-              <el-table-column label="操作" width="120">
-                <template #default="{ row }">
-                  <el-icon @click="handleCancelSelect(row)" style="color: #395ae3; cursor: pointer">
-                    <Delete />
-                  </el-icon>
-                </template>
-              </el-table-column>
-            </template>
-          </TableMain>
-        </template>
-      </div>
-      <div class="pro-transfer-panel__footer">
-        <slot name="footerRight">
-          <el-pagination
-            v-if="showPagination"
-            v-model:pageSize="pageSizeRight"
-            v-model:current-page="currentRight"
-            @current-change="changeRight"
-            :total="totalRight"
-            mode="simpleA"
-            size="small"
-          ></el-pagination>
-        </slot>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { ArrowRight, ArrowLeft, Delete, Search } from "@element-plus/icons-vue";
@@ -495,6 +340,161 @@ const handleCancelSelect = (row?: any) => {
   emit("change", tableDataRight.value);
 };
 </script>
+
+<template>
+  <div class="pro-transfer">
+    <!-- 左侧 -->
+    <div class="pro-transfer-panel" :style="{ width: `${width}px` }">
+      <div class="pro-transfer-panel__header">
+        <slot name="headerLeft" v-if="$slots.headerLeft"></slot>
+        <el-checkbox v-else :indeterminate="indeterminateLeft" v-model="leftCheckAll" @change="checkTopAllLeft">
+          {{ titles[0] }}
+          <span class="proportion">{{ countLeft }}</span>
+        </el-checkbox>
+      </div>
+      <div class="pro-transfer-panel__body" :class="!showPagination ? 'body-radius' : ''">
+        <slot name="bodyLeft" v-if="$slots.bodyLeft"></slot>
+        <template v-else>
+          <slot name="searchLeft">
+            <el-input
+              v-if="filterable"
+              v-model.trim="queryStringLeft"
+              clearable
+              :placeholder="filterPlaceholder"
+              size="large"
+              class="icon-search"
+              :prefix-icon="Search"
+              @input="(val: string | number) => queryInput(val, 'left')"
+            />
+          </slot>
+          <TableMain
+            stripe
+            ref="leftTableRef"
+            v-bind="tableAttrs"
+            :row-key="rowKey"
+            :height="tableHeight"
+            :emptyText="emptyText"
+            :data="tableShowDataLeft"
+            :columns="columnLeft.length ? columnLeft : column"
+            :highlightCurrentRow="false"
+            :row-class-name="tableRowClassLeft"
+            @row-click="handleRowClickLeft"
+            @selectionChange="selectionChangeLeft"
+            @select-all="selectAllLeft"
+          ></TableMain>
+        </template>
+      </div>
+      <div class="pro-transfer-panel__footer">
+        <slot name="footerLeft">
+          <el-pagination
+            v-if="showPagination"
+            v-model:pageSize="pageSizeLeft"
+            v-model:current-page="currentLeft"
+            @current-change="changeLeft"
+            :total="totalLeft"
+            mode="simpleA"
+            size="small"
+          ></el-pagination>
+        </slot>
+      </div>
+    </div>
+    <!-- 中间箭头 -->
+    <div v-if="!isAutoSelect" class="pro-transfer__buttons">
+      <div class="icon-btn icon-btn-right'" :class="disabledRight ? 'is-disabled' : ''" @click="submitRight">
+        <span v-if="buttonTexts[0]">{{ buttonTexts[0] }}</span>
+        <el-icon><ArrowRight /></el-icon>
+      </div>
+      <div class="icon-btn icon-btn-left" :class="disabledLeft ? 'is-disabled' : ''" @click="submitLeft">
+        <span v-if="buttonTexts[1]">{{ buttonTexts[1] }}</span>
+        <el-icon><ArrowLeft /></el-icon>
+      </div>
+    </div>
+    <div v-else class="pro-transfer__buttons"><img class="icon" src="./icons/switch.svg" /></div>
+    <!-- 右侧 -->
+    <div class="pro-transfer-panel" :style="{ width: `${width}px` }">
+      <div class="pro-transfer-panel__header">
+        <slot name="headerRight">
+          <el-checkbox
+            v-if="!isAutoSelect"
+            :indeterminate="indeterminateRight"
+            v-model="rightCheckAll"
+            @change="checkTopAllRight"
+          >
+            {{ titles[1] }}
+            <span class="proportion">{{ countRight }}</span>
+          </el-checkbox>
+
+          <div v-else class="proportion-auto">
+            <span class="title">{{ "已选（" + tableDataRight.length + ")" }}</span>
+            <el-button
+              type="primary"
+              link
+              @click="handleCancelSelect"
+              style="justify-content: flex-end; font-size: 14px"
+            >
+              全部清除
+            </el-button>
+          </div>
+        </slot>
+      </div>
+      <div class="pro-transfer-panel__body" :class="!showPagination ? 'body-radius' : ''">
+        <slot name="bodyRight" v-if="$slots.bodyRight"></slot>
+        <template v-else>
+          <slot name="searchRight">
+            <el-input
+              v-if="filterable"
+              v-model.trim="queryStringRight"
+              clearable
+              :placeholder="filterPlaceholder"
+              size="large"
+              class="icon-search"
+              :prefix-icon="Search"
+              @input="(val: string | number) => queryInput(val, 'right')"
+            />
+          </slot>
+          <TableMain
+            stripe
+            ref="rightTableRef"
+            v-bind="tableAttrs"
+            :row-key="rowKey"
+            :height="tableHeight"
+            :emptyText="emptyText"
+            :data="tableShowDataRight"
+            :columns="columnRight.length ? columnRight : column"
+            :row-class-name="tableRowClassRight"
+            :highlightCurrentRow="false"
+            @row-click="handleRowClickRight"
+            @selectionChange="selectionChangeRight"
+            @select-all="selectAllRight"
+          >
+            <template v-if="isAutoSelect" #suffixColumn>
+              <el-table-column label="操作" width="120">
+                <template #default="{ row }">
+                  <el-icon @click="handleCancelSelect(row)" style="color: #395ae3; cursor: pointer">
+                    <Delete />
+                  </el-icon>
+                </template>
+              </el-table-column>
+            </template>
+          </TableMain>
+        </template>
+      </div>
+      <div class="pro-transfer-panel__footer">
+        <slot name="footerRight">
+          <el-pagination
+            v-if="showPagination"
+            v-model:pageSize="pageSizeRight"
+            v-model:current-page="currentRight"
+            @current-change="changeRight"
+            :total="totalRight"
+            mode="simpleA"
+            size="small"
+          ></el-pagination>
+        </slot>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .pro-transfer {

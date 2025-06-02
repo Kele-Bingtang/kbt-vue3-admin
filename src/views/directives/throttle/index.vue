@@ -1,3 +1,10 @@
+<script setup lang="ts" name="Throttle">
+import { ElMessage } from "element-plus";
+const throttleClick = () => {
+  ElMessage.success("我是节流按钮触发的事件 🍍🍓🍌");
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="节流指令">
@@ -7,10 +14,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="Throttle">
-import { ElMessage } from "element-plus";
-const throttleClick = () => {
-  ElMessage.success("我是节流按钮触发的事件 🍍🍓🍌");
-};
-</script>

@@ -1,49 +1,3 @@
-<template>
-  <ElDialog
-    ref="elDialogRef"
-    v-model="dialogVisible"
-    :title="title"
-    :fullscreen="isFullscreen"
-    top="2vh"
-    width="50%"
-    :close-on-click-modal="false"
-    draggable
-    v-bind="$attrs"
-    :class="prefixClass"
-  >
-    <template #header="scope">
-      <slot name="header" v-bind="scope">
-        <div style="display: flex">
-          <slot name="title">
-            <span :class="`${ns.elNamespace}-dialog__title`" style="flex: 1">{{ title }}</span>
-          </slot>
-          <Icon
-            v-if="fullscreenIcon"
-            :name="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
-            @click="toggleFull"
-            width="15px"
-            height="15px"
-            :color="`var(--${ns.elNamespace}-color-info)`"
-            :hover-color="`var(--${ns.elNamespace}-color-primary)`"
-            :icon-style="{ cursor: 'pointer' }"
-          />
-        </div>
-      </slot>
-    </template>
-
-    <ElScrollbar :height="dialogHeight" :maxHeight>
-      <slot></slot>
-    </ElScrollbar>
-
-    <template #footer>
-      <slot name="footer">
-        <ElButton @Click="handleClose()">{{ closeLabel }}</ElButton>
-        <ElButton type="primary" @click="handleConfirm()">{{ confirmLabel }}</ElButton>
-      </slot>
-    </template>
-  </ElDialog>
-</template>
-
 <script setup lang="ts">
 import { ElDialog, ElScrollbar, ElButton, type DialogProps } from "element-plus";
 import { Icon } from "@/components";
@@ -121,6 +75,52 @@ const handleConfirm = () => {
 
 defineExpose({ elDialogRef });
 </script>
+
+<template>
+  <ElDialog
+    ref="elDialogRef"
+    v-model="dialogVisible"
+    :title="title"
+    :fullscreen="isFullscreen"
+    top="2vh"
+    width="50%"
+    :close-on-click-modal="false"
+    draggable
+    v-bind="$attrs"
+    :class="prefixClass"
+  >
+    <template #header="scope">
+      <slot name="header" v-bind="scope">
+        <div style="display: flex">
+          <slot name="title">
+            <span :class="`${ns.elNamespace}-dialog__title`" style="flex: 1">{{ title }}</span>
+          </slot>
+          <Icon
+            v-if="fullscreenIcon"
+            :name="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
+            @click="toggleFull"
+            width="15px"
+            height="15px"
+            :color="`var(--${ns.elNamespace}-color-info)`"
+            :hover-color="`var(--${ns.elNamespace}-color-primary)`"
+            :icon-style="{ cursor: 'pointer' }"
+          />
+        </div>
+      </slot>
+    </template>
+
+    <ElScrollbar :height="dialogHeight" :maxHeight>
+      <slot></slot>
+    </ElScrollbar>
+
+    <template #footer>
+      <slot name="footer">
+        <ElButton @Click="handleClose()">{{ closeLabel }}</ElButton>
+        <ElButton type="primary" @click="handleConfirm()">{{ confirmLabel }}</ElButton>
+      </slot>
+    </template>
+  </ElDialog>
+</template>
 
 <style lang="scss" scoped>
 @use "./index";

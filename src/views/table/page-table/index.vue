@@ -1,3 +1,21 @@
+<script setup lang="ts" name="pageTable">
+import { Pagination, pageSetting, type Paging } from "@/components";
+import { largeData } from "@/mock/table";
+import { tableStatusFilter } from "@/config";
+
+const tableData = ref(largeData);
+const paging = reactive(pageSetting);
+
+const tablePageData = computed(() =>
+  tableData.value.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)
+);
+
+const handleSizeChange = (pagingParam: Paging) => {
+  paging.pageNum = pagingParam.pageNum;
+  paging.pageSize = pagingParam.pageSize;
+};
+</script>
+
 <template>
   <div class="page-table-container">
     <el-table :data="tablePageData" border highlight-current-row row-key="id" style="width: 100%">
@@ -27,24 +45,6 @@
     />
   </div>
 </template>
-
-<script setup lang="ts" name="pageTable">
-import { Pagination, pageSetting, type Paging } from "@/components";
-import { largeData } from "@/mock/table";
-import { tableStatusFilter } from "@/config";
-
-const tableData = ref(largeData);
-const paging = reactive(pageSetting);
-
-const tablePageData = computed(() =>
-  tableData.value.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)
-);
-
-const handleSizeChange = (pagingParam: Paging) => {
-  paging.pageNum = pagingParam.pageNum;
-  paging.pageSize = pagingParam.pageSize;
-};
-</script>
 
 <style lang="scss" scoped>
 .page-table-container {

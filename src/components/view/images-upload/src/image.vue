@@ -1,52 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <el-upload
-      action="#"
-      :id="uuid"
-      :class="[`${prefixClass}__upload`, self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
-      :multiple="false"
-      :disabled="self_disabled"
-      :show-file-list="false"
-      :http-request="handleHttpUpload"
-      :before-upload="beforeUpload"
-      :on-success="uploadSuccess"
-      :on-error="uploadError"
-      :drag="drag"
-      :accept="fileType.join(',')"
-    >
-      <template v-if="imageUrl">
-        <img :src="imageUrl" :class="`${prefixClass}__image`" />
-        <div :class="`${prefixClass}__handle`" @click.stop>
-          <div :class="`${prefixClass}__handle--icon`" @click="editImg" v-if="!self_disabled">
-            <el-icon><Edit /></el-icon>
-            <span>编辑</span>
-          </div>
-          <div :class="`${prefixClass}__handle--icon`" @click="imgViewVisible = true">
-            <el-icon><ZoomIn /></el-icon>
-            <span>查看</span>
-          </div>
-          <div :class="`${prefixClass}__handle--icon`" @click="deleteImg" v-if="!self_disabled">
-            <el-icon><Delete /></el-icon>
-            <span>删除</span>
-          </div>
-        </div>
-      </template>
-      <template v-else>
-        <div :class="`${prefixClass}__empty`">
-          <slot name="empty">
-            <el-icon><Plus /></el-icon>
-            <!-- <span>请上传图片</span> -->
-          </slot>
-        </div>
-      </template>
-    </el-upload>
-    <div class="el-upload__tip">
-      <slot name="tip"></slot>
-    </div>
-    <el-image-viewer v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[imageUrl]" />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { useSimpleUuid } from "@/utils";
 import {
@@ -205,6 +156,55 @@ const uploadError = () => {
   });
 };
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <el-upload
+      action="#"
+      :id="uuid"
+      :class="[`${prefixClass}__upload`, self_disabled ? 'disabled' : '', drag ? 'no-border' : '']"
+      :multiple="false"
+      :disabled="self_disabled"
+      :show-file-list="false"
+      :http-request="handleHttpUpload"
+      :before-upload="beforeUpload"
+      :on-success="uploadSuccess"
+      :on-error="uploadError"
+      :drag="drag"
+      :accept="fileType.join(',')"
+    >
+      <template v-if="imageUrl">
+        <img :src="imageUrl" :class="`${prefixClass}__image`" />
+        <div :class="`${prefixClass}__handle`" @click.stop>
+          <div :class="`${prefixClass}__handle--icon`" @click="editImg" v-if="!self_disabled">
+            <el-icon><Edit /></el-icon>
+            <span>编辑</span>
+          </div>
+          <div :class="`${prefixClass}__handle--icon`" @click="imgViewVisible = true">
+            <el-icon><ZoomIn /></el-icon>
+            <span>查看</span>
+          </div>
+          <div :class="`${prefixClass}__handle--icon`" @click="deleteImg" v-if="!self_disabled">
+            <el-icon><Delete /></el-icon>
+            <span>删除</span>
+          </div>
+        </div>
+      </template>
+      <template v-else>
+        <div :class="`${prefixClass}__empty`">
+          <slot name="empty">
+            <el-icon><Plus /></el-icon>
+            <!-- <span>请上传图片</span> -->
+          </slot>
+        </div>
+      </template>
+    </el-upload>
+    <div class="el-upload__tip">
+      <slot name="tip"></slot>
+    </div>
+    <el-image-viewer v-if="imgViewVisible" @close="imgViewVisible = false" :url-list="[imageUrl]" />
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-image-upload;

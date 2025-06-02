@@ -1,3 +1,109 @@
+<script setup lang="ts" name="CountToDemo">
+import { CountTo } from "@/components";
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace("count-to-demo");
+const prefixClass = ns.b();
+
+const customUnit = [
+  { value: 3, label: "千多" },
+  { value: 4, label: "万多" },
+  { value: 5, label: "十万多" },
+];
+
+const countRef = useTemplateRef("countRef");
+const asyncEndVal = ref(199);
+let timer: ReturnType<typeof setInterval> | null;
+const countToParams = reactive({
+  startVal: 0,
+  endVal: 1999,
+  duration: 4,
+  decimals: 0,
+  separator: ",",
+  suffix: " Year",
+  prefix: "Be ",
+  loop: 1,
+});
+
+const startVal = computed(() => {
+  if (countToParams.startVal) {
+    return countToParams.startVal;
+  } else {
+    return 0;
+  }
+});
+
+const endVal = computed(() => {
+  if (countToParams.endVal) {
+    return countToParams.endVal;
+  } else {
+    return 0;
+  }
+});
+const duration = computed(() => {
+  if (countToParams.duration) {
+    return countToParams.duration;
+  } else {
+    return 100;
+  }
+});
+
+const decimals = computed(() => {
+  if (countToParams.decimals) {
+    if (countToParams.decimals < 0 || countToParams.decimals > 20) {
+      alert("decimals 值应该在 0 - 20 区间内");
+      return 0;
+    }
+    return countToParams.decimals;
+  } else {
+    return 0;
+  }
+});
+
+const separator = computed(() => countToParams.separator);
+const suffix = computed(() => countToParams.suffix);
+const prefix = computed(() => countToParams.prefix);
+const loop = computed(() => countToParams.loop);
+
+onMounted(() => {
+  init();
+});
+
+onActivated(() => {
+  init();
+});
+
+onDeactivated(() => {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
+});
+
+onBeforeUnmount(() => {
+  if (timer) {
+    clearInterval(timer);
+    timer = null;
+  }
+});
+
+const init = () => {
+  timer = setInterval(() => {
+    asyncEndVal.value += parseInt(Math.random() * 30 + "");
+  }, 2000);
+};
+
+const start = () => {
+  countRef.value && countRef.value.restart();
+};
+const pauseResume = () => {
+  countRef.value && countRef.value.pause();
+};
+const reset = () => {
+  countRef.value && countRef.value.reset();
+};
+</script>
+
 <template>
   <div :class="prefixClass">
     <el-card shadow="never" style="margin-bottom: 10px">
@@ -5,7 +111,7 @@
         <el-link
           href="https://github.com/inorganik/countUp.js"
           target="_blank"
-          :underline="false"
+          underline="never"
           style="font-size: 20px"
         >
           CountUp.js
@@ -275,112 +381,6 @@
     </el-card>
   </div>
 </template>
-
-<script setup lang="ts" name="CountToDemo">
-import { CountTo } from "@/components";
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace("count-to-demo");
-const prefixClass = ns.b();
-
-const customUnit = [
-  { value: 3, label: "千多" },
-  { value: 4, label: "万多" },
-  { value: 5, label: "十万多" },
-];
-
-const countRef = useTemplateRef("countRef");
-const asyncEndVal = ref(199);
-let timer: ReturnType<typeof setInterval> | null;
-const countToParams = reactive({
-  startVal: 0,
-  endVal: 1999,
-  duration: 4,
-  decimals: 0,
-  separator: ",",
-  suffix: " Year",
-  prefix: "Be ",
-  loop: 1,
-});
-
-const startVal = computed(() => {
-  if (countToParams.startVal) {
-    return countToParams.startVal;
-  } else {
-    return 0;
-  }
-});
-
-const endVal = computed(() => {
-  if (countToParams.endVal) {
-    return countToParams.endVal;
-  } else {
-    return 0;
-  }
-});
-const duration = computed(() => {
-  if (countToParams.duration) {
-    return countToParams.duration;
-  } else {
-    return 100;
-  }
-});
-
-const decimals = computed(() => {
-  if (countToParams.decimals) {
-    if (countToParams.decimals < 0 || countToParams.decimals > 20) {
-      alert("decimals 值应该在 0 - 20 区间内");
-      return 0;
-    }
-    return countToParams.decimals;
-  } else {
-    return 0;
-  }
-});
-
-const separator = computed(() => countToParams.separator);
-const suffix = computed(() => countToParams.suffix);
-const prefix = computed(() => countToParams.prefix);
-const loop = computed(() => countToParams.loop);
-
-onMounted(() => {
-  init();
-});
-
-onActivated(() => {
-  init();
-});
-
-onDeactivated(() => {
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  }
-});
-
-onBeforeUnmount(() => {
-  if (timer) {
-    clearInterval(timer);
-    timer = null;
-  }
-});
-
-const init = () => {
-  timer = setInterval(() => {
-    asyncEndVal.value += parseInt(Math.random() * 30 + "");
-  }, 2000);
-};
-
-const start = () => {
-  countRef.value && countRef.value.restart();
-};
-const pauseResume = () => {
-  countRef.value && countRef.value.pause();
-};
-const reset = () => {
-  countRef.value && countRef.value.reset();
-};
-</script>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-count-to-demo;

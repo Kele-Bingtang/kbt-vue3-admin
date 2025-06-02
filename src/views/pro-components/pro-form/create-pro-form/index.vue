@@ -1,19 +1,3 @@
-<template>
-  <el-space fill>
-    <el-card shadow="never" header="createFormComponent 函数式创建 Template 组件">
-      <RenderProForm></RenderProForm>
-
-      {{ model1 }}
-    </el-card>
-
-    <el-card shadow="never" header="createForm 函数式动态渲染组件到指定元素">
-      <div ref="proFormRef"></div>
-
-      {{ model2 }}
-    </el-card>
-  </el-space>
-</template>
-
 <script setup lang="tsx" name="CreateProForm">
 import { type FormSchemaProps, useProForm, type ProElFormProps } from "@/components";
 import { ElButton, ElRadio, ElMessageBox, ElMessage, type FormItemProp } from "element-plus";
@@ -283,3 +267,19 @@ const getTreeSelectData = () => {
   });
 };
 </script>
+
+<template>
+  <el-space fill>
+    <el-card shadow="never" header="createFormComponent 函数式创建 Template 组件">
+      <RenderProForm></RenderProForm>
+
+      {{ model1 }}
+    </el-card>
+
+    <el-card shadow="never" header="createForm 函数式动态渲染组件到指定元素">
+      <div ref="proFormRef"></div>
+
+      {{ model2 }}
+    </el-card>
+  </el-space>
+</template>

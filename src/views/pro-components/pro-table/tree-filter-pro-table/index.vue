@@ -1,36 +1,3 @@
-<template>
-  <div class="main-box">
-    <TreeFilter label="name" title="部门列表(单选)" :data="department" @change="changeTreeFilter" />
-    <div class="table-box">
-      <ProTable ref="proTableRef" :data="data" :columns="columns" :search-col="{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }">
-        <!-- 表格 header 按钮 -->
-        <template #tableHeader="scope">
-          <el-button type="primary" :icon="CirclePlus">新增用户</el-button>
-          <el-button type="primary" :icon="Upload" plain>批量添加用户</el-button>
-          <el-button type="primary" :icon="Download" plain @click="downloadFile">导出用户数据</el-button>
-          <el-button type="primary" plain>To 详情页面</el-button>
-          <el-button
-            type="danger"
-            :icon="Delete"
-            plain
-            :disabled="!scope.isSelected"
-            @click="batchDelete(scope.selectedListIds)"
-          >
-            批量删除用户
-          </el-button>
-        </template>
-        <!-- 表格操作 -->
-        <template #operation="scope">
-          <el-button type="primary" link :icon="View">查看</el-button>
-          <el-button type="primary" link :icon="EditPen">编辑</el-button>
-          <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)">重置密码</el-button>
-          <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
-        </template>
-      </ProTable>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts" name="treeFilterProTable">
 import { ProTable, TreeFilter, type TableColumnProps, type ProTableInstance } from "@/components";
 import { useConfirm } from "@/composables";
@@ -38,7 +5,7 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { genderType, tableData, userStatus, department } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
 import { exportJsonToExcel, formatJsonToArray } from "@/utils";
-import type { ResUserList } from "../simpleProTable/index.vue";
+import type { ResUserList } from "../simple-pro-table/index.vue";
 
 const proTableRef = useTemplateRef<ProTableInstance>("proTableRef");
 const data = ref(tableData);
@@ -113,6 +80,39 @@ const downloadFile = async () => {
   });
 };
 </script>
+
+<template>
+  <div class="main-box">
+    <TreeFilter label="name" title="部门列表(单选)" :data="department" @change="changeTreeFilter" />
+    <div class="table-box">
+      <ProTable ref="proTableRef" :data="data" :columns="columns" :search-col="{ xs: 1, sm: 1, md: 2, lg: 3, xl: 3 }">
+        <!-- 表格 header 按钮 -->
+        <template #tableHeader="scope">
+          <el-button type="primary" :icon="CirclePlus">新增用户</el-button>
+          <el-button type="primary" :icon="Upload" plain>批量添加用户</el-button>
+          <el-button type="primary" :icon="Download" plain @click="downloadFile">导出用户数据</el-button>
+          <el-button type="primary" plain>To 详情页面</el-button>
+          <el-button
+            type="danger"
+            :icon="Delete"
+            plain
+            :disabled="!scope.isSelected"
+            @click="batchDelete(scope.selectedListIds)"
+          >
+            批量删除用户
+          </el-button>
+        </template>
+        <!-- 表格操作 -->
+        <template #operation="scope">
+          <el-button type="primary" link :icon="View">查看</el-button>
+          <el-button type="primary" link :icon="EditPen">编辑</el-button>
+          <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)">重置密码</el-button>
+          <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
+        </template>
+      </ProTable>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .main-box {

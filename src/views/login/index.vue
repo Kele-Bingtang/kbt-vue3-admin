@@ -1,23 +1,3 @@
-<template>
-  <div :class="ns.b()">
-    <SwitchDark :class="ns.e('dark')" />
-    <div :class="ns.e('wrapper')">
-      <div :class="ns.e('left')">
-        <img src="@/assets/images/login/login_left.png" alt="login" />
-      </div>
-
-      <div :class="ns.e('right')">
-        <div :class="[ns.e('right__header'), 'flx-center']">
-          <img src="@/assets/images/logo.png" alt="" />
-          <h2 class="title">{{ SystemConfig.systemInfo.name }}</h2>
-        </div>
-
-        <component :is="formComponents[formMode]" />
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts" name="Login">
 import { SwitchDark } from "@/components";
 import LoginForm from "./loginForm.vue";
@@ -46,6 +26,26 @@ const switchLoginMode = (mode: string) => {
 
 provide("switchLoginMode", switchLoginMode);
 </script>
+
+<template>
+  <div :class="ns.b()">
+    <SwitchDark :class="ns.e('dark')" />
+    <div :class="ns.e('wrapper')">
+      <div :class="ns.e('left')">
+        <img src="@/assets/images/login/login_left.png" alt="login" />
+      </div>
+
+      <div :class="ns.e('right')">
+        <div :class="[ns.e('right__header'), 'flx-center']">
+          <img src="@/assets/images/logo.png" alt="" />
+          <h2 class="title">{{ SystemConfig.systemInfo.name }}</h2>
+        </div>
+
+        <component :is="formComponents[formMode]" />
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 @use "./index";

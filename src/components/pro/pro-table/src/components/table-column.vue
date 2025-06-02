@@ -1,7 +1,3 @@
-<template>
-  <RenderTableColumn v-bind="column" />
-</template>
-
 <script setup lang="tsx">
 import { inject, ref, useSlots } from "vue";
 import { type TableColumnProps, type TableRenderScope, type HeaderRenderScope, tableEnumMapKey } from "../interface";
@@ -121,3 +117,7 @@ const RenderTableColumn = (item: TableColumnProps) => {
   );
 };
 </script>
+
+<template>
+  <RenderTableColumn v-bind="column" />
+</template>

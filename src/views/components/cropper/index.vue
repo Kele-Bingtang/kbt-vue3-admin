@@ -1,13 +1,20 @@
+<script setup lang="ts" name="CropperDemo">
+import { Cropper } from "@/components";
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace("cropper-demo");
+const prefixClass = ns.b();
+
+const uploadImage = (imgData: FormData) => {
+  console.log(imgData);
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" :class="prefixClass">
       <template #header>
-        <el-link
-          href="https://github.xyxiao.cn/vue-cropper/"
-          target="_blank"
-          :underline="false"
-          style="font-size: 20px"
-        >
+        <el-link href="https://github.xyxiao.cn/vue-cropper/" target="_blank" underline="never" style="font-size: 20px">
           Cropper
         </el-link>
       </template>
@@ -47,18 +54,6 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="CropperDemo">
-import { Cropper } from "@/components";
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace("cropper-demo");
-const prefixClass = ns.b();
-
-const uploadImage = (imgData: FormData) => {
-  console.log(imgData);
-};
-</script>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-cropper-demo;

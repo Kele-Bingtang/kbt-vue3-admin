@@ -1,57 +1,3 @@
-<template>
-  <div :class="prefixClass" :style="{ height: cropContainerHeight + 'px' }">
-    <div :class="`${prefixClass}__img`">
-      <VueCropper
-        ref="cropperRef"
-        :img="options.img"
-        :output-size="options.outputSize"
-        :output-type="options.outputType"
-        :info="options.info"
-        :full="options.full"
-        :auto-crop="options.autoCrop"
-        :auto-crop-width="options.autoCropWidth"
-        :auto-crop-height="options.autoCropHeight"
-        :fixed-box="options.fixedBox"
-        :can-move="options.canMove"
-        :can-move-nox="options.canMoveBox"
-        :original="options.original"
-        :enlarge="options.enlarge"
-        @real-time="realTime"
-        @img-load="imgLoad"
-        @img-moving="emits('imgMoving')"
-        @crop-moving="emits('cropMoving')"
-      />
-    </div>
-    <div :class="`${prefixClass}__img ${prefixClass}__img--previews`" v-if="previews.url">
-      <div :class="`${prefixClass}--previews__img`" :style="previews.div">
-        <img :src="previews.url" :style="previews.img" class="img" alt="头像" />
-      </div>
-    </div>
-  </div>
-
-  <div :class="`${prefixClass}__btn`">
-    <div>
-      <el-upload
-        action="#"
-        :http-request="handleHttpRequest"
-        :show-file-list="false"
-        :before-upload="beforeUpload"
-        :class="`${prefixClass}__btn--upload`"
-      >
-        <el-button type="primary" plain :icon="Upload">选择</el-button>
-      </el-upload>
-      <el-button type="primary" plain :icon="ZoomIn" @click="changeScale(1)">放大</el-button>
-      <el-button type="primary" plain :icon="ZoomOut" @click="changeScale(-1)">缩小</el-button>
-      <el-button type="primary" plain @click="rotateLeft">↺ 左旋转</el-button>
-      <el-button type="primary" plain @click="rotateRight">↻ 右旋转</el-button>
-      <el-button type="primary" plain :icon="Download" @click="downloadImg('blob')">下载</el-button>
-      <el-button type="primary" :icon="Upload" @click="uploadImage" :class="`${prefixClass}__btn--submit`">
-        提交
-      </el-button>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts" name="Cropper">
 import { ElMessage, ElButton, type UploadRequestOptions } from "element-plus";
 import { VueCropper } from "vue-cropper";
@@ -213,6 +159,60 @@ const handleHttpRequest = (options: UploadRequestOptions): Promise<any> => {
   });
 };
 </script>
+
+<template>
+  <div :class="prefixClass" :style="{ height: cropContainerHeight + 'px' }">
+    <div :class="`${prefixClass}__img`">
+      <VueCropper
+        ref="cropperRef"
+        :img="options.img"
+        :output-size="options.outputSize"
+        :output-type="options.outputType"
+        :info="options.info"
+        :full="options.full"
+        :auto-crop="options.autoCrop"
+        :auto-crop-width="options.autoCropWidth"
+        :auto-crop-height="options.autoCropHeight"
+        :fixed-box="options.fixedBox"
+        :can-move="options.canMove"
+        :can-move-nox="options.canMoveBox"
+        :original="options.original"
+        :enlarge="options.enlarge"
+        @real-time="realTime"
+        @img-load="imgLoad"
+        @img-moving="emits('imgMoving')"
+        @crop-moving="emits('cropMoving')"
+      />
+    </div>
+    <div :class="`${prefixClass}__img ${prefixClass}__img--previews`" v-if="previews.url">
+      <div :class="`${prefixClass}--previews__img`" :style="previews.div">
+        <img :src="previews.url" :style="previews.img" class="img" alt="头像" />
+      </div>
+    </div>
+  </div>
+
+  <div :class="`${prefixClass}__btn`">
+    <div>
+      <el-upload
+        action="#"
+        :http-request="handleHttpRequest"
+        :show-file-list="false"
+        :before-upload="beforeUpload"
+        :class="`${prefixClass}__btn--upload`"
+      >
+        <el-button type="primary" plain :icon="Upload">选择</el-button>
+      </el-upload>
+      <el-button type="primary" plain :icon="ZoomIn" @click="changeScale(1)">放大</el-button>
+      <el-button type="primary" plain :icon="ZoomOut" @click="changeScale(-1)">缩小</el-button>
+      <el-button type="primary" plain @click="rotateLeft">↺ 左旋转</el-button>
+      <el-button type="primary" plain @click="rotateRight">↻ 右旋转</el-button>
+      <el-button type="primary" plain :icon="Download" @click="downloadImg('blob')">下载</el-button>
+      <el-button type="primary" :icon="Upload" @click="uploadImage" :class="`${prefixClass}__btn--submit`">
+        提交
+      </el-button>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-cropper;

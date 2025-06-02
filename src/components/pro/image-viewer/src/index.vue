@@ -1,9 +1,3 @@
-<template>
-  <ElConfigProvider :namespace="ns.elNamespace" :size="layoutSize">
-    <ElImageViewer v-if="visible" v-bind="bindValue" @close="close" />
-  </ElConfigProvider>
-</template>
-
 <script setup lang="ts">
 import { ElImageViewer, ElConfigProvider } from "element-plus";
 import { computed } from "vue";
@@ -50,3 +44,9 @@ const close = () => {
   visible.value = false;
 };
 </script>
+
+<template>
+  <ElConfigProvider :namespace="ns.elNamespace" :size="layoutSize">
+    <ElImageViewer v-if="visible" v-bind="bindValue" @close="close" />
+  </ElConfigProvider>
+</template>

@@ -1,3 +1,19 @@
+<script setup lang="ts" name="MessageDemo">
+import { h } from "vue";
+import { message, closeAllMessage } from "@/utils";
+
+onMounted(() => {
+  message.success("欢迎回来：message.success('欢迎回来')");
+  message("欢迎回来: message('欢迎回来', { type: 'info' })", {
+    type: "info",
+  });
+  message({
+    message: "欢迎回来：message({ message: '欢迎回来', type: 'warning'});",
+    type: "warning",
+  });
+});
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="Message 提示">
@@ -140,19 +156,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="MessageDemo">
-import { h } from "vue";
-import { message, closeAllMessage } from "@/utils";
-
-onMounted(() => {
-  message.success("欢迎回来：message.success('欢迎回来')");
-  message("欢迎回来: message('欢迎回来', { type: 'info' })", {
-    type: "info",
-  });
-  message({
-    message: "欢迎回来：message({ message: '欢迎回来', type: 'warning'});",
-    type: "warning",
-  });
-});
-</script>

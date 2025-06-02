@@ -1,7 +1,3 @@
-<template>
-  <RenderFormWrap />
-</template>
-
 <script setup lang="tsx">
 import {
   shallowRef,
@@ -493,6 +489,10 @@ defineExpose({
   isHidden,
 });
 </script>
+
+<template>
+  <RenderFormWrap />
+</template>
 
 <style lang="scss" scoped>
 @use "./index";

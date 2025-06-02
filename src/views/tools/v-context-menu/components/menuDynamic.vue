@@ -1,3 +1,18 @@
+<script setup lang="ts" name="MenuDynamic">
+import {
+  directive,
+  Contextmenu,
+  ContextmenuItem,
+  ContextmenuDivider,
+  ContextmenuSubmenu,
+  ContextmenuGroup,
+} from "v-contextmenu";
+
+const contextmenu = useTemplateRef("contextmenu");
+const extra = ref<string[]>([]);
+const vContextmenu = directive;
+</script>
+
 <template>
   <div>
     <h1>动态菜单</h1>
@@ -33,21 +48,6 @@
     </Contextmenu>
   </div>
 </template>
-
-<script setup lang="ts" name="MenuDynamic">
-import {
-  directive,
-  Contextmenu,
-  ContextmenuItem,
-  ContextmenuDivider,
-  ContextmenuSubmenu,
-  ContextmenuGroup,
-} from "v-contextmenu";
-
-const contextmenu = useTemplateRef("contextmenu");
-const extra = ref<string[]>([]);
-const vContextmenu = directive;
-</script>
 
 <style lang="scss" scoped>
 .menu-dynamic-component {

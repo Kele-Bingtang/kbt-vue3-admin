@@ -1,60 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <ElInput disabled v-model="modelValue" clearable v-bind="$attrs" />
-    <ElPopover
-      :popper-class="`${prefixClass}__popover`"
-      placement="bottom"
-      trigger="click"
-      :width="450"
-      popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; height: 380px;"
-      @show="popoverShow"
-    >
-      <template #reference>
-        <div :style="iconWrapStyle">
-          <Icon v-if="modelValue" :icon="modelValue" />
-        </div>
-      </template>
-      <ElScrollbar style="height: calc(100% - 50px)">
-        <ElInput v-model="search" clearable placeholder="搜索图标" @clear="inputClear" style="margin-bottom: 20px" />
-        <ElTabs tab-position="left" v-model="iconName" @tab-change="tabChange">
-          <ElTabPane v-for="item in icons" :key="item.name" :label="item.name" :name="item.prefix">
-            <div :class="`${prefixClass}__icons`">
-              <div
-                v-for="icon in filterIcons(filterItemIcons(item.icons))"
-                :key="icon"
-                :style="{
-                  width: iconSize,
-                  height: iconSize,
-                  border: `1px solid ${icon === modelValue ? `var(--${ns.elNamespace}-color-primary)` : `var(--${ns.elNamespace}-border-color)`}`,
-                }"
-                :class="`${prefixClass}__icon`"
-                @click="iconSelect(icon)"
-                v-copy="tip ? modelValue : undefined"
-              >
-                <Icon
-                  :icon="icon"
-                  :color="icon === modelValue ? `var(--${ns.elNamespace}-color-primary)` : 'inherit'"
-                />
-              </div>
-            </div>
-          </ElTabPane>
-        </ElTabs>
-      </ElScrollbar>
-      <div :class="`${prefixClass}__pagination`">
-        <ElPagination
-          v-model:current-page="currentPage"
-          v-model:page-size="pageSize"
-          :pager-count="5"
-          small
-          :page-sizes="[100, 200, 300, 400]"
-          layout="total, prev, pager, next, jumper"
-          :total="filterItemIcons(icons[currentIconNameIndex]?.icons || []).length"
-        />
-      </div>
-    </ElPopover>
-  </div>
-</template>
-
 <script lang="ts" setup>
 import type { CSSProperties } from "vue";
 import { computed, ref, watch, inject, nextTick } from "vue";
@@ -171,6 +114,63 @@ const inputClear = () => {
   init(modelValue.value);
 };
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <ElInput disabled v-model="modelValue" clearable v-bind="$attrs" />
+    <ElPopover
+      :popper-class="`${prefixClass}__popover`"
+      placement="bottom"
+      trigger="click"
+      :width="450"
+      popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; height: 380px;"
+      @show="popoverShow"
+    >
+      <template #reference>
+        <div :style="iconWrapStyle">
+          <Icon v-if="modelValue" :icon="modelValue" />
+        </div>
+      </template>
+      <ElScrollbar style="height: calc(100% - 50px)">
+        <ElInput v-model="search" clearable placeholder="搜索图标" @clear="inputClear" style="margin-bottom: 20px" />
+        <ElTabs tab-position="left" v-model="iconName" @tab-change="tabChange">
+          <ElTabPane v-for="item in icons" :key="item.name" :label="item.name" :name="item.prefix">
+            <div :class="`${prefixClass}__icons`">
+              <div
+                v-for="icon in filterIcons(filterItemIcons(item.icons))"
+                :key="icon"
+                :style="{
+                  width: iconSize,
+                  height: iconSize,
+                  border: `1px solid ${icon === modelValue ? `var(--${ns.elNamespace}-color-primary)` : `var(--${ns.elNamespace}-border-color)`}`,
+                }"
+                :class="`${prefixClass}__icon`"
+                @click="iconSelect(icon)"
+                v-copy="tip ? modelValue : undefined"
+              >
+                <Icon
+                  :icon="icon"
+                  :color="icon === modelValue ? `var(--${ns.elNamespace}-color-primary)` : 'inherit'"
+                />
+              </div>
+            </div>
+          </ElTabPane>
+        </ElTabs>
+      </ElScrollbar>
+      <div :class="`${prefixClass}__pagination`">
+        <ElPagination
+          v-model:current-page="currentPage"
+          v-model:page-size="pageSize"
+          :pager-count="5"
+          small
+          :page-sizes="[100, 200, 300, 400]"
+          layout="total, prev, pager, next, jumper"
+          :total="filterItemIcons(icons[currentIconNameIndex]?.icons || []).length"
+        />
+      </div>
+    </ElPopover>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 @use "./index";

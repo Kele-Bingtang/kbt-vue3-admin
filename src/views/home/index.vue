@@ -1,42 +1,3 @@
-<template>
-  <div class="home-container">
-    <el-row :gutter="20">
-      <el-col :xs="12" :sm="12" :md="8" :lg="6" v-for="(info, i) in cardInfo" :key="`info-${i}`" class="card-col">
-        <CardItem shadow="hover" :icon="info.icon" :color="info.color" :icon-size="48">
-          <div class="card-title">{{ info.title }}</div>
-          <CountTo :start-val="0" :end-val="info.count" :duration="2.7" class="count-style" />
-        </CardItem>
-      </el-col>
-    </el-row>
-
-    <el-row :gutter="20">
-      <el-col :xs="24" :sm="24" :lg="8" class="chart-col">
-        <el-card>
-          <ChartPie :data="pieData" title="用户访问来源" subTitle="统计" />
-        </el-card>
-      </el-col>
-
-      <el-col :xs="24" :sm="24" :lg="8" class="chart-col">
-        <el-card>
-          <ChartBar :data="barData" />
-        </el-card>
-      </el-col>
-
-      <el-col :xs="24" :sm="24" :lg="8" class="chart-col">
-        <el-card>
-          <ChartLineBar :data="lineBarData" />
-        </el-card>
-      </el-col>
-    </el-row>
-
-    <el-row>
-      <el-card>
-        <ChartLine />
-      </el-card>
-    </el-row>
-  </div>
-</template>
-
 <script setup lang="ts" name="Home">
 import { ElRow, ElCol, ElCard } from "element-plus";
 import CardItem from "./components/card-item.vue";
@@ -80,6 +41,45 @@ const lineBarData = [
   { category: "2022-10-07", lineData: "361", barData: "160", lineName: "访问量", barName: "用户量" },
 ];
 </script>
+
+<template>
+  <div class="home-container">
+    <el-row :gutter="20">
+      <el-col :xs="12" :sm="12" :md="8" :lg="6" v-for="(info, i) in cardInfo" :key="`info-${i}`" class="card-col">
+        <CardItem shadow="hover" :icon="info.icon" :color="info.color" :icon-size="48">
+          <div class="card-title">{{ info.title }}</div>
+          <CountTo :start-val="0" :end-val="info.count" :duration="2.7" class="count-style" />
+        </CardItem>
+      </el-col>
+    </el-row>
+
+    <el-row :gutter="20">
+      <el-col :xs="24" :sm="24" :lg="8" class="chart-col">
+        <el-card>
+          <ChartPie :data="pieData" title="用户访问来源" subTitle="统计" />
+        </el-card>
+      </el-col>
+
+      <el-col :xs="24" :sm="24" :lg="8" class="chart-col">
+        <el-card>
+          <ChartBar :data="barData" />
+        </el-card>
+      </el-col>
+
+      <el-col :xs="24" :sm="24" :lg="8" class="chart-col">
+        <el-card>
+          <ChartLineBar :data="lineBarData" />
+        </el-card>
+      </el-col>
+    </el-row>
+
+    <el-row>
+      <el-card>
+        <ChartLine />
+      </el-card>
+    </el-row>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .home-container {

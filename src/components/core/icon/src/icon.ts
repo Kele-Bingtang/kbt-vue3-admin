@@ -1,4 +1,4 @@
-import type { Component, CSSProperties } from "vue";
+import type { Component } from "vue";
 import type { IconifyIcon } from "@iconify/vue";
 
 export interface IconProps {
@@ -44,25 +44,4 @@ export interface IconProps {
    * 自定义图标样式
    */
   style?: Record<string, any>;
-}
-
-export interface IconType {
-  inline?: boolean;
-  width?: string | number;
-  height?: string | number;
-  horizontalFlip?: boolean;
-  verticalFlip?: boolean;
-  flip?: string;
-  rotate?: number | string;
-  color?: string;
-  horizontalAlign?: boolean;
-  verticalAlign?: boolean;
-  align?: string;
-  onLoad?: () => void;
-  includes?: () => void;
-  name?: string;
-  prefix?: string;
-
-  //  all icon
-  style?: CSSProperties;
 }

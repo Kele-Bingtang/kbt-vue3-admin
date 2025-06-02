@@ -1,102 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <!-- 查询表单 card -->
-    <ProSearch
-      ref="proSearchRef"
-      v-if="['search', 'all', 'allAndUseFilter'].includes(getProps.searchModel!)"
-      v-show="getProps.initShowSearch"
-      v-model="searchParam"
-      :schema="searchColumns"
-      :search-cols="getProps.searchCols"
-      v-bind="{ ...getProps.searchProps }"
-      @search="_search"
-      @reset="_reset"
-      @register="searchRegister"
-      :enum-map-props="enumMap"
-    />
-
-    <div :class="[{ card: useCardStyle }, `${prefixClass}__main`]">
-      <!-- 表格头部 操作按钮 -->
-      <TableMainHeader
-        :columns="getProps.columns"
-        :useToolButton="getProps.useToolButton"
-        :disabledButton="getProps.disabledButton"
-        :size="getProps.size"
-        :showSearch="searchColumns ? searchColumns.length > 0 : false"
-        :selectedList="selectedList"
-        :selectedListIds="selectedListIds"
-        :isSelected="isSelected"
-        :dialogForm="getProps.dialogForm"
-        @add="dialogFormRef?.handleAdd"
-        @removeBatch="handleRemoveBatch"
-        @refresh="getTableList"
-        @size="handleSizeCommand"
-        @colSetting="toggleColSetting"
-        @export="handleExport"
-        @search="() => setProps({ initShowSearch: !getProps.initShowSearch })"
-      >
-        <template v-for="slot in Object.keys($slots)" #[slot]="scope">
-          <slot :name="slot" v-bind="scope" />
-        </template>
-      </TableMainHeader>
-
-      <!-- 表格主体 -->
-      <TableMain
-        ref="tableMainRef"
-        v-bind="$attrs"
-        :data="filterTableData ? filterTableData : currentTableData"
-        :size="elTableSize"
-        :border="getProps.border"
-        :row-key="getProps.rowKey"
-        @selection-change="selectionChange"
-        :row-style="getRowStyle"
-        :cell-style="getCellStyle"
-        :header-cell-style="getHeaderCellStyle"
-        :columns="getProps.columns"
-        :columnTypes="columnTypes"
-        :rowClickEdit="rowClickEdit"
-        :dialogForm="getProps.dialogForm"
-        @edit="handleEdit"
-        @remove="handleRemove"
-      >
-        <template v-for="slot in Object.keys($slots)" #[slot]="scope">
-          <slot :name="slot" v-bind="scope" />
-        </template>
-      </TableMain>
-
-      <!-- Dialog 表单 -->
-      <DialogFormComponent
-        ref="dialogFormRef"
-        v-if="getProps.dialogForm"
-        v-bind="{
-          ...(getProps.dialogForm || { formProps: {}, dialog: {} }),
-          afterConfirm: (status, result) => {
-            getTableList();
-            getProps.dialogForm?.afterConfirm && getProps.dialogForm.afterConfirm(status, result);
-          },
-        }"
-        @register="formRegister"
-      >
-        <template v-for="slot in Object.keys($slots)" #[slot]="scope">
-          <slot :name="slot" v-bind="scope" />
-        </template>
-      </DialogFormComponent>
-
-      <!-- 表格分页 -->
-      <slot name="pagination" :total="pageTotal">
-        <Pagination
-          v-if="isOpenPage(pagination) && pageTotal"
-          v-model="paging"
-          :total="pageTotal"
-          @pagination="handlePagination"
-        />
-      </slot>
-    </div>
-    <!-- 列设置 -->
-    <ColSetting v-if="getProps.useToolButton" v-model="colSettingVisible" v-model:col-setting="colSetting" />
-  </div>
-</template>
-
 <script setup lang="ts">
 import {
   ref,
@@ -726,6 +627,105 @@ const expose = {
 
 defineExpose(expose);
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <!-- 查询表单 card -->
+    <ProSearch
+      ref="proSearchRef"
+      v-if="['search', 'all', 'allAndUseFilter'].includes(getProps.searchModel!)"
+      v-show="getProps.initShowSearch"
+      v-model="searchParam"
+      :schema="searchColumns"
+      :search-cols="getProps.searchCols"
+      v-bind="{ ...getProps.searchProps }"
+      @search="_search"
+      @reset="_reset"
+      @register="searchRegister"
+      :enum-map-props="enumMap"
+    />
+
+    <div :class="[{ card: useCardStyle }, `${prefixClass}__main`]">
+      <!-- 表格头部 操作按钮 -->
+      <TableMainHeader
+        :columns="getProps.columns"
+        :useToolButton="getProps.useToolButton"
+        :disabledButton="getProps.disabledButton"
+        :size="getProps.size"
+        :showSearch="searchColumns ? searchColumns.length > 0 : false"
+        :selectedList="selectedList"
+        :selectedListIds="selectedListIds"
+        :isSelected="isSelected"
+        :dialogForm="getProps.dialogForm"
+        @add="dialogFormRef?.handleAdd"
+        @removeBatch="handleRemoveBatch"
+        @refresh="getTableList"
+        @size="handleSizeCommand"
+        @colSetting="toggleColSetting"
+        @export="handleExport"
+        @search="() => setProps({ initShowSearch: !getProps.initShowSearch })"
+      >
+        <template v-for="slot in Object.keys($slots)" #[slot]="scope">
+          <slot :name="slot" v-bind="scope" />
+        </template>
+      </TableMainHeader>
+
+      <!-- 表格主体 -->
+      <TableMain
+        ref="tableMainRef"
+        v-bind="$attrs"
+        :data="filterTableData ? filterTableData : currentTableData"
+        :size="elTableSize"
+        :border="getProps.border"
+        :row-key="getProps.rowKey"
+        @selection-change="selectionChange"
+        :row-style="getRowStyle"
+        :cell-style="getCellStyle"
+        :header-cell-style="getHeaderCellStyle"
+        :columns="getProps.columns"
+        :columnTypes="columnTypes"
+        :rowClickEdit="rowClickEdit"
+        :dialogForm="getProps.dialogForm"
+        @edit="handleEdit"
+        @remove="handleRemove"
+      >
+        <template v-for="slot in Object.keys($slots)" #[slot]="scope">
+          <slot :name="slot" v-bind="scope" />
+        </template>
+      </TableMain>
+
+      <!-- Dialog 表单 -->
+      <DialogFormComponent
+        ref="dialogFormRef"
+        v-if="getProps.dialogForm"
+        v-bind="{
+          ...(getProps.dialogForm || { formProps: {}, dialog: {} }),
+          afterConfirm: (status, result) => {
+            getTableList();
+            getProps.dialogForm?.afterConfirm && getProps.dialogForm.afterConfirm(status, result);
+          },
+        }"
+        @register="formRegister"
+      >
+        <template v-for="slot in Object.keys($slots)" #[slot]="scope">
+          <slot :name="slot" v-bind="scope" />
+        </template>
+      </DialogFormComponent>
+
+      <!-- 表格分页 -->
+      <slot name="pagination" :total="pageTotal">
+        <Pagination
+          v-if="isOpenPage(pagination) && pageTotal"
+          v-model="paging"
+          :total="pageTotal"
+          @pagination="handlePagination"
+        />
+      </slot>
+    </div>
+    <!-- 列设置 -->
+    <ColSetting v-if="getProps.useToolButton" v-model="colSettingVisible" v-model:col-setting="colSetting" />
+  </div>
+</template>
 
 <style lang="scss">
 @use "./index";

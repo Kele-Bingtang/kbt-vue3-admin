@@ -1,35 +1,3 @@
-<template>
-  <el-space fill>
-    <el-card shadow="never">
-      <el-space wrap>
-        <el-button @click="changePosition('left')">按钮不换行 位置左</el-button>
-        <el-button @click="changePosition('right')">按钮不换行 位置右</el-button>
-        <el-button @click="changePosition('block-left')">按钮换行 位置左</el-button>
-        <el-button @click="changePosition('block-center')">按钮换行 位置中</el-button>
-        <el-button @click="changePosition('block-right')">按钮换行 位置右</el-button>
-        <el-button @click="changeSex(true)">删除性别</el-button>
-        <el-button @click="changeSex(false)">恢复性别</el-button>
-        <el-button @click="setValue()">设置姓名值</el-button>
-        <el-button @click="changeCollapsedRows(2)">默认显示两行</el-button>
-        <el-button @click="changeCollapsedRows(1)">默认显示一行</el-button>
-        <el-button @click="useCollapsed(false)">关闭折叠功能</el-button>
-        <el-button @click="useCollapsed(true)">使用折叠功能</el-button>
-        <el-button @click="changeSearchLoading">搜索按钮 loading</el-button>
-        <el-button @click="changeResetLoading">重置按钮 loading</el-button>
-      </el-space>
-    </el-card>
-
-    <ProSearch
-      :schema="schema"
-      v-model="model"
-      @search="handleSearch"
-      @reset="handleSearch"
-      @register="searchRegister"
-    />
-    {{ model }}
-  </el-space>
-</template>
-
 <script setup lang="ts" name="UseProSearchDemo">
 import { ProSearch, type ProSearchSchemaProps, useProSearch, type ActionPosition } from "@/components";
 
@@ -143,3 +111,35 @@ const schema: ProSearchSchemaProps[] = reactive([
   },
 ]);
 </script>
+
+<template>
+  <el-space fill>
+    <el-card shadow="never">
+      <el-space wrap>
+        <el-button @click="changePosition('left')">按钮不换行 位置左</el-button>
+        <el-button @click="changePosition('right')">按钮不换行 位置右</el-button>
+        <el-button @click="changePosition('block-left')">按钮换行 位置左</el-button>
+        <el-button @click="changePosition('block-center')">按钮换行 位置中</el-button>
+        <el-button @click="changePosition('block-right')">按钮换行 位置右</el-button>
+        <el-button @click="changeSex(true)">删除性别</el-button>
+        <el-button @click="changeSex(false)">恢复性别</el-button>
+        <el-button @click="setValue()">设置姓名值</el-button>
+        <el-button @click="changeCollapsedRows(2)">默认显示两行</el-button>
+        <el-button @click="changeCollapsedRows(1)">默认显示一行</el-button>
+        <el-button @click="useCollapsed(false)">关闭折叠功能</el-button>
+        <el-button @click="useCollapsed(true)">使用折叠功能</el-button>
+        <el-button @click="changeSearchLoading">搜索按钮 loading</el-button>
+        <el-button @click="changeResetLoading">重置按钮 loading</el-button>
+      </el-space>
+    </el-card>
+
+    <ProSearch
+      :schema="schema"
+      v-model="model"
+      @search="handleSearch"
+      @reset="handleSearch"
+      @register="searchRegister"
+    />
+    {{ model }}
+  </el-space>
+</template>

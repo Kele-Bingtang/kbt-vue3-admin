@@ -1,56 +1,3 @@
-<template>
-  <div v-if="schema.length" :class="`card ${prefixClass}`">
-    <ProForm :schema="schema" v-model="model" @register="formRegister" @validate="onFormValidate" :enum-map-props>
-      <template #default="{ parseLabel, getComponentWidth }">
-        <Grid
-          ref="gridRef"
-          :collapsed="getProps.useCollapsed ? getProps.collapsed : false"
-          :cols="getProps.searchCols"
-          :gap="getProps.gap"
-          :collapsedRows="getProps.collapsedRows"
-        >
-          <GridItem v-for="item in schemaForm" :key="item.prop" v-bind="getResponsive(item)" :index="item._index">
-            <el-form-item :label="parseLabel(item.label)">
-              <ProFormItem :column="item" v-model="model" :style="getComponentWidth(item)" />
-            </el-form-item>
-          </GridItem>
-
-          <GridItem :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
-            <div :style="style">
-              <slot name="action" :model="model" :showCollapse="showCollapse" :toggleCollapsed="toggleCollapsed">
-                <el-button
-                  v-if="getProps.showSearch"
-                  type="primary"
-                  :icon="Search"
-                  @click="search"
-                  :loading="getProps.searchLoading"
-                >
-                  搜索
-                </el-button>
-                <el-button v-if="getProps.showReset" :icon="Delete" @click="reset" :loading="getProps.resetLoading">
-                  重置
-                </el-button>
-                <el-button
-                  v-if="getProps.useCollapsed === false ? false : showCollapse"
-                  type="primary"
-                  link
-                  class="search-isOpen"
-                  @click="toggleCollapsed()"
-                >
-                  {{ getProps.collapsed ? "展开" : "折叠" }}
-                  <el-icon class="el-icon--right">
-                    <component :is="getProps.collapsed ? ArrowDown : ArrowUp"></component>
-                  </el-icon>
-                </el-button>
-              </slot>
-            </div>
-          </GridItem>
-        </Grid>
-      </template>
-    </ProForm>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, onMounted, ref, unref } from "vue";
 import {
@@ -341,6 +288,59 @@ onMounted(() => {
 
 defineExpose(defaultExpose);
 </script>
+
+<template>
+  <div v-if="schema.length" :class="`card ${prefixClass}`">
+    <ProForm :schema="schema" v-model="model" @register="formRegister" @validate="onFormValidate" :enum-map-props>
+      <template #default="{ parseLabel, getComponentWidth }">
+        <Grid
+          ref="gridRef"
+          :collapsed="getProps.useCollapsed ? getProps.collapsed : false"
+          :cols="getProps.searchCols"
+          :gap="getProps.gap"
+          :collapsedRows="getProps.collapsedRows"
+        >
+          <GridItem v-for="item in schemaForm" :key="item.prop" v-bind="getResponsive(item)" :index="item._index">
+            <el-form-item :label="parseLabel(item.label)">
+              <ProFormItem :column="item" v-model="model" :style="getComponentWidth(item)" />
+            </el-form-item>
+          </GridItem>
+
+          <GridItem :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
+            <div :style="style">
+              <slot name="action" :model="model" :showCollapse="showCollapse" :toggleCollapsed="toggleCollapsed">
+                <el-button
+                  v-if="getProps.showSearch"
+                  type="primary"
+                  :icon="Search"
+                  @click="search"
+                  :loading="getProps.searchLoading"
+                >
+                  搜索
+                </el-button>
+                <el-button v-if="getProps.showReset" :icon="Delete" @click="reset" :loading="getProps.resetLoading">
+                  重置
+                </el-button>
+                <el-button
+                  v-if="getProps.useCollapsed === false ? false : showCollapse"
+                  type="primary"
+                  link
+                  class="search-isOpen"
+                  @click="toggleCollapsed()"
+                >
+                  {{ getProps.collapsed ? "展开" : "折叠" }}
+                  <el-icon class="el-icon--right">
+                    <component :is="getProps.collapsed ? ArrowDown : ArrowUp"></component>
+                  </el-icon>
+                </el-button>
+              </slot>
+            </div>
+          </GridItem>
+        </Grid>
+      </template>
+    </ProForm>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-search-form;

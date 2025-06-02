@@ -1,9 +1,3 @@
-<template>
-  <div :class="[prefixClass, { fullscreen: fullscreen }]">
-    <TinymceEditor :id="id" v-model="tinymceContent" :init="initOptions" />
-  </div>
-</template>
-
 <script setup lang="ts" name="Tinymce">
 import { ref, reactive, computed, onMounted, onBeforeUnmount, watch, nextTick, useAttrs } from "vue";
 import TinymceEditor from "@tinymce/tinymce-vue";
@@ -232,6 +226,12 @@ watch(
   () => onDisabledChange()
 );
 </script>
+
+<template>
+  <div :class="[prefixClass, { fullscreen: fullscreen }]">
+    <TinymceEditor :id="id" v-model="tinymceContent" :init="initOptions" />
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-tinymce;

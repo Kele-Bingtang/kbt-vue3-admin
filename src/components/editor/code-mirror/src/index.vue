@@ -1,32 +1,4 @@
 <!-- vue-codemirror6 1.3.0 -->
-<template>
-  <component :is="tag" ref="editorRef" :class="prefixClass">
-    <template v-if="mergeConfig && mergeConfig.header">
-      <slot name="header">
-        <div :class="`${prefixClass}__merge--header`">
-          <slot name="headerLeft">
-            <div :class="`${prefixClass}__merge--header__left`">
-              <slot name="leftTitle">{{ mergeConfig.leftTitle || "Before" }}</slot>
-            </div>
-          </slot>
-          <slot name="headerRight">
-            <div :class="`${prefixClass}__merge--header__right`">
-              <slot name="rightTitle">{{ mergeConfig.rightTitle || "After" }}</slot>
-            </div>
-          </slot>
-        </div>
-      </slot>
-    </template>
-
-    <div v-if="fullScreen" :class="`${prefixClass}__full-screen`">
-      <el-button size="small" plain @click="toggleFullScreen">
-        <el-icon><FullScreen /></el-icon>
-      </el-button>
-    </div>
-
-    <aside v-if="$slots.default" style="display: none" aria-hidden><slot /></aside>
-  </component>
-</template>
 
 <script setup lang="ts">
 import { indentWithTab } from "@codemirror/commands";
@@ -633,6 +605,35 @@ const defaultPhrases = {
   "No diagnostics": "无诊断",
 };
 </script>
+
+<template>
+  <component :is="tag" ref="editorRef" :class="prefixClass">
+    <template v-if="mergeConfig && mergeConfig.header">
+      <slot name="header">
+        <div :class="`${prefixClass}__merge--header`">
+          <slot name="headerLeft">
+            <div :class="`${prefixClass}__merge--header__left`">
+              <slot name="leftTitle">{{ mergeConfig.leftTitle || "Before" }}</slot>
+            </div>
+          </slot>
+          <slot name="headerRight">
+            <div :class="`${prefixClass}__merge--header__right`">
+              <slot name="rightTitle">{{ mergeConfig.rightTitle || "After" }}</slot>
+            </div>
+          </slot>
+        </div>
+      </slot>
+    </template>
+
+    <div v-if="fullScreen" :class="`${prefixClass}__full-screen`">
+      <el-button size="small" plain @click="toggleFullScreen">
+        <el-icon><FullScreen /></el-icon>
+      </el-button>
+    </div>
+
+    <aside v-if="$slots.default" style="display: none" aria-hidden><slot /></aside>
+  </component>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-code-mirror;

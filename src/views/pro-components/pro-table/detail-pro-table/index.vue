@@ -1,62 +1,3 @@
-<template>
-  <div class="detail-pro-table-container">
-    <ProTable
-      ref="proTableRef"
-      :columns="columns"
-      :requestApi="getTicketList"
-      :initRequestParam="initRequestParam"
-      :default-expand-all="expandAll"
-      :expand-row-keys="expandKeys"
-      rowKey="id"
-      :dialogForm="dialogForm"
-    >
-      <template #expandHeader>
-        <el-button link :icon="expandAll ? ArrowUp : ArrowDown" @click="handleExpandAll" />
-      </template>
-
-      <template #expand="{ row }">
-        <div style="margin-left: 70px">
-          <el-descriptions title="描述类信息" :column="2" border>
-            <el-descriptions-item label="Description" label-class-name="description-label" width="120" :span="2">
-              {{ row.description }}
-            </el-descriptions-item>
-            <el-descriptions-item label="Root Cause" :span="2">{{ row.rootCause }}</el-descriptions-item>
-          </el-descriptions>
-
-          <el-descriptions title="基础类信息" :column="4" style="margin-top: 20px" border>
-            <el-descriptions-item label="Create User">{{ row.createUser }}</el-descriptions-item>
-            <el-descriptions-item label="Create Time">{{ row.createTime }}</el-descriptions-item>
-          </el-descriptions>
-
-          <div style="margin: 16px 0; font-size: 16px; font-weight: 700">Actions</div>
-
-          <el-collapse v-model="collapseActive" v-for="item in row.actionList" :key="item.actionId">
-            <el-collapse-item :name="item.actionId">
-              <template #title>
-                <Grid :gap="[5, 0]">
-                  <GridItem>{{ item.actionId }}</GridItem>
-                  <GridItem :span="2">{{ item.actionUpdateUser }}</GridItem>
-                  <GridItem>{{ item.actionUpdateTime }}</GridItem>
-                </Grid>
-              </template>
-              <span v-html="item.actionDesc"></span>
-            </el-collapse-item>
-          </el-collapse>
-        </div>
-      </template>
-
-      <!-- <template #operation>
-        <el-button link type="info" size="small" :icon="Document" class="btn-info">附件</el-button>
-        <el-button link type="primary" size="small" :icon="Edit" class="btn-primary">编辑</el-button>
-        <el-button link type="danger" size="small" :icon="Delete" class="btn-primary">删除</el-button>
-      </template> -->
-
-      <!-- <template #form>
-        <ProForm :options="options" v-model="form"></ProForm>
-      </template> -->
-    </ProTable>
-  </div>
-</template>
 <script setup lang="tsx" name="CommonTicket">
 import {
   ProTable,
@@ -223,3 +164,63 @@ const handleExpandAll = () => {
   else expandKeys.value = [];
 };
 </script>
+
+<template>
+  <div class="detail-pro-table-container">
+    <ProTable
+      ref="proTableRef"
+      :columns="columns"
+      :requestApi="getTicketList"
+      :initRequestParam="initRequestParam"
+      :default-expand-all="expandAll"
+      :expand-row-keys="expandKeys"
+      rowKey="id"
+      :dialogForm="dialogForm"
+    >
+      <template #expandHeader>
+        <el-button link :icon="expandAll ? ArrowUp : ArrowDown" @click="handleExpandAll" />
+      </template>
+
+      <template #expand="{ row }">
+        <div style="margin-left: 70px">
+          <el-descriptions title="描述类信息" :column="2" border>
+            <el-descriptions-item label="Description" label-class-name="description-label" width="120" :span="2">
+              {{ row.description }}
+            </el-descriptions-item>
+            <el-descriptions-item label="Root Cause" :span="2">{{ row.rootCause }}</el-descriptions-item>
+          </el-descriptions>
+
+          <el-descriptions title="基础类信息" :column="4" style="margin-top: 20px" border>
+            <el-descriptions-item label="Create User">{{ row.createUser }}</el-descriptions-item>
+            <el-descriptions-item label="Create Time">{{ row.createTime }}</el-descriptions-item>
+          </el-descriptions>
+
+          <div style="margin: 16px 0; font-size: 16px; font-weight: 700">Actions</div>
+
+          <el-collapse v-model="collapseActive" v-for="item in row.actionList" :key="item.actionId">
+            <el-collapse-item :name="item.actionId">
+              <template #title>
+                <Grid :gap="[5, 0]">
+                  <GridItem>{{ item.actionId }}</GridItem>
+                  <GridItem :span="2">{{ item.actionUpdateUser }}</GridItem>
+                  <GridItem>{{ item.actionUpdateTime }}</GridItem>
+                </Grid>
+              </template>
+              <span v-html="item.actionDesc"></span>
+            </el-collapse-item>
+          </el-collapse>
+        </div>
+      </template>
+
+      <!-- <template #operation>
+        <el-button link type="info" size="small" :icon="Document" class="btn-info">附件</el-button>
+        <el-button link type="primary" size="small" :icon="Edit" class="btn-primary">编辑</el-button>
+        <el-button link type="danger" size="small" :icon="Delete" class="btn-primary">删除</el-button>
+      </template> -->
+
+      <!-- <template #form>
+        <ProForm :options="options" v-model="form"></ProForm>
+      </template> -->
+    </ProTable>
+  </div>
+</template>

@@ -1,3 +1,48 @@
+<script setup lang="ts" name="seamlessScroll">
+import { SeamlessScroll } from "@/components";
+
+const scroll = useTemplateRef("scroll");
+
+const listData = ref([
+  {
+    title: "无缝滚动第一行无缝滚动第一行！！！！！！！！！！",
+  },
+  {
+    title: "无缝滚动第二行无缝滚动第二行！！！！！！！！！！",
+  },
+  {
+    title: "无缝滚动第三行无缝滚动第三行！！！！！！！！！！",
+  },
+  {
+    title: "无缝滚动第四行无缝滚动第四行！！！！！！！！！！",
+  },
+  {
+    title: "无缝滚动第五行无缝滚动第五行！！！！！！！！！！",
+  },
+  {
+    title: "无缝滚动第六行无缝滚动第六行！！！！！！！！！！",
+  },
+  {
+    title: "无缝滚动第七行无缝滚动第七行！！！！！！！！！！",
+  },
+  {
+    title: "无缝滚动第八行无缝滚动第八行！！！！！！！！！！",
+  },
+  {
+    title: "无缝滚动第九行无缝滚动第九行！！！！！！！！！！",
+  },
+]);
+
+const classOption = reactive({
+  direction: "top",
+});
+
+function changeDirection(val: string) {
+  (scroll.value as any).reset();
+  classOption.direction = val;
+}
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never">
@@ -81,51 +126,6 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="seamlessScroll">
-import { SeamlessScroll } from "@/components";
-
-const scroll = useTemplateRef("scroll");
-
-const listData = ref([
-  {
-    title: "无缝滚动第一行无缝滚动第一行！！！！！！！！！！",
-  },
-  {
-    title: "无缝滚动第二行无缝滚动第二行！！！！！！！！！！",
-  },
-  {
-    title: "无缝滚动第三行无缝滚动第三行！！！！！！！！！！",
-  },
-  {
-    title: "无缝滚动第四行无缝滚动第四行！！！！！！！！！！",
-  },
-  {
-    title: "无缝滚动第五行无缝滚动第五行！！！！！！！！！！",
-  },
-  {
-    title: "无缝滚动第六行无缝滚动第六行！！！！！！！！！！",
-  },
-  {
-    title: "无缝滚动第七行无缝滚动第七行！！！！！！！！！！",
-  },
-  {
-    title: "无缝滚动第八行无缝滚动第八行！！！！！！！！！！",
-  },
-  {
-    title: "无缝滚动第九行无缝滚动第九行！！！！！！！！！！",
-  },
-]);
-
-const classOption = reactive({
-  direction: "top",
-});
-
-function changeDirection(val: string) {
-  (scroll.value as any).reset();
-  classOption.direction = val;
-}
-</script>
 
 <style lang="scss" scoped>
 .card-header {

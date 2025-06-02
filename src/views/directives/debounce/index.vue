@@ -1,3 +1,11 @@
+<script setup lang="ts" name="Debounce">
+import { ElMessage } from "element-plus";
+
+const debounceClick = () => {
+  ElMessage.success("我是防抖按钮触发的事件 🍍🍓🍌");
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="防抖指令">
@@ -7,11 +15,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="Debounce">
-import { ElMessage } from "element-plus";
-
-const debounceClick = () => {
-  ElMessage.success("我是防抖按钮触发的事件 🍍🍓🍌");
-};
-</script>

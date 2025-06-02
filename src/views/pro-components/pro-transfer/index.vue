@@ -1,16 +1,3 @@
-<template>
-  <el-card shadow="never">
-    <ProTableTransfer
-      :data="list"
-      tableHeight="406"
-      v-model="value"
-      :filterMethod="filterMethod"
-      :column="column"
-      @change="change"
-    ></ProTableTransfer>
-  </el-card>
-</template>
-
 <script lang="ts" setup>
 import { ref } from "vue";
 import { ProTableTransfer } from "@/components";
@@ -54,6 +41,19 @@ const filterMethod = (queryString: string, row: any) => {
   return row.desc.toLowerCase().includes(queryString.toLowerCase());
 };
 </script>
+
+<template>
+  <el-card shadow="never">
+    <ProTableTransfer
+      :data="list"
+      tableHeight="406"
+      v-model="value"
+      :filterMethod="filterMethod"
+      :column="column"
+      @change="change"
+    ></ProTableTransfer>
+  </el-card>
+</template>
 
 <style lang="scss" scoped>
 .icon-search {

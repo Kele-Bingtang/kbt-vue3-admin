@@ -1,3 +1,36 @@
+<script setup lang="ts" name="Print">
+import { Print } from "@/utils";
+import ChartLine from "@/views/home/components/chart-line.vue";
+import { simpleData } from "@/mock/table";
+
+const value = ref("1");
+
+const options = [
+  {
+    value: "1",
+    el: ".el-table",
+    label: "Table",
+  },
+  {
+    value: "2",
+    el: ".echart",
+    label: "Echart",
+  },
+  {
+    value: "3",
+    el: ".img",
+    label: "Image",
+  },
+];
+
+function onPrint() {
+  const el = options.filter(v => v.value === value.value)[0]?.el;
+  Print(el).toPrint;
+}
+
+const tableData = ref(simpleData);
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" class="print-container">
@@ -40,39 +73,6 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="Print">
-import { Print } from "@/utils";
-import ChartLine from "@/views/home/components/chart-line.vue";
-import { simpleData } from "@/mock/table";
-
-const value = ref("1");
-
-const options = [
-  {
-    value: "1",
-    el: ".el-table",
-    label: "Table",
-  },
-  {
-    value: "2",
-    el: ".echart",
-    label: "Echart",
-  },
-  {
-    value: "3",
-    el: ".img",
-    label: "Image",
-  },
-];
-
-function onPrint() {
-  const el = options.filter(v => v.value === value.value)[0]?.el;
-  Print(el).toPrint;
-}
-
-const tableData = ref(simpleData);
-</script>
 
 <style lang="scss" scoped>
 .print-container {

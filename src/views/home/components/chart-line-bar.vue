@@ -1,7 +1,3 @@
-<template>
-  <div ref="echartsRef" :style="{ width: width, height: height }"></div>
-</template>
-
 <script setup lang="ts" name="ChartLineBar">
 import * as echarts from "echarts";
 import { useEcharts } from "@/composables";
@@ -111,3 +107,7 @@ const initChart = () => {
   useEcharts(chart, option);
 };
 </script>
+
+<template>
+  <div ref="echartsRef" :style="{ width: width, height: height }"></div>
+</template>

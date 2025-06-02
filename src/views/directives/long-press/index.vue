@@ -1,3 +1,10 @@
+<script setup lang="ts" name="LongPress">
+import { ElMessage } from "element-plus";
+const longPress = () => {
+  ElMessage.success("长按事件触发成功 🎉🎉🎉");
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="长按指令">
@@ -6,10 +13,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="LongPress">
-import { ElMessage } from "element-plus";
-const longPress = () => {
-  ElMessage.success("长按事件触发成功 🎉🎉🎉");
-};
-</script>

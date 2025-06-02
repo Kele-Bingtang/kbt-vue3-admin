@@ -1,24 +1,3 @@
-<template>
-  <el-table
-    v-if="!slots.custom"
-    ref="elTableRef"
-    :data="tableData"
-    :header-cell-class-name="handleHeaderCellClassName"
-    @sort-change="handleSort"
-    v-loading="loading"
-    v-bind="$attrs"
-  >
-    <slot></slot>
-  </el-table>
-
-  <slot
-    v-else-if="!slots.default"
-    name="custom"
-    :sortChange="handleSort"
-    :headerCellClassName="handleHeaderCellClassName"
-  ></slot>
-</template>
-
 <script setup lang="ts">
 import { isNumber } from "@/utils";
 import { ElTable, type TableInstance } from "element-plus";
@@ -154,3 +133,24 @@ defineExpose({
   el: elTableRef,
 });
 </script>
+
+<template>
+  <el-table
+    v-if="!slots.custom"
+    ref="elTableRef"
+    :data="tableData"
+    :header-cell-class-name="handleHeaderCellClassName"
+    @sort-change="handleSort"
+    v-loading="loading"
+    v-bind="$attrs"
+  >
+    <slot></slot>
+  </el-table>
+
+  <slot
+    v-else-if="!slots.default"
+    name="custom"
+    :sortChange="handleSort"
+    :headerCellClassName="handleHeaderCellClassName"
+  ></slot>
+</template>

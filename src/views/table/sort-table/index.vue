@@ -1,3 +1,68 @@
+<script setup lang="ts" name="SortTable">
+import { TableSort, Pagination, pageSetting, type Paging } from "@/components";
+import { largeData } from "@/mock/table";
+import { ElMessage, ElMessageBox } from "element-plus";
+import { Search, EditPen, Delete } from "@element-plus/icons-vue";
+
+const loading = ref(true);
+const tableData = ref(largeData);
+const paging = reactive(pageSetting);
+
+const data = computed(() =>
+  tableData.value.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)
+);
+
+onMounted(() => {
+  setTimeout(() => {
+    loading.value = false;
+  }, 500);
+});
+
+const handleLook = () => {
+  ElMessage.warning("消息弹框演示：无法查看");
+};
+const handleEdit = () => {
+  ElMessage.warning("消息弹框演示：无法查看");
+};
+const handleDelete = (row: any, index: number) => {
+  ElMessageBox.confirm("此操作将永久删除该数据, 是否继续?", "提示", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      tableData.value.splice(index, 1);
+      ElMessage({
+        message: "消息弹框演示：删除成功",
+        type: "success",
+        duration: 3000,
+      });
+    })
+    .catch(() => {});
+};
+
+const handleSizeChange = (pagingParams: Paging) => {
+  paging.pageNum = pagingParams.pageNum;
+  paging.pageSize = pagingParams.pageSize;
+};
+const tableRowClassName = (row: any) => {
+  if (row.rowIndex && row.rowIndex % 2 === 1) {
+    return "table-highlight-row";
+  } else {
+    return "table-default-row";
+  }
+};
+
+const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
+  const statusMap: Record<string, "success" | "info" | "danger"> = {
+    Enable: "success",
+    Disable: "info",
+    Deleted: "danger",
+  };
+  return statusMap[status];
+};
+</script>
+
 <template>
   <div class="table-sort-container">
     <p>方法一：使用 TableSoft 组件代替 el-table</p>
@@ -99,71 +164,6 @@
     />
   </div>
 </template>
-
-<script setup lang="ts" name="SortTable">
-import { TableSort, Pagination, pageSetting, type Paging } from "@/components";
-import { largeData } from "@/mock/table";
-import { ElMessage, ElMessageBox } from "element-plus";
-import { Search, EditPen, Delete } from "@element-plus/icons-vue";
-
-const loading = ref(true);
-const tableData = ref(largeData);
-const paging = reactive(pageSetting);
-
-const data = computed(() =>
-  tableData.value.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)
-);
-
-onMounted(() => {
-  setTimeout(() => {
-    loading.value = false;
-  }, 500);
-});
-
-const handleLook = () => {
-  ElMessage.warning("消息弹框演示：无法查看");
-};
-const handleEdit = () => {
-  ElMessage.warning("消息弹框演示：无法查看");
-};
-const handleDelete = (row: any, index: number) => {
-  ElMessageBox.confirm("此操作将永久删除该数据, 是否继续?", "提示", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(() => {
-      tableData.value.splice(index, 1);
-      ElMessage({
-        message: "消息弹框演示：删除成功",
-        type: "success",
-        duration: 3000,
-      });
-    })
-    .catch(() => {});
-};
-
-const handleSizeChange = (pagingParams: Paging) => {
-  paging.pageNum = pagingParams.pageNum;
-  paging.pageSize = pagingParams.pageSize;
-};
-const tableRowClassName = (row: any) => {
-  if (row.rowIndex && row.rowIndex % 2 === 1) {
-    return "table-highlight-row";
-  } else {
-    return "table-default-row";
-  }
-};
-
-const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
-  const statusMap: Record<string, "success" | "info" | "danger"> = {
-    Enable: "success",
-    Disable: "info",
-    Deleted: "danger",
-  };
-  return statusMap[status];
-};
-</script>
 
 <style lang="scss" scoped>
 .table-sort-container {

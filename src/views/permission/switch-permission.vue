@@ -1,3 +1,42 @@
+<script setup lang="ts" name="SwitchPermission">
+import { useUserStore } from "@/stores";
+import { usePermission } from "@/composables";
+import { RefreshPageKey } from "@/config";
+
+const userStore = useUserStore();
+const { getRoleList, getAuthList, hasRole, hasAuth } = usePermission();
+const refreshCurrentPage = inject(RefreshPageKey, (value?: boolean) => value);
+
+const roleList = computed(() => getRoleList());
+const switchRole = computed({
+  get() {
+    return roleList.value[0];
+  },
+  set(value: string) {
+    const roles = [value];
+    userStore.changeRoles(roles).then(() => {
+      refreshCurrentPage();
+    });
+  },
+});
+
+const authList = ref(getAuthList());
+// const options = [
+//   {
+//     value: "btn_add",
+//     label: "添加权限",
+//   },
+//   {
+//     value: "btn_edit",
+//     label: "编辑权限",
+//   },
+//   {
+//     value: "btn_delete",
+//     label: "删除权限",
+//   },
+// ];
+</script>
+
 <template>
   <el-card class="switch-permission-container">
     <div shadow="never" class="left-container">
@@ -114,45 +153,6 @@
     </div>
   </el-card>
 </template>
-
-<script setup lang="ts" name="SwitchPermission">
-import { useUserStore } from "@/stores";
-import { usePermission } from "@/composables";
-import { RefreshPageKey } from "@/config";
-
-const userStore = useUserStore();
-const { getRoleList, getAuthList, hasRole, hasAuth } = usePermission();
-const refreshCurrentPage = inject(RefreshPageKey, (value?: boolean) => value);
-
-const roleList = computed(() => getRoleList());
-const switchRole = computed({
-  get() {
-    return roleList.value[0];
-  },
-  set(value: string) {
-    const roles = [value];
-    userStore.changeRoles(roles).then(() => {
-      refreshCurrentPage();
-    });
-  },
-});
-
-const authList = ref(getAuthList());
-// const options = [
-//   {
-//     value: "btn_add",
-//     label: "添加权限",
-//   },
-//   {
-//     value: "btn_edit",
-//     label: "编辑权限",
-//   },
-//   {
-//     value: "btn_delete",
-//     label: "删除权限",
-//   },
-// ];
-</script>
 
 <style lang="scss" scoped>
 .switch-permission-container {

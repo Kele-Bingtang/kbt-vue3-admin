@@ -1,13 +1,3 @@
-<template>
-  <a :class="[prefixClass, className]" :style="{ color: initColor }" href="#">
-    <slot>
-      {{ text }}
-    </slot>
-    <span :data-letters="text" />
-    <span :data-letters="text" />
-  </a>
-</template>
-
 <script setup lang="ts">
 import { onMounted } from "vue";
 import { useNamespace } from "@/composables";
@@ -35,6 +25,16 @@ onMounted(() => {
   document.styleSheets[0].insertRule(`.${prefixClass} span::before { color: ${props.hoverColor} !important}`, 0);
 });
 </script>
+
+<template>
+  <a :class="[prefixClass, className]" :style="{ color: initColor }" href="#">
+    <slot>
+      {{ text }}
+    </slot>
+    <span :data-letters="text" />
+    <span :data-letters="text" />
+  </a>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-link-hover;

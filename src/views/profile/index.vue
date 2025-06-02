@@ -1,3 +1,17 @@
+<script setup lang="ts" name="Profile">
+import EditorInfo from "./components/editorInfo/index.vue";
+import Account from "./components/account/index.vue";
+import UserInfo from "./components/user-info/index.vue";
+import UserAvatar from "./components/user-avatar/index.vue";
+import Timeline from "./components/timeline/index.vue";
+import { useUserStore } from "@/stores";
+
+const userStore = useUserStore();
+const activeTab = ref("timeline");
+
+const { userInfo } = storeToRefs(userStore);
+</script>
+
 <template>
   <div class="profile-container">
     <el-row :gutter="20">
@@ -25,17 +39,3 @@
     </el-row>
   </div>
 </template>
-
-<script setup lang="ts" name="Profile">
-import EditorInfo from "./components/editorInfo/index.vue";
-import Account from "./components/account/index.vue";
-import UserInfo from "./components/user-info/index.vue";
-import UserAvatar from "./components/user-avatar/index.vue";
-import Timeline from "./components/timeline/index.vue";
-import { useUserStore } from "@/stores";
-
-const userStore = useUserStore();
-const activeTab = ref("timeline");
-
-const { userInfo } = storeToRefs(userStore);
-</script>

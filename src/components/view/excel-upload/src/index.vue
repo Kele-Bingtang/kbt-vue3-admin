@@ -1,19 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <input
-      ref="excelUploadInputRef"
-      :class="`${prefixClass}__input`"
-      type="file"
-      accept=".xlsx, .xls"
-      @change="handleClick"
-    />
-    <div :class="`${prefixClass}__drop`" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
-      上传 Excel 文件
-      <el-button :loading="loading" style="margin-left: 16px" type="primary" @click="handleUpload">浏览</el-button>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ElButton, ElMessage } from "element-plus";
 import { ref, reactive } from "vue";
@@ -139,6 +123,22 @@ const isExcel = (file: File) => {
   return /\.(xlsx|xls|csv)$/.test(file.name);
 };
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <input
+      ref="excelUploadInputRef"
+      :class="`${prefixClass}__input`"
+      type="file"
+      accept=".xlsx, .xls"
+      @change="handleClick"
+    />
+    <div :class="`${prefixClass}__drop`" @drop="handleDrop" @dragover="handleDragover" @dragenter="handleDragover">
+      上传 Excel 文件
+      <el-button :loading="loading" style="margin-left: 16px" type="primary" @click="handleUpload">浏览</el-button>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-excel-upload;

@@ -1,3 +1,7 @@
+<script setup lang="ts">
+defineOptions({ name: "DragDrawerTrigger" });
+</script>
+
 <template>
   <div class="drag-drawer-move-trigger">
     <div class="drag-drawer-move-trigger-point">
@@ -9,10 +13,6 @@
     </div>
   </div>
 </template>
-
-<script setup lang="ts">
-defineOptions({ name: "DragDrawerTrigger" });
-</script>
 
 <style lang="scss" scoped>
 .drag-drawer-move-trigger {

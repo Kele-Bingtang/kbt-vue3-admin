@@ -1,15 +1,6 @@
-<template>
-  <div class="upload-excel-container">
-    <upload-excel :on-success="handleSuccess" :before-upload="beforeUpload" />
-    <el-table :data="tableData" border highlight-current-row style="width: 100%; margin-top: 20px">
-      <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" />
-    </el-table>
-  </div>
-</template>
-
 <script setup lang="ts" name="UploadExcel">
 import { UploadExcel } from "@/components";
-import type { ExcelData } from "@/components/ExcelUpload/src/index.vue";
+import type { ExcelData } from "@/components/view/excel-upload/src/index.vue";
 import { ElMessage } from "element-plus";
 
 const tableData = ref([]);
@@ -28,6 +19,15 @@ const handleSuccess = ({ results, header }: ExcelData) => {
   tableHeader.value = header;
 };
 </script>
+
+<template>
+  <div class="upload-excel-container">
+    <upload-excel :on-success="handleSuccess" :before-upload="beforeUpload" />
+    <el-table :data="tableData" border highlight-current-row style="width: 100%; margin-top: 20px">
+      <el-table-column v-for="item of tableHeader" :key="item" :prop="item" :label="item" />
+    </el-table>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .upload-excel-container {

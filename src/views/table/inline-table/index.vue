@@ -1,3 +1,39 @@
+<script setup lang="ts" name="InlineTable">
+import { simpleData } from "@/mock/table";
+import { ElMessage } from "element-plus";
+import { tableStatusFilter } from "@/config";
+import { Refresh, Check, EditPen } from "@element-plus/icons-vue";
+
+const tableData = ref(simpleData);
+
+onMounted(() => {
+  tableData.value.map((item: any) => {
+    item.edit = false;
+    item.originalTitle = item.title;
+    return item;
+  });
+});
+
+const handleEdit = (row: any) => {
+  if (row.edit) {
+    cancelEdit(row);
+  } else {
+    row.edit = !row.edit;
+  }
+};
+const cancelEdit = (row: any) => {
+  row.title = row.originalTitle;
+  row.edit = false;
+  ElMessage.warning("标题已恢复为原始值！");
+};
+
+const confirmEdit = (row: any) => {
+  row.edit = false;
+  row.originalTitle = row.title;
+  ElMessage.success("标题已编辑！");
+};
+</script>
+
 <template>
   <div class="inline-table-container">
     <p>
@@ -44,42 +80,6 @@
     </el-table>
   </div>
 </template>
-
-<script setup lang="ts" name="InlineTable">
-import { simpleData } from "@/mock/table";
-import { ElMessage } from "element-plus";
-import { tableStatusFilter } from "@/config";
-import { Refresh, Check, EditPen } from "@element-plus/icons-vue";
-
-const tableData = ref(simpleData);
-
-onMounted(() => {
-  tableData.value.map((item: any) => {
-    item.edit = false;
-    item.originalTitle = item.title;
-    return item;
-  });
-});
-
-const handleEdit = (row: any) => {
-  if (row.edit) {
-    cancelEdit(row);
-  } else {
-    row.edit = !row.edit;
-  }
-};
-const cancelEdit = (row: any) => {
-  row.title = row.originalTitle;
-  row.edit = false;
-  ElMessage.warning("标题已恢复为原始值！");
-};
-
-const confirmEdit = (row: any) => {
-  row.edit = false;
-  row.originalTitle = row.title;
-  ElMessage.success("标题已编辑！");
-};
-</script>
 
 <style lang="scss" scoped>
 .inline-table-container {

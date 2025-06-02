@@ -1,16 +1,3 @@
-<template>
-  <div v-loading="loading" :class="prefixClass" :style="wrapStyle">
-    <canvas ref="wrapRef" @click="clickCode" v-if="props.tag === 'canvas'"></canvas>
-    <img v-else ref="wrapRef" @click="clickCode" />
-    <div v-if="props.disabled" :class="`${prefixClass}--disabled`" @click="disabledClick">
-      <div :class="`${prefixClass}__icon`" :color="`var(--${ns.elNamespace}-color-primary)`">
-        <el-icon style="cursor: pointer" :size="30"><RefreshRight /></el-icon>
-        <div>{{ props.disabledText }}</div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts" name="QrCode">
 import QRCode, { type QRCodeRenderersOptions } from "qrcode";
 import { isString } from "@/utils";
@@ -237,6 +224,19 @@ const disabledClick = () => {
   emits("disabledClick");
 };
 </script>
+
+<template>
+  <div v-loading="loading" :class="prefixClass" :style="wrapStyle">
+    <canvas ref="wrapRef" @click="clickCode" v-if="props.tag === 'canvas'"></canvas>
+    <img v-else ref="wrapRef" @click="clickCode" />
+    <div v-if="props.disabled" :class="`${prefixClass}--disabled`" @click="disabledClick">
+      <div :class="`${prefixClass}__icon`" :color="`var(--${ns.elNamespace}-color-primary)`">
+        <el-icon style="cursor: pointer" :size="30"><RefreshRight /></el-icon>
+        <div>{{ props.disabledText }}</div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-qrcode;

@@ -1,50 +1,3 @@
-<template>
-  <div class="complex-pro-table-container">
-    <ProTable
-      ref="proTableRef"
-      highlight-current-row
-      :data="data"
-      :columns="columns"
-      :row-class-name="tableRowClassName"
-      :span-method="objectSpanMethod"
-      :show-summary="true"
-      :summary-method="getSummaries"
-      @row-click="rowClick"
-    >
-      <!-- 表格 header 按钮 -->
-      <template #tableHeader="scope">
-        <el-button type="primary" :icon="CirclePlus" @click="proTableRef?.element?.toggleAllSelection">
-          全选 / 全不选
-        </el-button>
-        <el-button type="primary" :icon="Pointer" plain @click="setCurrent">选中第五行</el-button>
-        <el-button
-          type="danger"
-          :icon="Delete"
-          plain
-          :disabled="!scope.isSelected"
-          @click="batchDelete(scope.selectedListIds)"
-        >
-          批量删除用户
-        </el-button>
-      </template>
-      <!-- Expand -->
-      <template #expand="scope">
-        {{ scope.row }}
-      </template>
-      <!-- 表格操作 -->
-      <template #operation="scope">
-        <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)">重置密码</el-button>
-        <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
-      </template>
-      <template #append>
-        <span :style="`color: var(--${ns.elNamespace}-color-primary)`">
-          我是插入在表格最后的内容。若表格有合计行，该内容会位于合计行之上。
-        </span>
-      </template>
-    </ProTable>
-  </div>
-</template>
-
 <script setup lang="tsx" name="ComplexProTable">
 import { ProTable, type TableColumnProps, type HeaderRenderScope, type ProTableInstance } from "@/components";
 import { useConfirm } from "@/composables";
@@ -176,6 +129,53 @@ const resetPass = async (params: ResUserList) => {
   proTableRef.value?.getTableList();
 };
 </script>
+
+<template>
+  <div class="complex-pro-table-container">
+    <ProTable
+      ref="proTableRef"
+      highlight-current-row
+      :data="data"
+      :columns="columns"
+      :row-class-name="tableRowClassName"
+      :span-method="objectSpanMethod"
+      :show-summary="true"
+      :summary-method="getSummaries"
+      @row-click="rowClick"
+    >
+      <!-- 表格 header 按钮 -->
+      <template #tableHeader="scope">
+        <el-button type="primary" :icon="CirclePlus" @click="proTableRef?.element?.toggleAllSelection">
+          全选 / 全不选
+        </el-button>
+        <el-button type="primary" :icon="Pointer" plain @click="setCurrent">选中第五行</el-button>
+        <el-button
+          type="danger"
+          :icon="Delete"
+          plain
+          :disabled="!scope.isSelected"
+          @click="batchDelete(scope.selectedListIds)"
+        >
+          批量删除用户
+        </el-button>
+      </template>
+      <!-- Expand -->
+      <template #expand="scope">
+        {{ scope.row }}
+      </template>
+      <!-- 表格操作 -->
+      <template #operation="scope">
+        <el-button type="primary" link :icon="Refresh" @click="resetPass(scope.row)">重置密码</el-button>
+        <el-button type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">删除</el-button>
+      </template>
+      <template #append>
+        <span :style="`color: var(--${ns.elNamespace}-color-primary)`">
+          我是插入在表格最后的内容。若表格有合计行，该内容会位于合计行之上。
+        </span>
+      </template>
+    </ProTable>
+  </div>
+</template>
 
 <style lang="scss">
 .#{$el-namespace}-table .warning-row,

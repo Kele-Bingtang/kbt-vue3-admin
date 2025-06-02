@@ -1,3 +1,12 @@
+<script setup lang="ts" name="HighlightDemo">
+import { Highlight } from "@/components";
+import { message } from "@/utils";
+
+const handleClick = (key: string) => {
+  message.info(key);
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="高亮组件">
@@ -15,12 +24,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="HighlightDemo">
-import { Highlight } from "@/components";
-import { message } from "@/utils";
-
-const handleClick = (key: string) => {
-  message.info(key);
-};
-</script>

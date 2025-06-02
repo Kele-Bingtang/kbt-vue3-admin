@@ -1,3 +1,25 @@
+<script setup lang="ts" name="MergeHeader">
+import { exportJsonToExcel, formatJsonToArray } from "@/utils";
+import { largeData } from "@/mock/table";
+import { tableStatusFilter } from "@/config";
+import { Top } from "@element-plus/icons-vue";
+
+const tableData = ref(largeData);
+const downloadLoading = ref(false);
+
+const handleDownload = () => {
+  downloadLoading.value = true;
+  const filterVal = ["id", "name", "date", "address", "status", "priority", "title"];
+  const header = ["ID", "Date", "Name", "Address", "Status", "Priority", "Title"];
+  const multiHeader = [["ID", "Date", "Info", "", "", "", ""]];
+  const merges = ["A1:A2", "B1:B2", "C1:G1"]; // 合并表头的位置
+  const list = tableData.value;
+  const data = formatJsonToArray(list, filterVal);
+  exportJsonToExcel(header, data, "merge-header", multiHeader, merges);
+  downloadLoading.value = false;
+};
+</script>
+
 <template>
   <div class="merge-header-container">
     <el-button
@@ -33,28 +55,6 @@
     </el-table>
   </div>
 </template>
-
-<script setup lang="ts" name="MergeHeader">
-import { exportJsonToExcel, formatJsonToArray } from "@/utils";
-import { largeData } from "@/mock/table";
-import { tableStatusFilter } from "@/config";
-import { Top } from "@element-plus/icons-vue";
-
-const tableData = ref(largeData);
-const downloadLoading = ref(false);
-
-const handleDownload = () => {
-  downloadLoading.value = true;
-  const filterVal = ["id", "name", "date", "address", "status", "priority", "title"];
-  const header = ["ID", "Date", "Name", "Address", "Status", "Priority", "Title"];
-  const multiHeader = [["ID", "Date", "Info", "", "", "", ""]];
-  const merges = ["A1:A2", "B1:B2", "C1:G1"]; // 合并表头的位置
-  const list = tableData.value;
-  const data = formatJsonToArray(list, filterVal);
-  exportJsonToExcel(header, data, "merge-header", multiHeader, merges);
-  downloadLoading.value = false;
-};
-</script>
 
 <style lang="scss" scoped>
 .merge-header-container {

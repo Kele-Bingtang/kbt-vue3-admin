@@ -1,3 +1,12 @@
+<script setup lang="ts" name="Basic">
+import { directive, Contextmenu, ContextmenuItem, ContextmenuDivider, ContextmenuSubmenu } from "v-contextmenu";
+
+const contextmenu = useTemplateRef("contextmenu");
+
+// 局部指令：vXxxx ==> v-xxx
+const vContextmenu = directive;
+</script>
+
 <template>
   <div>
     <h1>基本使用</h1>
@@ -30,15 +39,6 @@
     </Contextmenu>
   </div>
 </template>
-
-<script setup lang="ts" name="Basic">
-import { directive, Contextmenu, ContextmenuItem, ContextmenuDivider, ContextmenuSubmenu } from "v-contextmenu";
-
-const contextmenu = useTemplateRef("contextmenu");
-
-// 局部指令：vXxxx ==> v-xxx
-const vContextmenu = directive;
-</script>
 
 <style lang="scss" scoped>
 .basic-component {

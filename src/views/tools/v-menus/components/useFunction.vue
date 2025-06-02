@@ -1,7 +1,3 @@
-<template>
-  <div class="function-component" @click.stop @contextmenu="rightClick">事件方式打开菜单</div>
-</template>
-
 <script setup lang="ts" name="UseFunction">
 import { menusEvent, type menusItemType } from "vue3-menus";
 
@@ -12,6 +8,10 @@ const rightClick = (event: MouseEvent) => {
   event.preventDefault();
 };
 </script>
+
+<template>
+  <div class="function-component" @click.stop @contextmenu="rightClick">事件方式打开菜单</div>
+</template>
 
 <style lang="scss" scoped>
 .function-component {

@@ -1,3 +1,24 @@
+<script setup lang="ts">
+import { ElDrawer, ElSwitch, ElTable, ElTableColumn } from "element-plus";
+import { proTablePrefixClassKey, type TableColumnProps } from "../interface";
+
+defineOptions({ name: "ColSetting" });
+
+const prefixClass = inject(proTablePrefixClassKey);
+
+defineProps<{ colSetting: TableColumnProps[] }>();
+
+const drawerVisible = defineModel({ default: false });
+
+const openColSetting = () => {
+  drawerVisible.value = true;
+};
+
+defineExpose({
+  openColSetting,
+});
+</script>
+
 <template>
   <!-- 列设置 -->
   <el-drawer v-model="drawerVisible" title="列设置" size="450px">
@@ -29,24 +50,3 @@
     </div>
   </el-drawer>
 </template>
-
-<script setup lang="ts">
-import { ElDrawer, ElSwitch, ElTable, ElTableColumn } from "element-plus";
-import { proTablePrefixClassKey, type TableColumnProps } from "../interface";
-
-defineOptions({ name: "ColSetting" });
-
-const prefixClass = inject(proTablePrefixClassKey);
-
-defineProps<{ colSetting: TableColumnProps[] }>();
-
-const drawerVisible = defineModel({ default: false });
-
-const openColSetting = () => {
-  drawerVisible.value = true;
-};
-
-defineExpose({
-  openColSetting,
-});
-</script>

@@ -1,3 +1,18 @@
+<script setup lang="ts" name="VideoPlayerDemo">
+import { VideoPlayer, createVideoViewer, VideoPlayerViewer } from "@/components";
+
+const videoInfo = {
+  url: "//sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-720p.mp4",
+  poster: "//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/poster.jpg",
+};
+
+const showVideo = () => {
+  createVideoViewer(videoInfo);
+};
+
+const visible = ref(false);
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never">
@@ -5,7 +20,7 @@
         <el-link
           href="https://v2.h5player.bytedance.com/gettingStarted/"
           target="_blank"
-          :underline="false"
+          underline="never"
           style="font-size: 20px"
         >
           视频播放器
@@ -39,18 +54,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="VideoPlayerDemo">
-import { VideoPlayer, createVideoViewer, VideoPlayerViewer } from "@/components";
-
-const videoInfo = {
-  url: "//sf1-cdn-tos.huoshanstatic.com/obj/media-fe/xgplayer_doc_video/mp4/xgplayer-demo-720p.mp4",
-  poster: "//lf3-static.bytednsdoc.com/obj/eden-cn/nupenuvpxnuvo/xgplayer_doc/poster.jpg",
-};
-
-const showVideo = () => {
-  createVideoViewer(videoInfo);
-};
-
-const visible = ref(false);
-</script>

@@ -1,3 +1,10 @@
+<script setup lang="ts" name="CustomButton">
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace("custom-button");
+const prefixClass = ns.b();
+</script>
+
 <template>
   <div :class="prefixClass">
     <el-button class="btn java">JAVA攻城狮</el-button>
@@ -32,13 +39,6 @@
     <el-button class="btn c">C语言攻城狮</el-button>
   </div>
 </template>
-
-<script setup lang="ts" name="CustomButton">
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace("custom-button");
-const prefixClass = ns.b();
-</script>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-custom-button;

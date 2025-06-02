@@ -1,99 +1,3 @@
-<template>
-  <div :class="`${prefixClass}__main__header`">
-    <div :class="`${prefixClass}__main__header--button-lf`">
-      <slot
-        name="tableHeader"
-        :selected-list-ids="selectedListIds"
-        :selected-list="selectedList"
-        :is-selected="isSelected"
-        :operate="dialogFormRef"
-      >
-        <slot
-          name="add"
-          :selected-list-ids="selectedListIds"
-          :selected-list="selectedList"
-          :is-selected="isSelected"
-          :operate="dialogFormRef"
-        >
-          <el-button
-            v-if="visibleButton(dialogForm?.addApi, dialogForm?.useAdd)"
-            type="primary"
-            :icon="Plus"
-            @click="emits('add')"
-            :disabled="dialogForm?.disableAdd"
-          >
-            新增
-          </el-button>
-        </slot>
-        <slot
-          name="removeBatch"
-          :selected-list-ids="selectedListIds"
-          :selected-list="selectedList"
-          :is-selected="isSelected"
-          :operate="dialogFormRef"
-        >
-          <el-button
-            v-if="visibleButton(dialogForm?.removeBatchApi, dialogForm?.useRemoveBatch) && showDeleteBatchBtn"
-            type="danger"
-            :icon="Delete"
-            plain
-            @click="emits('removeBatch')"
-            :disabled="dialogForm?.disableRemoveBatch || !isSelected"
-          >
-            批量删除
-          </el-button>
-        </slot>
-        <slot
-          name="tableHeaderExtra"
-          :selected-list-ids="selectedListIds"
-          :selected-list="selectedList"
-          :is-selected="isSelected"
-          :operate="dialogFormRef"
-        ></slot>
-      </slot>
-    </div>
-
-    <div v-if="useToolButton" :class="`${prefixClass}__main__header--button-ri`">
-      <slot name="toolButton">
-        <el-tooltip v-if="showToolButton('refresh')" effect="light" content="刷新" placement="top">
-          <el-button :disabled="disabledButton?.includes('refresh')" :icon="Refresh" circle @click="emits('refresh')" />
-        </el-tooltip>
-
-        <el-tooltip v-if="showToolButton('size')" effect="light" content="密度" placement="top">
-          <el-dropdown style="margin: 0 15px" @command="handleSizeCommand">
-            <el-button :disabled="disabledButton?.includes('size')" :icon="Coin" circle />
-            <template #dropdown>
-              <el-dropdown-menu>
-                <el-dropdown-item command="large" :disabled="customTableSize === 'large'">Large</el-dropdown-item>
-                <el-dropdown-item command="default" :disabled="customTableSize === 'default'">Default</el-dropdown-item>
-                <el-dropdown-item command="small" :disabled="customTableSize === 'small'">Small</el-dropdown-item>
-                <el-dropdown-item command="mini" :disabled="customTableSize === 'mini'">Mini</el-dropdown-item>
-              </el-dropdown-menu>
-            </template>
-          </el-dropdown>
-        </el-tooltip>
-
-        <el-tooltip v-if="showToolButton('setting') && columns.length" effect="light" content="列配置" placement="top">
-          <el-button
-            :disabled="disabledButton?.includes('setting')"
-            :icon="Operation"
-            circle
-            @click="emits('colSetting')"
-          />
-        </el-tooltip>
-
-        <el-tooltip v-if="showToolButton('export')" effect="light" content="导出" placement="top">
-          <el-button :disabled="disabledButton?.includes('export')" :icon="Download" circle @click="emits('export')" />
-        </el-tooltip>
-
-        <el-tooltip v-if="showToolButton('search') && showSearch" effect="light" content="隐藏搜索" placement="top">
-          <el-button :disabled="disabledButton?.includes('search')" :icon="Search" circle @click="emits('search')" />
-        </el-tooltip>
-      </slot>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, inject, nextTick, watch, type CSSProperties } from "vue";
 import { ElTooltip, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, type ComponentSize } from "element-plus";
@@ -206,3 +110,99 @@ const changeStyle = (style: CSSProperties) => {
   headerCellStyle = style;
 };
 </script>
+
+<template>
+  <div :class="`${prefixClass}__main__header`">
+    <div :class="`${prefixClass}__main__header--button-lf`">
+      <slot
+        name="tableHeader"
+        :selected-list-ids="selectedListIds"
+        :selected-list="selectedList"
+        :is-selected="isSelected"
+        :operate="dialogFormRef"
+      >
+        <slot
+          name="add"
+          :selected-list-ids="selectedListIds"
+          :selected-list="selectedList"
+          :is-selected="isSelected"
+          :operate="dialogFormRef"
+        >
+          <el-button
+            v-if="visibleButton(dialogForm?.addApi, dialogForm?.useAdd)"
+            type="primary"
+            :icon="Plus"
+            @click="emits('add')"
+            :disabled="dialogForm?.disableAdd"
+          >
+            新增
+          </el-button>
+        </slot>
+        <slot
+          name="removeBatch"
+          :selected-list-ids="selectedListIds"
+          :selected-list="selectedList"
+          :is-selected="isSelected"
+          :operate="dialogFormRef"
+        >
+          <el-button
+            v-if="visibleButton(dialogForm?.removeBatchApi, dialogForm?.useRemoveBatch) && showDeleteBatchBtn"
+            type="danger"
+            :icon="Delete"
+            plain
+            @click="emits('removeBatch')"
+            :disabled="dialogForm?.disableRemoveBatch || !isSelected"
+          >
+            批量删除
+          </el-button>
+        </slot>
+        <slot
+          name="tableHeaderExtra"
+          :selected-list-ids="selectedListIds"
+          :selected-list="selectedList"
+          :is-selected="isSelected"
+          :operate="dialogFormRef"
+        ></slot>
+      </slot>
+    </div>
+
+    <div v-if="useToolButton" :class="`${prefixClass}__main__header--button-ri`">
+      <slot name="toolButton">
+        <el-tooltip v-if="showToolButton('refresh')" effect="light" content="刷新" placement="top">
+          <el-button :disabled="disabledButton?.includes('refresh')" :icon="Refresh" circle @click="emits('refresh')" />
+        </el-tooltip>
+
+        <el-tooltip v-if="showToolButton('size')" effect="light" content="密度" placement="top">
+          <el-dropdown style="margin: 0 15px" @command="handleSizeCommand">
+            <el-button :disabled="disabledButton?.includes('size')" :icon="Coin" circle />
+            <template #dropdown>
+              <el-dropdown-menu>
+                <el-dropdown-item command="large" :disabled="customTableSize === 'large'">Large</el-dropdown-item>
+                <el-dropdown-item command="default" :disabled="customTableSize === 'default'">Default</el-dropdown-item>
+                <el-dropdown-item command="small" :disabled="customTableSize === 'small'">Small</el-dropdown-item>
+                <el-dropdown-item command="mini" :disabled="customTableSize === 'mini'">Mini</el-dropdown-item>
+              </el-dropdown-menu>
+            </template>
+          </el-dropdown>
+        </el-tooltip>
+
+        <el-tooltip v-if="showToolButton('setting') && columns.length" effect="light" content="列配置" placement="top">
+          <el-button
+            :disabled="disabledButton?.includes('setting')"
+            :icon="Operation"
+            circle
+            @click="emits('colSetting')"
+          />
+        </el-tooltip>
+
+        <el-tooltip v-if="showToolButton('export')" effect="light" content="导出" placement="top">
+          <el-button :disabled="disabledButton?.includes('export')" :icon="Download" circle @click="emits('export')" />
+        </el-tooltip>
+
+        <el-tooltip v-if="showToolButton('search') && showSearch" effect="light" content="隐藏搜索" placement="top">
+          <el-button :disabled="disabledButton?.includes('search')" :icon="Search" circle @click="emits('search')" />
+        </el-tooltip>
+      </slot>
+    </div>
+  </div>
+</template>

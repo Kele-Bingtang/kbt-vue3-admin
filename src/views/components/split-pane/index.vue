@@ -1,33 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <split-pane v-model="offset1" mode="vertical" @on-moving="handleMoving">
-      <template #left>
-        <div :class="`${prefixClass}__pane left-pane`">
-          <split-pane v-model="offset2" mode="horizontal" @on-moving="handleMoving">
-            <template #top>
-              <div :class="`${prefixClass}__pane top-pane`"></div>
-            </template>
-            <template #bottom>
-              <div :class="`${prefixClass}__pane bottom-pane`"></div>
-            </template>
-          </split-pane>
-        </div>
-      </template>
-
-      <template #right>
-        <split-pane v-model="offset3" class="pane right-pane" mode="vertical">
-          <template #left>
-            <div :class="`${prefixClass}__pane left-pane`"></div>
-          </template>
-          <template #right>
-            <div :class="`${prefixClass}__pane right-pane`"></div>
-          </template>
-        </split-pane>
-      </template>
-    </split-pane>
-  </div>
-</template>
-
 <script setup lang="ts" name="SplitPaneDemo">
 import { SplitPane } from "@/components";
 import { useNamespace } from "@/composables";
@@ -67,6 +37,36 @@ const handleMoving = (e: any) => {
   console.log(e);
 };
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <split-pane v-model="offset1" mode="vertical" @on-moving="handleMoving">
+      <template #left>
+        <div :class="`${prefixClass}__pane left-pane`">
+          <split-pane v-model="offset2" mode="horizontal" @on-moving="handleMoving">
+            <template #top>
+              <div :class="`${prefixClass}__pane top-pane`"></div>
+            </template>
+            <template #bottom>
+              <div :class="`${prefixClass}__pane bottom-pane`"></div>
+            </template>
+          </split-pane>
+        </div>
+      </template>
+
+      <template #right>
+        <split-pane v-model="offset3" class="pane right-pane" mode="vertical">
+          <template #left>
+            <div :class="`${prefixClass}__pane left-pane`"></div>
+          </template>
+          <template #right>
+            <div :class="`${prefixClass}__pane right-pane`"></div>
+          </template>
+        </split-pane>
+      </template>
+    </split-pane>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-split-pane-demo;

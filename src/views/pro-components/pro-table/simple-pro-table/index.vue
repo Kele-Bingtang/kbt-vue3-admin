@@ -1,70 +1,3 @@
-<template>
-  <div class="simple-pro-table-container">
-    <ProTable
-      ref="proTableRef"
-      :data="data"
-      :columns="columns"
-      row-key="id"
-      search-model="allAndUseFilter"
-      :edit-row="3"
-      :pagination="{ enabled: true, fake: true }"
-    >
-      <template #tableHeader="scope">
-        <el-button v-auth="'add'" type="primary" :icon="CirclePlus">新增用户</el-button>
-        <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain>批量添加用户</el-button>
-        <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile">
-          导出用户数据
-        </el-button>
-        <el-button type="primary" plain>To 子集详情页面</el-button>
-        <el-button
-          type="danger"
-          :icon="Delete"
-          plain
-          :disabled="!scope.isSelected"
-          @click="batchDelete(scope.selectedListIds)"
-        >
-          批量删除用户
-        </el-button>
-      </template>
-
-      <template #expand="scope">
-        {{ scope.row }}
-      </template>
-
-      <template #usernameHeader="scope">
-        <el-button type="primary" @click="ElMessage.success('我是通过作用域插槽渲染的表头')">
-          {{ scope.column.label }}
-        </el-button>
-      </template>
-
-      <template #createTime="scope">
-        <el-button type="primary" link @click="ElMessage.success('我是通过作用域插槽渲染的内容')">
-          {{ scope.row.createTime }}
-        </el-button>
-      </template>
-
-      <template #operation="scope">
-        <el-button v-if="!scope.row._edit" type="primary" link :icon="View">查看</el-button>
-        <el-button v-if="!scope.row._edit" type="primary" link :icon="EditPen" @click="() => (scope.row._edit = true)">
-          编辑
-        </el-button>
-        <el-button v-if="scope.row._edit" type="primary" link :icon="EditPen" @click="cancelEdit(scope.row)">
-          取消
-        </el-button>
-        <el-button v-if="scope.row._edit" type="primary" link :icon="EditPen" @click="confirmEdit(scope.row)">
-          确定
-        </el-button>
-        <el-button v-if="!scope.row._edit" type="primary" link :icon="Refresh" @click="resetPass(scope.row)">
-          重置密码
-        </el-button>
-        <el-button v-if="!scope.row._edit" type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">
-          删除
-        </el-button>
-      </template>
-    </ProTable>
-  </div>
-</template>
-
 <script setup lang="tsx" name="SimpleProTable">
 import { ProTable, type TableColumnProps, type ProTableInstance } from "@/components";
 import { useConfirm, usePermission } from "@/composables";
@@ -301,3 +234,70 @@ const confirmEdit = (row: any) => {
   });
 };
 </script>
+
+<template>
+  <div class="simple-pro-table-container">
+    <ProTable
+      ref="proTableRef"
+      :data="data"
+      :columns="columns"
+      row-key="id"
+      search-model="allAndUseFilter"
+      :edit-row="3"
+      :pagination="{ enabled: true, fake: true }"
+    >
+      <template #tableHeader="scope">
+        <el-button v-auth="'add'" type="primary" :icon="CirclePlus">新增用户</el-button>
+        <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain>批量添加用户</el-button>
+        <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile">
+          导出用户数据
+        </el-button>
+        <el-button type="primary" plain>To 子集详情页面</el-button>
+        <el-button
+          type="danger"
+          :icon="Delete"
+          plain
+          :disabled="!scope.isSelected"
+          @click="batchDelete(scope.selectedListIds)"
+        >
+          批量删除用户
+        </el-button>
+      </template>
+
+      <template #expand="scope">
+        {{ scope.row }}
+      </template>
+
+      <template #usernameHeader="scope">
+        <el-button type="primary" @click="ElMessage.success('我是通过作用域插槽渲染的表头')">
+          {{ scope.column.label }}
+        </el-button>
+      </template>
+
+      <template #createTime="scope">
+        <el-button type="primary" link @click="ElMessage.success('我是通过作用域插槽渲染的内容')">
+          {{ scope.row.createTime }}
+        </el-button>
+      </template>
+
+      <template #operation="scope">
+        <el-button v-if="!scope.row._edit" type="primary" link :icon="View">查看</el-button>
+        <el-button v-if="!scope.row._edit" type="primary" link :icon="EditPen" @click="() => (scope.row._edit = true)">
+          编辑
+        </el-button>
+        <el-button v-if="scope.row._edit" type="primary" link :icon="EditPen" @click="cancelEdit(scope.row)">
+          取消
+        </el-button>
+        <el-button v-if="scope.row._edit" type="primary" link :icon="EditPen" @click="confirmEdit(scope.row)">
+          确定
+        </el-button>
+        <el-button v-if="!scope.row._edit" type="primary" link :icon="Refresh" @click="resetPass(scope.row)">
+          重置密码
+        </el-button>
+        <el-button v-if="!scope.row._edit" type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">
+          删除
+        </el-button>
+      </template>
+    </ProTable>
+  </div>
+</template>

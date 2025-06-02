@@ -1,3 +1,28 @@
+<script setup lang="ts" name="DraggableListDemo">
+import { DraggableList } from "@/components";
+import type { DragClass } from "@/components/view/draggable-list/src/index.vue";
+import { list1, list2 } from "@/mock/drag-list";
+import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace("draggable-list-demo");
+const prefixClass = ns.b();
+
+const listData1 = ref(list1);
+const listData2 = ref(list2);
+
+const dragClass: DragClass = {
+  left: ["drag-box", "left-drag-box"],
+  right: ["drag-box", "right-drag-box"],
+};
+
+const handleList = ref<string[]>([]);
+
+const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
+  handleList.value.push(`${src} => ${target}, ${oldIndex} => ${newIndex}`);
+};
+</script>
+
 <template>
   <div :class="prefixClass">
     <el-card :class="`${prefixClass}__card`">
@@ -73,31 +98,6 @@
     </el-card>
   </div>
 </template>
-
-<script setup lang="ts" name="DraggableListDemo">
-import { DraggableList } from "@/components";
-import type { DragClass } from "@/components/DraggableList/src/index.vue";
-import { list1, list2 } from "@/mock/drag-list";
-import { ArrowRight, ArrowLeft } from "@element-plus/icons-vue";
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace("draggable-list-demo");
-const prefixClass = ns.b();
-
-const listData1 = ref(list1);
-const listData2 = ref(list2);
-
-const dragClass: DragClass = {
-  left: ["drag-box", "left-drag-box"],
-  right: ["drag-box", "right-drag-box"],
-};
-
-const handleList = ref<string[]>([]);
-
-const handleChange = ({ src, target, oldIndex, newIndex }: any) => {
-  handleList.value.push(`${src} => ${target}, ${oldIndex} => ${newIndex}`);
-};
-</script>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-draggable-list-demo;

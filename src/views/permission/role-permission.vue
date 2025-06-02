@@ -1,54 +1,3 @@
-<template>
-  <div class="role-permission-container">
-    <el-alert title="只有 admin 有权限进入该页面" type="info" style="margin-bottom: 10px"></el-alert>
-
-    <el-button type="primary" @click="handleCreateRole">新增</el-button>
-
-    <el-table :data="rolesList" style="width: 100%; margin-top: 30px" border>
-      <el-table-column prop="key" align="center" label="角色 Key" width="220"></el-table-column>
-      <el-table-column prop="name" align="center" label="角色名" width="220"></el-table-column>
-      <el-table-column prop="description" align="header-center" label="角色描述"></el-table-column>
-      <el-table-column align="center" label="操作">
-        <template #default="{ row, $index }">
-          <el-button type="primary" @click="handleEdit(row)">编辑</el-button>
-          <el-button type="danger" @click="handleDelete(row, $index)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <el-dialog v-model="dialogVisible" :title="dialogTitle[dialogStatus]">
-      <el-form :model="role" label-width="80px" label-position="left">
-        <el-form-item label="角色名">
-          <el-input v-model="role.name" placeholder="请输入角色名" />
-        </el-form-item>
-        <el-form-item label="角色描述">
-          <el-input
-            v-model="role.description"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-            type="textarea"
-            placeholder="请输入角色描述"
-          />
-        </el-form-item>
-        <el-form-item label="Menus">
-          <el-tree
-            ref="treeRef"
-            :data="routesTreeData"
-            :props="defaultProps"
-            :check-strictly="checkStrictly"
-            show-checkbox
-            node-key="path"
-            class="permission-tree"
-          />
-        </el-form-item>
-      </el-form>
-      <div style="text-align: right">
-        <el-button type="danger" @click="dialogVisible = false">取消</el-button>
-        <el-button type="primary" @click="confirmRole">确定</el-button>
-      </div>
-    </el-dialog>
-  </div>
-</template>
-
 <script setup lang="ts" name="RolePermission">
 import { useRouteStore, useUserStore } from "@/stores";
 import { useMenu, useRouteFn } from "@/composables";
@@ -229,6 +178,57 @@ const generateTree = (routes: RouterConfig[], checkedKeys: TreeKey[]) => {
   return res;
 };
 </script>
+
+<template>
+  <div class="role-permission-container">
+    <el-alert title="只有 admin 有权限进入该页面" type="info" style="margin-bottom: 10px"></el-alert>
+
+    <el-button type="primary" @click="handleCreateRole">新增</el-button>
+
+    <el-table :data="rolesList" style="width: 100%; margin-top: 30px" border>
+      <el-table-column prop="key" align="center" label="角色 Key" width="220"></el-table-column>
+      <el-table-column prop="name" align="center" label="角色名" width="220"></el-table-column>
+      <el-table-column prop="description" align="header-center" label="角色描述"></el-table-column>
+      <el-table-column align="center" label="操作">
+        <template #default="{ row, $index }">
+          <el-button type="primary" @click="handleEdit(row)">编辑</el-button>
+          <el-button type="danger" @click="handleDelete(row, $index)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <el-dialog v-model="dialogVisible" :title="dialogTitle[dialogStatus]">
+      <el-form :model="role" label-width="80px" label-position="left">
+        <el-form-item label="角色名">
+          <el-input v-model="role.name" placeholder="请输入角色名" />
+        </el-form-item>
+        <el-form-item label="角色描述">
+          <el-input
+            v-model="role.description"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            type="textarea"
+            placeholder="请输入角色描述"
+          />
+        </el-form-item>
+        <el-form-item label="Menus">
+          <el-tree
+            ref="treeRef"
+            :data="routesTreeData"
+            :props="defaultProps"
+            :check-strictly="checkStrictly"
+            show-checkbox
+            node-key="path"
+            class="permission-tree"
+          />
+        </el-form-item>
+      </el-form>
+      <div style="text-align: right">
+        <el-button type="danger" @click="dialogVisible = false">取消</el-button>
+        <el-button type="primary" @click="confirmRole">确定</el-button>
+      </div>
+    </el-dialog>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .role-permission-container {

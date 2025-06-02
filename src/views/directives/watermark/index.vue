@@ -1,3 +1,5 @@
+<script setup lang="ts" name="Watermark"></script>
+
 <template>
   <el-space fill>
     <el-card
@@ -14,5 +16,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="Watermark"></script>

@@ -1,3 +1,36 @@
+<script setup lang="ts" name="ExportExcel">
+import { exportJsonToExcel, formatJsonToArray } from "@/utils";
+import { largeData } from "@/mock/table";
+import { tableStatusFilter } from "@/config";
+import { Document, Top } from "@element-plus/icons-vue";
+
+const options = ["xlsx", "csv", "txt"];
+
+const tableData = ref(largeData);
+const downloadLoading = ref(false);
+const filename = ref("");
+const autoWidth = ref(true);
+const bookType = ref("xlsx");
+
+const handleDownload = () => {
+  downloadLoading.value = true;
+  const tHeader = ["ID", "Name", "Date", "Address", "Status", "Priority", "Title"];
+  const filterVal = ["id", "name", "date", "address", "status", "priority", "title"];
+  const list = tableData.value;
+  const data = formatJsonToArray(list, filterVal);
+  exportJsonToExcel(
+    tHeader,
+    data,
+    filename.value !== "" ? filename.value : undefined,
+    undefined,
+    undefined,
+    autoWidth.value,
+    bookType.value
+  );
+  downloadLoading.value = false;
+};
+</script>
+
 <template>
   <div class="export-excel-container">
     <div style="display: flex">
@@ -60,39 +93,6 @@
     </el-table>
   </div>
 </template>
-
-<script setup lang="ts" name="ExportExcel">
-import { exportJsonToExcel, formatJsonToArray } from "@/utils";
-import { largeData } from "@/mock/table";
-import { tableStatusFilter } from "@/config";
-import { Document, Top } from "@element-plus/icons-vue";
-
-const options = ["xlsx", "csv", "txt"];
-
-const tableData = ref(largeData);
-const downloadLoading = ref(false);
-const filename = ref("");
-const autoWidth = ref(true);
-const bookType = ref("xlsx");
-
-const handleDownload = () => {
-  downloadLoading.value = true;
-  const tHeader = ["ID", "Name", "Date", "Address", "Status", "Priority", "Title"];
-  const filterVal = ["id", "name", "date", "address", "status", "priority", "title"];
-  const list = tableData.value;
-  const data = formatJsonToArray(list, filterVal);
-  exportJsonToExcel(
-    tHeader,
-    data,
-    filename.value !== "" ? filename.value : undefined,
-    undefined,
-    undefined,
-    autoWidth.value,
-    bookType.value
-  );
-  downloadLoading.value = false;
-};
-</script>
 
 <style lang="scss" scoped>
 .export-excel-container {

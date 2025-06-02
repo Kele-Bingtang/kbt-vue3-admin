@@ -1,31 +1,3 @@
-<template>
-  <div v-if="checkbox">
-    <el-checkbox v-model="defaultExpandAll" label="展开/折叠" />
-    <el-checkbox v-if="select" v-model="isSelectAll" :indeterminate="indeterminate" label="全选/全不选" />
-    <el-checkbox v-if="select" v-model="checkStrictly" label="父子联动" />
-  </div>
-  <el-input
-    v-if="search"
-    v-model="filterText"
-    :style="{ width: $attrs.searchWidth || '98.5%' }"
-    :placeholder="($attrs.searchPlaceholder as string) || '请输入关键词进行筛选'"
-  />
-  <el-tree
-    ref="treeRef"
-    :show-checkbox="select"
-    @check="handleCheck"
-    :filter-node-method="filterNode"
-    :check-strictly="!checkStrictly"
-    :default-expanded-keys="defaultExpandedKeys"
-    v-bind="$attrs"
-    :data="data"
-    :nodeKey="nodeKey"
-  >
-    <template #default="{ node, data }">
-      <slot :node="node" :data="data"></slot>
-    </template>
-  </el-tree>
-</template>
 <script setup lang="ts">
 import { ElCheckbox, ElInput, ElTree } from "element-plus";
 import { nextTick, ref, watch } from "vue";
@@ -117,3 +89,32 @@ const setChecked = (val: any[]) => {
 
 watch(checkedList, val => val?.length && setChecked(val), { immediate: true });
 </script>
+
+<template>
+  <div v-if="checkbox">
+    <el-checkbox v-model="defaultExpandAll" label="展开/折叠" />
+    <el-checkbox v-if="select" v-model="isSelectAll" :indeterminate="indeterminate" label="全选/全不选" />
+    <el-checkbox v-if="select" v-model="checkStrictly" label="父子联动" />
+  </div>
+  <el-input
+    v-if="search"
+    v-model="filterText"
+    :style="{ width: $attrs.searchWidth || '98.5%' }"
+    :placeholder="($attrs.searchPlaceholder as string) || '请输入关键词进行筛选'"
+  />
+  <el-tree
+    ref="treeRef"
+    :show-checkbox="select"
+    @check="handleCheck"
+    :filter-node-method="filterNode"
+    :check-strictly="!checkStrictly"
+    :default-expanded-keys="defaultExpandedKeys"
+    v-bind="$attrs"
+    :data="data"
+    :nodeKey="nodeKey"
+  >
+    <template #default="{ node, data }">
+      <slot :node="node" :data="data"></slot>
+    </template>
+  </el-tree>
+</template>

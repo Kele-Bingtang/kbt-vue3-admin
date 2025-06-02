@@ -1,3 +1,36 @@
+<script setup lang="ts" name="SelectExcel">
+import { exportJsonToExcel, formatJsonToArray } from "@/utils";
+import { largeData } from "@/mock/table";
+import { ElMessage, ElTable } from "element-plus";
+import { tableStatusFilter } from "@/config";
+import { Document, Top } from "@element-plus/icons-vue";
+
+const tableData = ref(largeData);
+const multipleSelection = ref([]);
+const downloadLoading = ref(false);
+const filename = ref("");
+const multipleTableRef = useTemplateRef<InstanceType<typeof ElTable>>("multipleTableRef");
+
+const handleSelectionChange = (value: any) => {
+  multipleSelection.value = value;
+};
+
+const handleDownload = () => {
+  if (multipleSelection.value.length) {
+    downloadLoading.value = true;
+    const tHeader = ["ID", "Name", "Date", "Address", "Status", "Priority", "Title"];
+    const filterVal = ["id", "name", "date", "address", "status", "priority", "title"];
+    const list = multipleSelection.value;
+    const data = formatJsonToArray(list, filterVal);
+    exportJsonToExcel(tHeader, data, filename.value !== "" ? filename.value : undefined);
+    multipleTableRef.value?.clearSelection();
+    downloadLoading.value = false;
+  } else {
+    ElMessage.warning("请至少选择一行数据");
+  }
+};
+</script>
+
 <template>
   <div class="select-excel-container">
     <el-input
@@ -38,39 +71,6 @@
     </el-table>
   </div>
 </template>
-
-<script setup lang="ts" name="SelectExcel">
-import { exportJsonToExcel, formatJsonToArray } from "@/utils";
-import { largeData } from "@/mock/table";
-import { ElMessage, ElTable } from "element-plus";
-import { tableStatusFilter } from "@/config";
-import { Document, Top } from "@element-plus/icons-vue";
-
-const tableData = ref(largeData);
-const multipleSelection = ref([]);
-const downloadLoading = ref(false);
-const filename = ref("");
-const multipleTableRef = useTemplateRef<InstanceType<typeof ElTable>>("multipleTableRef");
-
-const handleSelectionChange = (value: any) => {
-  multipleSelection.value = value;
-};
-
-const handleDownload = () => {
-  if (multipleSelection.value.length) {
-    downloadLoading.value = true;
-    const tHeader = ["ID", "Name", "Date", "Address", "Status", "Priority", "Title"];
-    const filterVal = ["id", "name", "date", "address", "status", "priority", "title"];
-    const list = multipleSelection.value;
-    const data = formatJsonToArray(list, filterVal);
-    exportJsonToExcel(tHeader, data, filename.value !== "" ? filename.value : undefined);
-    multipleTableRef.value?.clearSelection();
-    downloadLoading.value = false;
-  } else {
-    ElMessage.warning("请至少选择一行数据");
-  }
-};
-</script>
 
 <style lang="scss" scoped>
 .select-excel-container {

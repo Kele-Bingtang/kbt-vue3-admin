@@ -1,3 +1,10 @@
+<script setup lang="ts" name="DetailProForm">
+import { ProForm } from "@/components";
+import { schema, elFormProps } from "./options";
+
+const model = ref({});
+</script>
+
 <template>
   <div style="padding: 10px">
     <el-card shadow="never" style="padding: 20px">
@@ -10,10 +17,3 @@
     {{ model }}
   </div>
 </template>
-
-<script setup lang="ts" name="DetailProForm">
-import { ProForm } from "@/components";
-import { schema, elFormProps } from "./options";
-
-const model = ref({});
-</script>

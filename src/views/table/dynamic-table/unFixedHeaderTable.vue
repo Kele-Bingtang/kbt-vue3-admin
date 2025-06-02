@@ -1,3 +1,10 @@
+<script setup lang="ts" name="UnFixedHeaderTable">
+import { simpleData } from "@/mock/table";
+
+const tableData = ref(simpleData);
+const formThead = ref(["date", "address"]);
+</script>
+
 <template>
   <div class="checkbox-container">
     <el-checkbox-group v-model="formThead">
@@ -17,10 +24,3 @@
     </el-table-column>
   </el-table>
 </template>
-
-<script setup lang="ts" name="UnFixedHeaderTable">
-import { simpleData } from "@/mock/table";
-
-const tableData = ref(simpleData);
-const formThead = ref(["date", "address"]);
-</script>

@@ -1,43 +1,3 @@
-<template>
-  <ElDrawer
-    ref="elDrawerRef"
-    v-model="drawerVisible"
-    :title="title"
-    size="30%"
-    v-bind="$attrs"
-    :class="[prefixClass, { 'is-fullscreen': isFullscreen }]"
-  >
-    <template #header="scope">
-      <slot name="header" v-bind="scope">
-        <div style="display: flex">
-          <slot name="title">
-            <span :class="`${ns.elNamespace}-drawer__title`" style="flex: 1">{{ title }}</span>
-          </slot>
-          <Icon
-            v-if="fullscreenIcon"
-            :name="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
-            @click="toggleFull"
-            width="18px"
-            height="18px"
-            :color="`var(--${ns.elNamespace}-color-info)`"
-            :hover-color="`var(--${ns.elNamespace}-color-primary)`"
-            :icon-style="{ cursor: 'pointer' }"
-          />
-        </div>
-      </slot>
-    </template>
-
-    <slot></slot>
-
-    <template #footer>
-      <slot name="footer">
-        <ElButton @Click="handleClose()">{{ closeLabel }}</ElButton>
-        <ElButton type="primary" @click="handleConfirm()">{{ confirmLabel }}</ElButton>
-      </slot>
-    </template>
-  </ElDrawer>
-</template>
-
 <script setup lang="ts">
 import { ElDrawer, ElButton, type DrawerProps } from "element-plus";
 import { ref } from "vue";
@@ -91,6 +51,46 @@ const handleConfirm = () => {
 
 defineExpose({ elDrawerRef });
 </script>
+
+<template>
+  <ElDrawer
+    ref="elDrawerRef"
+    v-model="drawerVisible"
+    :title="title"
+    size="30%"
+    v-bind="$attrs"
+    :class="[prefixClass, { 'is-fullscreen': isFullscreen }]"
+  >
+    <template #header="scope">
+      <slot name="header" v-bind="scope">
+        <div style="display: flex">
+          <slot name="title">
+            <span :class="`${ns.elNamespace}-drawer__title`" style="flex: 1">{{ title }}</span>
+          </slot>
+          <Icon
+            v-if="fullscreenIcon"
+            :name="isFullscreen ? 'core-fullscreen-exit' : 'core-fullscreen'"
+            @click="toggleFull"
+            width="18px"
+            height="18px"
+            :color="`var(--${ns.elNamespace}-color-info)`"
+            :hover-color="`var(--${ns.elNamespace}-color-primary)`"
+            :icon-style="{ cursor: 'pointer' }"
+          />
+        </div>
+      </slot>
+    </template>
+
+    <slot></slot>
+
+    <template #footer>
+      <slot name="footer">
+        <ElButton @Click="handleClose()">{{ closeLabel }}</ElButton>
+        <ElButton type="primary" @click="handleConfirm()">{{ confirmLabel }}</ElButton>
+      </slot>
+    </template>
+  </ElDrawer>
+</template>
 
 <style lang="scss" scoped>
 @use "./index";

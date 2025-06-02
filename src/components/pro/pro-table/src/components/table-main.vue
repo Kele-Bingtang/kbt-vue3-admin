@@ -1,3 +1,62 @@
+<script setup lang="ts">
+import { inject } from "vue";
+import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon, type TableColumnCtx } from "element-plus";
+import { Edit, Delete, DCaret } from "@element-plus/icons-vue";
+import TableColumn from "./table-column.vue";
+import { dialogFormInstanceKey, proTablePrefixClassKey, type TableColumnProps, type TypeProps } from "../interface";
+import { visibleButton } from "../helper";
+import type { DialogFormProps } from "./dialog-form.vue";
+
+defineOptions({ name: "ProTableMain" });
+
+const prefixClass = inject(proTablePrefixClassKey, "pro-table");
+
+export interface ProTableProps {
+  columns?: TableColumnProps[]; // 列配置项 ==> 必传
+  columnTypes?: TypeProps[]; // 字段类型
+  dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
+  rowClickEdit?: boolean; // 单击行激活行内编辑
+}
+
+// 接受父组件参数，配置默认值
+const props = withDefaults(defineProps<ProTableProps>(), {
+  columns: () => [],
+  columnTypes: () => ["selection", "radio", "index", "expand", "sort"],
+  rowClickEdit: false,
+});
+
+type TableMainEmits = {
+  edit: [cope: any, item: TableColumnProps];
+  remove: [cope: any, item: TableColumnProps];
+};
+
+const emits = defineEmits<TableMainEmits>();
+
+const dialogFormRef = inject(dialogFormInstanceKey, undefined);
+
+const tableRef = useTemplateRef<InstanceType<typeof ElTable>>("tableRef");
+
+// 编辑回调
+const handleEdit = (scope: any, item: TableColumnProps) => {
+  emits("edit", scope, item);
+};
+
+// 删除回调
+const handleRemove = (scope: any, item: TableColumnProps) => {
+  emits("remove", scope, item);
+};
+
+const setTableColumn = (item: TableColumnProps) => {
+  return item as TableColumnCtx<any>;
+};
+
+const handleRowClick = (row: any) => {
+  if (props.rowClickEdit) row._edit = !row._edit;
+};
+
+defineExpose({ table: tableRef });
+</script>
+
 <template>
   <el-table ref="tableRef" v-bind="$attrs" @row-click="handleRowClick">
     <!-- 默认插槽 -->
@@ -88,62 +147,3 @@
     </template>
   </el-table>
 </template>
-
-<script setup lang="ts">
-import { inject } from "vue";
-import { ElTable, ElButton, ElTableColumn, ElPopconfirm, ElTag, ElIcon, type TableColumnCtx } from "element-plus";
-import { Edit, Delete, DCaret } from "@element-plus/icons-vue";
-import TableColumn from "./table-column.vue";
-import { dialogFormInstanceKey, proTablePrefixClassKey, type TableColumnProps, type TypeProps } from "../interface";
-import { visibleButton } from "../helper";
-import type { DialogFormProps } from "./dialog-form.vue";
-
-defineOptions({ name: "ProTableMain" });
-
-const prefixClass = inject(proTablePrefixClassKey, "pro-table");
-
-export interface ProTableProps {
-  columns?: TableColumnProps[]; // 列配置项 ==> 必传
-  columnTypes?: TypeProps[]; // 字段类型
-  dialogForm?: DialogFormProps; // 新增、编辑、删除表单配置
-  rowClickEdit?: boolean; // 单击行激活行内编辑
-}
-
-// 接受父组件参数，配置默认值
-const props = withDefaults(defineProps<ProTableProps>(), {
-  columns: () => [],
-  columnTypes: () => ["selection", "radio", "index", "expand", "sort"],
-  rowClickEdit: false,
-});
-
-type TableMainEmits = {
-  edit: [cope: any, item: TableColumnProps];
-  remove: [cope: any, item: TableColumnProps];
-};
-
-const emits = defineEmits<TableMainEmits>();
-
-const dialogFormRef = inject(dialogFormInstanceKey, undefined);
-
-const tableRef = useTemplateRef<InstanceType<typeof ElTable>>("tableRef");
-
-// 编辑回调
-const handleEdit = (scope: any, item: TableColumnProps) => {
-  emits("edit", scope, item);
-};
-
-// 删除回调
-const handleRemove = (scope: any, item: TableColumnProps) => {
-  emits("remove", scope, item);
-};
-
-const setTableColumn = (item: TableColumnProps) => {
-  return item as TableColumnCtx<any>;
-};
-
-const handleRowClick = (row: any) => {
-  if (props.rowClickEdit) row._edit = !row._edit;
-};
-
-defineExpose({ table: tableRef });
-</script>

@@ -2,7 +2,7 @@
 declare module "vue" {
   export interface GlobalComponents {
     Role: (typeof import("./components/Permission/role.vue"))["default"];
-    Auth: (typeof import("../components/core/permission/src/auth"))["default"];
+    Auth: (typeof import("../components/core/permission/src/auth.vue"))["default"];
     Icon: (typeof import("./components/Icon/index.vue"))["default"];
   }
 

@@ -1,3 +1,10 @@
+<script setup lang="ts" name="MenuGroup">
+import { directive, Contextmenu, ContextmenuItem, ContextmenuDivider, ContextmenuGroup } from "v-contextmenu";
+
+const contextmenu = useTemplateRef("contextmenu");
+const vContextmenu = directive;
+</script>
+
 <template>
   <div>
     <h1>按钮组</h1>
@@ -25,13 +32,6 @@
     </Contextmenu>
   </div>
 </template>
-
-<script setup lang="ts" name="MenuGroup">
-import { directive, Contextmenu, ContextmenuItem, ContextmenuDivider, ContextmenuGroup } from "v-contextmenu";
-
-const contextmenu = useTemplateRef("contextmenu");
-const vContextmenu = directive;
-</script>
 
 <style lang="scss" scoped>
 .menu-group-component {

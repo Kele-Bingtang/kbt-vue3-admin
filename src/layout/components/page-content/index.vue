@@ -81,7 +81,6 @@ const isFixTabNav = computed(() => {
   background-color: var(--#{$admin-namespace}-bg-color);
 
   .main-content {
-    flex: 1;
     margin: 10px 12px;
     overflow: v-bind(isFixTabNav);
   }

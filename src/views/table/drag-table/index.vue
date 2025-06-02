@@ -1,46 +1,3 @@
-<template>
-  <div class="drag-table-container">
-    <p>循环 table-column 可以实现列和行拖拽</p>
-    <!-- 实现行拖拽, 必须指定 row-key 为一条数据的唯一值 -->
-    <el-table ref="draggableTable1" :data="tableData" border highlight-current-row row-key="id" style="width: 100%">
-      <el-table-column
-        v-for="(item, index) in col"
-        :key="`col_${index}`"
-        :prop="dropCol[index]?.prop"
-        :label="item.label"
-        :type="item.type"
-        :width="item.width"
-      >
-        <template #default="scope">
-          <template v-if="dropCol[index].prop === 'status'">
-            <el-tag :type="tableStatusFilter(scope.row.status)">
-              {{ scope.row.status }}
-            </el-tag>
-          </template>
-          <template v-else>
-            {{ scope.row[dropCol[index].prop] }}
-          </template>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <p>完整 table-column 只能实现行拖拽</p>
-    <el-table ref="draggableTable2" :data="tableData" border highlight-current-row row-key="id" style="width: 100%">
-      <el-table-column prop="id" label="ID" width="50"></el-table-column>
-      <el-table-column prop="date" label="日期"></el-table-column>
-      <el-table-column prop="name" label="姓名"></el-table-column>
-      <el-table-column prop="address" label="地址"></el-table-column>
-      <el-table-column prop="status" label="状态">
-        <template #default="scope">
-          <el-tag :type="tableStatusFilter(scope.row.status)">
-            {{ scope.row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
-</template>
-
 <script setup lang="ts" name="DragTable">
 import Sortable from "sortablejs";
 import { simpleData } from "@/mock/table";
@@ -145,6 +102,49 @@ const rowDrop2 = () => {
   });
 };
 </script>
+
+<template>
+  <div class="drag-table-container">
+    <p>循环 table-column 可以实现列和行拖拽</p>
+    <!-- 实现行拖拽, 必须指定 row-key 为一条数据的唯一值 -->
+    <el-table ref="draggableTable1" :data="tableData" border highlight-current-row row-key="id" style="width: 100%">
+      <el-table-column
+        v-for="(item, index) in col"
+        :key="`col_${index}`"
+        :prop="dropCol[index]?.prop"
+        :label="item.label"
+        :type="item.type"
+        :width="item.width"
+      >
+        <template #default="scope">
+          <template v-if="dropCol[index].prop === 'status'">
+            <el-tag :type="tableStatusFilter(scope.row.status)">
+              {{ scope.row.status }}
+            </el-tag>
+          </template>
+          <template v-else>
+            {{ scope.row[dropCol[index].prop] }}
+          </template>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <p>完整 table-column 只能实现行拖拽</p>
+    <el-table ref="draggableTable2" :data="tableData" border highlight-current-row row-key="id" style="width: 100%">
+      <el-table-column prop="id" label="ID" width="50"></el-table-column>
+      <el-table-column prop="date" label="日期"></el-table-column>
+      <el-table-column prop="name" label="姓名"></el-table-column>
+      <el-table-column prop="address" label="地址"></el-table-column>
+      <el-table-column prop="status" label="状态">
+        <template #default="scope">
+          <el-tag :type="tableStatusFilter(scope.row.status)">
+            {{ scope.row.status }}
+          </el-tag>
+        </template>
+      </el-table-column>
+    </el-table>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .drag-table-container {

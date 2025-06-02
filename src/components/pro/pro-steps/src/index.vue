@@ -1,3 +1,82 @@
+<script setup lang="ts">
+import { Select, CloseBold } from "@element-plus/icons-vue";
+import { type StyleValue } from "vue";
+
+export interface Step {
+  title: string;
+  status: "success" | "active" | "wait" | "error";
+  description?: string;
+  icon?: string;
+  isSubStep?: boolean;
+  nodeIndex?: number | string;
+}
+
+interface StepsProps {
+  type: "basic" | "align-top" | "custom-icon" | "column" | "dotted-row" | "dotted-column";
+  data?: Step[];
+}
+
+const props = withDefaults(defineProps<StepsProps>(), { data: () => [] });
+
+defineOptions({ name: "elCustomSteps" });
+const statusBackground: any = { success: "#d9e6ff", active: "#395ae3", wait: "#f0f0f2", error: "#ef4a38" };
+const titleColor: any = { success: "#20222b", active: "#395ae3", wait: "#20222b", error: "#ef4a38" };
+const calcWidth = (item: Step) => {
+  let result = "28px";
+  if (item.isSubStep) {
+    result = ["success", "error"].includes(item.status) ? "16px" : "12px";
+  }
+  return result;
+};
+
+const stepClass = (item: Step, index: number) => {
+  const classes: string[] = ["step"];
+  if (item.isSubStep) {
+    classes.push("sub-step");
+    if (["active", "error"].includes(item.status)) classes.push("activated");
+  }
+  if (index === props.data.length - 1) {
+    classes.push("no-grow");
+  }
+  return classes;
+};
+
+const getStepLineStyle = (item: Step, index: number): StyleValue => {
+  // 默认情况
+  const result: StyleValue = {
+    position: "absolute",
+    top: "14px",
+    left: "40px",
+    width: "calc(100% - 52px)",
+    height: "0px",
+    borderTop: "1px solid",
+    borderColor: item.status === "success" ? "#395ae3" : "#e4e5eb",
+  };
+
+  // subStep + normal 正常节点左右有 12px 边距，子节点完成状态、错误状态宽度为 16px, 进行、等待状态宽度为 12px，无边距
+  if (item.isSubStep && !props.data[index + 1].isSubStep) {
+    result.left = "16px";
+    result.width = "calc(100% - 28px)";
+    if (["active", "wait"].includes(item.status)) {
+      result.left = "12px";
+      result.width = "calc(100% - 24px)";
+    }
+  } else if (item.isSubStep && props.data[index + 1].isSubStep) {
+    // subStep + subStep
+    result.left = "16px";
+    result.width = "calc(100% - 16px)";
+    if (["active", "wait"].includes(item.status)) {
+      result.left = "12px";
+      result.width = "calc(100% - 12px)";
+    }
+  } else if (!item.isSubStep && props.data[index + 1].isSubStep) {
+    // normal + subStep
+    result.width = "calc(100% - 40px)";
+  }
+  return result;
+};
+</script>
+
 <template>
   <div style="width: 100%">
     <!-- 顶部对齐式 -->
@@ -342,84 +421,6 @@
     </div>
   </div>
 </template>
-<script setup lang="ts">
-import { Select, CloseBold } from "@element-plus/icons-vue";
-import { type StyleValue } from "vue";
-
-export interface Step {
-  title: string;
-  status: "success" | "active" | "wait" | "error";
-  description?: string;
-  icon?: string;
-  isSubStep?: boolean;
-  nodeIndex?: number | string;
-}
-
-interface StepsProps {
-  type: "basic" | "align-top" | "custom-icon" | "column" | "dotted-row" | "dotted-column";
-  data?: Step[];
-}
-
-const props = withDefaults(defineProps<StepsProps>(), { data: () => [] });
-
-defineOptions({ name: "elCustomSteps" });
-const statusBackground: any = { success: "#d9e6ff", active: "#395ae3", wait: "#f0f0f2", error: "#ef4a38" };
-const titleColor: any = { success: "#20222b", active: "#395ae3", wait: "#20222b", error: "#ef4a38" };
-const calcWidth = (item: Step) => {
-  let result = "28px";
-  if (item.isSubStep) {
-    result = ["success", "error"].includes(item.status) ? "16px" : "12px";
-  }
-  return result;
-};
-
-const stepClass = (item: Step, index: number) => {
-  const classes: string[] = ["step"];
-  if (item.isSubStep) {
-    classes.push("sub-step");
-    if (["active", "error"].includes(item.status)) classes.push("activated");
-  }
-  if (index === props.data.length - 1) {
-    classes.push("no-grow");
-  }
-  return classes;
-};
-
-const getStepLineStyle = (item: Step, index: number): StyleValue => {
-  // 默认情况
-  const result: StyleValue = {
-    position: "absolute",
-    top: "14px",
-    left: "40px",
-    width: "calc(100% - 52px)",
-    height: "0px",
-    borderTop: "1px solid",
-    borderColor: item.status === "success" ? "#395ae3" : "#e4e5eb",
-  };
-
-  // subStep + normal 正常节点左右有 12px 边距，子节点完成状态、错误状态宽度为 16px, 进行、等待状态宽度为 12px，无边距
-  if (item.isSubStep && !props.data[index + 1].isSubStep) {
-    result.left = "16px";
-    result.width = "calc(100% - 28px)";
-    if (["active", "wait"].includes(item.status)) {
-      result.left = "12px";
-      result.width = "calc(100% - 24px)";
-    }
-  } else if (item.isSubStep && props.data[index + 1].isSubStep) {
-    // subStep + subStep
-    result.left = "16px";
-    result.width = "calc(100% - 16px)";
-    if (["active", "wait"].includes(item.status)) {
-      result.left = "12px";
-      result.width = "calc(100% - 12px)";
-    }
-  } else if (!item.isSubStep && props.data[index + 1].isSubStep) {
-    // normal + subStep
-    result.width = "calc(100% - 40px)";
-  }
-  return result;
-};
-</script>
 
 <style lang="scss" scoped>
 .custom-steps {

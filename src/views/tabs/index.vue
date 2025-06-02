@@ -1,3 +1,39 @@
+<script setup lang="ts" name="Tabs">
+import { appendFieldById, deleteChildren, getNodeById } from "@/utils";
+import { useDetail } from "./hooks";
+import { useLayoutStore } from "@/stores";
+import { useMenu } from "@/composables";
+import { copyObj } from "@/utils";
+import { formatTitle } from "@/router/helper";
+
+const layoutStore = useLayoutStore();
+const { toDetail, router } = useDetail();
+const { menuList } = useMenu();
+const routesTreeData = copyObj(menuList.value);
+
+const treeData = computed(() => {
+  return appendFieldById(deleteChildren(routesTreeData), 0, {
+    disabled: true,
+  });
+});
+
+const currentValues = ref<string[]>([]);
+
+const { tabNavList } = storeToRefs(layoutStore);
+
+function onCloseTags() {
+  if (currentValues.value.length === 0) return;
+  currentValues.value.forEach(id => {
+    const currentPath =
+      getNodeById(treeData.value, id).redirect ??
+      getNodeById(treeData.value, id).meta?._fullPath ??
+      getNodeById(treeData.value, id).path;
+    layoutStore.removeCurrentTab({ path: currentPath } as any);
+    if (currentPath === "/tabs") router.push(tabNavList.value[(tabNavList as any).value.length - 1].path);
+  });
+}
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="Query 传参模式">
@@ -77,39 +113,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="Tabs">
-import { appendFieldById, deleteChildren, getNodeById } from "@/utils";
-import { useDetail } from "./hooks";
-import { useLayoutStore } from "@/stores";
-import { useMenu } from "@/composables";
-import { copyObj } from "@/utils";
-import { formatTitle } from "@/router/helper";
-
-const layoutStore = useLayoutStore();
-const { toDetail, router } = useDetail();
-const { menuList } = useMenu();
-const routesTreeData = copyObj(menuList.value);
-
-const treeData = computed(() => {
-  return appendFieldById(deleteChildren(routesTreeData), 0, {
-    disabled: true,
-  });
-});
-
-const currentValues = ref<string[]>([]);
-
-const { tabNavList } = storeToRefs(layoutStore);
-
-function onCloseTags() {
-  if (currentValues.value.length === 0) return;
-  currentValues.value.forEach(id => {
-    const currentPath =
-      getNodeById(treeData.value, id).redirect ??
-      getNodeById(treeData.value, id).meta?._fullPath ??
-      getNodeById(treeData.value, id).path;
-    layoutStore.removeCurrentTab({ path: currentPath } as any);
-    if (currentPath === "/tabs") router.push(tabNavList.value[(tabNavList as any).value.length - 1].path);
-  });
-}
-</script>

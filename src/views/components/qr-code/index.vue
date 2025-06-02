@@ -1,3 +1,22 @@
+<script setup lang="ts" name="QrCodeDemo">
+import { ref } from "vue";
+import { message } from "@/utils";
+import { QrCode } from "@/components";
+
+const qrCodeText = "teek-design-vue3";
+
+const asyncTitle = ref("");
+setTimeout(() => {
+  asyncTitle.value = qrCodeText;
+}, 3000);
+const codeClick = () => {
+  message("点击事件", { type: "info" });
+};
+const disabledClick = () => {
+  message("失效", { type: "info" });
+};
+</script>
+
 <template>
   <div>
     <el-card shadow="never">
@@ -84,22 +103,3 @@
     </el-card>
   </div>
 </template>
-
-<script setup lang="ts" name="QrCodeDemo">
-import { ref } from "vue";
-import { message } from "@/utils";
-import { QrCode } from "@/components";
-
-const qrCodeText = "teek-design-vue3";
-
-const asyncTitle = ref("");
-setTimeout(() => {
-  asyncTitle.value = qrCodeText;
-}, 3000);
-const codeClick = () => {
-  message("点击事件", { type: "info" });
-};
-const disabledClick = () => {
-  message("失效", { type: "info" });
-};
-</script>

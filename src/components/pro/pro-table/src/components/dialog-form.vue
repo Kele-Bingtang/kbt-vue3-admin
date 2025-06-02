@@ -1,36 +1,3 @@
-<template>
-  <WorkDialog v-model="dialogFormVisible" draggable v-bind="dialogProps">
-    <slot name="form">
-      <ProForm
-        v-if="formProps?.schema"
-        ref="proFormRef"
-        v-bind="{ ...$attrs, ...formProps }"
-        v-model="model"
-        :schema="newSchema"
-        :includeModelKeys="includeModelKeys"
-        :enumMapProps="enumMap"
-      >
-        <template #operation v-if="$slots.formOperation">
-          <slot name="formOperation" v-bind="model" />
-        </template>
-      </ProForm>
-    </slot>
-
-    <template #header="scope" v-if="$slots.dialogHeader">
-      <slot name="dialogHeader" v-bind="{ ...model, ...scope }" />
-    </template>
-
-    <template #footer>
-      <slot name="dialogFooter" v-bind="model">
-        <slot name="footerExtraPre" v-bind="model" />
-        <el-button @click="dialogFormVisible = !dialogFormVisible">取消</el-button>
-        <el-button type="primary" @click="handleFormConfirm(model, status)">保存</el-button>
-        <slot name="footerExtraPro" v-bind="model" />
-      </slot>
-    </template>
-  </WorkDialog>
-</template>
-
 <script setup lang="ts">
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
 import { ProForm, WorkDialog, type ProFormProps, type FormSchemaProps, type ProFormInstance } from "@/components";
@@ -401,4 +368,36 @@ const executeApi = (
 
 defineExpose({ handleAdd, handleEdit, handleRemove, handleRemoveBatch });
 </script>
-, unref
+
+<template>
+  <WorkDialog v-model="dialogFormVisible" draggable v-bind="dialogProps">
+    <slot name="form">
+      <ProForm
+        v-if="formProps?.schema"
+        ref="proFormRef"
+        v-bind="{ ...$attrs, ...formProps }"
+        v-model="model"
+        :schema="newSchema"
+        :includeModelKeys="includeModelKeys"
+        :enumMapProps="enumMap"
+      >
+        <template #operation v-if="$slots.formOperation">
+          <slot name="formOperation" v-bind="model" />
+        </template>
+      </ProForm>
+    </slot>
+
+    <template #header="scope" v-if="$slots.dialogHeader">
+      <slot name="dialogHeader" v-bind="{ ...model, ...scope }" />
+    </template>
+
+    <template #footer>
+      <slot name="dialogFooter" v-bind="model">
+        <slot name="footerExtraPre" v-bind="model" />
+        <el-button @click="dialogFormVisible = !dialogFormVisible">取消</el-button>
+        <el-button type="primary" @click="handleFormConfirm(model, status)">保存</el-button>
+        <slot name="footerExtraPro" v-bind="model" />
+      </slot>
+    </template>
+  </WorkDialog>
+</template>

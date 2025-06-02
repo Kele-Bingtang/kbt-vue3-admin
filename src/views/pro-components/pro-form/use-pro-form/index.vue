@@ -1,41 +1,3 @@
-<template>
-  <el-space fill>
-    <el-card shadow="never" header="UseForm 操作">
-      <el-space wrap>
-        <el-button @click="changeCol(false)">禁用栅格</el-button>
-        <el-button @click="changeCol(true)">使用栅格</el-button>
-        <el-button @click="changeLabelWidth(150)">更改 labelWidth</el-button>
-        <el-button @click="changeLabelWidth('auto')">还原 labelWidth</el-button>
-        <el-button @click="changeSize('large')">更改 size</el-button>
-        <el-button @click="changeSize('default')">还原 size</el-button>
-        <el-button @click="changeDisabled(true)">禁用表单</el-button>
-        <el-button @click="changeDisabled(false)">还原表单</el-button>
-        <el-button @click="changeSchema(true)">删除选择器</el-button>
-        <el-button @click="changeSchema(false)">添加选择器</el-button>
-        <el-button @click="setValue(false)">设置表单值</el-button>
-        <el-button @click="setValue(true)">还原表单值</el-button>
-        <el-button @click="setSelectLabel">设置选择器 label</el-button>
-        <el-button @click="addFormItem">添加子项</el-button>
-        <el-button @click="formValidation">表单验证</el-button>
-        <el-button @click="verifyReset">表单重置</el-button>
-        <el-button @click="inoutFocus">输入框聚焦</el-button>
-        <el-button @click="inoutValidation">输入框表单验证</el-button>
-      </el-space>
-    </el-card>
-
-    <el-card>
-      <ProForm
-        :elFormProps="elFormProps"
-        :schema="schema"
-        v-model="model"
-        @register="formRegister"
-        @validate="formValidate"
-      />
-    </el-card>
-    {{ model }}
-  </el-space>
-</template>
-
 <script setup lang="tsx" name="UseProForm">
 import { ProForm, type FormSchemaProps, type ProElFormProps, useProForm } from "@/components";
 import {
@@ -451,3 +413,41 @@ const getTreeSelectData = () => {
   });
 };
 </script>
+
+<template>
+  <el-space fill>
+    <el-card shadow="never" header="UseForm 操作">
+      <el-space wrap>
+        <el-button @click="changeCol(false)">禁用栅格</el-button>
+        <el-button @click="changeCol(true)">使用栅格</el-button>
+        <el-button @click="changeLabelWidth(150)">更改 labelWidth</el-button>
+        <el-button @click="changeLabelWidth('auto')">还原 labelWidth</el-button>
+        <el-button @click="changeSize('large')">更改 size</el-button>
+        <el-button @click="changeSize('default')">还原 size</el-button>
+        <el-button @click="changeDisabled(true)">禁用表单</el-button>
+        <el-button @click="changeDisabled(false)">还原表单</el-button>
+        <el-button @click="changeSchema(true)">删除选择器</el-button>
+        <el-button @click="changeSchema(false)">添加选择器</el-button>
+        <el-button @click="setValue(false)">设置表单值</el-button>
+        <el-button @click="setValue(true)">还原表单值</el-button>
+        <el-button @click="setSelectLabel">设置选择器 label</el-button>
+        <el-button @click="addFormItem">添加子项</el-button>
+        <el-button @click="formValidation">表单验证</el-button>
+        <el-button @click="verifyReset">表单重置</el-button>
+        <el-button @click="inoutFocus">输入框聚焦</el-button>
+        <el-button @click="inoutValidation">输入框表单验证</el-button>
+      </el-space>
+    </el-card>
+
+    <el-card>
+      <ProForm
+        :elFormProps="elFormProps"
+        :schema="schema"
+        v-model="model"
+        @register="formRegister"
+        @validate="formValidate"
+      />
+    </el-card>
+    {{ model }}
+  </el-space>
+</template>

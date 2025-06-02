@@ -1,9 +1,3 @@
-<template>
-  <div v-show="isShow" :style="style">
-    <slot></slot>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { computed, inject, type Ref, ref, useAttrs, watch } from "vue";
 import type { BreakPoint } from "../index.vue";
@@ -76,3 +70,9 @@ const style = computed(() => {
   }
 });
 </script>
+
+<template>
+  <div v-show="isShow" :style="style">
+    <slot></slot>
+  </div>
+</template>

@@ -1,13 +1,3 @@
-<template>
-  <div class="component-component" @click.stop @contextmenu="rightClick">组件方式打开菜单</div>
-  <vue3-menus v-model:open="isOpen" :event="eventVal" :menus="menus"></vue3-menus>
-
-  <!-- <vue3-menus v-model:open="isOpen" :event="eventVal" :menus="menus">
-    <template #icon="{ menu }"><span v-html="menu.icon"></span></template>
-    <template #label="{ menu }">插槽：{{ menu.label }}</template>
-  </vue3-menus> -->
-</template>
-
 <script setup lang="ts" name="UseComponent">
 import { Vue3Menus, type menusItemType } from "vue3-menus";
 
@@ -24,6 +14,16 @@ const rightClick = (event: MouseEvent) => {
   event.preventDefault();
 };
 </script>
+
+<template>
+  <div class="component-component" @click.stop @contextmenu="rightClick">组件方式打开菜单</div>
+  <vue3-menus v-model:open="isOpen" :event="eventVal" :menus="menus"></vue3-menus>
+
+  <!-- <vue3-menus v-model:open="isOpen" :event="eventVal" :menus="menus">
+    <template #icon="{ menu }"><span v-html="menu.icon"></span></template>
+    <template #label="{ menu }">插槽：{{ menu.label }}</template>
+  </vue3-menus> -->
+</template>
 
 <style lang="scss" scoped>
 .component-component {

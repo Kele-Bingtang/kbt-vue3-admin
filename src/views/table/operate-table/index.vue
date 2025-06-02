@@ -1,146 +1,3 @@
-<template>
-  <div class="operate-table-container">
-    <el-button v-waves type="primary" :icon="Plus" @click="handleAdd()" style="margin-bottom: 10px">添加</el-button>
-    <el-table
-      :data="tableData.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)"
-      border
-      highlight-current-row
-      row-key="id"
-      :key="tableKey"
-      style="width: 100%"
-      v-loading="loading"
-      @row-dblclick="handleInlineEdit"
-      ref="tableRef"
-    >
-      <el-table-column prop="id" label="ID" width="70" align="center" sortable></el-table-column>
-      <el-table-column prop="date" label="日期" width="180px"></el-table-column>
-      <el-table-column prop="name" label="姓名" width="150px"></el-table-column>
-      <el-table-column min-width="100" label="标题">
-        <template #default="{ row }">
-          <template v-if="row.edit">
-            <el-input v-model="row.title" class="edit-input" size="small" />
-            <el-button
-              class="cancel-btn"
-              size="small"
-              :icon="Refresh"
-              type="warning"
-              circle
-              @click="cancelEdit(row)"
-            ></el-button>
-            <el-button
-              class="confirm-btn"
-              size="small"
-              :icon="Check"
-              type="primary"
-              circle
-              @click="confirmEdit(row)"
-            ></el-button>
-          </template>
-          <span
-            v-else
-            :style="`color: var(--${ns.elNamespace}-color-primary); cursor: pointer`"
-            @click="handleEdit(row)"
-          >
-            {{ row.title }}
-          </span>
-        </template>
-      </el-table-column>
-      <el-table-column prop="address" label="地址" v-if="showAddress"></el-table-column>
-      <el-table-column prop="status" label="状态" width="140">
-        <template #default="{ row }">
-          <el-tag :type="tableStatusFilter(row.status)">
-            {{ row.status }}
-          </el-tag>
-        </template>
-      </el-table-column>
-      <el-table-column prop="priority" label="优先级" width="140">
-        <template #default="{ row }">
-          <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
-        </template>
-      </el-table-column>
-
-      <el-table-column label="操作" width="220px">
-        <template #default="{ row, $index }">
-          <el-button link type="info" :icon="Search" @click="handleLook(row)">查看</el-button>
-          <el-button link type="primary" :icon="EditPen" @click="handleEdit(row)">编辑</el-button>
-          <el-button link type="danger" :icon="Delete" @click="handleDelete(row, $index)">删除</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-
-    <Pagination
-      v-show="tableData.length > 0"
-      :total="tableData.length"
-      v-model="paging"
-      @pagination="handleSizeChange"
-    />
-
-    <el-dialog :title="dialogTitle[dialogStatus]" v-model="dialogFormVisible">
-      <el-form
-        ref="formRef"
-        :rules="rules"
-        :model="tempTableDate"
-        label-position="left"
-        label-width="80px"
-        style="width: 400px; margin-left: 50px"
-        :disabled="dialogStatus === 'look'"
-      >
-        <el-form-item label="姓名" prop="name">
-          <el-input v-model="tempTableDate.name" placeholder="请选择姓名" />
-        </el-form-item>
-        <el-form-item label="日期" prop="date">
-          <el-date-picker
-            v-model="tempTableDate.date"
-            type="datetime"
-            value-format="YYYY-MM-DD HH:mm:ss"
-            placeholder="请选择日期"
-          />
-        </el-form-item>
-        <el-form-item label="状态">
-          <el-select v-model="tempTableDate.status" placeholder="请选择状态">
-            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="优先级">
-          <el-rate
-            v-model="tempTableDate.priority"
-            :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
-            :max="5"
-            style="margin-top: 8px"
-          />
-        </el-form-item>
-        <el-form-item label="地址" prop="address">
-          <el-input
-            v-model="tempTableDate.address"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-            type="textarea"
-            placeholder="请输入地址"
-          />
-        </el-form-item>
-        <el-form-item label="标题" prop="title">
-          <el-input
-            v-model="tempTableDate.title"
-            :autosize="{ minRows: 2, maxRows: 4 }"
-            type="textarea"
-            placeholder="请输入标题"
-          />
-        </el-form-item>
-      </el-form>
-      <template #footer>
-        <div class="dialog-footer">
-          <template v-if="dialogStatus === 'look'">
-            <el-button type="primary" @click="dialogFormVisible = false">确定</el-button>
-          </template>
-          <template v-else>
-            <el-button @click="dialogFormVisible = false">取消</el-button>
-            <el-button type="primary" @click="dialogStatus === 'add' ? addData() : editData()">确定</el-button>
-          </template>
-        </div>
-      </template>
-    </el-dialog>
-  </div>
-</template>
-
 <script setup lang="ts" name="OperateTable">
 import { Pagination, pageSetting, type Paging } from "@/components";
 import { largeData } from "@/mock/table";
@@ -307,6 +164,149 @@ const handleSizeChange = (pagingParam: Paging) => {
   paging.pageSize = pagingParam.pageSize;
 };
 </script>
+
+<template>
+  <div class="operate-table-container">
+    <el-button v-waves type="primary" :icon="Plus" @click="handleAdd()" style="margin-bottom: 10px">添加</el-button>
+    <el-table
+      :data="tableData.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)"
+      border
+      highlight-current-row
+      row-key="id"
+      :key="tableKey"
+      style="width: 100%"
+      v-loading="loading"
+      @row-dblclick="handleInlineEdit"
+      ref="tableRef"
+    >
+      <el-table-column prop="id" label="ID" width="70" align="center" sortable></el-table-column>
+      <el-table-column prop="date" label="日期" width="180px"></el-table-column>
+      <el-table-column prop="name" label="姓名" width="150px"></el-table-column>
+      <el-table-column min-width="100" label="标题">
+        <template #default="{ row }">
+          <template v-if="row.edit">
+            <el-input v-model="row.title" class="edit-input" size="small" />
+            <el-button
+              class="cancel-btn"
+              size="small"
+              :icon="Refresh"
+              type="warning"
+              circle
+              @click="cancelEdit(row)"
+            ></el-button>
+            <el-button
+              class="confirm-btn"
+              size="small"
+              :icon="Check"
+              type="primary"
+              circle
+              @click="confirmEdit(row)"
+            ></el-button>
+          </template>
+          <span
+            v-else
+            :style="`color: var(--${ns.elNamespace}-color-primary); cursor: pointer`"
+            @click="handleEdit(row)"
+          >
+            {{ row.title }}
+          </span>
+        </template>
+      </el-table-column>
+      <el-table-column prop="address" label="地址" v-if="showAddress"></el-table-column>
+      <el-table-column prop="status" label="状态" width="140">
+        <template #default="{ row }">
+          <el-tag :type="tableStatusFilter(row.status)">
+            {{ row.status }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column prop="priority" label="优先级" width="140">
+        <template #default="{ row }">
+          <Icon v-for="n in row.priority" :key="n" name="star" style="color: #606266" />
+        </template>
+      </el-table-column>
+
+      <el-table-column label="操作" width="220px">
+        <template #default="{ row, $index }">
+          <el-button link type="info" :icon="Search" @click="handleLook(row)">查看</el-button>
+          <el-button link type="primary" :icon="EditPen" @click="handleEdit(row)">编辑</el-button>
+          <el-button link type="danger" :icon="Delete" @click="handleDelete(row, $index)">删除</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
+
+    <Pagination
+      v-show="tableData.length > 0"
+      :total="tableData.length"
+      v-model="paging"
+      @pagination="handleSizeChange"
+    />
+
+    <el-dialog :title="dialogTitle[dialogStatus]" v-model="dialogFormVisible">
+      <el-form
+        ref="formRef"
+        :rules="rules"
+        :model="tempTableDate"
+        label-position="left"
+        label-width="80px"
+        style="width: 400px; margin-left: 50px"
+        :disabled="dialogStatus === 'look'"
+      >
+        <el-form-item label="姓名" prop="name">
+          <el-input v-model="tempTableDate.name" placeholder="请选择姓名" />
+        </el-form-item>
+        <el-form-item label="日期" prop="date">
+          <el-date-picker
+            v-model="tempTableDate.date"
+            type="datetime"
+            value-format="YYYY-MM-DD HH:mm:ss"
+            placeholder="请选择日期"
+          />
+        </el-form-item>
+        <el-form-item label="状态">
+          <el-select v-model="tempTableDate.status" placeholder="请选择状态">
+            <el-option v-for="item in statusOptions" :key="item.value" :label="item.label" :value="item.value" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="优先级">
+          <el-rate
+            v-model="tempTableDate.priority"
+            :colors="['#99A9BF', '#F7BA2A', '#FF9900']"
+            :max="5"
+            style="margin-top: 8px"
+          />
+        </el-form-item>
+        <el-form-item label="地址" prop="address">
+          <el-input
+            v-model="tempTableDate.address"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            type="textarea"
+            placeholder="请输入地址"
+          />
+        </el-form-item>
+        <el-form-item label="标题" prop="title">
+          <el-input
+            v-model="tempTableDate.title"
+            :autosize="{ minRows: 2, maxRows: 4 }"
+            type="textarea"
+            placeholder="请输入标题"
+          />
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <div class="dialog-footer">
+          <template v-if="dialogStatus === 'look'">
+            <el-button type="primary" @click="dialogFormVisible = false">确定</el-button>
+          </template>
+          <template v-else>
+            <el-button @click="dialogFormVisible = false">取消</el-button>
+            <el-button type="primary" @click="dialogStatus === 'add' ? addData() : editData()">确定</el-button>
+          </template>
+        </div>
+      </template>
+    </el-dialog>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .operate-table-container {

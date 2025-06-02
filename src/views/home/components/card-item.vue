@@ -1,20 +1,3 @@
-<template>
-  <div :class="shadowClass" class="card-info">
-    <div class="card-content">
-      <div class="left-area" :style="{ width: `${iconWidth}%` }">
-        <el-icon :style="{ fontSize: `${iconSize}px`, color: color }">
-          <component :is="icon"></component>
-        </el-icon>
-      </div>
-      <div class="right-area" :style="{ width: `${100 - iconWidth}%` }">
-        <div style="text-align: right">
-          <slot></slot>
-        </div>
-      </div>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts" name="CardItem">
 import { computed, type Component } from "vue";
 import { ElIcon } from "element-plus";
@@ -45,6 +28,23 @@ const shadowClass = computed(() => {
   }
 });
 </script>
+
+<template>
+  <div :class="shadowClass" class="card-info">
+    <div class="card-content">
+      <div class="left-area" :style="{ width: `${iconWidth}%` }">
+        <el-icon :style="{ fontSize: `${iconSize}px`, color: color }">
+          <component :is="icon"></component>
+        </el-icon>
+      </div>
+      <div class="right-area" :style="{ width: `${100 - iconWidth}%` }">
+        <div style="text-align: right">
+          <slot></slot>
+        </div>
+      </div>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 .always-shadow {

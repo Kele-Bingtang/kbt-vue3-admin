@@ -1,9 +1,3 @@
-<template>
-  <div :style="style">
-    <slot></slot>
-  </div>
-</template>
-
 <script setup lang="ts">
 import {
   ref,
@@ -179,3 +173,9 @@ const style = computed(() => {
 
 defineExpose({ breakPoint });
 </script>
+
+<template>
+  <div :style="style">
+    <slot></slot>
+  </div>
+</template>

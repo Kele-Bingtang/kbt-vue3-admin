@@ -1,18 +1,3 @@
-<template>
-  <div :class="prefixClass">
-    <slot name="prefix">
-      <span v-if="prefix">{{ prefix }}</span>
-    </slot>
-    <p :class="`${prefixClass}__content--outer`">
-      <span ref="countRef" :class="[countClass]">{{ init }}</span>
-      <span :class="[unitClass]">{{ unitText }}</span>
-    </p>
-    <slot name="suffix">
-      <span v-if="suffix">{{ suffix }}</span>
-    </slot>
-  </div>
-</template>
-
 <script setup lang="ts">
 import CountUp from "countup";
 import { ref, watch, onMounted, onUnmounted } from "vue";
@@ -223,6 +208,21 @@ defineExpose({
   init: initCountUp,
 });
 </script>
+
+<template>
+  <div :class="prefixClass">
+    <slot name="prefix">
+      <span v-if="prefix">{{ prefix }}</span>
+    </slot>
+    <p :class="`${prefixClass}__content--outer`">
+      <span ref="countRef" :class="[countClass]">{{ init }}</span>
+      <span :class="[unitClass]">{{ unitText }}</span>
+    </p>
+    <slot name="suffix">
+      <span v-if="suffix">{{ suffix }}</span>
+    </slot>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-count-to;

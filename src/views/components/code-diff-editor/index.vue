@@ -1,3 +1,36 @@
+<script lang="ts" setup>
+import { CodeDiff } from "v-code-diff";
+import oldDoc from "./oldDoc.json";
+import newDOc from "./newDoc.json";
+import { useNamespace } from "@/composables";
+
+const ns = useNamespace();
+
+const oldString = ref(JSON.stringify(oldDoc, null, 2));
+const newString = ref(JSON.stringify(newDOc, null, 2));
+
+const state = reactive({
+  language: "json",
+  theme: "light",
+  diffStyle: "word",
+  forceInlineComparison: false,
+  outputFormat: "side-by-side",
+  context: 10,
+  trim: false,
+  noDiffLineFeed: false,
+  oldFilename: "package.json",
+  newFilename: "newPackage.json",
+  hideHeader: false,
+  hideStat: false,
+  maxHeight: "900px",
+});
+
+const printEvent = (e: Event) => {
+  console.log("diff finished! below is data:");
+  console.log(e);
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="CodeMirror 组件">
@@ -5,7 +38,7 @@
         <el-link
           href="https://github.com/Shimada666/v-code-diff"
           target="_blank"
-          :underline="false"
+          underline="never"
           style="margin-bottom: 10px; font-size: 22px"
         >
           v-code-diff 组件
@@ -127,7 +160,7 @@
             type="primary"
             href="https://github.com/highlightjs/highlight.js/blob/main/SUPPORTED_LANGUAGES.md"
             target="_blank"
-            :underline="false"
+            underline="never"
           >
             查看全部支持语言
           </el-link>
@@ -184,36 +217,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script lang="ts" setup>
-import { CodeDiff } from "v-code-diff";
-import oldDoc from "./oldDoc.json";
-import newDOc from "./newDoc.json";
-import { useNamespace } from "@/composables";
-
-const ns = useNamespace();
-
-const oldString = ref(JSON.stringify(oldDoc, null, 2));
-const newString = ref(JSON.stringify(newDOc, null, 2));
-
-const state = reactive({
-  language: "json",
-  theme: "light",
-  diffStyle: "word",
-  forceInlineComparison: false,
-  outputFormat: "side-by-side",
-  context: 10,
-  trim: false,
-  noDiffLineFeed: false,
-  oldFilename: "package.json",
-  newFilename: "newPackage.json",
-  hideHeader: false,
-  hideStat: false,
-  maxHeight: "900px",
-});
-
-const printEvent = (e: Event) => {
-  console.log("diff finished! below is data:");
-  console.log(e);
-};
-</script>

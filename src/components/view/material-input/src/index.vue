@@ -1,121 +1,3 @@
-<template>
-  <div :class="computedClasses" class="material-input-component">
-    <div :class="{ iconClass: icon }">
-      <Icon v-if="icon" :icon="icon" class="material-input__icon" />
-      <input
-        v-if="type === 'email'"
-        :id="id"
-        v-model="valueCopy"
-        type="email"
-        class="material-input"
-        :name="name"
-        :placeholder="filledPlaceholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :autocomplete="autoComplete"
-        :required="required"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @input="handleInput"
-      />
-      <input
-        v-if="type === 'url'"
-        :id="id"
-        v-model="valueCopy"
-        type="url"
-        class="material-input"
-        :name="name"
-        :placeholder="filledPlaceholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :autocomplete="autoComplete"
-        :required="required"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @input="handleInput"
-      />
-      <input
-        v-if="type === 'number'"
-        :id="id"
-        v-model="valueCopy"
-        type="number"
-        class="material-input"
-        :name="name"
-        :placeholder="filledPlaceholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :autocomplete="autoComplete"
-        :max="max"
-        :min="min"
-        :step="step"
-        :minlength="minlength"
-        :maxlength="maxlength"
-        :required="required"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @input="handleInput"
-      />
-      <input
-        v-if="type === 'password'"
-        :id="id"
-        v-model="valueCopy"
-        type="password"
-        class="material-input"
-        :name="name"
-        :placeholder="filledPlaceholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :autocomplete="autoComplete"
-        :max="max"
-        :min="min"
-        :step="step"
-        :required="required"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @input="handleInput"
-      />
-      <input
-        v-if="type === 'tel'"
-        :id="id"
-        v-model="valueCopy"
-        type="tel"
-        class="material-input"
-        :name="name"
-        :placeholder="filledPlaceholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :autocomplete="autoComplete"
-        :required="required"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @input="handleInput"
-      />
-      <input
-        v-if="type === 'text'"
-        :id="id"
-        v-model="valueCopy"
-        type="text"
-        class="material-input"
-        :name="name"
-        :placeholder="filledPlaceholder"
-        :readonly="readonly"
-        :disabled="disabled"
-        :autocomplete="autoComplete"
-        :minlength="minlength"
-        :maxlength="maxlength"
-        :required="required"
-        @focus="handleFocus"
-        @blur="handleBlur"
-        @input="handleInput"
-      />
-      <span class="material-input-bar" />
-      <label class="material-label">
-        <slot />
-      </label>
-    </div>
-  </div>
-</template>
-
 <script setup lang="ts">
 import type { IconifyIcon } from "@iconify/vue";
 import { computed, getCurrentInstance, onMounted, ref, type Component } from "vue";
@@ -234,6 +116,124 @@ const handleBlur = (event: FocusEvent) => {
   }
 };
 </script>
+
+<template>
+  <div :class="computedClasses" class="material-input-component">
+    <div :class="{ iconClass: icon }">
+      <Icon v-if="icon" :icon="icon" class="material-input__icon" />
+      <input
+        v-if="type === 'email'"
+        :id="id"
+        v-model="valueCopy"
+        type="email"
+        class="material-input"
+        :name="name"
+        :placeholder="filledPlaceholder"
+        :readonly="readonly"
+        :disabled="disabled"
+        :autocomplete="autoComplete"
+        :required="required"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        @input="handleInput"
+      />
+      <input
+        v-if="type === 'url'"
+        :id="id"
+        v-model="valueCopy"
+        type="url"
+        class="material-input"
+        :name="name"
+        :placeholder="filledPlaceholder"
+        :readonly="readonly"
+        :disabled="disabled"
+        :autocomplete="autoComplete"
+        :required="required"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        @input="handleInput"
+      />
+      <input
+        v-if="type === 'number'"
+        :id="id"
+        v-model="valueCopy"
+        type="number"
+        class="material-input"
+        :name="name"
+        :placeholder="filledPlaceholder"
+        :readonly="readonly"
+        :disabled="disabled"
+        :autocomplete="autoComplete"
+        :max="max"
+        :min="min"
+        :step="step"
+        :minlength="minlength"
+        :maxlength="maxlength"
+        :required="required"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        @input="handleInput"
+      />
+      <input
+        v-if="type === 'password'"
+        :id="id"
+        v-model="valueCopy"
+        type="password"
+        class="material-input"
+        :name="name"
+        :placeholder="filledPlaceholder"
+        :readonly="readonly"
+        :disabled="disabled"
+        :autocomplete="autoComplete"
+        :max="max"
+        :min="min"
+        :step="step"
+        :required="required"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        @input="handleInput"
+      />
+      <input
+        v-if="type === 'tel'"
+        :id="id"
+        v-model="valueCopy"
+        type="tel"
+        class="material-input"
+        :name="name"
+        :placeholder="filledPlaceholder"
+        :readonly="readonly"
+        :disabled="disabled"
+        :autocomplete="autoComplete"
+        :required="required"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        @input="handleInput"
+      />
+      <input
+        v-if="type === 'text'"
+        :id="id"
+        v-model="valueCopy"
+        type="text"
+        class="material-input"
+        :name="name"
+        :placeholder="filledPlaceholder"
+        :readonly="readonly"
+        :disabled="disabled"
+        :autocomplete="autoComplete"
+        :minlength="minlength"
+        :maxlength="maxlength"
+        :required="required"
+        @focus="handleFocus"
+        @blur="handleBlur"
+        @input="handleInput"
+      />
+      <span class="material-input-bar" />
+      <label class="material-label">
+        <slot />
+      </label>
+    </div>
+  </div>
+</template>
 
 <style lang="scss" scoped>
 @use "./index";

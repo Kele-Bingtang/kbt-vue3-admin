@@ -1,25 +1,3 @@
-<template>
-  <div :class="[prefixClass, { disabled }]">
-    <Toolbar
-      :class="`${prefixClass}__toolbar`"
-      :editor="editorRef"
-      :defaultConfig="toolbarConfig"
-      :mode="mode"
-      v-if="!hideToolBar"
-    />
-    <Editor
-      :class="`${prefixClass}__content`"
-      :style="{ height: typeof height == 'string' ? height : `${height}px`, overflowY: 'hidden' }"
-      v-model="content"
-      :defaultConfig="editorConfig"
-      :mode="mode"
-      v-bind="$attrs"
-      @on-created="handleCreated"
-      @custom-paste="handlePaste"
-    />
-  </div>
-</template>
-
 <script setup lang="ts">
 import { Boot, type IEditorConfig, type IDomEditor } from "@wangeditor/editor";
 import { Editor, Toolbar } from "@wangeditor/editor-for-vue";
@@ -201,6 +179,28 @@ defineExpose({
   editor: editorRef,
 });
 </script>
+
+<template>
+  <div :class="[prefixClass, { disabled }]">
+    <Toolbar
+      :class="`${prefixClass}__toolbar`"
+      :editor="editorRef"
+      :defaultConfig="toolbarConfig"
+      :mode="mode"
+      v-if="!hideToolBar"
+    />
+    <Editor
+      :class="`${prefixClass}__content`"
+      :style="{ height: typeof height == 'string' ? height : `${height}px`, overflowY: 'hidden' }"
+      v-model="content"
+      :defaultConfig="editorConfig"
+      :mode="mode"
+      v-bind="$attrs"
+      @on-created="handleCreated"
+      @custom-paste="handlePaste"
+    />
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-wang-editor;

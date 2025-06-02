@@ -1,7 +1,3 @@
-<template>
-  <div ref="videoRef"></div>
-</template>
-
 <script setup lang="ts">
 import Player from "xgplayer";
 import { ref, onMounted, watch, onBeforeUnmount, nextTick } from "vue";
@@ -56,3 +52,7 @@ defineExpose({
   playerExpose: () => playerRef.value,
 });
 </script>
+
+<template>
+  <div ref="videoRef"></div>
+</template>

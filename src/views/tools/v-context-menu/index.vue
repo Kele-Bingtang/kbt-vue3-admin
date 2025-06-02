@@ -1,3 +1,10 @@
+<script setup lang="ts" name="VContextmenu">
+import Basic from "./components/basic.vue";
+import MenuGroup from "./components/menuGroup.vue";
+import MenuDynamic from "./components/menuDynamic.vue";
+import "v-contextmenu/dist/themes/default.css";
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never">
@@ -29,10 +36,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="VContextmenu">
-import Basic from "./components/basic.vue";
-import MenuGroup from "./components/menuGroup.vue";
-import MenuDynamic from "./components/menuDynamic.vue";
-import "v-contextmenu/dist/themes/default.css";
-</script>

@@ -1,27 +1,3 @@
-<template>
-  <div style="display: flex; flex-direction: column; max-height: 500px">
-    <el-checkbox v-if="multiple" v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">
-      全部
-    </el-checkbox>
-    <Component
-      style="overflow: hidden auto"
-      :is="`el-${ComponentIs}-group`"
-      v-model="checkedValue"
-      @change="handleCheckedChange"
-    >
-      <Component
-        :is="`el-${ComponentIs}`"
-        style="width: 100%"
-        v-for="col in props.enum"
-        :key="col[fieldNames.value]"
-        :label="col[fieldNames.label]"
-        :value="col[fieldNames.value]"
-        :disabled="col[fieldNames.disabled || 'disabled']"
-      ></Component>
-    </Component>
-  </div>
-</template>
-
 <script setup lang="ts">
 import { ElCheckbox, type CheckboxValueType } from "element-plus";
 import { computed, ref, watch } from "vue";
@@ -72,3 +48,27 @@ watch(
   }
 );
 </script>
+
+<template>
+  <div style="display: flex; flex-direction: column; max-height: 500px">
+    <el-checkbox v-if="multiple" v-model="checkAll" :indeterminate="isIndeterminate" @change="handleCheckAllChange">
+      全部
+    </el-checkbox>
+    <Component
+      style="overflow: hidden auto"
+      :is="`el-${ComponentIs}-group`"
+      v-model="checkedValue"
+      @change="handleCheckedChange"
+    >
+      <Component
+        :is="`el-${ComponentIs}`"
+        style="width: 100%"
+        v-for="col in props.enum"
+        :key="col[fieldNames.value]"
+        :label="col[fieldNames.label]"
+        :value="col[fieldNames.value]"
+        :disabled="col[fieldNames.disabled || 'disabled']"
+      ></Component>
+    </Component>
+  </div>
+</template>

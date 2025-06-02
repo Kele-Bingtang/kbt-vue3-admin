@@ -1,3 +1,31 @@
+<script setup lang="tsx" name="UseDialogDemo">
+import { useDialog, WorkDialog } from "@/components";
+
+const visible = ref(false);
+
+const { open } = useDialog();
+
+const openDialog = () => {
+  open({
+    title: "useDialog 弹框",
+    height: 400,
+    render: () => (
+      <>
+        <el-button onClick={() => aginOpenDialog()}>使用函数打开 Dialog</el-button>
+      </>
+    ),
+  });
+};
+
+const aginOpenDialog = () => {
+  open({
+    title: "useDialog 弹框",
+    top: "20vh",
+    render: () => <div>我被函数再次打开</div>,
+  });
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="useDialog 组件">
@@ -84,31 +112,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="tsx" name="UseDialogDemo">
-import { useDialog, WorkDialog } from "@/components";
-
-const visible = ref(false);
-
-const { open } = useDialog();
-
-const openDialog = () => {
-  open({
-    title: "useDialog 弹框",
-    height: 400,
-    render: () => (
-      <>
-        <el-button onClick={() => aginOpenDialog()}>使用函数打开 Dialog</el-button>
-      </>
-    ),
-  });
-};
-
-const aginOpenDialog = () => {
-  open({
-    title: "useDialog 弹框",
-    top: "20vh",
-    render: () => <div>我被函数再次打开</div>,
-  });
-};
-</script>

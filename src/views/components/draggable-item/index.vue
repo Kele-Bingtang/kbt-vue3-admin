@@ -1,3 +1,13 @@
+<script setup lang="ts" name="DraggableItemDemo">
+import { DraggableItem } from "@/components";
+import { list1, list2, list3 } from "@/mock/drag-item";
+
+const group = ref("drag_item");
+const listData1 = ref(list1);
+const listData2 = ref(list2);
+const listData3 = ref(list3);
+</script>
+
 <template>
   <el-space fill>
     <el-card>
@@ -35,13 +45,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="DraggableItemDemo">
-import { DraggableItem } from "@/components";
-import { list1, list2, list3 } from "@/mock/drag-item";
-
-const group = ref("drag_item");
-const listData1 = ref(list1);
-const listData2 = ref(list2);
-const listData3 = ref(list3);
-</script>

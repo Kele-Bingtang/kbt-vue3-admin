@@ -4,22 +4,6 @@
       <Tooltip><span>...</span></Tooltip>
     </div>
  -->
-<template>
-  <template v-if="showTip">
-    <el-tooltip placement="top" v-bind="$attrs">
-      <template #content>{{ content.join("") }}</template>
-      <div ref="slotRef" :class="className">
-        <slot></slot>
-      </div>
-    </el-tooltip>
-  </template>
-  <template v-else>
-    <div ref="slotRef" :class="className">
-      <slot></slot>
-    </div>
-  </template>
-</template>
-
 <script setup lang="ts">
 import { isArray } from "@/utils";
 import { useSlots, ref, computed, onMounted, onUpdated, onBeforeMount } from "vue";
@@ -126,6 +110,22 @@ onBeforeMount(() => {
   slotRef.value?.removeEventListener("mouseout", compareWidth);
 });
 </script>
+
+<template>
+  <template v-if="showTip">
+    <el-tooltip placement="top" v-bind="$attrs">
+      <template #content>{{ content.join("") }}</template>
+      <div ref="slotRef" :class="className">
+        <slot></slot>
+      </div>
+    </el-tooltip>
+  </template>
+  <template v-else>
+    <div ref="slotRef" :class="className">
+      <slot></slot>
+    </div>
+  </template>
+</template>
 
 <style lang="scss" scoped>
 .line-clamp {

@@ -1,3 +1,21 @@
+<script setup lang="ts" name="ImageViewerDemo">
+import { createImageViewer, ImageViewer } from "@/components";
+
+const urlList = [
+  "https://i.imgtg.com/2023/01/16/QRBHS.jpg",
+  "https://i.imgtg.com/2023/01/16/QRqMK.jpg",
+  "https://i.imgtg.com/2023/01/16/QR57a.jpg",
+];
+
+const open = () => {
+  createImageViewer({
+    urlList: urlList,
+  });
+};
+
+const visible = ref(false);
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="图片预览组件">
@@ -29,21 +47,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="ts" name="ImageViewerDemo">
-import { createImageViewer, ImageViewer } from "@/components";
-
-const urlList = [
-  "https://i.imgtg.com/2023/01/16/QRBHS.jpg",
-  "https://i.imgtg.com/2023/01/16/QRqMK.jpg",
-  "https://i.imgtg.com/2023/01/16/QR57a.jpg",
-];
-
-const open = () => {
-  createImageViewer({
-    urlList: urlList,
-  });
-};
-
-const visible = ref(false);
-</script>

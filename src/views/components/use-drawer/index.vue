@@ -1,3 +1,26 @@
+<script setup lang="tsx" name="UseDrawerDemo">
+import { useDrawer, WorkDrawer } from "@/components";
+
+const visible = ref(false);
+
+const { open } = useDrawer();
+
+const openDrawer = () => {
+  open({
+    title: "useDrawer 弹框",
+    render: () => <el-button onClick={() => aginOpenDrawer()}>使用函数打开 Drawer</el-button>,
+  });
+};
+
+const aginOpenDrawer = () => {
+  open({
+    title: "useDrawer 弹框",
+    size: "60%",
+    render: () => <div>我被函数再次打开</div>,
+  });
+};
+</script>
+
 <template>
   <el-space fill>
     <el-card shadow="never" header="useDrawer 组件">
@@ -72,26 +95,3 @@
     </el-card>
   </el-space>
 </template>
-
-<script setup lang="tsx" name="UseDrawerDemo">
-import { useDrawer, WorkDrawer } from "@/components";
-
-const visible = ref(false);
-
-const { open } = useDrawer();
-
-const openDrawer = () => {
-  open({
-    title: "useDrawer 弹框",
-    render: () => <el-button onClick={() => aginOpenDrawer()}>使用函数打开 Drawer</el-button>,
-  });
-};
-
-const aginOpenDrawer = () => {
-  open({
-    title: "useDrawer 弹框",
-    size: "60%",
-    render: () => <div>我被函数再次打开</div>,
-  });
-};
-</script>

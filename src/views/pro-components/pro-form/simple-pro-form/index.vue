@@ -1,13 +1,3 @@
-<template>
-  <div>
-    <div class="card">
-      <ProForm :elFormProps="elFormProps" :schema="schema" v-model="model" />
-    </div>
-
-    {{ model }}
-  </div>
-</template>
-
 <script setup lang="ts" name="SimpleProForm">
 import { ref } from "vue";
 import { ProForm, type FormSchemaProps, type ProElFormProps } from "@/components";
@@ -47,3 +37,13 @@ const schema: FormSchemaProps[] = [
   },
 ];
 </script>
+
+<template>
+  <div>
+    <div class="card">
+      <ProForm :elFormProps="elFormProps" :schema="schema" v-model="model" />
+    </div>
+
+    {{ model }}
+  </div>
+</template>

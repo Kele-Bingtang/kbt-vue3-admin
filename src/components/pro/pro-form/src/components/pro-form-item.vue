@@ -1,19 +1,3 @@
-<template>
-  <RenderSlots v-if="column?.render" :style="style" />
-
-  <Tree
-    v-else-if="hyphenToCamelCase(column.el) === ComponentNameEnum.EL_TREE"
-    :data="columnEnum"
-    :model-value="getProp(model, column.prop)"
-    @update:model-value="v => setProp(model, column.prop, v)"
-    v-bind="{ ...formProps }"
-  />
-
-  <RenderElComponents v-else-if="hyphenToCamelCase(column.el)?.startsWith('El')" />
-
-  <RenderComponent v-else :style="style" />
-</template>
-
 <script setup lang="tsx">
 import { computed, inject, ref, resolveComponent } from "vue";
 import { ComponentNameEnum, formEnumMapKey, type FormSchemaProps, type PascalCaseComponentName } from "../interface";
@@ -242,3 +226,19 @@ defineExpose({
   formComponentRef,
 });
 </script>
+
+<template>
+  <RenderSlots v-if="column?.render" :style="style" />
+
+  <Tree
+    v-else-if="hyphenToCamelCase(column.el) === ComponentNameEnum.EL_TREE"
+    :data="columnEnum"
+    :model-value="getProp(model, column.prop)"
+    @update:model-value="v => setProp(model, column.prop, v)"
+    v-bind="{ ...formProps }"
+  />
+
+  <RenderElComponents v-else-if="hyphenToCamelCase(column.el)?.startsWith('El')" />
+
+  <RenderComponent v-else :style="style" />
+</template>

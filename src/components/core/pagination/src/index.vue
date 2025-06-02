@@ -1,19 +1,3 @@
-<template>
-  <div :class="[prefixClass, { hidden: hidden }]" class="pagination-component">
-    <el-pagination
-      :background="background"
-      v-model:current-page="pageObj.pageNum"
-      v-model:page-size="pageObj.pageSize"
-      :page-sizes="pageObj.pageSizes"
-      :layout="layout"
-      :total="modelValue.total"
-      v-bind="$attrs"
-      @size-change="handleSizeChange"
-      @current-change="handleCurrentChange"
-    />
-  </div>
-</template>
-
 <script lang="ts">
 import { scrollTo } from "@/utils";
 import { nextTick } from "vue";
@@ -88,6 +72,22 @@ const afterChange = () => {
 
 defineExpose({ paging: pageSetting });
 </script>
+
+<template>
+  <div :class="[prefixClass, { hidden: hidden }]" class="pagination-component">
+    <el-pagination
+      :background="background"
+      v-model:current-page="pageObj.pageNum"
+      v-model:page-size="pageObj.pageSize"
+      :page-sizes="pageObj.pageSizes"
+      :layout="layout"
+      :total="modelValue.total"
+      v-bind="$attrs"
+      @size-change="handleSizeChange"
+      @current-change="handleCurrentChange"
+    />
+  </div>
+</template>
 
 <style lang="scss" scoped>
 $prefix-class: #{$admin-namespace}-pagination;
