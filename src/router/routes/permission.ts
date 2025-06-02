@@ -13,7 +13,7 @@ const permissionRoutes = {
   children: [
     {
       path: "switch",
-      component: () => import("@/views/permission/switchPermission.vue"),
+      component: () => import("@/views/permission/switch-permission.vue"),
       name: "SwitchPermission",
       meta: {
         title: "权限切换",
@@ -23,7 +23,7 @@ const permissionRoutes = {
     },
     {
       path: "role",
-      component: () => import("@/views/permission/rolePermission.vue"),
+      component: () => import("@/views/permission/role-permission.vue"),
       name: "RolePermission",
       meta: {
         title: "权限编辑",

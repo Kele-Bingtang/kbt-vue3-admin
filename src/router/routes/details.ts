@@ -13,7 +13,7 @@ const detailsRoutes: RouterConfigRaw = {
     {
       path: "query",
       name: "Query",
-      component: "/tabs/queryDetail",
+      component: "/tabs/query-detail",
       meta: {
         title: (route: RouteLocationNormalizedLoaded) => `{{ _route.Query }}-${route.query.id}`,
         icon: StarFilled,
@@ -23,7 +23,7 @@ const detailsRoutes: RouterConfigRaw = {
     {
       path: "params/:id",
       name: "Params",
-      component: "/tabs/paramsDetail",
+      component: "/tabs/params-detail",
       meta: {
         title: (route: RouteLocationNormalizedLoaded) => `{{ _route.Params }}-${route.params.id}`,
         icon: StarFilled,

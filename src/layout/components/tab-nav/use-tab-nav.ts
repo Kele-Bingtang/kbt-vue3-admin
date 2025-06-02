@@ -1,5 +1,5 @@
 import { useBoolean } from "@/composables";
-import beforeClose from "@/router/beforeClose";
+import beforeClose from "@/router/before-close";
 import { useLayoutStore, useRouteStore, type TabProp } from "@/stores";
 import { getUrlParams, mittBus } from "@/utils";
 import Sortable from "sortablejs";

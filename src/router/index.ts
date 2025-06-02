@@ -1,9 +1,9 @@
 import type { RouteRecordRaw, RouterHistory } from "vue-router";
 import { createRouter, createWebHashHistory, createWebHistory } from "vue-router";
 import { NProgress } from "@/utils";
-import { staticRoutes } from "./routesConfig";
-import { beforeEach } from "./guards/beforeEach";
-import { afterEach } from "./guards/afterEach";
+import { staticRoutes } from "./routes-config";
+import { beforeEach } from "./guards/before-each";
+import { afterEach } from "./guards/after-each";
 import { useRouteStore } from "@/stores";
 import { LOGIN_NAME } from "@/config";
 

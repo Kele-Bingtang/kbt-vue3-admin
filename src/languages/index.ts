@@ -2,7 +2,7 @@ import { createI18n } from "vue-i18n";
 import SystemConfig from "@/config";
 import { LanguageEnum } from "@/enums/appEnum";
 import { isObject } from "@/utils";
-import { useStorage } from "@/composables/core/useStorage";
+import { useStorage } from "@/composables/core/use-storage";
 import zhCN from "./locales/zh-CN";
 import enUS from "./locales/en-US";
 

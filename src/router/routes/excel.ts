@@ -11,25 +11,25 @@ const excelRoutes: RouterConfigRaw = {
   children: [
     {
       path: "export-excel",
-      component: () => import("@/views/excel/exportExcel.vue"),
+      component: () => import("@/views/excel/export-excel.vue"),
       name: "ExportExcel",
       meta: { title: "Excel 导出", icon: StarFilled },
     },
     {
       path: "export-selected-excel",
-      component: () => import("@/views/excel/selectExcel.vue"),
+      component: () => import("@/views/excel/select-excel.vue"),
       name: "SelectExcel",
       meta: { title: "指定数据导出", icon: StarFilled },
     },
     {
       path: "export-merge-header",
-      component: () => import("@/views/excel/mergeHeader.vue"),
+      component: () => import("@/views/excel/merge-header.vue"),
       name: "MergeHeader",
       meta: { title: "合并表头导出", icon: StarFilled },
     },
     {
       path: "upload-excel",
-      component: () => import("@/views/excel/uploadExcel.vue"),
+      component: () => import("@/views/excel/upload-excel.vue"),
       name: "UploadExcel",
       meta: { title: "Excel 导入", icon: StarFilled },
     },

@@ -57,7 +57,7 @@ const directiveRoutes: RouterConfigRaw = {
     {
       path: "longPress",
       name: "LongPress",
-      component: "/directives/longPress/index",
+      component: "/directives/long-press/index",
       meta: {
         title: "长按指令",
         icon: StarFilled,

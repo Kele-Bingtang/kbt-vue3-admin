@@ -39,12 +39,12 @@
 
 <script setup lang="ts" name="Home">
 import { ElRow, ElCol, ElCard } from "element-plus";
-import CardItem from "./components/cardItem.vue";
+import CardItem from "./components/card-item.vue";
 import { CountTo } from "@/components";
-import ChartPie from "./components/chartPie.vue";
-import ChartBar from "./components/chartBar.vue";
-import ChartLineBar from "./components/chartLineBar.vue";
-import ChartLine from "./components/chartLine.vue";
+import ChartPie from "./components/chart-pie.vue";
+import ChartBar from "./components/chart-bar.vue";
+import ChartLineBar from "./components/chart-line-bar.vue";
+import ChartLine from "./components/chart-line.vue";
 import { Avatar, UserFilled, Share, Comment } from "@element-plus/icons-vue";
 
 const cardInfo = [

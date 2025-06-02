@@ -1,6 +1,6 @@
-export * from "./core/errorHandler";
+export * from "./core/error-handler";
 export * from "./core/message";
-export * from "./core/scrollTo";
+export * from "./core/scroll-to";
 export * from "./core/color";
 export * from "./core/is";
 
@@ -9,9 +9,9 @@ export * from "./download";
 export * from "./excel";
 export * from "./helper";
 export * from "./tree";
-export * from "./idGenerator";
+export * from "./id-generator";
 
-import mittBus from "./core/mittBus";
+import mittBus from "./core/mitt-bus";
 import log from "./core/log";
 import NProgress from "./nprogress";
 import Print from "./print";

@@ -1,0 +1,245 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
+@include b(global-search) {
+  ul {
+    padding: 0;
+    margin: 0;
+    list-style-type: none;
+  }
+
+  .search-modal {
+    background-color: rgba($color: #000000, $alpha: 20%);
+  }
+
+  .#{$el-namespace}-dialog__header {
+    padding: 5px 0;
+  }
+
+  .#{$el-namespace}-dialog {
+    padding: 0 15px;
+    border-radius: calc(cssVar(radius) / 2 + 8px);
+  }
+
+  .#{$el-namespace}-input {
+    height: 48px;
+
+    .#{$el-namespace}-input__wrapper {
+      background-color: rgb(cssVar(gray-200-rgb), 0.8);
+      border: 1px solid cssVar(border-dashed-color);
+      border-radius: calc(cssVar(radius) / 2 + 2px);
+      box-shadow: none;
+    }
+
+    .#{$el-namespace}-input__inner {
+      color: cssVar(gray-600);
+    }
+
+    .search-keydown {
+      display: flex;
+      align-items: center;
+      height: 20px;
+      padding: 0 4px;
+      color: cssVar(gray-500);
+      background-color: cssVar(bg-color);
+      border-radius: 4px;
+
+      i {
+        font-size: 12px;
+      }
+
+      span {
+        margin-left: 2px;
+        font-size: 12px;
+      }
+    }
+  }
+
+  @include e(search-scrollbar) {
+    margin-top: 20px;
+  }
+
+  @include e(search-list) {
+    width: 100%;
+    background: cssVar(main-bg-color);
+  }
+
+  @include e(search-item) {
+    font-size: 16px;
+    font-weight: 500;
+    line-height: 1;
+    cursor: pointer;
+
+    .menu-icon {
+      margin-right: 5px;
+      font-size: 18px;
+    }
+
+    div {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 50px;
+      padding: 0 16px;
+      margin-top: 8px;
+      font-size: 15px;
+      font-weight: 400;
+      color: cssVar(gray-700);
+      background: cssVar(gray-100);
+      border-radius: calc(cssVar(radius) / 2 + 2px);
+
+      @include is(highlighted) {
+        color: #ffffff;
+        background-color: var(--#{$el-namespace}-color-primary-light-3);
+      }
+
+      .selected-icon {
+        font-size: 15px;
+      }
+    }
+  }
+
+  @include e(search-history) {
+    .title {
+      font-size: 13px;
+      color: cssVar(gray-600);
+    }
+  }
+
+  @include e(history-list) {
+    width: 100%;
+    margin-top: 5px;
+    background: cssVar(main-bg-color);
+  }
+
+  @include e(history-item) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 50px;
+    padding: 0 16px;
+    margin-top: 8px;
+    font-size: 15px;
+    font-weight: 400;
+    color: cssVar(gray-800);
+    cursor: pointer;
+    background: cssVar(gray-100);
+    border-radius: calc(cssVar(radius) / 2 + 2px);
+
+    @include is(highlighted) {
+      color: #ffffff;
+      background-color: var(--#{$el-namespace}-color-primary-light-3);
+
+      .selected-icon {
+        color: #ffffff;
+      }
+    }
+
+    .selected-icon {
+      width: 20px;
+      height: 20px;
+      font-size: 15px;
+      line-height: 20px;
+      color: cssVar(gray-500);
+      text-align: center;
+      user-select: none;
+      border-radius: 50%;
+      transition: background-color 0.3s;
+
+      &:hover {
+        background-color: rgba($color: #000000, $alpha: 20%);
+      }
+    }
+  }
+
+  .dialog-footer {
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    padding-top: 10px;
+    border-top: 1px solid cssVar(border-color);
+
+    > div {
+      display: flex;
+      align-items: center;
+      height: 40px;
+
+      i {
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        width: 22px;
+        height: 20px;
+        padding: 3px;
+        margin-right: 8px;
+        font-size: 14px;
+        color: cssVar(gray-500);
+        background: cssVar(bg-color);
+        border: 1px solid cssVar(border-dashed-color);
+        border-radius: 3px;
+        box-shadow: 0 2px 0 cssVar(border-dashed-color);
+
+        &:last-of-type {
+          margin-right: 6px;
+        }
+      }
+
+      span {
+        margin-right: 15px;
+        font-size: 12px;
+      }
+    }
+  }
+}
+
+.dark {
+  @include b(global-search) {
+    .#{$el-namespace}-input {
+      .#{$el-namespace}-input__wrapper {
+        background-color: #252526;
+        border: 1px solid #4c4d50;
+      }
+
+      .search-keydown {
+        background-color: #252526;
+        border: 1px solid #4c4d50;
+      }
+    }
+
+    .search-modal {
+      background-color: rgb(23 23 26 / 60%);
+      backdrop-filter: none;
+    }
+
+    .#{$el-namespace}-dialog {
+      background-color: #252526;
+    }
+
+    @include e(search-item) {
+      div {
+        color: rgba($color: #ffffff, $alpha: 60%);
+
+        &.highlighted {
+          color: #ffffff;
+        }
+      }
+    }
+
+    .dialog-footer {
+      > div {
+        color: cssVar(gray-600);
+
+        i {
+          background-color: cssVar(gray-100);
+        }
+
+        span {
+          margin-right: 15px;
+          font-size: 12px;
+        }
+      }
+    }
+  }
+}

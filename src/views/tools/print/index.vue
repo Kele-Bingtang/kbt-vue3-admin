@@ -43,7 +43,7 @@
 
 <script setup lang="ts" name="Print">
 import { Print } from "@/utils";
-import ChartLine from "@/views/home/components/chartLine.vue";
+import ChartLine from "@/views/home/components/chart-line.vue";
 import { simpleData } from "@/mock/table";
 
 const value = ref("1");

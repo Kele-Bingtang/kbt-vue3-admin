@@ -11,13 +11,13 @@ import { reactive, computed, provide } from "vue";
 import { ElConfigProvider } from "element-plus";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 import en from "element-plus/es/locale/lang/en";
-import { useLayoutStore } from "@/stores/layout";
+import { useLayoutStore } from "@/stores/core/layout";
 import SystemConfig, { ConfigGlobalKey, WebSocketKey } from "@/config";
 import { useUserStore, useWebSocketStore } from "@/stores";
 import { isFunction } from "@/utils";
 import { LanguageEnum } from "@/enums/appEnum";
 import { useNamespace, useBrowserTitle, useWatchCssVar } from "@/composables";
-import { useTheme } from "@/composables/core/useTheme";
+import { useTheme } from "@/composables/core/use-theme";
 import { useIFrame } from "@/layout/components/iframe/use-iframe";
 
 const ns = useNamespace();

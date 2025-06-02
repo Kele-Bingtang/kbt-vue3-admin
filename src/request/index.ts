@@ -1,14 +1,14 @@
 import { ElNotification } from "element-plus";
 import axios, { type AxiosInstance, AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios";
 import qs from "qs";
-import { showFullScreenLoading, tryHideFullScreenLoading } from "@/request/serviceLoading";
+import router from "@/router";
 import { isArray, isValidURL, message } from "@/utils";
 import { useErrorLogStore, useUserStore } from "@/stores";
-import router from "@/router";
-import { ContentTypeEnum, ResultEnum } from "./httpEnum";
-import { AxiosCanceler } from "./axiosCancel";
-import { checkStatus } from "./checkStatus";
 import { LOGIN_URL } from "@/config";
+import { showFullScreenLoading, tryHideFullScreenLoading } from "./service-loading";
+import { ContentTypeEnum, ResultEnum } from "./http-enum";
+import { AxiosCanceler } from "./axios-cancel";
+import { checkStatus } from "./check-status";
 
 type AxiosRequestConfigProp<D = any> = AxiosRequestConfig<D> & {
   method: "get" | "post" | "delete" | "put" | "download";

@@ -2,18 +2,18 @@ import { createPinia } from "pinia";
 import { createPersistedState } from "pinia-plugin-persistedstate";
 import SystemConfig from "@/config";
 
-export * from "./errorLog";
-export * from "./layout";
-export * from "./route";
-export * from "./setting";
-export * from "./user";
+export * from "./core/layout";
+export * from "./core/route";
+export * from "./core/setting";
+export * from "./core/user";
+export * from "./error-log";
 export * from "./message";
 export * from "./websocket";
 
 const { version } = __APP_INFO__.pkg;
 const cacheKeyPrefix = SystemConfig.keyConfig.cacheKeyPrefix;
 
-// 搭配 useStorage 使用
+// 自定义存储逻辑，与 useStorage 方式一样
 const customStorage = {
   getItem: (key: string) => {
     // userStore 不进行版本管控，否则每次升版都要登录
