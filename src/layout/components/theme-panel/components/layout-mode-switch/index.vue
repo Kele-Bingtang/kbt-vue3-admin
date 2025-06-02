@@ -1,0 +1,69 @@
+<script setup lang="ts">
+import { useI18n } from "vue-i18n";
+import { CircleCheckFilled } from "@element-plus/icons-vue";
+import { LayoutModeEnum } from "@/enums/appEnum";
+import { useNamespace } from "@/composables";
+import { useSettingStore } from "@/stores";
+
+defineOptions({ name: "LayoutModeSwitch" });
+
+const ns = useNamespace("layout-mode-switch");
+const settingStore = useSettingStore();
+const { t } = useI18n();
+
+const { layoutMode } = storeToRefs(settingStore);
+
+const layoutModeList = [
+  {
+    name: t("_setting.layoutModeSelect.vertical"),
+    mode: LayoutModeEnum.Vertical,
+    content: `<div class="dark"></div> <div class="container"> <div class="light"></div><div class="content"></div> </div>`,
+  },
+  {
+    name: t("_setting.layoutModeSelect.classic"),
+    mode: LayoutModeEnum.Classic,
+    content: `<div class="dark"></div> <div class="container"> <div class="light"></div><div class="content"></div> </div>`,
+  },
+  {
+    name: t("_setting.layoutModeSelect.horizontal"),
+    mode: LayoutModeEnum.Horizontal,
+    content: `<div class="dark"></div> <div class="content"></div>`,
+  },
+  {
+    name: t("_setting.layoutModeSelect.columns"),
+    mode: LayoutModeEnum.Columns,
+    content: `<div class="dark"></div> <div class="light"></div> <div class="content"></div>`,
+  },
+  {
+    name: t("_setting.layoutModeSelect.mixins"),
+    mode: LayoutModeEnum.Mixins,
+    content: `<div class="dark"></div> <div class="container"> <div class="dark"></div><div class="content"></div> </div>`,
+  },
+  {
+    name: t("_setting.layoutModeSelect.iframe"),
+    mode: LayoutModeEnum.IFrame,
+    content: `<div class="dark"></div> <div class="content"></div>`,
+  },
+];
+
+const switchLayoutMode = (layoutMode: LayoutModeEnum) => {
+  settingStore.$patch({ layoutMode });
+};
+</script>
+
+<template>
+  <div :class="[ns.b(), 'flx', 'flx-wrap', 'gap-15']">
+    <div v-for="item in layoutModeList" :key="item.mode" :class="ns.e('item')" @click="switchLayoutMode(item.mode)">
+      <div
+        :class="[ns.e('box'), ns.join(item.mode), ns.is('active', item.mode === layoutMode)]"
+        v-html="item.content"
+      ></div>
+      <Icon :class="ns.m('icon')" v-show="item.mode === layoutMode"><CircleCheckFilled /></Icon>
+      <p :class="ns.m('name')">{{ item.name }}</p>
+    </div>
+  </div>
+</template>
+
+<style lang="scss">
+@use "./index";
+</style>

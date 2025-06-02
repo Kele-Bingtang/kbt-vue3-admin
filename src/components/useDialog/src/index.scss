@@ -10,17 +10,3 @@ $prefix-class: #{$admin-namespace}-work-dialog;
   margin-bottom: 0;
   overflow: auto;
 }
-
-.#{$prefix-class}.#{$el-namespace}-dialog {
-  .#{$el-namespace}-dialog__header {
-    border-bottom: 1px solid var(--#{$el-namespace}-border-color-lighter);
-  }
-
-  .#{$el-namespace}-dialog__body {
-    padding: 15px;
-  }
-
-  .#{$el-namespace}-dialog__footer {
-    border-top: 1px solid var(--#{$el-namespace}-border-color-lighter);
-  }
-}

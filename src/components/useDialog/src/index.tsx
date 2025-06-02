@@ -115,9 +115,6 @@ export const showDialog = (dialogProps: WorkDialogProps, component?: Component, 
         close-on-click-modal={false}
         draggable
         {...dialogProps}
-        render
-        headerRender
-        footerRender
         class={prefixClass}
       >
         {{

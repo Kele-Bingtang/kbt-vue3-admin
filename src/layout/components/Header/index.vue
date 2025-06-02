@@ -1,6 +1,6 @@
 <script setup lang="ts" name="Header">
-import HeaderLeft from "./HeaderLeft.vue";
-import HeaderRight from "./HeaderRight.vue";
+import HeaderLeft from "./header-left.vue";
+import HeaderRight from "./header-right.vue";
 </script>
 
 <template>

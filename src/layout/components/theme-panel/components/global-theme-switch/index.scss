@@ -1,0 +1,19 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/namespace" as *;
+
+@include b(global-theme-select) {
+  @include e(item) {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 14px 0;
+
+    span {
+      font-size: 14px;
+    }
+
+    .#{$el-namespace}-select {
+      width: 40%;
+    }
+  }
+}

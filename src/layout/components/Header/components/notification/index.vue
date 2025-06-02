@@ -123,7 +123,7 @@ const toDetail = () => {
   <div :class="ns.b()">
     <el-popover placement="bottom" :width="360" trigger="click" :popper-class="ns.b()">
       <template #reference>
-        <div class="flx-center" style="margin-top: 5px">
+        <div class="flx-center" style="width: 100%; height: 100%; margin-top: 5px">
           <el-badge is-dot>
             <Icon :icon="Bell" />
           </el-badge>
@@ -137,34 +137,36 @@ const toDetail = () => {
           :label="`${item.label} (${item.data.length})`"
           :name="item.name"
         >
-          <el-scrollbar v-if="item.data.length > 0" :max-height="400">
-            <ul :class="ns.e('list')">
-              <li v-for="data in item.data" :key="data.id" class="flx-align-center">
-                <img v-if="data.avatar" :src="data.avatar" alt="" :class="ns.m('avatar')" />
+          <template v-if="item.data.length > 0">
+            <el-scrollbar :max-height="400">
+              <ul :class="ns.e('list')">
+                <li v-for="data in item.data" :key="data.id" class="flx-align-center">
+                  <img v-if="data.avatar" :src="data.avatar" alt="" :class="ns.m('avatar')" />
 
-                <div :class="[ns.e('info'), 'flx-1']">
-                  <div class="flx-justify-between">
-                    <Tooltip :effect="tooltipEffect" :line="1" :try="1">
-                      <span class="title">{{ data.title }}</span>
-                    </Tooltip>
-                    <div v-if="data.tag?.length" class="flx" style="gap: 2px">
-                      <ElTag v-for="tag in data.tag" :key="tag.name" :type="tag.type" size="small">
-                        {{ tag.name }}
-                      </ElTag>
+                  <div :class="[ns.e('info'), 'flx-1']">
+                    <div class="flx-justify-between">
+                      <Tooltip :effect="tooltipEffect" :line="1" :try="1">
+                        <span class="title">{{ data.title }}</span>
+                      </Tooltip>
+                      <div v-if="data.tag?.length" class="flx" style="gap: 2px">
+                        <ElTag v-for="tag in data.tag" :key="tag.name" :type="tag.type" size="small">
+                          {{ tag.name }}
+                        </ElTag>
+                      </div>
                     </div>
+
+                    <Tooltip v-if="data.description" :effect="tooltipEffect" :line="2" :try="1">
+                      <span class="desc">{{ data.description }}</span>
+                    </Tooltip>
+
+                    <span class="date">{{ data.date || data.createTime }}</span>
                   </div>
-
-                  <Tooltip v-if="data.description" :effect="tooltipEffect" :line="2" :try="1">
-                    <span class="desc">{{ data.description }}</span>
-                  </Tooltip>
-
-                  <span class="date">{{ data.date || data.createTime }}</span>
-                </div>
-              </li>
-            </ul>
+                </li>
+              </ul>
+            </el-scrollbar>
 
             <el-button @click="toDetail" style="width: 100%">查看全部</el-button>
-          </el-scrollbar>
+          </template>
 
           <div :class="ns.e('empty')" v-else>
             <img src="@/assets/images/notData.png" alt="notData" />

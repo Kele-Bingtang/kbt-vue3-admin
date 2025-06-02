@@ -4,7 +4,7 @@ import { useRoute } from "vue-router";
 import { ElScrollbar, ElMenu } from "element-plus";
 import { useMenu } from "@/composables";
 import { useSettingStore } from "@/stores";
-import MenuItem from "./MenuItem.vue";
+import MenuItem from "./menu-item.vue";
 
 defineOptions({ name: "AsideMenu" });
 

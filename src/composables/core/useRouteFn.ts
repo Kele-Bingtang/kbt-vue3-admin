@@ -21,8 +21,8 @@ export const useRouteFn = () => {
   const modules = import.meta.glob("@/views/**/*.vue");
 
   // IFrame 组件
-  const IFrameView = () => import("@/layout/components/IFrameLayout/IFrameView.vue");
-  const IFrameBlank = () => import("@/layout/components/IFrameLayout/BlankIFrame.vue");
+  const IFrameView = () => import("@/layout/components/iframe/iframe-view.vue");
+  const IFrameBlank = () => import("@/layout/components/iframe/iframe-blank.vue");
 
   /**
    * 初始化动态路由

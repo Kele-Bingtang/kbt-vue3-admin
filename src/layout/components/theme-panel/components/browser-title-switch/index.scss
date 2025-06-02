@@ -1,0 +1,13 @@
+@use "@/styles/mixins/bem" as *;
+
+@include b(browser-title-switch) {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: space-between;
+  margin: 14px 0;
+
+  span {
+    font-size: 14px;
+  }
+}

@@ -64,7 +64,7 @@ export const useUserStore = defineStore(
             signature: "这个人很懒，什么都没有写",
             email: "2456019588@qq.com",
             phone: "13377492843",
-            avatar: "https://youngkbt.cn/public/img/default.png",
+            avatar: "https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar1.png",
             roles: ["visitor"],
             job: "开发工程师",
             dept: "MIT-智能制造科",

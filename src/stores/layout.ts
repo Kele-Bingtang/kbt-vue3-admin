@@ -1,4 +1,4 @@
-import type { IFrame } from "@/layout/components/IFrameLayout/useIFrame";
+import type { IFrame } from "@/layout/components/iframe/use-iframe";
 import type { Component } from "vue";
 import type { IconifyIcon } from "@iconify/vue";
 

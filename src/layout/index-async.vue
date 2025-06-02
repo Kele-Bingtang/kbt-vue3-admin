@@ -1,11 +1,20 @@
 <template>
-  <component :is="LayoutComponents[layoutMode]" />
+  <suspense>
+    <template #default>
+      <component :is="LayoutComponents[layoutMode]" />
+    </template>
+    <template #fallback>
+      <Loading />
+    </template>
+  </suspense>
+
   <ThemePanel />
   <Watermark />
 </template>
 
 <script setup lang="ts">
 import type { Component } from "vue";
+import { defineAsyncComponent } from "vue";
 import { storeToRefs } from "pinia";
 import { useMediaQuery } from "@vueuse/core";
 import { useSettingStore } from "@/stores";
@@ -14,24 +23,19 @@ import { LayoutModeEnum } from "@/enums/appEnum";
 import { mobileMaxWidthMedia } from "@/config";
 import ThemePanel from "./components/theme-panel/index.vue";
 import Watermark from "./components/watermark/index.vue";
-import LayoutVertical from "./layout-vertical/index.vue";
-import LayoutClassic from "./layout-classic/index.vue";
-import LayoutHorizontal from "./layout-horizontal/index.vue";
-import LayoutColumns from "./layout-columns/index.vue";
-import LayoutMixins from "./layout-mixins/index.vue";
-import LayoutIFrame from "./layout-iframe/index.vue";
+import Loading from "./components/loading/index.vue";
 
 import "./base-layout.scss";
 
 defineOptions({ name: "Layout" });
 
 const LayoutComponents: Record<string, Component> = {
-  [LayoutModeEnum.Vertical]: LayoutVertical,
-  [LayoutModeEnum.Classic]: LayoutClassic,
-  [LayoutModeEnum.Horizontal]: LayoutHorizontal,
-  [LayoutModeEnum.Columns]: LayoutColumns,
-  [LayoutModeEnum.Mixins]: LayoutMixins,
-  [LayoutModeEnum.IFrame]: LayoutIFrame,
+  [LayoutModeEnum.Vertical]: defineAsyncComponent(() => import("./layout-vertical/index.vue")),
+  [LayoutModeEnum.Classic]: defineAsyncComponent(() => import("./layout-classic/index.vue")),
+  [LayoutModeEnum.Horizontal]: defineAsyncComponent(() => import("./layout-horizontal/index.vue")),
+  [LayoutModeEnum.Columns]: defineAsyncComponent(() => import("./layout-columns/index.vue")),
+  [LayoutModeEnum.Mixins]: defineAsyncComponent(() => import("./layout-mixins/index.vue")),
+  [LayoutModeEnum.IFrame]: defineAsyncComponent(() => import("./layout-iframe/index.vue")),
 };
 
 const settingStore = useSettingStore();

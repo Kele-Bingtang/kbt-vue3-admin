@@ -1,0 +1,11 @@
+@use "@/styles/mixins/function" as *;
+@use "@/styles/mixins/namespace" as *;
+
+.#{$el-namespace}-button {
+  color: cssVar(layout-tab-text-color);
+
+  &:hover {
+    color: cssVar(main-color);
+    background-color: cssVar(gray-200) !important;
+  }
+}

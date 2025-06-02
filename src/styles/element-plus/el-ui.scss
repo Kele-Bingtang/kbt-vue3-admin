@@ -16,7 +16,6 @@
   // 边框、按钮圆角...
   --#{$el-namespace}-border-radius-base: calc(var(--#{$admin-namespace}-radius) / 3 + 2px) !important;
   --#{$el-namespace}-card-border-radius: calc(var(--#{$admin-namespace}-radius) / 3 + 2px) !important;
-  --#{$el-namespace}-messagebox-border-radius: 10px !important;
 
   .region .#{$el-namespace}-radio-button__original-radio:checked + .#{$el-namespace}-radio-button__inner {
     color: var(--#{$admin-namespace}-main-color);
@@ -95,32 +94,17 @@
   }
 }
 
-/* 自定义 el-dialog 样式 */
-.#{$el-namespace}-dialog {
-  .#{$el-namespace}-dialog__header {
-    border-bottom: 1px solid var(--#{$el-namespace}-border-color-lighter);
-  }
-
-  .#{$el-namespace}-dialog__body {
-    padding-top: 15px;
-  }
-
-  .#{$el-namespace}-dialog__footer {
-    border-top: 1px solid var(--#{$el-namespace}-border-color-lighter);
-  }
+.#{$el-namespace}-dialog__header {
+  padding: 10px 10px 0;
 }
 
-// .#{$el-namespace}-dialog__header {
-//   padding: 10px 10px;
-// }
+.#{$el-namespace}-dialog__body {
+  padding: 25px 10px !important;
+}
 
-// .#{$el-namespace}-dialog__body {
-//   padding: 25px 10px !important;
-// }
-
-// .#{$el-namespace}-dialog__footer {
-//   padding: 10px 10px !important;
-// }
+.#{$el-namespace}-dialog__footer {
+  padding: 10px;
+}
 
 // el-message 样式优化
 // .#{$el-namespace}-message {

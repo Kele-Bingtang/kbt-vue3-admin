@@ -17,7 +17,7 @@ import { useUserStore, useWebSocketStore } from "@/stores";
 import { isFunction } from "@/utils";
 import { useNamespace, useBrowserTitle, useWatchCssVar } from "@/composables";
 import { useTheme } from "@/composables/core/useTheme";
-import { useIFrame } from "@/layout/components/IFrameLayout/useIFrame";
+import { useIFrame } from "@/layout/components/iframe/use-iframe";
 
 const ns = useNamespace();
 
