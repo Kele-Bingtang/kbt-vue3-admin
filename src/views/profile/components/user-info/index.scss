@@ -1,0 +1,63 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
+@include b(user-info) {
+  color: cssVar(text-gray-700);
+
+  @include e(head) {
+    text-align: center;
+
+    @include m(avatar) {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+    }
+
+    @include m(name) {
+      margin-top: 20px;
+      margin-bottom: 0;
+      font-size: 22px;
+      color: cssVar(text-gray-800);
+    }
+
+    @include m(desc) {
+      margin-top: 10px;
+      font-size: 14px;
+    }
+  }
+
+  @include e(info) {
+    margin-top: 20px;
+    text-align: center;
+
+    ul {
+      padding: 0 20px;
+    }
+
+    span {
+      font-size: 14px;
+    }
+  }
+
+  @include e(tag) {
+    margin-top: 20px;
+    text-align: center;
+
+    p {
+      font-size: 15px;
+      font-weight: 500;
+      color: var(--art-text-gray-800);
+    }
+
+    span {
+      display: inline-flex;
+      padding: 3px 6px;
+      margin: 0 10px 10px 0;
+      font-size: 12px;
+      text-wrap: wrap;
+      background: cssVar(main-bg-color);
+      border: 1px solid cssVar(border-color);
+      border-radius: 2px;
+    }
+  }
+}

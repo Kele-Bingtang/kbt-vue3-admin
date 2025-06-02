@@ -1,7 +1,19 @@
-import type { ErrorLog } from ".";
 import { ref } from "vue";
 import { defineStore } from "pinia";
 import { useUserStore } from "./user";
+
+export interface ErrorLog {
+  error: unknown; // 错误对象
+  vm?: ComponentPublicInstance | null; // 发生错误的 Vue 实例
+  info: string; // Vue 组件的错误信息
+  url: string; // 发生错误的 URL
+  hasRead: boolean; // 错误日志是否已读
+  time?: number; // 发生错误的时间
+  userId?: string; // 用户 ID
+  username?: string; // 用户名
+  accessToken?: string; // 用户 token
+  roles?: string[]; // 用户的角色
+}
 
 export const useErrorLogStore = defineStore("errorLogStore", () => {
   const errorLogs = ref<ErrorLog[]>([]);

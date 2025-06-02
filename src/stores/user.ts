@@ -1,4 +1,3 @@
-import type { UserInfo } from ".";
 import type { LoginParams } from "@/api/user";
 import { ref } from "vue";
 import { defineStore } from "pinia";
@@ -6,21 +5,27 @@ import { resetRouter } from "@/router";
 import { useRouteFn } from "@/composables";
 import { useLayoutStore } from "./layout";
 
+export interface UserInfo {
+  userId?: string; // 用户 ID
+  username?: string; // 用户名
+  sex?: string; // 用户性别
+  signature?: string; // 签名
+  email?: string; // 用户邮箱
+  phone?: string; // 用户联系方式
+  avatar?: string; // 用户头像
+  roles?: string[]; // 用户角色
+  job?: string; // 职位
+  dept?: string; // 部门
+  registerTime?: string; // 用户角色
+}
+
 export const useUserStore = defineStore(
   "userStore",
   () => {
     const accessToken = ref("");
     const refreshToken = ref("");
-    const userInfo = ref<Partial<UserInfo>>({
-      userId: "v10001",
-      username: "visitor",
-      sex: "男",
-      email: "2456019588@qq.com",
-      phone: "13377492843",
-      avatar: "https://youngkbt.cn/public/img/default.png",
-      roles: ["visitor"],
-      registerTime: "2022-10-01 19:07:27",
-    });
+
+    const userInfo = ref<UserInfo>({});
     const roles = ref<string[]>([]);
     const searchHistory = ref<RouterConfig[]>([]);
 
@@ -54,12 +59,15 @@ export const useUserStore = defineStore(
         setTimeout(() => {
           resolve({
             userId: "v10001",
-            username: "Visitor",
-            sex: "男",
+            username: "visitor",
+            sex: "保密",
+            signature: "这个人很懒，什么都没有写",
             email: "2456019588@qq.com",
             phone: "13377492843",
-            avatar: "https://cdn.jsdelivr.net/gh/Kele-Bingtang/static/user/avatar1.png",
+            avatar: "https://youngkbt.cn/public/img/default.png",
             roles: ["visitor"],
+            job: "开发工程师",
+            dept: "MIT-智能制造科",
             registerTime: "2022-10-01 19:07:27",
           });
         });
@@ -103,7 +111,7 @@ export const useUserStore = defineStore(
 
     const setUserInfo = (userInfoParam: UserInfo) => {
       userInfo.value = userInfoParam;
-      roles.value = userInfoParam.roles;
+      roles.value = userInfoParam.roles || [];
     };
 
     const setRoles = (rolesParam: string[]) => (roles.value = rolesParam);

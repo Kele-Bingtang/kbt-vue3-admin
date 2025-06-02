@@ -1,24 +1,3 @@
-<template>
-  <div class="timeline-container">
-    <el-timeline reverse>
-      <el-timeline-item
-        v-for="(item, index) of timeline"
-        :key="index"
-        :timestamp="item.timestamp"
-        :icon="item.icon"
-        size="large"
-        type="primary"
-        placement="top"
-      >
-        <el-card>
-          <h4>{{ item.title }}</h4>
-          <p>{{ item.content }}</p>
-        </el-card>
-      </el-timeline-item>
-    </el-timeline>
-  </div>
-</template>
-
 <script setup lang="ts" name="ProfileTimeline">
 import { Loading, SuccessFilled } from "@element-plus/icons-vue";
 
@@ -55,6 +34,27 @@ const timeline = [
   },
 ];
 </script>
+
+<template>
+  <div class="timeline-container">
+    <el-timeline reverse>
+      <el-timeline-item
+        v-for="(item, index) of timeline"
+        :key="index"
+        :timestamp="item.timestamp"
+        :icon="item.icon"
+        size="large"
+        type="primary"
+        placement="top"
+      >
+        <el-card>
+          <h4>{{ item.title }}</h4>
+          <p>{{ item.content }}</p>
+        </el-card>
+      </el-timeline-item>
+    </el-timeline>
+  </div>
+</template>
 
 <style lang="scss">
 .timeline-container {

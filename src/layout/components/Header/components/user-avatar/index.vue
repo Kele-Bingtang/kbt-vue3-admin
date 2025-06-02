@@ -80,12 +80,7 @@ const Avatar = () => {
         <el-divider />
 
         <ul :class="[ns.e('menu'), 'flx-column']">
-          <li
-            :class="[ns.e('menu-item'), 'flx-align-center']"
-            v-for="item in menuList"
-            :key="item.label"
-            @click="item.click"
-          >
+          <li class="flx-align-center" v-for="item in menuList" :key="item.label" @click="item.click">
             <Icon :icon="item.icon || View" class="icon" />
             <span class="label">{{ item.label }}</span>
           </li>

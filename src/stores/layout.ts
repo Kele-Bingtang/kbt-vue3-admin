@@ -1,10 +1,25 @@
-import type { LayoutSizeType, TabProp } from "./interface";
 import type { IFrame } from "@/layout/components/IFrameLayout/useIFrame";
+import type { Component } from "vue";
+import type { IconifyIcon } from "@iconify/vue";
+
 import { ref, watch } from "vue";
 import { defineStore } from "pinia";
 import { useCache } from "@/composables";
 import SystemConfig from "@/config";
 import { useSettingStore } from "./setting";
+
+export type LayoutSizeType = "default" | "small" | "large";
+export type LanguageType = "zh-CN" | "en-US";
+
+// LayoutState
+export interface TabProp {
+  path: string; // 路由的 path
+  name: string; // 路由的 name
+  title: string; // 展示的描述
+  icon: string | IconifyIcon | Component; // 图标
+  close: boolean; // 是否允许关闭
+  meta: MetaProp;
+}
 
 export const useLayoutStore = defineStore(
   "layoutStore",

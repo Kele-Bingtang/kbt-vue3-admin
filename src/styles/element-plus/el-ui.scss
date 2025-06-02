@@ -15,6 +15,7 @@
 
   // 边框、按钮圆角...
   --#{$el-namespace}-border-radius-base: calc(var(--#{$admin-namespace}-radius) / 3 + 2px) !important;
+  --#{$el-namespace}-card-border-radius: calc(var(--#{$admin-namespace}-radius) / 3 + 2px) !important;
   --#{$el-namespace}-messagebox-border-radius: 10px !important;
 
   .region .#{$el-namespace}-radio-button__original-radio:checked + .#{$el-namespace}-radio-button__inner {

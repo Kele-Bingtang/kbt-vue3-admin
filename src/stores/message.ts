@@ -1,7 +1,15 @@
 import { defineStore } from "pinia";
-import type { MessageItem } from ".";
 import { ref } from "vue";
 import { hasReadList, recycleList, unreadList } from "@/mock/message";
+
+export interface MessageItem {
+  id: string;
+  title: string;
+  content: string;
+  description?: string;
+  createTime: string;
+  loading?: boolean;
+}
 
 export const useMessageStore = defineStore("messageStore", () => {
   const unreadMessageList = ref<MessageItem[]>([]);

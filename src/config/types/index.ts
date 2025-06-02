@@ -7,7 +7,7 @@ import type {
   TabNavModeEnum,
   TitleModeEnum,
 } from "@/enums/appEnum";
-import type { LayoutSizeType, LanguageType } from "@/stores/interface";
+import type { LayoutSizeType, LanguageType } from "@/stores";
 
 export interface SystemConfig {
   systemInfo: SystemInfo;

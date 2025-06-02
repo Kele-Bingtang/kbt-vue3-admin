@@ -31,7 +31,7 @@ const handleSelectLanguage = (lang: LanguageType) => {
 
 <template>
   <el-dropdown trigger="click" @command="handleSelectLanguage">
-    <Icon icon="core-language" style="width: 100%; height: 100%" />
+    <Icon icon="core-language" />
 
     <template #dropdown>
       <el-dropdown-menu>

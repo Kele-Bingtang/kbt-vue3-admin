@@ -6,7 +6,7 @@ import { useNamespace } from "@/composables";
 import SystemConfig, { mobileMaxWidthMedia } from "@/config";
 import Fullscreen from "./components/Fullscreen.vue";
 import LanguageSelect from "./components/LanguageSelect.vue";
-import Message from "./components/Message.vue";
+import Notification from "./components/notification/index.vue";
 import UserAvatar from "./components/user-avatar/index.vue";
 import ErrorLog from "./components/ErrorLog.vue";
 import GlobalSearch from "./components/global-search/index.vue";
@@ -35,7 +35,7 @@ const isMobile = useMediaQuery(mobileMaxWidthMedia);
     <div :class="[ns.e('btn'), 'flx-align-center']" :style="{ '--icon-size': ns.cssVar('layout-header-icon-size') }">
       <GlobalSearchInput id="menuSearch" />
       <Fullscreen id="fullscreen" v-if="!isMobile" />
-      <Message id="message" />
+      <Notification id="notification" />
       <LanguageSelect id="languageSelect" />
       <ErrorLog
         id="errorLog"

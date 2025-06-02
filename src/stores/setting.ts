@@ -14,7 +14,7 @@ import SystemConfig from "@/config";
 export const useSettingStore = defineStore(
   "settingStore",
   () => {
-    const { themeConfig, layoutConfig } = SystemConfig;
+    const { themeConfig, keyConfig } = SystemConfig;
 
     const primaryColor = ref(themeConfig.primaryColor);
     const titleMode = ref(themeConfig.titleMode);
@@ -61,7 +61,7 @@ export const useSettingStore = defineStore(
 
     const resetSetting = () => {
       const { removeStorage } = useStorage();
-      removeStorage(`${layoutConfig.cacheKeyPrefix}:settingStore`);
+      removeStorage(`${keyConfig.cacheKeyPrefix}:settingStore`);
       if (!recordTabNav.value) useCache().removeCacheTabNavList();
     };
 
