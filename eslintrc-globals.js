@@ -89,4 +89,7 @@ export default {
   log: "readonly",
   useTemplateRef: "readonly",
   storeToRefs: "readonly",
+  MaybeRef: "readonly",
+  MaybeRefOrGetter: "readonly",
+  toValue: "readonly",
 };

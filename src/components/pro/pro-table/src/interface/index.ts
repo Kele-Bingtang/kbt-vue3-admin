@@ -1,5 +1,5 @@
 import type { VNode, ComponentPublicInstance, ComputedRef, Ref, ShallowRef, InjectionKey } from "vue";
-import type { BreakPoint, Responsive, FormRenderScope, FormType, FormSchemaProps } from "@/components";
+import type { BreakPoint, Responsive, FormRenderScope, FormType, FormColumnProps } from "@/components";
 import type { TableColumnCtx, PopoverProps, TagProps, ButtonProps } from "element-plus";
 import ProTable, { type ProTableProps } from "../index.vue";
 import DialogForm, { type DialogFormProps } from "../components/dialog-form.vue";
@@ -133,7 +133,7 @@ export interface FilterConfig {
 
 export interface EditConfig
   extends Omit<
-    FormSchemaProps,
+    FormColumnProps,
     | "prop"
     | "label"
     | "enum"

@@ -23,12 +23,31 @@ import type {
   ElTooltipProps,
 } from "element-plus";
 import type { VNode, ComputedRef, ComponentPublicInstance, ExtractPropTypes, InjectionKey, Ref } from "vue";
-import ProForm, { type ProFormProps } from "../index.vue";
-import type { TreeProps as CustomTreeProps } from "../components/tree.vue";
+import ProForm, { type ProFormProps } from "./index.vue";
+import type { TreeProps as CustomTreeProps } from "./components/tree.vue";
 import type { TreeProps } from "element-plus/es/components/tree-v2/src/types";
 import type { SelectProps } from "element-plus/es/components/select/src/select";
 import type { SelectProps as SelectV2Props } from "element-plus/es/components/select-v2/src/defaults";
 import type { TimeSelectProps } from "element-plus/es/components/time-select/src/time-select";
+import type { JSX } from "vue/jsx-runtime";
+
+export type FieldValueType =
+  | string
+  | number
+  | boolean
+  | null
+  | undefined
+  | Date
+  | string[]
+  | number[]
+  | boolean[]
+  | Date[]
+  | [Date, Date]
+  | [number, number]
+  | [string, string]
+  | string[][]
+  | number[][]
+  | Record<any, any>;
 
 /**
  * 组件内置导入需要
@@ -101,6 +120,11 @@ export type FormType = PascalCaseComponentName | HyphenCaseComponentName;
 export type ValueType = string | number | boolean | any[];
 
 /**
+ * 渲染函数的返回值的类型
+ */
+export type RenderTypes = string | VNode | JSX.Element | Component;
+
+/**
  * 字典数据类型
  */
 export interface FormOptionProps {
@@ -134,17 +158,17 @@ export interface ProElFormProps extends Partial<FormProps> {
 export type FormFieldNamesProps = {
   label: string;
   value: string;
-  disabled?: string;
-  children?: string;
+  disabled: string;
+  children: string;
 };
 
 /**
  * 自定义 render 的参数类型
  */
 export type FormRenderScope = {
-  model: Record<string, any>;
+  model: FieldValueType;
   data: ValueType;
-  enumData: Record<string, any>;
+  options: Ref<Recordable[]>;
 };
 
 /**
@@ -161,62 +185,29 @@ export interface FormSetProps {
  */
 export interface FormColumnProps<T = any> {
   /**
-   * ElCol Props
-   */
-  col?: Partial<ColProps>;
-  /**
-   * ElFormItem props
-   */
-  formItem?: Partial<FormItemProps>;
-  /**
    * 表单组件 Props
    */
   prop: string;
   /**
    * ElFormItem 的 label 属性
    */
-  label: ValueType | ((model: T) => any) | ComputedRef<ValueType>;
+  label: ValueType | ComputedRef<ValueType>;
+  /**
+   * 是否显示 label
+   */
+  hasLabel?: boolean | Ref<boolean> | ComputedRef<boolean>;
+  /**
+   * 表单组件宽度
+   */
+  width?: string | number;
   /**
    * 使用的表单组件名
    */
   el?: FormType;
   /**
-   * 字典数据，如果 enum 是接口调用，那么可以指定哪个 key 获取 enum 数据，默认返回的数据作为 enum
-   */
-  enum?:
-    | FormOptionProps[]
-    | ((model: T, enumMap: Map<string, Record<string, any>>) => Promise<any>)
-    | ComputedRef<FormOptionProps[]>;
-  /**
-   * 是否缓存 enum 数据
-   * @default true
-   */
-  useCacheEnum?: boolean;
-  /**
-   * 从 enumMap 中获取其他的 enum 数据
-   */
-  useEnumMap?: string | ((enumMap: Map<string, Record<string, any>>) => Record<string, any>);
-  /**
-   * 搭配 useEnumMap 使用，指定 enumMap 的 key
-   */
-  enumKey?: string;
-  /**
-   * 字典指定 label && value && children 的 key 值
-   * @default Object { label: "label", value: "value", children: "children" }
-   */
-  fieldNames?: FormFieldNamesProps;
-  /**
-   * 级联表单的 prop
-   */
-  subProp?: string;
-  /**
-   * 级联表单的 enum
-   */
-  subEnum?: FormOptionProps[] | ((params?: any, enumData?: any) => Promise<any> | FormOptionProps[]);
-  /**
    * 根据 element plus 官方文档来传递，该属性所有值会透传到表单组件
    */
-  props?:
+  elProps?:
     | InputProps
     | InputNumberProps
     | ExtractPropTypes<typeof SelectProps>
@@ -242,28 +233,51 @@ export interface FormColumnProps<T = any> {
     | UploadProps
     | any;
   /**
+   * 表单组件的插槽
+   */
+  elSlots?: { [slotName: string]: (data?: any) => RenderTypes };
+  /**
+   * 字典数据，如果 enum 是接口调用，那么可以指定哪个 key 获取 enum 数据，默认返回的数据作为 enum
+   */
+  options?:
+    | FormOptionProps[]
+    | ((model: T, optionsMap: Map<string, Recordable>) => Promise<FormOptionProps>)
+    | ComputedRef<FormOptionProps[]>
+    | Promise<FormOptionProps[]>;
+  /**
+   * 字典指定 label && value && children 的 key 值
+   * @default Object { label: "label", value: "value", children: "children" }
+   */
+  optionField?: FormFieldNamesProps;
+  /**
+   * 是否缓存 Options 数据
+   * @default true
+   */
+  useCacheOptions?: boolean;
+  /**
+   * 从 OptionsMap 中获取其他的 Options 数据
+   */
+  useOptionsMap?: string | ((optionsMap: Map<string, Recordable>) => Recordable);
+  /**
+   * 搭配 useOptionsMap 使用，指定 Options 的 key
+   */
+  optionProp?: string;
+  /**
+   * ElCol Props
+   */
+  colProps?: Partial<ColProps>;
+  /**
+   * ElFormItem props
+   */
+  formItemProps?: Partial<FormItemProps>;
+  /**
    * 表单排序（从大到小）
    */
   order?: number;
   /**
    * 表单属性的默认值
    */
-  defaultValue?:
-    | ValueType
-    | ((model: T, enumMap: Map<string, Record<string, any>>) => ValueType | any)
-    | ComputedRef<ValueType>;
-  /**
-   * 表单组件宽度
-   */
-  width?: string | number;
-  /**
-   * 自定义搜索内容渲染（tsx 语法）
-   */
-  render?: (scope: FormRenderScope) => VNode;
-  /**
-   * 自定义 render 时候，需要填写 render 里表单组件使用 v-model 绑定的 prop
-   */
-  renderUseProp?: string[];
+  defaultValue?: ValueType | ((model: T, enumMap: Map<string, Recordable>) => ValueType | any) | ComputedRef<ValueType>;
   /**
    * 是否销毁表单，true 销毁，false 不销毁，类似于 v-if
    * @default false
@@ -290,13 +304,21 @@ export interface FormColumnProps<T = any> {
    */
   labelSize?: "default" | "small" | "large";
   /**
-   * 表单组件的插槽
+   * 自定义 label 标题
    */
-  slots?: any;
+  renderLabel?: (label: string, column: FormColumnProps) => RenderTypes;
+  /**
+   * 自定义渲染 el-form-item 下的表单组件
+   */
+  renderEl?: (scope: FormRenderScope) => RenderTypes;
+  /**
+   * 自定义 render 时候，需要填写 render 里表单组件使用 v-model 绑定的 prop
+   */
+  renderUseProp?: string[];
   /**
    * Label 使用 ElToolTip 提示的配置
    */
-  tip?: Partial<ElTooltipProps> & {
+  tooltip?: Partial<ElTooltipProps> & {
     icon?: Component; // ElTooTip 绑定的元素图标
     render?: () => VNode | string; // 自定义 ElTooTip 绑定的元素，将会覆盖图标，传入 ElTooTip 的 default 插槽里
     contentRender?: () => VNode | string; // 自定义 ElTooTip 的内容，传入 ElTooTip 的 content 插槽里
@@ -312,4 +334,4 @@ export type ProFormInstance = Omit<InstanceType<typeof ProForm>, keyof Component
 /**
  * provide 类型
  */
-export const formEnumMapKey: InjectionKey<Ref<Map<string, Record<string, any>[]>>> = Symbol("EnumMap");
+export const formEnumMapKey: InjectionKey<Ref<Map<string, Recordable[]>>> = Symbol("EnumMap");

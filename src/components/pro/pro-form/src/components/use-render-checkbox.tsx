@@ -1,12 +1,12 @@
 import { ElCheckbox, ElCheckboxButton } from "element-plus";
-import { ComponentNameEnum, type FormFieldNamesProps, type FormSchemaProps } from "../interface";
+import { ComponentNameEnum, type FormFieldNamesProps, type FormColumnProps } from "../interface";
 import { hyphenToCamelCase } from "../helper";
 
 export const useRenderCheckbox = () => {
   const renderCheckboxOptions = (
     columnEnum: Record<string, any>[],
     fieldNames: FormFieldNamesProps,
-    column: FormSchemaProps
+    column: FormColumnProps
   ) => {
     const Component =
       hyphenToCamelCase(column.el) === ComponentNameEnum.EL_CHECKBOX_BUTTON ? ElCheckboxButton : ElCheckbox;

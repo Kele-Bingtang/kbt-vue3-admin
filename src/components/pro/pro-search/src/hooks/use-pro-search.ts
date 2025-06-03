@@ -1,4 +1,4 @@
-import type { FormSchemaProps, FormSetProps } from "@/components/pro/pro-form";
+import type { FormColumnProps, FormSetProps } from "@/components/pro/pro-form";
 import ProSearch, { type ProSearchExpose, type ProSearchOnEmits, type ProSearchProps } from "../index.vue";
 import { useNamespace } from "@/composables";
 import { ElConfigProvider } from "element-plus";
@@ -85,7 +85,7 @@ export const useProSearch = () => {
      * @param prop 在哪里新增，number 为下标，字符串为指定的 prop
      * @param position 如果 prop 为字符串，则指定新增到 prop 前还是后
      */
-    addSchema: async (formSchema: FormSchemaProps, prop?: number | string, position: "before" | "after" = "after") => {
+    addSchema: async (formSchema: FormColumnProps, prop?: number | string, position: "before" | "after" = "after") => {
       const search = await getSearch();
       search?.addSchema(formSchema, prop, position);
     },

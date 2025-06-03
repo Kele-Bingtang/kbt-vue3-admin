@@ -7,6 +7,7 @@ import ChartBar from "./components/chart-bar.vue";
 import ChartLineBar from "./components/chart-line-bar.vue";
 import ChartLine from "./components/chart-line.vue";
 import { Avatar, UserFilled, Share, Comment } from "@element-plus/icons-vue";
+import { ProFormItemBeta } from "@/components";
 
 const cardInfo = [
   { title: "访问人数", icon: Avatar, count: 1803, color: "#2d8cf0" },
@@ -40,11 +41,77 @@ const lineBarData = [
   { category: "2022-10-06", lineData: "579", barData: "546", lineName: "访问量", barName: "用户量" },
   { category: "2022-10-07", lineData: "361", barData: "160", lineName: "访问量", barName: "用户量" },
 ];
+
+const options = [
+  {
+    value: "0",
+    label: "陕西",
+    children: [
+      {
+        value: "0-0",
+        label: "西安",
+        children: [
+          { value: "0-0-0", label: "新城区" },
+          { value: "0-0-1", label: "高新区" },
+          { value: "0-0-2", label: "灞桥区" },
+        ],
+      },
+    ],
+  },
+  {
+    value: "1",
+    label: "山西",
+    children: [
+      {
+        value: "1-0",
+        label: "太原",
+        children: [
+          { value: "1-0-0", label: "小店区" },
+          { value: "1-0-1", label: "古交市" },
+          { value: "1-0-2", label: "万柏林区" },
+        ],
+      },
+    ],
+  },
+];
+
+const checkboxOptions = [
+  {
+    label: "四六级",
+    value: "0",
+  },
+  {
+    label: "计算机二级证书",
+    value: "1",
+  },
+  {
+    label: "普通话证书",
+    value: "2",
+  },
+];
+
+const model = ref({
+  name: "",
+  cascader: "",
+  checkbox: [],
+});
 </script>
 
 <template>
   <div class="home-container">
-    <el-row :gutter="20">
+    <ProFormItemBeta v-model="model.name" label="输入框" prop="name" />
+
+    <ProFormItemBeta v-model="model.cascader" el="el-cascader" label="级联" prop="cascader" :options="options" />
+
+    <ProFormItemBeta
+      v-model="model.checkbox"
+      el="el-checkbox-group"
+      label="多选"
+      prop="checkbox"
+      :options="checkboxOptions"
+    />
+
+    <!-- <el-row :gutter="20">
       <el-col :xs="12" :sm="12" :md="8" :lg="6" v-for="(info, i) in cardInfo" :key="`info-${i}`" class="card-col">
         <CardItem shadow="hover" :icon="info.icon" :color="info.color" :icon-size="48">
           <div class="card-title">{{ info.title }}</div>
@@ -77,7 +144,7 @@ const lineBarData = [
       <el-card>
         <ChartLine />
       </el-card>
-    </el-row>
+    </el-row> -->
   </div>
 </template>
 

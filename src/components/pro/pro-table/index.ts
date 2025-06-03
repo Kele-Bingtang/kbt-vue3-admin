@@ -5,7 +5,7 @@ import tableMain from "./src/components/table-main.vue";
 export * from "./src/interface";
 export * from "./src/helper";
 export { type DialogForm, type ProTableOnEmits } from "./src/index.vue";
-export { type DialogFormSchemaProps } from "./src/components/dialog-form.vue";
+export { type DialogFormColumnProps } from "./src/components/dialog-form.vue";
 export { useProTable } from "./src/hooks/use-pro-table";
 
 export const ProTable = useInstall(index);

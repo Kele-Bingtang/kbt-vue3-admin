@@ -16,6 +16,8 @@ export * from "./pro/tree-filter";
 export * from "./pro/pro-steps";
 export * from "./pro/pro-transfer";
 
+export * from "./pro/form";
+
 export * from "./editor/code-mirror";
 export * from "./editor/tinymce";
 export * from "./editor/wang-editor";

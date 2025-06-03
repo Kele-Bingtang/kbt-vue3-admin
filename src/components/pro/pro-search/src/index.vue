@@ -5,7 +5,7 @@ import {
   GridItem,
   ProForm,
   ProFormItem,
-  type FormSchemaProps,
+  type FormColumnProps,
   type BreakPoint,
   useProForm,
   type FormSetProps,
@@ -26,7 +26,7 @@ export type ProSearchExpose = typeof defaultExpose;
 
 export type ActionPosition = "left" | "right" | "block-left" | "block-center" | "block-right";
 
-export type ProSearchSchemaProps = FormSchemaProps & {
+export type ProSearchSchemaProps = FormColumnProps & {
   grid?: Partial<GridItemProps>; // GridItem 的 props
 };
 
@@ -247,7 +247,7 @@ const setSchema = (schemaProps: FormSetProps[]) => {
 };
 
 // 添加 schema
-const addSchema = (formSchema: FormSchemaProps, prop?: number | string, position: "before" | "after" = "after") => {
+const addSchema = (formSchema: FormColumnProps, prop?: number | string, position: "before" | "after" = "after") => {
   const { schema } = getProps.value;
 
   if (isString(prop)) {

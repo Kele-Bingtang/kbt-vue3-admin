@@ -1,6 +1,6 @@
 <script setup lang="tsx">
 import { computed, inject, ref, resolveComponent } from "vue";
-import { ComponentNameEnum, formEnumMapKey, type FormSchemaProps, type PascalCaseComponentName } from "../interface";
+import { ComponentNameEnum, formEnumMapKey, type FormColumnProps, type PascalCaseComponentName } from "../interface";
 import Tree from "./tree.vue";
 import { getProp, hyphenToCamelCase, setComponentSlots, setProp } from "../helper";
 import { useRenderSelect } from "./use-render-select";
@@ -13,7 +13,7 @@ import { componentMap } from "../helper/component-map";
 defineOptions({ name: "ProFormItem" });
 
 interface ProFormItemProps {
-  column: FormSchemaProps;
+  column: FormColumnProps;
   style?: CSSStyleDeclaration;
 }
 

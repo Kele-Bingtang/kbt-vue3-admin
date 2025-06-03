@@ -1,5 +1,5 @@
 import { ElConfigProvider, type FormInstance } from "element-plus";
-import type { FormSchemaProps, FormSetProps, ProFormInstance } from "../interface";
+import type { FormColumnProps, FormSetProps, ProFormInstance } from "../interface";
 import ProForm, { type ProFormOnEmits, type ProFormProps } from "../index.vue";
 import {
   type Ref,
@@ -83,7 +83,7 @@ export const useProForm = () => {
      * @param prop 在哪里新增，number 为下标，字符串为指定的 prop
      * @param position 如果 prop 为字符串，则指定新增到 prop 前还是后
      */
-    addSchema: async (formSchema: FormSchemaProps, prop?: number | string, position: "before" | "after" = "after") => {
+    addSchema: async (formSchema: FormColumnProps, prop?: number | string, position: "before" | "after" = "after") => {
       const form = await getForm();
       form?.addSchema(formSchema, prop, position);
     },
