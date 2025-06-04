@@ -1,5 +1,5 @@
 <script setup lang="ts" name="SimpleProSearch">
-import { ProSearch, type ProSearchSchemaProps } from "@/components";
+import { ProSearch, type ProSearchColumnProps } from "@/components";
 
 const model = ref({});
 
@@ -17,7 +17,7 @@ const createFilter = (queryString: string) => {
   };
 };
 
-const schema: ProSearchSchemaProps[] = [
+const column: ProSearchColumnProps[] = [
   {
     label: "姓名",
     prop: "name",
@@ -27,7 +27,7 @@ const schema: ProSearchSchemaProps[] = [
     label: "性别",
     prop: "sex",
     el: "el-select",
-    enum: [
+    options: [
       { label: "男", value: "1" },
       { label: "女", value: "2" },
     ],
@@ -42,7 +42,7 @@ const schema: ProSearchSchemaProps[] = [
     label: "状态",
     prop: "status",
     el: "el-select",
-    enum: [
+    options: [
       { label: "在职", value: "1" },
       { label: "离职", value: "2" },
     ],
@@ -74,7 +74,7 @@ const loadAll = () => {
 
 <template>
   <el-space fill>
-    <ProSearch :schema="schema" v-model="model" />
+    <ProSearch :column="column" v-model="model" />
     {{ model }}
   </el-space>
 </template>

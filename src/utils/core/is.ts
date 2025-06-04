@@ -53,13 +53,8 @@ export const isUnDef = <T = unknown>(val?: T): val is T => {
  * 是否为对象
  */
 export const isObject = (val: any): val is Record<any, any> => {
-  return val !== null && is(val, "Object") && !Array.isArray(val) && val.constructor === Object;
+  return val !== null && is(val, "Object");
 };
-
-/**
- * 判断是否是 纯对象 object
- */
-export const isPlainObject = (val: any): val is Record<any, any> => isType(val) === "[object Object]";
 
 /**
  * 是否为时间

@@ -1,22 +1,25 @@
 <script setup lang="ts">
-import { ElRadio, ElRadioButton } from "element-plus";
-import { ComponentNameEnum, type FormFieldNamesProps } from "../types";
+import type { FormOptionFieldProps } from "../types";
 import { computed } from "vue";
+import { ElCheckbox, ElCheckboxButton } from "element-plus";
+import { ComponentNameEnum } from "../types";
 
 const props = defineProps<{
   options: Recordable[];
-  optionField: FormFieldNamesProps;
+  optionField: Required<FormOptionFieldProps>;
   el: ComponentNameEnum;
 }>();
 
 // 计算要渲染的组件类型
-const radioComponent = computed(() => (props.el === ComponentNameEnum.EL_RADIO_BUTTON ? ElRadioButton : ElRadio));
+const checkboxComponent = computed(() =>
+  props.el === ComponentNameEnum.EL_CHECKBOX_BUTTON ? ElCheckboxButton : ElCheckbox
+);
 </script>
 
 <template>
   <component
     v-for="option in options"
-    :is="radioComponent"
+    :is="checkboxComponent"
     :key="option[optionField.value]"
     :disabled="option[optionField.disabled]"
     :label="option[optionField.label]"

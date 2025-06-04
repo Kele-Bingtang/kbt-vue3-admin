@@ -5,7 +5,7 @@ import {
   GridItem,
   ProForm,
   ProFormItem,
-  type FormColumnProps,
+  type FormColumn,
   type BreakPoint,
   useProForm,
   type FormSetProps,
@@ -15,7 +15,7 @@ import {
 } from "@/components";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
-import { ElFormItem, ElButton, ElIcon, type FormItemProp } from "element-plus";
+import { ElButton, ElIcon, type FormItemProp } from "element-plus";
 import { isEmpty, isObject, isString } from "@/utils";
 
 defineOptions({ name: "ProSearch" });
@@ -26,13 +26,13 @@ export type ProSearchExpose = typeof defaultExpose;
 
 export type ActionPosition = "left" | "right" | "block-left" | "block-center" | "block-right";
 
-export type ProSearchSchemaProps = FormColumnProps & {
+export type ProSearchColumnProps = FormColumn & {
   grid?: Partial<GridItemProps>; // GridItem 的 props
 };
 
 export interface ProSearchProps {
   modeValue?: Record<string, any>; // 搜索表单值
-  schema?: ProSearchSchemaProps[]; // 搜索配置列
+  column?: ProSearchColumnProps[]; // 搜索配置列
   position?: ActionPosition; // Action 位置，block 代表换行
   useCollapsed?: boolean; // 是否使用折叠功能
   searchCols?: number | Record<BreakPoint, number>; // 响应式布局
@@ -50,7 +50,7 @@ export interface ProSearchProps {
 // 默认值
 const props = withDefaults(defineProps<ProSearchProps>(), {
   modeValue: () => ({}),
-  schema: () => [],
+  column: () => [],
   position: "right",
   useCollapsed: true,
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
@@ -82,11 +82,11 @@ const emits = defineEmits<ProSearchEmits>();
 const { formRegister, formMethods, formElState } = useProForm();
 const { getElFormExpose, getFormData, getFormExpose } = formMethods;
 
-const schemaForm = computed(() =>
-  props.schema
+const columnForm = computed(() =>
+  props.column
     .filter(item => {
       const { formRef } = formElState;
-      const destroy = formRef?.isDestroy(item) || item.destroy;
+      const destroy = formRef?.destroyOrInit(item) || item.destroy;
       const hidden = formRef?.isHidden(item) || item.hidden;
 
       if (destroy) delete model.value[item.prop];
@@ -111,7 +111,7 @@ const getProps = computed(() => {
 });
 
 // 获取响应式设置
-const getResponsive = (item: ProSearchSchemaProps) => {
+const getResponsive = (item: ProSearchColumnProps) => {
   return {
     span: item.grid?.span,
     offset: item.grid?.offset ?? 0,
@@ -135,10 +135,10 @@ const rowSpan = computed(() => {
 
 // 判断是否显示 展开/合并 按钮
 const showCollapse = computed(() => {
-  const { schema, searchCols } = getProps.value;
+  const { column, searchCols } = getProps.value;
 
   let show = false;
-  schema.reduce((prev, current) => {
+  column.reduce((prev, current) => {
     prev +=
       ((current.grid && current.grid[breakPoint.value]?.span) ?? current.grid?.span ?? 1) +
       ((current.grid && current.grid[breakPoint.value]?.offset) ?? current.grid?.offset ?? 0);
@@ -234,11 +234,11 @@ const setProps = (props: ProSearchProps = {}) => {
   mergeProps.value = Object.assign(unref(mergeProps), props);
 };
 
-// 设置 schema
-const setSchema = (schemaProps: FormSetProps[]) => {
-  const { schema } = getProps.value;
-  for (const v of schema) {
-    for (const item of schemaProps) {
+// 设置 column
+const setColumn = (columnProps: FormSetProps[]) => {
+  const { column } = getProps.value;
+  for (const v of column) {
+    for (const item of columnProps) {
       if (v.prop === item.prop) {
         setProp(v, item.field, item.value);
       }
@@ -246,26 +246,26 @@ const setSchema = (schemaProps: FormSetProps[]) => {
   }
 };
 
-// 添加 schema
-const addSchema = (formSchema: FormColumnProps, prop?: number | string, position: "before" | "after" = "after") => {
-  const { schema } = getProps.value;
+// 添加 column
+const addColumn = (formColumn: FormColumn, prop?: number | string, position: "before" | "after" = "after") => {
+  const { column } = getProps.value;
 
   if (isString(prop)) {
-    return schema.forEach((s, i) => {
-      if (s.prop === prop) position === "after" ? formSchema.splice(i + 1, 0, s) : formSchema.splice(i, 0, s);
+    return column.forEach((s, i) => {
+      if (s.prop === prop) position === "after" ? formColumn.splice(i + 1, 0, s) : formColumn.splice(i, 0, s);
     });
   }
-  if (prop !== undefined) return schema.splice(prop, 0, formSchema);
-  return schema.push(formSchema);
+  if (prop !== undefined) return column.splice(prop, 0, formColumn);
+  return column.push(formColumn);
 };
 
-// 删除 schema
-const delSchema = (prop: string) => {
-  const { schema } = getProps.value;
+// 删除 column
+const delColumn = (prop: string) => {
+  const { column } = getProps.value;
 
-  const index = schema.findIndex(item => item.prop === prop);
+  const index = column.findIndex(item => item.prop === prop);
   if (index > -1) {
-    schema.splice(index, 1);
+    column.splice(index, 1);
   }
 };
 
@@ -275,10 +275,10 @@ const defaultExpose = {
   getFormData,
   toggleCollapsed,
   setProps,
-  setSchema,
+  setColumn,
   setValues,
-  delSchema,
-  addSchema,
+  delColumn,
+  addColumn,
 };
 
 onMounted(() => {
@@ -289,54 +289,50 @@ defineExpose(defaultExpose);
 </script>
 
 <template>
-  <div v-if="schema.length" :class="`card ${ns.b()}`">
-    <ProForm :schema="schema" v-model="model" @register="formRegister" @validate="onFormValidate" :enum-map-props>
-      <template #default="{ parseLabel, getComponentWidth }">
-        <Grid
-          ref="gridRef"
-          :collapsed="getProps.useCollapsed ? getProps.collapsed : false"
-          :cols="getProps.searchCols"
-          :gap="getProps.gap"
-          :collapsedRows="getProps.collapsedRows"
-        >
-          <GridItem v-for="item in schemaForm" :key="item.prop" v-bind="getResponsive(item)" :index="item._index">
-            <el-form-item :label="parseLabel(item.label)">
-              <ProFormItem :column="item" v-model="model" :style="getComponentWidth(item)" />
-            </el-form-item>
-          </GridItem>
+  <div v-if="column.length" :class="`card ${ns.b()}`">
+    <ProForm :column="column" v-model="model" @register="formRegister" @validate="onFormValidate" :enum-map-props>
+      <Grid
+        ref="gridRef"
+        :collapsed="getProps.useCollapsed ? getProps.collapsed : false"
+        :cols="getProps.searchCols"
+        :gap="getProps.gap"
+        :collapsedRows="getProps.collapsedRows"
+      >
+        <GridItem v-for="column in columnForm" :key="column.prop" v-bind="getResponsive(column)" :index="column._index">
+          <ProFormItem v-model="model" v-bind="column" />
+        </GridItem>
 
-          <GridItem :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
-            <div :style="style">
-              <slot name="action" :model="model" :showCollapse="showCollapse" :toggleCollapsed="toggleCollapsed">
-                <el-button
-                  v-if="getProps.showSearch"
-                  type="primary"
-                  :icon="Search"
-                  @click="search"
-                  :loading="getProps.searchLoading"
-                >
-                  搜索
-                </el-button>
-                <el-button v-if="getProps.showReset" :icon="Delete" @click="reset" :loading="getProps.resetLoading">
-                  重置
-                </el-button>
-                <el-button
-                  v-if="getProps.useCollapsed === false ? false : showCollapse"
-                  type="primary"
-                  link
-                  class="search-isOpen"
-                  @click="toggleCollapsed()"
-                >
-                  {{ getProps.collapsed ? "展开" : "折叠" }}
-                  <el-icon class="el-icon--right">
-                    <component :is="getProps.collapsed ? ArrowDown : ArrowUp"></component>
-                  </el-icon>
-                </el-button>
-              </slot>
-            </div>
-          </GridItem>
-        </Grid>
-      </template>
+        <GridItem :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
+          <div :style="style">
+            <slot name="action" :model="model" :showCollapse="showCollapse" :toggleCollapsed="toggleCollapsed">
+              <el-button
+                v-if="getProps.showSearch"
+                type="primary"
+                :icon="Search"
+                @click="search"
+                :loading="getProps.searchLoading"
+              >
+                搜索
+              </el-button>
+              <el-button v-if="getProps.showReset" :icon="Delete" @click="reset" :loading="getProps.resetLoading">
+                重置
+              </el-button>
+              <el-button
+                v-if="getProps.useCollapsed === false ? false : showCollapse"
+                type="primary"
+                link
+                class="search-isOpen"
+                @click="toggleCollapsed()"
+              >
+                {{ getProps.collapsed ? "展开" : "折叠" }}
+                <el-icon class="el-icon--right">
+                  <component :is="getProps.collapsed ? ArrowDown : ArrowUp"></component>
+                </el-icon>
+              </el-button>
+            </slot>
+          </div>
+        </GridItem>
+      </Grid>
     </ProForm>
   </div>
 </template>

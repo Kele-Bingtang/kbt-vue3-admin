@@ -1,73 +1,44 @@
 <script setup lang="ts">
-import {
-  shallowRef,
-  ref,
-  watch,
-  unref,
-  onMounted,
-  computed,
-  type ComponentPublicInstance,
-  type ComputedRef,
-} from "vue";
-import { defineAsyncComponent } from "vue";
-import {
-  ComponentNameEnum,
-  type FormColumnProps,
-  type FormSetProps,
-  type ProElFormProps,
-  type ValueType,
-} from "./types";
-import {
-  ElRow,
-  ElCol,
-  ElForm,
-  ElFormItem,
-  ElDivider,
-  type FormInstance,
-  type RowProps,
-  type ColProps,
-  type FormItemProp,
-} from "element-plus";
-import { getProp, setProp, hyphenToCamelCase, deleteObjProperty } from "./helper";
+import type { FormColumn, FormSetProps, ProElFormProps } from "./types";
+import type { FormInstance, RowProps, ColProps, FormItemProp } from "element-plus";
+import type { FormOptionProps } from "@/components/pro/form-item";
+import { shallowRef, ref, watch, unref, onMounted, computed } from "vue";
+import { ElRow, ElCol, ElForm } from "element-plus";
+import { ProFormItem, formatValue } from "@/components/pro/form-item";
 import { useNamespace } from "@/composables";
-import { addUnit, isString } from "@/utils";
+import { isFunction, isPromise, isString } from "@/utils";
+import { getProp, setProp, deleteObjProperty } from "./helper";
 
-// 定义组件
-const ProFormItem = defineAsyncComponent(() => import("./form-item.vue"));
-
-// 组件选项
 defineOptions({ name: "ProForm" });
 
-const ns = useNamespace("pro-form");
-
 export interface ProFormProps {
-  modelValue?: Record<string, any>;
-  schema?: FormColumnProps[]; // 表单配置项
-  elFormProps?: ProElFormProps | Record<string, any>; // ElForm 的 props
-  useCol?: boolean; // 是否使用栅格布局
-  // 栅格布局全局设置
-  rowProps?: Partial<RowProps>;
-  colProps?: Partial<ColProps>;
-  onlyRenderComponent?: boolean; // 是否只渲染 ProFormItem 组件，只使用表单组件
-  dynamicModel?: boolean; // 动态 model，如果 schema 发生变化，则重新渲染 model 表单数据（将不存在 schema 的 prop 从 model 中去掉），默认启用 true
+  column?: FormColumn[]; // 表单配置项
+  elFormProps?: ProElFormProps | Recordable; // ElForm props
+  useFlexLayout?: boolean; // 是否使用栅格布局
+  rowProps?: Partial<RowProps>; // ElRow Props
+  colProps?: Partial<ColProps>; // ElCol Props
+  onlyRenderEl?: boolean; // 是否只渲染 ProFormItem 组件，只使用表单组件
+  dynamicModel?: boolean; // 动态 model，如果 column 发生变化，则重新渲染 model 表单数据（将不存在 column 的 prop 从 model 中去掉），默认启用 true
   includeModelKeys?: string[]; // 搭配 dynamicModel 使用，清除 model 不存在的 prop 时，指定保留 prop
-  enumMapProps?: Map<string, Record<string, any>[]>; // 存储 enum 值。该 props 是搭配 ProTable 使用，因为 ProTable 已经初始化部分字典数据，因此不需要 ProForm 再次请求这些字典数据
 }
 
 const props = withDefaults(defineProps<ProFormProps>(), {
-  modelValue: () => ({}),
-  schema: () => [],
-  useCol: true,
-  formProps: () => ({}),
-  onlyRenderComponent: false,
+  column: () => [],
+  elFormProps: () => ({}),
+  useFlexLayout: true,
+  rowProps: () => ({}),
+  colProps: () => ({}),
+  onlyRenderEl: false,
   dynamicModel: true,
   includeModelKeys: () => [],
 });
 
-const model = defineModel<Record<string, any>>({ default: () => ({}) });
+const ns = useNamespace("pro-form");
+
+const model = defineModel<Recordable>({ default: () => ({}) });
 
 // 存储 ElForm 实例
-const elFormRef = shallowRef<FormInstance>();
+const elFormRef = useTemplateRef<FormInstance>("elFormRef");
 // 存储表单组件实例
 const proFormItemRefs = shallowRef<Record<string, InstanceType<typeof ProFormItem>>>({});
 
@@ -76,58 +47,42 @@ const mergeProps = ref<ProFormProps>({});
 const getProps = computed(() => {
   const propsObj = { ...props };
   Object.assign(propsObj, mergeProps.value);
+
   return propsObj;
 });
 
 // 计算属性：过滤掉需要销毁的表单项
-const filteredSchema = computed(() => {
-  return getProps.value.schema.filter(item => !isDestroy(item));
-});
+const filteredColumn = computed(() => getProps.value.column.filter(item => !destroyOrInit(item)));
 
 // 定义 enumMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
-const enumMap = ref(props.enumMapProps || new Map<string, Record<string, any>[]>());
+const enumMap = ref(new Map<string, FormOptionProps[] | ComputedRef<FormOptionProps[]>>());
 
-// 初始化默认值
-const initDefaultValue = async ({ defaultValue, fieldNames, prop }: FormColumnProps) => {
-  const formConst = model.value;
-  const value = getProp(formConst, prop);
+const setEnumMap = async ({ options, prop, useCacheOptions = true }: FormColumn) => {
+  if (!options) return;
 
-  if (value || value === false || value === 0) return;
+  const enumMapConst = enumMap.value;
 
-  const defaultValueConst = unref(defaultValue);
-  // 设置表单项的默认值，如果存在值，则不需要赋默认值
-  if (defaultValueConst !== undefined && defaultValueConst !== null) {
-    if (typeof defaultValueConst !== "function") return setProp(formConst, prop, defaultValueConst);
+  // 如果当前 enumMap 存在相同的值 return & 开启缓存功能
+  if (useCacheOptions && unref(enumMapConst.get(prop))?.length) return;
 
-    return setProp(formConst, prop, await defaultValueConst(formConst, enumMap.value));
-  }
+  // 当前 enum 为静态数据，则直接存储到 enumMap
+  if (isPromise(options)) return enumMapConst.set(prop, await options);
+  if (!isFunction(options)) return enumMapConst.set(prop, options);
 
-  // 如果没有设置默认值，则判断后台是否返回 isDefault 为 Y 的枚举
-  const enumData = enumMap.value.get(prop);
-  if (enumData?.length) {
-    // 找出 isDefault 为 Y 的 value
-    const data = enumData.filter(item => item.isDefault === "Y");
+  // 为了防止接口执行慢，导致页面下拉等枚举数据无法填充，所以预先存储为 [] 方便获取，接口返回后再二次存储
+  enumMapConst.set(prop!, []);
 
-    return data.length && setProp(formConst, prop, data[0][fieldNames?.value ?? "value"]);
-  }
-};
-
-/**
- * 是否隐藏表单项
- */
-const isHidden = (item: FormColumnProps) => {
-  const { hidden } = item;
-  if (typeof hidden === "function") return hidden(model.value);
-  return hidden;
+  const value = await options(model.value, enumMapConst);
+  // 适配 enum 接口返回 data 以及自定义函数返回数组
+  enumMapConst.set(prop, (value as any)?.data || value);
 };
 
 /**
  * 是否销毁表单项 & 是否初始化表单项默认值
  */
-const isDestroy = (item: FormColumnProps) => {
-  let destroy: boolean;
-  if (typeof item.destroy === "function") destroy = item.destroy(model.value);
-  else destroy = item.destroy || false;
+const destroyOrInit = (item: FormColumn) => {
+  let destroy = item.destroy ?? false;
+  if (isFunction(item.destroy)) destroy = item.destroy(model.value) ?? false;
 
   // 如果不销毁，则初始化表单默认值，反之则重置为空
   if (!destroy) initDefaultValue(item);
@@ -136,36 +91,56 @@ const isDestroy = (item: FormColumnProps) => {
   return destroy;
 };
 
-const parseLabel = (label: ValueType | ((model: Record<string, any>) => string) | ComputedRef<ValueType>) => {
-  if (typeof label === "function") return label(model.value);
-  return unref(label) + "";
+// 初始化默认值
+const initDefaultValue = async ({ defaultValue, optionField, prop }: FormColumn) => {
+  const modelConst = model.value;
+  const value = getProp(modelConst, prop);
+
+  // 如果有值，则不需要赋默认值
+  if (value !== "" && value !== null && value !== undefined) return;
+
+  const defaultValueConst = await formatValue<FormColumn["defaultValue"]>(defaultValue, [modelConst, enumMap.value]);
+
+  if (defaultValueConst) return setProp(modelConst, prop, defaultValueConst);
+
+  // 如果没有设置默认值，则判断字典里是否有 isDefault 为 Y 的枚举
+  const enumData = unref(enumMap.value.get(prop));
+  if (enumData?.length) {
+    // 找出 isDefault 为 Y 的 value
+    const data = enumData.find(item => item.isDefault === "Y");
+
+    return data && setProp(modelConst, prop, data[optionField?.value ?? "value"]);
+  }
 };
 
-// 监听表单结构化数组，重新组装 schema
+// 监听表单结构化数组，重新组装 column
 watch(
-  () => getProps.value.schema,
-  (schema = []) => {
-    schema.forEach((item, index) => {
+  filteredColumn,
+  (column = []) => {
+    const { dynamicModel, includeModelKeys } = getProps.value;
+
+    column.forEach((item, index) => {
+      // 设置枚举
+      setEnumMap(item);
+
       // 设置表单排序默认值
       item && (item.order = item.order ?? index + 2);
-
       // 初始化值
       initDefaultValue(item);
     });
 
     // 排序表单项
-    schema.sort((a, b) => a.order! - b.order!);
+    column.sort((a, b) => a.order! - b.order!);
 
-    if (getProps.value.dynamicModel) {
-      // 如果 schema 对应的 prop 不存在，则删除 model 中的对应的 prop
-      Object.keys(model.value).forEach(key => {
-        const isExist = schema.some(
-          item =>
-            item.prop === key || item.renderUseProp?.includes(key) || getProps.value.includeModelKeys?.includes(key)
-        );
-        if (!isExist) delete model.value[key];
-      });
-    }
+    if (!dynamicModel) return;
+
+    // 如果 column 对应的 prop 不存在，则删除 model 中的对应的 prop
+    Object.keys(model.value).forEach(key => {
+      const isExist = column.some(
+        item => item.prop === key || item.renderUseProp?.includes(key) || includeModelKeys?.includes(key)
+      );
+      if (!isExist) delete model.value[key];
+    });
   },
   {
     immediate: true,
@@ -173,37 +148,23 @@ watch(
   }
 );
 
-// 获取每个表单的宽度
-const getComponentWidth = ({ width, props: componentProps }: FormColumnProps) => {
-  const { elFormProps = {} } = getProps.value;
-  const style = componentProps?.style || { width: "100%" }; // 默认宽度 100%
-  if (width) return { ...style, width: addUnit(width) };
-  if (elFormProps.fixWidth) return { ...style, width: addUnit(elFormProps.width || elFormProps.inline ? 220 : "100%") };
-  return style;
+/**
+ * 是否隐藏表单项
+ */
+const isHidden = (item: FormColumn) => {
+  const { hidden } = item;
+  if (isFunction(hidden)) return hidden(model.value) ?? false;
+  return hidden;
 };
 
-// 计算属性：获取列的 props
-const getColProps = (item: FormColumnProps) => {
+// 获取 ElCol Props
+const getColProps = (item: FormColumn) => {
+  const { colProps } = getProps.value;
   return {
-    ...(item.span ? {} : { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }),
-    ...getProps.value.colProps,
-    ...item.col,
+    ...(colProps.span ? {} : { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }),
+    ...colProps,
+    ...toValue(item.colProps),
   };
-};
-
-// 判断是否是分隔线组件
-const renderDivider = (item: FormColumnProps) => {
-  const el = hyphenToCamelCase(item.el) || "";
-  return el === ComponentNameEnum.EL_DIVIDER;
-};
-
-// 获取标题样式
-const formatDividerTitle = (labelSize = "default") => {
-  if (labelSize === "default") return { fontSize: "16px", fontWeight: 600 };
-  if (labelSize === "small") return { fontSize: "14px", fontWeight: 600 };
-  if (labelSize === "large") return { fontSize: "18px", fontWeight: 600 };
-
-  return {};
 };
 
 // 设置 ProFormItem 的引用
@@ -212,7 +173,7 @@ const setProFormItemRef = (el: any, prop: string) => {
 };
 
 type ProFormEmits = {
-  register: [proFormRef?: ComponentPublicInstance | null | any, elFormRef?: FormInstance];
+  register: [proFormRef: any, elFormRef: FormInstance | null];
   validate: [prop: FormItemProp, isValid: boolean, message: string]; // ElForm 自带的事件
 };
 
@@ -222,12 +183,12 @@ export type ProFormOnEmits = keyOnPrefix<ProFormEmits>;
 const emits = defineEmits<ProFormEmits>();
 
 onMounted(() => {
-  emits("register", elFormRef.value?.$parent, elFormRef.value);
+  emits("register", elFormRef.value?.$parent || null, elFormRef.value);
 });
 
 // 设置 form 的值
-const setValues = (data: Record<string, any> = {}) => {
-  model.value = Object.assign(model.value, data);
+const setValues = (modelValue: Recordable = {}) => {
+  model.value = Object.assign(model.value, modelValue);
 };
 
 // 设置 ProForm 组件的 props
@@ -235,11 +196,11 @@ const setProps = (props: Partial<ProFormProps> = {}) => {
   mergeProps.value = Object.assign(unref(mergeProps), props);
 };
 
-// 设置 schema
-const setSchema = (schemaSet: FormSetProps[]) => {
-  const { schema } = getProps.value;
-  for (const v of schema) {
-    for (const item of schemaSet) {
+// 设置 column
+const setColumn = (columnSet: FormSetProps[]) => {
+  const { column } = getProps.value;
+  for (const v of column) {
+    for (const item of columnSet) {
       if (v.prop === item.prop) {
         setProp(v, item.field, item.value);
       }
@@ -247,25 +208,25 @@ const setSchema = (schemaSet: FormSetProps[]) => {
   }
 };
 
-// 添加 schema
-const addSchema = (formSchema: FormColumnProps, prop?: number | string, position: "before" | "after" = "after") => {
-  const { schema } = getProps.value;
+// 添加 column
+const addColumn = (formColumn: FormColumn, prop?: number | string, position: "before" | "after" = "after") => {
+  const { column } = getProps.value;
 
   if (isString(prop)) {
-    return schema.forEach((s, i) => {
-      if (s.prop === prop) position === "after" ? formSchema.splice(i + 1, 0, s) : formSchema.splice(i, 0, s);
+    return column.forEach((s, i) => {
+      if (s.prop === prop) position === "after" ? formColumn.splice(i + 1, 0, s) : formColumn.splice(i, 0, s);
     });
   }
-  if (prop !== undefined) return schema.splice(prop, 0, formSchema);
-  return schema.push(formSchema);
+  if (prop !== undefined) return column.splice(prop, 0, formColumn);
+  return column.push(formColumn);
 };
 
-// 删除 schema
-const delSchema = (prop: string) => {
-  const { schema } = getProps.value;
+// 删除 column
+const delColumn = (prop: string) => {
+  const { column } = getProps.value;
 
-  const index = schema.findIndex(item => item.prop === prop);
-  if (index > -1) schema.splice(index, 1);
+  const index = column.findIndex(item => item.prop === prop);
+  if (index > -1) column.splice(index, 1);
 };
 
 // 获取 formItem 实例
@@ -283,59 +244,42 @@ defineExpose({
   model,
   setValues,
   setProps,
-  setSchema,
-  addSchema,
-  delSchema,
+  setColumn,
+  addColumn,
+  delColumn,
   getFormItemExpose,
   getComponentExpose,
-  getComponentWidth,
-  parseLabel,
-  isDestroy,
+  destroyOrInit,
   isHidden,
 });
 </script>
 
 <template>
-  <el-form ref="elFormRef" v-bind="elFormProps" :model="model" :class="ns.b()">
-    <slot
-      :get-component-width="getComponentWidth"
-      :parse-label="parseLabel"
-      :is-destroy="isDestroy"
-      :is-hidden="isHidden"
-    >
-      <template v-if="useCol">
-        <el-row :gutter="20" v-bind="rowProps" style="width: 100%">
-          <el-col v-for="item in filteredSchema" :key="item.prop" v-show="!isHidden(item)" v-bind="getColProps(item)">
-            <el-divider v-if="renderDivider(item)" v-bind="item.props">
-              <span :style="formatDividerTitle(item?.labelSize)">
-                {{ parseLabel(item.label) }}
-              </span>
-            </el-divider>
+  <el-form ref="elFormRef" v-bind="getProps.elFormProps" :model="model" :class="ns.b()">
+    <slot>
+      <el-row v-if="getProps.useFlexLayout" :gutter="20" v-bind="getProps.rowProps" style="width: 100%">
+        <el-col v-for="item in filteredColumn" :key="item.prop" v-show="!isHidden(item)" v-bind="getColProps(item)">
+          <ProFormItem
+            :ref="el => setProFormItemRef(el, item.prop)"
+            :model-value="getProp(model, item.prop)"
+            @update:model-value="v => setProp(model, item.prop, v)"
+            v-bind="{ width: elFormProps.width, ...item }"
+            :option="enumMap.get(item.optionsProp || item.prop)"
+          />
+        </el-col>
+      </el-row>
 
-            <ProFormItem v-else :ref="el => setProFormItemRef(el, item.prop)" v-bind="{ ...item }" />
-          </el-col>
-        </el-row>
+      <template v-else v-for="item in filteredColumn" :key="item.prop">
+        <ProFormItem
+          :ref="el => setProFormItemRef(el, item.prop)"
+          :model-value="getProp(model, item.prop, item.valueFormat)"
+          @update:modelValue="v => setProp(model, item.prop, v)"
+          v-bind="item"
+          v-show="!isHidden(item)"
+        />
       </template>
 
-      <template v-else>
-        <template v-for="item in filteredSchema" :key="item.prop">
-          <el-divider v-if="renderDivider(item)" v-bind="item.props">
-            <span :style="formatDividerTitle(item.labelSize)">
-              {{ parseLabel(item.label) }}
-            </span>
-          </el-divider>
-
-          <ProFormItem v-else v-bind="{ ...item }" v-show="!isHidden(item)" />
-        </template>
-      </template>
-
-      <el-form-item v-if="$slots.operation">
-        <slot name="operation" :model="model" />
-      </el-form-item>
+      <slot name="footer" :model="model" />
     </slot>
   </el-form>
 </template>
-
-<style lang="scss" scoped>
-@use "./index";
-</style>

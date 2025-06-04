@@ -1,0 +1,13 @@
+import { useInstall } from "@/utils";
+import index from "./src/index.vue";
+import Tree from "./src/components/tree.vue";
+
+export type { ProFormItemProps } from "./src/index.vue";
+export * from "./src/types";
+export * from "./src/helper";
+
+export { Tree };
+
+export const ProFormItem = useInstall(index);
+
+export default index;

@@ -1,6 +1,6 @@
 <script setup lang="ts" name="SimpleProForm">
 import { ref } from "vue";
-import { ProForm, type FormSchemaProps, type ProElFormProps } from "@/components";
+import { ProForm, ProFormItem, type ProElFormProps, type FormColumn } from "@/components";
 
 const model = ref<Record<string, any>>({});
 
@@ -14,7 +14,7 @@ const elFormProps: ProElFormProps = {
 };
 
 // 表单列配置项 (formItem 代表 item 配置项，attrs 代表 输入、选择框 配置项)
-const schema: FormSchemaProps[] = [
+const column: FormColumn[] = [
   {
     formItem: { labelWidth: "80px", required: true },
     label: "用户名",
@@ -36,14 +36,81 @@ const schema: FormSchemaProps[] = [
     props: { placeholder: "请输入邮箱", clearable: true },
   },
 ];
+
+const options = [
+  {
+    value: "0",
+    label: "陕西",
+    children: [
+      {
+        value: "0-0",
+        label: "西安",
+        children: [
+          { value: "0-0-0", label: "新城区" },
+          { value: "0-0-1", label: "高新区" },
+          { value: "0-0-2", label: "灞桥区" },
+        ],
+      },
+    ],
+  },
+  {
+    value: "1",
+    label: "山西",
+    children: [
+      {
+        value: "1-0",
+        label: "太原",
+        children: [
+          { value: "1-0-0", label: "小店区" },
+          { value: "1-0-1", label: "古交市" },
+          { value: "1-0-2", label: "万柏林区" },
+        ],
+      },
+    ],
+  },
+];
+
+const checkboxOptions = [
+  {
+    label: "四六级",
+    value: "0",
+  },
+  {
+    label: "计算机二级证书",
+    value: "1",
+  },
+  {
+    label: "普通话证书",
+    value: "2",
+  },
+];
+
+const model2 = ref({
+  name: "",
+  cascader: "",
+  checkbox: [],
+});
 </script>
 
 <template>
   <div>
     <div class="card">
-      <ProForm :elFormProps="elFormProps" :schema="schema" v-model="model" />
-    </div>
+      <h4>1 个 ProForm</h4>
+      <ProForm :elFormProps="elFormProps" :column v-model="model" />
+      {{ model }}
 
-    {{ model }}
+      <h4>3 个 ProFormItem</h4>
+
+      <ProFormItem v-model="model2.name" label="输入框" prop="name" />
+      <ProFormItem v-model="model2.cascader" el="el-cascader" label="级联" prop="cascader" :options="options" />
+      <ProFormItem
+        v-model="model2.checkbox"
+        el="el-checkbox-group"
+        label="多选"
+        prop="checkbox"
+        :options="checkboxOptions"
+      />
+      {{ model2 }}
+    </div>
   </div>
 </template>

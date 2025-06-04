@@ -1,5 +1,5 @@
 <script setup lang="tsx" name="CreateProForm">
-import { type FormSchemaProps, useProForm, type ProElFormProps } from "@/components";
+import { type FormColumn, useProForm, type ProElFormProps } from "@/components";
 import { ElButton, ElRadio, ElMessageBox, ElMessage, type FormItemProp } from "element-plus";
 
 const model1 = ref<Record<string, any>>({});
@@ -15,7 +15,7 @@ const {
 const RenderProForm = (_: any, context: Record<string, any>) => {
   return createFormComponent(
     {
-      schema: schema,
+      column: column,
       modelValue: model1.value,
       elFormProps,
       onValidate: formValidate,
@@ -26,7 +26,7 @@ const RenderProForm = (_: any, context: Record<string, any>) => {
 
 onMounted(() => {
   createForm("proFormRef", {
-    schema: schema,
+    column: column,
     modelValue: model2.value,
     elFormProps,
     onValidate: formValidate,
@@ -46,25 +46,25 @@ const elFormProps: ProElFormProps = {
   labelSuffix: " :",
 };
 
-const schema = reactive<FormSchemaProps[]>([
+const column = reactive<FormColumn[]>([
   {
     label: "使用 ProForm",
     prop: "input",
     el: "ElDivider",
   },
   {
-    formItem: { required: true },
+    formItemProps: { required: true },
     label: "输入框",
     prop: "input",
     el: "ElInput",
   },
   {
-    formItem: { required: true },
+    formItemProps: { required: true },
     label: "选择器",
     prop: "select",
     el: "el-select",
     defaultValue: "1",
-    enum: [
+    options: [
       {
         label: "option1",
         value: "1",
@@ -80,21 +80,16 @@ const schema = reactive<FormSchemaProps[]>([
     label: "单选框",
     el: "el-radio-group",
     defaultValue: "1",
-    slots: {
-      default: (columnEnum, fieldNames) => {
-        return columnEnum.map(col => {
+    elSlots: {
+      default: ({ options }) => {
+        return options.map(option => {
           return (
-            <ElRadio
-              disabled={col[fieldNames.disabled || "disabled"]}
-              label={col[fieldNames.label]}
-              value={col[fieldNames.value]}
-              key={col[fieldNames.value]}
-            ></ElRadio>
+            <ElRadio disabled={option.disabled} label={option.label} value={option.value} key={option.value}></ElRadio>
           );
         });
       },
     },
-    enum: [
+    options: [
       {
         label: "option-1",
         value: "1",
@@ -110,7 +105,7 @@ const schema = reactive<FormSchemaProps[]>([
     label: "多选框",
     el: "el-checkbox-group",
     defaultValue: ["2"],
-    enum: [
+    options: [
       {
         label: "option-1",
         value: "1",
@@ -129,7 +124,7 @@ const schema = reactive<FormSchemaProps[]>([
     label: "日期选择器",
     prop: "datePicker",
     el: "el-date-picker",
-    props: { type: "date" },
+    elProps: { type: "date" },
   },
   {
     label: "时间选择器",
@@ -140,7 +135,7 @@ const schema = reactive<FormSchemaProps[]>([
     label: "树形选择",
     prop: "treeSelect",
     el: "el-tree-select",
-    enum: () => getTreeSelectData(), // 模拟远程获取数据
+    options: () => getTreeSelectData(), // 模拟远程获取数据
   },
   {
     label: "上传",
@@ -156,7 +151,7 @@ const schema = reactive<FormSchemaProps[]>([
         url: "https://element-plus.org/images/element-plus-logo.svg",
       },
     ],
-    props: {
+    elProps: {
       limit: 3,
       action: "https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15",
       multiple: true,

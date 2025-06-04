@@ -7,7 +7,7 @@ defineOptions({ name: "Tree" });
 export interface TreeProps {
   data: any[]; // 树数据
   nodeKey?: string; // 每一个树节点 id
-  checkValueType?: "keys" | "nodes"; // v-model 返回的格式，keys 返回选中的节点 nodeKey，nodes 为返回选中的节点
+  checkBaseValueType?: "keys" | "nodes"; // v-model 返回的格式，keys 返回选中的节点 nodeKey，nodes 为返回选中的节点
   expandSelected?: boolean; // 初始化就有默认选中的节点时，是否展开选中节点的所有父节点
   checkbox?: boolean; // 开启工具栏
   search?: boolean; // 开启搜索功能
@@ -16,14 +16,14 @@ export interface TreeProps {
 
 const props = withDefaults(defineProps<TreeProps>(), {
   nodeKey: " id",
-  checkValueType: "keys",
+  checkBaseValueType: "keys",
   expandSelected: true,
   checkbox: false,
   search: false,
   select: true,
 });
 
-const checkedList = defineModel<any[]>();
+const checkedList = defineModel<any>();
 
 const defaultExpandAll = ref(false); // 展开/折叠状态
 const isSelectAll = ref(false); // 全选/全不选状态
@@ -59,7 +59,7 @@ const filterNode = (value: string, data: Record<string, any>) => {
 };
 
 const handleCheck = (_: any, selected: { checkedKeys: string[]; checkedNodes: Record<string, any>[] }) => {
-  if (props.checkValueType === "nodes") checkedList.value = selected.checkedNodes;
+  if (props.checkBaseValueType === "nodes") checkedList.value = selected.checkedNodes;
   else checkedList.value = selected.checkedKeys;
 
   // 如果都没选择任何节点，则状态关闭
@@ -76,8 +76,8 @@ const handleCheck = (_: any, selected: { checkedKeys: string[]; checkedNodes: Re
 const setChecked = (val: any[]) => {
   // 不用 nextTick 导致获取不到 treeRef 实例
   nextTick(() => {
-    const { checkValueType, expandSelected, nodeKey } = props;
-    if (checkValueType === "nodes") {
+    const { checkBaseValueType, expandSelected, nodeKey } = props;
+    if (checkBaseValueType === "nodes") {
       treeRef.value?.setCheckedNodes(val);
       if (expandSelected) defaultExpandedKeys.value = val?.map(item => item[nodeKey]);
     } else {

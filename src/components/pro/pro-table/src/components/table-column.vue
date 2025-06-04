@@ -1,7 +1,7 @@
 <script setup lang="tsx">
 import { inject, ref, useSlots } from "vue";
 import { type TableColumnProps, type TableRenderScope, type HeaderRenderScope, tableEnumMapKey } from "../interface";
-import { filterEnum, filterEnumLabel, formatValue, lastProp, handleRowAccordingToProp } from "../helper";
+import { filterEnum, filterEnumLabel, formatCellValue, lastProp, handleRowAccordingToProp } from "../helper";
 import { ElCheckTag, ElTag, ElTableColumn, ElButton } from "element-plus";
 import { useHeaderFilter } from "./plugins/header-filter";
 import { useRowInlineEdit } from "./plugins/row-inline-edit";
@@ -23,7 +23,7 @@ const getEnumData = (item: TableColumnProps, scope: TableRenderScope<any>) => {
 const renderCellData = (item: TableColumnProps, scope: TableRenderScope<any>, enumData: any) => {
   return enumMap.value.get(item.prop!) && item.isFilterEnum
     ? filterEnumLabel(enumData, item.fieldNames)
-    : formatValue(handleRowAccordingToProp(scope.row, item.prop!));
+    : formatCellValue(handleRowAccordingToProp(scope.row, item.prop!));
 };
 
 // 获取 tag 标签

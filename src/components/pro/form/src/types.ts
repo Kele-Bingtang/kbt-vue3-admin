@@ -1,151 +1,8 @@
-import type {
-  FormItemProps,
-  ColProps,
-  FormProps,
-  InputProps,
-  AutocompleteProps,
-  CascaderProps,
-  ColorPickerProps,
-  DatePickerProps,
-  DividerProps,
-  InputNumberProps,
-  RadioButtonProps,
-  RadioGroupProps,
-  RateProps,
-  SwitchProps,
-  TransferProps,
-  UploadProps,
-  SliderProps,
-  CheckboxProps,
-  CheckboxGroupProps,
-  RadioProps,
-  TimePickerDefaultProps,
-  ElTooltipProps,
-} from "element-plus";
-import type { VNode, ComputedRef, ComponentPublicInstance, ExtractPropTypes, InjectionKey, Ref } from "vue";
-import ProForm, { type ProFormProps } from "./index.vue";
-import type { TreeProps as CustomTreeProps } from "./components/tree.vue";
-import type { TreeProps } from "element-plus/es/components/tree-v2/src/types";
-import type { SelectProps } from "element-plus/es/components/select/src/select";
-import type { SelectProps as SelectV2Props } from "element-plus/es/components/select-v2/src/defaults";
-import type { TimeSelectProps } from "element-plus/es/components/time-select/src/time-select";
-import type { JSX } from "vue/jsx-runtime";
-
-export type FieldValueType =
-  | string
-  | number
-  | boolean
-  | null
-  | undefined
-  | Date
-  | string[]
-  | number[]
-  | boolean[]
-  | Date[]
-  | [Date, Date]
-  | [number, number]
-  | [string, string]
-  | string[][]
-  | number[][]
-  | Record<any, any>;
-
-/**
- * 组件内置导入需要
- */
-export enum ComponentNameEnum {
-  EL_INPUT = "ElInput",
-  EL_INPUT_NUMBER = "ElInputNumber",
-  EL_SELECT = "ElSelect",
-  EL_SELECT_V2 = "ElSelectV2",
-  EL_TREE = "ElTree",
-  EL_TREE_SELECT = "ElTreeSelect",
-  EL_CASCADER = "ElCascader",
-  EL_DATE_PICKER = "ElDatePicker",
-  EL_TIME_PICKER = "ElTimePicker",
-  EL_TIME_SELECT = "ElTimeSelect",
-  EL_SWITCH = "ElSwitch",
-  EL_SLIDER = "ElSlider",
-  EL_RADIO = "ElRadio",
-  EL_RADIO_GROUP = "ElRadioGroup",
-  EL_RADIO_BUTTON = "ElRadioButton",
-  EL_CHECKBOX = "ElCheckbox",
-  EL_CHECKBOX_GROUP = "ElCheckboxGroup",
-  EL_CHECKBOX_BUTTON = "ElCheckboxButton",
-  EL_AUTOCOMPLETE = "ElAutocomplete",
-  EL_RATE = "ElRate",
-  EL_COLOR_PICKER = "ElColorPicker",
-  EL_TRANSFER = "ElTransfer",
-  EL_DIVIDER = "ElDivider",
-  EL_UPLOAD = "ElUpload",
-  CHECK_BOX_SELECT = "CheckBoxSelect",
-  WANG_EDITOR = "WangEditor",
-  TINYMCE = "Tinymce",
-  ICON_PICKER = "IconPicker",
-}
-
-/**
- * el 字面量
- */
-export type PascalCaseComponentName = keyof typeof ComponentNameEnum extends infer K
-  ? K extends string
-    ? K extends `${infer A}_${infer B}`
-      ? K extends `${infer A}_${infer B}_${infer C}`
-        ? `${Capitalize<Lowercase<A>>}${Capitalize<Lowercase<B>>}${Capitalize<Lowercase<C>>}`
-        : `${Capitalize<Lowercase<A>>}${Capitalize<Lowercase<B>>}`
-      : Capitalize<Lowercase<K>>
-    : never
-  : never;
-
-/**
- * el 字面量
- */
-export type HyphenCaseComponentName = keyof typeof ComponentNameEnum extends infer K
-  ? K extends string
-    ? K extends `${infer A}_${infer B}`
-      ? K extends `${infer A}_${infer B}_${infer C}`
-        ? `${Lowercase<A>}-${Lowercase<B>}-${Lowercase<C>}`
-        : `${Lowercase<A>}-${Lowercase<B>}`
-      : Lowercase<K>
-    : never
-  : never;
-
-/**
- * el 字面量
- */
-export type FormType = PascalCaseComponentName | HyphenCaseComponentName;
-
-/**
- * 基本类型
- */
-export type ValueType = string | number | boolean | any[];
-
-/**
- * 渲染函数的返回值的类型
- */
-export type RenderTypes = string | VNode | JSX.Element | Component;
-
-/**
- * 字典数据类型
- */
-export interface FormOptionProps {
-  /**
-   * 选项框显示的文字
-   */
-  label?: string;
-  /**
-   * 选项框值
-   */
-  value?: ValueType;
-  /**
-   * 是否禁用此选项
-   */
-  disabled?: boolean;
-  /**
-   * 为树形选择时，可以通过 children 属性指定子选项
-   */
-  children?: FormOptionProps[];
-  [key: string]: any;
-}
+import type { ColProps, FormProps } from "element-plus";
+import type { ComputedRef, ComponentPublicInstance, InjectionKey, Ref } from "vue";
+import type { FormItemColumn, BaseValueType } from "@/components/pro/form-item";
+import type { ProFormProps } from "./index.vue";
+import ProForm from "./index.vue";
 
 export interface ProElFormProps extends Partial<FormProps> {
   fixWidth?: boolean;
@@ -153,176 +10,67 @@ export interface ProElFormProps extends Partial<FormProps> {
 }
 
 /**
- * 自定义字典的 key
- */
-export type FormFieldNamesProps = {
-  label: string;
-  value: string;
-  disabled: string;
-  children: string;
-};
-
-/**
- * 自定义 render 的参数类型
- */
-export type FormRenderScope = {
-  model: FieldValueType;
-  data: ValueType;
-  options: Ref<Recordable[]>;
-};
-
-/**
  * setSchema 函数的参数类型
  */
 export interface FormSetProps {
   prop: string;
   field: string;
-  value: ValueType;
+  value: BaseValueType;
 }
 
 /**
- * 表单配置项
+ * ProForm 表单配置项
  */
-export interface FormColumnProps<T = any> {
-  /**
-   * 表单组件 Props
-   */
-  prop: string;
-  /**
-   * ElFormItem 的 label 属性
-   */
-  label: ValueType | ComputedRef<ValueType>;
-  /**
-   * 是否显示 label
-   */
-  hasLabel?: boolean | Ref<boolean> | ComputedRef<boolean>;
-  /**
-   * 表单组件宽度
-   */
-  width?: string | number;
-  /**
-   * 使用的表单组件名
-   */
-  el?: FormType;
-  /**
-   * 根据 element plus 官方文档来传递，该属性所有值会透传到表单组件
-   */
-  elProps?:
-    | InputProps
-    | InputNumberProps
-    | ExtractPropTypes<typeof SelectProps>
-    | ExtractPropTypes<typeof SelectV2Props>
-    | TreeProps
-    | CustomTreeProps
-    | CascaderProps
-    | DatePickerProps
-    | TimePickerDefaultProps
-    | TimeSelectProps
-    | SwitchProps
-    | SliderProps
-    | RadioProps
-    | RadioGroupProps
-    | RadioButtonProps
-    | CheckboxProps
-    | CheckboxGroupProps
-    | AutocompleteProps
-    | RateProps
-    | ColorPickerProps
-    | TransferProps
-    | DividerProps
-    | UploadProps
-    | any;
-  /**
-   * 表单组件的插槽
-   */
-  elSlots?: { [slotName: string]: (data?: any) => RenderTypes };
-  /**
-   * 字典数据，如果 enum 是接口调用，那么可以指定哪个 key 获取 enum 数据，默认返回的数据作为 enum
-   */
-  options?:
-    | FormOptionProps[]
-    | ((model: T, optionsMap: Map<string, Recordable>) => Promise<FormOptionProps>)
-    | ComputedRef<FormOptionProps[]>
-    | Promise<FormOptionProps[]>;
-  /**
-   * 字典指定 label && value && children 的 key 值
-   * @default Object { label: "label", value: "value", children: "children" }
-   */
-  optionField?: FormFieldNamesProps;
-  /**
-   * 是否缓存 Options 数据
-   * @default true
-   */
-  useCacheOptions?: boolean;
-  /**
-   * 从 OptionsMap 中获取其他的 Options 数据
-   */
-  useOptionsMap?: string | ((optionsMap: Map<string, Recordable>) => Recordable);
-  /**
-   * 搭配 useOptionsMap 使用，指定 Options 的 key
-   */
-  optionProp?: string;
+export interface FormColumn extends FormItemColumn {
   /**
    * ElCol Props
    */
-  colProps?: Partial<ColProps>;
+  colProps?: MaybeRef<Partial<ColProps>>;
   /**
-   * ElFormItem props
+   * 表单属性的默认值
    */
-  formItemProps?: Partial<FormItemProps>;
+  defaultValue?:
+    | BaseValueType
+    | ((model: Recordable, optionsMap: Map<string, Recordable>) => BaseValueType | Promise<BaseValueType>)
+    | ComputedRef<BaseValueType>
+    | Promise<BaseValueType>;
   /**
    * 表单排序（从大到小）
    */
   order?: number;
   /**
-   * 表单属性的默认值
-   */
-  defaultValue?: ValueType | ((model: T, enumMap: Map<string, Recordable>) => ValueType | any) | ComputedRef<ValueType>;
-  /**
    * 是否销毁表单，true 销毁，false 不销毁，类似于 v-if
    * @default false
    */
-  destroy?: boolean | ((model: T) => boolean);
+  destroy?: boolean | ((model: Recordable) => boolean);
   /**
    * 是否隐藏表单，true 隐藏，false 不隐藏，类似于 v-show
    * @default false
    */
-  hidden?: boolean | ((model: T) => boolean);
+  hidden?: boolean | ((model: Recordable) => boolean);
   /**
    * 是否禁用表单，true 禁用，false 不禁用
    * @default false
    */
-  disabled?: boolean | ((model: T) => boolean);
+  disabled?: boolean | ((model: Recordable) => boolean);
   /**
    * 表单绑定的值格式，针对 Enum Value 是 string "1"，而值是 number 1 导致编辑时无法匹配问题
    * @default default
    */
   valueFormat?: "default" | "string" | "number" | "boolean";
   /**
-   * label 标题大小，默认 default。仅 el 为 el-divider | ElDivider 生效
-   * @default default
+   * 是否使用已缓存 Options 数据，防止重复请求
+   * @default true
    */
-  labelSize?: "default" | "small" | "large";
+  useCacheOptions?: boolean;
   /**
-   * 自定义 label 标题
+   * 指定 Options 的 key，如果设置了则优先从缓存获取对于 key 的 Options 数据
    */
-  renderLabel?: (label: string, column: FormColumnProps) => RenderTypes;
-  /**
-   * 自定义渲染 el-form-item 下的表单组件
-   */
-  renderEl?: (scope: FormRenderScope) => RenderTypes;
+  optionsProp?: string;
   /**
    * 自定义 render 时候，需要填写 render 里表单组件使用 v-model 绑定的 prop
    */
   renderUseProp?: string[];
-  /**
-   * Label 使用 ElToolTip 提示的配置
-   */
-  tooltip?: Partial<ElTooltipProps> & {
-    icon?: Component; // ElTooTip 绑定的元素图标
-    render?: () => VNode | string; // 自定义 ElTooTip 绑定的元素，将会覆盖图标，传入 ElTooTip 的 default 插槽里
-    contentRender?: () => VNode | string; // 自定义 ElTooTip 的内容，传入 ElTooTip 的 content 插槽里
-  };
   /**
    * 其他拓展
    */
@@ -334,4 +82,4 @@ export type ProFormInstance = Omit<InstanceType<typeof ProForm>, keyof Component
 /**
  * provide 类型
  */
-export const formEnumMapKey: InjectionKey<Ref<Map<string, Recordable[]>>> = Symbol("EnumMap");
+export const formEnumMapKey: InjectionKey<Ref<Map<string, Recordable[]>>> = Symbol("enumMap");

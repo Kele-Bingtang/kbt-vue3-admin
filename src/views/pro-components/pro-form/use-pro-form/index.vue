@@ -1,5 +1,5 @@
 <script setup lang="tsx" name="UseProForm">
-import { ProForm, type FormSchemaProps, type ProElFormProps, useProForm } from "@/components";
+import { ProForm, type FormColumn, type ProElFormProps, useProForm } from "@/components";
 import {
   ElRadio,
   type ComponentSize,
@@ -11,10 +11,10 @@ import {
 const { formRegister, formMethods } = useProForm();
 const {
   setProps,
-  delSchema,
-  addSchema,
+  delColumn,
+  addColumn,
   setValues,
-  setSchema,
+  setColumn,
   getComponentExpose,
   getFormItemExpose,
   getElFormExpose,
@@ -32,26 +32,26 @@ const elFormProps: ProElFormProps = {
   labelSuffix: " :",
 };
 
-// 表单列配置项 (formItem 代表 item 配置项，attrs 代表 输入、选择框 配置项)
-const schema = reactive<FormSchemaProps[]>([
+// 表单列配置项 (formItemProps 代表 item 配置项，attrs 代表 输入、选择框 配置项)
+const column = reactive<FormColumn[]>([
   {
     label: "使用 ProForm",
     prop: "input",
     el: "ElDivider",
   },
   {
-    formItem: { required: true },
+    formItemProps: { required: true },
     label: "输入框",
     prop: "input",
     el: "ElInput",
   },
   {
-    formItem: { required: true },
+    formItemProps: { required: true },
     label: "选择器",
     prop: "select",
     el: "el-select",
     defaultValue: "1",
-    enum: [
+    options: [
       {
         label: "option1",
         value: "1",
@@ -67,21 +67,16 @@ const schema = reactive<FormSchemaProps[]>([
     label: "单选框",
     el: "el-radio-group",
     defaultValue: "1",
-    slots: {
-      default: (columnEnum, fieldNames) => {
-        return columnEnum.map(col => {
+    elSlots: {
+      default: ({ options }) => {
+        return options.map(option => {
           return (
-            <ElRadio
-              disabled={col[fieldNames.disabled || "disabled"]}
-              label={col[fieldNames.label]}
-              value={col[fieldNames.value]}
-              key={col[fieldNames.value]}
-            ></ElRadio>
+            <ElRadio disabled={option.disabled} label={option.label} value={option.value} key={option.value}></ElRadio>
           );
         });
       },
     },
-    enum: [
+    options: [
       {
         label: "option-1",
         value: "1",
@@ -97,7 +92,7 @@ const schema = reactive<FormSchemaProps[]>([
     label: "多选框",
     el: "el-checkbox-group",
     defaultValue: ["2"],
-    enum: [
+    options: [
       {
         label: "option-1",
         value: "1",
@@ -116,7 +111,7 @@ const schema = reactive<FormSchemaProps[]>([
     label: "日期选择器",
     prop: "datePicker",
     el: "el-date-picker",
-    props: { type: "date" },
+    elProps: { type: "date" },
   },
   {
     label: "时间选择器",
@@ -127,7 +122,7 @@ const schema = reactive<FormSchemaProps[]>([
     label: "树形选择",
     prop: "treeSelect",
     el: "el-tree-select",
-    enum: () => getTreeSelectData(), // 模拟远程获取数据
+    options: () => getTreeSelectData(), // 模拟远程获取数据
   },
   {
     label: "上传",
@@ -143,7 +138,7 @@ const schema = reactive<FormSchemaProps[]>([
         url: "https://element-plus.org/images/element-plus-logo.svg",
       },
     ],
-    props: {
+    elProps: {
       limit: 3,
       action: "https://run.mocky.io/v3/9d059bf9-4660-45f2-925d-ce80ad6c4d15",
       multiple: true,
@@ -176,7 +171,7 @@ const schema = reactive<FormSchemaProps[]>([
 
 const changeCol = (col: boolean) => {
   setProps({
-    useCol: col,
+    useFlexLayout: col,
   });
 };
 
@@ -197,18 +192,18 @@ const changeDisabled = (bool: boolean) => {
   });
 };
 
-const changeSchema = (del: boolean) => {
+const changeColumn = (del: boolean) => {
   if (del) {
-    delSchema("select");
-  } else if (!del && schema[1].prop !== "select") {
-    addSchema(
+    delColumn("select");
+  } else if (!del && column[1].prop !== "select") {
+    addColumn(
       {
-        formItem: { required: true },
+        formItemProps: { required: true },
         label: "选择器",
         prop: "select",
         el: "el-select",
         defaultValue: "1",
-        enum: [
+        options: [
           {
             label: "option1",
             value: "1",
@@ -255,7 +250,7 @@ const setValue = async (reset: boolean) => {
 const index = ref(7);
 
 const setSelectLabel = () => {
-  setSchema([
+  setColumn([
     {
       prop: "select",
       field: "label",
@@ -285,13 +280,13 @@ const setSelectLabel = () => {
 
 const addFormItem = () => {
   if (index.value % 2 === 0) {
-    addSchema({
+    addColumn({
       prop: `input${index.value}`,
       label: `输入框 ${index.value}`,
       el: "el-input",
     });
   } else {
-    addSchema(
+    addColumn(
       {
         prop: `input${index.value}`,
         label: `输入框 ${index.value}`,
@@ -316,15 +311,15 @@ const verifyReset = async () => {
 };
 
 const inoutFocus = async () => {
-  const inputEl: InputInstance = await getComponentExpose("input");
+  const inputEl = (await getComponentExpose("input")) as InputInstance;
   inputEl?.focus();
 };
 
 const inoutValidation = async () => {
-  const formItem = await getFormItemExpose("input");
-  const inputEl: InputInstance = await getComponentExpose("input");
+  const formItemProps = await getFormItemExpose("input");
+  const inputEl = (await getComponentExpose("input")) as InputInstance;
   inputEl?.focus();
-  formItem?.validate("focus", (val: boolean) => {
+  formItemProps?.validate("focus", (val: boolean) => {
     console.log(val);
   });
 };
@@ -426,8 +421,8 @@ const getTreeSelectData = () => {
         <el-button @click="changeSize('default')">还原 size</el-button>
         <el-button @click="changeDisabled(true)">禁用表单</el-button>
         <el-button @click="changeDisabled(false)">还原表单</el-button>
-        <el-button @click="changeSchema(true)">删除选择器</el-button>
-        <el-button @click="changeSchema(false)">添加选择器</el-button>
+        <el-button @click="changeColumn(true)">删除选择器</el-button>
+        <el-button @click="changeColumn(false)">添加选择器</el-button>
         <el-button @click="setValue(false)">设置表单值</el-button>
         <el-button @click="setValue(true)">还原表单值</el-button>
         <el-button @click="setSelectLabel">设置选择器 label</el-button>
@@ -442,7 +437,7 @@ const getTreeSelectData = () => {
     <el-card>
       <ProForm
         :elFormProps="elFormProps"
-        :schema="schema"
+        :column="column"
         v-model="model"
         @register="formRegister"
         @validate="formValidate"

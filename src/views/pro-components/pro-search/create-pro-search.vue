@@ -1,5 +1,5 @@
 <script setup lang="ts" name="CreateProSearch">
-import { useProSearch, type ProSearchSchemaProps } from "@/components";
+import { useProSearch, type ProSearchColumnProps } from "@/components";
 
 const {
   createMethods: { createSearch, createSearchComponent },
@@ -14,7 +14,7 @@ const RenderProSearch = (_: any, context: Record<string, any>) => {
   // 函数式创建 Template 组件
   return createSearchComponent(
     {
-      schema: schema,
+      column: column,
       modeValue: model,
       onSearch: handleSearch,
       onReset: handleSearch,
@@ -27,7 +27,7 @@ const handleSearch = async (data: Record<string, any>) => {
   console.log(data);
 };
 
-const schema: ProSearchSchemaProps[] = reactive([
+const column: ProSearchColumnProps[] = reactive([
   {
     label: "姓名",
     prop: "name",
@@ -37,7 +37,7 @@ const schema: ProSearchSchemaProps[] = reactive([
     label: "性别",
     prop: "sex",
     el: "el-select",
-    enum: [
+    options: [
       { label: "男", value: "1" },
       { label: "女", value: "2" },
     ],
@@ -52,7 +52,7 @@ const schema: ProSearchSchemaProps[] = reactive([
     label: "状态",
     prop: "status",
     el: "el-select",
-    enum: [
+    options: [
       { label: "在职", value: "1" },
       { label: "离职", value: "2" },
     ],
@@ -84,7 +84,7 @@ const schema: ProSearchSchemaProps[] = reactive([
   },
 ]);
 
-createSearch("proSearchRef", { schema: schema, modeValue: model, onSearch: handleSearch, onReset: handleSearch });
+createSearch("proSearchRef", { column: column, modeValue: model, onSearch: handleSearch, onReset: handleSearch });
 </script>
 
 <template>

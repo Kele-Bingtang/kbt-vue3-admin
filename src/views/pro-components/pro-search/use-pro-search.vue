@@ -1,8 +1,8 @@
 <script setup lang="ts" name="UseProSearchDemo">
-import { ProSearch, type ProSearchSchemaProps, useProSearch, type ActionPosition } from "@/components";
+import { ProSearch, type ProSearchColumnProps, useProSearch, type ActionPosition } from "@/components";
 
 const { searchRegister, searchMethods } = useProSearch();
-const { setSchema, setProps, setValues, getFormData } = searchMethods;
+const { setColumn, setProps, setValues, getFormData } = searchMethods;
 
 const model = ref({});
 
@@ -17,7 +17,7 @@ const changePosition = (position: ActionPosition) => {
 };
 
 const changeSex = (del: boolean) => {
-  setSchema([
+  setColumn([
     {
       prop: "sex",
       field: "destroy",
@@ -54,7 +54,7 @@ const changeResetLoading = () => {
   }, 2000);
 };
 
-const schema: ProSearchSchemaProps[] = reactive([
+const column: ProSearchColumnProps[] = reactive([
   {
     label: "姓名",
     prop: "name",
@@ -64,7 +64,7 @@ const schema: ProSearchSchemaProps[] = reactive([
     label: "性别",
     prop: "sex",
     el: "el-select",
-    enum: [
+    options: [
       { label: "男", value: "1" },
       { label: "女", value: "2" },
     ],
@@ -79,7 +79,7 @@ const schema: ProSearchSchemaProps[] = reactive([
     label: "状态",
     prop: "status",
     el: "el-select",
-    enum: [
+    options: [
       { label: "在职", value: "1" },
       { label: "离职", value: "2" },
     ],
@@ -134,7 +134,7 @@ const schema: ProSearchSchemaProps[] = reactive([
     </el-card>
 
     <ProSearch
-      :schema="schema"
+      :column="column"
       v-model="model"
       @search="handleSearch"
       @reset="handleSearch"
