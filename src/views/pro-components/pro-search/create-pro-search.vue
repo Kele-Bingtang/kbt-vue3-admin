@@ -14,8 +14,8 @@ const RenderProSearch = (_: any, context: Record<string, any>) => {
   // 函数式创建 Template 组件
   return createSearchComponent(
     {
-      column: column,
-      modeValue: model,
+      columns: columns,
+      modelValue: model.value,
       onSearch: handleSearch,
       onReset: handleSearch,
     },
@@ -27,7 +27,7 @@ const handleSearch = async (data: Record<string, any>) => {
   console.log(data);
 };
 
-const column: ProSearchColumnProps[] = reactive([
+const columns: ProSearchColumnProps[] = reactive([
   {
     label: "姓名",
     prop: "name",
@@ -84,7 +84,7 @@ const column: ProSearchColumnProps[] = reactive([
   },
 ]);
 
-createSearch("proSearchRef", { column: column, modeValue: model, onSearch: handleSearch, onReset: handleSearch });
+createSearch("proSearchRef", { columns, modelValue: model.value, onSearch: handleSearch, onReset: handleSearch });
 </script>
 
 <template>

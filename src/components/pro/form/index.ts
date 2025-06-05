@@ -1,6 +1,5 @@
 import { useInstall } from "@/utils";
 import index from "./src/index.vue";
-export type { ProFormProps, ProFormOnEmits } from "./src/index.vue";
 
 export * from "./src/types";
 export * from "./src/helper";

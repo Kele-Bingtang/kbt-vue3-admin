@@ -18,7 +18,7 @@ import {
   ProSearch,
   Pagination,
   type BreakPoint,
-  type ProSearchSchemaProps,
+  type ProSearchColumnProps,
   type ProSearchInstance,
   type ProFormInstance,
   type ProSearchExpose,
@@ -271,7 +271,7 @@ const flatColumns = computed<TableColumnProps[]>(() => flatColumnsFunc(getProps.
 const searchColumns = computed(() => {
   const column = flatColumns.value?.filter(item => item.search?.el || item.search?.render);
 
-  const searchColumns: ProSearchSchemaProps[] = [];
+  const searchColumns: ProSearchColumnProps[] = [];
 
   column?.forEach(async item => {
     // Table 默认查询参数初始化

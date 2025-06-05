@@ -5,7 +5,7 @@ const model = ref({});
 
 const links = ref<{ value: string; link: string }[]>([]);
 
-const querySearch = (queryString: string, cb) => {
+const querySearch = (queryString: string, cb: any) => {
   const results = queryString ? links.value.filter(createFilter(queryString)) : links.value;
   // call callback function to return suggestion objects
   cb(results);
@@ -17,7 +17,7 @@ const createFilter = (queryString: string) => {
   };
 };
 
-const column: ProSearchColumnProps[] = [
+const columns: ProSearchColumnProps[] = [
   {
     label: "姓名",
     prop: "name",
@@ -51,7 +51,7 @@ const column: ProSearchColumnProps[] = [
     label: "下拉自动补全",
     prop: "autocomplete",
     el: "el-autocomplete",
-    props: { fetchSuggestions: querySearch },
+    elProps: { fetchSuggestions: querySearch },
   },
 ];
 
@@ -74,7 +74,7 @@ const loadAll = () => {
 
 <template>
   <el-space fill>
-    <ProSearch :column="column" v-model="model" />
+    <ProSearch :columns v-model="model" />
     {{ model }}
   </el-space>
 </template>

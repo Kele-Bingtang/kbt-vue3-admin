@@ -463,12 +463,12 @@ const delSchema = (prop: string) => {
 };
 
 // 获取表单组件实例
-const getComponentExpose = (prop: string) => {
+const getComponentInstance = (prop: string) => {
   return proFormItemRefs.value[prop].formComponentRef;
 };
 
 // 获取 formItem 实例
-const getFormItemExpose = (prop: string) => {
+const getFormItemInstance = (prop: string) => {
   return formItemComponentsRef.value[prop];
 };
 
@@ -480,8 +480,8 @@ defineExpose({
   setSchema,
   addSchema,
   delSchema,
-  getComponentExpose,
-  getFormItemExpose,
+  getComponentInstance,
+  getFormItemInstance,
   getComponentWidth,
   parseLabel,
   isDestroy,

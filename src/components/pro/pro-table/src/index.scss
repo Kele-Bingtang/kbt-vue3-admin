@@ -120,14 +120,4 @@ $prefix-class: #{$admin-namespace}-pro-table;
       margin-bottom: 0 !important;
     }
   }
-
-  .card {
-    box-sizing: border-box;
-    padding: 20px;
-    overflow-x: hidden;
-    background-color: var(--#{$el-namespace}-fill-color-blank);
-    border: 1px solid var(--#{$el-namespace}-border-color-light);
-    border-radius: 4px;
-    box-shadow: 0 0 12px rgb(0 0 0 / 5%);
-  }
 }

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormOptionFieldProps } from "../types";
 import { ElOption, ElOptionGroup } from "element-plus";
-import { ComponentNameEnum } from "../types";
+import { ComponentNameEnum } from "../helper";
 
 defineProps<{
   options: Recordable[];

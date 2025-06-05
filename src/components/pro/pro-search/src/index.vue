@@ -1,284 +1,193 @@
 <script setup lang="ts">
-import { computed, onMounted, ref, unref } from "vue";
-import {
-  Grid,
-  GridItem,
-  ProForm,
-  ProFormItem,
-  type FormColumn,
-  type BreakPoint,
-  useProForm,
-  type FormSetProps,
-  setProp,
-  type GridInstance,
-  type GridItemProps,
-} from "@/components";
+import type { BreakPoint, GridInstance } from "@/components";
+import type { ProSearchColumnProps, ProSearchEmits, ProSearchProps } from "./types";
+import { computed, onMounted } from "vue";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
+import { ElButton, ElIcon } from "element-plus";
+import { Grid, GridItem, ProForm, ProFormItem } from "@/components";
 import { useNamespace } from "@/composables";
-import { ElButton, ElIcon, type FormItemProp } from "element-plus";
-import { isEmpty, isObject, isString } from "@/utils";
+import { useSearchApi } from "./composables/use-search-api";
 
 defineOptions({ name: "ProSearch" });
 
-const ns = useNamespace("search-form");
+const ns = useNamespace("pro-search");
 
-export type ProSearchExpose = typeof defaultExpose;
-
-export type ActionPosition = "left" | "right" | "block-left" | "block-center" | "block-right";
-
-export type ProSearchColumnProps = FormColumn & {
-  grid?: Partial<GridItemProps>; // GridItem 的 props
-};
-
-export interface ProSearchProps {
-  modeValue?: Record<string, any>; // 搜索表单值
-  column?: ProSearchColumnProps[]; // 搜索配置列
-  position?: ActionPosition; // Action 位置，block 代表换行
-  useCollapsed?: boolean; // 是否使用折叠功能
-  searchCols?: number | Record<BreakPoint, number>; // 响应式布局
-  collapsed?: boolean; // 是否默认折叠搜索项
-  collapsedRows?: number; // 可见的行数
-  gap?: [number, number] | number; // 行和列间距
-  showSearch?: boolean; // 是否展示搜索按钮
-  showReset?: boolean; // 是否展示重置按钮
-  searchLoading?: boolean; // 搜索按钮的 loading
-  resetLoading?: boolean; // 搜索按钮的 loading
-  removeNoValue?: boolean; // 是否去除空值项
-  enumMapProps?: Map<string, Record<string, any>[]>; // 存储 enum 值。该 props 是搭配 ProTable 使用，因为 ProTable 已经初始化部分字典数据，因此不需要 ProForm 再次请求这些字典数据
-}
-
-// 默认值
 const props = withDefaults(defineProps<ProSearchProps>(), {
-  modeValue: () => ({}),
-  column: () => [],
+  columns: () => [],
   position: "right",
-  useCollapsed: true,
   searchCols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
-  collapsed: true,
-  collapsedRows: 1,
   gap: () => [20, 0],
+  showAction: true,
   showSearch: true,
   showReset: true,
+  showCollapse: true,
+  searchText: "搜索",
+  resetText: "重置",
+  collapseText: "折叠",
+  expandText: "展开",
+  collapse: true,
+  showRow: 1,
   searchLoading: false,
   resetLoading: false,
   removeNoValue: true,
+  validate: true,
 });
-
-type ProSearchEmits = {
-  search: [params: Record<string, any>]; // 搜索方法
-  reset: [params: Record<string, any>]; // 重置方法
-  register: [expose: ProSearchExpose]; // 注册方法
-  validate: [prop: FormItemProp, isValid: boolean, message: string]; // ElForm 触发验证事件
-};
-
-/**
- * 将 ProSearchEmits 类型的 key 变为 on{Key} 的形式
- * @example 返回 { onSearch: (params: Record<string, any>) => void }
- */
-export type ProSearchOnEmits = keyOnPrefix<ProSearchEmits>;
 
 const emits = defineEmits<ProSearchEmits>();
 
-const { formRegister, formMethods, formElState } = useProForm();
-const { getElFormExpose, getFormData, getFormExpose } = formMethods;
-
-const columnForm = computed(() =>
-  props.column
-    .filter(item => {
-      const { formRef } = formElState;
-      const destroy = formRef?.destroyOrInit(item) || item.destroy;
-      const hidden = formRef?.isHidden(item) || item.hidden;
-
-      if (destroy) delete model.value[item.prop];
-
-      return !(destroy || hidden);
-    })
-    .map((item, index) => {
-      item._index = index;
-      return item;
-    })
-);
-
 // 搜索参数
-const model = defineModel<Record<string, any>>({ default: {} });
+const model = defineModel<Recordable>({ default: () => ({}) });
+// Grid 组件实例
+const gridInstance = useTemplateRef<GridInstance>("gridInstance");
+// 获取响应式断点
+const breakPoint = computed<BreakPoint>(() => gridInstance.value?.breakPoint || "xl");
 
-const mergeProps = ref<ProSearchProps>({});
-
-const getProps = computed(() => {
+const finalProps = computed(() => {
   const propsObj = { ...props };
   Object.assign(propsObj, mergeProps.value);
   return propsObj;
 });
 
-// 获取响应式设置
-const getResponsive = (item: ProSearchColumnProps) => {
-  return {
-    span: item.grid?.span,
-    offset: item.grid?.offset ?? 0,
-    xs: item.grid?.xs,
-    sm: item.grid?.sm,
-    md: item.grid?.md,
-    lg: item.grid?.lg,
-    xl: item.grid?.xl,
-  };
-};
+const { mergeProps, setValues, setProps, setColumn, addColumn, delColumn, formRegister, formMethods, formElState } =
+  useSearchApi(model, finalProps);
 
-// 获取响应式断点
-const gridRef = useTemplateRef<GridInstance>("gridRef");
-const breakPoint = computed<BreakPoint>(() => gridRef.value?.breakPoint || "xl");
+const {
+  getFormModel,
+  getElFormInstance,
+  getProFormInstance,
+  submitForm,
+  resetForm,
+  getFormItemInstance,
+  getElInstance,
+} = formMethods;
+
+// 搜索表单的配置项
+const searchColumns = computed(() =>
+  props.columns
+    .filter(item => {
+      const { proFormInstance } = formElState;
+      return !(proFormInstance?.destroyOrInit(item) ?? item.destroy);
+    })
+    .map((item, index) => {
+      item._index = index;
+      // 如果不开启校验，则清空校验规则
+      if (!props.validate) item.formItemProps = { ...item.formItemProps, rules: undefined, required: undefined };
+      return item;
+    })
+);
 
 const rowSpan = computed(() => {
-  const { searchCols } = getProps.value;
+  const { searchCols } = finalProps.value;
   if (typeof searchCols === "number") return searchCols;
   return searchCols[breakPoint.value];
 });
 
-// 判断是否显示 展开/合并 按钮
-const showCollapse = computed(() => {
-  const { column, searchCols } = getProps.value;
+// 判断是否显示 展开/折叠 按钮
+const showCollapseButton = computed(() => {
+  const { columns, searchCols } = finalProps.value;
 
   let show = false;
-  column.reduce((prev, current) => {
+  columns.reduce((prev, current) => {
     prev +=
       ((current.grid && current.grid[breakPoint.value]?.span) ?? current.grid?.span ?? 1) +
       ((current.grid && current.grid[breakPoint.value]?.offset) ?? current.grid?.offset ?? 0);
 
     if (typeof searchCols !== "number") {
       if (prev >= searchCols[breakPoint.value]) show = true;
-    } else {
-      if (prev >= searchCols) show = true;
-    }
+    } else if (prev >= searchCols) show = true;
     return prev;
   }, 0);
   return show;
 });
 
 const isRightPosition = computed(() => {
-  const { position } = getProps.value;
+  const { position } = finalProps.value;
   return position === "right";
 });
 
-const isBlock = computed(() => {
-  const { position = "right" } = getProps.value;
+const isBlockPosition = computed(() => {
+  const { position = "right" } = finalProps.value;
   return ["block-left", "block-center", "block-right"].includes(position);
 });
 
-const style = computed(() => {
-  const { position = "right" } = getProps.value;
+const actionStyle = computed(() => {
+  const { position = "right" } = finalProps.value;
   const style = {
     display: "flex",
     alignItems: "center",
     justifyContent: "flex-end",
     marginBottom: "18px",
   };
+
   if (["block-left", "left"].includes(position)) return { ...style, justifyContent: "flex-start" };
   if (["block-center"].includes(position)) return { ...style, justifyContent: "center" };
   if (["block-right", "right"].includes(position)) return { ...style, justifyContent: "flex-end" };
   return style;
 });
 
+// 获取响应式设置
+const getResponsive = (item: ProSearchColumnProps) => {
+  const { grid = {} } = item;
+  return {
+    span: grid.span,
+    offset: grid.offset ?? 0,
+    xs: grid.xs,
+    sm: grid.sm,
+    md: grid.md,
+    lg: grid.lg,
+    xl: grid.xl,
+  };
+};
+
+/**
+ * 过滤空值
+ */
 const filterModel = async () => {
-  const model = await getFormData();
-  if (getProps.value.removeNoValue) {
-    // 使用 reduce 过滤空值，并返回一个新对象
-    return Object.keys(model).reduce((prev: any, next: any) => {
-      const value = model[next];
-      if (!isEmpty(value)) {
-        if (isObject(value)) {
-          if (Object.keys(value).length > 0) prev[next] = value;
-        } else prev[next] = value;
-      }
-      return prev;
-    }, {});
-  }
-  return model;
+  return await getFormModel(finalProps.value.removeNoValue);
 };
 
 const search = async () => {
-  const elFormExpose = await getElFormExpose();
-  await elFormExpose?.validate(async isValid => {
-    if (isValid) {
-      const model = await filterModel();
-      emits("search", model);
-    }
-  });
+  const isValid = await submitForm();
+  if (isValid) {
+    const model = await filterModel();
+    emits("search", model);
+  }
 };
 
 const reset = async () => {
-  const elFormExpose = await getElFormExpose();
-  elFormExpose?.resetFields();
+  await resetForm();
   const model = await filterModel();
   emits("reset", model);
 };
 
-const onFormValidate = (prop: FormItemProp, isValid: boolean, message: string) => {
-  emits("validate", prop, isValid, message);
+/**
+ * 折叠或展开搜索项
+ *
+ * @param isCollapse 是否折叠，如果不传，则根据情况取反操作
+ */
+const toggleCollapse = (isCollapse?: boolean) => {
+  const { collapse } = finalProps.value;
+
+  if (isCollapse === undefined) return setProps({ collapse: !collapse });
+  return setProps({ collapse: isCollapse });
 };
 
-const toggleCollapsed = (isCollapsed?: boolean) => {
-  const { collapsed } = getProps.value;
-
-  if (isCollapsed === undefined) return setProps({ collapsed: !collapsed });
-  return setProps({ collapsed: isCollapsed });
-};
-
-// 设置 form 的值
-const setValues = async (data: Record<string, any> = {}) => {
-  model.value = Object.assign(model.value, data);
-  const formExpose = await getFormExpose();
-  formExpose?.setValues(data);
-};
-
-// 设置 ProForm 组件的 props
-const setProps = (props: ProSearchProps = {}) => {
-  mergeProps.value = Object.assign(unref(mergeProps), props);
-};
-
-// 设置 column
-const setColumn = (columnProps: FormSetProps[]) => {
-  const { column } = getProps.value;
-  for (const v of column) {
-    for (const item of columnProps) {
-      if (v.prop === item.prop) {
-        setProp(v, item.field, item.value);
-      }
-    }
-  }
-};
-
-// 添加 column
-const addColumn = (formColumn: FormColumn, prop?: number | string, position: "before" | "after" = "after") => {
-  const { column } = getProps.value;
-
-  if (isString(prop)) {
-    return column.forEach((s, i) => {
-      if (s.prop === prop) position === "after" ? formColumn.splice(i + 1, 0, s) : formColumn.splice(i, 0, s);
-    });
-  }
-  if (prop !== undefined) return column.splice(prop, 0, formColumn);
-  return column.push(formColumn);
-};
-
-// 删除 column
-const delColumn = (prop: string) => {
-  const { column } = getProps.value;
-
-  const index = column.findIndex(item => item.prop === prop);
-  if (index > -1) {
-    column.splice(index, 1);
-  }
-};
+export type ProSearchExpose = typeof defaultExpose;
 
 const defaultExpose = {
-  getElFormExpose,
-  getFormExpose,
-  getFormData,
-  toggleCollapsed,
+  getFormModel,
+  getElFormInstance,
+  getProFormInstance,
+  getFormItemInstance,
+  getElInstance,
+  toggleCollapse,
   setProps,
   setColumn,
   setValues,
   delColumn,
   addColumn,
+  search,
+  reset,
 };
 
 onMounted(() => {
@@ -289,50 +198,68 @@ defineExpose(defaultExpose);
 </script>
 
 <template>
-  <div v-if="column.length" :class="`card ${ns.b()}`">
-    <ProForm :column="column" v-model="model" @register="formRegister" @validate="onFormValidate" :enum-map-props>
-      <Grid
-        ref="gridRef"
-        :collapsed="getProps.useCollapsed ? getProps.collapsed : false"
-        :cols="getProps.searchCols"
-        :gap="getProps.gap"
-        :collapsedRows="getProps.collapsedRows"
-      >
-        <GridItem v-for="column in columnForm" :key="column.prop" v-bind="getResponsive(column)" :index="column._index">
-          <ProFormItem v-model="model" v-bind="column" />
-        </GridItem>
+  <div v-if="searchColumns.length" :class="`card ${ns.b()}`">
+    <ProForm :columns @register="formRegister" v-bind="$attrs">
+      <template #default="{ isHidden, setProFormItemInstance, optionsMap }">
+        <Grid
+          ref="gridInstance"
+          :collapse="finalProps.showCollapse ? finalProps.collapse : false"
+          :cols="finalProps.searchCols"
+          :gap="finalProps.gap"
+          :showRow="finalProps.showRow"
+        >
+          <GridItem
+            v-for="column in searchColumns"
+            :key="column.prop"
+            v-bind="getResponsive(column)"
+            :index="column._index"
+          >
+            <ProFormItem
+              :ref="el => setProFormItemInstance(el, column.prop)"
+              v-model="model"
+              v-bind="column"
+              v-show="!isHidden(column)"
+              :option="optionsMap.get(column.optionsProp || column.prop)"
+            />
+          </GridItem>
 
-        <GridItem :suffix="isRightPosition" :span="isBlock ? rowSpan : 1">
-          <div :style="style">
-            <slot name="action" :model="model" :showCollapse="showCollapse" :toggleCollapsed="toggleCollapsed">
-              <el-button
-                v-if="getProps.showSearch"
-                type="primary"
-                :icon="Search"
-                @click="search"
-                :loading="getProps.searchLoading"
+          <GridItem :suffix="isRightPosition" :span="isBlockPosition ? rowSpan : 1">
+            <div :style="actionStyle">
+              <slot
+                name="action"
+                :model="model"
+                :showCollapseButton="showCollapseButton"
+                :toggleCollapse="toggleCollapse"
               >
-                搜索
-              </el-button>
-              <el-button v-if="getProps.showReset" :icon="Delete" @click="reset" :loading="getProps.resetLoading">
-                重置
-              </el-button>
-              <el-button
-                v-if="getProps.useCollapsed === false ? false : showCollapse"
-                type="primary"
-                link
-                class="search-isOpen"
-                @click="toggleCollapsed()"
-              >
-                {{ getProps.collapsed ? "展开" : "折叠" }}
-                <el-icon class="el-icon--right">
-                  <component :is="getProps.collapsed ? ArrowDown : ArrowUp"></component>
-                </el-icon>
-              </el-button>
-            </slot>
-          </div>
-        </GridItem>
-      </Grid>
+                <el-button
+                  v-if="finalProps.showSearch"
+                  type="primary"
+                  :icon="Search"
+                  @click="search"
+                  :loading="finalProps.searchLoading"
+                >
+                  {{ finalProps.searchText }}
+                </el-button>
+                <el-button v-if="finalProps.showReset" :icon="Delete" @click="reset" :loading="finalProps.resetLoading">
+                  {{ finalProps.resetText }}
+                </el-button>
+                <el-button
+                  v-if="finalProps.showCollapse && showCollapseButton"
+                  type="primary"
+                  link
+                  class="search-isOpen"
+                  @click="toggleCollapse()"
+                >
+                  {{ finalProps.collapse ? finalProps.expandText : finalProps.collapseText }}
+                  <el-icon class="el-icon--right">
+                    <component :is="finalProps.collapse ? ArrowDown : ArrowUp" />
+                  </el-icon>
+                </el-button>
+              </slot>
+            </div>
+          </GridItem>
+        </Grid>
+      </template>
     </ProForm>
   </div>
 </template>
@@ -340,7 +267,7 @@ defineExpose(defaultExpose);
 <style lang="scss" scoped>
 @use "@/styles/mixins/bem" as *;
 
-@include b(search-form) {
+@include b(pro-search) {
   padding: 18px 18px 0;
   margin-bottom: 10px;
 }

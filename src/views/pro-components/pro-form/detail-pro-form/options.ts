@@ -1,4 +1,4 @@
-import type { FormColumn } from "@/components";
+import type { FormColumn, ElFormProps } from "@/components";
 import type { FormRules } from "element-plus";
 
 const rules = reactive<FormRules>({
@@ -9,18 +9,16 @@ const rules = reactive<FormRules>({
   owner: [{ required: true, message: "请输入 Owner", trigger: "blur" }],
 });
 
-export const elFormProps = {
+export const elFormProps: ElFormProps = {
   inline: false,
   labelPosition: "right",
   labelWidth: "120px",
   disabled: false,
   labelSuffix: " :",
-  fixWidth: true,
   rules: rules,
-  width: "100%",
 };
 
-export const column: FormColumn[] = [
+export const columns: FormColumn[] = [
   {
     label: "Title",
     el: "el-input",

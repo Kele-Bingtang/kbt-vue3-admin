@@ -2,12 +2,12 @@
 import { ProSearch, type ProSearchColumnProps, useProSearch, type ActionPosition } from "@/components";
 
 const { searchRegister, searchMethods } = useProSearch();
-const { setColumn, setProps, setValues, getFormData } = searchMethods;
+const { setColumn, setProps, setValues, getFormModel } = searchMethods;
 
 const model = ref({});
 
 const handleSearch = async (data: any) => {
-  const formData = await getFormData();
+  const formData = await getFormModel();
   console.log(formData);
   console.log(data);
 };
@@ -33,11 +33,11 @@ const setValue = () => {
 };
 
 const changeCollapsedRows = (rows: number) => {
-  setProps({ collapsedRows: rows });
+  setProps({ showRow: rows });
 };
 
 const useCollapsed = (use: boolean) => {
-  setProps({ useCollapsed: use });
+  setProps({ showCollapse: use });
 };
 
 const changeSearchLoading = () => {
@@ -54,7 +54,7 @@ const changeResetLoading = () => {
   }, 2000);
 };
 
-const column: ProSearchColumnProps[] = reactive([
+const columns: ProSearchColumnProps[] = reactive([
   {
     label: "姓名",
     prop: "name",
@@ -133,13 +133,7 @@ const column: ProSearchColumnProps[] = reactive([
       </el-space>
     </el-card>
 
-    <ProSearch
-      :column="column"
-      v-model="model"
-      @search="handleSearch"
-      @reset="handleSearch"
-      @register="searchRegister"
-    />
+    <ProSearch :columns v-model="model" @search="handleSearch" @reset="handleSearch" @register="searchRegister" />
     {{ model }}
   </el-space>
 </template>

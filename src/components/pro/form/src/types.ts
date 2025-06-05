@@ -1,16 +1,132 @@
-import type { ColProps, FormProps } from "element-plus";
+import type { ColProps, FormInstance, FormItemProp, FormProps, FormValidateCallback, RowProps } from "element-plus";
 import type { ComputedRef, ComponentPublicInstance, InjectionKey, Ref } from "vue";
-import type { FormItemColumn, BaseValueType } from "@/components/pro/form-item";
-import type { ProFormProps } from "./index.vue";
-import ProForm from "./index.vue";
+import type { FormItemColumnProps, BaseValueType } from "@/components/pro/form-item";
+import type ProForm from "./index.vue";
 
-export interface ProElFormProps extends Partial<FormProps> {
-  fixWidth?: boolean;
-  width?: number | string;
+export type ElFormProps = Partial<FormProps>;
+export type ElRowProps = Partial<RowProps>;
+export type ElColProps = Partial<ColProps>;
+
+export interface ProFormProps {
+  /**
+   * 表单配置项
+   */
+  columns?: RequiredKey<FormColumn, "prop">[];
+  /**
+   * ElForm props
+   */
+  elFormProps?: ElFormProps;
+  /**
+   * 是否使用栅格布局
+   *
+   * @default true
+   */
+  useFlexLayout?: boolean;
+  /**
+   * ElRow Props
+   */
+  rowProps?: ElRowProps;
+  /**
+   * ElCol Props
+   */
+  colProps?: ElColProps;
+  /**
+   * TODO 是否只渲染 ProFormItem 组件，只使用表单组件
+   *
+   * @default false
+   */
+  onlyRenderEl?: boolean;
+  /**
+   * 动态 model，如果 column 发生变化，则重新渲染 model 表单数据（将不存在 column 的 prop 从 model 中去掉）
+   *
+   * @default true
+   */
+  dynamicModel?: boolean;
+  /**
+   * 搭配 dynamicModel 使用，清除 model 不存在的 prop 时，指定保留 prop
+   */
+  includeModelKeys?: string[];
+  /**
+   * 表单提交时，如果校验失败，是否使用 ElMessage 提示错误信息
+   *
+   * @default true
+   */
+  showErrorTip?: boolean;
+  /**
+   * 是否显示 Footer（两个按钮）
+   *
+   * @default true
+   */
+  showFooter?: boolean;
+  /**
+   * 是否显示重置按钮
+   *
+   * @default true
+   */
+  showReset?: boolean;
+  /**
+   * 提交按钮文字
+   *
+   * @default '提交'
+   */
+  submitText?: string;
+  /**
+   * 重置按钮文字
+   *
+   * @default '重置'
+   */
+  resetText?: string;
+  /**
+   * 提交按钮 loading
+   *
+   * @default false
+   */
+  submitLoading?: boolean;
+  /**
+   * 底部对齐方式
+   *
+   * @default 'right'
+   */
+  footerAlign?: "left" | "center" | "right";
+  /**
+   * 是否阻止表单提交时默认的表单提交行为（即自动校验表单）
+   *
+   * @default false
+   */
+  preventNativeSubmit?: boolean;
+  /**
+   * 是否显示 label，优先级低于 FormItemColumnProps["showLabel"]
+   *
+   * @default true
+   */
+  showLabel?: FormItemColumnProps["showLabel"];
+  /**
+   * 是否显示清除按钮，优先级低于 FormItemColumnProps["clearable"]
+   *
+   * @default true
+   */
+  clearable?: FormItemColumnProps["clearable"];
+  /**
+   * 表单组件宽度，优先级低于 FormItemColumnProps["width"]
+   *
+   * @default '100%'
+   */
+  width?: FormItemColumnProps["width"];
 }
 
+export type ProFormEmits = {
+  register: [proFormRef: any, elFormRef: FormInstance | null]; // 注册 ProForm 组件实例和 elForm 实例
+  validate: [prop: FormItemProp, isValid: boolean, message: string]; // ElForm 自带的事件
+  submit: [model: Recordable]; // 提交按钮事件
+  submitError: [invalidFields: Parameters<FormValidateCallback>[1]]; // 表单提交后校验失败事件
+  reset: [model: Recordable]; // 重置按钮事件
+};
+
+// 转为 onXxx: (xxx) => void
+export type ProFormOnEmits = keyOnPrefix<ProFormEmits>;
+
 /**
- * setSchema 函数的参数类型
+ * setColumn 函数的参数类型
  */
 export interface FormSetProps {
   prop: string;
@@ -21,7 +137,8 @@ export interface FormSetProps {
 /**
  * ProForm 表单配置项
  */
-export interface FormColumn extends FormItemColumn {
+export interface FormColumn extends FormItemColumnProps {
+  prop: NonNullable<FormItemColumnProps["prop"]>;
   /**
    * ElCol Props
    */
@@ -54,11 +171,6 @@ export interface FormColumn extends FormItemColumn {
    */
   disabled?: boolean | ((model: Recordable) => boolean);
   /**
-   * 表单绑定的值格式，针对 Enum Value 是 string "1"，而值是 number 1 导致编辑时无法匹配问题
-   * @default default
-   */
-  valueFormat?: "default" | "string" | "number" | "boolean";
-  /**
    * 是否使用已缓存 Options 数据，防止重复请求
    * @default true
    */
@@ -77,9 +189,12 @@ export interface FormColumn extends FormItemColumn {
   [key: string]: any;
 }
 
+/**
+ * ProForm 组件实例
+ */
 export type ProFormInstance = Omit<InstanceType<typeof ProForm>, keyof ComponentPublicInstance | keyof ProFormProps>;
 
 /**
  * provide 类型
  */
-export const formEnumMapKey: InjectionKey<Ref<Map<string, Recordable[]>>> = Symbol("enumMap");
+export const optionsMapKey: InjectionKey<Ref<Map<string, Recordable[]>>> = Symbol("optionsMap");

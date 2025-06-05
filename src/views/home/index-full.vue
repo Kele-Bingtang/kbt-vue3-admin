@@ -85,6 +85,7 @@ const lineBarData = [
 <style lang="scss" scoped>
 .home-full {
   width: 100%;
+  height: 100%;
   padding: 20px;
   background-color: #f0f2f5;
 

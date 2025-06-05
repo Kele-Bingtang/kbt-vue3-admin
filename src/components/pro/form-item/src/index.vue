@@ -1,12 +1,10 @@
 <script setup lang="ts">
 import type { FormItemInstance } from "element-plus";
-import type { FormItemColumn, FieldBaseValueType } from "./types";
+import type { FormItemColumnProps, FieldBaseValueType } from "./types";
 import { ElFormItem, ElTooltip, ElDivider, ElUpload, ElIcon } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
-import { addUnit } from "@/utils";
-import { ComponentNameEnum } from "./types";
-import { formatValue, hyphenToCamelCase } from "./helper";
-import { componentMap } from "./helper/component-map";
+import { addUnit, isObject } from "@/utils";
+import { formatValue, getProp, hyphenToCamelCase, setProp, componentMap, ComponentNameEnum } from "./helper";
 import Checkbox from "./components/checkbox.vue";
 import Radio from "./components/radio.vue";
 import Select from "./components/select.vue";
@@ -14,52 +12,51 @@ import Tree from "./components/tree.vue";
 
 defineOptions({ name: "ProFormItem" });
 
-export interface ProFormItemProps {
-  prop: FormItemColumn["prop"];
-  label?: FormItemColumn["label"];
-  hasLabel?: FormItemColumn["hasLabel"];
-  width?: FormItemColumn["width"];
-  el?: FormItemColumn["el"];
-  elProps?: FormItemColumn["elProps"];
-  elSlots?: FormItemColumn["elSlots"];
-  options?: FormItemColumn["options"];
-  optionField?: FormItemColumn["optionField"];
-  formItemProps?: FormItemColumn["formItemProps"];
-  defaultValue?: FormItemColumn["defaultValue"];
-  tooltip?: FormItemColumn["tooltip"];
-  renderLabel?: FormItemColumn["renderLabel"];
-  renderEl?: FormItemColumn["renderEl"];
-  // modelProp?: string; // model 的 key
-}
-
-const props = withDefaults(defineProps<ProFormItemProps>(), {
-  el: "ElInput",
+const props = withDefaults(defineProps<FormItemColumnProps>(), {
+  prop: "",
   label: "",
-  hasLabel: true,
+  showLabel: true,
+  width: "",
+  el: "ElInput",
   elProps: () => ({}),
   elSlots: () => ({}),
   options: () => [],
   optionField: () => ({ label: "label", value: "value", children: "children", disabled: "disabled" }),
   formItemProps: () => ({}),
-  defaultValue: undefined,
+  clearable: true,
   tooltip: undefined,
   renderLabel: undefined,
   renderEl: undefined,
+  getFormat: undefined,
 });
 
 const model = defineModel<FieldBaseValueType | any>({ required: false });
 const enums = ref<Recordable[]>([]);
 
 // 存储每一个 ElFormItem 实例
-const formItemComponentsRef = useTemplateRef<FormItemInstance>("formItemComponentsRef");
-// 存储表单组件实例
-const formComponentRef = useTemplateRef<Component>("formComponentRef");
+const formItemInstance = useTemplateRef<FormItemInstance>("formItemInstance");
+// 存储每一个表单组件实例
+const elInstance = useTemplateRef<Component>("elInstance");
 
 const formEl = computed(() => hyphenToCamelCase(toValue(props.el)) as ComponentNameEnum);
 const labelValue = computed(() => toValue(props.label));
-const hasLabelValue = computed(() => toValue(props.hasLabel));
+const showLabelValue = computed(() => toValue(props.showLabel));
 const withValue = computed(() => addUnit(toValue(props.width)));
 const formItemPropsValue = computed(() => toValue(props.formItemProps));
+
+const elModel = computed({
+  get: () => {
+    const { prop, getFormat } = props;
+    // 如果 model 是对象，则取到对应的 prop 值
+    if (isObject(model.value) && prop) return getProp(model.value, prop, getFormat);
+    return model.value;
+  },
+  set: val => {
+    const { prop } = props;
+    if (isObject(model.value) && prop) return setProp(model.value, prop, val);
+    model.value = val;
+  },
+});
 
 // 处理透传的 elProps
 const elPropsValue = computed<Recordable>(() => {
@@ -102,7 +99,7 @@ const slotParams = computed(() => ({
 const initOptions = async () => {
   const { options, optionField } = props;
 
-  let value = await formatValue<FormItemColumn["options"]>(options, [model.value]);
+  let value = await formatValue<FormItemColumnProps["options"]>(options, [model.value]);
   if (!value) return [];
 
   // 适配接口返回 data
@@ -142,13 +139,6 @@ const placeholder = computed(() => {
   return { placeholder: placeholderConst };
 });
 
-// 是否有清除按钮 (当有默认值时，清除按钮不显示)
-const clearable = computed(() => {
-  const { defaultValue } = props;
-  const { clearable } = elPropsValue.value;
-  return clearable ?? (defaultValue === null || defaultValue === undefined);
-});
-
 const childComponentMap: Record<string, Component> = {
   [ComponentNameEnum.EL_SELECT]: Select,
   [ComponentNameEnum.EL_RADIO_GROUP]: Radio,
@@ -167,7 +157,6 @@ const formatDividerTitle = (labelSize = "default") => {
   return {};
 };
 
-// 渲染自定义插槽
 const RenderElSlot = () => {
   const { renderEl } = props;
   return renderEl?.(slotParams.value);
@@ -189,34 +178,37 @@ const RenderTooltipContentSlot = () => {
 };
 
 defineExpose({
-  formItemComponentsRef,
-  formComponentRef,
+  formItemInstance,
+  elInstance,
 });
 </script>
 
 <template>
   <el-form-item
-    ref="formItemComponentsRef"
-    :label="hasLabelValue ? labelValue + '' : ''"
+    ref="formItemInstance"
+    :label="showLabelValue ? labelValue + '' : ''"
     :prop="prop"
-    class="plus-form-item"
     v-bind="formItemProps"
-    :label-width="hasLabelValue ? formItemPropsValue?.labelWidth : '0px'"
+    :label-width="showLabelValue ? formItemPropsValue?.labelWidth : '0px'"
   >
-    <template v-if="hasLabelValue" #label="{ label }">
-      <RenderLabelSlot v-if="!!renderLabel" :label />
-
-      <slot v-else :name="`${prop}-label`" v-bind="slotParams">
-        {{ label }}
+    <template v-if="showLabelValue" #label="{ label }">
+      <!-- 自定义 label 插槽 -->
+      <slot :name="`${prop}-label`" v-bind="slotParams">
+        <!-- 自定义 label（h、JSX）渲染 -->
+        <RenderLabelSlot v-if="!!renderLabel" :label />
+        <span v-else>{{ label }}</span>
       </slot>
 
       <el-tooltip v-if="tooltip" placement="top" effect="dark" v-bind="tooltip">
+        <!-- ElToolTip 默认插槽 -->
         <RenderTooltipDefaultSlot v-if="!!tooltip.render" />
 
+        <!-- ElToolTip content 插槽 -->
         <template v-if="!!tooltip.contentRender" #content>
           <RenderTooltipContentSlot />
         </template>
 
+        <!-- ElToolTip icon 插槽 -->
         <slot name="tooltip-icon">
           <el-icon :size="16">
             <QuestionFilled />
@@ -225,61 +217,65 @@ defineExpose({
       </el-tooltip>
     </template>
 
-    <RenderElSlot v-if="!!renderEl" />
+    <!-- 自定义表单组件插槽 -->
+    <slot :name="`${prop}-el`" v-bind="slotParams">
+      <!-- 自定义表单组件（h、JSX）渲染-->
+      <RenderElSlot v-if="!!renderEl" />
 
-    <Tree
-      v-else-if="formEl === ComponentNameEnum.EL_TREE"
-      :data="enums"
-      v-model="model"
-      v-bind="elPropsValue"
-      :style="{ width: withValue }"
-    />
+      <Tree
+        v-else-if="formEl === ComponentNameEnum.EL_TREE"
+        :data="enums"
+        v-model="elModel"
+        v-bind="elPropsValue"
+        :style="{ width: withValue }"
+      />
 
-    <el-divider v-else-if="formEl === ComponentNameEnum.EL_DIVIDER" v-bind="elPropsValue">
-      <span :style="formatDividerTitle(elPropsValue.labelSize)">
-        {{ labelValue }}
-      </span>
-    </el-divider>
+      <el-divider v-else-if="formEl === ComponentNameEnum.EL_DIVIDER" v-bind="elPropsValue">
+        <span :style="formatDividerTitle(elPropsValue.labelSize)">
+          {{ labelValue }}
+        </span>
+      </el-divider>
 
-    <el-upload
-      v-else-if="formEl === ComponentNameEnum.EL_UPLOAD"
-      ref="formComponentRef"
-      v-model:file-list="model"
-      :clearable
-      v-bind="{ ...elPropsValue, ...placeholder }"
-      :style="{ width: withValue }"
-    />
+      <el-upload
+        v-else-if="formEl === ComponentNameEnum.EL_UPLOAD"
+        ref="elInstance"
+        v-model:file-list="elModel"
+        :clearable
+        v-bind="{ ...elPropsValue, ...placeholder }"
+        :style="{ width: withValue }"
+      />
 
-    <component
-      v-if="childComponentMap[formEl]"
-      :is="componentMap[formEl]"
-      ref="formComponentRef"
-      v-model="model"
-      :clearable
-      v-bind="{ ...elPropsValue, ...placeholder }"
-      :style="{ width: withValue }"
-    >
-      <component :is="childComponentMap[formEl]" :options="enums" :optionField :el="formEl" />
+      <component
+        v-if="childComponentMap[formEl]"
+        :is="componentMap[formEl]"
+        ref="elInstance"
+        v-model="elModel"
+        :clearable
+        v-bind="{ ...elPropsValue, ...placeholder }"
+        :style="{ width: withValue }"
+      >
+        <component :is="childComponentMap[formEl]" :options="enums" :optionField :el="formEl" />
 
-      <template v-for="(elSlot, key) in elSlots" :key="key" #[key]="data">
-        <component :is="elSlot" v-bind="{ ...slotParams, ...data }" />
-      </template>
-    </component>
+        <template v-for="(slot, key) in elSlots" :key="key" #[key]="data">
+          <component :is="slot" v-bind="{ ...slotParams, ...data }" />
+        </template>
+      </component>
 
-    <component
-      v-else-if="formEl"
-      :is="componentMap[formEl]"
-      ref="formComponentRef"
-      v-model="model"
-      :clearable
-      v-bind="{ ...elPropsValue, ...placeholder }"
-      :data="formEl === ComponentNameEnum.EL_TREE_SELECT ? enums : []"
-      :options="[ComponentNameEnum.EL_CASCADER, ComponentNameEnum.EL_SELECT_V2].includes(formEl) ? enums : []"
-      :style="{ width: withValue }"
-    >
-      <template v-for="(elSlot, key) in elSlots" :key="key" #[key]="data">
-        <component :is="elSlot" v-bind="{ ...slotParams, ...data }" />
-      </template>
-    </component>
+      <component
+        v-else-if="formEl"
+        :is="componentMap[formEl]"
+        ref="elInstance"
+        v-model="elModel"
+        :clearable
+        v-bind="{ ...elPropsValue, ...placeholder }"
+        :data="formEl === ComponentNameEnum.EL_TREE_SELECT ? enums : []"
+        :options="[ComponentNameEnum.EL_CASCADER, ComponentNameEnum.EL_SELECT_V2].includes(formEl) ? enums : []"
+        :style="{ width: withValue }"
+      >
+        <template v-for="(slot, key) in elSlots" :key="key" #[key]="data">
+          <component :is="slot" v-bind="{ ...slotParams, ...data }" />
+        </template>
+      </component>
+    </slot>
   </el-form-item>
 </template>

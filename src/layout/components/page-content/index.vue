@@ -46,10 +46,10 @@ watchEffect(() => {
   const app = document.getElementById("app") as HTMLElement;
 
   if (urlParams.get("_maximize")) {
-    if (!app?.className.includes("main-maximize")) app?.classList.add("main-maximize");
+    if (!app?.className.includes("page-maximize")) app?.classList.add("page-maximize");
   } else {
-    if (settingStore.maximize) app?.classList.add("main-maximize");
-    else app?.classList.remove("main-maximize");
+    if (settingStore.maximize) app?.classList.add("page-maximize");
+    else app?.classList.remove("page-maximize");
   }
 });
 
@@ -67,7 +67,7 @@ const isFixTabNav = computed(() => {
     <router-view v-slot="{ Component, route }">
       <transition :name="settingStore.pageTransition" mode="out-in" appear>
         <keep-alive :max="10" :include="layoutStore.keepAliveName">
-          <component v-if="isRefreshRoute" :is="Component" :key="route.path" class="main-content" />
+          <component v-if="isRefreshRoute" :is="Component" :key="route.path" class="page-content" />
         </keep-alive>
       </transition>
     </router-view>
@@ -80,7 +80,10 @@ const isFixTabNav = computed(() => {
   padding: 0;
   background-color: var(--#{$admin-namespace}-bg-color);
 
-  .main-content {
+  .page-content {
+    max-height: calc(
+      100vh - var(--#{$admin-namespace}-layout-header-height) - var(--#{$admin-namespace}-layout-tab-height) - 18px
+    );
     margin: 10px 12px;
     overflow: v-bind(isFixTabNav);
   }
@@ -89,7 +92,7 @@ const isFixTabNav = computed(() => {
 
 <style lang="scss">
 /* 当前页面最大化 */
-.main-maximize {
+.page-maximize {
   .#{$admin-namespace}-columns-layout__aside,
   .#{$el-namespace}-aside,
   .#{$el-namespace}-header,

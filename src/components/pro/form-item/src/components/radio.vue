@@ -2,7 +2,7 @@
 import type { FormOptionFieldProps } from "../types";
 import { computed } from "vue";
 import { ElRadio, ElRadioButton } from "element-plus";
-import { ComponentNameEnum } from "../types";
+import { ComponentNameEnum } from "../helper";
 
 const props = defineProps<{
   options: Recordable[];

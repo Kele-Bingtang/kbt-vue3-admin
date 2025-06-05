@@ -23,15 +23,15 @@ export type BreakPoint = "xs" | "sm" | "md" | "lg" | "xl";
 
 export interface GridProps {
   cols?: number | Record<BreakPoint, number>; // 响应式布局
-  collapsed?: boolean; // 是否开启折叠功能
-  collapsedRows?: number; // 可见的行数
+  collapse?: boolean; // 是否开启折叠功能
+  showRow?: number; // 可见的行数
   gap?: [number, number] | number; // 行和列间距
 }
 
 const props = withDefaults(defineProps<GridProps>(), {
   cols: () => ({ xs: 1, sm: 2, md: 2, lg: 3, xl: 4 }),
-  collapsed: false,
-  collapsedRows: 1,
+  collapse: false,
+  showRow: 1,
   gap: 0,
 });
 
@@ -53,7 +53,7 @@ provide("cols", gridCols);
 const hiddenIndex = ref(-1);
 provide("shouldHiddenIndex", hiddenIndex);
 
-onBeforeMount(() => props.collapsed && findHiddenIndex());
+onBeforeMount(() => props.collapse && findHiddenIndex());
 
 onMounted(() => {
   resize({ target: { innerWidth: window.innerWidth } } as unknown as UIEvent);
@@ -126,7 +126,7 @@ const findHiddenIndex = () => {
         ((current as VNode)!.props![breakPoint.value]?.span ?? (current as VNode)!.props?.span ?? 1) +
         ((current as VNode)!.props![breakPoint.value]?.offset ?? (current as VNode)!.props?.offset ?? 0);
       // 当计算的多个 Children 的 span 和 offset 总和超出一行
-      if (Number(prev) > props.collapsedRows * gridCols.value - suffixCols) {
+      if (Number(prev) > props.showRow * gridCols.value - suffixCols) {
         hiddenIndex.value = index;
         find = true;
         // 跳出 reduce
@@ -142,15 +142,15 @@ const findHiddenIndex = () => {
 
 // 断点变化时 执行 findHiddenIndex
 watch(
-  () => [breakPoint.value, props.collapsedRows],
+  () => [breakPoint.value, props.showRow],
   () => {
-    if (props.collapsed) findHiddenIndex();
+    if (props.collapse) findHiddenIndex();
   }
 );
 
-// 监听 collapsed
+// 监听 collapse
 watch(
-  () => props.collapsed,
+  () => props.collapse,
   value => {
     if (value) return findHiddenIndex();
     hiddenIndex.value = -1;

@@ -4,12 +4,12 @@ import {
   Grid,
   GridItem,
   type TableColumnProps,
-  type DialogFormSchemaProps,
+  type DialogFormColumnProps,
   type ProTableInstance,
 } from "@/components";
 // import ProForm from "@/components";
 import { ArrowUp, ArrowDown } from "@element-plus/icons-vue";
-import { schema, elFormProps } from "@/views/pro-components/pro-form/detail-pro-form/options";
+import { columns as FormColumns, elFormProps } from "@/views/pro-components/pro-form/detail-pro-form/options";
 
 interface ProblemData {
   id: string;
@@ -141,7 +141,7 @@ const columns: TableColumnProps<ProblemData>[] = [
 
 const dialogForm = {
   formProps: {
-    schema: schema as DialogFormSchemaProps[],
+    schema: FormColumns as DialogFormColumnProps[],
     elFormProps,
   },
   useAdd: true,

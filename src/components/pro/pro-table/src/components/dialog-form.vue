@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ElButton, type DialogProps, ElMessage, type FormInstance, ElMessageBox } from "element-plus";
-import { ProForm, WorkDialog, type ProFormProps, type FormColumnProps, type ProFormInstance } from "@/components";
+import { ProForm, WorkDialog, type ProFormProps, type FormColumn, type ProFormInstance } from "@/components";
 import { ref, computed, unref } from "vue";
 import { tableEnumMapKey } from "../interface";
 import { deepClone } from "@/utils";
@@ -9,7 +9,7 @@ defineOptions({ name: "DialogForm" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
-export interface DialogFormColumnProps<T = any> extends FormColumnProps<T> {
+export interface DialogFormColumnProps<T = any> extends FormColumn {
   destroyIn?: Array<"add" | "edit">; // 是否销毁表单，类似于 v-if
   hiddenIn?: Array<"add" | "edit">; // 是否隐藏表单，类似于 v-show
   disabledIn?: Array<"add" | "edit">; // 是否禁用表单
@@ -93,7 +93,7 @@ const includeModelKeys = computed(() => {
 /**
  * 表单配置项
  */
-const newSchema = computed((): FormColumnProps[] | undefined => {
+const newSchema = computed((): FormColumn[] | undefined => {
   // 目前 status 一变化，都走一遍循环，优化：可以利用 Map 存储有 show 的 column（存下标），然后监听 status，当 status 变化，则通过下标获取 column，将 hidden 设置为 true
   unref(props.formProps?.schema)?.forEach(column => {
     if (!column) return;
@@ -114,7 +114,7 @@ const newSchema = computed((): FormColumnProps[] | undefined => {
     }
   });
 
-  return props.formProps?.schema as FormColumnProps[];
+  return props.formProps?.schema as FormColumn[];
 });
 
 /**

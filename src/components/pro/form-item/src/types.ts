@@ -21,14 +21,20 @@ import type {
   ElTooltipProps,
 } from "element-plus";
 import type { VNode, ComputedRef, ComponentPublicInstance, ExtractPropTypes } from "vue";
-import ProFormItem, { type ProFormItemProps } from "./index.vue";
+import type ProFormItem from "./index.vue";
 import type { TreeProps as CustomTreeProps } from "./components/tree.vue";
 import type { TreeProps } from "element-plus/es/components/tree-v2/src/types";
 import type { SelectProps } from "element-plus/es/components/select/src/select";
 import type { SelectProps as SelectV2Props } from "element-plus/es/components/select-v2/src/defaults";
 import type { TimeSelectProps } from "element-plus/es/components/time-select/src/time-select";
 import type { JSX } from "vue/jsx-runtime";
+import type { ComponentNameEnum } from "./helper";
 
+export type ElFormItemProps = Partial<FormItemProps>;
+
+/**
+ * 表单数据类型
+ */
 export type FieldBaseValueType =
   | string
   | number
@@ -48,41 +54,7 @@ export type FieldBaseValueType =
   | Record<any, any>;
 
 /**
- * 组件内置导入需要
- */
-export enum ComponentNameEnum {
-  EL_INPUT = "ElInput",
-  EL_INPUT_NUMBER = "ElInputNumber",
-  EL_SELECT = "ElSelect",
-  EL_SELECT_V2 = "ElSelectV2",
-  EL_TREE = "ElTree",
-  EL_TREE_SELECT = "ElTreeSelect",
-  EL_CASCADER = "ElCascader",
-  EL_DATE_PICKER = "ElDatePicker",
-  EL_TIME_PICKER = "ElTimePicker",
-  EL_TIME_SELECT = "ElTimeSelect",
-  EL_SWITCH = "ElSwitch",
-  EL_SLIDER = "ElSlider",
-  EL_RADIO = "ElRadio",
-  EL_RADIO_GROUP = "ElRadioGroup",
-  EL_RADIO_BUTTON = "ElRadioButton",
-  EL_CHECKBOX = "ElCheckbox",
-  EL_CHECKBOX_GROUP = "ElCheckboxGroup",
-  EL_CHECKBOX_BUTTON = "ElCheckboxButton",
-  EL_AUTOCOMPLETE = "ElAutocomplete",
-  EL_RATE = "ElRate",
-  EL_COLOR_PICKER = "ElColorPicker",
-  EL_TRANSFER = "ElTransfer",
-  EL_DIVIDER = "ElDivider",
-  EL_UPLOAD = "ElUpload",
-  CHECK_BOX_SELECT = "CheckBoxSelect",
-  WANG_EDITOR = "WangEditor",
-  TINYMCE = "Tinymce",
-  ICON_PICKER = "IconPicker",
-}
-
-/**
- * el 字面量
+ * el 字面量，为 PascalCase 格式
  */
 export type PascalCaseComponentName = keyof typeof ComponentNameEnum extends infer K
   ? K extends string
@@ -95,7 +67,7 @@ export type PascalCaseComponentName = keyof typeof ComponentNameEnum extends inf
   : never;
 
 /**
- * el 字面量
+ * el 字面量，为 HyphenCase 格式
  */
 export type HyphenCaseComponentName = keyof typeof ComponentNameEnum extends infer K
   ? K extends string
@@ -142,6 +114,9 @@ export interface FormOptionProps {
    * 为树形选择时，可以通过 children 属性指定子选项
    */
   children?: FormOptionProps[];
+  /**
+   * 拓展其他选项
+   */
   [key: string]: any;
 }
 
@@ -158,25 +133,27 @@ export type FormOptionFieldProps = {
 /**
  * ProFormItem 的 props
  */
-export interface FormItemColumn {
+export interface FormItemColumnProps {
   /**
-   * 表单组件 Props
+   * ElFormItem 的 props 属性，当表单数据 model 为对象时，prop 也是 model 的 key 传入表单组件里
    */
-  prop: string;
+  prop?: string;
   /**
-   * ElFormItem 的 label 属性
+   * 标签，ElFormItem 的 label 属性
    */
-  label: MaybeRefOrGetter<BaseValueType>;
+  label?: MaybeRefOrGetter<BaseValueType>;
   /**
    * 是否显示 label
    */
-  hasLabel?: MaybeRefOrGetter<boolean>;
+  showLabel?: MaybeRefOrGetter<boolean>;
   /**
    * 表单组件宽度
    */
   width?: MaybeRef<string | number>;
   /**
    * 使用的表单组件名
+   *
+   * @default 'ElInput'
    */
   el?: MaybeRef<FormType>;
   /**
@@ -216,7 +193,7 @@ export interface FormItemColumn {
     [slotName: string]: (data: {
       options: FormOptionProps[];
       optionField: FormOptionFieldProps;
-      // 其他的 FormItemColumn 类型
+      // 其他的 FormItemColumnProps 类型
       [key: string]: any;
     }) => RenderTypes;
   };
@@ -233,15 +210,22 @@ export interface FormItemColumn {
     | Promise<FormOptionProps[]>;
   /**
    * 字典指定 label && value && children 的 key 值
-   * @default Object { label: "label", value: "value", children: "children" }
+   *
+   * @default { label: "label", value: "value", children: "children", disabled: "disabled" }
    */
   optionField?: FormOptionFieldProps;
   /**
    * ElFormItem props
    */
-  formItemProps?: MaybeRef<Partial<FormItemProps>>;
+  formItemProps?: MaybeRef<ElFormItemProps>;
   /**
-   * Label 使用 ElToolTip 提示的配置
+   * 是否显示清除按钮
+   *
+   * @default true
+   */
+  clearable?: boolean;
+  /**
+   * Label 右侧 ElToolTip 提示
    */
   tooltip?: Partial<ElTooltipProps> & {
     icon?: Component; // ElTooTip 绑定的元素图标
@@ -249,21 +233,23 @@ export interface FormItemColumn {
     contentRender?: () => VNode | string; // 自定义 ElTooTip 的内容，传入 ElTooTip 的 content 插槽里
   };
   /**
+   * 表单绑定的值格式，场景：select 下拉 value 为 "1"，而 model 值是 1 导致无法匹配，可以设置为 getFormat: "string" 解决
+   */
+  getFormat?: BaseValueType | ((value: BaseValueType) => BaseValueType);
+  /**
    * 自定义 label 标题
    */
-  renderLabel?: (label: string, scope: FormItemColumn) => RenderTypes;
+  renderLabel?: (label: string, scope: FormItemColumnProps) => RenderTypes;
   /**
    * 自定义渲染 el-form-item 下的表单组件
    */
-  renderEl?: (scope: FormItemColumn) => RenderTypes;
-
-  /**
-   * 其他拓展
-   */
-  [key: string]: any;
+  renderEl?: (scope: FormItemColumnProps) => RenderTypes;
 }
 
+/**
+ * ProFormItem 组件实例
+ */
 export type ProFormItemInstance = Omit<
   InstanceType<typeof ProFormItem>,
-  keyof ComponentPublicInstance | keyof ProFormItemProps
+  keyof ComponentPublicInstance | keyof FormItemColumnProps
 >;

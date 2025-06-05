@@ -1,5 +1,9 @@
-import { isFunction, isObject, isPromise } from "@/utils";
-import { isRef, type Reactive } from "vue";
+import type { Reactive } from "vue";
+import type { FieldBaseValueType, FormItemColumnProps } from "../types";
+import { isRef } from "vue";
+import { isEmpty, isFunction, isObject, isPromise } from "@/utils";
+
+export * from "./component-map";
 
 /**
  * 将连字符转换为大驼峰格式
@@ -32,4 +36,51 @@ export const formatValue = async <T = any>(
   if (isPromise(value)) return await value;
 
   return value;
+};
+
+/**
+ * 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
+ */
+export const getProp = (
+  model: FieldBaseValueType,
+  prop: NonNullable<FormItemColumnProps["prop"]>,
+  valueFormat?: FormItemColumnProps["getFormat"]
+) => {
+  if (!isObject(model)) return model;
+
+  let value: any;
+  if (!prop.includes(".")) value = (model as any)[prop];
+  else {
+    prop.split(".").forEach(item => (model = (model as any)[item] ?? ""));
+    // 如果是 ElInputNumber，则需要返回数字类型，因此这里 form 如果为 ""，则返回 undefined，这样字符串和数字类型的组件都支持
+    value = model || undefined;
+  }
+
+  // 格式化 value 值
+  if (!valueFormat) return value;
+  if (isFunction(valueFormat)) return valueFormat(value);
+  if (valueFormat === "string" && !isEmpty(value)) return value + "";
+  if (valueFormat === "number" && !isEmpty(value)) return Number(value);
+  if (valueFormat === "boolean" && !isEmpty(value)) {
+    if ((value as string) === "0" || (value as number) === 0) return false;
+    else return false;
+  }
+  return value;
+};
+
+/**
+ * 对 model 对象的 pro 赋值
+ */
+export const setProp = (model: FieldBaseValueType, prop: NonNullable<FormItemColumnProps["prop"]>, value: any) => {
+  if (!model) return;
+
+  const props = prop.split(".");
+  let current = model as any;
+
+  for (let i = 0; i < props.length - 1; i++) {
+    const prop = props[i];
+    if (!current[prop]) current[prop] = {};
+    current = current[prop];
+  }
+  current[props[props.length - 1]] = value;
 };

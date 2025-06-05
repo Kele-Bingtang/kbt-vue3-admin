@@ -1,5 +1,5 @@
 <script setup lang="tsx" name="CreateProForm">
-import { type FormColumn, useProForm, type ProElFormProps } from "@/components";
+import { type FormColumn, useProForm, type ElFormProps } from "@/components";
 import { ElButton, ElRadio, ElMessageBox, ElMessage, type FormItemProp } from "element-plus";
 
 const model1 = ref<Record<string, any>>({});
@@ -15,7 +15,7 @@ const {
 const RenderProForm = (_: any, context: Record<string, any>) => {
   return createFormComponent(
     {
-      column: column,
+      columns: columns,
       modelValue: model1.value,
       elFormProps,
       onValidate: formValidate,
@@ -26,7 +26,7 @@ const RenderProForm = (_: any, context: Record<string, any>) => {
 
 onMounted(() => {
   createForm("proFormRef", {
-    column: column,
+    columns: columns,
     modelValue: model2.value,
     elFormProps,
     onValidate: formValidate,
@@ -38,7 +38,7 @@ const formValidate = (prop: FormItemProp, isValid: boolean, message: string) => 
 };
 
 // 表单整体配置项
-const elFormProps: ProElFormProps = {
+const elFormProps: ElFormProps = {
   inline: false,
   labelPosition: "right",
   labelWidth: 120,
@@ -46,7 +46,7 @@ const elFormProps: ProElFormProps = {
   labelSuffix: " :",
 };
 
-const column = reactive<FormColumn[]>([
+const columns = reactive<FormColumn[]>([
   {
     label: "使用 ProForm",
     prop: "input",
@@ -175,7 +175,7 @@ const column = reactive<FormColumn[]>([
         );
       },
     },
-    slots: {
+    elSlots: {
       default: () => <ElButton type="primary">Click to upload</ElButton>,
       tip: () => <div class="el-upload__tip">jpg/png files with a size less than 500KB.</div>,
     },

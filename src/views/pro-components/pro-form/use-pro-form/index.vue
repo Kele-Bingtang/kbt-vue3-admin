@@ -1,5 +1,5 @@
 <script setup lang="tsx" name="UseProForm">
-import { ProForm, type FormColumn, type ProElFormProps, useProForm } from "@/components";
+import { ProForm, type FormColumn, useProForm, type ElFormProps } from "@/components";
 import {
   ElRadio,
   type ComponentSize,
@@ -15,16 +15,16 @@ const {
   addColumn,
   setValues,
   setColumn,
-  getComponentExpose,
-  getFormItemExpose,
-  getElFormExpose,
-  getFormData,
+  getElInstance,
+  getFormItemInstance,
+  getElFormInstance,
+  getFormModel,
 } = formMethods;
 
 const model = ref<Record<string, any>>({});
 
 // 表单整体配置项
-const elFormProps: ProElFormProps = {
+const elFormProps: ElFormProps = {
   inline: false,
   labelPosition: "right",
   labelWidth: 120,
@@ -33,7 +33,7 @@ const elFormProps: ProElFormProps = {
 };
 
 // 表单列配置项 (formItemProps 代表 item 配置项，attrs 代表 输入、选择框 配置项)
-const column = reactive<FormColumn[]>([
+const columns = reactive<FormColumn[]>([
   {
     label: "使用 ProForm",
     prop: "input",
@@ -162,7 +162,7 @@ const column = reactive<FormColumn[]>([
         );
       },
     },
-    slots: {
+    elSlots: {
       default: () => <el-button type="primary">Click to upload</el-button>,
       tip: () => <div class="el-upload__tip">jpg/png files with a size less than 500KB.</div>,
     },
@@ -195,7 +195,7 @@ const changeDisabled = (bool: boolean) => {
 const changeColumn = (del: boolean) => {
   if (del) {
     delColumn("select");
-  } else if (!del && column[1].prop !== "select") {
+  } else if (!del && columns[1].prop !== "select") {
     addColumn(
       {
         formItemProps: { required: true },
@@ -220,9 +220,9 @@ const changeColumn = (del: boolean) => {
 };
 
 const setValue = async (reset: boolean) => {
-  const elFormExpose = await getElFormExpose();
+  const elFormInstance = await getElFormInstance();
   if (reset) {
-    elFormExpose?.resetFields();
+    elFormInstance?.resetFields();
   } else {
     setValues({
       input: "输入框",
@@ -242,7 +242,7 @@ const setValue = async (reset: boolean) => {
         },
       ],
     });
-    const formData = await getFormData();
+    const formData = await getFormModel();
     console.log(formData);
   }
 };
@@ -258,7 +258,7 @@ const setSelectLabel = () => {
     },
     {
       prop: "select",
-      field: "enum",
+      field: "options",
       value: [
         {
           label: "option-1",
@@ -299,25 +299,25 @@ const addFormItem = () => {
 };
 
 const formValidation = async () => {
-  const elFormExpose = await getElFormExpose();
-  elFormExpose?.validate(isValid => {
+  const elFormInstance = await getElFormInstance();
+  elFormInstance?.validate(isValid => {
     console.log(isValid);
   });
 };
 
 const verifyReset = async () => {
-  const elFormExpose = await getElFormExpose();
-  elFormExpose?.resetFields();
+  const elFormInstance = await getElFormInstance();
+  elFormInstance?.resetFields();
 };
 
 const inoutFocus = async () => {
-  const inputEl = (await getComponentExpose("input")) as InputInstance;
+  const inputEl = (await getElInstance("input")) as InputInstance;
   inputEl?.focus();
 };
 
 const inoutValidation = async () => {
-  const formItemProps = await getFormItemExpose("input");
-  const inputEl = (await getComponentExpose("input")) as InputInstance;
+  const formItemProps = await getFormItemInstance("input");
+  const inputEl = (await getElInstance("input")) as InputInstance;
   inputEl?.focus();
   formItemProps?.validate("focus", (val: boolean) => {
     console.log(val);
@@ -435,13 +435,7 @@ const getTreeSelectData = () => {
     </el-card>
 
     <el-card>
-      <ProForm
-        :elFormProps="elFormProps"
-        :column="column"
-        v-model="model"
-        @register="formRegister"
-        @validate="formValidate"
-      />
+      <ProForm :elFormProps="elFormProps" :columns v-model="model" @register="formRegister" @validate="formValidate" />
     </el-card>
     {{ model }}
   </el-space>

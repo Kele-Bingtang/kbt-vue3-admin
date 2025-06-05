@@ -1,11 +1,11 @@
 <script setup lang="ts" name="SimpleProForm">
 import { ref } from "vue";
-import { ProForm, ProFormItem, type ProElFormProps, type FormColumn } from "@/components";
+import { ProForm, ProFormItem, type FormColumn, type ElFormProps } from "@/components";
 
 const model = ref<Record<string, any>>({});
 
 // 表单整体配置项
-const elFormProps: ProElFormProps = {
+const elFormProps: Partial<ElFormProps> = {
   inline: false,
   labelPosition: "right",
   labelWidth: "80px",
@@ -14,26 +14,26 @@ const elFormProps: ProElFormProps = {
 };
 
 // 表单列配置项 (formItem 代表 item 配置项，attrs 代表 输入、选择框 配置项)
-const column: FormColumn[] = [
+const columns: FormColumn[] = [
   {
-    formItem: { labelWidth: "80px", required: true },
+    formItemProps: { labelWidth: "80px", required: true },
     label: "用户名",
     prop: "username",
     el: "el-input",
-    props: { clearable: true, placeholder: "请输入用户名", disabled: true },
+    elProps: { clearable: true, placeholder: "请输入用户名", disabled: true },
   },
   {
     label: "密码",
     prop: "password",
     el: "el-input",
-    props: { clearable: true, autofocus: true, placeholder: "请输入密码", type: "password" },
+    elProps: { clearable: true, autofocus: true, placeholder: "请输入密码", type: "password" },
   },
   {
     label: "邮箱",
     prop: "email",
     el: "el-input",
     width: 500,
-    props: { placeholder: "请输入邮箱", clearable: true },
+    elProps: { placeholder: "请输入邮箱", clearable: true },
   },
 ];
 
@@ -96,7 +96,7 @@ const model2 = ref({
   <div>
     <div class="card">
       <h4>1 个 ProForm</h4>
-      <ProForm :elFormProps="elFormProps" :column v-model="model" />
+      <ProForm :elFormProps="elFormProps" :columns v-model="model" />
       {{ model }}
 
       <h4>3 个 ProFormItem</h4>

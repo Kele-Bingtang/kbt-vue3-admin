@@ -159,7 +159,7 @@ export interface FormSetProps {
 /**
  * 表单配置项
  */
-export interface FormColumnProps<T = any> {
+export interface FormSchemaProps<T = any> {
   /**
    * ElCol Props
    */

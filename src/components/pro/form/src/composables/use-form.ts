@@ -1,7 +1,6 @@
 import type { Ref, ShallowRef } from "vue";
 import type { FormInstance } from "element-plus";
-import type { FormColumn, FormSetProps, ProFormInstance } from "../types";
-import type { ProFormOnEmits, ProFormProps } from "../index.vue";
+import type { FormColumn, FormSetProps, ProFormInstance, ProFormOnEmits, ProFormProps } from "../types";
 import { ElConfigProvider } from "element-plus";
 import { createVNode, getCurrentInstance, isRef, isShallow, nextTick, ref, render, unref } from "vue";
 import { useNamespace } from "@/composables";
@@ -13,10 +12,10 @@ type ProFormPropsWithModel = ProFormProps & { modelValue?: Recordable };
 
 export const useProForm = () => {
   // ProFrom 实例
-  const formRef = ref<ProFormInstance | null>();
+  const proFormInstance = ref<ProFormInstance | null>();
 
   // ElForm 实例
-  const elFormRef = ref<FormInstance | null>();
+  const elFormInstance = ref<FormInstance | null>();
 
   const ns = useNamespace();
 
@@ -28,14 +27,14 @@ export const useProForm = () => {
    * @param ref ProForm 实例
    * @param elRef ElForm 实例
    */
-  const register = (ref: ProFormInstance | null, elRef: FormInstance | null) => {
-    formRef.value = ref;
-    elFormRef.value = elRef;
+  const register = (proForm: ProFormInstance | null, elForm: FormInstance | null) => {
+    proFormInstance.value = proForm;
+    elFormInstance.value = elForm;
   };
 
-  const getForm = async () => {
+  const getPropForm = async () => {
     await nextTick();
-    const form = formRef.value;
+    const form = proFormInstance.value;
     if (!form) console.error("The form is not registered. Please use the register method to register");
 
     return form;
@@ -45,58 +44,68 @@ export const useProForm = () => {
   const methods = {
     /**
      * 设置 ProForm 组件的 props
+     *
      * @param props ProForm 组件的 props
      */
     setProps: async (props: ProFormPropsWithModel = {}) => {
-      const form = await getForm();
+      const form = await getPropForm();
       form?.setProps(props);
 
       if (props.modelValue) form?.setValues(props.modelValue);
     },
 
     /**
-     * 设置 form 的值
-     * @param data 需要设置的数据
+     * 设置 model 的值
+     *
+     * @param model 需要设置的数据
      */
-    setValues: async (data: Record<string, any>) => {
-      const form = await getForm();
-      form?.setValues(data);
+    setValues: async (model: Recordable) => {
+      const form = await getPropForm();
+      form?.setValues(model);
     },
 
     /**
      * 设置 column
+     *
      * @param columnProps 需要设置的 columnProps
      */
     setColumn: async (columnProps: FormSetProps[]) => {
-      const form = await getForm();
+      const form = await getPropForm();
       form?.setColumn(columnProps);
     },
 
     /**
      * 新增 column
+     *
      * @param prop 在哪里新增，number 为下标，字符串为指定的 prop
      * @param position 如果 prop 为字符串，则指定新增到 prop 前还是后
      */
-    addColumn: async (formColumn: FormColumn, prop?: number | string, position: "before" | "after" = "after") => {
-      const form = await getForm();
-      form?.addColumn(formColumn, prop, position);
+    addColumn: async (
+      column: FormColumn,
+      propOrIndex?: FormColumn["prop"] | number,
+      position: "before" | "after" = "after"
+    ) => {
+      const form = await getPropForm();
+      form?.addColumn(column, propOrIndex, position);
     },
 
     /**
      * 删除 column
+     *
      * @param field 删除哪个数据
      */
-    delColumn: async (prop: string) => {
-      const form = await getForm();
+    delColumn: async (prop: FormColumn["prop"]) => {
+      const form = await getPropForm();
       form?.delColumn(prop);
     },
 
     /**
      * 获取表单数据
-     * @returns form data
+     *
+     * @returns form model
      */
-    getFormData: async <T = Record<string, any>>(filterEmptyVal = true): Promise<T> => {
-      const form = await getForm();
+    getFormModel: async <T = Recordable>(filterEmptyVal = true): Promise<T> => {
+      const form = await getPropForm();
       const model = form?.model || {};
 
       if (filterEmptyVal) {
@@ -112,43 +121,59 @@ export const useProForm = () => {
         }, {}) as T;
       } else return model as T;
     },
-
     /**
-     * 获取表单组件的实例
-     * @param prop 表单项唯一标识
+     * 提交表单
+     *
+     * @returns submit 结果：true | false
+     */
+    submitForm: async () => {
+      const form = await getPropForm();
+      return form?.submitForm();
+    },
+    /**
+     * 重置表单
+     */
+    resetForm: async () => {
+      const form = await getPropForm();
+      return form?.resetForm();
+    },
+    /**
+     * 获取 ElForm 组件的实例
+     *
      * @returns ElForm instance
      */
-    getComponentExpose: async (prop: string) => {
-      const form = await getForm();
-      return form?.getComponentExpose(prop);
+    getElFormInstance: async () => {
+      await getPropForm();
+      return elFormInstance.value;
     },
-
+    /**
+     * 获取 ProForm 组件的实例
+     *
+     * @returns ProForm instance
+     */
+    getProFormInstance: async () => {
+      await getPropForm();
+      return proFormInstance.value;
+    },
     /**
      * 获取 ElFormItem 组件的实例
+     *
      * @param prop 表单项唯一标识
      * @returns formItem instance
      */
-    getFormItemExpose: async (prop: string) => {
-      const form = await getForm();
-      return form?.getFormItemExpose(prop);
+    getFormItemInstance: async (prop: string) => {
+      const form = await getPropForm();
+      return form?.getFormItemInstance(prop);
     },
-
     /**
-     * 获取 ElForm 组件的实例
+     * 获取表单组件的实例
+     *
+     * @param prop 表单项唯一标识
      * @returns ElForm instance
      */
-    getElFormExpose: async () => {
-      await getForm();
-      return elFormRef.value;
-    },
-
-    /**
-     * 获取 ProForm 组件的实例
-     * @returns ProForm instance
-     */
-    getFormExpose: async () => {
-      await getForm();
-      return formRef.value;
+    getElInstance: async (prop: string) => {
+      const form = await getPropForm();
+      return form?.getElInstance(prop);
     },
   };
 
@@ -156,10 +181,7 @@ export const useProForm = () => {
     /**
      * 返回 ProForm 组件的虚拟 DOM，直接在页面中渲染该虚拟 DOM 即可。可以理解为返回一个 Vue 组件
      */
-    createFormComponent: (
-      proFormProps?: ProFormPropsWithModel & Partial<ProFormOnEmits>,
-      context: Record<string, any> = {}
-    ) => {
+    createFormComponent: (proFormProps?: ProFormPropsWithModel & Partial<ProFormOnEmits>, context: Recordable = {}) => {
       const { attrs, slots } = context;
       const instance = createVNode(ProForm, { ...attrs, ...proFormProps, onRegister: register }, { ...slots });
       return instance;
@@ -190,8 +212,8 @@ export const useProForm = () => {
 
   return {
     formElState: {
-      formRef: formRef.value,
-      elFormRef: elFormRef.value,
+      proFormInstance: proFormInstance.value,
+      elFormInstance: elFormInstance.value,
     },
     formMethods: methods,
     formRegister: register,

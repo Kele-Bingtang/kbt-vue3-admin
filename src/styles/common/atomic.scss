@@ -106,11 +106,10 @@
 
 /* 自定义 card 卡片样式 */
 .card {
-  box-sizing: border-box;
   padding: 20px;
   overflow-x: hidden;
-  background-color: var(--#{$el-namespace}-fill-color-blank);
-  border: 1px solid var(--#{$el-namespace}-border-color-light);
-  border-radius: 4px;
-  box-shadow: 0 0 12px rgb(0 0 0 / 5%);
+  background-color: var(--#{$admin-namespace}-main-bg-color);
+  border: 1px solid rgb(var(--#{$admin-namespace}-gray-300-rgb), 0.3);
+  border-radius: calc(var(--#{$admin-namespace}-radius) / 2 + 2px);
+  box-shadow: 0 0 4px 0 rgb(0 0 0 / 4%);
 }
