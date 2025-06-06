@@ -18,6 +18,16 @@ const proComponents: RouterConfigRaw = {
       },
       children: [
         {
+          path: "test",
+          component: () => import("@/views/pro-components/pro-table/test.vue"),
+          name: "TestProTable",
+          meta: {
+            title: "测试 ProTable",
+            icon: StarFilled,
+            useI18n: false,
+          },
+        },
+        {
           path: "simple",
           component: () => import("@/views/pro-components/pro-table/simple-pro-table/index.vue"),
           name: "SimpleProTable",

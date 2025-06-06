@@ -167,15 +167,15 @@ const RenderLabelSlot = ({ label }: { label: string }) => {
   return renderLabel?.(label, slotParams.value);
 };
 
-const RenderTooltipDefaultSlot = () => {
-  const { tooltip } = props;
-  return tooltip?.render?.();
-};
+// const RenderTooltipDefaultSlot = () => {
+//   const { tooltip } = props;
+//   return tooltip?.render?.();
+// };
 
-const RenderTooltipContentSlot = () => {
-  const { tooltip } = props;
-  return tooltip?.contentRender?.();
-};
+// const RenderTooltipContentSlot = () => {
+//   const { tooltip } = props;
+//   return tooltip?.contentRender?.();
+// };
 
 defineExpose({
   formItemInstance,
@@ -201,18 +201,15 @@ defineExpose({
 
       <el-tooltip v-if="tooltip" placement="top" effect="dark" v-bind="tooltip">
         <!-- ElToolTip 默认插槽 -->
-        <RenderTooltipDefaultSlot v-if="!!tooltip.render" />
-
+        <!-- <RenderTooltipDefaultSlot v-if="!!tooltip.render" /> -->
+        <component v-if="tooltip.render" :is="tooltip.render()" />
         <!-- ElToolTip content 插槽 -->
-        <template v-if="!!tooltip.contentRender" #content>
-          <RenderTooltipContentSlot />
+        <template v-if="tooltip.contentRender" #content>
+          <!-- <RenderTooltipContentSlot /> -->
+          <component v-if="tooltip.contentRender" :is="tooltip.contentRender()" />
         </template>
-
-        <!-- ElToolTip icon 插槽 -->
         <slot name="tooltip-icon">
-          <el-icon :size="16">
-            <QuestionFilled />
-          </el-icon>
+          <el-icon :size="16"><QuestionFilled /></el-icon>
         </slot>
       </el-tooltip>
     </template>
