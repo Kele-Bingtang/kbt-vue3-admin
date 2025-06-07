@@ -8,7 +8,7 @@ import { ProFormItem, formatValue, getProp, setProp } from "@/components/pro/for
 import { useNamespace } from "@/composables";
 import { isFunction, isPromise } from "@/utils";
 import { deleteObjProperty } from "./helper";
-import { useFormApi } from "./composables/use-form-api";
+import { useFormApi } from "./composables";
 
 defineOptions({ name: "ProForm" });
 
@@ -47,7 +47,6 @@ const proFormItemInstances = shallowRef<Record<string, InstanceType<typeof ProFo
 const finalProps = computed(() => {
   const propsObj = { ...props };
   Object.assign(propsObj, mergeProps.value);
-
   return propsObj;
 });
 
@@ -219,7 +218,7 @@ const getElInstance = (prop: FormColumn["prop"]) => {
   return proFormItemInstances.value[prop].elInstance;
 };
 
-defineExpose({
+const expose = {
   form: elFormInstance,
   model,
   setValues,
@@ -234,7 +233,9 @@ defineExpose({
   optionsMap,
   submitForm,
   resetForm,
-});
+};
+
+defineExpose(expose);
 </script>
 
 <template>

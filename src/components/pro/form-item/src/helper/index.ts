@@ -3,7 +3,7 @@ import type { FieldBaseValueType, FormItemColumnProps } from "../types";
 import { isRef } from "vue";
 import { isEmpty, isFunction, isObject, isPromise } from "@/utils";
 
-export * from "./component-map";
+export * from "./component";
 
 /**
  * 将连字符转换为大驼峰格式

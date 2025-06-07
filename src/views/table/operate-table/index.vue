@@ -1,5 +1,5 @@
 <script setup lang="ts" name="OperateTable">
-import { Pagination, pageSetting, type Paging } from "@/components";
+import { Pagination, defaultPageInfo, type PageInfo } from "@/components";
 import { largeData } from "@/mock/table";
 import { ElMessage, ElMessageBox, ElNotification, type FormInstance, type TableInstance } from "element-plus";
 import { tableStatusFilter } from "@/config";
@@ -46,7 +46,7 @@ const tableKey = ref(0);
 const showAddress = ref(false);
 const loading = ref(true);
 const tableData = ref(largeData);
-const paging = reactive(pageSetting);
+const paging = reactive(defaultPageInfo);
 const dialogFormVisible = ref(false);
 const dialogStatus = ref("");
 const tempTableDate = ref(defaultTableData);
@@ -159,7 +159,7 @@ const handleDelete = (row: any, index: number) => {
     .catch(() => {});
 };
 
-const handleSizeChange = (pagingParam: Paging) => {
+const handleSizeChange = (pagingParam: PageInfo) => {
   paging.pageNum = pagingParam.pageNum;
   paging.pageSize = pagingParam.pageSize;
 };
@@ -235,12 +235,7 @@ const handleSizeChange = (pagingParam: Paging) => {
       </el-table-column>
     </el-table>
 
-    <Pagination
-      v-show="tableData.length > 0"
-      :total="tableData.length"
-      v-model="paging"
-      @pagination="handleSizeChange"
-    />
+    <Pagination v-show="tableData.length > 0" :total="tableData.length" v-model="paging" @change="handleSizeChange" />
 
     <el-dialog :title="dialogTitle[dialogStatus]" v-model="dialogFormVisible">
       <el-form

@@ -1,13 +1,14 @@
 <script setup lang="ts">
-import { type TableColumnProps } from "./types";
+import { type TableColumn } from "../types";
 import { useSlots } from "vue";
 import { ElTableColumn } from "element-plus";
+import { QuestionFilled } from "@element-plus/icons-vue";
 import { getProp } from "@/components";
-import { formatCellValue, lastProp, formatTableColumnType } from "./helper";
+import { formatCellValue, lastProp, formatTableColumnType } from "../helper";
 
-defineOptions({ name: "TableColumn" });
+defineOptions({ name: "TableColumnData" });
 
-defineProps<{ column: TableColumnProps }>();
+defineProps<{ column: TableColumn }>();
 
 const slots = useSlots();
 </script>
@@ -16,6 +17,7 @@ const slots = useSlots();
   <el-table-column v-bind="formatTableColumnType(column)" :align="column.align || 'center'">
     <!-- 表头插槽 - 表头内容 -->
     <template #header="scope">
+      <!-- 自定义表头 | 自定义插槽 -->
       <component v-if="column.headerRender" :is="column.headerRender(scope)" />
       <slot v-else :name="`${lastProp(column.prop!)}-header`" v-bind="scope"></slot>
 
@@ -26,6 +28,7 @@ const slots = useSlots();
         <template v-if="column.tooltip.contentRender" #content>
           <component v-if="column.tooltip.contentRender" :is="column.tooltip.contentRender()" />
         </template>
+        <!-- ElToolTip icon -->
         <slot name="tooltip-icon">
           <el-icon :size="16"><QuestionFilled /></el-icon>
         </slot>
@@ -35,8 +38,8 @@ const slots = useSlots();
     <!-- 默认插槽 - 单元格内容 -->
     <template #default="scope">
       <!-- 合并表头 -->
-      <template v-if="column._children">
-        <TableColumn v-for="child in column._children" :key="child.prop" :column="child" />
+      <template v-if="column.children">
+        <TableColumnData v-for="child in column.children" :key="child.prop" :column="child" />
       </template>
 
       <template v-else-if="column.render">

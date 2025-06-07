@@ -1,8 +1,8 @@
 <script setup lang="ts" name="IntegrationTable">
-import { Pagination, TableSort, pageSetting, type Paging } from "@/components";
+import { Pagination, TableSort, defaultPageInfo, type PageInfo } from "@/components";
 import { largeData } from "@/mock/table";
 import Sortable from "sortablejs";
-import { ElMessage, ElMessageBox, ElNotification, type FormInstance, type TableInstance } from "element-plus";
+import { ElMessage, ElMessageBox, ElNotification, type FormInstance } from "element-plus";
 import { tableStatusFilter } from "@/config";
 import { Search, Refresh, Plus, Check, EditPen, Delete } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
@@ -75,7 +75,7 @@ const tableKey = ref(0);
 const showAddress = ref(false);
 const loading = ref(true);
 const tableData = ref(largeData);
-const paging = reactive(pageSetting);
+const paging = reactive(defaultPageInfo);
 const singleSearchKey = ref("");
 const singleSearchValue = ref("");
 const multipleSearchParams = reactive({
@@ -278,7 +278,7 @@ const handleDelete = (row: any, index: number) => {
     .catch(() => {});
 };
 
-const handleSizeChange = (pagingParam: Paging) => {
+const handleSizeChange = (pagingParam: PageInfo) => {
   paging.pageNum = pagingParam.pageNum;
   paging.pageSize = pagingParam.pageSize;
 };
@@ -383,12 +383,7 @@ const handleSizeChange = (pagingParam: Paging) => {
       </el-table-column>
     </TableSort>
 
-    <Pagination
-      v-show="tableData.length > 0"
-      :total="tableData.length"
-      v-model="paging"
-      @pagination="handleSizeChange"
-    />
+    <Pagination v-show="tableData.length > 0" :total="tableData.length" v-model="paging" @change="handleSizeChange" />
 
     <el-dialog :title="dialogTitle[dialogStatus]" v-model="dialogFormVisible">
       <el-form

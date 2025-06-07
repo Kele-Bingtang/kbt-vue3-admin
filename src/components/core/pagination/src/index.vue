@@ -1,86 +1,77 @@
 <script lang="ts">
-import { scrollTo } from "@/utils";
-import { nextTick } from "vue";
-import { ElPagination } from "element-plus";
-
-export const pageSetting = { pageNum: 1, pageSizes: [10, 20, 50, 100, 200], pageSize: 20 };
+export const defaultPageInfo: PageInfo = {
+  pageNum: 1,
+  pageSizes: [10, 20, 30, 40, 50, 100, 200, 300, 400, 500],
+  pageSize: 20,
+};
 </script>
 
 <script setup lang="ts">
+import type { PaginationEmits, PaginationProps, PageInfo } from "./types";
+import { nextTick } from "vue";
+import { ElPagination } from "element-plus";
 import { useNamespace } from "@/composables";
-
-export interface Paging {
-  pageNum: number; // 当前页
-  pageSizes?: number[]; // 页数数组
-  pageSize: number; // 一页显示多少条数据
-  total?: number; // 总数
-}
-
-export interface PaginationProps {
-  layout?: string; // 布局
-  background?: boolean; // 是否开启背景色
-  autoScroll?: boolean; // 切换页数，是否自动滚动到最上面
-  hidden?: boolean; // 是否不显示分页
-  reset?: boolean; // 切换 pageSize，pageNum 重置为 1
-}
 
 defineOptions({ name: "Pagination" });
 
 const ns = useNamespace("pagination");
 
 const props = withDefaults(defineProps<PaginationProps>(), {
-  layout: "total, sizes, prev, pager, next, jumper",
-  background: true,
   autoScroll: true,
   hidden: false,
   reset: true,
+  total: 0,
 });
-
-type PaginationEmits = {
-  pagination: [value: Paging];
-};
 
 const emits = defineEmits<PaginationEmits>();
 
-const pageObj = defineModel<Paging>({ required: true });
+const pageModel = defineModel<PageInfo>({ default: () => defaultPageInfo });
+const pageInfo = ref(Object.assign(defaultPageInfo, pageModel.value));
 
-if (!pageObj.value.pageNum) pageObj.value.pageNum = pageSetting.pageNum;
-if (!pageObj.value.pageSizes) pageObj.value.pageSizes = pageSetting.pageSizes;
-if (!pageObj.value.pageSize) pageObj.value.pageSize = pageSetting.pageSize;
+watch(
+  () => pageModel.value,
+  val => (pageInfo.value = { ...defaultPageInfo, ...val }),
+  { deep: true }
+);
 
-const handleSizeChange = (value: number) => {
+const handleSizeChange = (pageSize: number) => {
   if (props.reset) handleCurrentChange(1);
-  pageObj.value.pageSize = value;
+  pageModel.value.pageSize = pageSize;
   afterChange();
+  emits("sizeChange", pageSize);
 };
 
-const handleCurrentChange = (value: number) => {
-  pageObj.value.pageNum = value;
+const handleCurrentChange = (pageNum: number) => {
+  pageModel.value.pageNum = pageNum;
   afterChange();
+  emits("currentChange", pageNum);
 };
 
-const afterChange = () => {
-  emits("pagination", pageObj.value);
+const afterChange = async () => {
+  emits("change", pageInfo.value);
   if (props.autoScroll) {
-    nextTick(() => {
-      scrollTo(`${ns.elNamespace}-table__body-wrapper`, 0, 700);
-      scrollTo(`${ns.elNamespace}-main`, 0, 700);
-    });
+    await nextTick();
+
+    const elTableBodyDom = document.querySelector(`${ns.elNamespace}-table__body-wrapper`);
+    const elNameDom = document.querySelector(`${ns.elNamespace}-main`);
+    const targetDom = elTableBodyDom || elNameDom;
+
+    targetDom?.scrollIntoView({ behavior: "smooth", block: "start" });
   }
 };
 
-defineExpose({ paging: pageSetting });
+defineExpose({ defaultPageInfo });
 </script>
 
 <template>
-  <div :class="[ns.b(), ns.is('hidden', hidden)]">
+  <div :class="ns.b()" v-if="!hidden">
     <el-pagination
-      :background="background"
-      v-model:current-page="pageObj.pageNum"
-      v-model:page-size="pageObj.pageSize"
-      :page-sizes="pageObj.pageSizes"
-      :layout="layout"
-      :total="modelValue.total"
+      layout="total, sizes, prev, pager, next, jumper"
+      background
+      v-model:current-page="pageInfo.pageNum"
+      v-model:page-size="pageInfo.pageSize"
+      :page-sizes="pageInfo.pageSizes"
+      :total
       v-bind="$attrs"
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"

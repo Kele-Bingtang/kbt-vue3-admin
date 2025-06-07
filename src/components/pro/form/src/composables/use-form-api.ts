@@ -1,6 +1,15 @@
-import type { FormColumn, FormSetProps, ProFormProps } from "../types";
+import type { FormColumn, ProFormProps } from "../types";
 import { isString } from "@/utils";
-import { setProp } from "@/components";
+import { setProp, type BaseValueType } from "@/components";
+
+/**
+ * setColumn 函数的参数类型
+ */
+export interface FormSetProps {
+  prop: string;
+  field: string;
+  value: BaseValueType;
+}
 
 export const useFormApi = (model: Ref<Recordable>, finalProps: ComputedRef<ProFormProps>) => {
   const mergeProps = ref<ProFormProps>({});
@@ -43,7 +52,7 @@ export const useFormApi = (model: Ref<Recordable>, finalProps: ComputedRef<ProFo
    * 添加 column
    *
    * @param column 添加的 column
-   * @param propOrIndex 参考对象，prop 或者 index
+   * @param propOrIndex 参考对象，prop 或者 index 下标，不传则插入到最后
    * @param position 添加的位置，before 或者 after
    */
   const addColumn = (

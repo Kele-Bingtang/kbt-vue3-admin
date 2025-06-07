@@ -1,7 +1,7 @@
 import { ElConfigProvider, type TableInstance } from "element-plus";
 import type { ProTableInstance, TableColumnProps, TableSetProps } from "../interface";
 import ProTable, { type ProTableOnEmits, type ProTableProps } from "../index.vue";
-import type { ProSearchInstance, Paging } from "@/components";
+import type { ProSearchInstance, PageInfo } from "@/components";
 import {
   type Ref,
   createVNode,
@@ -118,7 +118,7 @@ export const useProTable = () => {
     /**
      * @description 更新表格分页信息，从而更新表格数据
      */
-    pagination: async (paging: Partial<Paging>) => {
+    pagination: async (paging: Partial<PageInfo>) => {
       const table = await getTable();
       return table?.handlePagination(paging);
     },

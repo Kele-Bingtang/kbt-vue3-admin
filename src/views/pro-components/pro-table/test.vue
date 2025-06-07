@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import { TableMain, type TableColumnProps } from "@/components/pro/table";
+import { ProTable, type TableColumn } from "@/components/pro/table";
 import { tableData } from "@/mock/pro-table";
 
 defineOptions({ name: "Test" });
 
 const data = ref(tableData);
 
-const columns: TableColumnProps[] = [
+const columns: TableColumn[] = [
   { type: "selection", fixed: "left", width: 60 },
   { type: "index", label: "#", width: 60 },
   { type: "sort", label: "Sort", width: 80 },
@@ -32,9 +32,9 @@ const columns: TableColumnProps[] = [
 </script>
 
 <template>
-  <TableMain :columns :data>
+  <ProTable :columns :data pagination>
     <template #expand="scope">
       {{ scope.row }}
     </template>
-  </TableMain>
+  </ProTable>
 </template>

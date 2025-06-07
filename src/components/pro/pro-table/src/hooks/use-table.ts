@@ -1,10 +1,10 @@
-import type { Paging } from "@/components";
+import type { PageInfo } from "@/components";
 import type { TableColumnProps } from "../interface";
 import { reactive, computed, toRefs } from "vue";
 import { isEmpty } from "@/utils";
 
 export namespace Table {
-  export interface Paging {
+  export interface PageInfo {
     pageNum: number;
     pageSize: number;
     pageSizes?: number[];
@@ -18,7 +18,7 @@ export namespace Table {
 
   export interface StateProps {
     tableData: any[];
-    paging: Paging;
+    paging: PageInfo;
     searchParam: Record<string, any>;
     searchInitParam: Record<string, any>;
     totalParam: Record<string, any>;
@@ -46,7 +46,7 @@ export const useTable = (
   api?: (params: any) => Promise<any>,
   initRequestParam: object = {},
   openPage: boolean | Table.PaginationProps = true,
-  pageConfig?: Partial<Table.Paging>,
+  pageConfig?: Partial<Table.PageInfo>,
   beforeSearch?: (searchParam: any) => any,
   dataCallBack?: (data: any) => any,
   requestError?: (error: any) => void,
@@ -125,11 +125,11 @@ export const useTable = (
       // 解构后台返回的分页数据 (如果有分页更新分页信息)
       if (isBackPage(openPage)) {
         const { pageNum, pageSize, pageSizes, total } = data;
-        if (pageNum) updatePaging({ pageNum });
-        if (pageSize) updatePaging({ pageSize });
-        if (pageSizes) updatePaging({ pageSizes });
-        if (total) updatePaging({ total });
-        else updatePaging({ total: data.length });
+        if (pageNum) updatePageInfo({ pageNum });
+        if (pageSize) updatePageInfo({ pageSize });
+        if (pageSizes) updatePageInfo({ pageSizes });
+        if (total) updatePageInfo({ total });
+        else updatePageInfo({ total: data.length });
       }
     } catch (error) {
       console.error(error);
@@ -170,7 +170,7 @@ export const useTable = (
    * @param {Object} paging 后台返回的分页数据
    * @return void
    */
-  const updatePaging = (paging: Partial<Table.Paging>) => {
+  const updatePageInfo = (paging: Partial<Table.PageInfo>) => {
     Object.assign(state.paging, paging);
   };
 
@@ -208,7 +208,7 @@ export const useTable = (
    * @param {Number} paging 当前分页信息
    * @return void
    */
-  const handlePagination = (paging: Partial<Paging>) => {
+  const handlePagination = (paging: Partial<PageInfo>) => {
     if (paging.pageNum) state.paging.pageNum = paging.pageNum;
     if (paging.pageSize) state.paging.pageSize = paging.pageSize;
     if (paging.pageSizes) state.paging.pageSizes = paging.pageSizes;

@@ -126,15 +126,6 @@ export type ProFormEmits = {
 export type ProFormOnEmits = keyOnPrefix<ProFormEmits>;
 
 /**
- * setColumn 函数的参数类型
- */
-export interface FormSetProps {
-  prop: string;
-  field: string;
-  value: BaseValueType;
-}
-
-/**
  * ProForm 表单配置项
  */
 export interface FormColumn extends FormItemColumnProps {

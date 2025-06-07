@@ -177,10 +177,12 @@ const RenderLabelSlot = ({ label }: { label: string }) => {
 //   return tooltip?.contentRender?.();
 // };
 
-defineExpose({
+const expose = {
   formItemInstance,
   elInstance,
-});
+};
+
+defineExpose(expose);
 </script>
 
 <template>

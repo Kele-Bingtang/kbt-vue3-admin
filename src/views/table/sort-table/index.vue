@@ -1,12 +1,12 @@
 <script setup lang="ts" name="SortTable">
-import { TableSort, Pagination, pageSetting, type Paging } from "@/components";
+import { TableSort, Pagination, defaultPageInfo, type PageInfo } from "@/components";
 import { largeData } from "@/mock/table";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { Search, EditPen, Delete } from "@element-plus/icons-vue";
 
 const loading = ref(true);
 const tableData = ref(largeData);
-const paging = reactive(pageSetting);
+const paging = reactive(defaultPageInfo);
 
 const data = computed(() =>
   tableData.value.slice((paging.pageNum - 1) * paging.pageSize, paging.pageNum * paging.pageSize)
@@ -41,7 +41,7 @@ const handleDelete = (row: any, index: number) => {
     .catch(() => {});
 };
 
-const handleSizeChange = (pagingParams: Paging) => {
+const handleSizeChange = (pagingParams: PageInfo) => {
   paging.pageNum = pagingParams.pageNum;
   paging.pageSize = pagingParams.pageSize;
 };
@@ -103,12 +103,7 @@ const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
         </template>
       </el-table-column>
     </TableSort>
-    <Pagination
-      v-show="tableData.length > 0"
-      :total="tableData.length"
-      v-model="paging"
-      @pagination="handleSizeChange"
-    />
+    <Pagination v-show="tableData.length > 0" :total="tableData.length" v-model="paging" @change="handleSizeChange" />
 
     <p>方法二：使用 TableSoft 组件包裹 el-table，el-table 作为插槽</p>
     <TableSort :data="data">
@@ -156,12 +151,7 @@ const tableStatusFilter = (status: string): "success" | "info" | "danger" => {
         </el-table>
       </template>
     </TableSort>
-    <Pagination
-      v-show="tableData.length > 0"
-      :total="tableData.length"
-      v-model="paging"
-      @pagination="handleSizeChange"
-    />
+    <Pagination v-show="tableData.length > 0" :total="tableData.length" v-model="paging" @change="handleSizeChange" />
   </div>
 </template>
 

@@ -1,0 +1,36 @@
+// 表格列类型
+export enum TableColumnTypeEnum {
+  Index = "index",
+  Selection = "selection",
+  Radio = "radio",
+  Expand = "expand",
+  Sort = "sort",
+}
+
+// 表格大小样式
+export enum TableSizeEnum {
+  Large = "large",
+  Default = "default",
+  Small = "small",
+  Mini = "mini",
+}
+
+// 表格工具栏按钮
+export enum ToolButtonEnum {
+  Size = "size",
+  Export = "export",
+  Setting = "setting",
+}
+
+// 导出时列配置项
+export enum ExportKey {
+  DataKey = "dataKey",
+  Label = "label",
+  Prop = "prop",
+}
+
+// 分页模式
+export enum PageMode {
+  Client = "client",
+  Server = "server",
+}

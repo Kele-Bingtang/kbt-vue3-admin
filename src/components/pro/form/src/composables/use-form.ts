@@ -1,11 +1,12 @@
 import type { Ref, ShallowRef } from "vue";
 import type { FormInstance } from "element-plus";
-import type { FormColumn, FormSetProps, ProFormInstance, ProFormOnEmits, ProFormProps } from "../types";
+import type { FormColumn, ProFormInstance, ProFormOnEmits, ProFormProps } from "../types";
+import type { FormSetProps } from "./use-form-api";
 import { ElConfigProvider } from "element-plus";
 import { createVNode, getCurrentInstance, isRef, isShallow, nextTick, ref, render, unref } from "vue";
 import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
-import { isObject } from "@/utils";
+import { isEmpty, isObject } from "@/utils";
 import ProForm from "../index.vue";
 
 type ProFormPropsWithModel = ProFormProps & { modelValue?: Recordable };
@@ -112,10 +113,9 @@ export const useProForm = () => {
         // 使用 reduce 过滤空值，并返回一个新对象
         return Object.keys(model).reduce((prev: Recordable, next) => {
           const value = model[next];
-          if (value !== "" && value !== null && value !== undefined) {
-            if (isObject(value)) {
-              if (Object.keys(value).length > 0) prev[next] = value;
-            } else prev[next] = value;
+          if (isEmpty(value, true)) {
+            if (isObject(value)) prev[next] = value;
+            else prev[next] = value;
           }
           return prev;
         }, {}) as T;

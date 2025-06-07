@@ -12,6 +12,7 @@ export * from "./pro/image-viewer";
 // export * from "./pro/pro-form";
 export * from "./pro/form";
 export * from "./pro/form-item";
+// export * from "./pro/table";
 export * from "./pro/pro-table";
 export * from "./pro/pro-search";
 export * from "./pro/tree-filter";

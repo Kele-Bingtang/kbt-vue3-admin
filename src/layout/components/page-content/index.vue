@@ -64,15 +64,15 @@ const isFixTabNav = computed(() => {
   <el-main class="flx-column">
     <component :is="TabNavComponents[tabNavMode]" v-if="showTabNav" />
 
-    <div class="page-content">
-      <router-view v-slot="{ Component, route }">
-        <transition :name="settingStore.pageTransition" mode="out-in" appear>
+    <router-view v-slot="{ Component, route }">
+      <transition :name="settingStore.pageTransition" mode="out-in" appear>
+        <div class="page-content">
           <keep-alive :max="10" :include="layoutStore.keepAliveName">
             <component v-if="isRefreshRoute" :is="Component" :key="route.path" />
           </keep-alive>
-        </transition>
-      </router-view>
-    </div>
+        </div>
+      </transition>
+    </router-view>
     <FrameLayout />
   </el-main>
 </template>

@@ -1,5 +1,7 @@
 import type { TableColumnCtx } from "element-plus";
-import type { TableColumnProps } from "../types";
+import type { TableColumn } from "../types";
+
+export * from "./enums";
 
 /**
  * 处理 prop，当 prop 为多级嵌套时，返回最后一级 prop
@@ -23,6 +25,6 @@ export const formatCellValue = (callValue: any) => {
   return callValue ?? "--";
 };
 
-export const formatTableColumnType = (item: TableColumnProps) => {
+export const formatTableColumnType = (item: TableColumn) => {
   return item as unknown as TableColumnCtx<any>;
 };

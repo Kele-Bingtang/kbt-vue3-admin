@@ -1,7 +1,8 @@
 import { useInstall } from "@/utils";
-import index, { pageSetting, type Paging } from "./src/index.vue";
+import index, { defaultPageInfo } from "./src/index.vue";
 
-export { pageSetting, type Paging };
+export { defaultPageInfo };
+export type * from "./src/types";
 
 export const Pagination = useInstall(index);
 

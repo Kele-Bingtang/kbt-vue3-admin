@@ -54,7 +54,7 @@ export type FieldBaseValueType =
   | Record<any, any>;
 
 /**
- * el 字面量，为 PascalCase 格式
+ * el 字面量，转为 PascalCase 格式
  */
 export type PascalCaseComponentName = keyof typeof ComponentNameEnum extends infer K
   ? K extends string
@@ -67,7 +67,7 @@ export type PascalCaseComponentName = keyof typeof ComponentNameEnum extends inf
   : never;
 
 /**
- * el 字面量，为 HyphenCase 格式
+ * el 字面量，转为 HyphenCase 格式
  */
 export type HyphenCaseComponentName = keyof typeof ComponentNameEnum extends infer K
   ? K extends string
@@ -82,7 +82,7 @@ export type HyphenCaseComponentName = keyof typeof ComponentNameEnum extends inf
 /**
  * el 字面量
  */
-export type FormType = PascalCaseComponentName | HyphenCaseComponentName;
+export type ElType = PascalCaseComponentName | HyphenCaseComponentName;
 
 /**
  * 基本类型
@@ -155,7 +155,7 @@ export interface FormItemColumnProps {
    *
    * @default 'ElInput'
    */
-  el?: MaybeRef<FormType>;
+  el?: MaybeRef<ElType>;
   /**
    * 根据 element plus 官方文档来传递，该属性所有值会透传到表单组件
    */

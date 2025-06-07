@@ -196,16 +196,16 @@ export const isIOS = () => {
 /**
  * 是否为空值项（包含数组、对象判断）
  *
- * @param checkFull 是否检查数组、对象是否为空。默认 true
+ * @param checkComplexType 是否检查数组、对象是否为空。默认 true
  */
-export const isEmpty = (val: any, checkFull = true): boolean => {
+export const isEmpty = (val: any, checkComplexType = true): boolean => {
   // NaN 的检查
   if (isNumber(val) && isNaN(val)) return true;
 
   // 检查空字符串、null 和 undefined
   if (val === "" || val === null || val === undefined) return true;
 
-  if (!checkFull) return false;
+  if (!checkComplexType) return false;
 
   // 检查是不是数组并且长度为 0
   if (isArray(val) && val.length === 0) return true;
