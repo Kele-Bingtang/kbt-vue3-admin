@@ -24,7 +24,7 @@ import {
   ElUpload,
 } from "element-plus";
 import Tree from "../components/tree.vue";
-import CheckBoxSelect from "../components/checkbox.vue";
+import CheckBoxSelect from "../components/checkbox-select.vue";
 import WangEditor from "@/components/editor/wang-editor/index";
 import Tinymce from "@/components/editor/tinymce/index";
 import IconPicker from "@/components/view/icon-picker/index";

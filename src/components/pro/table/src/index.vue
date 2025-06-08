@@ -1,11 +1,14 @@
 <script setup lang="ts">
-import type { ProTableNamespace, TableColumn, TableStyle } from "./types";
+import type { ProTableHeadInstance, ProTableMainInstance, ProTableNamespace, TableColumn, TableStyle } from "./types";
 import type { PageInfo } from "@/components/core/pagination";
 import { useNamespace } from "@/composables";
-import { useTableApi, useTableState } from "./composables";
-import { PageMode, TableSizeEnum } from "./helper";
+import { useTableApi, useTableState, type UseSelectState } from "./composables";
+import { Environment, TableSizeEnum } from "./helper";
 import TableMain from "./table-main.vue";
-import TableHeader from "./table-header.vue";
+import TableHead from "./table-head.vue";
+
+import "./index.scss";
+import type { UnwrapRef } from "vue";
 
 defineOptions({ name: "ProTable" });
 
@@ -13,27 +16,26 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   columns: () => [],
   data: () => [],
   requestApi: undefined,
-  defaultRequestParams: () => ({}),
+  defaultParams: () => ({}),
   requestImmediate: true,
   beforeSearch: undefined,
   requestError: undefined,
   dataCallback: undefined,
-  cardStyle: false,
+  hideHeader: false,
+  card: false,
   exportProps: () => ({}),
   pageInfo: undefined,
-  pagination: false,
-  paginationProps: undefined,
-  title: undefined,
-  headerButton: undefined,
-  disabledHeaderButton: undefined,
-  size: undefined,
-  headerTooltipProps: undefined,
+  pageScope: false,
 });
 
 const emits = defineEmits<ProTableNamespace.Emits>();
 
 const ns = useNamespace("pro-table");
+const rootInstance = useTemplateRef<ProTableHeadInstance>("rootInstance");
+const tableHeadInstance = useTemplateRef<ProTableHeadInstance>("tableHeadInstance");
+const tableMainInstance = useTemplateRef<ProTableMainInstance>("tableMainInstance");
 
+const tableStyle = ref<TableStyle>();
 const optionsMap = ref(new Map<string, Recordable[]>());
 
 // 最终的 props
@@ -53,18 +55,18 @@ const { mergeProps, setProps, setColumn, addColumn, delColumn } = useTableApi(fi
 
 // 是否为服务器（后端）分页
 const isServerPage = computed(() => {
-  const { pagination } = finalProps.value;
-  const paginationValue = toValue(pagination);
+  const { pageScope } = finalProps.value;
+  const pageScopeValue = toValue(pageScope);
 
   // 如果传入 true，则为前端分页，返回 false
-  if (!paginationValue || paginationValue === true) return false;
-  return paginationValue.pageMode === PageMode.Server;
+  if (!pageScopeValue || pageScopeValue === true) return false;
+  return pageScopeValue === Environment.Server;
 });
 
 const { tableData, pageInfo, searchParams, searchInitParams, getTableList, search, reset, handlePagination } =
   useTableState(
     finalProps.value.requestApi,
-    finalProps.value.defaultRequestParams,
+    computed(() => finalProps.value.defaultParams),
     finalProps.value.pageInfo,
     isServerPage,
     finalProps.value.beforeSearch,
@@ -90,6 +92,8 @@ const finalTableData = computed(() => {
 onMounted(() => {
   // 初始化请求
   mergeProps.value.requestImmediate && getTableList();
+  // 注册实例
+  emits("register", tableMainInstance.value?.$parent || null, tableMainInstance.value?.elTableInstance || null);
 });
 
 // 每一个 column 配置 _options 字典信息（如果配置了 options）
@@ -124,8 +128,13 @@ watch(
   { deep: true }
 );
 
-const handleSizeChange = (size: TableSizeEnum, tableStyle: TableStyle) => {
-  emits("sizeChange", size, tableStyle);
+const handleSelectionChange = (useSelectReturn: UnwrapRef<UseSelectState>, index?: number) => {
+  emits("selectionChange", useSelectReturn, index);
+};
+
+const handleSizeChange = (size: TableSizeEnum, style: TableStyle) => {
+  tableStyle.value = style;
+  emits("sizeChange", size, style);
 };
 
 const handlePaginationChange = (pageInfo: PageInfo) => {
@@ -139,6 +148,7 @@ const handleDragSortEnd = (newIndex: number, oldIndex: number) => {
 
 const expose = {
   tableData,
+  optionsMap,
   pageInfo,
   searchParams,
   searchInitParams,
@@ -150,33 +160,43 @@ const expose = {
   setColumn,
   addColumn,
   delColumn,
+  ...tableHeadInstance.value!,
+  ...tableMainInstance.value!,
 };
 
 defineExpose(expose);
 </script>
 
 <template>
-  <div :class="[ns.b(), { card: cardStyle }]">
+  <div ref="rootInstance" :class="[ns.b(), { card }]">
     <!-- 表格头部 -->
-    <TableHeader
+    <TableHead
+      v-if="!hideHeader"
+      ref="tableHeadInstance"
+      v-bind="$attrs"
       :columns="finalProps.columns"
-      :title
-      :headerButton
-      :disabledHeaderButton
-      :size
-      :exportProps
       @size-change="handleSizeChange"
-    />
+    >
+      <template v-for="slot in Object.keys($slots)" #[slot]="scope">
+        <slot :name="slot" v-bind="scope" />
+      </template>
+    </TableHead>
 
     <!-- 表格主体 -->
     <TableMain
       :columns="finalProps.columns"
+      ref="tableMainInstance"
+      v-bind="{ ...tableStyle, ...$attrs }"
       :data="finalTableData"
-      :pagination
-      :paginationProps
+      :pageScope
       :pageInfo
-      @paginationChange="handlePaginationChange"
-      @drag-sort-end="handleDragSortEnd"
-    />
+      @selection-change="handleSelectionChange"
+      @pagination-change="handlePaginationChange"
+      @dragSortEnd="handleDragSortEnd"
+    >
+      <template v-for="slot in Object.keys($slots)" #[slot]="scope">
+        <slot :name="slot" v-bind="scope" />
+      </template>
+    </TableMain>
   </div>
 </template>

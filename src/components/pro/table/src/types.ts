@@ -2,26 +2,88 @@ import type {
   ButtonProps,
   ElTooltipProps,
   PaginationProps,
+  PopoverProps,
+  RadioProps,
   TableColumnCtx,
   TableInstance,
   TableProps,
 } from "element-plus";
 import type { FormItemColumnProps, PageInfo } from "@/components";
-import type { CSSProperties } from "vue";
+import type { CSSProperties, UnwrapRef } from "vue";
 import type { UseSelectState } from "./composables/use-selection";
 import type ProTable from "./index.vue";
 import type ProTableMain from "./table-main.vue";
-import type ProTableHeader from "./table-header.vue";
-import { TableSizeEnum, TableColumnTypeEnum, ExportKey, ToolButtonEnum, PageMode } from "./helper";
+import type ProTableHead from "./table-head.vue";
+import { TableSizeEnum, TableColumnTypeEnum, ExportKey, ToolButtonEnum, Environment } from "./helper";
 
 /**
  * 自定义 render 的参数类型
  */
-export type TableRenderScope<T> = { row: T; $index: number; column: TableColumnCtx<T>; [key: string]: any };
-export type HeaderRenderScope<T> = { $index: number; column: TableColumnCtx<T>; [key: string]: any };
+export type TableDefaultRenderScope<T = Recordable> = {
+  row: T;
+  $index: number;
+  column: TableColumn<T>;
+  [key: string]: any;
+};
+export type TableHeadRenderScope<T = Recordable> = { $index: number; column: TableColumn<T>; [key: string]: any };
 
 export type TableStyle = { rowStyle: CSSProperties; cellStyle: CSSProperties; headerCellStyle: CSSProperties };
 
+/**
+ * 部分查询条件有固定的规则，比如时间范围查询不可能是 lt、gt 之类的
+ */
+export type FilterRule =
+  | "lt"
+  | "gt"
+  | "le"
+  | "ge"
+  | "eq"
+  | "ne"
+  | "like"
+  | "notLike"
+  | "between"
+  | "notBetween"
+  | "in"
+  | "notIn"
+  | ((model: Record<string, any>, row: any, key: string) => boolean) // 自定义函数查询，返回 boolean：true 符合条件，false 不符合条件
+  | undefined;
+
+export interface TableFilterProps {
+  /**
+   * 是否开启筛选功能
+   *
+   * @default true
+   */
+  enabled?: boolean;
+  /**
+   * 使用的表单组件名
+   *
+   * @default 'ElInput'
+   */
+  el?: FormItemColumnProps["el"];
+  /**
+   * ElFormItem 的 prop 属性，当表单数据 model 为对象时，prop 也是 model 的 key
+   */
+  prop?: FormItemColumnProps["prop"];
+  /**
+   * 当前端查询时，指定查询的规则
+   *
+   * @default 'eq'
+   */
+  rule?: FilterRule;
+  /**
+   * ProFormItem props
+   */
+  formColumn?: FormItemColumnProps;
+  /**
+   * PopoverProps props
+   */
+  popoverProps?: Partial<PopoverProps>;
+}
+
+/**
+ * 表格导出类型
+ */
 export interface ExportProps {
   /**
    * 导出时的表头配置
@@ -108,9 +170,9 @@ export interface OperationProps {
 }
 
 /**
- * TableHeader 组件的类型命名空间
+ * TableHead 组件的类型命名空间
  */
-export namespace ProTableHeaderNamespace {
+export namespace ProTableHeadNamespace {
   export interface Props {
     /**
      * table 数据
@@ -188,6 +250,12 @@ export namespace ProTableMainNamespace {
      */
     columnTypes?: (TableColumnTypeEnum | `${TableColumnTypeEnum}`)[];
     /**
+     * 行主键
+     *
+     * @default 'id'
+     */
+    rowKey?: TableProps<Recordable>["rowKey"];
+    /**
      * 操作列 props
      *
      * @param false
@@ -198,11 +266,11 @@ export namespace ProTableMainNamespace {
      */
     pageInfo?: Partial<PageInfo>;
     /**
-     * 是否开启分页功能，pageMode 可以指定客户端（前端）分页还是服务端（后端）分页，当为 true 时，默认为客户端（前端）分页
+     * 是否开启分页功能，可以指定客户端（前端）分页还是服务端（后端）分页，当为 true 时，默认为客户端（前端）分页
      *
      * @default false
      */
-    pagination?: boolean | { pageMode?: PageMode | `${PageMode}` };
+    pageScope?: boolean | Environment | `${Environment}`;
     /**
      * 分页组件 props
      *
@@ -210,11 +278,13 @@ export namespace ProTableMainNamespace {
      */
     paginationProps?: MaybeRef<Partial<PaginationProps>>;
     /**
-     * 行主键
-     *
-     * @default 'id'
+     * 单选框 props
      */
-    rowKey?: string;
+    radioProps?: MaybeRef<Partial<RadioProps>>;
+    /**
+     * 过滤规则，可以指定客户端（前端）过滤还是服务端（后端）过滤，当为 true 时，默认为客户端（前端）过滤
+     */
+    filterScope?: boolean | Environment | `${Environment}`;
     /**
      * 表格无数据时显示的文字
      *
@@ -227,7 +297,7 @@ export namespace ProTableMainNamespace {
     /**
      * 多选框勾选事件
      */
-    selectionChange: [useSelectReturn: UseSelectState];
+    selectionChange: [useSelectReturn: UnwrapRef<UseSelectState>, index?: number];
     /**
      * 分页触发事件
      */
@@ -236,6 +306,9 @@ export namespace ProTableMainNamespace {
      * 拖拽排序结束事件
      */
     dragSortEnd: [newIndex: number, oldIndex: number];
+    filter: [model: Recordable];
+    filterClear: [model: Recordable];
+    filterReset: [];
   }
 }
 
@@ -265,7 +338,7 @@ export namespace ProTableNamespace {
     /**
      * 默认请求参数
      */
-    defaultRequestParams?: Recordable;
+    defaultParams?: Recordable;
     /**
      * 是否立即执行请求
      *
@@ -289,30 +362,34 @@ export namespace ProTableNamespace {
      */
     dataCallback?: (data: Recordable) => any;
     /**
+     * 是否隐藏表格头部
+     *
+     * @default false
+     */
+    hideHeader?: boolean;
+    /**
      * 是否使用卡片样式
      *
      * @default false
      */
-    cardStyle?: boolean;
+    card?: boolean;
     /**
-     * 导出配置
+     * 分页信息
      */
-    exportProps?: ExportProps;
     pageInfo?: ProTableMainNamespace.Props["pageInfo"];
-    pagination?: ProTableMainNamespace.Props["pagination"];
-    paginationProps?: ProTableMainNamespace.Props["paginationProps"];
-    title?: ProTableHeaderNamespace.Props["title"];
-    headerButton?: ProTableHeaderNamespace.Props["button"];
-    disabledHeaderButton?: ProTableHeaderNamespace.Props["disabledButton"];
-    size?: ProTableHeaderNamespace.Props["size"];
-    headerTooltipProps?: ProTableHeaderNamespace.Props["tooltipProps"];
+    /**
+     * 是否开启分页功能，pageMode 可以指定客户端（前端）分页还是服务端（后端）分页，当为 true 时，默认为客户端（前端）分页
+     *
+     * @default false
+     */
+    pageScope?: ProTableMainNamespace.Props["pageScope"];
   }
 
-  export interface Emits extends ProTableMainNamespace.Emits, ProTableHeaderNamespace.Emits {
+  export interface Emits extends ProTableMainNamespace.Emits, ProTableHeadNamespace.Emits {
     /**
      * 注册组件实例
      */
-    register: [proTableRef: any, elTableRef: TableInstance | undefined];
+    register: [proTableInstance: any, elTableInstance: TableInstance | null];
   }
 }
 
@@ -366,15 +443,15 @@ export interface TableColumn<T = any>
   /**
    * ElButton Props
    */
-  linkProps?: Partial<ButtonProps & { onClick: (scope: TableRenderScope<any>) => void }>;
+  linkProps?: Partial<ButtonProps & { onClick: (scope: TableDefaultRenderScope<any>) => void }>;
   /**
    * 自定义表头内容渲染（tsx 语法）
    */
-  headerRender?: (scope: HeaderRenderScope<T>) => VNode;
+  headerRender?: (scope: TableHeadRenderScope<T>) => VNode;
   /**
    * 自定义单元格内容渲染（tsx 语法）
    */
-  render?: (scope: TableRenderScope<T>) => VNode | string;
+  render?: (scope: TableDefaultRenderScope<T>) => VNode | string;
   /**
    * 多级表头
    */
@@ -383,6 +460,10 @@ export interface TableColumn<T = any>
    * 表头右侧 ElToolTip 提示
    */
   tooltip?: FormItemColumnProps["tooltip"];
+  /**
+   * 表头筛选配置项
+   */
+  filterProps?: TableFilterProps;
 }
 
 /**
@@ -391,18 +472,18 @@ export interface TableColumn<T = any>
 export type ProTableInstance = Omit<
   InstanceType<typeof ProTable>,
   keyof ComponentPublicInstance | keyof ProTableNamespace.Props
->;
+> & { $parent?: ComponentPublicInstance | null; pageInfo: ProTableNamespace.Props["pageInfo"] };
 /**
  * ProTableMain 组件实例
  */
 export type ProTableMainInstance = Omit<
   InstanceType<typeof ProTableMain>,
   keyof ComponentPublicInstance | keyof ProTableMainNamespace.Props
->;
+> & { $parent?: ComponentPublicInstance | null };
 /**
- * ProTableHeader 组件实例
+ * ProTableHead 组件实例
  */
-export type ProTableHeaderInstance = Omit<
-  InstanceType<typeof ProTableHeader>,
-  keyof ComponentPublicInstance | keyof ProTableHeaderNamespace.Props
->;
+export type ProTableHeadInstance = Omit<
+  InstanceType<typeof ProTableHead>,
+  keyof ComponentPublicInstance | keyof ProTableHeadNamespace.Props
+> & { $parent?: ComponentPublicInstance | null };

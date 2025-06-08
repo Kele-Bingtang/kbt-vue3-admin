@@ -1,5 +1,5 @@
 import type { Reactive } from "vue";
-import type { FieldBaseValueType, FormItemColumnProps } from "../types";
+import type { ModelBaseValueType, FormItemColumnProps } from "../types";
 import { isRef } from "vue";
 import { isEmpty, isFunction, isObject, isPromise } from "@/utils";
 
@@ -42,7 +42,7 @@ export const formatValue = async <T = any>(
  * 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
  */
 export const getProp = (
-  model: FieldBaseValueType,
+  model: ModelBaseValueType,
   prop: NonNullable<FormItemColumnProps["prop"]>,
   valueFormat?: FormItemColumnProps["getFormat"]
 ) => {
@@ -71,7 +71,7 @@ export const getProp = (
 /**
  * 对 model 对象的 pro 赋值
  */
-export const setProp = (model: FieldBaseValueType, prop: NonNullable<FormItemColumnProps["prop"]>, value: any) => {
+export const setProp = (model: ModelBaseValueType, prop: NonNullable<FormItemColumnProps["prop"]>, value: any) => {
   if (!model) return;
 
   const props = prop.split(".");

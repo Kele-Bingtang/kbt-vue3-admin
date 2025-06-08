@@ -1,64 +1,64 @@
-import type { AxiosRequestConfig, Canceler } from "axios";
-import axios from "axios";
+import type { PlusAxiosRequestConfig } from ".";
 import qs from "qs";
-import { isFunction } from "@/utils";
 
 // 声明一个 Map 用于存储每个请求的标识 和 取消函数
-let pendingMap = new Map<string, Canceler>();
+const pendingMap = new Map<string, AbortController>();
+
+// 序列化参数，确保对象属性顺序一致
+const sortedStringify = (obj: any) => {
+  return qs.stringify(obj, { arrayFormat: "repeat", sort: (a, b) => a.localeCompare(b) });
+};
 
 // 序列化参数
-export const getPendingUrl = (config: AxiosRequestConfig) =>
-  [config.method, config.url, qs.stringify(config.data), qs.stringify(config.params)].join("&");
+export const getPendingUrl = (config: PlusAxiosRequestConfig) => {
+  return [config.method, config.url, sortedStringify(config.data), sortedStringify(config.params)].join("&");
+};
 
 export class AxiosCanceler {
   /**
-   * @description 添加请求
-   * @param {Object} config
-   * @return void
+   * 添加请求
+   *
+   * @param config
    */
-  addPendingRequest(config: AxiosRequestConfig) {
+  addPending(config: PlusAxiosRequestConfig) {
     // 在请求开始前，对之前的请求做检查取消操作
-    this.removePendingRequest(config);
+    this.removePending(config);
     const url = getPendingUrl(config);
-    config.cancelToken =
-      config.cancelToken ||
-      new axios.CancelToken(cancel => {
-        if (!pendingMap.has(url)) {
-          // 如果 pending 中不存在当前请求，则添加进去
-          pendingMap.set(url, cancel);
-        }
-      });
+    const controller = new AbortController();
+    config.signal = controller.signal;
+    pendingMap.set(url, controller);
   }
 
   /**
-   * @description 移除请求
-   * @param {Object} config
+   * 移除请求
+   *
+   * @param config
    */
-  removePendingRequest(config: AxiosRequestConfig) {
+  removePending(config: PlusAxiosRequestConfig) {
     const url = getPendingUrl(config);
 
-    if (pendingMap.has(url)) {
-      // 如果在 pending 中存在当前请求标识，需要取消当前请求，并且移除
-      const cancel = pendingMap.get(url);
-      cancel && cancel();
+    // 如果在 pending 中存在当前请求标识，需要取消当前请求并删除条目
+    const controller = pendingMap.get(url);
+    if (controller) {
+      controller.abort();
       pendingMap.delete(url);
     }
   }
 
   /**
-   * @description 清空所有pending
+   * 清空所有 pending
    */
-  removeAllPendingRequest() {
-    pendingMap.forEach(cancel => {
-      cancel && isFunction(cancel) && cancel();
+  removeAllPending() {
+    pendingMap.forEach(controller => {
+      controller && controller.abort();
     });
     pendingMap.clear();
   }
 
   /**
-   * @description 重置
+   * 重置
    */
-  reset(): void {
-    pendingMap = new Map<string, Canceler>();
+  reset() {
+    pendingMap.clear();
   }
 }

@@ -26,7 +26,7 @@ const props = withDefaults(defineProps<PaginationProps>(), {
 const emits = defineEmits<PaginationEmits>();
 
 const pageModel = defineModel<PageInfo>({ default: () => defaultPageInfo });
-const pageInfo = ref(Object.assign(defaultPageInfo, pageModel.value));
+const pageInfo = ref({ ...defaultPageInfo, ...pageModel.value });
 
 watch(
   () => pageModel.value,

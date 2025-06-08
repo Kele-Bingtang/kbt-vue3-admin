@@ -1,15 +1,15 @@
 <script setup lang="ts">
 import type { CSSProperties } from "vue";
-import type { ProTableHeaderNamespace } from "./types";
+import type { ProTableHeadNamespace, TableStyle } from "./types";
 import { Coin, Operation, Download } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { TableColumnTypeEnum, TableSizeEnum, ToolButtonEnum } from "./helper";
-import TableHeaderColumnSetting from "./plugins/table-header-column-setting.vue";
+import TableHeadColumnSetting from "./plugins/table-head-column-setting.vue";
 import { exportExcel } from "./helper/export";
 
-defineOptions({ name: "TableHeader" });
+defineOptions({ name: "TableHead" });
 
-const props = withDefaults(defineProps<ProTableHeaderNamespace.Props>(), {
+const props = withDefaults(defineProps<ProTableHeadNamespace.Props>(), {
   data: () => [],
   columns: () => [],
   button: () => ["size", "setting", "export"],
@@ -21,9 +21,9 @@ const props = withDefaults(defineProps<ProTableHeaderNamespace.Props>(), {
   tooltipProps: () => ({ placement: "top", effect: "light" }),
 });
 
-const emits = defineEmits<ProTableHeaderNamespace.Emits>();
+const emits = defineEmits<ProTableHeadNamespace.Emits>();
 
-const ns = useNamespace("pro-table-header");
+const ns = useNamespace("pro-table-head");
 
 const columnSettingVisible = ref(false);
 const tableSize = ref<TableSizeEnum>(TableSizeEnum.Default);
@@ -33,7 +33,7 @@ const tableStyle = reactive<Record<string, CSSProperties>>({
   headerCellStyle: {},
 });
 
-const tableSizeStyleMap: Record<TableSizeEnum, Record<"cellStyle" | "rowStyle" | "headerCellStyle", CSSProperties>> = {
+const tableSizeStyleMap: Record<TableSizeEnum, TableStyle> = {
   [TableSizeEnum.Default]: {
     cellStyle: {},
     rowStyle: {},
@@ -95,9 +95,13 @@ const handleExport = () => {
   const { data, columns, exportProps } = props;
 
   if (exportProps?.exportFile) return exportProps.exportFile(data);
-
   exportExcel(columns, data, exportProps);
 };
+
+const toggleColumnSetting = (show = !columnSettingVisible.value) => (columnSettingVisible.value = show);
+
+const expose = { sizeCommand: handleSizeCommand, exportFile: handleExport, toggleColumnSetting };
+defineExpose(expose);
 </script>
 
 <template>
@@ -115,7 +119,12 @@ const handleExport = () => {
             <el-button :disabled="disabledButton.includes(ToolButtonEnum.Size)" :icon="Coin" circle />
             <template #dropdown>
               <el-dropdown-menu>
-                <el-dropdown-item v-for="(value, key) in TableSizeEnum" :key :disabled="tableSize === value">
+                <el-dropdown-item
+                  v-for="(value, key) in TableSizeEnum"
+                  :key
+                  :command="value"
+                  :disabled="tableSize === value"
+                >
                   {{ key }}
                 </el-dropdown-item>
               </el-dropdown-menu>
@@ -149,22 +158,10 @@ const handleExport = () => {
       </slot>
     </div>
 
-    <TableHeaderColumnSetting v-model="columnSettingVisible" :columns="settingColumns" />
+    <TableHeadColumnSetting v-model="columnSettingVisible" :columns="settingColumns" />
   </div>
 </template>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins/bem" as *;
-
-@include b(pro-table-header) {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  margin-bottom: 11px;
-
-  @include e(right) {
-    display: flex;
-    align-items: center;
-  }
-}
+@use "./table-head";
 </style>

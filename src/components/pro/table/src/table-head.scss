@@ -1,0 +1,13 @@
+@use "@/styles/mixins/bem" as *;
+
+@include b(pro-table-head) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 11px;
+
+  @include e(right) {
+    display: flex;
+    align-items: center;
+  }
+}

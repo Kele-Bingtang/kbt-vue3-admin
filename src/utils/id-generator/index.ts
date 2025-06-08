@@ -1,14 +1,14 @@
 import snowflake from "./snowflakes";
 
 /**
- * @description 雪花算法 ID
+ * 雪花算法 ID
  */
 export const useSnowflakeId = () => {
   return snowflake.nextId();
 };
 
 /**
- * @description 生成唯一 uuid，带有 -
+ * 生成唯一 uuid，带有 -
  */
 export const useUuid = () => {
   if (typeof crypto === "object") {
@@ -39,14 +39,14 @@ export const useUuid = () => {
 };
 
 /**
- * @description 没有 `-` 的 uuid
+ * 没有 `-` 的 uuid
  */
 export const useSimpleUuid = () => {
   return useUuid().replace(/-/g, "");
 };
 
 /**
- * @description 随机字符串
+ * 随机字符串
  */
 export function toAnyString() {
   const str: string = "xxxxx-xxxxx-4xxxx-yxxxx-xxxxx".replace(/[xy]/g, (c: string) => {

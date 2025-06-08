@@ -494,7 +494,7 @@ const clearSelection = () => tableMainRef.value?.table?.clearSelection();
 type ProTableEmits = {
   register: [
     proTableRef: ComponentPublicInstance | null | any,
-    elTableRef: TableInstance | undefined,
+    elTableRef: TableInstance | null,
     proSearch: ProSearchInstance | null,
   ];
   formRegister: [proFormRef?: ComponentPublicInstance | null | any, elFormRef?: FormInstance];
@@ -523,7 +523,7 @@ const searchRegister = (ref?: ProSearchExpose) => {
 
 onMounted(() => {
   // 注册实例
-  emits("register", tableMainRef.value?.$parent, tableMainRef.value?.table, proSearchRef.value);
+  emits("register", tableMainRef.value?.$parent, tableMainRef.value?.table || null, proSearchRef.value);
 });
 
 const _search = (model: Record<string, any>) => {

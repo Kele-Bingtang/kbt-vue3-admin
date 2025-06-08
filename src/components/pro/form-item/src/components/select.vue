@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { FormOptionFieldProps } from "../types";
+import type { ElOptionField } from "../types";
 import { ElOption, ElOptionGroup } from "element-plus";
 import { ComponentNameEnum } from "../helper";
 
 defineProps<{
   options: Recordable[];
-  optionField: Required<FormOptionFieldProps>;
+  optionField: Required<ElOptionField>;
   el: ComponentNameEnum;
 }>();
 </script>

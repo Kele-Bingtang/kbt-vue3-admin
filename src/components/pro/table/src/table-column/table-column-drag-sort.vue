@@ -49,7 +49,7 @@ const dragSort = () => {
     easing: "cubic-bezier(1, 0, 0, 1)",
     chosenClass: "table-column-sortable-chosen",
     onEnd({ newIndex, oldIndex }) {
-      if (oldIndex !== undefined && newIndex !== undefined) {
+      if (newIndex !== undefined && oldIndex !== undefined) {
         emits("dragSortEnd", newIndex, oldIndex);
       }
     },
@@ -59,7 +59,6 @@ const dragSort = () => {
 
 <template>
   <el-table-column width="60" v-bind="$attrs">
-    <!-- sort -->
     <span :class="ns.e('icon')" style="cursor: e-resize">
       <slot name="drag-sort-icon">
         <el-icon><DCaret /></el-icon>

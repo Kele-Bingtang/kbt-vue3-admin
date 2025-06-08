@@ -183,7 +183,9 @@ export interface FormColumn extends FormItemColumnProps {
 /**
  * ProForm 组件实例
  */
-export type ProFormInstance = Omit<InstanceType<typeof ProForm>, keyof ComponentPublicInstance | keyof ProFormProps>;
+export type ProFormInstance = Omit<InstanceType<typeof ProForm>, keyof ComponentPublicInstance | keyof ProFormProps> & {
+  $parent?: ComponentPublicInstance | null;
+};
 
 /**
  * provide 类型

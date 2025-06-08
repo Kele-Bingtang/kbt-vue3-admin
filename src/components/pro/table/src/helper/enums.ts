@@ -29,8 +29,8 @@ export enum ExportKey {
   Prop = "prop",
 }
 
-// 分页模式
-export enum PageMode {
+// 环境
+export enum Environment {
   Client = "client",
   Server = "server",
 }

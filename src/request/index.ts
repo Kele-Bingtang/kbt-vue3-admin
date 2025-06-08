@@ -1,5 +1,11 @@
 import { ElNotification } from "element-plus";
-import axios, { type AxiosInstance, AxiosError, type AxiosRequestConfig, type InternalAxiosRequestConfig } from "axios";
+import axios, {
+  type AxiosInstance,
+  AxiosError,
+  type AxiosRequestConfig,
+  type InternalAxiosRequestConfig,
+  type AxiosResponse,
+} from "axios";
 import qs from "qs";
 import router from "@/router";
 import { isArray, isValidURL, message } from "@/utils";
@@ -10,6 +16,11 @@ import { ContentTypeEnum, ResultEnum } from "./http-enum";
 import { AxiosCanceler } from "./axios-cancel";
 import { checkStatus } from "./check-status";
 
+export interface PlusAxiosRequestConfig extends InternalAxiosRequestConfig {
+  loading?: boolean;
+  cancel?: boolean;
+}
+
 type AxiosRequestConfigProp<D = any> = AxiosRequestConfig<D> & {
   method: "get" | "post" | "delete" | "put" | "download";
 };
@@ -17,7 +28,7 @@ type AxiosRequestConfigProp<D = any> = AxiosRequestConfig<D> & {
 const axiosCanceler = new AxiosCanceler();
 
 /**
- * @description 当请求 url 携带的如下前缀（key），会替换为 http（value），如接口 url 为 /test/xx/xxx，则最终发送的请求为 https://youngkbt.cn/xx/xxx
+ * 当请求 url 携带的如下前缀（key），会替换为 http（value），如接口 url 为 /test/xx/xxx，则最终发送的请求为 https://youngkbt.cn/xx/xxx
  * @condition 接口在 header 填写 mapping: true 来开启 URL 映射功能，{ headers: { mapping: true } }
  * 详细请看 README.md 文档的 API 介绍
  */
@@ -31,6 +42,8 @@ const config = {
   baseURL: mappingUrl.default,
   // 设置超时时间（10s）
   timeout: ResultEnum.TIMEOUT as number,
+  // 跨域时候允许携带凭证
+  withCredentials: true,
 };
 
 class RequestHttp {
@@ -40,16 +53,17 @@ class RequestHttp {
     this.service = axios.create(config);
 
     /**
-     * @description 请求拦截器
+     * 请求拦截器
      */
     this.service.interceptors.request.use(
-      config => {
-        // 如果当前请求需要显示 loading，在 api 服务中通过指定: { headers: { loading: true } } 来控制显示 loading
-        if (config.headers?.loading) showFullScreenLoading();
-        else {
-          axiosCanceler.removePendingRequest(config);
-          axiosCanceler.addPendingRequest(config);
-        }
+      (config: PlusAxiosRequestConfig) => {
+        // 在 api 服务中通过指定的第三个参数: { cancel: false } 来控制是否拒绝重复请求
+        config.cancel ??= true;
+        config.cancel && axiosCanceler.addPending(config);
+        // 在 api 服务中通过指定的第三个参数: { loading: false } 来控制发起请求后是否显示全局 loading
+        config.loading ??= true;
+        config.loading && showFullScreenLoading();
+
         const userStore = useUserStore();
         // 处理 url 映射
         config.headers?.mapping && processMappingUrl(config) && delete config.headers?.mapping;
@@ -57,52 +71,63 @@ class RequestHttp {
         config.params?._type && config.method?.toLocaleLowerCase() === "post" && processParamsType(config);
         config.params?._type === "multi" && processArray(config);
         config.params && delete config.params._type;
+
+        // 请求头携带 Token
         config.headers.token = userStore.accessToken;
         return config;
       },
       (error: AxiosError) => {
-        // TODO：请求的异常进行捕获处理
         return Promise.reject(error);
       }
     );
 
     /**
-     * @description 响应拦截器
+     * 响应拦截器
      */
     this.service.interceptors.response.use(
-      response => {
-        const { data } = response;
+      (response: AxiosResponse & { config: PlusAxiosRequestConfig }) => {
+        const { data, config } = response;
+
         // 在请求结束后，并关闭请求 loading
-        if (response.config.headers?.loading) tryHideFullScreenLoading();
-        else axiosCanceler.removePendingRequest(response.config);
+        config.loading && tryHideFullScreenLoading();
+        // 在请求结束后，取消本次请求（防止下次重复请求）
+        axiosCanceler.removePending(config);
+
         const userStore = useUserStore();
         //  登陆失效（code == 401）
         if (data.code === ResultEnum.OVERDUE) {
-          message.error(data.msg);
+          message.error(data.message);
           userStore.logout();
           router.replace(LOGIN_URL);
           return Promise.reject(data);
         }
         // 全局错误信息拦截（防止下载文件得时候返回数据流，没有 code，直接报错）
         if (data.code && data.code !== ResultEnum.SUCCESS) {
-          message.error(data.msg);
+          message.error(data.message);
           return Promise.reject(data);
         }
         return data;
       },
       async (error: AxiosError) => {
+        const { response, config } = error;
         const errorStore = useErrorLogStore();
-        if (error.config?.headers?.loading) tryHideFullScreenLoading();
-        else axiosCanceler.removePendingRequest(error.config || {});
+
+        tryHideFullScreenLoading();
+        axiosCanceler.removePending(config as PlusAxiosRequestConfig);
+
         if (error.message === "身份异常") return message.error("身份异常");
         else if (error.message.indexOf("timeout") !== -1) message.error("请求超时！请您稍后重试");
         else if (error.message.indexOf("Network Error") !== -1) message.error("网络错误！请您稍后重试");
+
         // 根据响应的错误状态码，做不同的处理
-        if (error.response) checkStatus(error.response.status);
+        if (response) checkStatus(response.status);
         // 服务器结果都没有返回(可能服务器错误可能客户端断网)，断网处理:可以跳转到断网页面
         if (!window.navigator.onLine) router.replace("/500");
+
         const e = processError(error);
+        // 添加错误日志到 store 里
         e && errorStore.addErrorLog(e);
+
         return Promise.reject(error);
       }
     );
@@ -125,7 +150,7 @@ class RequestHttp {
     return this.service.post(url, params, { ..._object, responseType: "blob" });
   }
 
-  // 全写请求封装
+  // 全部方法请求封装
   request<T, R = any>(config: AxiosRequestConfigProp<R>): Promise<T> {
     return this.service(config) as unknown as Promise<T>;
   }
@@ -133,7 +158,12 @@ class RequestHttp {
 
 export default new RequestHttp(config);
 
-function processMappingUrl(config: InternalAxiosRequestConfig) {
+/**
+ * 处理 url 映射
+ *
+ * @param config Axios 配置信息
+ */
+const processMappingUrl = (config: InternalAxiosRequestConfig) => {
   const keys = Object.keys(mappingUrl);
   let url = config.url || "";
   let prefix = "";
@@ -157,14 +187,14 @@ function processMappingUrl(config: InternalAxiosRequestConfig) {
     }
   }
   return config;
-}
+};
 
 /**
  * 通过 params 的 _type 属性来设置不同的 contentType
+ *
  * @param config Axios 配置信息
- * @returns config
  */
-function processParamsType(config: InternalAxiosRequestConfig) {
+const processParamsType = (config: InternalAxiosRequestConfig) => {
   if (config.params?._type) {
     const type = config.params._type;
     if (type === "form") {
@@ -180,13 +210,13 @@ function processParamsType(config: InternalAxiosRequestConfig) {
     config.data = qs.stringify(config.data);
   }
   return config;
-}
+};
 /**
  * 处理参数的数组
+ *
  * @param config Axios 配置信息
- * @returns config
  */
-function processArray(config: InternalAxiosRequestConfig) {
+const processArray = (config: InternalAxiosRequestConfig) => {
   let url = String(config.url);
   if (url.indexOf("?") !== -1) url += "&";
   else url += "?";
@@ -203,13 +233,13 @@ function processArray(config: InternalAxiosRequestConfig) {
   config.params = {};
   config.url = url.slice(0, -1);
   return config;
-}
+};
 /**
  * Axios 的错误提示和持久化处理
+ *
  * @param error Axios 错误
- * @returns 持久化数据
  */
-function processError(error: AxiosError) {
+const processError = (error: AxiosError) => {
   const e = JSON.parse(JSON.stringify(error));
   if (Object.keys(e).includes("baseURL")) {
     const {
@@ -232,7 +262,7 @@ function processError(error: AxiosError) {
       hasRead: false,
     };
   }
-}
+};
 
 /**
  * h 手动渲染 ElNotification

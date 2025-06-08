@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { FormColumn, ProFormEmits, ProFormProps } from "./types";
 import type { FormInstance, FormItemProp } from "element-plus";
-import type { FormOptionProps } from "@/components/pro/form-item";
+import type { ElOption } from "@/components/pro/form-item";
 import { shallowRef, ref, watch, unref, onMounted, computed } from "vue";
 import { ElRow, ElCol, ElForm, ElMessage, ElButton } from "element-plus";
 import { ProFormItem, formatValue, getProp, setProp } from "@/components/pro/form-item";
@@ -61,7 +61,7 @@ const footerStyle = computed(() => ({
 }));
 
 // 定义 optionsMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
-const optionsMap = ref(new Map<string, FormOptionProps[] | ComputedRef<FormOptionProps[]>>());
+const optionsMap = ref(new Map<string, ElOption[] | ComputedRef<ElOption[]>>());
 
 const initOptionsMap = async ({ options, prop, useCacheOptions = true }: FormColumn) => {
   if (!options) return;
@@ -208,9 +208,9 @@ const handleValidate = (prop: FormItemProp, isValid: boolean, message: string): 
   emits("validate", prop, isValid, message);
 };
 
-// 获取 formItem 实例
-const getFormItemInstance = (prop: FormColumn["prop"]) => {
-  return proFormItemInstances.value[prop].formItemInstance;
+// 获取 ElFormItem 实例
+const getElFormItemInstance = (prop: FormColumn["prop"]) => {
+  return proFormItemInstances.value[prop].elFormItemInstance;
 };
 
 // 获取表单组件实例
@@ -219,14 +219,14 @@ const getElInstance = (prop: FormColumn["prop"]) => {
 };
 
 const expose = {
-  form: elFormInstance,
+  elFormInstance,
   model,
   setValues,
   setProps,
   setColumn,
   addColumn,
   delColumn,
-  getFormItemInstance,
+  getElFormItemInstance,
   getElInstance,
   destroyOrInit,
   isHidden,

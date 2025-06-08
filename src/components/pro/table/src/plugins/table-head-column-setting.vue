@@ -2,16 +2,16 @@
 import type { TableColumn } from "../types";
 import { useNamespace } from "@/composables";
 
-defineOptions({ name: "TableHeaderColumnSetting" });
+defineOptions({ name: "TableHeadColumnSetting" });
 
-const ns = useNamespace("pro-table-header-column-setting");
+const ns = useNamespace("pro-table-head-column-setting");
 
-export interface TableHeaderColumnSettingProps {
+export interface TableHeadColumnSettingProps {
   columns?: TableColumn[];
   emptyText?: string;
 }
 
-withDefaults(defineProps<TableHeaderColumnSettingProps>(), {
+withDefaults(defineProps<TableHeadColumnSettingProps>(), {
   columns: () => [],
   emptyText: "暂无可配置列",
 });

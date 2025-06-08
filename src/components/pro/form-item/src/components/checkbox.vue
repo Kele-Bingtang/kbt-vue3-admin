@@ -1,12 +1,12 @@
 <script setup lang="ts">
-import type { FormOptionFieldProps } from "../types";
+import type { ElOptionField } from "../types";
 import { computed } from "vue";
 import { ElCheckbox, ElCheckboxButton } from "element-plus";
 import { ComponentNameEnum } from "../helper";
 
 const props = defineProps<{
   options: Recordable[];
-  optionField: Required<FormOptionFieldProps>;
+  optionField: Required<ElOptionField>;
   el: ComponentNameEnum;
 }>();
 

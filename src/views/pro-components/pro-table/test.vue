@@ -8,6 +8,7 @@ const data = ref(tableData);
 
 const columns: TableColumn[] = [
   { type: "selection", fixed: "left", width: 60 },
+  // { type: "radio", label: "单选", fixed: "left", width: 60 },
   { type: "index", label: "#", width: 60 },
   { type: "sort", label: "Sort", width: 80 },
   { type: "expand", label: "Expand", width: 80 },
@@ -25,7 +26,7 @@ const columns: TableColumn[] = [
     prop: "user.detail.age",
     label: "年龄",
   },
-  { prop: "idCard", label: "身份证号" },
+  { prop: "idCard", label: "身份证号", filterProps: { enabled: true } },
   { prop: "email", label: "邮箱" },
   { prop: "address", label: "居住地址" },
 ];

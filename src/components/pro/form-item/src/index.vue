@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { FormItemInstance } from "element-plus";
-import type { FormItemColumnProps, FieldBaseValueType } from "./types";
+import type { FormItemColumnProps, ModelBaseValueType } from "./types";
 import { ElFormItem, ElTooltip, ElDivider, ElUpload, ElIcon } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
 import { addUnit, isObject } from "@/utils";
@@ -30,11 +30,11 @@ const props = withDefaults(defineProps<FormItemColumnProps>(), {
   getFormat: undefined,
 });
 
-const model = defineModel<FieldBaseValueType | any>({ required: false });
+const model = defineModel<ModelBaseValueType>({ required: false });
 const enums = ref<Recordable[]>([]);
 
 // 存储每一个 ElFormItem 实例
-const formItemInstance = useTemplateRef<FormItemInstance>("formItemInstance");
+const elFormItemInstance = useTemplateRef<FormItemInstance>("elFormItemInstance");
 // 存储每一个表单组件实例
 const elInstance = useTemplateRef<Component>("elInstance");
 
@@ -178,7 +178,7 @@ const RenderLabelSlot = ({ label }: { label: string }) => {
 // };
 
 const expose = {
-  formItemInstance,
+  elFormItemInstance,
   elInstance,
 };
 
@@ -187,7 +187,7 @@ defineExpose(expose);
 
 <template>
   <el-form-item
-    ref="formItemInstance"
+    ref="elFormItemInstance"
     :label="showLabelValue ? labelValue + '' : ''"
     :prop="prop"
     v-bind="formItemProps"

@@ -1,12 +1,11 @@
-import type { Ref, ShallowRef } from "vue";
 import type { FormInstance } from "element-plus";
 import type { FormColumn, ProFormInstance, ProFormOnEmits, ProFormProps } from "../types";
 import type { FormSetProps } from "./use-form-api";
 import { ElConfigProvider } from "element-plus";
-import { createVNode, getCurrentInstance, isRef, isShallow, nextTick, ref, render, unref } from "vue";
+import { createVNode, getCurrentInstance, nextTick, ref, render } from "vue";
 import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
-import { isEmpty, isObject } from "@/utils";
+import { isEmpty, isObject, isString } from "@/utils";
 import ProForm from "../index.vue";
 
 type ProFormPropsWithModel = ProFormProps & { modelValue?: Recordable };
@@ -25,8 +24,8 @@ export const useProForm = () => {
   const currentInstance = getCurrentInstance();
 
   /**
-   * @param ref ProForm 实例
-   * @param elRef ElForm 实例
+   * @param proForm ProForm 实例
+   * @param elForm ElForm 实例
    */
   const register = (proForm: ProFormInstance | null, elForm: FormInstance | null) => {
     proFormInstance.value = proForm;
@@ -113,7 +112,7 @@ export const useProForm = () => {
         // 使用 reduce 过滤空值，并返回一个新对象
         return Object.keys(model).reduce((prev: Recordable, next) => {
           const value = model[next];
-          if (isEmpty(value, true)) {
+          if (isEmpty(value)) {
             if (isObject(value)) prev[next] = value;
             else prev[next] = value;
           }
@@ -161,9 +160,9 @@ export const useProForm = () => {
      * @param prop 表单项唯一标识
      * @returns formItem instance
      */
-    getFormItemInstance: async (prop: string) => {
+    getElFormItemInstance: async (prop: string) => {
       const form = await getPropForm();
-      return form?.getFormItemInstance(prop);
+      return form?.getElFormItemInstance(prop);
     },
     /**
      * 获取表单组件的实例
@@ -191,7 +190,7 @@ export const useProForm = () => {
      * 动态创建表单。使用该函数，控制台会有 warning： Slot "XXX" invoked outside of the render function，可以忽略
      */
     createForm: async (
-      el: string | Ref<HTMLElement> | ShallowRef<HTMLElement>,
+      el: MaybeRef<HTMLElement> | string,
       proFormProps?: ProFormPropsWithModel & Partial<ProFormOnEmits>,
       slots?: any
     ) => {
@@ -203,10 +202,10 @@ export const useProForm = () => {
       );
       await nextTick();
 
-      if (isRef(el) || isShallow(el)) return render(rootInstance, unref(el as Ref<HTMLElement>));
-
-      const rootEl = currentInstance?.refs[el as string] as HTMLElement;
-      rootEl && render(rootInstance, rootEl);
+      if (isString(el)) {
+        const rootEl = currentInstance?.refs[el as string] as HTMLElement;
+        rootEl && render(rootInstance, rootEl);
+      } else return render(rootInstance, toValue(el));
     },
   };
 

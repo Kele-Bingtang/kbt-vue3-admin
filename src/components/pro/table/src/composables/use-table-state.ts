@@ -16,7 +16,7 @@ export interface UseTableStateData {
  * table 页面操作方法封装
  *
  * @param api 获取表格数据 api 方法 (必传)
- * @param initRequestParam 获取数据初始化参数 (非必传，默认为{})
+ * @param defaultParams 获取数据初始化参数 (非必传，默认为{})
  * @param openPage 是否有分页 (非必传，默认为true)
  * @param pageConfig 分页对象
  * @param beforeSearch 查询前的回调函数
@@ -27,7 +27,7 @@ export interface UseTableStateData {
  */
 export const useTableState = (
   api?: (params: Recordable) => Promise<any>,
-  initRequestParam: Recordable = {},
+  defaultParams: MaybeRef<Recordable> = {},
   pageInfo?: ProTableMainNamespace.Props["pageInfo"],
   isServerPage?: MaybeRef<boolean>,
   beforeSearch?: (searchParam: Recordable) => boolean | Recordable,
@@ -59,14 +59,14 @@ export const useTableState = (
   /**
    * 获取表格数据
    */
-  const getTableList = async (requestParams = initRequestParam) => {
+  const getTableList = async (requestParams = defaultParams) => {
     if (!api) return;
 
     const isServerPageValue = toValue(isServerPage);
 
     try {
       // 先把初始化参数和分页参数放到总参数里面
-      Object.assign(state.totalParams, requestParams, isServerPageValue ? pageParams.value : {});
+      Object.assign(state.totalParams, toValue(requestParams), isServerPageValue ? pageParams.value : {});
       let searchParams = { ...state.searchInitParams, ...state.totalParams } as any;
       searchParams = beforeSearch?.(searchParams) ?? searchParams;
 
@@ -116,7 +116,7 @@ export const useTableState = (
       for (const key in state.searchParams) {
         const val = state.searchParams[key];
         // 过滤空值
-        if (!isEmpty(val, true)) nowSearchParam[key] = val;
+        if (!isEmpty(val)) nowSearchParam[key] = val;
       }
       return mergeParams(nowSearchParam);
     }

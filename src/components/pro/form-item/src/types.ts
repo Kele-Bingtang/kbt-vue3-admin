@@ -35,7 +35,7 @@ export type ElFormItemProps = Partial<FormItemProps>;
 /**
  * 表单数据类型
  */
-export type FieldBaseValueType =
+export type ModelBaseValueType =
   | string
   | number
   | boolean
@@ -97,7 +97,7 @@ export type RenderTypes = string | VNode | JSX.Element | Component;
 /**
  * 字典数据类型
  */
-export interface FormOptionProps {
+export interface ElOption {
   /**
    * 选项框显示的文字
    */
@@ -113,7 +113,7 @@ export interface FormOptionProps {
   /**
    * 为树形选择时，可以通过 children 属性指定子选项
    */
-  children?: FormOptionProps[];
+  children?: ElOption[];
   /**
    * 拓展其他选项
    */
@@ -123,7 +123,7 @@ export interface FormOptionProps {
 /**
  * 自定义字典的 key
  */
-export type FormOptionFieldProps = {
+export type ElOptionField = {
   label?: string;
   value?: string;
   disabled?: string;
@@ -135,7 +135,7 @@ export type FormOptionFieldProps = {
  */
 export interface FormItemColumnProps {
   /**
-   * ElFormItem 的 props 属性，当表单数据 model 为对象时，prop 也是 model 的 key 传入表单组件里
+   * ElFormItem 的 prop 属性，当表单数据 model 为对象时，prop 也是 model 的 key
    */
   prop?: string;
   /**
@@ -191,8 +191,8 @@ export interface FormItemColumnProps {
    */
   elSlots?: {
     [slotName: string]: (data: {
-      options: FormOptionProps[];
-      optionField: FormOptionFieldProps;
+      options: ElOption[];
+      optionField: ElOptionField;
       // 其他的 FormItemColumnProps 类型
       [key: string]: any;
     }) => RenderTypes;
@@ -201,19 +201,16 @@ export interface FormItemColumnProps {
    * 字典数据
    */
   options?:
-    | FormOptionProps[]
-    | ((
-        model: Recordable,
-        optionsMap: Map<string, Recordable>
-      ) => FormOptionProps[] | Promise<FormOptionProps[]> | Promise<unknown>)
-    | ComputedRef<FormOptionProps[]>
-    | Promise<FormOptionProps[]>;
+    | ElOption[]
+    | ((model: Recordable, optionsMap: Map<string, Recordable>) => ElOption[] | Promise<ElOption[]> | Promise<unknown>)
+    | ComputedRef<ElOption[]>
+    | Promise<ElOption[]>;
   /**
    * 字典指定 label && value && children 的 key 值
    *
    * @default { label: "label", value: "value", children: "children", disabled: "disabled" }
    */
-  optionField?: FormOptionFieldProps;
+  optionField?: ElOptionField;
   /**
    * ElFormItem props
    */
@@ -252,4 +249,4 @@ export interface FormItemColumnProps {
 export type ProFormItemInstance = Omit<
   InstanceType<typeof ProFormItem>,
   keyof ComponentPublicInstance | keyof FormItemColumnProps
->;
+> & { $parent?: ComponentPublicInstance | null };

@@ -115,11 +115,11 @@ export const isBoolean = (val: unknown): val is boolean => {
 /**
  * 是否为数组
  */
-export const isArray = (arg: any) => {
+export const isArray = (val: unknown): val is Array<unknown> => {
   if (typeof Array.isArray === "undefined") {
-    return Object.prototype.toString.call(arg) === "[object Array]";
+    return Object.prototype.toString.call(val) === "[object Array]";
   }
-  return Array.isArray(arg);
+  return Array.isArray(val);
 };
 
 /**

@@ -1,9 +1,9 @@
 import { message } from "@/utils";
 
 /**
- * @description 校验网络请求状态码
- * @param {Number} status
- * @return void
+ * 校验网络请求状态码
+ *
+ * @param status
  */
 export const checkStatus = (status: number): void => {
   switch (status) {
