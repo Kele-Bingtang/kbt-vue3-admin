@@ -9,7 +9,7 @@ defineOptions({ name: "DialogForm" });
 
 export type DialogStatus = "" | "edit" | "add" | "read";
 
-export interface DialogFormColumnProps<T = any> extends FormColumn {
+export interface DialogFormColumnProps extends FormColumn {
   destroyIn?: Array<"add" | "edit">; // 是否销毁表单，类似于 v-if
   hiddenIn?: Array<"add" | "edit">; // 是否隐藏表单，类似于 v-show
   disabledIn?: Array<"add" | "edit">; // 是否禁用表单

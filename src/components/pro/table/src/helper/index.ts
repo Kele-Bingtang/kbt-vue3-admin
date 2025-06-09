@@ -1,5 +1,6 @@
+import { getProp } from "@/components/pro/form-item";
 import type { FilterRule } from "../types";
-import { isArray, isFunction } from "@/utils";
+import { isArray, isEmpty, isFunction, isObject } from "@/utils";
 
 export * from "./enums";
 
@@ -25,13 +26,21 @@ export const formatCellValue = (callValue: any) => {
   return callValue ?? "--";
 };
 
-export const initModel = (prop: string | string[], model: Recordable, value: unknown) => {
+/**
+ * 初始化 model
+ *
+ * @param model 模型
+ * @param prop 属性
+ * @param value 初始化的值
+ * @param initIfEmpty 值为空时是否依然初始化
+ */
+export const initModel = (model: Recordable, prop: string | string[], value: unknown, initIfEmpty = false) => {
   const init = (propArr: string[]) => {
-    let currentLevel = { ...model };
+    let currentLevel = model;
     propArr.forEach((prop, index) => {
-      if (index === propArr.length - 1) currentLevel[prop] = value;
-      else {
-        // 如果不存在，则创建空对象
+      if (index === propArr.length - 1 && (!isEmpty(value) || (isEmpty(value) && initIfEmpty))) {
+        currentLevel[prop] = value;
+      } else {
         if (!currentLevel[prop]) currentLevel[prop] = {};
         currentLevel = currentLevel[prop];
       }
@@ -42,9 +51,31 @@ export const initModel = (prop: string | string[], model: Recordable, value: unk
 
   if (isArray(prop)) return init(prop);
   if (prop?.includes(".")) return init(prop.split("."));
-  model[prop] = value;
+
+  if (!isEmpty(value) || (isEmpty(value) && initIfEmpty)) model[prop] = value;
 
   return model;
+};
+
+/**
+ * 获取对象中所有叶子节点的路径（多级路径用 . 拼接）
+ *
+ * 假设 假设 model 为 { user: { age: {name: ""} }, menu: "" }，如果获取为 ["user.age.name", "menu"]
+ *
+ * @param model 要遍历的对象
+ * @param prefix 当前路径前缀
+ */
+export const getObjLeafKeys = (model: Recordable, prefix = ""): string[] => {
+  return Object.keys(model).reduce((acc: string[], key: string) => {
+    const value = model[key];
+    const path = prefix ? `${prefix}.${key}` : key;
+
+    // 如果是对象，继续递归
+    if (isObject(value)) acc.push(...getObjLeafKeys(value, path));
+    else acc.push(path); // 如果是基本类型或数组，视为叶子节点
+
+    return acc;
+  }, []);
 };
 
 /**
@@ -62,25 +93,33 @@ export const strToDate = (data: string | number) => {
  * @param filterRule 过滤规则
  */
 export const filterData = (data: Recordable[], model: Recordable, filterRule: Record<string, FilterRule>) => {
+  if (isEmpty(model)) return data;
+
+  const modelKeys = getObjLeafKeys(model);
+
   return data.filter(item => {
-    return Object.keys(model).every(key => {
-      // 输入的值
-      const value = model[key];
-      // 表格的值
-      const rowValue = item[key];
+    // model 全部满足查询条件才算匹配成功
+    return modelKeys.every(key => {
       // 匹配规则
-      const rule = filterRule[key] || "eq";
+      const rule = getProp(filterRule, key) || "eq";
       // 自定义规则函数
       if (isFunction(rule)) return rule(model, item, key);
 
+      // 输入的值
+      const value = getProp(model, key);
+      // 表格的值
+      const rowValue = getProp(item, key);
+
+      console.log(value);
+
       // 空值默认不查询
-      if (value === undefined || value === null || value === "" || value?.length === 0) return true;
+      if (isEmpty(value)) return true;
 
       const rowDate = strToDate(rowValue);
       // 日期类型
       if (rowDate) {
         // 日期范围查询，仅支持 between、notBetween 规则
-        if (Array.isArray(value)) {
+        if (isArray(value)) {
           if (value.length === 2) {
             const startDate = strToDate(value[0]);
             const endDate = strToDate(value[1]);
@@ -107,7 +146,7 @@ export const filterData = (data: Recordable[], model: Recordable, filterRule: Re
       }
 
       // 数组类型，仅支持 in、between、notBetween 规则
-      if (Array.isArray(value)) {
+      if (isArray(value)) {
         if (value.length === 2 && !rowDate) {
           if (rule === "between") return value[0] <= rowValue && rowValue <= value[1];
           if (rule === "notBetween") return value[0] > rowValue || value[1] < rowValue;
@@ -125,8 +164,8 @@ export const filterData = (data: Recordable[], model: Recordable, filterRule: Re
       if (rule === "le") return value <= rowValue;
       if (rule === "gt") return value > rowValue;
       if (rule === "ge") return value >= rowValue;
-      if (rule === "like") return rowValue.indexOf(value) !== -1;
-      if (rule === "notLike") return rowValue.indexOf(value) !== -1;
+      if (rule === "like") return rowValue.includes(value);
+      if (rule === "notLike") return !rowValue.includes(value);
 
       // 默认 eq
       return rowValue === value;

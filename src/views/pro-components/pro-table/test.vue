@@ -25,8 +25,13 @@ const columns: TableColumn[] = [
     // 多级 prop
     prop: "user.detail.age",
     label: "年龄",
+    filterProps: { enabled: true },
   },
-  { prop: "idCard", label: "身份证号", filterProps: { enabled: true } },
+  {
+    prop: "idCard",
+    label: "身份证号",
+    filterProps: { enabled: true, rule: "like" },
+  },
   { prop: "email", label: "邮箱" },
   { prop: "address", label: "居住地址" },
 ];

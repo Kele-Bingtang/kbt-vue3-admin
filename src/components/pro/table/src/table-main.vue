@@ -10,7 +10,7 @@ import TableColumnOperation from "./table-column/table-column-operation.vue";
 import TableColumnDragSort from "./table-column/table-column-drag-sort.vue";
 import { useSelection } from "./composables";
 import { isFunction, isObject } from "@/utils";
-import { Environment, TableColumnTypeEnum, filterData, initModel } from "./helper";
+import { Environment, TableColumnTypeEnum, filterData, getObjLeafKeys, initModel } from "./helper";
 import TableFilter from "./plugins/table-filter.vue";
 
 defineOptions({ name: "TableMain" });
@@ -58,20 +58,19 @@ const isServer = (value: unknown) => {
 /**
  * 执行分页操作
  */
-const execPagination = (data: Recordable[] = []) => {
+const tryPagination = (data: Recordable[] = []) => {
   if (!data.length) return [];
+
+  // 如果服务端（后端）分页，则不执行分页，需要后端返回已分页的 data
+  if (isServer(toValue(props.pageScope))) return data;
+
+  // 客户端（前端）分页
   const { pageNum, pageSize } = pageInfo.value;
   return data.slice((pageNum - 1) * pageSize, pageNum * pageSize);
 };
 
 // 表格实际渲染的数据
-const tableData = computed(() => {
-  const { data = [] } = props;
-  // 服务端（后端）分页，需要自行实现 @paginationChange 事件传入分页的 data
-  if (isServer(toValue(props.pageScope))) return data;
-  // 客户端（前端）分页
-  return execPagination(data);
-});
+const tableData = computed(() => tryPagination(props.data));
 
 // 数据发生改变，则清除过滤数据
 watch(tableData, () => (filterTableData.value = undefined));
@@ -128,29 +127,31 @@ const handlePaginationChange = () => {
 };
 
 /**
- * 执行过滤
+ * 执行过滤搜索
  */
-const handleFilter = (value: any) => {
-  if (!value) return;
+const handleFilter = (filterValue: unknown, prop: string | undefined) => {
   // 后端过滤
-  if (isServer(toValue(props.filterScope))) return emits("filter", filterModel.value);
+  if (isServer(toValue(props.filterScope))) return emits("filter", filterModel.value, filterValue, prop);
 
-  let filterRule: Recordable = {};
-  props.columns.forEach(item => {
-    filterRule = initModel(item.filterProps?.prop || item.prop!, {}, item.filterProps?.rule);
+  const keys = getObjLeafKeys(filterModel.value);
+
+  const filterRule: Recordable = {};
+  keys.forEach(key => {
+    const column = props.columns.find(item => item.prop === key);
+    initModel(filterRule, key, column?.filterProps?.rule || "eq");
   });
 
   // 前端过滤
-  const finalFilterData = filterData(tableData.value, filterModel, filterRule);
-  filterTableData.value = execPagination(finalFilterData);
+  const finalFilterData = filterData(tableData.value, filterModel.value, filterRule);
+  filterTableData.value = tryPagination(finalFilterData);
 
-  emits("filter", filterModel.value);
+  emits("filter", filterModel.value, filterValue, prop);
 };
 /**
  * 执行过滤清除
  */
-const handleFilterClear = () => {
-  emits("filterClear", filterModel.value);
+const handleFilterClear = (prop: string | undefined) => {
+  emits("filterClear", prop);
 };
 /**
  * 执行过滤重置
@@ -248,12 +249,19 @@ defineExpose(expose);
             <TableFilter
               v-model="filterModel"
               v-bind="column.filterProps"
-              :prop="column.prop || column.filterProps?.prop"
+              :prop="column.filterProps?.prop || column.prop"
               @filter="handleFilter"
               @clear="handleFilterClear"
               @reset="handleFilterReset"
-            ></TableFilter>
-            <slot name="header-after"></slot>
+            >
+              <template v-if="$slots['filter-icon']" #filter-icon>
+                <slot name="filter-icon" />
+              </template>
+              <template v-if="$slots['filter-button']" #filter-button>
+                <slot name="filter-button" />
+              </template>
+            </TableFilter>
+            <slot name="header-after" />
           </template>
 
           <template

@@ -79,6 +79,24 @@ export interface TableFilterProps {
    * PopoverProps props
    */
   popoverProps?: Partial<PopoverProps>;
+  /**
+   * 筛选按钮文字
+   *
+   * @default '筛选'
+   */
+  filterText?: string;
+  /**
+   * 清空按钮文字
+   *
+   * @default '清空'
+   */
+  clearText?: string;
+  /**
+   * 重置按钮文字
+   *
+   * @default '重置'
+   */
+  resetText?: string;
 }
 
 /**
@@ -306,8 +324,11 @@ export namespace ProTableMainNamespace {
      * 拖拽排序结束事件
      */
     dragSortEnd: [newIndex: number, oldIndex: number];
-    filter: [model: Recordable];
-    filterClear: [model: Recordable];
+    // 过滤事件，返回输入的值以及 prop
+    filter: [filterModel: Recordable, filterValue: unknown, prop: string | undefined];
+    // 清空事件，返回输入的 prop
+    filterClear: [prop: string | undefined];
+    // 重置所有表单事件
     filterReset: [];
   }
 }

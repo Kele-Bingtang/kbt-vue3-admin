@@ -7,7 +7,7 @@ import { ElRow, ElCol, ElForm, ElMessage, ElButton } from "element-plus";
 import { ProFormItem, formatValue, getProp, setProp } from "@/components/pro/form-item";
 import { useNamespace } from "@/composables";
 import { isFunction, isPromise } from "@/utils";
-import { deleteObjProperty } from "./helper";
+import { deleteProp } from "./helper";
 import { useFormApi } from "./composables";
 
 defineOptions({ name: "ProForm" });
@@ -92,7 +92,7 @@ const destroyOrInit = (item: FormColumn) => {
 
   // 如果不销毁，则初始化表单默认值，反之则重置为空
   if (!destroy) initDefaultValue(item);
-  else deleteObjProperty(model.value, item.prop);
+  else deleteProp(model.value, item.prop);
 
   return destroy;
 };

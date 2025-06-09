@@ -71,7 +71,7 @@ export const getProp = (
 /**
  * 对 model 对象的 pro 赋值
  */
-export const setProp = (model: ModelBaseValueType, prop: NonNullable<FormItemColumnProps["prop"]>, value: any) => {
+export const setProp = (model: ModelBaseValueType, prop: NonNullable<FormItemColumnProps["prop"]>, value: unknown) => {
   if (!model) return;
 
   const props = prop.split(".");

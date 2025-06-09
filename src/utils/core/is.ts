@@ -115,7 +115,7 @@ export const isBoolean = (val: unknown): val is boolean => {
 /**
  * 是否为数组
  */
-export const isArray = (val: unknown): val is Array<unknown> => {
+export const isArray = (val: unknown): val is any[] => {
   if (typeof Array.isArray === "undefined") {
     return Object.prototype.toString.call(val) === "[object Array]";
   }
@@ -196,9 +196,9 @@ export const isIOS = () => {
 /**
  * 是否为空值项（包含数组、对象判断）
  *
- * @param checkComplexType 是否检查数组、对象是否为空。默认 true
+ * @param checkComplexType 是否检查数组、对象是否为空
  */
-export const isEmpty = (val: any, checkComplexType = true): boolean => {
+export const isEmpty = (val: unknown, checkComplexType = true): boolean => {
   // NaN 的检查
   if (isNumber(val) && isNaN(val)) return true;
 
@@ -208,10 +208,13 @@ export const isEmpty = (val: any, checkComplexType = true): boolean => {
   if (!checkComplexType) return false;
 
   // 检查是不是数组并且长度为 0
-  if (isArray(val) && val.length === 0) return true;
+  if (isArray(val) && !val.length) return true;
 
-  // 检查是不是对象并且没有自身可枚举属性
-  if (isObject(val) && Object.keys(val).length === 0) return true;
+  // 检查是不是对象并且自身 key 和 value 都为空
+  if (isObject(val)) {
+    if (!Object.keys(val).length) return true;
+    if (Object.values(val).every(item => isEmpty(item, checkComplexType))) return true;
+  }
 
   // 如果以上都不是，则不为空
   return false;
