@@ -123,7 +123,7 @@ const handleDragSortEnd = (newIndex: number, oldIndex: number) => {
  * 分页改变事件
  */
 const handlePaginationChange = () => {
-  emits("paginationChange", Object.assign(defaultPageInfo, props.pageInfo));
+  emits("paginationChange", pageInfo.value);
 };
 
 /**

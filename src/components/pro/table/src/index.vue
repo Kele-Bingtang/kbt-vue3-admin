@@ -31,7 +31,6 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
 const emits = defineEmits<ProTableNamespace.Emits>();
 
 const ns = useNamespace("pro-table");
-const rootInstance = useTemplateRef<ProTableHeadInstance>("rootInstance");
 const tableHeadInstance = useTemplateRef<ProTableHeadInstance>("tableHeadInstance");
 const tableMainInstance = useTemplateRef<ProTableMainInstance>("tableMainInstance");
 
@@ -168,7 +167,7 @@ defineExpose(expose);
 </script>
 
 <template>
-  <div ref="rootInstance" :class="[ns.b(), { card }]">
+  <div :class="[ns.b(), { card }]">
     <!-- 表格头部 -->
     <TableHead
       v-if="!hideHeader"

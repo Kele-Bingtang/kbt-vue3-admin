@@ -38,9 +38,9 @@ defineExpose({ open });
         <el-switch v-model="row.sortable" />
       </el-table-column>
 
-      <!-- <el-table-column v-slot="{ row }" prop="sortable" align="center" label="筛选">
-          <el-switch v-model="row.filterConfig.enabled" />
-        </el-table-column> -->
+      <el-table-column v-slot="{ row }" prop="filter" align="center" label="筛选">
+        <el-switch v-model="row.filterProps.enabled" />
+      </el-table-column>
 
       <template #empty>
         <div :class="ns.e('empty')">

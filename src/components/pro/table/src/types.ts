@@ -1,7 +1,11 @@
 import type {
   ButtonProps,
+  ElMessageBoxOptions,
   ElTooltipProps,
+  IconProps,
+  LinkProps,
   PaginationProps,
+  PopconfirmProps,
   PopoverProps,
   RadioProps,
   TableColumnCtx,
@@ -9,7 +13,7 @@ import type {
   TableProps,
 } from "element-plus";
 import type { FormItemColumnProps, PageInfo } from "@/components";
-import type { CSSProperties, UnwrapRef } from "vue";
+import type { AppContext, CSSProperties, UnwrapRef } from "vue";
 import type { UseSelectState } from "./composables/use-selection";
 import type ProTable from "./index.vue";
 import type ProTableMain from "./table-main.vue";
@@ -28,6 +32,11 @@ export type TableDefaultRenderScope<T = Recordable> = {
 export type TableHeadRenderScope<T = Recordable> = { $index: number; column: TableColumn<T>; [key: string]: any };
 
 export type TableStyle = { rowStyle: CSSProperties; cellStyle: CSSProperties; headerCellStyle: CSSProperties };
+
+/**
+ * 按钮属性的类型
+ */
+export type ButtonRowProps = Partial<ButtonProps & LinkProps & IconProps & Recordable>;
 
 /**
  * 部分查询条件有固定的规则，比如时间范围查询不可能是 lt、gt 之类的
@@ -139,52 +148,166 @@ export interface ExportProps {
   exportFile?: (data: Recordable[]) => void;
 }
 
-/**
- * 操作栏的类型
- */
-export interface OperationProps {
+export namespace OperationNamespace {
+  export interface Props
+    extends Partial<Omit<TableColumnCtx<Recordable>, "children" | "renderCell" | "renderHeader" | "label">> {
+    /**
+     * 操作按钮集合
+     */
+    buttons?: ButtonRaw[];
+    /**
+     * 操作按钮的类型
+     *
+     * @default 'link'
+     */
+    el?: "el-icon" | "el-link" | "el-button" | "ElIcon" | "ElLink" | "ElButton";
+    /**
+     * 操作栏名称
+     *
+     * @default '操作栏'
+     */
+    label?: MaybeRef<string>;
+    /**
+     * 显示出来的按钮个数
+     *
+     * @default 3
+     */
+    showNumber?: number | ((row: Recordable, index: number) => number);
+    /**
+     * 是否启用二次确认
+     *
+     * @default false
+     */
+    confirm?: boolean;
+  }
+
+  export interface Emits {
+    buttonClick: [params: OperationNamespace.ButtonsCallBackParams];
+    confirm: [params: OperationNamespace.ButtonsCallBackParams];
+    cancel: [params: OperationNamespace.ButtonsCallBackParams];
+  }
+
+  export type Confirm<T extends keyof ConfirmProps> = {
+    el: T;
+    props: ConfirmProps[T];
+  };
+
+  export type ConfirmProps = {
+    ElPopconfirm: Partial<PopconfirmProps>;
+    ElMessageBox: {
+      /**
+       * ElMessageBox.confirm 的 title
+       *
+       * @default '提示'
+       */
+      title?: string | ((data: ButtonsCallBackParams) => string);
+      /**
+       * ElMessageBox.confirm 的 message
+       *
+       * @default '确定执行本次操作'
+       */
+      message?: string | ((data: ButtonsCallBackParams) => string);
+      /**
+       * ElMessageBox.confirm 的 options
+       */
+      options?: ElMessageBoxOptions;
+      /**
+       * ElMessageBox.confirm 的 appContext
+       */
+      appContext?: AppContext | null;
+    };
+  };
+
+  export interface ButtonRaw {
+    /**
+     * 操作文本
+     */
+    text: MaybeRef<string> | ((row: Recordable, index: number, button: ButtonRowProps) => MaybeRef<string>);
+    /**
+     * 操作按钮唯一 code，可用来判断按钮类型
+     */
+    code?: string | number;
+    /**
+     * `@element-plus/icons-vue` 的图标名称，对 ElButton、ElLink、ElIcon 组件同时生效
+     */
+    icon?: Component;
+    /**
+     * ElButton、ElLink、ElIcon 组件对应的 props
+     */
+    elProps?: MaybeRef<ButtonRowProps> | ((row: any, index: number, button: ButtonRaw) => ButtonRowProps);
+    /**
+     * ElTooltip 组件的 props， type 为 icon 时生效
+     */
+    tooltipProps?: Partial<ElTooltipProps>;
+    /**
+     * 按钮显示的逻辑 默认 true 显示，不需要显示给 false
+     */
+    show?: MaybeRef<boolean> | ((row: Recordable, index: number, button: ButtonRaw) => MaybeRef<boolean>);
+    /**
+     * 二次确认配置
+     *
+     * @default false
+     */
+    confirm?: Confirm<"ElPopconfirm"> | Confirm<"ElMessageBox">;
+    /**
+     * 点击当前按钮时触发，可与PlusTable的事件 `clickAction` 同时触发； * 操作需要二次确认时：PlusTable的事件 `clickAction`会在确认时触发，而当前的onClick是在点击时触发
+     */
+    onClick?: (params: ButtonsCallBackParams) => void;
+    /**
+     * 操作需要二次确认时，点击确认时触发
+     */
+    onConfirm?: (params: ButtonsCallBackParams) => void;
+    /**
+     * 操作需要二次确认时，点击取消时触发， 可与PlusTable的事件 `clickActionConfirmCancel` 同时触发
+     */
+    onCancel?: (params: ButtonsCallBackParams) => void;
+  }
+
   /**
-   * 操作栏名称  默认值为 `'操作栏'`
-   * @version v0.1.0 类型新增ComputedRef<string>
+   * 点击按钮回调的参数的类型
    */
-  label?: string | ComputedRef<string>;
-  /**
-   * 操作栏固定   默认值为 `'right'`
-   */
-  fixed?: string;
-  /**
-   * 显示出来的按钮个数  默认值为 `3`
-   * @version 0.1.23 新增函数类型
-   * @default 3
-   */
-  showNumber?: number | ((row: Recordable, index: number) => number);
-  /**
-   * 更多按钮显示策略
-   * @version 0.1.20
-   * @default false
-   */
-  showLimitIncludeMore?: boolean;
-  /**
-   * 操作按钮的类型   默认值为 `'link'`
-   */
-  type?: "icon" | "button" | "link";
-  /**
-   * 操作按钮集合   默认值为 `[]`
-   */
-  buttons?: any[];
-  /**
-   * 表格操作栏 el-table-column 的其width   默认值为 `200`
-   */
-  width?: string | number;
-  /**
-   * 表格操作栏 el-table-column 的其他props   默认值为 `{}`
-   */
-  actionBarTableColumn?: Partial<TableColumnCtx<Recordable>>;
-  /**
-   * 表格操作栏 需要二次确认的类型，默认是 messageBox
-   * @version v0.1.17
-   */
-  confirmType?: "messageBox" | "popconfirm";
+  export interface ButtonsCallBackParams {
+    /**
+     * 点击按钮数据
+     */
+    buttonRaw: ButtonRaw;
+    /**
+     * 解析后的按钮数据中的 text
+     */
+    text: string;
+    /**
+     * 按钮点击事件数据
+     */
+    event: MouseEvent;
+    /**
+     * 表格行数据
+     */
+    row: Recordable;
+    /**
+     * 表格列数据
+     */
+    column: Recordable;
+    /**
+     * 表格行索引 同 index
+     */
+    rowIndex: number;
+    /**
+     * 表格列索引
+     */
+    cellIndex: number;
+    /**
+     * 表格 store
+     */
+    store: Recordable;
+    /**
+     * 表格 expanded
+     */
+    expanded: boolean;
+    /**
+     * 表格 _self
+     */
+    _self: Recordable;
+  }
 }
 
 /**
@@ -209,13 +332,13 @@ export namespace ProTableHeadNamespace {
      *
      * @default '["size", "setting", "export"]'
      */
-    button?: false | (ToolButtonEnum | `${ToolButtonEnum}`)[];
+    toolButton?: false | (ToolButtonEnum | `${ToolButtonEnum}`)[];
     /**
      * 按钮禁用数组
      *
      * @default '[]'
      */
-    disabledButton?: (ToolButtonEnum | `${ToolButtonEnum}`)[];
+    disabledToolButton?: (ToolButtonEnum | `${ToolButtonEnum}`)[];
     /**
      * 表格密度
      *
@@ -278,7 +401,7 @@ export namespace ProTableMainNamespace {
      *
      * @param false
      */
-    operation?: false | Partial<OperationProps>;
+    operation?: false | Partial<ProTableMainNamespace.Props>;
     /**
      * 分页信息
      */

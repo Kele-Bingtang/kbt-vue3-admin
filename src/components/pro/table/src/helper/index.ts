@@ -110,8 +110,6 @@ export const filterData = (data: Recordable[], model: Recordable, filterRule: Re
       // 表格的值
       const rowValue = getProp(item, key);
 
-      console.log(value);
-
       // 空值默认不查询
       if (isEmpty(value)) return true;
 

@@ -9,8 +9,8 @@ defineOptions({ name: "TableColumnData" });
 
 defineProps<{ column: TableColumn }>();
 
-const formatTableColumnType = (item: TableColumn) => {
-  return item as unknown as TableColumnCtx<any>;
+const formatTableColumnType = (column: TableColumn) => {
+  return column as unknown as TableColumnCtx<any>;
 };
 </script>
 

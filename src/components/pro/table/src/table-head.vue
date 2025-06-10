@@ -12,8 +12,8 @@ defineOptions({ name: "TableHead" });
 const props = withDefaults(defineProps<ProTableHeadNamespace.Props>(), {
   data: () => [],
   columns: () => [],
-  button: () => ["size", "setting", "export"],
-  disabledButton: () => [],
+  toolButton: () => ["size", "setting", "export"],
+  disabledToolButton: () => [],
   size: () => TableSizeEnum.Default,
   title: "",
   exportFile: undefined,
@@ -60,10 +60,10 @@ const tableSizeStyleMap: Record<TableSizeEnum, TableStyle> = {
  * 控制 ToolButton 显示
  */
 const showToolButton = (key: ToolButtonEnum) => {
-  const { button } = props;
+  const { toolButton } = props;
 
-  if (!button) return false;
-  return button.includes(key);
+  if (!toolButton) return false;
+  return toolButton.includes(key);
 };
 
 /**
@@ -83,7 +83,8 @@ const settingColumns = computed(() => {
   return props.columns
     .filter(column => ![TableColumnTypeEnum.Selection].includes(column.type as TableColumnTypeEnum))
     .map(column => {
-      column.isHide = column.isHide ?? false;
+      column.isHide ??= false;
+      column.filterProps = { ...column.filterProps };
       return column;
     });
 });
@@ -110,13 +111,13 @@ defineExpose(expose);
       <slot name="header-left">{{ title }}</slot>
     </div>
 
-    <div v-if="button" :class="ns.e('right')">
+    <div v-if="toolButton" :class="ns.e('right')">
       <slot name="header-right">
         <slot name="header-right-before"></slot>
 
         <el-tooltip v-if="showToolButton(ToolButtonEnum.Size)" content="密度" v-bind="tooltipProps">
           <el-dropdown style="margin: 0 15px" @command="handleSizeCommand">
-            <el-button :disabled="disabledButton.includes(ToolButtonEnum.Size)" :icon="Coin" circle />
+            <el-button :disabled="disabledToolButton.includes(ToolButtonEnum.Size)" :icon="Coin" circle />
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item
@@ -138,7 +139,7 @@ defineExpose(expose);
           v-bind="tooltipProps"
         >
           <el-button
-            :disabled="disabledButton.includes(ToolButtonEnum.Setting)"
+            :disabled="disabledToolButton.includes(ToolButtonEnum.Setting)"
             :icon="Operation"
             circle
             @click="columnSettingVisible = true"
@@ -147,7 +148,7 @@ defineExpose(expose);
 
         <el-tooltip v-if="showToolButton(ToolButtonEnum.Export)" content="导出" v-bind="tooltipProps">
           <el-button
-            :disabled="disabledButton.includes(ToolButtonEnum.Export)"
+            :disabled="disabledToolButton.includes(ToolButtonEnum.Export)"
             :icon="Download"
             circle
             @click="handleExport"

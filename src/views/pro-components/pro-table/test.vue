@@ -25,7 +25,7 @@ const columns: TableColumn[] = [
     // 多级 prop
     prop: "user.detail.age",
     label: "年龄",
-    filterProps: { enabled: true },
+    filterProps: { enabled: true, formColumn: { elProps: { modelModifiers: { number: true } } } },
   },
   {
     prop: "idCard",
