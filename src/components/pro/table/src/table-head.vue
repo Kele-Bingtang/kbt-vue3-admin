@@ -16,9 +16,9 @@ const props = withDefaults(defineProps<ProTableHeadNamespace.Props>(), {
   disabledToolButton: () => [],
   size: () => TableSizeEnum.Default,
   title: "",
-  exportFile: undefined,
-  exportKey: "label",
+  exportProps: () => ({}),
   tooltipProps: () => ({ placement: "top", effect: "light" }),
+  tableSizeStyle: () => ({}),
 });
 
 const emits = defineEmits<ProTableHeadNamespace.Emits>();
@@ -33,28 +33,34 @@ const tableStyle = reactive<Record<string, CSSProperties>>({
   headerCellStyle: {},
 });
 
-const tableSizeStyleMap: Record<TableSizeEnum, TableStyle> = {
-  [TableSizeEnum.Default]: {
-    cellStyle: {},
-    rowStyle: {},
-    headerCellStyle: {},
-  },
-  [TableSizeEnum.Large]: {
-    cellStyle: {},
-    rowStyle: {},
-    headerCellStyle: {},
-  },
-  [TableSizeEnum.Small]: {
-    cellStyle: {},
-    rowStyle: { height: "40px" },
-    headerCellStyle: { height: "40px" },
-  },
-  [TableSizeEnum.Mini]: {
-    cellStyle: { padding: "0" },
-    rowStyle: { height: "24px", fontSize: "12px" },
-    headerCellStyle: { height: "24px", fontSize: "12px", padding: "0" },
-  },
-};
+const tableSizeStyleMap = computed<Record<TableSizeEnum, TableStyle>>(() => {
+  return {
+    [TableSizeEnum.Default]: {
+      cellStyle: {},
+      rowStyle: {},
+      headerCellStyle: {},
+      ...props.tableSizeStyle[TableSizeEnum.Default],
+    },
+    [TableSizeEnum.Large]: {
+      cellStyle: {},
+      rowStyle: {},
+      headerCellStyle: {},
+      ...props.tableSizeStyle[TableSizeEnum.Large],
+    },
+    [TableSizeEnum.Small]: {
+      cellStyle: {},
+      rowStyle: { height: "40px" },
+      headerCellStyle: { height: "40px" },
+      ...props.tableSizeStyle[TableSizeEnum.Small],
+    },
+    [TableSizeEnum.Mini]: {
+      cellStyle: { padding: "0" },
+      rowStyle: { height: "24px", fontSize: "12px" },
+      headerCellStyle: { height: "24px", fontSize: "12px", padding: "0" },
+      ...props.tableSizeStyle[TableSizeEnum.Mini],
+    },
+  };
+});
 
 /**
  * 控制 ToolButton 显示
@@ -71,7 +77,7 @@ const showToolButton = (key: ToolButtonEnum) => {
  */
 const handleSizeCommand = (command: TableSizeEnum) => {
   tableSize.value = command;
-  const tableSizeStyle = tableSizeStyleMap[command];
+  const tableSizeStyle = tableSizeStyleMap.value[command];
   tableStyle.rowStyle = tableSizeStyle.rowStyle;
   tableStyle.cellStyle = tableSizeStyle.cellStyle;
   tableStyle.headerCellStyle = tableSizeStyle.headerCellStyle;
@@ -95,7 +101,7 @@ const settingColumns = computed(() => {
 const handleExport = () => {
   const { data, columns, exportProps } = props;
 
-  if (exportProps?.exportFile) return exportProps.exportFile(data);
+  if (exportProps.exportFile) return exportProps.exportFile(data);
   exportExcel(columns, data, exportProps);
 };
 

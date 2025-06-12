@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import type { ElMessageBoxOptions, PopconfirmProps } from "element-plus";
-import type { OperationNamespace } from "../types";
-import { ElPopconfirm, ElTooltip, ElIcon, ElButton, ElLink, ElMessageBox } from "element-plus";
 import type { AppContext } from "vue";
+import type { ElMessageBoxOptions, PopconfirmProps, ElTooltipProps } from "element-plus";
+import { ElPopconfirm, ElTooltip, ElIcon, ElButton, ElLink, ElMessageBox } from "element-plus";
+import { OperationConfirmEl, OperationEl } from "../helper";
 
 defineOptions({ name: "OperationButton" });
 
@@ -30,16 +30,37 @@ export interface ElMessageBoxProps {
 }
 
 export interface OperationButtonProps {
+  /**
+   * 按钮文字
+   */
   text?: string;
-  el?: "ElIcon" | "ElLink" | "ElButton";
+  /**
+   * 按钮类型
+   */
+  el?: OperationEl | `${OperationEl}`;
+  /**
+   * 按钮组件 props
+   */
   elProps?: Recordable;
-  icon?: OperationNamespace.ButtonRaw["icon"];
-  tooltipProps?: OperationNamespace.ButtonRaw["tooltipProps"];
-  confirmEl?: "ElPopconfirm" | "ElMessageBox";
+  /**
+   * 按钮图标，仅当 el 为 ElIcon 时有效
+   */
+  icon?: Component;
+  /**
+   * ElTooltipProps props
+   */
+  tooltipProps?: Partial<ElTooltipProps>;
+  /**
+   * 二次确认组件
+   */
+  confirmEl?: OperationConfirmEl | `${OperationConfirmEl}`;
+  /**
+   * 二次确认组件 props
+   */
   confirmProps?: Partial<PopconfirmProps> | ElMessageBoxProps;
 }
 
-interface OperationButtonEmits {
+export interface OperationButtonEmits {
   buttonClick: [event: MouseEvent];
   buttonConfirmClick: [event: MouseEvent];
   confirm: [event: MouseEvent];
@@ -58,23 +79,23 @@ const props = withDefaults(defineProps<OperationButtonProps>(), {
 
 const emits = defineEmits<OperationButtonEmits>();
 
+const defaultTitle = "温馨提示";
+const defaultMessage = "确定执行本次操作?";
+
+const icon = computed(() => toRaw(props.icon));
+
 const handleButtonClick = (event: MouseEvent) => {
+  emits("buttonClick", event);
+
   const { confirmEl, confirmProps } = props;
-  if (confirmEl === "ElMessageBox") {
-    const { title, message, options, appContext } = confirmProps as ElMessageBoxProps;
+
+  if (confirmEl === OperationConfirmEl.ElMessageBox) {
+    const { title = defaultTitle, message = defaultMessage, options, appContext } = confirmProps as ElMessageBoxProps;
 
     ElMessageBox.confirm(message, title, options, appContext)
-      .then(() => {
-        emits("confirm", event);
-      })
-      .catch(() => {
-        emits("cancel", event);
-      });
-  } else emits("buttonClick", event);
-};
-
-const handleButtonConfirmClick = (event: MouseEvent) => {
-  emits("buttonConfirmClick", event);
+      .then(() => emits("confirm", event))
+      .catch(() => emits("cancel", event));
+  }
 };
 
 const handleConfirm = (event: MouseEvent) => {
@@ -88,18 +109,18 @@ const handleCancel = (event: MouseEvent) => {
 
 <template>
   <!-- Icon 类型按钮 -->
-  <el-tooltip v-if="el === 'ElIcon'" placement="top" :content="text" v-bind="tooltipProps">
+  <el-tooltip v-if="el === OperationEl.ElIcon" placement="top" :content="text" v-bind="tooltipProps">
     <!-- 带二次确认的图标按钮 -->
-    <span v-if="confirmEl === 'ElPopconfirm'" class="el-icon">
+    <span v-if="confirmEl === OperationConfirmEl.ElPopconfirm" class="el-icon">
       <el-popconfirm
         trigger="click"
-        title="确定执行本次操作?"
+        :title="defaultMessage"
         v-bind="confirmProps"
         @confirm="handleConfirm"
         @cancel="handleCancel"
       >
         <template #reference>
-          <el-icon size="16" style="margin: 0" v-bind="elProps" @click="handleButtonConfirmClick">
+          <el-icon size="16" v-bind="elProps" @click="handleButtonClick">
             <component v-if="icon" :is="icon" />
           </el-icon>
         </template>
@@ -116,20 +137,20 @@ const handleCancel = (event: MouseEvent) => {
   <template v-else>
     <!-- 带二次确认的按钮 -->
     <el-popconfirm
-      v-if="confirmEl === 'ElPopconfirm'"
+      v-if="confirmEl === OperationConfirmEl.ElPopconfirm"
       trigger="click"
-      title="确定执行本次操作?"
+      :title="defaultMessage"
       v-bind="confirmProps"
       @confirm="handleConfirm"
       @cancel="handleCancel"
     >
       <template #reference>
         <component
-          :is="el === 'ElButton' ? ElButton : ElLink"
+          :is="el === OperationEl.ElButton ? ElButton : ElLink"
           size="small"
-          :href="el === 'ElLink' ? 'javascript:;' : undefined"
+          :href="el === OperationEl.ElLink ? 'javascript:;' : undefined"
           v-bind="elProps"
-          @click="handleButtonConfirmClick"
+          @click="handleButtonClick"
         >
           {{ text }}
         </component>
@@ -139,9 +160,9 @@ const handleCancel = (event: MouseEvent) => {
     <!-- 普通按钮 -->
     <component
       v-else
-      :is="el === 'ElButton' ? ElButton : ElLink"
+      :is="el === OperationEl.ElButton ? ElButton : ElLink"
       size="small"
-      :href="el === 'ElLink' ? 'javascript:;' : undefined"
+      :href="el === OperationEl.ElLink ? 'javascript:;' : undefined"
       v-bind="elProps"
       @click="handleButtonClick"
     >

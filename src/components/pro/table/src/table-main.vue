@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { Component } from "vue";
 import type { TableInstance } from "element-plus";
-import type { ProTableMainNamespace, TableDefaultRenderScope } from "./types";
+import type { OperationNamespace, ProTableMainNamespace, TableColumn, TableDefaultRenderScope } from "./types";
 import { ElRadio, ElTableColumn } from "element-plus";
 import { defaultPageInfo, Pagination } from "@/components";
 import { useNamespace } from "@/composables";
@@ -15,12 +15,11 @@ import TableFilter from "./plugins/table-filter.vue";
 
 defineOptions({ name: "TableMain" });
 
-// 接受父组件参数，配置默认值
 const props = withDefaults(defineProps<ProTableMainNamespace.Props>(), {
   data: () => [],
   columns: () => [],
-  columnTypes: () => ["selection", "radio", "index", "expand", "sort"],
-  operation: false,
+  operationProp: "operation",
+  operationProps: () => ({}),
   pageInfo: () => defaultPageInfo,
   pageScope: false,
   paginationProps: () => ({}),
@@ -32,11 +31,20 @@ const props = withDefaults(defineProps<ProTableMainNamespace.Props>(), {
 
 const emits = defineEmits<ProTableMainNamespace.Emits>();
 
+const columnTypes = ["selection", "radio", "index", "expand", "sort"];
+
 const ns = useNamespace("table-main");
 const radio = ref("");
 const filterModel = ref<Recordable>({});
 const filterTableData = ref<Recordable[]>();
 const elTableInstance = useTemplateRef<TableInstance>("elTableInstance");
+
+const toValueColumn = (column: TableColumn) => {
+  return {
+    width: toValue(column.width),
+    label: toValue(column.label),
+  };
+};
 
 const pageInfo = ref({ ...defaultPageInfo, ...props.pageInfo });
 
@@ -79,6 +87,35 @@ const getRowKey = (row: Recordable) => {
   const { rowKey } = props;
   if (isFunction(rowKey)) return rowKey(row);
   return rowKey;
+};
+
+/**
+ * 获取操作列的配置项
+ */
+const getOperationColumn = (column: TableColumn, index: number) => {
+  const { columns, operationProps, operationProp } = props;
+  if (column.prop === operationProp) {
+    return {
+      ...columns,
+      ...operationProps,
+      ...toValueColumn({
+        width: column.width || operationProps.width,
+        label: column.label || operationProps.label,
+      }),
+    };
+  }
+
+  if (operationProps && index === columns.length - 1) {
+    return {
+      ...operationProps,
+      ...toValueColumn({
+        width: operationProps.width,
+        label: operationProps.label,
+      }),
+    };
+  }
+
+  return {};
 };
 
 /**
@@ -161,6 +198,18 @@ const handleFilterReset = () => {
   emits("filterReset");
 };
 
+const handleButtonClick = (params: OperationNamespace.ButtonsCallBackParams) => {
+  emits("buttonClick", params);
+};
+
+const handleConfirm = (params: OperationNamespace.ButtonsCallBackParams) => {
+  emits("confirm", params);
+};
+
+const handleCancel = (params: OperationNamespace.ButtonsCallBackParams) => {
+  emits("cancel", params);
+};
+
 // 功能列
 const tableColumnType: Record<
   TableColumnTypeEnum,
@@ -215,8 +264,8 @@ defineExpose(expose);
     :class="ns.b()"
   >
     <!-- 默认插槽 -->
-    <slot>
-      <template v-for="column in columns.filter(c => !c.isHide)" :key="column">
+    <slot name="default">
+      <template v-for="(column, index) in columns.filter(c => !c.isHide)" :key="column">
         <!-- 功能列 -->
         <component
           v-if="column.type && columnTypes.includes(column.type)"
@@ -244,23 +293,25 @@ defineExpose(expose);
         </component>
 
         <!-- 数据列 -->
-        <TableColumnData v-else :column>
+        <TableColumnData v-else :column v-bind="toValueColumn(column)" :align="column.align || 'center'">
           <template #header-after>
-            <TableFilter
-              v-model="filterModel"
-              v-bind="column.filterProps"
-              :prop="column.filterProps?.prop || column.prop"
-              @filter="handleFilter"
-              @clear="handleFilterClear"
-              @reset="handleFilterReset"
-            >
-              <template v-if="$slots['filter-icon']" #filter-icon>
-                <slot name="filter-icon" />
-              </template>
-              <template v-if="$slots['filter-button']" #filter-button>
-                <slot name="filter-button" />
-              </template>
-            </TableFilter>
+            <slot name="header-filter">
+              <TableFilter
+                v-model="filterModel"
+                v-bind="column.filterProps"
+                :prop="column.filterProps?.prop || column.prop"
+                @filter="handleFilter"
+                @clear="handleFilterClear"
+                @reset="handleFilterReset"
+              >
+                <template v-if="$slots['filter-icon']" #filter-icon>
+                  <slot name="filter-icon" />
+                </template>
+                <template v-if="$slots['filter-button']" #filter-button>
+                  <slot name="filter-button" />
+                </template>
+              </TableFilter>
+            </slot>
             <slot name="header-after" />
           </template>
 
@@ -273,7 +324,15 @@ defineExpose(expose);
         </TableColumnData>
 
         <!-- 操作列 -->
-        <TableColumnOperation v-if="operation" v-bind="operation">
+        <TableColumnOperation
+          v-if="column.prop === operationProp || (operationProps && index === columns.length - 1)"
+          v-bind="getOperationColumn(column, index)"
+          :align="column.align || 'center'"
+          :prop="operationProp"
+          @button-click="handleButtonClick"
+          @confirm="handleConfirm"
+          @cancel="handleCancel"
+        >
           <template v-if="$slots['operation-more-icon']" #action-bar-more-icon>
             <slot name="operation-more-icon" />
           </template>

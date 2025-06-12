@@ -18,7 +18,7 @@ import type { UseSelectState } from "./composables/use-selection";
 import type ProTable from "./index.vue";
 import type ProTableMain from "./table-main.vue";
 import type ProTableHead from "./table-head.vue";
-import { TableSizeEnum, TableColumnTypeEnum, ExportKey, ToolButtonEnum, Environment } from "./helper";
+import { TableSizeEnum, TableColumnTypeEnum, ExportKey, ToolButtonEnum, Environment, OperationEl } from "./helper";
 
 /**
  * 自定义 render 的参数类型
@@ -31,12 +31,10 @@ export type TableDefaultRenderScope<T = Recordable> = {
 };
 export type TableHeadRenderScope<T = Recordable> = { $index: number; column: TableColumn<T>; [key: string]: any };
 
-export type TableStyle = { rowStyle: CSSProperties; cellStyle: CSSProperties; headerCellStyle: CSSProperties };
-
 /**
- * 按钮属性的类型
+ * 表格样式属性
  */
-export type ButtonRowProps = Partial<ButtonProps & LinkProps & IconProps & Recordable>;
+export type TableStyle = { rowStyle: CSSProperties; cellStyle: CSSProperties; headerCellStyle: CSSProperties };
 
 /**
  * 部分查询条件有固定的规则，比如时间范围查询不可能是 lt、gt 之类的
@@ -149,24 +147,27 @@ export interface ExportProps {
 }
 
 export namespace OperationNamespace {
-  export interface Props
-    extends Partial<Omit<TableColumnCtx<Recordable>, "children" | "renderCell" | "renderHeader" | "label">> {
+  /**
+   * 操作按钮属性的类型
+   */
+  export type ButtonRowProps = Partial<ButtonProps & LinkProps & IconProps & Recordable>;
+
+  /**
+   * 操作按钮组件
+   */
+  export type ButtonEl = "el-icon" | "el-link" | "el-button" | `${OperationEl}`;
+
+  export interface Props extends TableColumn {
     /**
      * 操作按钮集合
      */
     buttons?: ButtonRaw[];
     /**
-     * 操作按钮的类型
+     * 操作按钮类型
      *
-     * @default 'link'
+     * @default 'ElLink'
      */
-    el?: "el-icon" | "el-link" | "el-button" | "ElIcon" | "ElLink" | "ElButton";
-    /**
-     * 操作栏名称
-     *
-     * @default '操作栏'
-     */
-    label?: MaybeRef<string>;
+    el?: ButtonEl;
     /**
      * 显示出来的按钮个数
      *
@@ -174,22 +175,29 @@ export namespace OperationNamespace {
      */
     showNumber?: number | ((row: Recordable, index: number) => number);
     /**
-     * 是否启用二次确认
-     *
-     * @default false
+     * 二次确认配置
      */
-    confirm?: boolean;
+    confirm?: boolean | Confirm<"ElPopconfirm"> | Confirm<"ElMessageBox">;
   }
 
   export interface Emits {
+    /**
+     * 操作按钮点击时触发
+     */
     buttonClick: [params: OperationNamespace.ButtonsCallBackParams];
+    /**
+     * 二次确认的确定按钮点击时触发
+     */
     confirm: [params: OperationNamespace.ButtonsCallBackParams];
+    /**
+     * 二次确认的取消按钮点击时触发
+     */
     cancel: [params: OperationNamespace.ButtonsCallBackParams];
   }
 
   export type Confirm<T extends keyof ConfirmProps> = {
     el: T;
-    props: ConfirmProps[T];
+    props?: ConfirmProps[T];
   };
 
   export type ConfirmProps = {
@@ -228,6 +236,12 @@ export namespace OperationNamespace {
      */
     code?: string | number;
     /**
+     * 操作按钮类型
+     *
+     * @default 'ElLink'
+     */
+    el?: ButtonEl;
+    /**
      * `@element-plus/icons-vue` 的图标名称，对 ElButton、ElLink、ElIcon 组件同时生效
      */
     icon?: Component;
@@ -245,10 +259,8 @@ export namespace OperationNamespace {
     show?: MaybeRef<boolean> | ((row: Recordable, index: number, button: ButtonRaw) => MaybeRef<boolean>);
     /**
      * 二次确认配置
-     *
-     * @default false
      */
-    confirm?: Confirm<"ElPopconfirm"> | Confirm<"ElMessageBox">;
+    confirm?: Props["confirm"];
     /**
      * 点击当前按钮时触发，可与PlusTable的事件 `clickAction` 同时触发； * 操作需要二次确认时：PlusTable的事件 `clickAction`会在确认时触发，而当前的onClick是在点击时触发
      */
@@ -357,6 +369,10 @@ export namespace ProTableHeadNamespace {
      * ElTable Props
      */
     tooltipProps?: Partial<ElTooltipProps>;
+    /**
+     * 自定义不同尺寸的 rowStyle、cellStyle、headerCellStyle
+     */
+    tableSizeStyle?: Partial<Record<TableSizeEnum, TableStyle>>;
   }
 
   export interface Emits {
@@ -385,23 +401,21 @@ export namespace ProTableMainNamespace {
      */
     columns?: TableColumn[];
     /**
-     * 字段类型
-     *
-     * @default '["selection", "radio", "index", "expand", "sort"]'
-     */
-    columnTypes?: (TableColumnTypeEnum | `${TableColumnTypeEnum}`)[];
-    /**
      * 行主键
      *
      * @default 'id'
      */
     rowKey?: TableProps<Recordable>["rowKey"];
     /**
-     * 操作列 props
+     * 操作列的 prop
      *
-     * @param false
+     * @default 'operation'
      */
-    operation?: false | Partial<ProTableMainNamespace.Props>;
+    operationProp?: string;
+    /**
+     * 操作列 props
+     */
+    operationProps?: Partial<OperationNamespace.Props>;
     /**
      * 分页信息
      */
@@ -434,7 +448,7 @@ export namespace ProTableMainNamespace {
     emptyText?: string;
   }
 
-  export interface Emits {
+  export interface Emits extends OperationNamespace.Emits {
     /**
      * 多选框勾选事件
      */
@@ -447,11 +461,17 @@ export namespace ProTableMainNamespace {
      * 拖拽排序结束事件
      */
     dragSortEnd: [newIndex: number, oldIndex: number];
-    // 过滤事件，返回输入的值以及 prop
+    /**
+     * 过滤事件，返回输入的值以及 prop
+     */
     filter: [filterModel: Recordable, filterValue: unknown, prop: string | undefined];
-    // 清空事件，返回输入的 prop
+    /**
+     * 清空事件，返回输入的 prop
+     */
     filterClear: [prop: string | undefined];
-    // 重置所有表单事件
+    /**
+     * 重置所有表单事件
+     */
     filterReset: [];
   }
 }
@@ -460,7 +480,7 @@ export namespace ProTableMainNamespace {
  * ProTable 组件的类型命名空间
  */
 export namespace ProTableNamespace {
-  export interface Props extends Partial<Omit<TableProps<any>, "data" | "size">> {
+  export interface Props extends ProTableMainNamespace.Props, ProTableHeadNamespace.Props {
     /**
      * 列配置项
      *
@@ -527,6 +547,22 @@ export namespace ProTableNamespace {
      * @default false
      */
     pageScope?: ProTableMainNamespace.Props["pageScope"];
+    /**
+     * 操作列 props
+     */
+    operationProps?: ProTableMainNamespace.Props["operationProps"];
+    /**
+     * ElTable 的 rowStyle
+     */
+    rowStyle?: TableProps<Recordable>["rowStyle"];
+    /**
+     * ElTable 的 cellStyle
+     */
+    cellStyle?: TableProps<Recordable>["cellStyle"];
+    /**
+     * ElTable 的 headerCellStyle
+     */
+    headerCellStyle?: TableProps<Recordable>["headerCellStyle"];
   }
 
   export interface Emits extends ProTableMainNamespace.Emits, ProTableHeadNamespace.Emits {
@@ -541,11 +577,15 @@ export namespace ProTableNamespace {
  * 表格列配置
  */
 export interface TableColumn<T = any>
-  extends Partial<Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader" | "width">> {
+  extends Partial<Omit<TableColumnCtx<T>, "children" | "renderCell" | "renderHeader" | "width" | "label">> {
   /**
    * 表头宽度
    */
-  width?: string | number | ComputedRef<string | number>;
+  width?: MaybeRefOrGetter<string | number>;
+  /**
+   * 列名称
+   */
+  label?: MaybeRefOrGetter<string>;
   /**
    * 列类型
    */
@@ -608,6 +648,10 @@ export interface TableColumn<T = any>
    * 表头筛选配置项
    */
   filterProps?: TableFilterProps;
+  /**
+   * 其他扩展
+   */
+  [key: string]: any;
 }
 
 /**

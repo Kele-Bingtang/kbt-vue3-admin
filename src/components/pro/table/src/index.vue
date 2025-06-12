@@ -1,6 +1,14 @@
 <script setup lang="ts">
-import type { ProTableHeadInstance, ProTableMainInstance, ProTableNamespace, TableColumn, TableStyle } from "./types";
-import type { PageInfo } from "@/components/core/pagination";
+import type { UnwrapRef } from "vue";
+import type {
+  OperationNamespace,
+  ProTableHeadInstance,
+  ProTableMainInstance,
+  ProTableNamespace,
+  TableColumn,
+  TableStyle,
+} from "./types";
+import { defaultPageInfo, type PageInfo } from "@/components/core/pagination";
 import { useNamespace } from "@/composables";
 import { useTableApi, useTableState, type UseSelectState } from "./composables";
 import { Environment, TableSizeEnum } from "./helper";
@@ -8,7 +16,6 @@ import TableMain from "./table-main.vue";
 import TableHead from "./table-head.vue";
 
 import "./index.scss";
-import type { UnwrapRef } from "vue";
 
 defineOptions({ name: "ProTable" });
 
@@ -23,9 +30,27 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   dataCallback: undefined,
   hideHeader: false,
   card: false,
-  exportProps: () => ({}),
-  pageInfo: undefined,
+  tableStyle: () => ({}),
+
+  // TableHead 组件的 props（透传下去）
+  toolButton: () => ["size", "setting", "export"],
+  disabledToolButton: () => [],
+  size: () => TableSizeEnum.Default,
+  title: "",
+  exportProps: undefined,
+  tooltipProps: () => ({ placement: "top", effect: "light" }),
+  tableSizeStyle: () => ({}),
+
+  // TableMain 组件的 props（透传下去）
+  operationProp: "operation",
+  operationProps: () => ({}),
+  pageInfo: () => defaultPageInfo,
   pageScope: false,
+  paginationProps: () => ({}),
+  radioProps: () => ({}),
+  filterScope: false,
+  rowKey: "id",
+  emptyText: "暂无数据",
 });
 
 const emits = defineEmits<ProTableNamespace.Emits>();
@@ -88,6 +113,16 @@ const finalTableData = computed(() => {
   return tableData.value;
 });
 
+// 最终的 tableStyle，即将 ProTable 内置的 tableStyle 和传入的 tableStyle 合并
+const finalTableStyle = computed(() => {
+  const { rowStyle, cellStyle, headerCellStyle } = finalProps.value;
+  return {
+    rowStyle: { ...rowStyle, ...tableStyle.value?.rowStyle },
+    cellStyle: { ...cellStyle, ...tableStyle.value?.cellStyle },
+    headerCellStyle: { ...headerCellStyle, ...tableStyle.value?.headerCellStyle },
+  };
+});
+
 onMounted(() => {
   // 初始化请求
   mergeProps.value.requestImmediate && getTableList();
@@ -145,6 +180,18 @@ const handleDragSortEnd = (newIndex: number, oldIndex: number) => {
   emits("dragSortEnd", newIndex, oldIndex);
 };
 
+const handleButtonClick = (params: OperationNamespace.ButtonsCallBackParams) => {
+  emits("buttonClick", params);
+};
+
+const handleConfirm = (params: OperationNamespace.ButtonsCallBackParams) => {
+  emits("confirm", params);
+};
+
+const handleCancel = (params: OperationNamespace.ButtonsCallBackParams) => {
+  emits("cancel", params);
+};
+
 const expose = {
   tableData,
   optionsMap,
@@ -172,8 +219,14 @@ defineExpose(expose);
     <TableHead
       v-if="!hideHeader"
       ref="tableHeadInstance"
-      v-bind="$attrs"
       :columns="finalProps.columns"
+      :tool-button
+      :disabled-tool-button
+      :size
+      :title
+      :export-props
+      :tooltip-props
+      :table-size-style
       @size-change="handleSizeChange"
     >
       <template v-for="slot in Object.keys($slots)" #[slot]="scope">
@@ -183,15 +236,25 @@ defineExpose(expose);
 
     <!-- 表格主体 -->
     <TableMain
-      :columns="finalProps.columns"
       ref="tableMainInstance"
-      v-bind="{ ...tableStyle, ...$attrs }"
+      v-bind="{ ...finalTableStyle, ...$attrs }"
+      :columns="finalProps.columns"
       :data="finalTableData"
-      :pageScope
-      :pageInfo
+      :operation-prop
+      :operation-props
+      :page-info
+      :page-scope
+      :pagination-props
+      :radio-props
+      :filter-scope
+      :row-key
+      :empty-text
+      @button-click="handleButtonClick"
+      @confirm="handleConfirm"
+      @cancel="handleCancel"
       @selection-change="handleSelectionChange"
       @pagination-change="handlePaginationChange"
-      @dragSortEnd="handleDragSortEnd"
+      @drag-sort-end="handleDragSortEnd"
     >
       <template v-for="slot in Object.keys($slots)" #[slot]="scope">
         <slot :name="slot" v-bind="scope" />

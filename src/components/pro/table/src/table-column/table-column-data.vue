@@ -15,17 +15,14 @@ const formatTableColumnType = (column: TableColumn) => {
 </script>
 
 <template>
-  <el-table-column v-bind="formatTableColumnType(column)" :align="column.align || 'center'">
+  <el-table-column v-bind="formatTableColumnType(column)">
     <!-- 表头插槽 - 表头内容 -->
     <template #header="scope">
       <slot name="header-before" />
-      <slot v-if="column.prop" :name="`${lastProp(column.prop)}-header-before`" />
 
       <!-- 自定义表头 | 自定义插槽 -->
       <component v-if="column.headerRender" :is="column.headerRender(scope)" />
-      <slot v-else :name="`${lastProp(column.prop!)}-header`" v-bind="scope">
-        {{ scope.column.label }}
-      </slot>
+      <slot v-else :name="`${lastProp(column.prop!)}-header`" v-bind="scope">{{ scope.column.label }}</slot>
 
       <el-tooltip v-if="column.tooltip" placement="top" effect="dark" v-bind="column.tooltip">
         <!-- ElToolTip 默认插槽 -->
@@ -40,7 +37,6 @@ const formatTableColumnType = (column: TableColumn) => {
         </slot>
       </el-tooltip>
 
-      <slot v-if="column.prop" :name="`${lastProp(column.prop)}-header-after`" />
       <slot name="header-after" />
     </template>
 
@@ -51,13 +47,8 @@ const formatTableColumnType = (column: TableColumn) => {
         <TableColumnData v-for="child in column.children" :key="child.prop" :column="child" />
       </template>
 
-      <template v-else-if="column.render">
-        <component :is="column.render(scope)" />
-      </template>
-
-      <template v-else-if="$slots[lastProp(column.prop!)]">
-        <slot :name="lastProp(column.prop!)" v-bind="scope" />
-      </template>
+      <component v-else-if="column.render" :is="column.render(scope)" />
+      <slot v-else-if="$slots[lastProp(column.prop!)]" :name="lastProp(column.prop!)" v-bind="scope" />
 
       <template v-else>{{ formatCellValue(getProp(scope.row, column.prop!)) }}</template>
     </template>

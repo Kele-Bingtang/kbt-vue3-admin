@@ -33,7 +33,7 @@ const props = withDefaults(defineProps<TableFilterProps>(), {
 
 const emits = defineEmits<TableFilterEmits>();
 
-const ns = useNamespace();
+const ns = useNamespace("pro-table-filter");
 
 const model = defineModel<ModelBaseValueType>({ required: false });
 
@@ -67,22 +67,23 @@ const handleReset = () => {
     :width="popoverProps?.width || 230"
     :trigger="popoverProps?.trigger || 'click'"
     v-bind="popoverProps"
+    :popper-class="ns.b()"
   >
     <!-- 过滤图标 -->
     <template #reference>
-      <span
-        @click.stop
-        :style="{
-          marginLeft: '4px',
-          verticalAlign: '-2px',
-          cursor: 'pointer',
-          color: isEmpty(getProp(model, prop)) ? 'inherit' : `var(--${ns.elNamespace}-color-primary)`,
-        }"
-      >
-        <slot name="filter-icon">
+      <slot name="filter-icon">
+        <span
+          @click.stop
+          :class="ns.b('icon')"
+          :style="{
+            [ns.cssVarName('pro-table-filter-icon-color')]: isEmpty(getProp(model, prop))
+              ? 'inherit'
+              : `var(--${ns.elNamespace}-color-primary)`,
+          }"
+        >
           <ElIcon><Filter /></ElIcon>
-        </slot>
-      </span>
+        </span>
+      </slot>
     </template>
 
     <!-- 过滤内容区域 -->
@@ -90,7 +91,7 @@ const handleReset = () => {
       <ProFormItem v-model="model" v-bind="formColumn" :prop :el :show-label="false" :el-props />
 
       <slot name="filter-button" v-bind="{ handleFilter, handleClear, handleReset }">
-        <div style="display: flex; gap: 12px; justify-content: space-between; margin-top: 10px">
+        <div :class="ns.e('buttons')">
           <ElButton @click="handleReset">{{ resetText }}</ElButton>
           <div>
             <ElButton @click="handleClear">{{ clearText }}</ElButton>
@@ -101,3 +102,7 @@ const handleReset = () => {
     </div>
   </ElPopover>
 </template>
+
+<style lang="scss">
+@use "./table-filter";
+</style>

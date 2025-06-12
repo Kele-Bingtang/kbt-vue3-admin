@@ -1,0 +1,18 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+
+@include b(pro-table-filter) {
+  @include e(buttons) {
+    display: flex;
+    gap: 12px;
+    justify-content: space-between;
+    margin-top: 10px;
+  }
+}
+
+@include b(pro-table-filter-icon) {
+  margin-left: 4px;
+  vertical-align: -2px;
+  color: cssVar(pro-table-filter-icon-color);
+  cursor: pointer;
+}

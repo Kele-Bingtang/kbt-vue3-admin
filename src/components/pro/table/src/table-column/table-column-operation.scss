@@ -1,0 +1,40 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/namespace" as *;
+
+@include b(pro-table-operation) {
+  &.is-center {
+    .cell {
+      justify-content: center;
+    }
+  }
+
+  &.is-right {
+    .cell {
+      justify-content: flex-end;
+    }
+  }
+
+  .cell {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+
+    > .#{$el-namespace}-button {
+      margin-left: 0;
+    }
+
+    .#{$el-namespace}-icon {
+      cursor: pointer;
+    }
+  }
+
+  @include e(more) {
+    display: inline-flex;
+    cursor: pointer;
+    user-select: none;
+
+    @include m(text) {
+      margin-right: 2px;
+    }
+  }
+}
