@@ -5,9 +5,7 @@ import { ref, unref } from "vue";
 import type { ExportProps, ProTableNamespace } from "../types";
 
 const defaultFileName = "export-table";
-const defaultConfirmTitle = "温馨提示";
-const defaultLabelConfirmTitle = "请选择导出列";
-const defaultConfirmMessage = "确认导出数据?";
+const defaultConfirmTitle = "请选择导出列";
 
 /**
  * 导出为 Excel
@@ -33,7 +31,7 @@ export const exportExcelByLabel = async (
   data: ProTableNamespace.Props["data"] = [],
   exportProps: ExportProps = {}
 ) => {
-  const { fileName = defaultFileName, labelConfirmTitle = defaultLabelConfirmTitle } = exportProps;
+  const { fileName = defaultFileName, title = defaultConfirmTitle, options, appContext } = exportProps;
   const exportColumns = columns.filter(item => !item.type && item.prop !== "operation");
   const exportLabel = ref(exportColumns.map(item => item.label));
 
@@ -45,13 +43,14 @@ export const exportExcelByLabel = async (
         ))}
       </ElCheckboxGroup>
     ),
-    { title: labelConfirmTitle }
+    title,
+    options,
+    appContext
   );
 
   const tHeader = [] as string[];
   const propName = [] as string[];
 
-  // 扁平化 data，data 可能有 children 属性和 _enum 属性
   const flatData = filterFlatData(data);
 
   exportColumns.forEach((item: any) => {
@@ -73,20 +72,30 @@ export const exportExcelByProp = async (
   data: ProTableNamespace.Props["data"] = [],
   exportProps: ExportProps = {}
 ) => {
-  const {
-    fileName = defaultFileName,
-    confirmMessage = defaultConfirmMessage,
-    confirmTitle = defaultConfirmTitle,
-  } = exportProps;
-  await ElMessageBox.confirm(confirmMessage, confirmTitle, { type: "warning" });
+  const { fileName = defaultFileName, title = defaultConfirmTitle, options, appContext } = exportProps;
+  const exportColumns = columns.filter(item => !item.type && item.prop !== "operation");
+  const exportProp = ref(exportColumns.map(item => item.prop));
+
+  await ElMessageBox.confirm(
+    () => (
+      <ElCheckboxGroup v-model={exportProp.value}>
+        {exportColumns.map(item => (
+          <ElCheckbox label={item.prop} value={item.prop} />
+        ))}
+      </ElCheckboxGroup>
+    ),
+    title,
+    options,
+    appContext
+  );
 
   const tHeader = [] as string[];
   const propName = [] as string[];
-  // 扁平化 data，data 可能有 children 属性和 _enum 属性
+
   const flatData = filterFlatData(data);
 
-  columns.forEach((item: any) => {
-    if (!item.type && item.prop !== "operation") {
+  exportColumns.forEach((item: any) => {
+    if (exportProp.value.includes(item.prop)) {
       propName.push(item.prop!);
       tHeader.push(item.prop!);
     }
@@ -103,17 +112,31 @@ export const exportExcelByDataKey = async (
   data: ProTableNamespace.Props["data"] = [],
   exportProps: ExportProps = {}
 ) => {
-  const { fileName = defaultFileName, confirmMessage = defaultConfirmMessage } = exportProps;
-  await ElMessageBox.confirm(confirmMessage, "温馨提示", { type: "warning" });
+  const { fileName = defaultFileName, title = defaultConfirmTitle, options, appContext } = exportProps;
+  const flatData = filterFlatData(data);
+  const exportItem = ref(Object.keys(flatData[0]));
+
+  await ElMessageBox.confirm(
+    () => (
+      <ElCheckboxGroup v-model={exportItem.value}>
+        {flatData[0].map((item: any) => (
+          <ElCheckbox label={item} value={item} />
+        ))}
+      </ElCheckboxGroup>
+    ),
+    title,
+    options,
+    appContext
+  );
 
   const tHeader = [] as string[];
   const propName = [] as string[];
-  // 扁平化 data，data 可能有 children 属性和 _enum 属性
-  const flatData = filterFlatData(data);
 
-  Object.keys(flatData[0]).forEach((item: any) => {
-    propName.push(item);
-    tHeader.push(item);
+  Object.keys(flatData[0]).forEach(item => {
+    if (exportItem.value.includes(item)) {
+      propName.push(item);
+      tHeader.push(item);
+    }
   });
 
   const jsonArray = formatJsonToArray(flatData, propName);
@@ -121,14 +144,14 @@ export const exportExcelByDataKey = async (
 };
 
 /**
- * @description 扁平化 data，data 可能有 children 属性和 _enum 属性
+ * 扁平化 data，data 可能有 children 属性和 _options 属性
  */
 const filterFlatData = (data: any[]) => {
   return data.reduce((pre: any[], current: any) => {
     // 针对枚举类的导出
-    if (current._enum) {
-      Object.keys(current._enum).forEach(key => (current[key] = unref(current._enum[key])));
-      delete current._enum;
+    if (current._options) {
+      Object.keys(current._options).forEach(key => (current[key] = unref(current._options[key])));
+      delete current._options;
     }
     let flatArr = [...pre, current];
     if (current.children) flatArr = [...flatArr, ...filterFlatData(current.children)];

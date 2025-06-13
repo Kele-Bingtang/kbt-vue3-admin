@@ -1,17 +1,12 @@
 <script setup lang="ts">
 import type { Component } from "vue";
 import type { TableInstance } from "element-plus";
+import type { ElOption, FormItemColumnProps } from "@/components/pro/form-item";
 import type { OperationNamespace, ProTableMainNamespace, TableColumn, TableDefaultRenderScope } from "./types";
 import { ElRadio, ElTableColumn } from "element-plus";
-import {
-  defaultPageInfo,
-  formatValue,
-  getProp,
-  Pagination,
-  type ElOption,
-  type FormItemColumnProps,
-} from "@/components";
 import { useNamespace } from "@/composables";
+import Pagination, { defaultPageInfo } from "@/components/pro/pagination";
+import { formatValue, getProp } from "@/components/pro/form-item";
 import TableColumnData from "./table-column/table-column-data.vue";
 import TableColumnOperation from "./table-column/table-column-operation.vue";
 import TableColumnDragSort from "./table-column/table-column-drag-sort.vue";
@@ -141,18 +136,12 @@ const initOptionsInData = (data: Recordable[]) => {
 
 watch(
   () => props.columns,
-  () => initOptionsInData(tableData.value),
-  { deep: true }
+  async () => {
+    await Promise.all(props.columns.map(async column => await initOptionsMap(column)));
+    initOptionsInData(tableData.value);
+  },
+  { deep: true, immediate: true, flush: "post" }
 );
-
-onMounted(async () => {
-  await Promise.all(
-    props.columns.map(async column => {
-      await initOptionsMap(column);
-    })
-  );
-  initOptionsInData(tableData.value);
-});
 
 const getRowKey = (row: Recordable) => {
   const { rowKey } = props;
@@ -219,7 +208,7 @@ const handleRadioChange = (row: Recordable, index: number) => {
 };
 
 /**
- * 拖拽排序结束事件
+ * 行拖拽排序结束事件
  */
 const handleDragSortEnd = (newIndex: number, oldIndex: number) => {
   const [removedItem] = tableData.value.splice(oldIndex, 1);

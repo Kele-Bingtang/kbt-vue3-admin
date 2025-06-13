@@ -8,7 +8,7 @@ defineOptions({ name: "TableColumnDragSort" });
 
 interface TableColumnDragSortProps {
   sortable?: boolean;
-  tableInstance?: Ref<TableInstance> | TableInstance;
+  tableInstance?: MaybeRef<TableInstance> | null;
 }
 
 export interface ProTableEmits {
@@ -59,7 +59,7 @@ const dragSort = () => {
 
 <template>
   <el-table-column width="60" v-bind="$attrs">
-    <span :class="ns.e('icon')" style="cursor: e-resize">
+    <span :class="ns.e('icon')" style="cursor: move">
       <slot name="drag-sort-icon">
         <el-icon><DCaret /></el-icon>
       </slot>

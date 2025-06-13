@@ -1,6 +1,8 @@
 <script setup lang="ts">
-import type { TableColumn } from "../types";
+import type { TableInstance } from "element-plus";
+import type { ProTableHeadNamespace, TableColumn } from "../types";
 import { useNamespace } from "@/composables";
+import TableColumnDragSort from "../table-column/table-column-drag-sort.vue";
 
 defineOptions({ name: "TableHeadColumnSetting" });
 
@@ -8,15 +10,23 @@ const ns = useNamespace("pro-table-head-column-setting");
 
 export interface TableHeadColumnSettingProps {
   columns?: TableColumn[];
+  columnSetting?: ProTableHeadNamespace.Props["columnSetting"];
   emptyText?: string;
 }
 
 withDefaults(defineProps<TableHeadColumnSettingProps>(), {
   columns: () => [],
+  columnSetting: () => ({}),
   emptyText: "暂无可配置列",
 });
 
+const emits = defineEmits<{
+  dragSortEnd: [newIndex: number, oldIndex: number];
+}>();
+
 const visible = defineModel({ default: false });
+
+const elTableInstance = useTemplateRef<TableInstance>("elTableInstance");
 
 const open = () => {
   visible.value = true;
@@ -26,24 +36,47 @@ const close = () => {
   visible.value = false;
 };
 
+/**
+ * 拖拽排序结束事件
+ */
+const handleDragSortEnd = (newIndex: number, oldIndex: number) => {
+  emits("dragSortEnd", newIndex, oldIndex);
+};
+
 defineExpose({ open, close });
 </script>
 
 <template>
   <el-drawer v-model="visible" title="列设置" :size="450" :class="ns.b()">
-    <el-table :data="columns" :border="true" row-key="prop" default-expand-all>
+    <el-table ref="elTableInstance" :data="columns" :border="true" row-key="prop" default-expand-all>
+      <TableColumnDragSort
+        v-if="!columnSetting.hideDragSort"
+        :table-instance="elTableInstance"
+        label="排序"
+        align="center"
+        :width="60"
+        @drag-sort-end="handleDragSortEnd"
+      >
+        <template #drag-sort-icon>☷</template>
+      </TableColumnDragSort>
+
       <el-table-column prop="label" align="center" label="列名" />
 
-      <el-table-column v-slot="{ row }" prop="hide" align="center" label="显示">
-        <el-switch v-model="row.hide" :active-value="false" :inactive-value="true" :disabled="row.disabledHide" />
+      <el-table-column v-if="!columnSetting.hideHide" v-slot="{ row }" prop="hide" align="center" label="显示">
+        <el-switch
+          v-model="row.hide"
+          :active-value="false"
+          :inactive-value="true"
+          :disabled="row.disabledHide ?? columnSetting.disabledHide"
+        />
       </el-table-column>
 
-      <el-table-column v-slot="{ row }" prop="sortable" align="center" label="排序">
-        <el-switch v-model="row.sortable" :disabled="row.disabledSortable" />
+      <el-table-column v-if="!columnSetting.hideSortable" v-slot="{ row }" prop="sortable" align="center" label="排序">
+        <el-switch v-model="row.sortable" :disabled="row.disabledSortable ?? columnSetting.disabledSortable" />
       </el-table-column>
 
-      <el-table-column v-slot="{ row }" prop="filter" align="center" label="筛选">
-        <el-switch v-model="row.filter" :disabled="row.disabledFilter" />
+      <el-table-column v-if="!columnSetting.hideFilter" v-slot="{ row }" prop="filter" align="center" label="筛选">
+        <el-switch v-model="row.filter" :disabled="row.disabledFilter ?? columnSetting.disabledFilter" />
       </el-table-column>
 
       <template #empty>

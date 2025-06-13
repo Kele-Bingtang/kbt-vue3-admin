@@ -28,6 +28,7 @@ const columns: TableColumn[] = [
     prop: "user.detail.age",
     label: "年龄",
     filter: true,
+    disabledFilter: false,
     filterProps: { formColumn: { elProps: { modelModifiers: { number: true } } } },
   },
   {

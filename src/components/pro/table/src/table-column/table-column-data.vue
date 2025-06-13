@@ -1,8 +1,9 @@
 <script setup lang="ts">
 import type { TableColumn } from "../types";
-import { ElTableColumn, type TableColumnCtx } from "element-plus";
+import type { TableColumnCtx } from "element-plus";
+import { ElTableColumn } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
-import { getProp } from "@/components";
+import { getProp } from "@/components/pro/form-item";
 import { formatCellValue, lastProp } from "../helper";
 
 defineOptions({ name: "TableColumnData" });

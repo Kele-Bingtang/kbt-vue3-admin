@@ -140,9 +140,9 @@ export const useProSearch = () => {
      * @param prop 表单项唯一标识
      * @returns formItem instance
      */
-    getFormItemInstance: async (prop: string) => {
+    getElFormItemInstance: async (prop: string) => {
       const search = await getProSearch();
-      return search?.getFormItemInstance(prop);
+      return search?.getElFormItemInstance(prop);
     },
     /**
      * 获取表单组件的实例

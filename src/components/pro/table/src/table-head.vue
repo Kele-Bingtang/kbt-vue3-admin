@@ -1,11 +1,10 @@
 <script setup lang="ts">
-import type { CSSProperties } from "vue";
-import type { ProTableHeadNamespace, SizeStyle } from "./types";
+import type { ProTableHeadNamespace, SizeStyle, TableColumn } from "./types";
 import { Coin, Operation, Download, Setting } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { TableColumnTypeEnum, TableSizeEnum, ToolButtonEnum } from "./helper";
+import { exportExcel } from "./plugins/export";
 import TableHeadColumnSetting from "./plugins/table-head-column-setting.vue";
-import { exportExcel } from "./helper/export";
 
 defineOptions({ name: "TableHead" });
 
@@ -19,6 +18,7 @@ const props = withDefaults(defineProps<ProTableHeadNamespace.Props>(), {
   exportProps: () => ({}),
   tooltipProps: () => ({ placement: "top", effect: "light" }),
   sizeStyle: () => ({}),
+  columnSetting: () => ({}),
   baseSetting: () => ({}),
 });
 
@@ -27,13 +27,10 @@ const emits = defineEmits<ProTableHeadNamespace.Emits>();
 const ns = useNamespace("pro-table-head");
 
 const columnSettingVisible = ref(false);
+// 密度值
 const tableSize = ref<TableSizeEnum>((props.size as TableSizeEnum) || TableSizeEnum.Default);
-const sizeStyle = reactive<Record<string, CSSProperties>>({
-  rowStyle: {},
-  cellStyle: {},
-  headerCellStyle: {},
-});
 
+// 密度样式 Map
 const sizeStyleMap = computed<Record<TableSizeEnum, SizeStyle>>(() => {
   return {
     [TableSizeEnum.Default]: {
@@ -63,6 +60,17 @@ const sizeStyleMap = computed<Record<TableSizeEnum, SizeStyle>>(() => {
   };
 });
 
+// 列配置需要的列
+const settingColumns = computed(() => {
+  return props.columns
+    .filter(column => !hasSpecialColumn(column))
+    .map(column => {
+      column.hide ??= false;
+      column.filterProps = { ...column.filterProps };
+      return column;
+    });
+});
+
 onMounted(() => {
   // 初始化尺寸
   handleSizeCommand(tableSize.value);
@@ -84,22 +92,9 @@ const showToolButton = (key: ToolButtonEnum) => {
 const handleSizeCommand = (command: TableSizeEnum) => {
   tableSize.value = command;
   const tableSizeStyle = sizeStyleMap.value[command];
-  sizeStyle.rowStyle = tableSizeStyle.rowStyle;
-  sizeStyle.cellStyle = tableSizeStyle.cellStyle;
-  sizeStyle.headerCellStyle = tableSizeStyle.headerCellStyle;
 
   emits("sizeChange", tableSize.value, tableSizeStyle);
 };
-
-const settingColumns = computed(() => {
-  return props.columns
-    .filter(column => ![TableColumnTypeEnum.Selection].includes(column.type as TableColumnTypeEnum))
-    .map(column => {
-      column.hide ??= false;
-      column.filterProps = { ...column.filterProps };
-      return column;
-    });
-});
 
 /**
  * 表格导出
@@ -111,7 +106,34 @@ const handleExport = () => {
   exportExcel(columns, data, exportProps);
 };
 
+/**
+ * 是否含有特殊列（多选列、单选列）
+ */
+const hasSpecialColumn = (column: TableColumn) =>
+  [TableColumnTypeEnum.Selection, TableColumnTypeEnum.Radio].includes(column.type as TableColumnTypeEnum);
+
+/**
+ * 切换列配置抽屉的显示状态
+ */
 const toggleColumnSetting = (show = !columnSettingVisible.value) => (columnSettingVisible.value = show);
+
+/**
+ * 列配置拖拽事件
+ */
+const handleDragSortEnd = (newIndex: number, oldIndex: number) => {
+  const { columns } = props;
+
+  const partColumns = columns.slice(0, newIndex);
+  const specialColumnsLength = partColumns.filter(column => hasSpecialColumn(column)).length;
+
+  if (specialColumnsLength) {
+    const [removedItem] = columns.splice(oldIndex + specialColumnsLength, 1);
+    props.columns.splice(newIndex + specialColumnsLength, 0, removedItem);
+  } else {
+    const [removedItem] = columns.splice(oldIndex, 1);
+    props.columns.splice(newIndex, 0, removedItem);
+  }
+};
 
 const expose = { sizeCommand: handleSizeCommand, exportFile: handleExport, toggleColumnSetting };
 defineExpose(expose);
@@ -201,7 +223,12 @@ defineExpose(expose);
       </slot>
     </div>
 
-    <TableHeadColumnSetting v-model="columnSettingVisible" :columns="settingColumns" />
+    <TableHeadColumnSetting
+      v-model="columnSettingVisible"
+      :columns="settingColumns"
+      :column-setting
+      @drag-sort-end="handleDragSortEnd"
+    />
   </div>
 </template>
 

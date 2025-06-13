@@ -110,27 +110,24 @@ export interface ExportProps {
    */
   mode?: ExportKey | `${ExportKey}`;
   /**
-   *导出文件名
+   * 导出的文件名
+   * @default 'export-table'
    */
   fileName?: string;
   /**
-   * 导出时确认提示语
-   *
-   * @default '确认导出数据?'
-   */
-  confirmMessage?: string;
-  /**
-   *  导出时确认标题（ElMessageBox.confirm 标题）
-   *
-   * @default '温馨提示'
-   */
-  confirmTitle?: string;
-  /**
-   * 导出时确认标题（ElMessageBox.confirm 标题）
+   * ElMessageBox.confirm 的 title
    *
    * @default '请选择导出列'
    */
-  labelConfirmTitle?: string;
+  title?: string;
+  /**
+   * ElMessageBox.confirm 的 options
+   */
+  options?: ElMessageBoxOptions;
+  /**
+   * ElMessageBox.confirm 的 appContext
+   */
+  appContext?: AppContext | null;
   /**
    * 自定义导出为文件
    *
@@ -378,6 +375,18 @@ export namespace ProTableHeadNamespace {
      */
     tooltipProps?: Partial<ElTooltipProps>;
     /**
+     * 表格列配置
+     */
+    columnSetting?: {
+      hideDragSort?: boolean; // 是否禁用拖拽显示
+      hideHide?: boolean; // 是否禁用隐藏显示
+      hideSortable?: boolean; // 是否禁用排序显示
+      hideFilter?: boolean; // 是否禁用筛选显示
+      disabledHide?: boolean; // 是否禁用隐藏选择
+      disabledSortable?: boolean; // 是否禁用排序选择
+      disabledFilter?: boolean; // 是否禁用筛选选择
+    };
+    /**
      * 表格基础配置
      */
     baseSetting?: {
@@ -393,6 +402,9 @@ export namespace ProTableHeadNamespace {
   }
 
   export interface Emits {
+    /**
+     * 密度选择事件
+     */
     sizeChange: [size: TableSizeEnum, sizeStyle: SizeStyle];
   }
 }
@@ -547,11 +559,11 @@ export namespace ProTableNamespace {
      */
     dataCallback?: (data: Recordable) => any;
     /**
-     * 是否隐藏表格头部
+     * 是否隐藏表格顶部栏
      *
      * @default false
      */
-    hideHeader?: boolean;
+    hideHead?: boolean;
     /**
      * 是否使用卡片样式
      *
@@ -620,12 +632,6 @@ export interface TableColumn<T = any>
    */
   type?: TableColumnTypeEnum | `${TableColumnTypeEnum}`;
   /**
-   * 是否是标签展示
-   *
-   * @default false
-   */
-  tag?: boolean;
-  /**
    * 是否隐藏在表格当中
    *
    * @default false
@@ -657,16 +663,6 @@ export interface TableColumn<T = any>
    * @default true
    */
   isFilterOptions?: boolean;
-  /**
-   * 是否使用 ElButton link 属性来渲染单元格
-   *
-   * @default false
-   */
-  link?: boolean;
-  /**
-   * ElButton Props
-   */
-  linkProps?: Partial<ButtonProps & { onClick: (scope: TableDefaultRenderScope<any>) => void }>;
   /**
    * 自定义表头内容渲染（tsx 语法）
    */
@@ -718,6 +714,7 @@ export type ProTableInstance = Omit<
   InstanceType<typeof ProTable>,
   keyof ComponentPublicInstance | keyof ProTableNamespace.Props
 > & { $parent?: ComponentPublicInstance | null; pageInfo: ProTableNamespace.Props["pageInfo"] };
+
 /**
  * ProTableMain 组件实例
  */
@@ -725,6 +722,7 @@ export type ProTableMainInstance = Omit<
   InstanceType<typeof ProTableMain>,
   keyof ComponentPublicInstance | keyof ProTableMainNamespace.Props
 > & { $parent?: ComponentPublicInstance | null };
+
 /**
  * ProTableHead 组件实例
  */

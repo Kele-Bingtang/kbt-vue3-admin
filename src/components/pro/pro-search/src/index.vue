@@ -4,8 +4,10 @@ import type { ProSearchColumnProps, ProSearchEmits, ProSearchProps } from "./typ
 import { computed, onMounted } from "vue";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { ElButton, ElIcon } from "element-plus";
-import { Grid, GridItem, ProForm, ProFormItem } from "@/components";
 import { useNamespace } from "@/composables";
+import { ProForm } from "@/components/pro/form";
+import { ProFormItem } from "@/components/pro/form-item";
+import { Grid, GridItem } from "@/components/pro/grid";
 import { useSearchApi } from "./composables/use-search-api";
 
 defineOptions({ name: "ProSearch" });
@@ -57,7 +59,7 @@ const {
   getProFormInstance,
   submitForm,
   resetForm,
-  getFormItemInstance,
+  getElFormItemInstance,
   getElInstance,
 } = formMethods;
 
@@ -178,7 +180,7 @@ const defaultExpose = {
   getFormModel,
   getElFormInstance,
   getProFormInstance,
-  getFormItemInstance,
+  getElFormItemInstance,
   getElInstance,
   toggleCollapse,
   setProps,

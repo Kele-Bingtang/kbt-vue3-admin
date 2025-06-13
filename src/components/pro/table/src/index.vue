@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { UnwrapRef } from "vue";
+import type { PageInfo } from "@/components/pro/pagination";
 import type {
   OperationNamespace,
   ProTableHeadInstance,
@@ -8,7 +9,7 @@ import type {
   TableColumn,
   SizeStyle,
 } from "./types";
-import { defaultPageInfo, type PageInfo } from "@/components/pro/pagination";
+import { defaultPageInfo } from "@/components/pro/pagination";
 import { useNamespace } from "@/composables";
 import { useTableApi, useTableState, type UseSelectState } from "./composables";
 import { Environment, TableSizeEnum } from "./helper";
@@ -28,7 +29,7 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   beforeSearch: undefined,
   requestError: undefined,
   dataCallback: undefined,
-  hideHeader: false,
+  hideHead: false,
   card: false,
   rowStyle: () => ({}),
   cellStyle: () => ({}),
@@ -44,6 +45,7 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   exportProps: undefined,
   tooltipProps: () => ({ placement: "top", effect: "light" }),
   sizeStyle: () => ({}),
+  columnSetting: () => ({}),
   baseSetting: () => ({}),
 
   // TableMain 组件的 props（透传下去）
@@ -199,7 +201,7 @@ defineExpose(expose);
   <div :class="[ns.b(), { card }]">
     <!-- 表格头部 -->
     <TableHead
-      v-if="!hideHeader"
+      v-if="!hideHead"
       ref="tableHeadInstance"
       :columns="finalProps.columns"
       :tool-button
@@ -209,6 +211,7 @@ defineExpose(expose);
       :export-props
       :tooltip-props
       :size-style
+      :column-setting
       :base-setting
       @size-change="handleSizeChange"
     >
