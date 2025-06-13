@@ -20,7 +20,6 @@ interface TableFilterEmits {
 }
 
 const props = withDefaults(defineProps<TableFilterProps>(), {
-  enabled: false,
   el: "ElInput",
   rule: "eq",
   prop: "",
@@ -63,7 +62,6 @@ const handleReset = () => {
 
 <template>
   <ElPopover
-    v-if="enabled"
     :width="popoverProps?.width || 230"
     :trigger="popoverProps?.trigger || 'click'"
     v-bind="popoverProps"

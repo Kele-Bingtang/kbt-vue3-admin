@@ -21,6 +21,7 @@ const props = withDefaults(defineProps<PaginationProps>(), {
   hidden: false,
   reset: true,
   total: 0,
+  align: "right",
 });
 
 const emits = defineEmits<PaginationEmits>();
@@ -64,8 +65,13 @@ defineExpose({ defaultPageInfo });
 </script>
 
 <template>
-  <div :class="ns.b()" v-if="!hidden">
+  <div :class="ns.b()">
+    <slot v-if="align === 'right'" name="pagination-left">
+      <span />
+    </slot>
+
     <el-pagination
+      v-if="!hidden"
       layout="total, sizes, prev, pager, next, jumper"
       background
       v-model:current-page="pageInfo.pageNum"
@@ -76,6 +82,8 @@ defineExpose({ defaultPageInfo });
       @size-change="handleSizeChange"
       @current-change="handleCurrentChange"
     />
+
+    <slot v-if="align === 'left'" name="pagination-right"><span /></slot>
   </div>
 </template>
 

@@ -23,7 +23,7 @@ export const lastProp = (prop: string) => {
  */
 export const formatCellValue = (callValue: any) => {
   // 如果当前值为数组，使用 / 拼接（根据需求自定义）
-  if (Array.isArray(callValue)) return callValue.length ? callValue.join(" / ") : "--";
+  if (isArray(callValue)) return callValue.length ? callValue.join(" / ") : "--";
   return callValue ?? "--";
 };
 
@@ -71,8 +71,8 @@ export const findItemNested = (
 export function filterOptionsLabel(options: Recordable | Recordable[], labelName = "label") {
   if (!isArray(options)) return options ? options[labelName] : "--";
 
-  const filterDataArray: any[] = [];
-  options.forEach((item: any) => filterDataArray.push(item[labelName]));
+  const filterDataArray: string[] = [];
+  options.forEach(item => filterDataArray.push(item[labelName]));
   return filterDataArray;
 }
 

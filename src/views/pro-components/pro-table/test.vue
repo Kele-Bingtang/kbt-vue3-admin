@@ -9,7 +9,6 @@ const data = ref(tableData);
 
 const columns: TableColumn[] = [
   { type: "selection", fixed: "left", width: 60 },
-  // { type: "radio", label: "单选", fixed: "left", width: 60 },
   { type: "index", label: "#", width: 60 },
   { type: "sort", label: "Sort", width: 80 },
   { type: "expand", label: "Expand", width: 80 },
@@ -17,21 +16,25 @@ const columns: TableColumn[] = [
   {
     prop: "gender",
     label: "性别",
-    options: [
-      { label: "男", value: 1 },
-      { label: "女", value: 2 },
-    ],
+    options: async () => {
+      return [
+        { label: "男", value: 1 },
+        { label: "女", value: 2 },
+      ];
+    },
   },
   {
     // 多级 prop
     prop: "user.detail.age",
     label: "年龄",
-    filterProps: { enabled: true, formColumn: { elProps: { modelModifiers: { number: true } } } },
+    filter: true,
+    filterProps: { formColumn: { elProps: { modelModifiers: { number: true } } } },
   },
   {
     prop: "idCard",
     label: "身份证号",
-    filterProps: { enabled: true, rule: "like" },
+    filter: true,
+    filterProps: { rule: "like" },
   },
   { prop: "email", label: "邮箱" },
   { prop: "address", label: "居住地址" },
@@ -42,27 +45,25 @@ const buttons = ref<OperationNamespace.ButtonRaw[]>();
 
 buttons.value = [
   {
-    // v0.0.8开始支持 text支持函数类型
-    text: row => (row.status === "1" ? "开启" : "关闭"),
+    text: row => (row.gender === 1 ? "开启" : "关闭"),
     code: "status",
     icon: View,
+    el: "ElLink",
     elProps: {
       type: "primary",
     },
   },
   {
-    // 查看
     text: "查看",
     code: "view",
     elProps: (row: any) => ({
       type: "info",
-      disabled: row.status === "1",
+      disabled: row.gender === 1,
     }),
-    show: (row: any) => row.status === "1",
+    show: (row: any) => row.gender === 1,
     icon: View,
   },
   {
-    // 修改
     text: "修改",
     code: "edit",
     elProps: (row: any) => ({
@@ -76,7 +77,6 @@ buttons.value = [
     icon: Edit,
   },
   {
-    // 删除
     text: "删除",
     code: "delete",
     elProps: computed(() => ({ type: "danger" })),
@@ -113,12 +113,12 @@ const handleCancel = (params: OperationNamespace.ButtonsCallBackParams) => {
   <ProTable
     :columns
     :data
-    :border="false"
-    pagination
+    page-scope
+    card
     :operation-props="{
       buttons: buttons,
       el,
-      width: el === 'ElButton' ? 260 : el === 'ElIcon' ? 160 : 200,
+      width: el === 'ElButton' ? 260 : el === 'ElIcon' ? 190 : 200,
     }"
     @button-click="handleButtonClick"
     @confirm="handleConfirm"

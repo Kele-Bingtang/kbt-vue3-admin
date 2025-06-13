@@ -31,8 +31,10 @@ const hideOnClick = ref(true);
 
 const widthValue = computed(() => toValue(props.width));
 const labelValue = computed(() => toValue(props.label));
-const buttonEl = computed(() => hyphenToCamelCase(props.el) as OperationEl);
 
+/**
+ * 获取需要渲染的按钮和隐藏的按钮信息
+ */
 const getButtons = (row: Recordable, index: number) => {
   const { buttons, showNumber } = props;
 
@@ -49,18 +51,29 @@ const getButtons = (row: Recordable, index: number) => {
   return { showMore, showButtons: data.slice(0, showNumberConst), hideButtons: data.slice(showNumberConst) };
 };
 
+/**
+ * 获取文本
+ */
 const getText = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordable, index: number) => {
   return isFunction(buttonRaw.text)
     ? unref(buttonRaw.text(row, index, { ...buttonRaw, text: undefined }))
     : unref(buttonRaw.text);
 };
 
-const getElProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordable, index: number) => {
+const getButtonEl = (buttonRaw: OperationNamespace.ButtonRaw) =>
+  hyphenToCamelCase(buttonRaw.el || props.el) as OperationEl;
+/**
+ * 获取按钮相关组件的 Props
+ */
+const getButtonElProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordable, index: number) => {
   return isFunction(buttonRaw.elProps)
     ? buttonRaw.elProps(row, index, { ...buttonRaw, elProps: undefined })
     : unref(buttonRaw.elProps);
 };
 
+/**
+ * 获取 emits 返回的参数信息
+ */
 const getCallbackParams = (
   buttonRaw: OperationNamespace.ButtonRaw,
   row: Recordable,
@@ -79,6 +92,9 @@ const getCallbackParams = (
   } as OperationNamespace.ButtonsCallBackParams;
 };
 
+/**
+ * 获取 confirm 弹窗组件
+ */
 const getConfirmEl = (buttonRaw: OperationNamespace.ButtonRaw) => {
   const confirm = buttonRaw.confirm ?? props.confirm;
   if (!confirm) return;
@@ -86,6 +102,9 @@ const getConfirmEl = (buttonRaw: OperationNamespace.ButtonRaw) => {
   return confirm.el;
 };
 
+/**
+ * 获取 confirm 弹窗组件 props
+ */
 const getConfirmProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordable, index: number, rest: Recordable) => {
   const confirmEl = getConfirmEl(buttonRaw);
   const confirm = buttonRaw.confirm ?? props.confirm;
@@ -114,6 +133,9 @@ const getConfirmProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordabl
   };
 };
 
+/**
+ * 点击按钮事件
+ */
 const handleButtonClick = (
   buttonRaw: OperationNamespace.ButtonRaw,
   row: Recordable,
@@ -128,6 +150,9 @@ const handleButtonClick = (
   emits("buttonClick", callbackParams);
 };
 
+/**
+ * 点击确认按钮事件
+ */
 const handleConfirm = (
   buttonRaw: OperationNamespace.ButtonRaw,
   row: Recordable,
@@ -141,6 +166,9 @@ const handleConfirm = (
   emits("confirm", callbackParams);
 };
 
+/**
+ * 点击取消按钮事件
+ */
 const handleCancel = (
   buttonRaw: OperationNamespace.ButtonRaw,
   row: Recordable,
@@ -179,8 +207,8 @@ const handleCancel = (
         <template v-for="button in getButtons(row, $index).showButtons" :key="button.text">
           <OperationButton
             :text="getText(button, row, $index)"
-            :el-props="getElProps(button, row, $index)"
-            :el="buttonEl"
+            :el="getButtonEl(button)"
+            :el-props="getButtonElProps(button, row, $index)"
             :icon="button.icon"
             :tooltip-props="button.tooltipProps"
             :confirm-el="getConfirmEl(button)"
@@ -192,12 +220,7 @@ const handleCancel = (
         </template>
 
         <!-- 隐藏的按钮 -->
-        <el-dropdown
-          v-if="getButtons(row, $index).showMore"
-          trigger="click"
-          class="plus-table-action-bar__dropdown"
-          :hide-on-click="hideOnClick"
-        >
+        <el-dropdown v-if="getButtons(row, $index).showMore" trigger="click" :hide-on-click="hideOnClick">
           <span :class="ns.e('more')">
             <span :class="ns.em('more', 'text')">更多</span>
             <slot name="operation-more-icon">
@@ -214,8 +237,8 @@ const handleCancel = (
               >
                 <OperationButton
                   :text="getText(button, row, $index)"
-                  :el-props="getElProps(button, row, $index)"
-                  :el="buttonEl"
+                  :el="getButtonEl(button)"
+                  :el-props="getButtonElProps(button, row, $index)"
                   :icon="button.icon"
                   :tooltip-props="button.tooltipProps"
                   :confirm-el="getConfirmEl(button)"

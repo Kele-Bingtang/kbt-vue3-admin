@@ -6,9 +6,9 @@ import type {
   ProTableMainInstance,
   ProTableNamespace,
   TableColumn,
-  TableStyle,
+  SizeStyle,
 } from "./types";
-import { defaultPageInfo, type PageInfo } from "@/components/core/pagination";
+import { defaultPageInfo, type PageInfo } from "@/components/pro/pagination";
 import { useNamespace } from "@/composables";
 import { useTableApi, useTableState, type UseSelectState } from "./composables";
 import { Environment, TableSizeEnum } from "./helper";
@@ -33,15 +33,18 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   rowStyle: () => ({}),
   cellStyle: () => ({}),
   headerCellStyle: () => ({}),
+  border: undefined,
+  stripe: undefined,
 
   // TableHead 组件的 props（透传下去）
-  toolButton: () => ["size", "setting", "export"],
+  toolButton: () => ["size", "export", "columnSetting", "baseSetting"],
   disabledToolButton: () => [],
   size: () => TableSizeEnum.Default,
   title: "",
   exportProps: undefined,
   tooltipProps: () => ({ placement: "top", effect: "light" }),
-  tableSizeStyle: () => ({}),
+  sizeStyle: () => ({}),
+  baseSetting: () => ({}),
 
   // TableMain 组件的 props（透传下去）
   operationProp: "operation",
@@ -61,8 +64,19 @@ const ns = useNamespace("pro-table");
 const tableHeadInstance = useTemplateRef<ProTableHeadInstance>("tableHeadInstance");
 const tableMainInstance = useTemplateRef<ProTableMainInstance>("tableMainInstance");
 
+// 表格密度
 const tableSize = ref<TableSizeEnum>((props.size as TableSizeEnum) || TableSizeEnum.Default);
-const tableStyle = ref<TableStyle>();
+// 表格密度样式
+const sizeStyle = ref<SizeStyle>();
+// 表格全局设置
+const baseSetting = reactive({
+  border: props.border ?? false,
+  stripe: props.stripe ?? false,
+  headerBackground: true,
+  highlightCurrentRow: true,
+  ...props.baseSetting,
+});
+// options 枚举缓存
 const optionsMap = ref(new Map<string, Recordable[]>());
 
 // 最终的 props
@@ -108,13 +122,17 @@ const finalTableData = computed(() => {
   return tableData.value;
 });
 
-// 最终的 tableStyle，即将 ProTable 内置的 tableStyle 和传入的 tableStyle 合并
-const finalTableStyle = computed(() => {
+// 最终的 sizeStyle，即将 ProTable 内置的 sizeStyle 和传入的 sizeStyle 合并
+const finalSizeStyle = computed(() => {
   const { rowStyle, cellStyle, headerCellStyle } = finalProps.value;
   return {
-    rowStyle: { ...rowStyle, ...tableStyle.value?.rowStyle },
-    cellStyle: { ...cellStyle, ...tableStyle.value?.cellStyle },
-    headerCellStyle: { ...headerCellStyle, ...tableStyle.value?.headerCellStyle },
+    rowStyle: { ...rowStyle, ...sizeStyle.value?.rowStyle },
+    cellStyle: { ...cellStyle, ...sizeStyle.value?.cellStyle },
+    headerCellStyle: {
+      ...headerCellStyle,
+      ...sizeStyle.value?.headerCellStyle,
+      ...(!baseSetting.headerBackground && { backgroundColor: undefined }),
+    },
   };
 });
 
@@ -129,9 +147,9 @@ const handleSelectionChange = (useSelectReturn: UnwrapRef<UseSelectState>, index
   emits("selectionChange", useSelectReturn, index);
 };
 
-const handleSizeChange = (size: TableSizeEnum, style: TableStyle) => {
+const handleSizeChange = (size: TableSizeEnum, style: SizeStyle) => {
   tableSize.value = size === TableSizeEnum.Mini ? TableSizeEnum.Default : size;
-  tableStyle.value = style;
+  sizeStyle.value = style;
   emits("sizeChange", size, style);
 };
 
@@ -190,7 +208,8 @@ defineExpose(expose);
       :title
       :export-props
       :tooltip-props
-      :table-size-style
+      :size-style
+      :base-setting
       @size-change="handleSizeChange"
     >
       <template v-for="slot in Object.keys($slots)" #[slot]="scope">
@@ -201,7 +220,7 @@ defineExpose(expose);
     <!-- 表格主体 -->
     <TableMain
       ref="tableMainInstance"
-      v-bind="{ ...$attrs, ...finalTableStyle }"
+      v-bind="{ ...baseSetting, headerBackground: undefined, ...$attrs, ...finalSizeStyle }"
       :columns="finalProps.columns"
       :data="finalTableData"
       :operation-prop

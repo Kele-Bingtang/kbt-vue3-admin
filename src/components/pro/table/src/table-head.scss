@@ -10,10 +10,12 @@
 
   @include e(right) {
     display: flex;
+    gap: 12px;
     align-items: center;
 
     .#{$el-namespace}-button {
       width: 32px;
+      margin-left: 0;
       color: cssVar(gray-700);
       outline: none;
       background-color: rgb(cssVar(gray-200-rgb), 0.8);

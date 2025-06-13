@@ -208,7 +208,7 @@ export interface FormItemColumnProps {
   /**
    * 字典指定 label && value && children 的 key 值
    *
-   * @default { label: "label", value: "value", children: "children", disabled: "disabled" }
+   * @default '{ label: "label", value: "value", children: "children", disabled: "disabled" }'
    */
   optionField?: ElOptionField;
   /**

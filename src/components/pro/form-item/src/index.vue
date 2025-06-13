@@ -3,7 +3,7 @@ import type { FormItemInstance } from "element-plus";
 import type { FormItemColumnProps, ModelBaseValueType } from "./types";
 import { ElFormItem, ElTooltip, ElDivider, ElUpload, ElIcon } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
-import { addUnit, isObject } from "@/utils";
+import { addUnit, isArray, isObject } from "@/utils";
 import { formatValue, getProp, hyphenToCamelCase, setProp, componentMap, ComponentNameEnum } from "./helper";
 import Checkbox from "./components/checkbox.vue";
 import Radio from "./components/radio.vue";
@@ -98,6 +98,8 @@ const slotParams = computed(() => ({
 
 const initOptions = async () => {
   const { options, optionField } = props;
+
+  if (!options || (isArray(options) && !options.length)) return [];
 
   let value = await formatValue<FormItemColumnProps["options"]>(options, [model.value]);
   if (!value) return [];

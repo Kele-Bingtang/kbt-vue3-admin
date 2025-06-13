@@ -16,7 +16,7 @@ import TableColumnData from "./table-column/table-column-data.vue";
 import TableColumnOperation from "./table-column/table-column-operation.vue";
 import TableColumnDragSort from "./table-column/table-column-drag-sort.vue";
 import { useSelection } from "./composables";
-import { isFunction, isObject } from "@/utils";
+import { isFunction } from "@/utils";
 import {
   TableColumnTypeEnum,
   filterData,
@@ -110,7 +110,7 @@ const initOptionsMap = async ({ options, prop }: TableColumn) => {
   optionsMapConst.set(prop!, []);
 
   // 处理 options 并存储到 optionsMap
-  const value = await formatValue<FormItemColumnProps["options"]>(options, [optionsMapConst], false);
+  const value = await formatValue<FormItemColumnProps["options"]>(options, [optionsMapConst, prop], false);
 
   optionsMapConst.set(prop!, (value as any)?.data || value);
 };
@@ -152,8 +152,6 @@ onMounted(async () => {
     })
   );
   initOptionsInData(tableData.value);
-
-  console.log(tableData.value);
 });
 
 const getRowKey = (row: Recordable) => {
@@ -326,7 +324,6 @@ defineExpose(expose);
 <template>
   <el-table
     ref="elTableInstance"
-    border
     highlight-current-row
     scrollbar-always-on
     v-bind="$attrs"
@@ -338,7 +335,7 @@ defineExpose(expose);
   >
     <!-- 默认插槽 -->
     <slot name="default">
-      <template v-for="(column, index) in columns.filter(c => !c.isHide)" :key="column">
+      <template v-for="(column, index) in columns.filter(c => !c.hide)" :key="column">
         <!-- 功能列 -->
         <component
           v-if="column.type && columnTypes.includes(column.type)"
@@ -367,7 +364,7 @@ defineExpose(expose);
 
         <!-- 数据列 -->
         <TableColumnData
-          v-else
+          v-else-if="column.prop !== operationProp"
           :column
           v-bind="toValueColumn(column)"
           :align="column.align || 'center'"
@@ -376,6 +373,7 @@ defineExpose(expose);
           <template #header-after>
             <slot name="header-filter">
               <TableFilter
+                v-if="column.filter"
                 v-model="filterModel"
                 v-bind="column.filterProps"
                 :prop="column.filterProps?.prop || column.prop"
@@ -436,11 +434,18 @@ defineExpose(expose);
   <!-- 表格分页 -->
   <slot name="pagination">
     <Pagination
-      v-if="paginationProps"
+      v-if="pageScope"
       v-model="pageInfo"
       @change="handlePaginationChange"
       :total="data.length"
-      v-bind="{ ...(isObject(paginationProps) ? paginationProps : {}) }"
-    />
+      v-bind="paginationProps"
+    >
+      <template v-if="$slots['pagination-left']" #pagination-left>
+        <slot name="pagination-left" />
+      </template>
+      <template v-if="$slots['pagination-right']" #pagination-right>
+        <slot name="pagination-right" />
+      </template>
+    </Pagination>
   </slot>
 </template>

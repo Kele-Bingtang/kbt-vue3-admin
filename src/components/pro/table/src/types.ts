@@ -4,7 +4,6 @@ import type {
   ElTooltipProps,
   IconProps,
   LinkProps,
-  PaginationProps,
   PopconfirmProps,
   PopoverProps,
   RadioProps,
@@ -12,7 +11,7 @@ import type {
   TableInstance,
   TableProps,
 } from "element-plus";
-import type { FormItemColumnProps, PageInfo } from "@/components";
+import type { FormItemColumnProps, PageInfo, PaginationProps } from "@/components";
 import type { AppContext, CSSProperties, UnwrapRef } from "vue";
 import type { UseSelectState } from "./composables/use-selection";
 import type ProTable from "./index.vue";
@@ -34,7 +33,7 @@ export type TableHeadRenderScope<T = Recordable> = { $index: number; column: Tab
 /**
  * 表格样式属性
  */
-export type TableStyle = { rowStyle: CSSProperties; cellStyle: CSSProperties; headerCellStyle: CSSProperties };
+export type SizeStyle = { rowStyle: CSSProperties; cellStyle: CSSProperties; headerCellStyle: CSSProperties };
 
 /**
  * 部分查询条件有固定的规则，比如时间范围查询不可能是 lt、gt 之类的
@@ -56,12 +55,6 @@ export type FilterRule =
   | undefined;
 
 export interface TableFilterProps {
-  /**
-   * 是否开启筛选功能
-   *
-   * @default true
-   */
-  enabled?: boolean;
   /**
    * 使用的表单组件名
    *
@@ -369,6 +362,10 @@ export namespace ProTableHeadNamespace {
      */
     size?: TableSizeEnum | `${TableSizeEnum}`;
     /**
+     * 自定义不同尺寸的 rowStyle、cellStyle、headerCellStyle
+     */
+    sizeStyle?: Partial<Record<TableSizeEnum, SizeStyle>>;
+    /**
      * 表格标题
      */
     title?: string;
@@ -381,13 +378,22 @@ export namespace ProTableHeadNamespace {
      */
     tooltipProps?: Partial<ElTooltipProps>;
     /**
-     * 自定义不同尺寸的 rowStyle、cellStyle、headerCellStyle
+     * 表格基础配置
      */
-    tableSizeStyle?: Partial<Record<TableSizeEnum, TableStyle>>;
+    baseSetting?: {
+      border?: boolean; // 是否开启边框，默认 false
+      stripe?: boolean; // 是否开启斑马纹，默认 false
+      headerBackground?: boolean; // 是否开启表头背景色，默认 true
+      highlightCurrentRow?: boolean; // 是否开启单击高亮当前行，默认 true
+      disabledBorder?: boolean; // 是否开启禁用边框选择，默认 false
+      disabledStripe?: boolean; // 是否开启禁用斑马纹选择，默认 false
+      disabledHeaderBackground?: boolean; // 是否开启禁用表格高亮选择，默认 false
+      disabledHighlightCurrentRow?: boolean; // 是否开启禁用单击高亮当前行选择，默认 false
+    };
   }
 
   export interface Emits {
-    sizeChange: [size: TableSizeEnum, tableStyle: TableStyle];
+    sizeChange: [size: TableSizeEnum, sizeStyle: SizeStyle];
   }
 }
 
@@ -578,6 +584,14 @@ export namespace ProTableNamespace {
      * ElTable 的 headerCellStyle
      */
     headerCellStyle?: TableProps<Recordable>["headerCellStyle"];
+    /**
+     * ElTable 的 border
+     */
+    border?: TableProps<Recordable>["border"];
+    /**
+     * ElTable 的 stripe
+     */
+    stripe?: TableProps<Recordable>["stripe"];
   }
 
   export interface Emits extends ProTableMainNamespace.Emits, ProTableHeadNamespace.Emits {
@@ -616,7 +630,13 @@ export interface TableColumn<T = any>
    *
    * @default false
    */
-  isHide?: boolean;
+  hide?: boolean;
+  /**
+   * 列配置中是否禁用列隐藏选择
+   *
+   * @default false
+   */
+  disabledHide?: boolean;
   /**
    * 字典数据
    */
@@ -628,7 +648,7 @@ export interface TableColumn<T = any>
   /**
    * 字典指定 label && value && children 的 key 值
    *
-   * @default { label: "label", value: "value", children: "children", disabled: "disabled" }
+   * @default '{ label: "label", value: "value", children: "children", disabled: "disabled" }'
    */
   optionField?: FormItemColumnProps["optionField"];
   /**
@@ -664,9 +684,27 @@ export interface TableColumn<T = any>
    */
   tooltip?: FormItemColumnProps["tooltip"];
   /**
+   * 是否开启 filter 功能
+   *
+   * @default false
+   */
+  filter?: boolean;
+  /**
+   * 列配置中是否禁用 filter 功能选择
+   *
+   * @default false
+   */
+  disabledFilter?: boolean;
+  /**
    * 表头筛选配置项
    */
   filterProps?: TableFilterProps;
+  /**
+   * 列配置中是否禁用列排序选择
+   *
+   * @default false
+   */
+  disabledSortable?: boolean;
   /**
    * 其他扩展
    */

@@ -92,7 +92,7 @@ const handleButtonClick = (event: MouseEvent) => {
   if (confirmEl === OperationConfirmEl.ElMessageBox) {
     const { title = defaultTitle, message = defaultMessage, options, appContext } = confirmProps as ElMessageBoxProps;
 
-    ElMessageBox.confirm(message, title, options, appContext)
+    ElMessageBox.confirm(message, title, { type: "warning", ...options }, appContext)
       .then(() => emits("confirm", event))
       .catch(() => emits("cancel", event));
   }

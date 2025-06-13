@@ -19,7 +19,8 @@ export enum TableSizeEnum {
 export enum ToolButtonEnum {
   Size = "size",
   Export = "export",
-  Setting = "setting",
+  ColumnSetting = "columnSetting",
+  BaseSetting = "baseSetting",
 }
 
 // 导出时列配置项

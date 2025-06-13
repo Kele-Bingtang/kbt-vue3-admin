@@ -1,7 +1,7 @@
 import type { Reactive } from "vue";
 import type { ModelBaseValueType, FormItemColumnProps } from "../types";
 import { isRef } from "vue";
-import { isEmpty, isFunction, isObject, isPromise } from "@/utils";
+import { isAsyncFunction, isEmpty, isFunction, isObject, isPromise } from "@/utils";
 
 export * from "./component";
 
@@ -39,8 +39,8 @@ export const formatValue = async <T = any>(
     if (processRef) return { ...value };
     return value;
   }
-  if (isFunction(value)) return await (value as any)(...params);
   if (isObject(value)) return { ...value };
+  if (isFunction(value) || isAsyncFunction(value)) return await (value as any)(...params);
   if (isPromise(value)) return await value;
 
   return value;

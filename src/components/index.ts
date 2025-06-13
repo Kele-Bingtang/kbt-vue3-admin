@@ -1,6 +1,5 @@
 export * from "./core/icon";
 export * from "./core/image-verify-code";
-export * from "./core/pagination";
 export * from "./core/permission";
 export * from "./core/switch-dark";
 export * from "./core/tooltip";
@@ -12,6 +11,7 @@ export * from "./pro/image-viewer";
 // export * from "./pro/pro-form";
 export * from "./pro/form";
 export * from "./pro/form-item";
+export * from "./pro/pagination";
 // export * from "./pro/table";
 export * from "./pro/pro-table";
 export * from "./pro/pro-search";

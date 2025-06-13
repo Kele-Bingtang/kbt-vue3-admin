@@ -4,7 +4,8 @@ export interface PaginationProps extends Partial<ElPaginationProps> {
   autoScroll?: boolean; // 切换页数，是否自动滚动到最上面
   hidden?: boolean; // 是否隐藏分页
   reset?: boolean; // 切换 pageSize，pageNum 是否重置为 1
-  total?: number;
+  total?: number; // 总数
+  align?: "left" | "right"; // 分页对齐方式
 }
 
 export type PaginationEmits = {

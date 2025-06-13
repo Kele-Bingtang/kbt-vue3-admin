@@ -50,7 +50,9 @@ const formatTableColumnType = (column: TableColumn) => {
       <component v-else-if="column.render" :is="column.render(scope)" />
       <slot v-else-if="$slots[lastProp(column.prop!)]" :name="lastProp(column.prop!)" v-bind="scope" />
 
-      <template v-else>{{ formatCellValue(getProp(scope.row, column.prop!)) }}</template>
+      <template v-else>
+        {{ formatCellValue(getProp(scope.row._label?.[column.prop!] ?? scope.row, column.prop!)) }}
+      </template>
     </template>
   </el-table-column>
 </template>
