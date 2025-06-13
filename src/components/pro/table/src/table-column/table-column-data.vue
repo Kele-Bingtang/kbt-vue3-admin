@@ -7,7 +7,7 @@ import { formatCellValue, lastProp } from "../helper";
 
 defineOptions({ name: "TableColumnData" });
 
-defineProps<{ column: TableColumn }>();
+defineProps<{ column: TableColumn; options?: TableColumn["options"] }>();
 
 const formatTableColumnType = (column: TableColumn) => {
   return column as unknown as TableColumnCtx<any>;

@@ -1,4 +1,6 @@
 @use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/namespace" as *;
+@use "@/styles/mixins/function" as *;
 
 @include b(pro-table-head) {
   display: flex;
@@ -9,5 +11,17 @@
   @include e(right) {
     display: flex;
     align-items: center;
+
+    .#{$el-namespace}-button {
+      width: 32px;
+      color: cssVar(gray-700);
+      outline: none;
+      background-color: rgb(cssVar(gray-200-rgb), 0.8);
+      border: none;
+
+      &:hover {
+        background-color: rgb(cssVar(gray-300-rgb), 0.75);
+      }
+    }
   }
 }

@@ -30,7 +30,9 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   dataCallback: undefined,
   hideHeader: false,
   card: false,
-  tableStyle: () => ({}),
+  rowStyle: () => ({}),
+  cellStyle: () => ({}),
+  headerCellStyle: () => ({}),
 
   // TableHead 组件的 props（透传下去）
   toolButton: () => ["size", "setting", "export"],
@@ -59,6 +61,7 @@ const ns = useNamespace("pro-table");
 const tableHeadInstance = useTemplateRef<ProTableHeadInstance>("tableHeadInstance");
 const tableMainInstance = useTemplateRef<ProTableMainInstance>("tableMainInstance");
 
+const tableSize = ref<TableSizeEnum>((props.size as TableSizeEnum) || TableSizeEnum.Default);
 const tableStyle = ref<TableStyle>();
 const optionsMap = ref(new Map<string, Recordable[]>());
 
@@ -94,15 +97,7 @@ const { tableData, pageInfo, searchParams, searchInitParams, getTableList, searc
     finalProps.value.pageInfo,
     isServerPage,
     finalProps.value.beforeSearch,
-    data => {
-      if (!data) return;
-      // 配置 _options 字典信息
-      data = initOptions(data) || data;
-      const { dataCallback } = finalProps.value;
-      dataCallback && (data = dataCallback(data) || data);
-
-      return data;
-    },
+    finalProps.value.dataCallback,
     finalProps.value.requestError
   );
 
@@ -130,43 +125,12 @@ onMounted(() => {
   emits("register", tableMainInstance.value?.$parent || null, tableMainInstance.value?.elTableInstance || null);
 });
 
-// 每一个 column 配置 _options 字典信息（如果配置了 options）
-const initOptions = (data: Recordable[]) => {
-  let newData = [...data];
-
-  // 如果 columns 发生改变，则重新初始化 _options
-  finalProps.value.columns.forEach(async col => {
-    const optionsCache = optionsMap.value.get(col.prop!);
-
-    // 如果字段有配置枚举信息，则存放到 _options[col.prop] 里
-    if (optionsCache && col.isFilterOptions) {
-      newData = newData?.map(row => {
-        // TODO 支持枚举获取和对于的 label 获取
-        const options = {};
-        const formatValue = {};
-
-        if (!row._options) row._options = {};
-        if (!row._formatValue) row._options = {};
-        row._options[col.prop!] = options;
-        row._formatValue[col.prop!] = formatValue;
-        return row;
-      });
-    }
-  });
-  return newData;
-};
-
-watch(
-  () => finalProps.value.columns,
-  () => initOptions(tableData.value),
-  { deep: true }
-);
-
 const handleSelectionChange = (useSelectReturn: UnwrapRef<UseSelectState>, index?: number) => {
   emits("selectionChange", useSelectReturn, index);
 };
 
 const handleSizeChange = (size: TableSizeEnum, style: TableStyle) => {
+  tableSize.value = size === TableSizeEnum.Mini ? TableSizeEnum.Default : size;
   tableStyle.value = style;
   emits("sizeChange", size, style);
 };
@@ -237,7 +201,7 @@ defineExpose(expose);
     <!-- 表格主体 -->
     <TableMain
       ref="tableMainInstance"
-      v-bind="{ ...finalTableStyle, ...$attrs }"
+      v-bind="{ ...$attrs, ...finalTableStyle }"
       :columns="finalProps.columns"
       :data="finalTableData"
       :operation-prop
@@ -248,6 +212,7 @@ defineExpose(expose);
       :radio-props
       :filter-scope
       :row-key
+      :size="tableSize"
       :empty-text
       @button-click="handleButtonClick"
       @confirm="handleConfirm"

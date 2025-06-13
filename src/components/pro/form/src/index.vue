@@ -1,12 +1,12 @@
 <script setup lang="ts">
 import type { FormColumn, ProFormEmits, ProFormProps } from "./types";
 import type { FormInstance, FormItemProp } from "element-plus";
-import type { ElOption } from "@/components/pro/form-item";
+import type { ElOption, FormItemColumnProps } from "@/components/pro/form-item";
 import { shallowRef, ref, watch, unref, onMounted, computed } from "vue";
 import { ElRow, ElCol, ElForm, ElMessage, ElButton } from "element-plus";
 import { ProFormItem, formatValue, getProp, setProp } from "@/components/pro/form-item";
 import { useNamespace } from "@/composables";
-import { isFunction, isPromise } from "@/utils";
+import { isFunction } from "@/utils";
 import { deleteProp } from "./helper";
 import { useFormApi } from "./composables";
 
@@ -60,26 +60,23 @@ const footerStyle = computed(() => ({
   justifyContent: props.footerAlign === "left" ? "flex-start" : props.footerAlign === "center" ? "center" : "flex-end",
 }));
 
-// 定义 optionsMap 存储 enum 值（避免异步请求无法格式化单元格内容 || 无法填充下拉选择）
-const optionsMap = ref(new Map<string, ElOption[] | ComputedRef<ElOption[]>>());
+// 定义 optionsMap 存储枚举值
+const optionsMap = ref(new Map<string, MaybeRef<ElOption[]>>());
 
-const initOptionsMap = async ({ options, prop, useCacheOptions = true }: FormColumn) => {
+const initOptionsMap = async ({ options, prop }: FormColumn) => {
   if (!options) return;
 
   const optionsMapConst = optionsMap.value;
 
-  // 如果当前 optionsMap 存在相同的值 return & 开启缓存功能
-  if (useCacheOptions && unref(optionsMapConst.get(prop))?.length) return;
-
-  // 当前 enum 为静态数据，则直接存储到 optionsMap
-  if (isPromise(options)) return optionsMapConst.set(prop, await options);
-  if (!isFunction(options)) return optionsMapConst.set(prop, options);
+  // 如果当前 enumMap 存在相同的值则 return
+  if (optionsMap.value.has(prop!) && (isFunction(options) || optionsMap.value.get(prop!) === options)) return;
 
   // 为了防止接口执行慢，导致页面下拉等枚举数据无法填充，所以预先存储为 [] 方便获取，接口返回后再二次存储
   optionsMapConst.set(prop!, []);
 
-  const value = await options(model.value, optionsMapConst);
-  // 适配 enum 接口返回 data 以及自定义函数返回数组
+  // 处理 options 并存储到 optionsMap
+  const value = await formatValue<FormItemColumnProps["options"]>(options, [model.value, optionsMapConst], false);
+
   optionsMapConst.set(prop, (value as any)?.data || value);
 };
 

@@ -22,7 +22,11 @@ const open = () => {
   visible.value = true;
 };
 
-defineExpose({ open });
+const close = () => {
+  visible.value = false;
+};
+
+defineExpose({ open, close });
 </script>
 
 <template>

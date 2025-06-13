@@ -153,11 +153,22 @@ export namespace OperationNamespace {
   export type ButtonRowProps = Partial<ButtonProps & LinkProps & IconProps & Recordable>;
 
   /**
+   * el 字面量，转为 HyphenCase 格式
+   */
+  export type OperationElName = keyof typeof OperationEl extends infer K
+    ? K extends string
+      ? K extends `El${infer B}`
+        ? `el-${Lowercase<B>}`
+        : Lowercase<K>
+      : never
+    : never;
+
+  /**
    * 操作按钮组件
    */
-  export type ButtonEl = "el-icon" | "el-link" | "el-button" | `${OperationEl}`;
+  export type ButtonEl = OperationElName | `${OperationEl}`;
 
-  export interface Props extends TableColumn {
+  export interface Props extends Omit<TableColumn, "children"> {
     /**
      * 操作按钮集合
      */
@@ -441,6 +452,10 @@ export namespace ProTableMainNamespace {
      */
     filterScope?: boolean | Environment | `${Environment}`;
     /**
+     * ElTable 的 headerCellStyle 配置项
+     */
+    headerCellStyle?: TableColumn["headerCellStyle"];
+    /**
      * 表格无数据时显示的文字
      *
      * @default '暂无数据'
@@ -607,17 +622,21 @@ export interface TableColumn<T = any>
    */
   options?: FormItemColumnProps["options"];
   /**
-   * 当前单元格值是否根据 options 格式化（根据 value 找 label）
-   *
-   * @default true
+   * 指定 Options 的 key，如果设置了则优先从缓存获取对于 key 的 Options 数据
    */
-  isFilterOptions?: boolean;
+  optionsProp?: string;
   /**
    * 字典指定 label && value && children 的 key 值
    *
    * @default { label: "label", value: "value", children: "children", disabled: "disabled" }
    */
   optionField?: FormItemColumnProps["optionField"];
+  /**
+   * 当前单元格值是否根据 options 格式化（根据 value 找 label）
+   *
+   * @default true
+   */
+  isFilterOptions?: boolean;
   /**
    * 是否使用 ElButton link 属性来渲染单元格
    *

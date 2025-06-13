@@ -1,6 +1,7 @@
 import { getProp } from "@/components/pro/form-item";
-import type { FilterRule } from "../types";
+import type { FilterRule, TableColumn } from "../types";
 import { isArray, isEmpty, isFunction, isObject } from "@/utils";
+import { Environment } from "./enums";
 
 export * from "./enums";
 
@@ -24,6 +25,61 @@ export const formatCellValue = (callValue: any) => {
   // 如果当前值为数组，使用 / 拼接（根据需求自定义）
   if (Array.isArray(callValue)) return callValue.length ? callValue.join(" / ") : "--";
   return callValue ?? "--";
+};
+
+/**
+ * 根据枚举列表查询当需要的数据（如果指定了 value 的 key 值，会自动识别格式化）
+ */
+export const filterOptions = (callValue: any, options: Recordable[], optionField?: TableColumn["optionField"]) => {
+  const value = optionField?.value ?? "value";
+  const children = optionField?.children ?? "children";
+  const filterOptions: Recordable[] = [];
+  let filterOption: Recordable = {};
+
+  // 判断 options 是否为数组
+  if (isArray(callValue)) {
+    callValue.forEach(item => {
+      const data = findItemNested(options, item, value, children);
+      data && filterOptions.push(data);
+    });
+  } else filterOption = findItemNested(options, callValue, value, children) || {};
+
+  return filterOptions.length ? filterOptions : filterOption || "";
+};
+
+/**
+ * 递归查找 callValue 对应的 options 值
+ */
+export const findItemNested = (
+  options: Recordable[],
+  callValue: any,
+  value: string,
+  children: string
+): Recordable | null => {
+  return options.reduce<Recordable | null>((accumulator, current) => {
+    if (accumulator) return accumulator;
+    // 兼容数字和字符串数字匹配，如值为数字 0，字典是 '0'，依然满足条件
+    if (current[value] === callValue || current[value] === callValue + "") return current;
+    if (current[children]) return findItemNested(current[children], callValue, value, children);
+    return null;
+  }, null);
+};
+
+/**
+ * 根据枚举列表查询当需要的 label 数据
+ */
+export function filterOptionsLabel(options: Recordable | Recordable[], labelName = "label") {
+  if (!isArray(options)) return options ? options[labelName] : "--";
+
+  const filterDataArray: any[] = [];
+  options.forEach((item: any) => filterDataArray.push(item[labelName]));
+  return filterDataArray;
+}
+
+export const isServer = (value: unknown) => {
+  // 如果传入 true，则为客户端
+  if (!value || value === true) return false;
+  return value === Environment.Server;
 };
 
 /**

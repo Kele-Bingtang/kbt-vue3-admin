@@ -26,11 +26,19 @@ export const hyphenToCamelCase = (val?: string) => {
  */
 export const formatValue = async <T = any>(
   value: T | Promise<T> | Ref<T> | Reactive<T> | ComputedRef<T> | ((...arg: any) => Promise<T>),
-  params: any[] = []
+  params: any[] = [],
+  processRef: boolean = true
 ): Promise<any> => {
   if (value === undefined) return value;
 
-  if (isRef(value)) return unref(value);
+  if (isRef(value)) {
+    if (processRef) return unref(value);
+    return value;
+  }
+  if (isProxy(value)) {
+    if (processRef) return { ...value };
+    return value;
+  }
   if (isFunction(value)) return await (value as any)(...params);
   if (isObject(value)) return { ...value };
   if (isPromise(value)) return await value;

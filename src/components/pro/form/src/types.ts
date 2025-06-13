@@ -31,12 +31,6 @@ export interface ProFormProps {
    */
   colProps?: ElColProps;
   /**
-   * TODO 是否只渲染 ProFormItem 组件，只使用表单组件
-   *
-   * @default false
-   */
-  onlyRenderEl?: boolean;
-  /**
    * 动态 model，如果 column 发生变化，则重新渲染 model 表单数据（将不存在 column 的 prop 从 model 中去掉）
    *
    * @default true
@@ -162,18 +156,9 @@ export interface FormColumn extends FormItemColumnProps {
    */
   disabled?: boolean | ((model: Recordable) => boolean);
   /**
-   * 是否使用已缓存 Options 数据，防止重复请求
-   * @default true
-   */
-  useCacheOptions?: boolean;
-  /**
    * 指定 Options 的 key，如果设置了则优先从缓存获取对于 key 的 Options 数据
    */
   optionsProp?: string;
-  /**
-   * 自定义 render 时候，需要填写 render 里表单组件使用 v-model 绑定的 prop
-   */
-  renderUseProp?: string[];
   /**
    * 其他拓展
    */

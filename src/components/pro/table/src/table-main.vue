@@ -3,14 +3,29 @@ import type { Component } from "vue";
 import type { TableInstance } from "element-plus";
 import type { OperationNamespace, ProTableMainNamespace, TableColumn, TableDefaultRenderScope } from "./types";
 import { ElRadio, ElTableColumn } from "element-plus";
-import { defaultPageInfo, Pagination } from "@/components";
+import {
+  defaultPageInfo,
+  formatValue,
+  getProp,
+  Pagination,
+  type ElOption,
+  type FormItemColumnProps,
+} from "@/components";
 import { useNamespace } from "@/composables";
 import TableColumnData from "./table-column/table-column-data.vue";
 import TableColumnOperation from "./table-column/table-column-operation.vue";
 import TableColumnDragSort from "./table-column/table-column-drag-sort.vue";
 import { useSelection } from "./composables";
 import { isFunction, isObject } from "@/utils";
-import { Environment, TableColumnTypeEnum, filterData, getObjLeafKeys, initModel } from "./helper";
+import {
+  TableColumnTypeEnum,
+  filterData,
+  filterOptions,
+  filterOptionsLabel,
+  getObjLeafKeys,
+  initModel,
+  isServer,
+} from "./helper";
 import TableFilter from "./plugins/table-filter.vue";
 
 defineOptions({ name: "TableMain" });
@@ -25,6 +40,7 @@ const props = withDefaults(defineProps<ProTableMainNamespace.Props>(), {
   paginationProps: () => ({}),
   radioProps: () => ({}),
   filterScope: false,
+  headerCellStyle: () => ({}),
   rowKey: "id",
   emptyText: "暂无数据",
 });
@@ -38,6 +54,8 @@ const radio = ref("");
 const filterModel = ref<Recordable>({});
 const filterTableData = ref<Recordable[]>();
 const elTableInstance = useTemplateRef<TableInstance>("elTableInstance");
+// 定义 optionsMap 存储枚举值
+const optionsMap = ref(new Map<string, MaybeRef<ElOption[]>>());
 
 const toValueColumn = (column: TableColumn) => {
   return {
@@ -57,12 +75,6 @@ watch(
 // 表格多选
 const { selectionChange, selectedList, selectedListIds, isSelected } = useSelection(props.rowKey);
 
-const isServer = (value: unknown) => {
-  // 如果传入 true，则为客户端
-  if (!value || value === true) return false;
-  return value === Environment.Server;
-};
-
 /**
  * 执行分页操作
  */
@@ -80,8 +92,69 @@ const tryPagination = (data: Recordable[] = []) => {
 // 表格实际渲染的数据
 const tableData = computed(() => tryPagination(props.data));
 
-// 数据发生改变，则清除过滤数据
+// 数据发生改变，则清除过滤的数据
 watch(tableData, () => (filterTableData.value = undefined));
+
+/**
+ * 初始化枚举字典数据
+ */
+const initOptionsMap = async ({ options, prop }: TableColumn) => {
+  if (!options) return;
+
+  const optionsMapConst = optionsMap.value;
+
+  // 如果当前 enumMap 存在相同的值则 return
+  if (optionsMap.value.has(prop!) && (isFunction(options) || optionsMap.value.get(prop!) === options)) return;
+
+  // 为了防止接口执行慢，导致页面下拉等枚举数据无法填充，所以预先存储为 [] 方便获取，接口返回后再二次存储
+  optionsMapConst.set(prop!, []);
+
+  // 处理 options 并存储到 optionsMap
+  const value = await formatValue<FormItemColumnProps["options"]>(options, [optionsMapConst], false);
+
+  optionsMapConst.set(prop!, (value as any)?.data || value);
+};
+
+// 每一个 column 配置 _options 字典信息（如果配置了 options）
+const initOptionsInData = (data: Recordable[]) => {
+  let newData = [...data];
+
+  // 如果 columns 发生改变，则重新初始化 _options
+  props.columns.forEach(async col => {
+    const optionsCache = unref(optionsMap.value.get(col.prop!));
+    // 如果字段有配置枚举信息，则存放到 _options[col.prop] 里
+    if (optionsCache && (col.isFilterOptions ?? true)) {
+      newData = newData?.map(row => {
+        const options = filterOptions(getProp(row, col.prop!), optionsCache, col.optionField);
+        const formatLabel = filterOptionsLabel(options, "label");
+
+        if (!row._options) row._options = {};
+        if (!row._label) row._label = {};
+        row._options[col.prop!] = options;
+        row._label[col.prop!] = formatLabel;
+        return row;
+      });
+    }
+  });
+  return newData;
+};
+
+watch(
+  () => props.columns,
+  () => initOptionsInData(tableData.value),
+  { deep: true }
+);
+
+onMounted(async () => {
+  await Promise.all(
+    props.columns.map(async column => {
+      await initOptionsMap(column);
+    })
+  );
+  initOptionsInData(tableData.value);
+
+  console.log(tableData.value);
+});
 
 const getRowKey = (row: Recordable) => {
   const { rowKey } = props;
@@ -96,7 +169,7 @@ const getOperationColumn = (column: TableColumn, index: number) => {
   const { columns, operationProps, operationProp } = props;
   if (column.prop === operationProp) {
     return {
-      ...columns,
+      ...column,
       ...operationProps,
       ...toValueColumn({
         width: column.width || operationProps.width,
@@ -256,8 +329,8 @@ defineExpose(expose);
     border
     highlight-current-row
     scrollbar-always-on
-    :header-cell-style="{ 'background-color': ns.cssVar('gray-200') }"
     v-bind="$attrs"
+    :header-cell-style="{ 'background-color': ns.cssVar('gray-200'), ...headerCellStyle }"
     :data="filterTableData ? filterTableData : tableData"
     :row-key
     @selection-change="handleSelectionChange"
@@ -293,7 +366,13 @@ defineExpose(expose);
         </component>
 
         <!-- 数据列 -->
-        <TableColumnData v-else :column v-bind="toValueColumn(column)" :align="column.align || 'center'">
+        <TableColumnData
+          v-else
+          :column
+          v-bind="toValueColumn(column)"
+          :align="column.align || 'center'"
+          :option="optionsMap.get(column.optionsProp || column.prop!)"
+        >
           <template #header-after>
             <slot name="header-filter">
               <TableFilter

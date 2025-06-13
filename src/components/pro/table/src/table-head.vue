@@ -26,7 +26,7 @@ const emits = defineEmits<ProTableHeadNamespace.Emits>();
 const ns = useNamespace("pro-table-head");
 
 const columnSettingVisible = ref(false);
-const tableSize = ref<TableSizeEnum>(TableSizeEnum.Default);
+const tableSize = ref<TableSizeEnum>((props.size as TableSizeEnum) || TableSizeEnum.Default);
 const tableStyle = reactive<Record<string, CSSProperties>>({
   rowStyle: {},
   cellStyle: {},
@@ -60,6 +60,11 @@ const tableSizeStyleMap = computed<Record<TableSizeEnum, TableStyle>>(() => {
       ...props.tableSizeStyle[TableSizeEnum.Mini],
     },
   };
+});
+
+onMounted(() => {
+  // 初始化尺寸
+  handleSizeCommand(tableSize.value);
 });
 
 /**
@@ -114,16 +119,16 @@ defineExpose(expose);
 <template>
   <div :class="ns.b()">
     <div :class="ns.e('left')">
-      <slot name="header-left">{{ title }}</slot>
+      <slot name="head-left">{{ title }}</slot>
     </div>
 
     <div v-if="toolButton" :class="ns.e('right')">
-      <slot name="header-right">
-        <slot name="header-right-before"></slot>
+      <slot name="head-right">
+        <slot name="head-right-before"></slot>
 
         <el-tooltip v-if="showToolButton(ToolButtonEnum.Size)" content="密度" v-bind="tooltipProps">
           <el-dropdown style="margin: 0 15px" @command="handleSizeCommand">
-            <el-button :disabled="disabledToolButton.includes(ToolButtonEnum.Size)" :icon="Coin" circle />
+            <el-button :disabled="disabledToolButton.includes(ToolButtonEnum.Size)" :icon="Coin" />
             <template #dropdown>
               <el-dropdown-menu>
                 <el-dropdown-item
@@ -147,7 +152,6 @@ defineExpose(expose);
           <el-button
             :disabled="disabledToolButton.includes(ToolButtonEnum.Setting)"
             :icon="Operation"
-            circle
             @click="columnSettingVisible = true"
           />
         </el-tooltip>
@@ -156,12 +160,11 @@ defineExpose(expose);
           <el-button
             :disabled="disabledToolButton.includes(ToolButtonEnum.Export)"
             :icon="Download"
-            circle
             @click="handleExport"
           />
         </el-tooltip>
 
-        <slot name="header-right-after"></slot>
+        <slot name="head-right-after"></slot>
       </slot>
     </div>
 
