@@ -1,11 +1,14 @@
 <script setup lang="ts">
+import { setProp } from "@/components/pro/pro-form";
 import { ProTable, type OperationNamespace, type TableColumn } from "@/components/pro/table";
 import { tableData } from "@/mock/pro-table";
 import { View, Edit, Delete, DocumentCopy } from "@element-plus/icons-vue";
+import { ElMessage } from "element-plus";
 
 defineOptions({ name: "Test" });
 
 const data = ref(tableData);
+const proTableInstance = useTemplateRef("proTableInstance");
 
 const columns: TableColumn[] = [
   { type: "selection", fixed: "left", width: 60 },
@@ -36,6 +39,11 @@ const columns: TableColumn[] = [
     label: "身份证号",
     filter: true,
     filterProps: { rule: "like" },
+    editProps: {
+      formItemProps: {
+        required: true,
+      },
+    },
   },
   { prop: "email", label: "邮箱" },
   { prop: "address", label: "居住地址" },
@@ -46,36 +54,17 @@ const buttons = ref<OperationNamespace.ButtonRaw[]>();
 
 buttons.value = [
   {
-    text: row => (row.gender === 1 ? "开启" : "关闭"),
-    code: "status",
-    icon: View,
-    el: "ElLink",
-    elProps: {
-      type: "primary",
-    },
-  },
-  {
-    text: "查看",
-    code: "view",
-    elProps: (row: any) => ({
-      type: "info",
-      disabled: row.gender === 1,
-    }),
-    show: (row: any) => row.gender === 1,
-    icon: View,
-  },
-  {
     text: "修改",
     code: "edit",
-    elProps: (row: any) => ({
+    elProps: () => ({
       type: "primary",
-      disabled: row.status === "1",
     }),
-    show: computed(() => true),
-    confirm: {
-      el: "ElPopconfirm",
-    },
     icon: Edit,
+    onClick: async ({ row }) => {
+      const valid = await row._validateCellEdit();
+      if (valid) row._editable = !row._editable;
+      // row._editableCol["user.detail.age"] = !row._editableCol["user.detail.age"];
+    },
   },
   {
     text: "删除",
@@ -87,15 +76,15 @@ buttons.value = [
     },
     icon: Delete,
   },
-  {
-    text: "复制",
-    code: "copy",
-    elProps: {
-      type: "success",
-    },
-    icon: DocumentCopy,
-  },
 ];
+
+const handleFormChange = async (fromValue: unknown, prop: string, scope: Recordable) => {
+  setProp(data.value[scope.rowIndex], prop, fromValue);
+};
+
+const handleLeaveCellEdit = (row: Recordable, column: TableColumn) => {
+  ElMessage.success("退出编辑");
+};
 
 const handleButtonClick = (params: OperationNamespace.ButtonsCallBackParams) => {
   console.log("buttonClick", params);
@@ -112,10 +101,12 @@ const handleCancel = (params: OperationNamespace.ButtonsCallBackParams) => {
 
 <template>
   <ProTable
+    ref="proTableInstance"
     :columns
     :data
     page-scope
     card
+    editable="click"
     :operation-props="{
       buttons: buttons,
       el,
@@ -124,6 +115,8 @@ const handleCancel = (params: OperationNamespace.ButtonsCallBackParams) => {
     @button-click="handleButtonClick"
     @confirm="handleConfirm"
     @cancel="handleCancel"
+    @form-change="handleFormChange"
+    @leave-cell-edit="handleLeaveCellEdit"
   >
     <template #expand="scope">
       {{ scope.row }}

@@ -1,0 +1,23 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/function" as *;
+@use "@/styles/mixins/namespace" as *;
+
+tbody {
+  @include b(pro-table-column-data) {
+    @include is(cell-edit) {
+      .cell:not(:has(.el-form-item)) {
+        cursor: pointer;
+        transition: box-shadow var(--#{$el-namespace}-transition-duration-fast);
+
+        &:hover {
+          margin-right: 0.6px;
+          box-shadow: 0 0 0 1px cssVar(gray-400);
+        }
+      }
+    }
+
+    .el-form-item {
+      margin-bottom: 0;
+    }
+  }
+}

@@ -1,14 +1,14 @@
 import { isNumber, isString, isStringNumber } from "./core/is";
 
 /**
- * @description 数据解耦后，再返回（深拷贝函数）
+ * 数据解耦后，再返回（深拷贝函数）
  */
 export function copyObj(obj: unknown) {
   return obj && JSON.parse(JSON.stringify(obj));
 }
 
 /**
- * @description 深拷贝函数
+ * 深拷贝函数
  */
 export const deepClone = (obj: any, hash = new WeakMap()): Record<string, any> => {
   if (!obj || typeof obj !== "object") return obj;
@@ -73,7 +73,7 @@ export function removeDuplicateObj<T>(arr: Array<T>, removeKeys: string[], keyIs
 }
 
 /**
- * @description 获取当前时间对应的提示语
+ * 获取当前时间对应的提示语
  * @return string
  */
 export function getTimeState() {
@@ -117,7 +117,7 @@ export function isObjectValueEqual(a: Record<string, any>, b: Record<string, any
 }
 
 /**
- * @description 上传文件到本地浏览器
+ * 上传文件到本地浏览器
  */
 export const uploadLocal = (file: File): Promise<{ blobInfo: any; file: File }> => {
   return new Promise(resolve => {
@@ -224,7 +224,7 @@ export const removeUnit = (value?: string | number, defaultUnit = "px") => {
 };
 
 /**
- * @description 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
+ * 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
  */
 export const get = (form: Record<string, any>, prop: string) => {
   if (!prop.includes(".")) return form[prop] ?? "";
@@ -233,7 +233,7 @@ export const get = (form: Record<string, any>, prop: string) => {
 };
 
 /**
- * @description 处理 prop 为多级嵌套的情况，返回的数据 (列如: prop: user.name)
+ * 处理 prop 为多级嵌套的情况，给指定 key 赋值 (列如: prop: user.name)
  */
 export const set = (form: Record<string, any>, prop: string, value: any) => {
   if (!form) return;

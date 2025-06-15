@@ -34,6 +34,7 @@ const columns: FormColumn[] = [
     el: "el-input",
     width: 500,
     elProps: { placeholder: "请输入邮箱", clearable: true },
+    formItemProps: { required: true },
   },
 ];
 
@@ -86,10 +87,12 @@ const checkboxOptions = [
 ];
 
 const model2 = ref({
-  name: "",
+  name: "123",
   cascader: "",
   checkbox: [],
 });
+
+const editable = ref(true);
 </script>
 
 <template>
@@ -101,16 +104,26 @@ const model2 = ref({
 
       <h4>3 个 ProFormItem</h4>
 
-      <ProFormItem v-model="model2.name" label="输入框" prop="name" />
-      <ProFormItem v-model="model2.cascader" el="el-cascader" label="级联" prop="cascader" :options="options" />
+      <ProFormItem v-model="model2.name" label="输入框" prop="name" :editable />
+      <ProFormItem
+        v-model="model2.cascader"
+        el="el-cascader"
+        label="级联"
+        prop="cascader"
+        :options="options"
+        :editable
+      />
       <ProFormItem
         v-model="model2.checkbox"
         el="el-checkbox-group"
         label="多选"
         prop="checkbox"
         :options="checkboxOptions"
+        :editable
       />
       {{ model2 }}
+
+      <el-button @click="editable = !editable">点击</el-button>
     </div>
   </div>
 </template>

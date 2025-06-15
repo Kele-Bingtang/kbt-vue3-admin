@@ -1,6 +1,7 @@
+import type { FilterRule } from "../types";
+import { isArray, isEmpty, isFunction } from "@/utils";
 import { getProp } from "@/components/pro/form-item";
-import type { FilterRule, TableColumn } from "../types";
-import { isArray, isEmpty, isFunction, isObject } from "@/utils";
+import { getObjectKeys } from "@/components/pro/form";
 import { Environment } from "./enums";
 
 export * from "./enums";
@@ -11,6 +12,8 @@ export * from "./enums";
  * @param prop 当前 prop
  */
 export const lastProp = (prop: string) => {
+  if (!prop) return prop;
+
   const propArr = prop.split(".");
   if (propArr.length === 1) return prop;
   return propArr[propArr.length - 1];
@@ -26,55 +29,6 @@ export const formatCellValue = (callValue: any) => {
   if (isArray(callValue)) return callValue.length ? callValue.join(" / ") : "--";
   return callValue ?? "--";
 };
-
-/**
- * 根据枚举列表查询当需要的数据（如果指定了 value 的 key 值，会自动识别格式化）
- */
-export const filterOptions = (callValue: any, options: Recordable[], optionField?: TableColumn["optionField"]) => {
-  const value = optionField?.value ?? "value";
-  const children = optionField?.children ?? "children";
-  const filterOptions: Recordable[] = [];
-  let filterOption: Recordable = {};
-
-  // 判断 options 是否为数组
-  if (isArray(callValue)) {
-    callValue.forEach(item => {
-      const data = findItemNested(options, item, value, children);
-      data && filterOptions.push(data);
-    });
-  } else filterOption = findItemNested(options, callValue, value, children) || {};
-
-  return filterOptions.length ? filterOptions : filterOption || "";
-};
-
-/**
- * 递归查找 callValue 对应的 options 值
- */
-export const findItemNested = (
-  options: Recordable[],
-  callValue: any,
-  value: string,
-  children: string
-): Recordable | null => {
-  return options.reduce<Recordable | null>((accumulator, current) => {
-    if (accumulator) return accumulator;
-    // 兼容数字和字符串数字匹配，如值为数字 0，字典是 '0'，依然满足条件
-    if (current[value] === callValue || current[value] === callValue + "") return current;
-    if (current[children]) return findItemNested(current[children], callValue, value, children);
-    return null;
-  }, null);
-};
-
-/**
- * 根据枚举列表查询当需要的 label 数据
- */
-export function filterOptionsLabel(options: Recordable | Recordable[], labelName = "label") {
-  if (!isArray(options)) return options ? options[labelName] : "--";
-
-  const filterDataArray: string[] = [];
-  options.forEach(item => filterDataArray.push(item[labelName]));
-  return filterDataArray;
-}
 
 export const isServer = (value: unknown) => {
   // 如果传入 true，则为客户端
@@ -114,27 +68,6 @@ export const initModel = (model: Recordable, prop: string | string[], value: unk
 };
 
 /**
- * 获取对象中所有叶子节点的路径（多级路径用 . 拼接）
- *
- * 假设 假设 model 为 { user: { age: {name: ""} }, menu: "" }，如果获取为 ["user.age.name", "menu"]
- *
- * @param model 要遍历的对象
- * @param prefix 当前路径前缀
- */
-export const getObjLeafKeys = (model: Recordable, prefix = ""): string[] => {
-  return Object.keys(model).reduce((acc: string[], key: string) => {
-    const value = model[key];
-    const path = prefix ? `${prefix}.${key}` : key;
-
-    // 如果是对象，继续递归
-    if (isObject(value)) acc.push(...getObjLeafKeys(value, path));
-    else acc.push(path); // 如果是基本类型或数组，视为叶子节点
-
-    return acc;
-  }, []);
-};
-
-/**
  * 将 data 转换为日期，如果转换失败，则返回 undefined
  */
 export const strToDate = (data: string | number) => {
@@ -151,7 +84,7 @@ export const strToDate = (data: string | number) => {
 export const filterData = (data: Recordable[], model: Recordable, filterRule: Record<string, FilterRule>) => {
   if (isEmpty(model)) return data;
 
-  const modelKeys = getObjLeafKeys(model);
+  const modelKeys = getObjectKeys(model);
 
   return data.filter(item => {
     // model 全部满足查询条件才算匹配成功

@@ -2,6 +2,8 @@ import type {
   ButtonProps,
   ElMessageBoxOptions,
   ElTooltipProps,
+  FormValidateCallback,
+  FormValidationResult,
   IconProps,
   LinkProps,
   PopconfirmProps,
@@ -11,7 +13,9 @@ import type {
   TableInstance,
   TableProps,
 } from "element-plus";
-import type { FormItemColumnProps, PageInfo, PaginationProps } from "@/components";
+import type { ProFormInstance } from "@/components/pro/form";
+import type { FormItemColumnProps } from "@/components/pro/form-item";
+import type { PageInfo, PaginationProps } from "@/components/pro/pagination";
 import type { AppContext, CSSProperties, UnwrapRef } from "vue";
 import type { UseSelectState } from "./composables/use-selection";
 import type ProTable from "./index.vue";
@@ -99,6 +103,13 @@ export interface TableFilterProps {
   resetText?: string;
 }
 
+export interface TableEditProps extends FormItemColumnProps {
+  /**
+   * 表单组件值
+   */
+  value?: unknown;
+}
+
 /**
  * 表格导出类型
  */
@@ -135,6 +146,56 @@ export interface ExportProps {
    */
   exportFile?: (data: Recordable[]) => void;
 }
+
+export type TableRow<T extends string | number | symbol = any> = {
+  [key in T]: any;
+} & {
+  _editable: boolean | undefined;
+  _editableCol: Record<string, boolean>;
+  _proFormInstance: Record<string, ProFormInstance>;
+  _startCellEdit: (prop?: string) => void;
+  _stopCellEdit: (prop?: string) => void;
+  _isCellEdit: (prop?: string) => boolean;
+  _validateCellEdit: (callback?: FormValidateCallback, prop?: string) => FormValidationResult | undefined;
+};
+
+/**
+ * 表格单元格回调参数
+ */
+export type TableCellParams = {
+  /**
+   * 表格行索引
+   */
+  $index: number;
+  /**
+   * 表格行数据
+   */
+  row: TableRow;
+  /**
+   * 表格列数据
+   */
+  column: Recordable;
+  /**
+   * 表格行索引
+   */
+  rowIndex: number;
+  /**
+   * 表格列索引
+   */
+  cellIndex: number;
+  /**
+   * 表格store
+   */
+  store: Recordable;
+  /**
+   * 表格 expanded
+   */
+  expanded: boolean;
+  /**
+   * 表格  _self
+   */
+  _self: Recordable;
+};
 
 export namespace OperationNamespace {
   /**
@@ -174,7 +235,7 @@ export namespace OperationNamespace {
      *
      * @default 3
      */
-    showNumber?: number | ((row: Recordable, index: number) => number);
+    showNumber?: number | ((row: TableRow, index: number) => number);
     /**
      * 二次确认配置
      */
@@ -231,7 +292,7 @@ export namespace OperationNamespace {
     /**
      * 操作文本
      */
-    text: MaybeRef<string> | ((row: Recordable, index: number, button: ButtonRowProps) => MaybeRef<string>);
+    text: MaybeRef<string> | ((row: TableRow, index: number, button: ButtonRowProps) => MaybeRef<string>);
     /**
      * 操作按钮唯一 code，可用来判断按钮类型
      */
@@ -249,7 +310,7 @@ export namespace OperationNamespace {
     /**
      * ElButton、ElLink、ElIcon 组件对应的 props
      */
-    elProps?: MaybeRef<ButtonRowProps> | ((row: any, index: number, button: ButtonRaw) => ButtonRowProps);
+    elProps?: MaybeRef<ButtonRowProps> | ((row: TableRow, index: number, button: ButtonRaw) => ButtonRowProps);
     /**
      * ElTooltip 组件的 props， type 为 icon 时生效
      */
@@ -257,7 +318,7 @@ export namespace OperationNamespace {
     /**
      * 按钮显示的逻辑 默认 true 显示，不需要显示给 false
      */
-    show?: MaybeRef<boolean> | ((row: Recordable, index: number, button: ButtonRaw) => MaybeRef<boolean>);
+    show?: MaybeRef<boolean> | ((row: TableRow, index: number, button: ButtonRaw) => MaybeRef<boolean>);
     /**
      * 二次确认配置
      */
@@ -279,7 +340,7 @@ export namespace OperationNamespace {
   /**
    * 点击按钮回调的参数的类型
    */
-  export interface ButtonsCallBackParams {
+  export interface ButtonsCallBackParams extends TableCellParams {
     /**
      * 点击按钮数据
      */
@@ -292,34 +353,32 @@ export namespace OperationNamespace {
      * 按钮点击事件数据
      */
     event: MouseEvent;
+  }
+}
+
+export namespace TableColumnDataNamespace {
+  export interface Props {
+    column: TableColumn;
+    editable?: boolean | "click" | "dblclick";
+  }
+
+  export interface Emits {
     /**
-     * 表格行数据
+     * 表单值改变事件
      */
-    row: Recordable;
+    formChange: [fromValue: unknown, prop: NonNullable<TableColumn["prop"]>, scope: TableCellParams];
     /**
-     * 表格列数据
+     * 过滤事件，返回输入的值以及 prop
      */
-    column: Recordable;
+    filter: [filterModel: Recordable, filterValue: unknown, prop: string | undefined];
     /**
-     * 表格行索引 同 index
+     * 清空事件，返回输入的 prop
      */
-    rowIndex: number;
+    filterClear: [prop: string | undefined];
     /**
-     * 表格列索引
+     * 重置所有表单事件
      */
-    cellIndex: number;
-    /**
-     * 表格 store
-     */
-    store: Recordable;
-    /**
-     * 表格 expanded
-     */
-    expanded: boolean;
-    /**
-     * 表格 _self
-     */
-    _self: Recordable;
+    filterReset: [];
   }
 }
 
@@ -416,7 +475,7 @@ export namespace ProTableMainNamespace {
   /**
    * TableMain 组件 Props
    */
-  export interface Props {
+  export interface Props extends Omit<TableColumnDataNamespace.Props, "column" | "proFormItemInstances"> {
     /**
      * 表格数据
      *
@@ -481,7 +540,7 @@ export namespace ProTableMainNamespace {
     emptyText?: string;
   }
 
-  export interface Emits extends OperationNamespace.Emits {
+  export interface Emits extends TableColumnDataNamespace.Emits, OperationNamespace.Emits {
     /**
      * 多选框勾选事件
      */
@@ -495,17 +554,17 @@ export namespace ProTableMainNamespace {
      */
     dragSortEnd: [newIndex: number, oldIndex: number];
     /**
-     * 过滤事件，返回输入的值以及 prop
+     * 单元格点击事件
      */
-    filter: [filterModel: Recordable, filterValue: unknown, prop: string | undefined];
+    cellClick: [row: TableRow, column: TableColumn, cell: HTMLTableCellElement, event: Event];
     /**
-     * 清空事件，返回输入的 prop
+     * 单元格双击事件
      */
-    filterClear: [prop: string | undefined];
+    cellDblClick: [row: TableRow, column: TableColumn, cell: HTMLTableCellElement, event: Event];
     /**
-     * 重置所有表单事件
+     * 离开单元格编辑事件
      */
-    filterReset: [];
+    leaveCellEdit: [row: TableRow, column: TableColumn];
   }
 }
 
@@ -636,13 +695,13 @@ export interface TableColumn<T = any>
    *
    * @default false
    */
-  hide?: boolean;
+  hide?: MaybeRefOrGetter<boolean>;
   /**
    * 列配置中是否禁用列隐藏选择
    *
    * @default false
    */
-  disabledHide?: boolean;
+  disabledHide?: MaybeRefOrGetter<boolean>;
   /**
    * 字典数据
    */
@@ -662,7 +721,7 @@ export interface TableColumn<T = any>
    *
    * @default true
    */
-  isFilterOptions?: boolean;
+  isFilterOptions?: MaybeRefOrGetter<boolean>;
   /**
    * 自定义表头内容渲染（tsx 语法）
    */
@@ -684,13 +743,13 @@ export interface TableColumn<T = any>
    *
    * @default false
    */
-  filter?: boolean;
+  filter?: MaybeRefOrGetter<boolean>;
   /**
    * 列配置中是否禁用 filter 功能选择
    *
    * @default false
    */
-  disabledFilter?: boolean;
+  disabledFilter?: MaybeRefOrGetter<boolean>;
   /**
    * 表头筛选配置项
    */
@@ -700,7 +759,15 @@ export interface TableColumn<T = any>
    *
    * @default false
    */
-  disabledSortable?: boolean;
+  disabledSortable?: MaybeRefOrGetter<boolean>;
+  /**
+   * 是否开启编辑功能
+   */
+  editable?: MaybeRefOrGetter<boolean>;
+  /**
+   * 编辑功能配置项
+   */
+  editProps?: TableEditProps;
   /**
    * 其他扩展
    */

@@ -1,7 +1,7 @@
 import type { Reactive } from "vue";
 import type { ModelBaseValueType, FormItemColumnProps } from "../types";
 import { isRef } from "vue";
-import { isAsyncFunction, isEmpty, isFunction, isObject, isPromise } from "@/utils";
+import { isArray, isEmpty, isFunction, isObject, isPromise } from "@/utils";
 
 export * from "./component";
 
@@ -40,7 +40,7 @@ export const formatValue = async <T = any>(
     return value;
   }
   if (isObject(value)) return { ...value };
-  if (isFunction(value) || isAsyncFunction(value)) return await (value as any)(...params);
+  if (isFunction(value)) return await (value as any)(...params);
   if (isPromise(value)) return await value;
 
   return value;
@@ -92,3 +92,56 @@ export const setProp = (model: ModelBaseValueType, prop: NonNullable<FormItemCol
   }
   current[props[props.length - 1]] = value;
 };
+
+/**
+ * 根据枚举列表查询当需要的数据（如果指定了 value 的 key 值，会自动识别格式化）
+ */
+export const filterOptions = (
+  modelValue: unknown,
+  options: Recordable[],
+  optionField?: FormItemColumnProps["optionField"]
+) => {
+  const value = optionField?.value ?? "value";
+  const children = optionField?.children ?? "children";
+  const filterOptions: Recordable[] = [];
+  let filterOption: Recordable = {};
+
+  // 判断 options 是否为数组
+  if (isArray(modelValue)) {
+    modelValue.forEach(item => {
+      const data = findItemNested(item, options, value, children);
+      data && filterOptions.push(data);
+    });
+  } else filterOption = findItemNested(modelValue, options, value, children) || {};
+
+  return filterOptions.length ? filterOptions : filterOption || "";
+};
+
+/**
+ * 递归查找 callValue 对应的 options 值
+ */
+export const findItemNested = (
+  modelValue: unknown,
+  options: Recordable[],
+  value: string,
+  children: string
+): Recordable | null => {
+  return options.reduce<Recordable | null>((accumulator, current) => {
+    if (accumulator) return accumulator;
+    // 兼容数字和字符串数字匹配，如值为数字 0，字典是 '0'，依然满足条件
+    if (current[value] === modelValue || current[value] === modelValue + "") return current;
+    if (current[children]) return findItemNested(modelValue, current[children], value, children);
+    return null;
+  }, null);
+};
+
+/**
+ * 根据枚举列表查询当需要的 label 数据
+ */
+export function filterOptionsValue(options: Recordable | Recordable[], keyName = "label", defaultValue = "--") {
+  if (!isArray(options)) return options ? options[keyName] : defaultValue;
+
+  const filterDataArray: string[] = [];
+  options.forEach(item => filterDataArray.push(item[keyName]));
+  return filterDataArray;
+}

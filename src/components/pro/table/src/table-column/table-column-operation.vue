@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import type { OperationNamespace } from "../types";
+import type { OperationNamespace, TableRow } from "../types";
 import { ArrowDownBold } from "@element-plus/icons-vue";
 import { isFunction } from "@/utils";
 import { hyphenToCamelCase } from "@/components/pro/form-item";
@@ -7,7 +7,7 @@ import { useNamespace } from "@/composables";
 import { OperationConfirmEl, OperationEl, lastProp } from "../helper";
 import OperationButton from "../plugins/operation-button.vue";
 
-import "./table-column-operation.scss";
+import "../styles/table-column-operation.scss";
 
 defineOptions({ name: "TableColumnOperation" });
 
@@ -35,7 +35,7 @@ const labelValue = computed(() => toValue(props.label));
 /**
  * 获取需要渲染的按钮和隐藏的按钮信息
  */
-const getButtons = (row: Recordable, index: number) => {
+const getButtons = (row: TableRow, index: number) => {
   const { buttons, showNumber } = props;
 
   const data = buttons.filter(item => {
@@ -54,7 +54,7 @@ const getButtons = (row: Recordable, index: number) => {
 /**
  * 获取文本
  */
-const getText = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordable, index: number) => {
+const getText = (buttonRaw: OperationNamespace.ButtonRaw, row: TableRow, index: number) => {
   return isFunction(buttonRaw.text)
     ? unref(buttonRaw.text(row, index, { ...buttonRaw, text: undefined }))
     : unref(buttonRaw.text);
@@ -65,7 +65,7 @@ const getButtonEl = (buttonRaw: OperationNamespace.ButtonRaw) =>
 /**
  * 获取按钮相关组件的 Props
  */
-const getButtonElProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordable, index: number) => {
+const getButtonElProps = (buttonRaw: OperationNamespace.ButtonRaw, row: TableRow, index: number) => {
   return isFunction(buttonRaw.elProps)
     ? buttonRaw.elProps(row, index, { ...buttonRaw, elProps: undefined })
     : unref(buttonRaw.elProps);
@@ -74,21 +74,16 @@ const getButtonElProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordab
 /**
  * 获取 emits 返回的参数信息
  */
-const getCallbackParams = (
-  buttonRaw: OperationNamespace.ButtonRaw,
-  row: Recordable,
-  index: number,
-  rest: Recordable,
-  event?: MouseEvent
-) => {
-  const text = getText(buttonRaw, row, index);
+const getCallbackParams = (buttonRaw: OperationNamespace.ButtonRaw, scope: Recordable, event?: MouseEvent) => {
+  const { row, $index } = scope;
+  const text = getText(buttonRaw, row, $index);
+
   return {
+    ...scope,
     text,
-    row,
-    rowIndex: index,
+    rowIndex: $index,
     buttonRaw,
     event,
-    ...rest,
   } as OperationNamespace.ButtonsCallBackParams;
 };
 
@@ -105,7 +100,7 @@ const getConfirmEl = (buttonRaw: OperationNamespace.ButtonRaw) => {
 /**
  * 获取 confirm 弹窗组件 props
  */
-const getConfirmProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordable, index: number, rest: Recordable) => {
+const getConfirmProps = (buttonRaw: OperationNamespace.ButtonRaw, scope: Recordable) => {
   const confirmEl = getConfirmEl(buttonRaw);
   const confirm = buttonRaw.confirm ?? props.confirm;
 
@@ -114,7 +109,7 @@ const getConfirmProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordabl
     return (confirm as OperationNamespace.Confirm<OperationConfirmEl.ElPopconfirm>).props;
   }
 
-  const callbackParams = getCallbackParams(buttonRaw, row, index, rest);
+  const callbackParams = getCallbackParams(buttonRaw, scope);
 
   const elMessageBoxConfirm = confirm as OperationNamespace.Confirm<OperationConfirmEl.ElMessageBox>;
 
@@ -136,15 +131,9 @@ const getConfirmProps = (buttonRaw: OperationNamespace.ButtonRaw, row: Recordabl
 /**
  * 点击按钮事件
  */
-const handleButtonClick = (
-  buttonRaw: OperationNamespace.ButtonRaw,
-  row: Recordable,
-  index: number,
-  rest: Recordable,
-  event: MouseEvent
-) => {
+const handleButtonClick = (buttonRaw: OperationNamespace.ButtonRaw, scope: Recordable, event: MouseEvent) => {
   hideOnClick.value = true;
-  const callbackParams = getCallbackParams(buttonRaw, row, index, rest, event);
+  const callbackParams = getCallbackParams(buttonRaw, scope, event);
   if (isFunction(buttonRaw.onClick)) buttonRaw.onClick(callbackParams);
 
   emits("buttonClick", callbackParams);
@@ -153,14 +142,8 @@ const handleButtonClick = (
 /**
  * 点击确认按钮事件
  */
-const handleConfirm = (
-  buttonRaw: OperationNamespace.ButtonRaw,
-  row: Recordable,
-  index: number,
-  rest: Recordable,
-  event: MouseEvent
-) => {
-  const callbackParams = getCallbackParams(buttonRaw, row, index, rest, event);
+const handleConfirm = (buttonRaw: OperationNamespace.ButtonRaw, scope: Recordable, event: MouseEvent) => {
+  const callbackParams = getCallbackParams(buttonRaw, scope, event);
 
   if (isFunction(buttonRaw.onConfirm)) buttonRaw.onConfirm(callbackParams);
   emits("confirm", callbackParams);
@@ -169,14 +152,8 @@ const handleConfirm = (
 /**
  * 点击取消按钮事件
  */
-const handleCancel = (
-  buttonRaw: OperationNamespace.ButtonRaw,
-  row: Recordable,
-  index: number,
-  rest: Recordable,
-  event: MouseEvent
-) => {
-  const callbackParams = getCallbackParams(buttonRaw, row, index, rest, event);
+const handleCancel = (buttonRaw: OperationNamespace.ButtonRaw, scope: Recordable, event: MouseEvent) => {
+  const callbackParams = getCallbackParams(buttonRaw, scope, event);
 
   if (isFunction(buttonRaw.onCancel)) buttonRaw.onCancel(callbackParams);
   emits("cancel", callbackParams);
@@ -189,38 +166,38 @@ const handleCancel = (
     :fixed
     :label="labelValue"
     :width="widthValue"
-    :class-name="ns.b()"
+    :class-name="className ? className : '' + ns.b()"
   >
     <!-- 表头插槽 - 表头内容 -->
     <template #header="scope">
       <component v-if="headerRender" :is="headerRender(scope)" />
-      <slot v-else :name="`${lastProp(prop!)}-header`" v-bind="scope">{{ scope.column.label }}</slot>
+      <slot v-else :name="`${lastProp(prop)}-header`" v-bind="scope">{{ scope.column.label }}</slot>
     </template>
 
     <!-- 默认插槽 - 单元格内容 -->
-    <template #default="{ row, $index, ...rest }">
+    <template #default="scope">
       <component v-if="render" :is="render(scope)" />
-      <slot v-else-if="$slots[lastProp(prop!)]" :name="lastProp(prop!)" v-bind="scope" />
+      <slot v-else-if="$slots[lastProp(prop)]" :name="lastProp(prop)" v-bind="scope" />
 
       <template v-else>
         <!-- 显示出来的按钮 -->
-        <template v-for="button in getButtons(row, $index).showButtons" :key="button.text">
+        <template v-for="button in getButtons(scope.row, scope.$index).showButtons" :key="button.text">
           <OperationButton
-            :text="getText(button, row, $index)"
+            :text="getText(button, scope.row, scope.$index)"
             :el="getButtonEl(button)"
-            :el-props="getButtonElProps(button, row, $index)"
+            :el-props="getButtonElProps(button, scope.row, scope.$index)"
             :icon="button.icon"
             :tooltip-props="button.tooltipProps"
             :confirm-el="getConfirmEl(button)"
-            :confirm-props="getConfirmProps(button, row, $index, rest)"
-            @buttonClick="e => handleButtonClick(button, row, $index, rest, e)"
-            @confirm="e => handleConfirm(button, row, $index, rest, e)"
-            @cancel="e => handleCancel(button, row, $index, rest, e)"
+            :confirm-props="getConfirmProps(button, scope)"
+            @buttonClick="e => handleButtonClick(button, scope, e)"
+            @confirm="e => handleConfirm(button, scope, e)"
+            @cancel="e => handleCancel(button, scope, e)"
           />
         </template>
 
         <!-- 隐藏的按钮 -->
-        <el-dropdown v-if="getButtons(row, $index).showMore" trigger="click" :hide-on-click="hideOnClick">
+        <el-dropdown v-if="getButtons(scope.row, scope.$index).showMore" trigger="click" :hide-on-click="hideOnClick">
           <span :class="ns.e('more')">
             <span :class="ns.em('more', 'text')">更多</span>
             <slot name="operation-more-icon">
@@ -232,20 +209,20 @@ const handleCancel = (
           <template #dropdown>
             <el-dropdown-menu>
               <el-dropdown-item
-                v-for="button in getButtons(row, $index).hideButtons"
-                :key="getText(button, row, $index)"
+                v-for="button in getButtons(scope.row, scope.$index).hideButtons"
+                :key="getText(button, scope.row, scope.$index)"
               >
                 <OperationButton
-                  :text="getText(button, row, $index)"
+                  :text="getText(button, scope.row, scope.$index)"
                   :el="getButtonEl(button)"
-                  :el-props="getButtonElProps(button, row, $index)"
+                  :el-props="getButtonElProps(button, scope.row, scope.$index)"
                   :icon="button.icon"
                   :tooltip-props="button.tooltipProps"
                   :confirm-el="getConfirmEl(button)"
-                  :confirm-props="getConfirmProps(button, row, $index, rest)"
-                  @buttonClick="e => handleButtonClick(button, row, $index, rest, e)"
-                  @confirm="e => handleConfirm(button, row, $index, rest, e)"
-                  @cancel="e => handleCancel(button, row, $index, rest, e)"
+                  :confirm-props="getConfirmProps(button, scope)"
+                  @buttonClick="e => handleButtonClick(button, scope, e)"
+                  @confirm="e => handleConfirm(button, scope, e)"
+                  @cancel="e => handleCancel(button, scope, e)"
                 />
               </el-dropdown-item>
             </el-dropdown-menu>

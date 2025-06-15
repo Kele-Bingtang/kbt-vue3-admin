@@ -8,6 +8,8 @@ import type {
   ProTableNamespace,
   TableColumn,
   SizeStyle,
+  TableCellParams,
+  TableRow,
 } from "./types";
 import { defaultPageInfo } from "@/components/pro/pagination";
 import { useNamespace } from "@/composables";
@@ -16,7 +18,7 @@ import { Environment, TableSizeEnum } from "./helper";
 import TableMain from "./table-main.vue";
 import TableHead from "./table-head.vue";
 
-import "./index.scss";
+import "./styles/index.scss";
 
 defineOptions({ name: "ProTable" });
 
@@ -56,6 +58,7 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   paginationProps: () => ({}),
   radioProps: () => ({}),
   filterScope: false,
+  editable: false,
   rowKey: "id",
   emptyText: "暂无数据",
 });
@@ -88,7 +91,7 @@ const finalProps = computed(() => {
     columns:
       isRef(props.columns) || isReactive(props.columns)
         ? props.columns
-        : (reactive(toValue(props.columns)) as TableColumn[]),
+        : (reactive(unref(props.columns)) as TableColumn[]),
   };
   Object.assign(propsObj, mergeProps.value);
   return propsObj;
@@ -99,11 +102,10 @@ const { mergeProps, setProps, setColumn, addColumn, delColumn } = useTableApi(fi
 // 是否为服务器（后端）分页
 const isServerPage = computed(() => {
   const { pageScope } = finalProps.value;
-  const pageScopeValue = toValue(pageScope);
 
   // 如果传入 true，则为前端分页，返回 false
-  if (!pageScopeValue || pageScopeValue === true) return false;
-  return pageScopeValue === Environment.Server;
+  if (!pageScope || pageScope === true) return false;
+  return pageScope === Environment.Server;
 });
 
 const { tableData, pageInfo, searchParams, searchInitParams, getTableList, search, reset, handlePagination } =
@@ -164,6 +166,29 @@ const handleDragSortEnd = (newIndex: number, oldIndex: number) => {
   emits("dragSortEnd", newIndex, oldIndex);
 };
 
+/**
+ * 执行过滤搜索
+ */
+const handleFilter = (filterModel: Recordable, filterValue: unknown, prop: string | undefined) => {
+  emits("filter", filterModel, filterValue, prop);
+};
+/**
+ * 执行过滤清除
+ */
+const handleFilterClear = (prop: string | undefined) => {
+  emits("filterClear", prop);
+};
+/**
+ * 执行过滤重置
+ */
+const handleFilterReset = () => {
+  emits("filterReset");
+};
+
+const handleFormChange = (fromValue: unknown, prop: TableColumn["prop"], scope: TableCellParams) => {
+  emits("formChange", fromValue, prop || "", scope);
+};
+
 const handleButtonClick = (params: OperationNamespace.ButtonsCallBackParams) => {
   emits("buttonClick", params);
 };
@@ -174,6 +199,10 @@ const handleConfirm = (params: OperationNamespace.ButtonsCallBackParams) => {
 
 const handleCancel = (params: OperationNamespace.ButtonsCallBackParams) => {
   emits("cancel", params);
+};
+
+const handleLeaveCellEdit = (row: TableRow, column: TableColumn) => {
+  emits("leaveCellEdit", row, column);
 };
 
 const expose = {
@@ -190,8 +219,8 @@ const expose = {
   setColumn,
   addColumn,
   delColumn,
-  ...tableHeadInstance.value!,
-  ...tableMainInstance.value!,
+  tableHeadInstance,
+  tableMainInstance,
 };
 
 defineExpose(expose);
@@ -204,6 +233,7 @@ defineExpose(expose);
       v-if="!hideHead"
       ref="tableHeadInstance"
       :columns="finalProps.columns"
+      :data="finalTableData"
       :tool-button
       :disabled-tool-button
       :size
@@ -233,6 +263,7 @@ defineExpose(expose);
       :pagination-props
       :radio-props
       :filter-scope
+      :editable
       :row-key
       :size="tableSize"
       :empty-text
@@ -242,6 +273,11 @@ defineExpose(expose);
       @selection-change="handleSelectionChange"
       @pagination-change="handlePaginationChange"
       @drag-sort-end="handleDragSortEnd"
+      @form-change="handleFormChange"
+      @filter="handleFilter"
+      @filter-clear="handleFilterClear"
+      @filter-reset="handleFilterReset"
+      @leave-cell-edit="handleLeaveCellEdit"
     >
       <template v-for="slot in Object.keys($slots)" #[slot]="scope">
         <slot :name="slot" v-bind="scope" />

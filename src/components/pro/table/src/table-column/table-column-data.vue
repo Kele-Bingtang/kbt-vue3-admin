@@ -1,22 +1,155 @@
 <script setup lang="ts">
-import type { TableColumn } from "../types";
 import type { TableColumnCtx } from "element-plus";
-import { ElTableColumn } from "element-plus";
+import type { TableCellParams, TableColumn, TableColumnDataNamespace, TableRow } from "../types";
+import type { ProFormInstance } from "@/components/pro/form";
+import type { ModelBaseValueType } from "@/components/pro/form-item";
+import { ElMessage, ElTableColumn } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
 import { getProp } from "@/components/pro/form-item";
+import { isBoolean } from "@/utils";
+import { useNamespace } from "@/composables";
 import { formatCellValue, lastProp } from "../helper";
+import TableFilter from "../plugins/table-filter.vue";
+import TableEdit from "../plugins/table-edit.vue";
+
+import "../styles/table-column-data.scss";
 
 defineOptions({ name: "TableColumnData" });
 
-defineProps<{ column: TableColumn; options?: TableColumn["options"] }>();
+const props = withDefaults(defineProps<TableColumnDataNamespace.Props>(), {
+  editable: false,
+});
 
-const formatTableColumnType = (column: TableColumn) => {
+const emits = defineEmits<
+  TableColumnDataNamespace.Emits & {
+    registerProFormInstance: [index: number, prop: string, instance: ProFormInstance | null];
+  }
+>();
+
+const ns = useNamespace("pro-table-column-data");
+
+const useEdit = computed(() => !isBoolean(props.editable) && ["click", "dblclick"].includes(props.editable));
+
+const formatTableColumn = (column: TableColumn) => {
+  column.filter = toValue(column.filter);
+  column.editable = toValue(column.editable);
+  column.hide = toValue(column.hide);
+  column.disabledHide = toValue(column.disabledHide);
+  column.disabledFilter = toValue(column.disabledFilter);
+  column.disabledSortable = toValue(column.disabledSortable);
+  column.isFilterOptions = toValue(column.isFilterOptions);
+
   return column as unknown as TableColumnCtx<any>;
+};
+
+// 获取 ProFormItem 的实例
+const registerProFormInstance = (el: InstanceType<typeof TableEdit>, scope: Recordable, prop: string) => {
+  if (!el) return;
+
+  emits("registerProFormInstance", scope.$index, prop, el.proFormInstance);
+
+  scope.row._proFormInstance ??= {};
+  if (!scope.row._proFormInstance[prop]?.elFormInstance) scope.row._proFormInstance[prop] = el.proFormInstance;
+};
+
+/**
+ * 初始化表格的 row，添加编辑态开关的方法
+ */
+const initRowEditApi = (row: TableRow) => {
+  // 初始化 _editableCol
+  row._editableCol ??= {};
+
+  // 开启单元格编辑状态
+  row._startCellEdit ??= prop => {
+    if (prop) {
+      row._editableCol![prop] = true;
+
+      nextTick(() => {
+        // 焦点聚焦
+        (row._proFormInstance?.[prop]?.getElInstance(prop) as HTMLElement)?.focus();
+      });
+    } else row._editable = true;
+  };
+  // 关闭开启单元格编辑状态
+  row._stopCellEdit ??= prop => {
+    if (prop) row._editableCol![prop] = false;
+    else row._editable = false;
+  };
+  // 判断当前单元格是否处于编辑状态
+  row._isCellEdit ??= prop => {
+    if (prop) return row._editableCol![prop] ?? false;
+    else return row._editable ?? false;
+  };
+  // 编辑态行/单元格校验
+  row._validateCellEdit ??= async (callback, prop) => {
+    if (!row._proFormInstance) return true;
+
+    try {
+      if (prop) return (await row._proFormInstance[prop].elFormInstance?.validate(callback)) ?? true;
+
+      const proFormInstances = Object.values(row._proFormInstance);
+      const results: boolean[] = await Promise.all(
+        proFormInstances.map(async proFormInstance => {
+          return (await proFormInstance.elFormInstance?.validate(callback)) ?? true;
+        })
+      );
+      // 有一个校验失败，则返回 false，如果都不为 false，则返回 true
+      return !results.some(valid => valid === false);
+    } catch (error) {
+      // 如果校验失败且没有自定义 callback，则弹出内置错误信息
+      if (!callback) {
+        ElMessage.closeAll();
+        ElMessage.warning(Object.values(error || { message: ["请完整填写表单然后再次提交！"] })[0][0].message);
+      }
+
+      return false;
+    }
+  };
+};
+
+/**
+ * 执行过滤搜索
+ */
+const handleFilter = (model: ModelBaseValueType, filterValue: unknown, prop: string | undefined) => {
+  emits("filter", model as Recordable, filterValue, prop);
+};
+/**
+ * 执行过滤清除
+ */
+const handleFilterClear = (prop: string | undefined) => {
+  emits("filterClear", prop);
+};
+/**
+ * 执行过滤重置
+ */
+const handleFilterReset = () => {
+  emits("filterReset");
+};
+
+/**
+ * 表单值发生改变事件
+ */
+const handleChange = (model: unknown, scope: Recordable, column: TableColumn) => {
+  emits("formChange", model, column.prop || "", {
+    ...scope,
+    rowIndex: scope.$index,
+    column: { ...scope.column, column },
+  } as TableCellParams);
+};
+
+/**
+ * 表单值发生改变事件（多级表头调用当前组件 handleChange 事件）
+ */
+const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: TableCellParams) => {
+  emits("formChange", model, props || "", scope);
 };
 </script>
 
 <template>
-  <el-table-column v-bind="formatTableColumnType(column)">
+  <el-table-column
+    v-bind="formatTableColumn(column)"
+    :class-name="`${ns.b()}${' ' + ns.is('cell-edit', useEdit)}${column.className ? ' ' + column.className : ''}`"
+  >
     <!-- 表头插槽 - 表头内容 -->
     <template #header="scope">
       <slot name="header-before" />
@@ -38,15 +171,54 @@ const formatTableColumnType = (column: TableColumn) => {
         </slot>
       </el-tooltip>
 
+      <!-- 表头筛选 -->
+      <TableFilter
+        v-if="column.filter"
+        v-bind="column.filterProps"
+        :prop="column.filterProps?.prop || column.prop"
+        @filter="handleFilter"
+        @clear="handleFilterClear"
+        @reset="handleFilterReset"
+      >
+        <template v-if="$slots['filter-icon']" #filter-icon>
+          <slot name="filter-icon" />
+        </template>
+        <template v-if="$slots['filter-button']" #filter-button>
+          <slot name="filter-button" />
+        </template>
+      </TableFilter>
+
       <slot name="header-after" />
     </template>
 
     <!-- 默认插槽 - 单元格内容 -->
     <template #default="scope">
+      <span v-if="!column.children" style="display: none">{{ initRowEditApi(scope.row) }}</span>
+
       <!-- 合并表头 -->
       <template v-if="column.children">
-        <TableColumnData v-for="child in column.children" :key="child.prop" :column="child" />
+        <TableColumnData
+          v-for="child in column.children"
+          :key="child.prop"
+          :column="child"
+          @form-change="handleFormChange"
+        />
       </template>
+
+      <!-- 单元格编辑 -->
+      <TableEdit
+        v-else-if="
+          editable === true || // 表格整体编辑
+          column.editable || // 单列整体编辑
+          scope.row._editable || // 单行整体编辑
+          scope.row._editableCol?.[column.prop!] || // 单元格编辑
+          getProp(scope.row_editableCol, column.prop!) // 多级 prop 单元格编辑
+        "
+        :ref="(el: any) => registerProFormInstance(el, scope, column.prop!)"
+        :value="getProp(scope.row._label?.[column.prop!] ?? scope.row, column.prop!)"
+        :prop="column.editProps?.prop || column.prop!"
+        @change="model => handleChange(model, scope, column)"
+      />
 
       <component v-else-if="column.render" :is="column.render(scope)" />
       <slot v-else-if="$slots[lastProp(column.prop!)]" :name="lastProp(column.prop!)" v-bind="scope" />

@@ -12,7 +12,7 @@ defineOptions({ name: "TableFilter" });
 
 interface TableFilterEmits {
   // 过滤事件，返回输入的值以及 prop
-  filter: [filterValue: unknown, prop: string | undefined];
+  filter: [model: ModelBaseValueType, filterValue: unknown, prop: string | undefined];
   // 清空事件，返回输入的 prop
   clear: [prop: string | undefined];
   // 重置所有表单事件
@@ -34,7 +34,7 @@ const emits = defineEmits<TableFilterEmits>();
 
 const ns = useNamespace("pro-table-filter");
 
-const model = defineModel<ModelBaseValueType>({ required: false });
+const model = ref<ModelBaseValueType>({});
 
 const prop = computed(() => props.prop || props.formColumn.prop);
 const elProps = computed(() => ({ ...props.formColumn.elProps, teleported: false }));
@@ -43,7 +43,7 @@ const elProps = computed(() => ({ ...props.formColumn.elProps, teleported: false
 const handleFilter = () => {
   let filterValue = model.value;
   if (isObject(model.value) && prop.value) filterValue = getProp(model.value, prop.value);
-  emits("filter", filterValue, prop.value);
+  emits("filter", model.value, filterValue, prop.value);
 };
 
 const handleClear = () => {
@@ -102,5 +102,5 @@ const handleReset = () => {
 </template>
 
 <style lang="scss">
-@use "./table-filter";
+@use "../styles/table-filter";
 </style>

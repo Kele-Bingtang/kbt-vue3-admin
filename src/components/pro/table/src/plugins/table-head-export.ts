@@ -1,11 +1,60 @@
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage, type CheckboxGroupValueType } from "element-plus";
 import { ElCheckboxGroup, ElCheckbox } from "element-plus";
 import { exportJsonToExcel, formatJsonToArray } from "@/utils";
 import { ref, unref } from "vue";
 import type { ExportProps, ProTableNamespace } from "../types";
+import { getObjectKeys } from "@/components/pro/form";
+import { getProp } from "@/components/pro/form-item";
 
 const defaultFileName = "export-table";
 const defaultConfirmTitle = "请选择导出列";
+
+// ElCheckboxGroup 使用组件
+const CheckboxGroupModal = defineComponent({
+  name: "CheckboxGroupModal",
+  props: {
+    initialValue: {
+      type: Array as () => CheckboxGroupValueType,
+      default: () => [],
+    },
+    columns: {
+      type: Array as () => any[],
+      required: true,
+    },
+    valueKey: {
+      type: String,
+      default: "",
+    },
+  },
+  setup(props, { emit }) {
+    const selectedLabels = ref<CheckboxGroupValueType>(props.initialValue || []);
+    const valueKey = ref<string>(props.valueKey);
+
+    watch(
+      () => selectedLabels,
+      val => emit("change", val)
+    );
+    return { selectedLabels, valueKey };
+  },
+  render() {
+    return h(
+      ElCheckboxGroup,
+      {
+        modelValue: this.selectedLabels,
+        "onUpdate:modelValue": (val: CheckboxGroupValueType) => {
+          this.selectedLabels = val;
+        },
+      },
+      () =>
+        this.columns?.map(item =>
+          h(ElCheckbox, {
+            label: this.valueKey ? item[this.valueKey] : item,
+            value: this.valueKey ? item[this.valueKey] : item,
+          })
+        )
+    );
+  },
+});
 
 /**
  * 导出为 Excel
@@ -15,7 +64,7 @@ export const exportExcel = async (
   data: ProTableNamespace.Props["data"],
   exportProps: ExportProps = {}
 ) => {
-  const { mode = "label" } = exportProps;
+  const { mode = "dataKey" } = exportProps;
   if (mode === "label") return exportExcelByLabel(columns, data, exportProps);
   if (mode === "prop") return exportExcelByProp(columns, data, exportProps);
   if (mode === "dataKey") return exportExcelByDataKey(data, exportProps);
@@ -33,16 +82,15 @@ export const exportExcelByLabel = async (
 ) => {
   const { fileName = defaultFileName, title = defaultConfirmTitle, options, appContext } = exportProps;
   const exportColumns = columns.filter(item => !item.type && item.prop !== "operation");
-  const exportLabel = ref(exportColumns.map(item => item.label));
+  const exportLabel = ref<CheckboxGroupValueType>(exportColumns.map(item => toValue(item.label) || ""));
 
   await ElMessageBox.confirm(
-    () => (
-      <ElCheckboxGroup v-model={exportLabel.value}>
-        {exportColumns.map(item => (
-          <ElCheckbox label={item.label} value={item.label} />
-        ))}
-      </ElCheckboxGroup>
-    ),
+    h(CheckboxGroupModal, {
+      initialValue: exportLabel.value,
+      columns: exportColumns,
+      valueKey: "label",
+      onChange: (value: CheckboxGroupValueType) => (exportLabel.value = value),
+    }),
     title,
     options,
     appContext
@@ -53,10 +101,10 @@ export const exportExcelByLabel = async (
 
   const flatData = filterFlatData(data);
 
-  exportColumns.forEach((item: any) => {
-    if (exportLabel.value.includes(item.label)) {
+  exportColumns.forEach(item => {
+    if (exportLabel.value.includes(toValue(item.label)!)) {
       propName.push(item.prop!);
-      tHeader.push(item.label!);
+      tHeader.push(toValue(item.label)!);
     }
   });
 
@@ -74,16 +122,15 @@ export const exportExcelByProp = async (
 ) => {
   const { fileName = defaultFileName, title = defaultConfirmTitle, options, appContext } = exportProps;
   const exportColumns = columns.filter(item => !item.type && item.prop !== "operation");
-  const exportProp = ref(exportColumns.map(item => item.prop));
+  const exportProp = ref<CheckboxGroupValueType>(exportColumns.map(item => item.prop || ""));
 
   await ElMessageBox.confirm(
-    () => (
-      <ElCheckboxGroup v-model={exportProp.value}>
-        {exportColumns.map(item => (
-          <ElCheckbox label={item.prop} value={item.prop} />
-        ))}
-      </ElCheckboxGroup>
-    ),
+    h(CheckboxGroupModal, {
+      initialValue: exportProp.value,
+      columns: exportColumns,
+      valueKey: "prop",
+      onChange: (value: CheckboxGroupValueType) => (exportProp.value = value),
+    }),
     title,
     options,
     appContext
@@ -96,8 +143,8 @@ export const exportExcelByProp = async (
 
   exportColumns.forEach((item: any) => {
     if (exportProp.value.includes(item.prop)) {
-      propName.push(item.prop!);
-      tHeader.push(item.prop!);
+      propName.push(item.prop);
+      tHeader.push(item.prop);
     }
   });
 
@@ -114,16 +161,15 @@ export const exportExcelByDataKey = async (
 ) => {
   const { fileName = defaultFileName, title = defaultConfirmTitle, options, appContext } = exportProps;
   const flatData = filterFlatData(data);
-  const exportItem = ref(Object.keys(flatData[0]));
+  const keys = getObjectKeys(flatData[0]).filter(key => !key.startsWith("_"));
+  const exportItem = ref<CheckboxGroupValueType>(keys);
 
   await ElMessageBox.confirm(
-    () => (
-      <ElCheckboxGroup v-model={exportItem.value}>
-        {flatData[0].map((item: any) => (
-          <ElCheckbox label={item} value={item} />
-        ))}
-      </ElCheckboxGroup>
-    ),
+    h(CheckboxGroupModal, {
+      initialValue: exportItem.value,
+      columns: keys,
+      onChange: (value: CheckboxGroupValueType) => (exportItem.value = value),
+    }),
     title,
     options,
     appContext
@@ -132,7 +178,7 @@ export const exportExcelByDataKey = async (
   const tHeader = [] as string[];
   const propName = [] as string[];
 
-  Object.keys(flatData[0]).forEach(item => {
+  keys.forEach(item => {
     if (exportItem.value.includes(item)) {
       propName.push(item);
       tHeader.push(item);
@@ -146,15 +192,15 @@ export const exportExcelByDataKey = async (
 /**
  * 扁平化 data，data 可能有 children 属性和 _options 属性
  */
-const filterFlatData = (data: any[]) => {
-  return data.reduce((pre: any[], current: any) => {
-    // 针对枚举类的导出
-    if (current._options) {
-      Object.keys(current._options).forEach(key => (current[key] = unref(current._options[key])));
-      delete current._options;
+const filterFlatData = (data: Recordable[]): Recordable[] => {
+  return data.reduce((pre: Recordable[], current) => {
+    if (current._label) {
+      const leafKeys = getObjectKeys(current._label);
+      leafKeys.forEach(key => (current[key] = unref(getProp(current._label, key))));
     }
-    let flatArr = [...pre, current];
-    if (current.children) flatArr = [...flatArr, ...filterFlatData(current.children)];
-    return flatArr;
-  }, []);
+    let result = [...pre, current];
+    if (current.children) result = [...result, ...filterFlatData(current.children)];
+
+    return result;
+  }, [] as Recordable[]);
 };

@@ -149,17 +149,17 @@ export interface FormItemColumnProps {
   /**
    * 表单组件宽度
    */
-  width?: MaybeRef<string | number>;
+  width?: MaybeRefOrGetter<string | number>;
   /**
    * 使用的表单组件名
    *
    * @default 'ElInput'
    */
-  el?: MaybeRef<ElType>;
+  el?: MaybeRefOrGetter<ElType>;
   /**
    * 根据 element plus 官方文档来传递，该属性所有值会透传到表单组件
    */
-  elProps?: MaybeRef<
+  elProps?: MaybeRefOrGetter<
     | InputProps
     | InputNumberProps
     | ExtractPropTypes<typeof SelectProps>
@@ -214,7 +214,7 @@ export interface FormItemColumnProps {
   /**
    * ElFormItem props
    */
-  formItemProps?: MaybeRef<ElFormItemProps>;
+  formItemProps?: MaybeRefOrGetter<ElFormItemProps>;
   /**
    * 是否显示清除按钮
    *
@@ -241,6 +241,16 @@ export interface FormItemColumnProps {
    * 自定义渲染 el-form-item 下的表单组件
    */
   renderEl?: (scope: FormItemColumnProps) => RenderTypes;
+  /**
+   * 是否为编辑态
+   *
+   * @default true
+   */
+  editable?: MaybeRefOrGetter<boolean>;
+}
+
+export interface ProFormItemEmits {
+  change: [model: ModelBaseValueType, column: FormItemColumnProps];
 }
 
 /**

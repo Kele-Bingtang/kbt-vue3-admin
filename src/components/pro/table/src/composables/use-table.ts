@@ -38,9 +38,9 @@ export const useProTable = () => {
   };
 
   const selectState = {
-    isSelected: proTableInstance.value?.isSelected, // 是否选中至少一行表格数据
-    selectedList: proTableInstance.value?.selectedList, // 选中的表格数据
-    selectedListIds: proTableInstance.value?.selectedListIds, // 选中的表格数据 ID 列表
+    isSelected: proTableInstance.value?.tableMainInstance?.isSelected, // 是否选中至少一行表格数据
+    selectedList: proTableInstance.value?.tableMainInstance?.selectedList, // 选中的表格数据
+    selectedListIds: proTableInstance.value?.tableMainInstance?.selectedListIds, // 选中的表格数据 ID 列表
   };
 
   const getTable = async () => {
@@ -126,14 +126,14 @@ export const useProTable = () => {
      */
     toggleColSetting: async () => {
       const table = await getTable();
-      table?.toggleColumnSetting();
+      table?.tableHeadInstance?.toggleColumnSetting();
     },
     /**
      * 清除所有选择项
      */
     clearSelection: async () => {
       const table = await getTable();
-      return table?.clearSelection();
+      return table?.tableMainInstance?.clearSelection();
     },
     /**
      * 获取 ElTable 组件的实例
@@ -150,6 +150,36 @@ export const useProTable = () => {
     getTableExpose: async () => {
       await getTable();
       return proTableInstance.value;
+    },
+    /**
+     * 获取编辑态的 ElForm 组件的实例
+     * @param index 下标
+     * @param prop 属性
+     * @returns ElFormItem instance
+     */
+    getElFormInstance: async () => {
+      const table = await getTable();
+      return table?.tableMainInstance?.elTableInstance;
+    },
+    /**
+     * 获取编辑态的 ElFormItem 组件的实例
+     * @param index 下标
+     * @param prop 属性
+     * @returns ElFormItem instance
+     */
+    getElFormItemInstance: async (index: number, prop?: TableColumn["prop"]) => {
+      const table = await getTable();
+      return table?.tableMainInstance?.getElFormItemInstance(index, prop);
+    },
+    /**
+     * 获取编辑态的表单组件的实例
+     * @param index 下标
+     * @param prop 属性
+     * @returns 表单组件 instance
+     */
+    getElInstance: async (index: number, prop?: TableColumn["prop"]) => {
+      const table = await getTable();
+      return table?.tableMainInstance?.getElInstance(index, prop);
     },
   };
 

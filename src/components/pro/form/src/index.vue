@@ -1,14 +1,15 @@
 <script setup lang="ts">
 import type { FormColumn, ProFormEmits, ProFormProps } from "./types";
-import type { FormInstance, FormItemProp } from "element-plus";
-import type { ElOption, FormItemColumnProps } from "@/components/pro/form-item";
-import { shallowRef, ref, watch, unref, onMounted, computed } from "vue";
+import type { FormInstance, FormItemInstance, FormItemProp } from "element-plus";
+import type { ElOption, FormItemColumnProps, ModelBaseValueType } from "@/components/pro/form-item";
+import { shallowRef, ref, watch, unref, onMounted, computed, type Component } from "vue";
 import { ElRow, ElCol, ElForm, ElMessage, ElButton } from "element-plus";
 import { ProFormItem, formatValue, getProp, setProp } from "@/components/pro/form-item";
 import { useNamespace } from "@/composables";
-import { isFunction } from "@/utils";
-import { deleteProp } from "./helper";
+import { addUnit, isEmpty, isFunction } from "@/utils";
+import { deleteProp, getObjectKeys } from "./helper";
 import { useFormApi } from "./composables";
+import { deleteObjProperty } from "../../pro-form";
 
 defineOptions({ name: "ProForm" });
 
@@ -42,6 +43,9 @@ const model = defineModel<Recordable>({ default: () => ({}) });
 const elFormInstance = useTemplateRef<FormInstance>("elFormInstance");
 // 存储表单组件实例
 const proFormItemInstances = shallowRef<Record<string, InstanceType<typeof ProFormItem>>>({});
+
+const showLabelValue = computed(() => toValue(props.showLabel));
+const withValue = computed(() => addUnit(toValue(props.width)));
 
 // 最终的 props
 const finalProps = computed(() => {
@@ -84,8 +88,8 @@ const initOptionsMap = async ({ options, prop }: FormColumn) => {
  * 是否销毁表单项 & 是否初始化表单项默认值
  */
 const destroyOrInit = (item: FormColumn) => {
-  let destroy = item.destroy ?? false;
-  if (isFunction(item.destroy)) destroy = item.destroy(model.value) ?? false;
+  let destroy = unref(item.destroy) ?? false;
+  if (isFunction(item.destroy)) destroy = unref(item.destroy(model.value)) ?? false;
 
   // 如果不销毁，则初始化表单默认值，反之则重置为空
   if (!destroy) initDefaultValue(item);
@@ -100,7 +104,7 @@ const initDefaultValue = async ({ defaultValue, optionField, prop }: FormColumn)
   const value = getProp(modelConst, prop);
 
   // 如果有值，则不需要赋默认值
-  if (value !== "" && value !== null && value !== undefined) return;
+  if (!isEmpty(value)) return;
 
   const defaultValueConst = await formatValue<FormColumn["defaultValue"]>(defaultValue, [modelConst, optionsMap.value]);
 
@@ -138,11 +142,9 @@ watch(
     if (!dynamicModel) return;
 
     // 如果 column 对应的 prop 不存在，则删除 model 中的对应的 prop
-    Object.keys(model.value).forEach(key => {
-      const isExist = column.some(
-        item => item.prop === key || item.renderUseProp?.includes(key) || includeModelKeys?.includes(key)
-      );
-      if (!isExist) delete model.value[key];
+    getObjectKeys(model.value).forEach(key => {
+      const isExist = column.some(item => item.prop === key || includeModelKeys?.includes(key));
+      if (!isExist) deleteObjProperty(model.value, key);
     });
   },
   {
@@ -156,15 +158,15 @@ watch(
  */
 const isHidden = (item: FormColumn) => {
   const { hidden } = item;
-  if (isFunction(hidden)) return hidden(model.value) ?? false;
-  return hidden;
+  if (isFunction(hidden)) return unref(hidden(model.value)) ?? false;
+  return unref(hidden);
 };
 
 // 获取 ElCol Props
 const getColProps = (item: FormColumn) => {
   const { colProps } = finalProps.value;
   return {
-    ...(colProps.span ? {} : { xs: 24, sm: 12, md: 12, lg: 12, xl: 12 }),
+    span: 24,
     ...colProps,
     ...toValue(item.colProps),
   };
@@ -172,11 +174,15 @@ const getColProps = (item: FormColumn) => {
 
 // 获取 ProFormItem 的实例
 const setProFormItemInstance = (el: any, prop: string) => {
-  if (el) proFormItemInstances.value[prop] = el;
+  if (el) setProp(proFormItemInstances.value, prop, el);
 };
 
 // 定义 emit 事件
 const emits = defineEmits<ProFormEmits>();
+
+const handleChange = (model: ModelBaseValueType, column: FormItemColumnProps) => {
+  emits("change", model, column);
+};
 
 onMounted(() => {
   emits("register", elFormInstance.value?.$parent || null, elFormInstance.value);
@@ -206,13 +212,13 @@ const handleValidate = (prop: FormItemProp, isValid: boolean, message: string): 
 };
 
 // 获取 ElFormItem 实例
-const getElFormItemInstance = (prop: FormColumn["prop"]) => {
-  return proFormItemInstances.value[prop].elFormItemInstance;
+const getElFormItemInstance = (prop: FormColumn["prop"]): FormItemInstance => {
+  return getProp(proFormItemInstances.value, prop).elFormItemInstance;
 };
 
 // 获取表单组件实例
-const getElInstance = (prop: FormColumn["prop"]) => {
-  return proFormItemInstances.value[prop].elInstance;
+const getElInstance = (prop: FormColumn["prop"]): Component | ComponentPublicInstance => {
+  return getProp(proFormItemInstances.value, prop).elInstance;
 };
 
 const expose = {
@@ -238,7 +244,9 @@ defineExpose(expose);
 <template>
   <el-form
     ref="elFormInstance"
-    v-bind="finalProps.elFormProps"
+    v-bind="{ ...finalProps.elFormProps, ...$attrs }"
+    :label-width="showLabelValue ? finalProps.elFormProps.labelWidth : 0"
+    :label-suffix="showLabelValue ? finalProps.elFormProps.labelSuffix : ''"
     :model="model"
     :class="ns.b()"
     @validate="handleValidate"
@@ -254,8 +262,12 @@ defineExpose(expose);
           <ProFormItem
             :ref="el => setProFormItemInstance(el, column.prop)"
             v-model="model"
-            v-bind="{ width, clearable, showLabel, ...column }"
+            v-bind="column"
+            :clearable="column.clearable ?? clearable"
+            :width="column.width ?? withValue"
+            :show-label="column.showLabel ?? showLabelValue"
             :option="optionsMap.get(column.optionsProp || column.prop)"
+            @change="handleChange"
           />
         </el-col>
       </el-row>
@@ -264,9 +276,13 @@ defineExpose(expose);
         <ProFormItem
           :ref="el => setProFormItemInstance(el, column.prop)"
           v-model="model"
-          v-bind="{ width, clearable, showLabel, ...column }"
+          v-bind="column"
+          :clearable="column.clearable ?? clearable"
+          :width="column.width ?? withValue"
+          :show-label="column.showLabel ?? showLabelValue"
           v-show="!isHidden(column)"
           :option="optionsMap.get(column.optionsProp || column.prop)"
+          @change="handleChange"
         />
       </template>
 

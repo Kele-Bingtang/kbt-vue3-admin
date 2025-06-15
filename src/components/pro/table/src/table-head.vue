@@ -3,7 +3,7 @@ import type { ProTableHeadNamespace, SizeStyle, TableColumn } from "./types";
 import { Coin, Operation, Download, Setting } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { TableColumnTypeEnum, TableSizeEnum, ToolButtonEnum } from "./helper";
-import { exportExcel } from "./plugins/export";
+import { exportExcel } from "./plugins/table-head-export";
 import TableHeadColumnSetting from "./plugins/table-head-column-setting.vue";
 
 defineOptions({ name: "TableHead" });
@@ -233,5 +233,5 @@ defineExpose(expose);
 </template>
 
 <style lang="scss" scoped>
-@use "./table-head";
+@use "./styles/table-head";
 </style>

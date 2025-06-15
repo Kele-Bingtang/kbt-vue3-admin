@@ -29,10 +29,17 @@ export const is = (val: unknown, type: string) => {
 };
 
 /**
+ * 是否为纯粹的函数
+ */
+export const isPlainFunction = <T = Function>(val: unknown): val is T => {
+  return is(val, "Function");
+};
+
+/**
  * 是否为函数
  */
 export const isFunction = <T = Function>(val: unknown): val is T => {
-  return is(val, "Function");
+  return is(val, "Function") || isAsyncFunction(val);
 };
 
 /**

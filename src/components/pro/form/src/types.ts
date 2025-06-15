@@ -1,6 +1,6 @@
 import type { ColProps, FormInstance, FormItemProp, FormProps, FormValidateCallback, RowProps } from "element-plus";
 import type { ComputedRef, ComponentPublicInstance, InjectionKey, Ref } from "vue";
-import type { FormItemColumnProps, BaseValueType } from "@/components/pro/form-item";
+import type { FormItemColumnProps, BaseValueType, ProFormItemEmits } from "@/components/pro/form-item/src/types";
 import type ProForm from "./index.vue";
 
 export type ElFormProps = Partial<FormProps>;
@@ -108,7 +108,7 @@ export interface ProFormProps {
   width?: FormItemColumnProps["width"];
 }
 
-export type ProFormEmits = {
+export type ProFormEmits = ProFormItemEmits & {
   register: [proFormRef: any, elFormRef: FormInstance | null]; // 注册 ProForm 组件实例和 elForm 实例
   validate: [prop: FormItemProp, isValid: boolean, message: string]; // ElForm 自带的事件
   submit: [model: Recordable]; // 提交按钮事件
@@ -144,17 +144,12 @@ export interface FormColumn extends FormItemColumnProps {
    * 是否销毁表单，true 销毁，false 不销毁，类似于 v-if
    * @default false
    */
-  destroy?: boolean | ((model: Recordable) => boolean);
+  destroy?: MaybeRef<boolean> | ((model: Recordable) => MaybeRef<boolean>);
   /**
    * 是否隐藏表单，true 隐藏，false 不隐藏，类似于 v-show
    * @default false
    */
-  hidden?: boolean | ((model: Recordable) => boolean);
-  /**
-   * 是否禁用表单，true 禁用，false 不禁用
-   * @default false
-   */
-  disabled?: boolean | ((model: Recordable) => boolean);
+  hidden?: MaybeRef<boolean> | ((model: Recordable) => MaybeRef<boolean>);
   /**
    * 指定 Options 的 key，如果设置了则优先从缓存获取对于 key 的 Options 数据
    */

@@ -1,6 +1,7 @@
 import type { WorkBook, WorkSheet } from "xlsx";
 import { write, utils, SSF } from "xlsx";
 import { saveAs } from "file-saver";
+import { get } from "./helper";
 
 interface ICell {
   v: Date | number | boolean | string;
@@ -240,11 +241,8 @@ export const exportJsonToExcel = (
   );
 };
 // 将表格的对象转为数组，导出时必须转为数组
-export const formatJsonToArray = (jsonData: any, filterKeys?: any) =>
-  jsonData.map((data: any) => {
-    if (filterKeys) {
-      return filterKeys.map((key: string) => data[key]);
-    } else {
-      return Object.values(data);
-    }
+export const formatJsonToArray = (jsonData: Recordable[], filterKeys?: string[]) =>
+  jsonData.map(data => {
+    if (filterKeys) return filterKeys.map((key: string) => get(data, key));
+    else return Object.values(data);
   });
