@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { TableColumnCtx } from "element-plus";
-import type { TableCellParams, TableColumn, TableColumnDataNamespace, TableRow } from "../types";
+import type { TableScope, TableColumn, TableColumnDataNamespace, TableRow } from "../types";
 import type { ProFormInstance } from "@/components/pro/form";
 import type { ModelBaseValueType } from "@/components/pro/form-item";
 import { ElMessage, ElTableColumn } from "element-plus";
@@ -42,6 +42,10 @@ const formatTableColumn = (column: TableColumn) => {
   return column as unknown as TableColumnCtx<any>;
 };
 
+const formatValue = (row: TableRow, column: TableColumn) => {
+  return formatCellValue(getProp(row._label?.[column.prop!] ?? row, column.prop!));
+};
+
 // 获取 ProFormItem 的实例
 const registerProFormInstance = (el: InstanceType<typeof TableEdit>, scope: Recordable, prop: string) => {
   if (!el) return;
@@ -60,7 +64,7 @@ const initRowEditApi = (row: TableRow) => {
   row._editableCol ??= {};
 
   // 开启单元格编辑状态
-  row._startCellEdit ??= prop => {
+  row._openCellEdit ??= prop => {
     if (prop) {
       row._editableCol![prop] = true;
 
@@ -71,7 +75,7 @@ const initRowEditApi = (row: TableRow) => {
     } else row._editable = true;
   };
   // 关闭开启单元格编辑状态
-  row._stopCellEdit ??= prop => {
+  row._closeCellEdit ??= prop => {
     if (prop) row._editableCol![prop] = false;
     else row._editable = false;
   };
@@ -134,13 +138,13 @@ const handleChange = (model: unknown, scope: Recordable, column: TableColumn) =>
     ...scope,
     rowIndex: scope.$index,
     column: { ...scope.column, column },
-  } as TableCellParams);
+  } as TableScope);
 };
 
 /**
  * 表单值发生改变事件（多级表头调用当前组件 handleChange 事件）
  */
-const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: TableCellParams) => {
+const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: TableScope) => {
   emits("formChange", model, props || "", scope);
 };
 </script>
@@ -220,11 +224,18 @@ const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: Tab
         @change="model => handleChange(model, scope, column)"
       />
 
-      <component v-else-if="column.render" :is="column.render(scope)" />
+      <component
+        v-else-if="column.render"
+        :is="column.render(formatValue(scope.row, column), { ...scope, rowIndex: scope.$index })"
+      />
+      <component
+        v-else-if="column.renderHTML"
+        :is="column.renderHTML(formatValue(scope.row, column), { ...scope, rowIndex: scope.$index })"
+      />
       <slot v-else-if="$slots[lastProp(column.prop!)]" :name="lastProp(column.prop!)" v-bind="scope" />
 
       <template v-else>
-        {{ formatCellValue(getProp(scope.row._label?.[column.prop!] ?? scope.row, column.prop!)) }}
+        {{ formatValue(scope.row, column) }}
       </template>
     </template>
   </el-table-column>

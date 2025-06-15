@@ -14,7 +14,7 @@ import type {
   TableProps,
 } from "element-plus";
 import type { ProFormInstance } from "@/components/pro/form";
-import type { FormItemColumnProps } from "@/components/pro/form-item";
+import type { ElOption, FormItemColumnProps } from "@/components/pro/form-item";
 import type { PageInfo, PaginationProps } from "@/components/pro/pagination";
 import type { AppContext, CSSProperties, UnwrapRef } from "vue";
 import type { UseSelectState } from "./composables/use-selection";
@@ -24,15 +24,59 @@ import type ProTableHead from "./table-head.vue";
 import { TableSizeEnum, TableColumnTypeEnum, ExportKey, ToolButtonEnum, Environment, OperationEl } from "./helper";
 
 /**
- * 自定义 render 的参数类型
+ * 表格行 Scope
  */
-export type TableDefaultRenderScope<T = Recordable> = {
-  row: T;
+export type TableScope<T = Recordable> = {
+  /**
+   * 表格行索引
+   */
   $index: number;
+  /**
+   * 表格行数据
+   */
+  row: T & TableRow;
+  /**
+   * 表格列数据
+   */
   column: TableColumn<T>;
-  [key: string]: any;
+  /**
+   * 表格行索引
+   */
+  rowIndex?: number;
+  /**
+   * 表格列索引
+   */
+  cellIndex: number;
+  /**
+   * 表格store
+   */
+  store: Recordable;
+  /**
+   * 表格 expanded
+   */
+  expanded: boolean;
+  /**
+   * 表格  _self
+   */
+  _self: Recordable;
 };
-export type TableHeadRenderScope<T = Recordable> = { $index: number; column: TableColumn<T>; [key: string]: any };
+
+/**
+ * 表格行 row
+ */
+export type TableRow<T extends string | number | symbol = any> = {
+  [key in T]: any;
+} & {
+  _option: Recordable; // 配置项（option 下拉枚举）
+  _label: Recordable; // 单元格显示的内容
+  _editable: boolean | undefined; // 表格是否可编辑
+  _editableCol: Record<string, boolean>; // 表格单元格是否可编辑
+  _proFormInstance: Record<string, ProFormInstance>; // 编辑态的 ProForm 实例
+  _openCellEdit: (prop?: string) => void; // 开启编辑态方法
+  _closeCellEdit: (prop?: string) => void; // 停止编辑态方法
+  _isCellEdit: (prop?: string) => boolean; // 是否处于编辑态方法
+  _validateCellEdit: (callback?: FormValidateCallback, prop?: string) => FormValidationResult | undefined; // 校验编辑态表单方法
+};
 
 /**
  * 表格样式属性
@@ -146,56 +190,6 @@ export interface ExportProps {
    */
   exportFile?: (data: Recordable[]) => void;
 }
-
-export type TableRow<T extends string | number | symbol = any> = {
-  [key in T]: any;
-} & {
-  _editable: boolean | undefined;
-  _editableCol: Record<string, boolean>;
-  _proFormInstance: Record<string, ProFormInstance>;
-  _startCellEdit: (prop?: string) => void;
-  _stopCellEdit: (prop?: string) => void;
-  _isCellEdit: (prop?: string) => boolean;
-  _validateCellEdit: (callback?: FormValidateCallback, prop?: string) => FormValidationResult | undefined;
-};
-
-/**
- * 表格单元格回调参数
- */
-export type TableCellParams = {
-  /**
-   * 表格行索引
-   */
-  $index: number;
-  /**
-   * 表格行数据
-   */
-  row: TableRow;
-  /**
-   * 表格列数据
-   */
-  column: Recordable;
-  /**
-   * 表格行索引
-   */
-  rowIndex: number;
-  /**
-   * 表格列索引
-   */
-  cellIndex: number;
-  /**
-   * 表格store
-   */
-  store: Recordable;
-  /**
-   * 表格 expanded
-   */
-  expanded: boolean;
-  /**
-   * 表格  _self
-   */
-  _self: Recordable;
-};
 
 export namespace OperationNamespace {
   /**
@@ -340,7 +334,7 @@ export namespace OperationNamespace {
   /**
    * 点击按钮回调的参数的类型
    */
-  export interface ButtonsCallBackParams extends TableCellParams {
+  export interface ButtonsCallBackParams extends TableScope {
     /**
      * 点击按钮数据
      */
@@ -366,7 +360,7 @@ export namespace TableColumnDataNamespace {
     /**
      * 表单值改变事件
      */
-    formChange: [fromValue: unknown, prop: NonNullable<TableColumn["prop"]>, scope: TableCellParams];
+    formChange: [fromValue: unknown, prop: NonNullable<TableColumn["prop"]>, scope: TableScope];
     /**
      * 过滤事件，返回输入的值以及 prop
      */
@@ -723,13 +717,21 @@ export interface TableColumn<T = any>
    */
   isFilterOptions?: MaybeRefOrGetter<boolean>;
   /**
+   * 自定义当前 option 选项
+   */
+  transformOption?: (value: unknown, options: ElOption[], row: Recordable) => ElOption;
+  /**
    * 自定义表头内容渲染（tsx 语法）
    */
-  headerRender?: (scope: TableHeadRenderScope<T>) => VNode;
+  headerRender?: (scope: Omit<TableScope<T>, "row">) => VNode;
   /**
    * 自定义单元格内容渲染（tsx 语法）
    */
-  render?: (scope: TableDefaultRenderScope<T>) => VNode | string;
+  render?: (value: unknown, scope: TableScope<T>) => VNode | string;
+  /**
+   * 自定义单元格内容渲染（返回 HTML），优先级低于 render，高于插槽
+   */
+  renderHTML?: (value: unknown, scope: TableScope<T>) => string;
   /**
    * 多级表头
    */

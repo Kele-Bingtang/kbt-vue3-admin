@@ -8,7 +8,7 @@ import type {
   ProTableNamespace,
   TableColumn,
   SizeStyle,
-  TableCellParams,
+  TableScope,
   TableRow,
 } from "./types";
 import { defaultPageInfo } from "@/components/pro/pagination";
@@ -185,7 +185,7 @@ const handleFilterReset = () => {
   emits("filterReset");
 };
 
-const handleFormChange = (fromValue: unknown, prop: TableColumn["prop"], scope: TableCellParams) => {
+const handleFormChange = (fromValue: unknown, prop: TableColumn["prop"], scope: TableScope) => {
   emits("formChange", fromValue, prop || "", scope);
 };
 

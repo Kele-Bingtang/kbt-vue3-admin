@@ -3,14 +3,7 @@ import type { Component } from "vue";
 import type { FormValidationResult, TableInstance } from "element-plus";
 import { getObjectKeys, type ProFormInstance } from "@/components/pro/form";
 import type { ElOption, FormItemColumnProps } from "@/components/pro/form-item";
-import type {
-  OperationNamespace,
-  ProTableMainNamespace,
-  TableCellParams,
-  TableColumn,
-  TableDefaultRenderScope,
-  TableRow,
-} from "./types";
+import type { OperationNamespace, ProTableMainNamespace, TableScope, TableColumn, TableRow } from "./types";
 import { ElRadio, ElTableColumn } from "element-plus";
 import { useNamespace } from "@/composables";
 import Pagination, { defaultPageInfo } from "@/components/pro/pagination";
@@ -117,18 +110,22 @@ const initOptionsInData = (data: Recordable[]) => {
 
   // 如果 columns 发生改变，则重新初始化 _options
   visibleColumns.value.forEach(async column => {
-    const { prop = "", isFilterOptions = true, optionField } = column;
+    const { prop = "", isFilterOptions = true, optionField, transformOption } = column;
 
-    const optionsCache = unref(optionsMap.value.get(prop));
+    const options = unref(optionsMap.value.get(prop));
     // 如果字段有配置枚举信息，则存放到 _options[col.prop] 里
-    if (optionsCache && toValue(isFilterOptions)) {
+    if (options && toValue(isFilterOptions)) {
       newData = newData?.map(row => {
-        const options = filterOptions(getProp(row, prop), optionsCache, optionField);
-        const formatLabel = filterOptionsValue(options, "label");
+        const option = transformOption
+          ? transformOption(getProp(row, prop), options, row)
+          : filterOptions(getProp(row, prop), options, optionField);
 
-        if (!row._options) row._options = {};
+        const formatLabel = filterOptionsValue(option, optionField?.label ?? "label");
+
+        if (!row._option) row._option = {};
         if (!row._label) row._label = {};
-        row._options[prop] = options;
+
+        row._option[prop] = option;
         row._label[prop] = formatLabel;
         return row;
       });
@@ -234,11 +231,11 @@ const handleCellEdit = async (row: TableRow, column: TableColumn, type: "click" 
   // 停止上一个单元格的编辑状态
   stopCurrentEditCell?.();
   // 缓存当前单元格的退出编辑状态函数和校验函数
-  stopCurrentEditCell = () => row._stopCellEdit(currentColumn.prop);
+  stopCurrentEditCell = () => row._closeCellEdit(currentColumn.prop);
   validateCellEdit = () => row._validateCellEdit(undefined, currentColumn.prop);
 
   // 开启当前点击的单元格的编辑
-  row._startCellEdit(currentColumn.prop);
+  row._openCellEdit(currentColumn.prop);
 };
 
 /**
@@ -342,7 +339,7 @@ const handleFilterReset = () => {
   emits("filterReset");
 };
 
-const handleFormChange = (fromValue: unknown, prop: TableColumn["prop"], scope: TableCellParams) => {
+const handleFormChange = (fromValue: unknown, prop: TableColumn["prop"], scope: TableScope) => {
   emits("formChange", fromValue, prop || "", scope);
 };
 
@@ -361,7 +358,7 @@ const handleCancel = (params: OperationNamespace.ButtonsCallBackParams) => {
 // 功能列
 const tableColumnType: Record<
   TableColumnTypeEnum,
-  { el: Component; props?: Recordable; slots?: Recordable; render?: (scope: TableDefaultRenderScope) => VNode }
+  { el: Component; props?: Recordable; slots?: Recordable; render?: (scope: TableScope) => VNode }
 > = {
   [TableColumnTypeEnum.Selection]: { el: ElTableColumn, props: { reserveSelection: true } },
   [TableColumnTypeEnum.Radio]: {

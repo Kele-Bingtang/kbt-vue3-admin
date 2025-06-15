@@ -87,7 +87,7 @@ export type ElType = PascalCaseComponentName | HyphenCaseComponentName;
 /**
  * 基本类型
  */
-export type BaseValueType = string | number | boolean | any;
+export type BaseValueType = string | number | boolean | unknown;
 
 /**
  * 渲染函数的返回值的类型
