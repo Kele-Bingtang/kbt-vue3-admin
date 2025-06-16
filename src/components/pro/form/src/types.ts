@@ -1,5 +1,5 @@
 import type { ColProps, FormInstance, FormItemProp, FormProps, FormValidateCallback, RowProps } from "element-plus";
-import type { ComputedRef, ComponentPublicInstance, InjectionKey, Ref } from "vue";
+import type { ComponentPublicInstance, InjectionKey, Ref } from "vue";
 import type { FormItemColumnProps, BaseValueType, ProFormItemEmits } from "@/components/pro/form-item/src/types";
 import type ProForm from "./index.vue";
 
@@ -132,10 +132,9 @@ export interface FormColumn extends FormItemColumnProps {
    * 表单属性的默认值
    */
   defaultValue?:
-    | BaseValueType
-    | ((model: Recordable, optionsMap: Map<string, Recordable>) => BaseValueType | Promise<BaseValueType>)
-    | ComputedRef<BaseValueType>
-    | Promise<BaseValueType>;
+    | MaybeRef<BaseValueType>
+    | Promise<BaseValueType>
+    | ((model: Recordable, optionsMap: Map<string, Recordable>) => BaseValueType | Promise<BaseValueType>);
   /**
    * 表单排序（从大到小）
    */

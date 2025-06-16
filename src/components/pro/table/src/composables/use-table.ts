@@ -1,13 +1,13 @@
 import type { TableInstance } from "element-plus";
 import type { ProTableInstance, ProTableNamespace, TableColumn } from "../types";
 import type { PageInfo } from "@/components";
-import { ElConfigProvider } from "element-plus";
-import ProTable from "../index.vue";
+import type { TableSetProps } from "./use-table-api";
 import { createVNode, getCurrentInstance, nextTick, ref, render } from "vue";
+import { ElConfigProvider } from "element-plus";
 import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
-import type { TableSetProps } from "./use-table-api";
 import { isString } from "@/utils";
+import ProTable from "../index.vue";
 
 export const useProTable = () => {
   // ProTable 实例
