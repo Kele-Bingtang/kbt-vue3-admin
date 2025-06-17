@@ -219,8 +219,11 @@ const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: Tab
           getProp(scope.row_editableCol, column.prop!) // 多级 prop 单元格编辑
         "
         :ref="(el: any) => registerProFormInstance(el, scope, column.prop!)"
+        v-bind="column.editProps"
         :value="getProp(scope.row._label?.[column.prop!] ?? scope.row, column.prop!)"
         :prop="column.editProps?.prop || column.prop!"
+        :options="column.editProps?.options || scope.row._options"
+        :option-field="column.editProps?.optionField || column.optionField"
         @change="model => handleChange(model, scope, column)"
       />
 

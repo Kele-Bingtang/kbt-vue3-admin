@@ -2,12 +2,12 @@ import { defineConfig } from "eslint/config";
 import eslint from "@eslint/js";
 import globals from "globals";
 import pluginVue from "eslint-plugin-vue";
-import projectGlobals from "./eslintrc-globals.js";
 import configPrettier from "eslint-config-prettier";
 import pluginPrettier from "eslint-plugin-prettier";
 import pluginTypeScript from "@typescript-eslint/eslint-plugin";
 import * as parserVue from "vue-eslint-parser";
 import * as parserTypeScript from "@typescript-eslint/parser";
+import projectGlobals from "./.eslintrc-globals.js";
 
 export default defineConfig([
   eslint.configs.recommended,

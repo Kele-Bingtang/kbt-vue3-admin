@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, computed } from "vue";
 import { ArrowRight, ArrowLeft, Delete, Search } from "@element-plus/icons-vue";
-import { TableMain } from "@/components";
+import { TableMain } from "@/components/pro/pro-table";
 
 defineOptions({ name: "ProTableTransfer" });
 

@@ -7,6 +7,7 @@ import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
 import { isEmpty, isObject, isString } from "@/utils";
 import ProForm from "../index.vue";
+import type { RenderTypes } from "@/components/pro/form-item";
 
 type ProFormPropsWithModel = ProFormProps & { modelValue?: Recordable };
 
@@ -192,7 +193,7 @@ export const useProForm = () => {
     createForm: async (
       el: MaybeRef<HTMLElement> | string,
       proFormProps?: ProFormPropsWithModel & Partial<ProFormOnEmits>,
-      slots?: any
+      slots?: { [slotName: string]: (scope?: any) => RenderTypes }
     ) => {
       const proFormInstance = createVNode(ProForm, { ...proFormProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(

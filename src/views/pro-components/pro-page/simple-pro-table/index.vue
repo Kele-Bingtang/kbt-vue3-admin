@@ -1,7 +1,7 @@
-<script setup lang="tsx" name="SimpleProTable">
-import { ProTable, type TableColumn, type ProTableInstance } from "@/components";
+<script setup lang="tsx">
+import { ProPage, type PageColumn, type ProPageInstance } from "@/components";
 import { useConfirm, usePermission } from "@/composables";
-import { ElButton, ElMessage, ElMessageBox, ElSwitch, ElTag, type TableColumnCtx } from "element-plus";
+import { ElButton, ElInput, ElMessage, ElMessageBox, ElSwitch, ElTag, type TableColumnCtx } from "element-plus";
 import { tableData } from "@/mock/pro-table";
 import { CirclePlus, Delete, EditPen, Download, Upload, View, Refresh } from "@element-plus/icons-vue";
 import { exportJsonToExcel, formatJsonToArray } from "@/utils";
@@ -25,10 +25,10 @@ export interface ResUserList {
 const { hasAuth } = usePermission();
 
 // 获取 ProTable 元素，调用其获取刷新数据方法（还能获取到当前查询参数，方便导出携带参数）
-const proTableInstance = useTemplateRef<ProTableInstance>("proTableInstance");
+const proPageInstance = useTemplateRef<ProPageInstance>("proPageInstance");
 const data = ref(tableData);
 
-const columns: TableColumn<ResUserList>[] = [
+const columns: PageColumn<ResUserList>[] = [
   { type: "selection", fixed: "left", width: 60 },
   { type: "index", label: "#", width: 60 },
   { type: "sort", label: "Sort", width: 80 },
@@ -36,6 +36,7 @@ const columns: TableColumn<ResUserList>[] = [
   {
     prop: "username",
     label: "用户姓名",
+    search: { el: "el-input" },
     render: value => {
       return (
         <ElButton
@@ -51,11 +52,12 @@ const columns: TableColumn<ResUserList>[] = [
   {
     prop: "gender",
     label: "性别",
-    options: [
+    enum: [
       { genderLabel: "男", genderValue: 1 },
       { genderLabel: "女", genderValue: 2 },
     ],
-    optionField: { label: "genderLabel", value: "genderValue" },
+    fieldNames: { label: "genderLabel", value: "genderValue" },
+    search: { el: "el-select", props: { filterable: true } },
     filters: [
       { text: "男", value: "1" },
       { text: "女", value: "2" },
@@ -64,14 +66,15 @@ const columns: TableColumn<ResUserList>[] = [
       const property = column["property"];
       return row[property] === Number(value);
     },
-    editable: true,
-    editProps: {
+    editConfig: {
+      enabled: true,
       el: "el-select",
     },
   },
   {
     // 多级 prop
     prop: "user.detail.age",
+    renderUseProp: ["minAge", "maxAge"],
     label: "年龄",
     filterProps: {
       formColumn: { width: 400 },
@@ -81,20 +84,34 @@ const columns: TableColumn<ResUserList>[] = [
         return value >= model.minAge && value <= model.maxAge;
       },
     },
-    editProps: {
+    search: {
       el: "el-input-number",
-      prop: "age",
-      formItemProps: { required: true },
+      // 自定义 search 显示内容
+      renderEl: (model: any) => {
+        return (
+          <div class="flx-center">
+            <ElInput vModel_trim={model.minAge} placeholder="最小年龄" />
+            <span style="margin: 0 10px">-</span>
+            <ElInput vModel_trim={model.maxAge} placeholder="最大年龄" />
+          </div>
+        );
+      },
+    },
+    editConfig: {
+      el: "el-input-number",
+      key: "age",
+      formItem: { required: true },
     },
   },
   {
     prop: "idCard",
     label: "身份证号",
-    filterProps: {
+    filterConfig: {
       rule: "like",
     },
-    editProps: {
-      formItemProps: { required: true },
+    search: { el: "el-input" },
+    editConfig: {
+      formItem: { required: true },
     },
   },
   { prop: "email", label: "邮箱" },
@@ -102,10 +119,11 @@ const columns: TableColumn<ResUserList>[] = [
   {
     prop: "status",
     label: "用户状态",
-    options: [
+    enum: [
       { userLabel: "启用", userStatus: 1 },
       { userLabel: "禁用", userStatus: 0 },
     ],
+    search: { el: "el-select", props: { filterable: true } },
     fieldNames: { label: "userLabel", value: "userStatus" },
     render: (value, scope) => {
       return (
@@ -116,7 +134,7 @@ const columns: TableColumn<ResUserList>[] = [
               active-text={value ? "启用" : "禁用"}
               active-value={1}
               inactive-value={0}
-              onClick={() => changeStatus(scope.row)}
+              onChange={() => changeStatus(scope.row)}
             />
           ) : (
             <ElTag type={value ? "success" : "danger"}>{value ? "启用" : "禁用"}</ElTag>
@@ -136,8 +154,14 @@ const columns: TableColumn<ResUserList>[] = [
       );
     },
     width: 180,
-    filterProps: {
-      formColumn: { width: 400 },
+    filterConfig: {
+      width: 400,
+    },
+    search: {
+      el: "el-date-picker",
+      span: 2, // 占两个位置
+      props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
+      defaultValue: ["1900-11-12 11:35:00", "2024-12-12 11:35:00"],
     },
   },
   { prop: "operation", label: "操作", fixed: "right", width: 330 },
@@ -148,7 +172,7 @@ const deleteAccount = async (params: ResUserList) => {
   await useConfirm(() => {
     data.value = data.value.filter(item => item.id !== params.id);
   }, `删除【${params.username}】用户`);
-  proTableInstance.value?.getTableList();
+  proPageInstance.value?.proTableInstance?.getTableList();
 };
 
 // 批量删除用户信息
@@ -156,14 +180,14 @@ const batchDelete = async (id: string[]) => {
   await useConfirm(() => {
     data.value = data.value.filter(item => !id.includes(item.id));
   }, "删除所选用户信息");
-  proTableInstance.value?.tableMainInstance?.clearSelection();
-  proTableInstance.value?.getTableList();
+  proPageInstance.value?.proTableInstance?.tableMainInstance?.clearSelection();
+  proPageInstance.value?.proTableInstance?.getTableList();
 };
 
 // 重置用户密码
 const resetPass = async (params: ResUserList) => {
   await useConfirm(() => {}, `重置【${params.username}】用户密码`);
-  proTableInstance.value?.getTableList();
+  proPageInstance.value?.proTableInstance?.getTableList();
 };
 
 // 切换用户状态
@@ -189,8 +213,8 @@ const downloadFile = async () => {
 
 <template>
   <div class="simple-pro-table-container">
-    <ProTable
-      ref="proTableInstance"
+    <ProPage
+      ref="proPageInstance"
       :data="data"
       :columns="columns"
       row-key="id"
@@ -244,6 +268,6 @@ const downloadFile = async () => {
           删除
         </el-button>
       </template>
-    </ProTable>
+    </ProPage>
   </div>
 </template>

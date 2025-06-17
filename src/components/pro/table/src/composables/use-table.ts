@@ -1,6 +1,7 @@
 import type { TableInstance } from "element-plus";
 import type { ProTableInstance, ProTableNamespace, TableColumn } from "../types";
-import type { PageInfo } from "@/components";
+import type { PageInfo } from "@/components/pro/pagination";
+import type { RenderTypes } from "@/components/pro/form-item";
 import type { TableSetProps } from "./use-table-api";
 import { createVNode, getCurrentInstance, nextTick, ref, render } from "vue";
 import { ElConfigProvider } from "element-plus";
@@ -34,7 +35,7 @@ export const useProTable = () => {
   const tableState = {
     tableData: proTableInstance.value?.tableData, // 表格数据
     pageInfo: proTableInstance.value?.pageInfo, // 分页信息
-    optionsMap: proTableInstance.value?.optionsMap, // 字典枚举
+    optionsMap: proTableInstance.value?.tableMainInstance?.optionsMap, // 字典枚举
   };
 
   const selectState = {
@@ -202,7 +203,7 @@ export const useProTable = () => {
     createTable: async (
       el: MaybeRef<HTMLElement> | string,
       proTableProps?: ProTableNamespace.Props & Partial<ProTableNamespace.Emits>,
-      slots?: any
+      slots?: { [slotName: string]: (scope?: any) => RenderTypes }
     ) => {
       const proTableInstance = createVNode(ProTable, { ...proTableProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(

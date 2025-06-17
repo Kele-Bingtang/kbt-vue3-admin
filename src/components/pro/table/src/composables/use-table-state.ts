@@ -27,7 +27,7 @@ export interface UseTableStateData {
  */
 export const useTableState = (
   api?: (params: Recordable) => Promise<any>,
-  defaultParams: MaybeRef<Recordable> = {},
+  defaultRequestParams: MaybeRef<Recordable> = {},
   pageInfo?: ProTableMainNamespace.Props["pageInfo"],
   isServerPage?: MaybeRef<boolean>,
   beforeSearch?: (searchParam: Recordable) => boolean | Recordable,
@@ -59,7 +59,7 @@ export const useTableState = (
   /**
    * 获取表格数据
    */
-  const getTableList = async (requestParams = defaultParams) => {
+  const getTableList = async (requestParams = defaultRequestParams) => {
     if (!api) return;
 
     const isServerPageValue = toValue(isServerPage);

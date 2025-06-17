@@ -26,7 +26,8 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   columns: () => [],
   data: () => [],
   requestApi: undefined,
-  defaultParams: () => ({}),
+  defaultRequestParams: () => ({}),
+  initRequestParams: () => ({}),
   requestImmediate: true,
   beforeSearch: undefined,
   requestError: undefined,
@@ -72,7 +73,7 @@ const tableMainInstance = useTemplateRef<ProTableMainInstance>("tableMainInstanc
 // 表格密度
 const tableSize = ref<TableSizeEnum>((props.size as TableSizeEnum) || TableSizeEnum.Default);
 // 表格密度样式
-const sizeStyle = ref<SizeStyle>();
+const currentSizeStyle = ref<SizeStyle>();
 // 表格全局设置
 const baseSetting = reactive({
   border: props.border ?? false,
@@ -81,8 +82,6 @@ const baseSetting = reactive({
   highlightCurrentRow: true,
   ...props.baseSetting,
 });
-// options 枚举缓存
-const optionsMap = ref(new Map<string, Recordable[]>());
 
 // 最终的 props
 const finalProps = computed(() => {
@@ -111,7 +110,7 @@ const isServerPage = computed(() => {
 const { tableData, pageInfo, searchParams, searchInitParams, getTableList, search, reset, handlePagination } =
   useTableState(
     finalProps.value.requestApi,
-    computed(() => finalProps.value.defaultParams),
+    computed(() => unref(finalProps.value.defaultRequestParams)),
     finalProps.value.pageInfo,
     isServerPage,
     finalProps.value.beforeSearch,
@@ -130,15 +129,17 @@ const finalTableData = computed(() => {
 const finalSizeStyle = computed(() => {
   const { rowStyle, cellStyle, headerCellStyle } = finalProps.value;
   return {
-    rowStyle: { ...rowStyle, ...sizeStyle.value?.rowStyle },
-    cellStyle: { ...cellStyle, ...sizeStyle.value?.cellStyle },
+    rowStyle: { ...rowStyle, ...currentSizeStyle.value?.rowStyle },
+    cellStyle: { ...cellStyle, ...currentSizeStyle.value?.cellStyle },
     headerCellStyle: {
       ...headerCellStyle,
-      ...sizeStyle.value?.headerCellStyle,
+      ...currentSizeStyle.value?.headerCellStyle,
       ...(!baseSetting.headerBackground && { backgroundColor: undefined }),
     },
   };
 });
+
+watchEffect(() => (searchInitParams.value = finalProps.value.initRequestParams));
 
 onMounted(() => {
   // 初始化请求
@@ -153,7 +154,7 @@ const handleSelectionChange = (useSelectReturn: UnwrapRef<UseSelectState>, index
 
 const handleSizeChange = (size: TableSizeEnum, style: SizeStyle) => {
   tableSize.value = size === TableSizeEnum.Mini ? TableSizeEnum.Default : size;
-  sizeStyle.value = style;
+  currentSizeStyle.value = style;
   emits("sizeChange", size, style);
 };
 
@@ -205,9 +206,13 @@ const handleLeaveCellEdit = (row: TableRow, column: TableColumn) => {
   emits("leaveCellEdit", row, column);
 };
 
+const getElTableInstance = () => tableMainInstance.value?.elTableInstance;
+const getElFormInstance = () => tableMainInstance.value?.getElFormInstance;
+const getElFormItemInstance = () => tableMainInstance.value?.getElFormItemInstance;
+const getElInstance = () => tableMainInstance.value?.getElInstance;
+
 const expose = {
   tableData,
-  optionsMap,
   pageInfo,
   searchParams,
   searchInitParams,
@@ -219,6 +224,11 @@ const expose = {
   setColumn,
   addColumn,
   delColumn,
+
+  getElTableInstance,
+  getElFormInstance,
+  getElFormItemInstance,
+  getElInstance,
   tableHeadInstance,
   tableMainInstance,
 };
@@ -243,6 +253,9 @@ defineExpose(expose);
       :size-style
       :column-setting
       :base-setting
+      :is-selected="tableMainInstance?.isSelected"
+      :selected-list="tableMainInstance?.selectedList"
+      :selected-list-ids="tableMainInstance?.selectedListIds"
       @size-change="handleSizeChange"
     >
       <template v-for="slot in Object.keys($slots)" #[slot]="scope">

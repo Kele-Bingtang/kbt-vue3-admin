@@ -1,7 +1,7 @@
 <script setup lang="tsx" name="useProTable">
-import { useProTable, ProTable, type TableColumnProps } from "@/components";
+import { useProTable, ProTable, type TableColumn } from "@/components";
 import { tableData } from "@/mock/pro-table";
-import { ElButton, ElInput, ElMessage } from "element-plus";
+import { ElButton, ElMessage } from "element-plus";
 
 const { tableRegister, tableMethods } = useProTable();
 const { setProps, setColumn, getElTableExpose, addColumn, delColumn, clearSelection, pagination } = tableMethods;
@@ -12,10 +12,6 @@ const getTicketList = () => {
       data: tableData,
     });
   });
-};
-
-const showSearch = (show: boolean) => {
-  setProps({ initShowSearch: show });
 };
 
 const showTableButton = (show: boolean) => {
@@ -33,7 +29,7 @@ const showSelections = (show: boolean) => {
 };
 
 const showPagination = (show: boolean) => {
-  setProps({ pagination: show });
+  setProps({ pageScope: show });
 };
 
 const index = ref(1);
@@ -131,7 +127,7 @@ export interface ResUserList {
   children?: ResUserList[];
 }
 
-const columns: TableColumnProps<ResUserList>[] = reactive([
+const columns: TableColumn<ResUserList>[] = reactive([
   { type: "selection", prop: "selection", fixed: "left", width: 60 },
   { type: "index", label: "#", width: 60 },
   { type: "sort", label: "Sort", width: 80 },
@@ -140,10 +136,10 @@ const columns: TableColumnProps<ResUserList>[] = reactive([
     prop: "username",
     label: "用户姓名",
     search: { el: "el-input" },
-    render: scope => {
+    render: value => {
       return (
         <ElButton type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
-          {scope.row.username}
+          {value}
         </ElButton>
       );
     },
@@ -156,26 +152,13 @@ const columns: TableColumnProps<ResUserList>[] = reactive([
       { genderLabel: "女", genderValue: 2 },
     ],
     fieldNames: { label: "genderLabel", value: "genderValue" },
-    search: { el: "el-select", props: { filterable: true } },
   },
   {
     // 多级 prop
     prop: "user.detail.age",
     label: "年龄",
-    search: {
-      // 自定义 search 显示内容
-      render: ({ model }) => {
-        return (
-          <div class="flx-center">
-            <ElInput vModel_trim={model.minAge} placeholder="最小年龄" />
-            <span style="margin: 0 10px">-</span>
-            <ElInput vModel_trim={model.maxAge} placeholder="最大年龄" />
-          </div>
-        );
-      },
-    },
   },
-  { prop: "idCard", label: "身份证号", search: { el: "el-input" } },
+  { prop: "idCard", label: "身份证号" },
   { prop: "email", label: "邮箱" },
   { prop: "address", label: "居住地址" },
   {
@@ -189,12 +172,6 @@ const columns: TableColumnProps<ResUserList>[] = reactive([
       );
     },
     width: 180,
-    search: {
-      el: "el-date-picker",
-      span: 2,
-      props: { type: "datetimerange", valueFormat: "YYYY-MM-DD HH:mm:ss" },
-      defaultValue: ["2022-11-12 11:35:00", "2022-12-12 11:35:00"],
-    },
   },
   {
     prop: "operation",
@@ -221,8 +198,6 @@ const columns: TableColumnProps<ResUserList>[] = reactive([
   <el-space fill>
     <el-card shadow="never" header="UseTable 操作">
       <el-space wrap>
-        <el-button @click="showSearch(false)">隐藏搜索</el-button>
-        <el-button @click="showSearch(true)">显示搜索</el-button>
         <el-button @click="showTableButton(false)">隐藏表格头部按钮</el-button>
         <el-button @click="showTableButton(true)">显示表格头部按钮</el-button>
         <el-button @click="showSelections(false)">隐藏多选</el-button>

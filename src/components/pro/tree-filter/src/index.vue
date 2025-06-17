@@ -8,10 +8,7 @@ defineOptions({ name: "TreeFilter" });
 
 const ns = useNamespace("tree-filter");
 
-export type TreeFilterInstance = Omit<
-  InstanceType<typeof TreeFilter>,
-  keyof ComponentPublicInstance | keyof TreeFilterProps
->;
+export type TreeFilterInstance = InstanceType<typeof TreeFilter>;
 
 // 接收父组件参数并设置默认值
 interface TreeFilterProps {

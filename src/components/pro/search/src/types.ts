@@ -135,7 +135,4 @@ export type ProSearchOnEmits = keyOnPrefix<ProSearchEmits>;
 /**
  * ProSearch 组件实例
  */
-export type ProSearchInstance = Omit<
-  InstanceType<typeof ProSearch>,
-  keyof ComponentPublicInstance | keyof ProSearchColumnProps
-> & { $parent?: ComponentPublicInstance | null };
+export type ProSearchInstance = InstanceType<typeof ProSearch>;

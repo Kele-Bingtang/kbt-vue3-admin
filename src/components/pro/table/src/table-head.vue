@@ -83,7 +83,7 @@ const showToolButton = (key: ToolButtonEnum) => {
   const { toolButton } = props;
 
   if (!toolButton) return false;
-  return toolButton.includes(key);
+  return toolButton === true || toolButton.includes(key);
 };
 
 /**
@@ -142,7 +142,14 @@ defineExpose(expose);
 <template>
   <div :class="ns.b()">
     <div :class="ns.e('left')">
-      <slot name="head-left">{{ title }}</slot>
+      <slot
+        name="head-left"
+        :selected-list-ids="selectedListIds"
+        :selected-list="selectedList"
+        :is-selected="isSelected"
+      >
+        {{ title }}
+      </slot>
     </div>
 
     <div v-if="toolButton" :class="ns.e('right')">

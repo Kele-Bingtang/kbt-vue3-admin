@@ -57,12 +57,6 @@ const proComponents: RouterConfigRaw = {
           name: "ComplexProTable",
           meta: { title: "复杂 ProTable", icon: StarFilled },
         },
-        {
-          path: "detail",
-          component: () => import("@/views/pro-components/pro-table/detail-pro-table/index.vue"),
-          name: "DetailProTable",
-          meta: { title: "详情 ProTable", icon: StarFilled },
-        },
       ],
     },
     {

@@ -176,7 +176,12 @@ const formatDividerTitle = (labelSize = "default") => {
 
 const RenderLabelSlot = ({ label }: { label: string }) => {
   const { renderLabel } = props;
-  return renderLabel?.(label, slotParams.value);
+  return renderLabel?.(label, model.value, slotParams.value);
+};
+
+const RenderElSlot = () => {
+  const { renderEl } = props;
+  return renderEl?.(model.value, slotParams.value);
 };
 
 const expose = {
@@ -220,7 +225,7 @@ defineExpose(expose);
       <!-- 自定义表单组件插槽 -->
       <slot :name="`${prop}-el`" v-bind="slotParams">
         <!-- 自定义表单组件（h、JSX）渲染-->
-        <component v-if="!!renderEl" :is="renderEl" v-bind="slotParams" />
+        <RenderElSlot v-if="!!renderEl" />
 
         <Tree
           v-else-if="formEl === ComponentNameEnum.EL_TREE"

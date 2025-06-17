@@ -20,7 +20,7 @@ import type {
   TimePickerDefaultProps,
   ElTooltipProps,
 } from "element-plus";
-import type { VNode, ComputedRef, ComponentPublicInstance, ExtractPropTypes } from "vue";
+import type { VNode, ComputedRef, ExtractPropTypes } from "vue";
 import type ProFormItem from "./index.vue";
 import type { TreeProps as CustomTreeProps } from "./components/tree.vue";
 import type { TreeProps } from "element-plus/es/components/tree-v2/src/types";
@@ -87,7 +87,7 @@ export type ElType = PascalCaseComponentName | HyphenCaseComponentName;
 /**
  * 基本类型
  */
-export type BaseValueType = string | number | boolean | unknown;
+export type BaseValueType = string | number | boolean | string[] | number[] | boolean[];
 
 /**
  * 渲染函数的返回值的类型
@@ -236,11 +236,11 @@ export interface FormItemColumnProps {
   /**
    * 自定义 label 标题
    */
-  renderLabel?: (label: string, scope: FormItemColumnProps) => RenderTypes;
+  renderLabel?: (label: string, model: ModelBaseValueType, scope: FormItemColumnProps) => RenderTypes;
   /**
    * 自定义渲染 el-form-item 下的表单组件
    */
-  renderEl?: (scope: FormItemColumnProps) => RenderTypes;
+  renderEl?: (model: ModelBaseValueType, scope: FormItemColumnProps) => RenderTypes;
   /**
    * 是否为编辑态
    *
@@ -256,7 +256,4 @@ export interface ProFormItemEmits {
 /**
  * ProFormItem 组件实例
  */
-export type ProFormItemInstance = Omit<
-  InstanceType<typeof ProFormItem>,
-  keyof ComponentPublicInstance | keyof FormItemColumnProps
-> & { $parent?: ComponentPublicInstance | null };
+export type ProFormItemInstance = InstanceType<typeof ProFormItem>;

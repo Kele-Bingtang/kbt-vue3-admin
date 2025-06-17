@@ -67,6 +67,7 @@ export type TableScope<T = Recordable> = {
 export type TableRow<T extends string | number | symbol = any> = {
   [key in T]: any;
 } & {
+  _options: Recordable[]; // 配置项（options 下拉枚举）
   _option: Recordable; // 配置项（option 下拉枚举）
   _label: Recordable; // 单元格显示的内容
   _editable: boolean | undefined; // 表格是否可编辑
@@ -398,7 +399,7 @@ export namespace ProTableHeadNamespace {
      *
      * @default '["size", "setting", "export"]'
      */
-    toolButton?: false | (ToolButtonEnum | `${ToolButtonEnum}`)[];
+    toolButton?: boolean | (ToolButtonEnum | `${ToolButtonEnum}`)[];
     /**
      * 按钮禁用数组
      *
@@ -452,6 +453,18 @@ export namespace ProTableHeadNamespace {
       disabledHeaderBackground?: boolean; // 是否开启禁用表格高亮选择，默认 false
       disabledHighlightCurrentRow?: boolean; // 是否开启禁用单击高亮当前行选择，默认 false
     };
+    /**
+     * 表格是否选中数据
+     */
+    isSelected?: boolean;
+    /**
+     * 表格选中数据列表
+     */
+    selectedList?: Recordable[];
+    /**
+     * 表格选中数据列表 id
+     */
+    selectedListIds?: string[];
   }
 
   export interface Emits {
@@ -586,9 +599,13 @@ export namespace ProTableNamespace {
      */
     requestApi?: (params: Recordable) => Promise<any>;
     /**
-     * 默认请求参数
+     * 默认请求参数（请求一定会携带）
      */
-    defaultParams?: Recordable;
+    defaultRequestParams?: MaybeRef<Recordable>;
+    /**
+     * 初始化请求参数（重置时恢复为初始化参数）
+     */
+    initRequestParams?: MaybeRef<Recordable>;
     /**
      * 是否立即执行请求
      *
@@ -657,6 +674,10 @@ export namespace ProTableNamespace {
      * ElTable 的 stripe
      */
     stripe?: TableProps<Recordable>["stripe"];
+    /**
+     * ElTable 的 props
+     */
+    [key: string]: any;
   }
 
   export interface Emits extends ProTableMainNamespace.Emits, ProTableHeadNamespace.Emits {
@@ -723,7 +744,7 @@ export interface TableColumn<T = any>
   /**
    * 自定义表头内容渲染（tsx 语法）
    */
-  headerRender?: (scope: Omit<TableScope<T>, "row">) => VNode;
+  headerRender?: (scope: TableScope<T>) => VNode;
   /**
    * 自定义单元格内容渲染（tsx 语法）
    */
@@ -779,23 +800,14 @@ export interface TableColumn<T = any>
 /**
  * ProTable 组件实例
  */
-export type ProTableInstance = Omit<
-  InstanceType<typeof ProTable>,
-  keyof ComponentPublicInstance | keyof ProTableNamespace.Props
-> & { $parent?: ComponentPublicInstance | null; pageInfo: ProTableNamespace.Props["pageInfo"] };
+export type ProTableInstance = InstanceType<typeof ProTable>;
 
 /**
  * ProTableMain 组件实例
  */
-export type ProTableMainInstance = Omit<
-  InstanceType<typeof ProTableMain>,
-  keyof ComponentPublicInstance | keyof ProTableMainNamespace.Props
-> & { $parent?: ComponentPublicInstance | null };
+export type ProTableMainInstance = InstanceType<typeof ProTableMain>;
 
 /**
  * ProTableHead 组件实例
  */
-export type ProTableHeadInstance = Omit<
-  InstanceType<typeof ProTableHead>,
-  keyof ComponentPublicInstance | keyof ProTableHeadNamespace.Props
-> & { $parent?: ComponentPublicInstance | null };
+export type ProTableHeadInstance = InstanceType<typeof ProTableHead>;

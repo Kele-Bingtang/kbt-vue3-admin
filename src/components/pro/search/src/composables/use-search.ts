@@ -7,6 +7,7 @@ import { ElConfigProvider } from "element-plus";
 import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
 import ProSearch from "../index.vue";
+import type { RenderTypes } from "@/components/pro/form-item";
 
 type ProSearchPropsWithModel = ProSearchProps & { modelValue?: Recordable };
 
@@ -174,7 +175,7 @@ export const useProSearch = () => {
     createSearch: async (
       el: string | Ref<HTMLElement> | ShallowRef<HTMLElement>,
       proSearchProps?: ProSearchPropsWithModel & Partial<ProSearchOnEmits>,
-      slots?: any
+      slots?: { [slotName: string]: (scope?: any) => RenderTypes }
     ) => {
       const proSearchInstance = createVNode(ProSearch, { ...proSearchProps, onRegister: register }, { ...slots });
       const rootInstance = createVNode(

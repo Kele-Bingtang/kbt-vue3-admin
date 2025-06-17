@@ -1,33 +1,34 @@
-<script setup lang="tsx" name="ComplexProTable">
-import type { TableColumn, TableScope, ProTableInstance } from "@/components";
-import type { ResUserList } from "../simple-pro-table/index.vue";
-import { ProTable } from "@/components";
+<script setup lang="tsx">
+import { ProPage, type PageColumn, type TableScope, type ProPageInstance } from "@/components";
 import { useConfirm } from "@/composables";
 import { ElButton, ElMessage, type TableColumnCtx } from "element-plus";
 import { genderType, tableData, userStatus } from "@/mock/pro-table";
 import { CirclePlus, Delete, Pointer, Refresh } from "@element-plus/icons-vue";
+import type { ResUserList } from "../simple-pro-table/index.vue";
 import { useNamespace } from "@/composables";
 
 const ns = useNamespace();
-const proTableInstance = useTemplateRef<ProTableInstance>("proTableInstance");
+const proPageInstance = useTemplateRef<ProPageInstance>("proPageInstance");
 const data = ref(tableData);
 
-const columns: TableColumn<ResUserList>[] = [
+// 自定义渲染表头（使用tsx语法）
+const headerRender = (scope: TableScope<ResUserList>) => {
+  return (
+    <ElButton type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
+      {scope.column.label}
+    </ElButton>
+  );
+};
+
+const columns: PageColumn<ResUserList>[] = [
   { type: "selection", width: 80 },
   { type: "index", label: "#", width: 80 },
   { type: "expand", label: "Expand", width: 100 },
   {
     prop: "base",
     label: "基本信息",
-    // 自定义渲染表头（使用tsx语法）
-    headerRender: (scope: TableScope<ResUserList>) => {
-      return (
-        <ElButton type="primary" onClick={() => ElMessage.success("我是通过 tsx 语法渲染的表头")}>
-          {scope.column.label}
-        </ElButton>
-      );
-    },
-    children: [
+    headerRender,
+    _children: [
       { prop: "username", label: "用户姓名", width: 110 },
       { prop: "user.detail.age", label: "年龄", width: 100 },
       {
@@ -59,7 +60,8 @@ const columns: TableColumn<ResUserList>[] = [
 
 // 选择行
 const setCurrent = () => {
-  proTableInstance.value?.getElTableInstance()?.setCurrentRow(proTableInstance.value?.tableData[4]);
+  const proTableInstance = proPageInstance.value?.proTableInstance;
+  proTableInstance?.getElTableInstance()?.setCurrentRow(proTableInstance.value?.tableData[4]);
 };
 
 // 表尾合计行（自行根据条件计算）
@@ -110,7 +112,7 @@ const deleteAccount = async (params: ResUserList) => {
   await useConfirm(() => {
     data.value = data.value.filter(item => item.id !== params.id);
   }, `删除【${params.username}】用户`);
-  proTableInstance.value?.getTableList();
+  proPageInstance.value?.proTableInstance?.getTableList();
 };
 
 // 批量删除用户信息
@@ -118,22 +120,21 @@ const batchDelete = async (id: string[]) => {
   await useConfirm(() => {
     data.value = data.value.filter(item => !id.includes(item.id));
   }, "删除所选用户信息");
-  proTableInstance.value?.tableMainInstance?.clearSelection();
-  proTableInstance.value?.getTableList();
+  proPageInstance.value?.proTableInstance?.tableMainInstance?.clearSelection();
+  proPageInstance.value?.proTableInstance?.getTableList();
 };
 
 // 重置用户密码
 const resetPass = async (params: ResUserList) => {
   await useConfirm(() => {}, `重置【${params.username}】用户密码`);
-  proTableInstance.value?.getTableList();
+  proPageInstance.value?.proTableInstance?.getTableList();
 };
 </script>
 
 <template>
   <div class="complex-pro-table-container">
-    <ProTable
-      ref="proTableInstance"
-      highlight-current-row
+    <ProPage
+      ref="proPageInstance"
       :data="data"
       :columns="columns"
       :row-class-name="tableRowClassName"
@@ -147,7 +148,7 @@ const resetPass = async (params: ResUserList) => {
         <el-button
           type="primary"
           :icon="CirclePlus"
-          @click="proTableInstance?.getElTableInstance()?.toggleAllSelection"
+          @click="proPageInstance?.proTableInstance?.getElTableInstance()?.toggleAllSelection"
         >
           全选 / 全不选
         </el-button>
@@ -176,7 +177,7 @@ const resetPass = async (params: ResUserList) => {
           我是插入在表格最后的内容。若表格有合计行，该内容会位于合计行之上。
         </span>
       </template>
-    </ProTable>
+    </ProPage>
   </div>
 </template>
 

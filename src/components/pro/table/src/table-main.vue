@@ -110,9 +110,9 @@ const initOptionsInData = (data: Recordable[]) => {
 
   // 如果 columns 发生改变，则重新初始化 _options
   visibleColumns.value.forEach(async column => {
-    const { prop = "", isFilterOptions = true, optionField, transformOption } = column;
+    const { prop = "", isFilterOptions = true, optionField, transformOption, optionsProp } = column;
 
-    const options = unref(optionsMap.value.get(prop));
+    const options = unref(optionsMap.value.get(optionsProp || prop));
     // 如果字段有配置枚举信息，则存放到 _options[col.prop] 里
     if (options && toValue(isFilterOptions)) {
       newData = newData?.map(row => {
@@ -125,6 +125,7 @@ const initOptionsInData = (data: Recordable[]) => {
         if (!row._option) row._option = {};
         if (!row._label) row._label = {};
 
+        row._options = options;
         row._option[prop] = option;
         row._label[prop] = formatLabel;
         return row;
@@ -195,9 +196,9 @@ const handleDoubleClickCell = (row: TableRow, column: TableColumn, cell: HTMLTab
 };
 
 // 缓存关闭当前单元格的编辑态方法
-let stopCurrentEditCell: (() => void) | null = null;
+let closeCurrentCellEdit: (() => void) | null = null;
 // 缓存当前单元格的校验方法
-let validateCellEdit: (() => FormValidationResult | undefined) | null = () => Promise.resolve(true);
+let validateCurrentCellEdit: (() => FormValidationResult | undefined) | null = () => Promise.resolve(true);
 // 缓存当前的 stopCurrentEditCell 函数
 let currentStopEditHandler: ((e: MouseEvent) => void) | null = null;
 
@@ -215,7 +216,7 @@ const handleCellEdit = async (row: TableRow, column: TableColumn, type: "click" 
   if (props.editable !== type) return;
 
   // 原先的单元格校验失败
-  if (!(await validateCellEdit?.())) return;
+  if (!(await validateCurrentCellEdit?.())) return;
 
   // 清理之前的监听器
   if (currentStopEditHandler) document.removeEventListener("click", currentStopEditHandler);
@@ -229,10 +230,10 @@ const handleCellEdit = async (row: TableRow, column: TableColumn, type: "click" 
   document.addEventListener("click", currentStopEditHandler);
 
   // 停止上一个单元格的编辑状态
-  stopCurrentEditCell?.();
+  closeCurrentCellEdit?.();
   // 缓存当前单元格的退出编辑状态函数和校验函数
-  stopCurrentEditCell = () => row._closeCellEdit(currentColumn.prop);
-  validateCellEdit = () => row._validateCellEdit(undefined, currentColumn.prop);
+  closeCurrentCellEdit = () => row._closeCellEdit(currentColumn.prop);
+  validateCurrentCellEdit = () => row._validateCellEdit(undefined, currentColumn.prop);
 
   // 开启当前点击的单元格的编辑
   row._openCellEdit(currentColumn.prop);
@@ -244,7 +245,7 @@ const handleCellEdit = async (row: TableRow, column: TableColumn, type: "click" 
 const handleStopEditClick = async (e: MouseEvent, row: TableRow, column: TableColumn) => {
   if (!(await row._validateCellEdit(undefined, column.prop))) return;
 
-  if (stopCurrentEditCell && elTableInstance.value) {
+  if (closeCurrentCellEdit && elTableInstance.value) {
     const target = e?.target as HTMLElement;
 
     if (target.classList.contains("el-icon")) return;
@@ -252,7 +253,7 @@ const handleStopEditClick = async (e: MouseEvent, row: TableRow, column: TableCo
     const contains = elTableInstance.value.$el?.contains(target);
 
     if (!contains) {
-      stopCurrentEditCell();
+      closeCurrentCellEdit();
       emits("leaveCellEdit", row, column);
       if (currentStopEditHandler) document.removeEventListener("click", currentStopEditHandler);
     }
@@ -410,6 +411,7 @@ const getElInstance = (index: number, prop: TableColumn["prop"]) => {
 
 // 暴露给父组件的参数和方法(外部需要什么，都可以从这里暴露出去)
 const expose = {
+  optionsMap,
   elTableInstance,
   isSelected,
   selectedList,

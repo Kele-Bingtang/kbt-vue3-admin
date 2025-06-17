@@ -1,5 +1,5 @@
 import type { ColProps, FormInstance, FormItemProp, FormProps, FormValidateCallback, RowProps } from "element-plus";
-import type { ComponentPublicInstance, InjectionKey, Ref } from "vue";
+import type { InjectionKey, Ref } from "vue";
 import type { FormItemColumnProps, BaseValueType, ProFormItemEmits } from "@/components/pro/form-item/src/types";
 import type ProForm from "./index.vue";
 
@@ -162,9 +162,7 @@ export interface FormColumn extends FormItemColumnProps {
 /**
  * ProForm 组件实例
  */
-export type ProFormInstance = Omit<InstanceType<typeof ProForm>, keyof ComponentPublicInstance | keyof ProFormProps> & {
-  $parent?: ComponentPublicInstance | null;
-};
+export type ProFormInstance = InstanceType<typeof ProForm>;
 
 /**
  * provide 类型

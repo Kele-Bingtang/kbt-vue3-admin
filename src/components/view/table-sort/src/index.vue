@@ -6,10 +6,7 @@ import TableSort from "./index.vue";
 
 defineOptions({ name: "TableSort" });
 
-export type TableSortInstance = Omit<
-  InstanceType<typeof TableSort>,
-  keyof ComponentPublicInstance | keyof TableSortProps
->;
+export type TableSortInstance = InstanceType<typeof TableSort>;
 
 const slots = useSlots();
 
