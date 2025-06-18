@@ -49,7 +49,13 @@ const withValue = computed(() => addUnit(toValue(props.width)));
 
 // 最终的 props
 const finalProps = computed(() => {
-  const propsObj = { ...props };
+  const propsObj = {
+    ...props,
+    columns:
+      isRef(props.columns) || isReactive(props.columns)
+        ? props.columns
+        : (reactive(unref(props.columns)) as FormColumn[]),
+  };
   Object.assign(propsObj, mergeProps.value);
   return propsObj;
 });
@@ -120,32 +126,42 @@ const initDefaultValue = async ({ defaultValue, optionField, prop }: FormColumn)
   }
 };
 
+let timer: ReturnType<typeof setTimeout> | null = null;
+
 // 监听表单结构化数组，重新组装 column
 watch(
   filteredColumn,
   (column = []) => {
-    const { dynamicModel, includeModelKeys } = finalProps.value;
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
 
-    column.forEach((item, index) => {
-      // 初始化枚举数据
-      initOptionsMap(item);
+    // 防抖：防止初始化时连续执行
+    timer = setTimeout(() => {
+      const { dynamicModel, includeModelKeys } = finalProps.value;
 
-      // 设置表单排序默认值
-      item && (item.order = item.order ?? index + 5);
-      // 初始化值
-      initDefaultValue(item);
-    });
+      column.forEach((item, index) => {
+        // 初始化枚举数据
+        initOptionsMap(item);
 
-    // 排序表单项
-    column.sort((a, b) => a.order! - b.order!);
+        // 设置表单排序默认值
+        item && (item.order = item.order ?? index + 5);
+        // 初始化值
+        initDefaultValue(item);
+      });
 
-    if (!dynamicModel) return;
+      // 排序表单项
+      column.sort((a, b) => a.order! - b.order!);
 
-    // 如果 column 对应的 prop 不存在，则删除 model 中的对应的 prop
-    getObjectKeys(model.value).forEach(key => {
-      const isExist = column.some(item => item.prop === key || includeModelKeys?.includes(key));
-      if (!isExist) deleteObjProperty(model.value, key);
-    });
+      if (!dynamicModel) return;
+
+      // 如果 column 对应的 prop 不存在，则删除 model 中的对应的 prop
+      getObjectKeys(model.value).forEach(key => {
+        const isExist = column.some(item => item.prop === key || includeModelKeys?.includes(key));
+        if (!isExist) deleteObjProperty(model.value, key);
+      });
+    }, 10);
   },
   {
     immediate: true,
@@ -189,7 +205,10 @@ onMounted(() => {
 });
 
 const submitForm = async () => {
-  if (props.preventNativeSubmit) return emits("submit", model.value);
+  if (props.preventNativeSubmit) {
+    emits("submit", model.value);
+    return true;
+  }
 
   return await elFormInstance.value?.validate((isValid, invalidFields) => {
     if (isValid) return emits("submit", model.value);

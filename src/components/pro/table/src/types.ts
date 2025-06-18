@@ -77,6 +77,7 @@ export type TableRow<T extends string | number | symbol = any> = {
   _closeCellEdit: (prop?: string) => void; // 停止编辑态方法
   _isCellEdit: (prop?: string) => boolean; // 是否处于编辑态方法
   _validateCellEdit: (callback?: FormValidateCallback, prop?: string) => FormValidationResult | undefined; // 校验编辑态表单方法
+  _getData: () => Recordable;
 };
 
 /**
@@ -748,11 +749,11 @@ export interface TableColumn<T = any>
   /**
    * 自定义单元格内容渲染（tsx 语法）
    */
-  render?: (value: unknown, scope: TableScope<T>) => VNode | string;
+  render?: (value: unknown, scope: TableScope<T>, options: ElOption[]) => VNode | string;
   /**
    * 自定义单元格内容渲染（返回 HTML），优先级低于 render，高于插槽
    */
-  renderHTML?: (value: unknown, scope: TableScope<T>) => string;
+  renderHTML?: (value: unknown, scope: TableScope<T>, options: ElOption[]) => string;
   /**
    * 多级表头
    */

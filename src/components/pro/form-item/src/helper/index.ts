@@ -35,10 +35,7 @@ export const formatValue = async <T = any>(
     if (processRef) return unref(value);
     return value;
   }
-  if (isProxy(value)) {
-    if (processRef) return { ...value };
-    return value;
-  }
+  if (isProxy(value)) return value;
   if (isObject(value)) return { ...value };
   if (isFunction(value)) return await (value as any)(...params);
   if (isPromise(value)) return await value;

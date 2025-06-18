@@ -8,9 +8,7 @@ const { setProps, setColumn, getElTableExpose, addColumn, delColumn, clearSelect
 
 const getTicketList = () => {
   return new Promise(resolve => {
-    resolve({
-      data: tableData,
-    });
+    resolve({ data: tableData });
   });
 };
 
@@ -127,7 +125,7 @@ export interface ResUserList {
   children?: ResUserList[];
 }
 
-const columns: TableColumn<ResUserList>[] = reactive([
+const columns = reactive<TableColumn<ResUserList>[]>([
   { type: "selection", prop: "selection", fixed: "left", width: 60 },
   { type: "index", label: "#", width: 60 },
   { type: "sort", label: "Sort", width: 80 },
@@ -135,7 +133,6 @@ const columns: TableColumn<ResUserList>[] = reactive([
   {
     prop: "username",
     label: "用户姓名",
-    search: { el: "el-input" },
     render: value => {
       return (
         <ElButton type="primary" link onClick={() => ElMessage.success("我是通过 tsx 语法渲染的内容")}>
@@ -147,11 +144,11 @@ const columns: TableColumn<ResUserList>[] = reactive([
   {
     prop: "gender",
     label: "性别",
-    enum: [
+    options: [
       { genderLabel: "男", genderValue: 1 },
       { genderLabel: "女", genderValue: 2 },
     ],
-    fieldNames: { label: "genderLabel", value: "genderValue" },
+    optionField: { label: "genderLabel", value: "genderValue" },
   },
   {
     // 多级 prop
@@ -216,11 +213,6 @@ const columns: TableColumn<ResUserList>[] = reactive([
       </el-space>
     </el-card>
 
-    <ProTable
-      :requestApi="getTicketList"
-      :pagination="{ enabled: true, fake: true }"
-      :columns="columns"
-      @register="tableRegister"
-    ></ProTable>
+    <ProTable :requestApi="getTicketList" page-scope :columns @register="tableRegister" />
   </el-space>
 </template>

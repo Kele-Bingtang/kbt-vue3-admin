@@ -132,18 +132,13 @@ const initOptions = async () => {
   return value;
 };
 
-if (isRef(props.options) || isProxy(props.options)) {
-  watch(
-    () => props.options,
-    async () => {
-      enums.value = await initOptions();
-    }
-  );
-}
-
-onMounted(async () => {
-  enums.value = await initOptions();
-});
+watch(
+  () => props.options,
+  async () => {
+    enums.value = await initOptions();
+  },
+  { immediate: true }
+);
 
 // 处理默认 placeholder
 const placeholder = computed(() => {
@@ -174,16 +169,6 @@ const formatDividerTitle = (labelSize = "default") => {
   return {};
 };
 
-const RenderLabelSlot = ({ label }: { label: string }) => {
-  const { renderLabel } = props;
-  return renderLabel?.(label, model.value, slotParams.value);
-};
-
-const RenderElSlot = () => {
-  const { renderEl } = props;
-  return renderEl?.(model.value, slotParams.value);
-};
-
 const expose = {
   elFormItemInstance,
   elInstance,
@@ -204,7 +189,7 @@ defineExpose(expose);
       <!-- 自定义 label 插槽 -->
       <slot :name="`${prop}-label`" v-bind="slotParams">
         <!-- 自定义 label（h、JSX）渲染 -->
-        <RenderLabelSlot v-if="!!renderLabel" :label />
+        <component v-if="!!renderLabel" :is="renderLabel(label, model, slotParams)" />
         <span v-else-if="label">{{ label }}</span>
       </slot>
 
@@ -225,7 +210,7 @@ defineExpose(expose);
       <!-- 自定义表单组件插槽 -->
       <slot :name="`${prop}-el`" v-bind="slotParams">
         <!-- 自定义表单组件（h、JSX）渲染-->
-        <RenderElSlot v-if="!!renderEl" />
+        <component v-if="!!renderEl" :is="renderEl(model, slotParams)" />
 
         <Tree
           v-else-if="formEl === ComponentNameEnum.EL_TREE"

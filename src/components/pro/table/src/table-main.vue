@@ -87,7 +87,8 @@ watch(tableData, () => (filterTableData.value = undefined));
 /**
  * 初始化枚举字典数据
  */
-const initOptionsMap = async ({ options, prop = "" }: TableColumn) => {
+const initOptionsMap = async (column: TableColumn) => {
+  const { options, prop = "" } = column;
   if (!options) return;
 
   const optionsMapConst = optionsMap.value;
@@ -96,12 +97,12 @@ const initOptionsMap = async ({ options, prop = "" }: TableColumn) => {
   if (optionsMap.value.has(prop) && (isFunction(options) || optionsMap.value.get(prop) === options)) return;
 
   // 为了防止接口执行慢，导致页面下拉等枚举数据无法填充，所以预先存储为 [] 方便获取，接口返回后再二次存储
-  optionsMapConst.set(prop, []);
+  optionsMap.value.set(prop, []);
 
   // 处理 options 并存储到 optionsMap
   const value = await formatValue<FormItemColumnProps["options"]>(options, [optionsMapConst, prop], false);
 
-  optionsMapConst.set(prop, (value as any)?.data || value);
+  optionsMap.value.set(prop, (value as any)?.data || value);
 };
 
 // 每一个 column 配置 _options 字典信息（如果配置了 options）
@@ -122,10 +123,11 @@ const initOptionsInData = (data: Recordable[]) => {
 
         const formatLabel = filterOptionsValue(option, optionField?.label ?? "label");
 
+        if (!row._options) row._options = {};
         if (!row._option) row._option = {};
         if (!row._label) row._label = {};
 
-        row._options = options;
+        row._options[prop] = options;
         row._option[prop] = option;
         row._label[prop] = formatLabel;
         return row;
@@ -135,13 +137,24 @@ const initOptionsInData = (data: Recordable[]) => {
   return newData;
 };
 
+let timer: ReturnType<typeof setTimeout> | null = null;
+
 watch(
-  () => visibleColumns.value,
-  async () => {
-    await Promise.all(visibleColumns.value.map(async column => await initOptionsMap(column)));
-    initOptionsInData(props.data);
+  visibleColumns,
+  newValue => {
+    if (timer) {
+      clearTimeout(timer);
+      timer = null;
+    }
+
+    // 防抖：防止初始化时连续执行
+    timer = setTimeout(async () => {
+      // 异步但有序执行
+      for (const column of newValue) await initOptionsMap(column);
+      initOptionsInData(props.data);
+    }, 10);
   },
-  { deep: true, immediate: true, flush: "post" }
+  { deep: true, flush: "post" }
 );
 
 const getRowKey = (row: Recordable) => {
@@ -496,8 +509,8 @@ defineExpose(expose);
           @confirm="handleConfirm"
           @cancel="handleCancel"
         >
-          <template v-if="$slots['operation-more-icon']" #action-bar-more-icon>
-            <slot name="operation-more-icon" />
+          <template v-for="slot in Object.keys($slots)" #[slot]="scope">
+            <slot :name="slot" v-bind="scope" />
           </template>
         </TableColumnOperation>
       </template>

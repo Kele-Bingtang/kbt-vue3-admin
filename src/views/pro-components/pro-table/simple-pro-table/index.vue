@@ -1,5 +1,5 @@
 <script setup lang="tsx" name="SimpleProTable">
-import { ProTable, type TableColumn, type ProTableInstance } from "@/components";
+import { ProTable, type TableColumn, type ProTableInstance, type TableRow } from "@/components";
 import { useConfirm, usePermission } from "@/composables";
 import { ElButton, ElMessage, ElMessageBox, ElSwitch, ElTag, type TableColumnCtx } from "element-plus";
 import { tableData } from "@/mock/pro-table";
@@ -106,8 +106,8 @@ const columns: TableColumn<ResUserList>[] = [
       { userLabel: "启用", userStatus: 1 },
       { userLabel: "禁用", userStatus: 0 },
     ],
-    fieldNames: { label: "userLabel", value: "userStatus" },
-    render: (value, scope) => {
+    optionField: { label: "userLabel", value: "userStatus" },
+    render: (value, { row }) => {
       return (
         <>
           {hasAuth("edit") ? (
@@ -116,7 +116,7 @@ const columns: TableColumn<ResUserList>[] = [
               active-text={value ? "启用" : "禁用"}
               active-value={1}
               inactive-value={0}
-              onClick={() => changeStatus(scope.row)}
+              onClick={() => changeStatus(row)}
             />
           ) : (
             <ElTag type={value ? "success" : "danger"}>{value ? "启用" : "禁用"}</ElTag>
@@ -185,20 +185,34 @@ const downloadFile = async () => {
     exportJsonToExcel(tHeader, d, "proTable", undefined, undefined, true, "xlsx");
   });
 };
+
+// 取消行内编辑
+const cancelEdit = (row: TableRow) => {
+  row._editable = false;
+};
+
+const confirmEdit = (row: TableRow) => {
+  row._validateCellEdit((isValid, invalidFields) => {
+    if (isValid) {
+      row._editable = false;
+      ElMessage.success({
+        message: `编辑成功，内容为 ${JSON.stringify(row._getData())}`,
+        plain: true,
+      });
+    } else {
+      ElMessage.warning({
+        message: Object.values(invalidFields || { message: ["请完整填写表单然后再次提交！"] })[0][0].message,
+        plain: true,
+      });
+    }
+  });
+};
 </script>
 
 <template>
   <div class="simple-pro-table-container">
-    <ProTable
-      ref="proTableInstance"
-      :data="data"
-      :columns="columns"
-      row-key="id"
-      search-model="allAndUseFilter"
-      :edit-row="3"
-      :pagination="{ enabled: true, fake: true }"
-    >
-      <template #tableHeader="scope">
+    <ProTable ref="proTableInstance" :data="data" :columns="columns" row-key="id" page-scope>
+      <template #head-left="scope">
         <el-button v-auth="'add'" type="primary" :icon="CirclePlus">新增用户</el-button>
         <el-button v-auth="'batchAdd'" type="primary" :icon="Upload" plain>批量添加用户</el-button>
         <el-button v-auth="'export'" type="primary" :icon="Download" plain @click="downloadFile">
@@ -232,17 +246,17 @@ const downloadFile = async () => {
         </el-button>
       </template>
 
-      <template #operation="scope">
-        <el-button v-if="!scope.row._edit" type="primary" link :icon="View">查看</el-button>
-        <el-button v-if="!scope.row._edit" type="primary" link :icon="EditPen" @click="() => (scope.row._edit = true)">
+      <template #operation="{ row }">
+        <el-button v-if="!row._editable" type="primary" link :icon="View">查看</el-button>
+        <el-button v-if="!row._editable" type="primary" link :icon="EditPen" @click="() => (row._editable = true)">
           编辑
         </el-button>
-        <el-button v-if="!scope.row._edit" type="primary" link :icon="Refresh" @click="resetPass(scope.row)">
+        <el-button v-if="row._editable" type="primary" link :icon="EditPen" @click="cancelEdit(row)">取消</el-button>
+        <el-button v-if="row._editable" type="primary" link :icon="EditPen" @click="confirmEdit(row)">确定</el-button>
+        <el-button v-if="!row._editable" type="primary" link :icon="Refresh" @click="resetPass(row)">
           重置密码
         </el-button>
-        <el-button v-if="!scope.row._edit" type="primary" link :icon="Delete" @click="deleteAccount(scope.row)">
-          删除
-        </el-button>
+        <el-button v-if="!row._editable" type="primary" link :icon="Delete" @click="deleteAccount(row)">删除</el-button>
       </template>
     </ProTable>
   </div>

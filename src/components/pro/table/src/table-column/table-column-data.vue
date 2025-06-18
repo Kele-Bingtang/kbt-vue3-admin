@@ -89,16 +89,20 @@ const initRowEditApi = (row: TableRow) => {
     if (!row._proFormInstance) return true;
 
     try {
-      if (prop) return (await row._proFormInstance[prop].elFormInstance?.validate(callback)) ?? true;
+      // 校验失败会走 catch
+      if (prop) await row._proFormInstance[prop].elFormInstance?.validate();
+      else {
+        const proFormInstances = Object.values(row._proFormInstance);
+        await Promise.all(
+          proFormInstances.map(async proFormInstance => {
+            await proFormInstance.elFormInstance?.validate();
+          })
+        );
+      }
 
-      const proFormInstances = Object.values(row._proFormInstance);
-      const results: boolean[] = await Promise.all(
-        proFormInstances.map(async proFormInstance => {
-          return (await proFormInstance.elFormInstance?.validate(callback)) ?? true;
-        })
-      );
-      // 有一个校验失败，则返回 false，如果都不为 false，则返回 true
-      return !results.some(valid => valid === false);
+      callback?.(true, undefined);
+
+      return true;
     } catch (error) {
       // 如果校验失败且没有自定义 callback，则弹出内置错误信息
       if (!callback) {
@@ -106,8 +110,14 @@ const initRowEditApi = (row: TableRow) => {
         ElMessage.warning(Object.values(error || { message: ["请完整填写表单然后再次提交！"] })[0][0].message);
       }
 
+      callback?.(false, error as any);
+
       return false;
     }
+  };
+  // 获取 row 的纯数据（过滤掉内置的方法）
+  row._getData ??= () => {
+    return Object.fromEntries(Object.entries(row).filter(([key]) => !key.startsWith("_")));
   };
 };
 
@@ -222,20 +232,36 @@ const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: Tab
         v-bind="column.editProps"
         :value="getProp(scope.row._label?.[column.prop!] ?? scope.row, column.prop!)"
         :prop="column.editProps?.prop || column.prop!"
-        :options="column.editProps?.options || scope.row._options"
+        :options="column.editProps?.options || scope.row._options?.[column.prop!]"
         :option-field="column.editProps?.optionField || column.optionField"
         @change="model => handleChange(model, scope, column)"
       />
 
       <component
         v-else-if="column.render"
-        :is="column.render(formatValue(scope.row, column), { ...scope, rowIndex: scope.$index })"
+        :is="
+          column.render(
+            scope.row[column.prop!],
+            { ...scope, rowIndex: scope.$index },
+            scope.row._options?.[column.prop!]
+          )
+        "
       />
       <component
         v-else-if="column.renderHTML"
-        :is="column.renderHTML(formatValue(scope.row, column), { ...scope, rowIndex: scope.$index })"
+        :is="
+          column.renderHTML(
+            scope.row[column.prop!],
+            { ...scope, rowIndex: scope.$index },
+            scope.row._options?.[column.prop!]
+          )
+        "
       />
-      <slot v-else-if="$slots[lastProp(column.prop!)]" :name="lastProp(column.prop!)" v-bind="scope" />
+      <slot
+        v-else-if="$slots[lastProp(column.prop!)]"
+        :name="lastProp(column.prop!)"
+        v-bind="{ ...scope, options: scope.row._options?.[column.prop!] }"
+      />
 
       <template v-else>
         {{ formatValue(scope.row, column) }}

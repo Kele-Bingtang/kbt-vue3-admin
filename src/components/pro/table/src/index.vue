@@ -143,7 +143,7 @@ watchEffect(() => (searchInitParams.value = finalProps.value.initRequestParams))
 
 onMounted(() => {
   // 初始化请求
-  mergeProps.value.requestImmediate && getTableList();
+  finalProps.value.requestImmediate && getTableList();
   // 注册实例
   emits("register", tableMainInstance.value?.$parent || null, tableMainInstance.value?.elTableInstance || null);
 });
@@ -244,15 +244,15 @@ defineExpose(expose);
       ref="tableHeadInstance"
       :columns="finalProps.columns"
       :data="finalTableData"
-      :tool-button
-      :disabled-tool-button
-      :size
-      :title
-      :export-props
-      :tooltip-props
-      :size-style
-      :column-setting
-      :base-setting
+      :tool-button="finalProps.toolButton"
+      :disabled-tool-button="finalProps.disabledToolButton"
+      :size="finalProps.size"
+      :title="finalProps.title"
+      :export-props="finalProps.exportProps"
+      :tooltip-props="finalProps.tooltipProps"
+      :size-style="finalProps.sizeStyle"
+      :column-setting="finalProps.columnSetting"
+      :base-setting="finalProps.baseSetting"
       :is-selected="tableMainInstance?.isSelected"
       :selected-list="tableMainInstance?.selectedList"
       :selected-list-ids="tableMainInstance?.selectedListIds"
@@ -269,17 +269,17 @@ defineExpose(expose);
       v-bind="{ ...baseSetting, headerBackground: undefined, ...$attrs, ...finalSizeStyle }"
       :columns="finalProps.columns"
       :data="finalTableData"
-      :operation-prop
-      :operation-props
-      :page-info
-      :page-scope
-      :pagination-props
-      :radio-props
-      :filter-scope
-      :editable
-      :row-key
+      :operation-prop="finalProps.operationProp"
+      :operation-props="finalProps.operationProps"
+      :page-info="finalProps.pageInfo"
+      :page-scope="finalProps.pageScope"
+      :pagination-props="finalProps.paginationProps"
+      :radio-props="finalProps.radioProps"
+      :filter-scope="finalProps.filterScope"
+      :editable="finalProps.editable"
+      :row-key="finalProps.rowKey"
       :size="tableSize"
-      :empty-text
+      :empty-text="finalProps.emptyText"
       @button-click="handleButtonClick"
       @confirm="handleConfirm"
       @cancel="handleCancel"

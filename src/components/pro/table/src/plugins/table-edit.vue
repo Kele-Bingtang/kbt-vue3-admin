@@ -22,6 +22,11 @@ const model = ref<Recordable>({});
 
 const proFormInstance = useTemplateRef<ProFormInstance>("proFormInstance");
 
+const columns = computed(() => {
+  const { options } = props;
+  return [{ ...props, options: options ? ref(options) : options, value: undefined, editable: true }];
+});
+
 watch(
   () => props.value,
   val => setProp(model.value, props.prop, val),
@@ -38,7 +43,7 @@ defineExpose({ proFormInstance });
 <template>
   <ProForm
     ref="proFormInstance"
-    :columns="[{ ...props, value: undefined, editable: true }]"
+    :columns
     v-model="model"
     :show-label="false"
     :show-footer="false"

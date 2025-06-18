@@ -31,7 +31,7 @@ $btn-width: 28px;
   }
 
   @include is(classic) {
-    @include e(tab) {
+    @include e(tab, true) {
       .icon-close:hover {
         color: #ffffff;
         background-color: cssVar(gray-500);

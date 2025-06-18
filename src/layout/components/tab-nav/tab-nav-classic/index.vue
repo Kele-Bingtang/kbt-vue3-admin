@@ -13,7 +13,7 @@ import "./index.scss";
 
 defineOptions({ name: "ClassicTabNav" });
 
-const { type = "simple" } = defineProps<{ type?: "simple" | "classic" }>();
+const { type = "classic" } = defineProps<{ type?: "simple" | "classic" }>();
 
 const ns = useNamespace("classic-tabs-nav");
 const route = useRoute();
