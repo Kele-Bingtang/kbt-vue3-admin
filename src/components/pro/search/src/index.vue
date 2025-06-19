@@ -5,7 +5,7 @@ import { computed, onMounted } from "vue";
 import { Delete, Search, ArrowDown, ArrowUp } from "@element-plus/icons-vue";
 import { ElButton, ElIcon } from "element-plus";
 import { useNamespace } from "@/composables";
-import { ProForm } from "@/components/pro/form";
+import { filterEmpty, ProForm } from "@/components/pro/form";
 import { ProFormItem } from "@/components/pro/form-item";
 import { Grid, GridItem } from "@/components/pro/grid";
 import { useSearchApi } from "./composables/use-search-api";
@@ -72,6 +72,7 @@ const searchColumns = computed(() =>
     })
     .map((item, index) => {
       item._index = index;
+      item.width = "100%";
       // 如果不开启校验，则清空校验规则
       if (!props.validate) item.formItemProps = { ...item.formItemProps, rules: undefined, required: undefined };
       return item;
@@ -141,25 +142,16 @@ const getResponsive = (item: ProSearchColumnProps) => {
   };
 };
 
-/**
- * 过滤空值
- */
-const filterModel = async () => {
-  return await getFormModel(finalProps.value.removeNoValue);
-};
-
 const search = async () => {
   const isValid = await submitForm();
   if (isValid) {
-    const model = await filterModel();
-    emits("search", model);
+    emits("search", finalProps.value.removeNoValue ? filterEmpty(model.value) : model.value);
   }
 };
 
 const reset = async () => {
   await resetForm();
-  const model = await filterModel();
-  emits("reset", model);
+  emits("reset", finalProps.value.removeNoValue ? filterEmpty(model.value) : model.value);
 };
 
 /**
@@ -200,7 +192,7 @@ defineExpose(defaultExpose);
 </script>
 
 <template>
-  <div v-if="searchColumns.length" :class="`card ${ns.b()}`">
+  <div v-if="searchColumns.length" :class="[ns.b(), 'tk-card']">
     <ProForm :columns @register="formRegister" v-bind="$attrs">
       <template #default="{ isHidden, setProFormItemInstance, optionsMap }">
         <Grid
@@ -221,7 +213,7 @@ defineExpose(defaultExpose);
               v-model="model"
               v-bind="column"
               v-show="!isHidden(column)"
-              :option="optionsMap.get(column.optionsProp || column.prop)"
+              :options="optionsMap.get(column.optionsProp || column.prop)"
             />
           </GridItem>
 
@@ -268,10 +260,5 @@ defineExpose(defaultExpose);
 </template>
 
 <style lang="scss" scoped>
-@use "@/styles/mixins/bem" as *;
-
-@include b(pro-search) {
-  padding: 18px 18px 0;
-  margin-bottom: 10px;
-}
+@use "./index";
 </style>

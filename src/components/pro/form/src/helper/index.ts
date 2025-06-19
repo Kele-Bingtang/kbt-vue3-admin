@@ -1,4 +1,4 @@
-import { isObject } from "@/utils";
+import { isEmpty, isObject } from "@/utils";
 
 /**
  * 删除对象中的属性，包括嵌套属性
@@ -43,4 +43,21 @@ export const getObjectKeys = (model: Recordable, prefix = ""): string[] => {
 
     return acc;
   }, []);
+};
+
+/**
+ * 过滤对象中为空值的属性
+ * @param obj 需要处理的对象
+ */
+export const filterEmpty = <T extends Recordable>(obj: T) => {
+  return Object.entries(obj).reduce((acc, [key, value]) => {
+    if (!isEmpty(value)) {
+      if (isObject(value)) {
+        // 如果是嵌套对象，递归处理
+        const nestedFiltered = filterEmpty(value as Recordable);
+        if (Object.keys(nestedFiltered).length) acc[key as keyof T] = nestedFiltered as T[keyof T];
+      } else acc[key as keyof T] = value;
+    }
+    return acc;
+  }, {} as T);
 };

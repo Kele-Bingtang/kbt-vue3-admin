@@ -9,7 +9,7 @@ import { useNamespace } from "@/composables";
 import { addUnit, isEmpty, isFunction } from "@/utils";
 import { deleteProp, getObjectKeys } from "./helper";
 import { useFormApi } from "./composables";
-import { deleteObjProperty } from "../../pro-form";
+import { proFormOptionsMapKey } from "./types";
 
 defineOptions({ name: "ProForm" });
 
@@ -71,15 +71,16 @@ const footerStyle = computed(() => ({
 }));
 
 // 定义 optionsMap 存储枚举值
-const optionsMap = ref(new Map<string, MaybeRef<ElOption[]>>());
+const optionsMap = inject(proFormOptionsMapKey, ref(new Map<string, MaybeRef<ElOption[]>>()));
 
-const initOptionsMap = async ({ options, prop }: FormColumn) => {
+const initOptionsMap = async (column: FormColumn) => {
+  const { options, prop = "" } = column;
   if (!options) return;
 
   const optionsMapConst = optionsMap.value;
 
   // 如果当前 enumMap 存在相同的值则 return
-  if (optionsMap.value.has(prop!) && (isFunction(options) || optionsMap.value.get(prop!) === options)) return;
+  if (optionsMapConst.has(prop!) && (isFunction(options) || optionsMapConst.get(prop!) === options)) return;
 
   // 为了防止接口执行慢，导致页面下拉等枚举数据无法填充，所以预先存储为 [] 方便获取，接口返回后再二次存储
   optionsMapConst.set(prop!, []);
@@ -159,7 +160,7 @@ watch(
       // 如果 column 对应的 prop 不存在，则删除 model 中的对应的 prop
       getObjectKeys(model.value).forEach(key => {
         const isExist = column.some(item => item.prop === key || includeModelKeys?.includes(key));
-        if (!isExist) deleteObjProperty(model.value, key);
+        if (!isExist) deleteProp(model.value, key);
       });
     }, 10);
   },
@@ -285,7 +286,7 @@ defineExpose(expose);
             :clearable="column.clearable ?? clearable"
             :width="column.width ?? withValue"
             :show-label="column.showLabel ?? showLabelValue"
-            :option="optionsMap.get(column.optionsProp || column.prop)"
+            :options="optionsMap.get(column.optionsProp || column.prop)"
             @change="handleChange"
           />
         </el-col>
@@ -300,7 +301,7 @@ defineExpose(expose);
           :width="column.width ?? withValue"
           :show-label="column.showLabel ?? showLabelValue"
           v-show="!isHidden(column)"
-          :option="optionsMap.get(column.optionsProp || column.prop)"
+          :options="optionsMap.get(column.optionsProp || column.prop)"
           @change="handleChange"
         />
       </template>

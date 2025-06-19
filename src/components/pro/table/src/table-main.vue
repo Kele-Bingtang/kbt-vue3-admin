@@ -15,6 +15,7 @@ import TableColumnOperation from "./table-column/table-column-operation.vue";
 import TableColumnDragSort from "./table-column/table-column-drag-sort.vue";
 import { useSelection } from "./composables";
 import { TableColumnTypeEnum, filterData, initModel, isServer } from "./helper";
+import { proTableOptionsMapKey } from "./types";
 
 defineOptions({ name: "TableMain" });
 
@@ -43,7 +44,7 @@ const radio = ref("");
 const filterTableData = ref<Recordable[]>();
 const elTableInstance = useTemplateRef<TableInstance>("elTableInstance");
 // 定义 optionsMap 存储枚举值
-const optionsMap = ref(new Map<string, MaybeRef<ElOption[]>>());
+const optionsMap = inject(proTableOptionsMapKey, ref(new Map<string, MaybeRef<ElOption[]>>()));
 
 const visibleColumns = computed(() => props.columns.filter(column => !toValue(column.hide)));
 
@@ -89,55 +90,57 @@ watch(tableData, () => (filterTableData.value = undefined));
  * 初始化枚举字典数据
  */
 const initOptionsMap = async (column: TableColumn) => {
-  if (column.children) return column.children.forEach(async child => await initOptionsMap(child));
-
   const { options, prop = "" } = column;
   if (!options) return;
 
   const optionsMapConst = optionsMap.value;
 
   // 如果当前 enumMap 存在相同的值则 return
-  if (optionsMap.value.has(prop) && (isFunction(options) || optionsMap.value.get(prop) === options)) return;
+  if (optionsMapConst.has(prop) && (isFunction(options) || optionsMapConst.get(prop) === options)) return;
 
   // 为了防止接口执行慢，导致页面下拉等枚举数据无法填充，所以预先存储为 [] 方便获取，接口返回后再二次存储
-  optionsMap.value.set(prop, []);
+  optionsMapConst.set(prop, []);
 
   // 处理 options 并存储到 optionsMap
   const value = await formatValue<FormItemColumnProps["options"]>(options, [optionsMapConst, prop], false);
 
-  optionsMap.value.set(prop, (value as any)?.data || value);
+  optionsMapConst.set(prop, (value as any)?.data || value);
 };
 
-// 在表格的数据里配置 _options 相关字典信息（如果配置了 options）
-const initOptionsInData = async (data: Recordable[]) => {
-  for (const column of visibleColumns.value) await initOptionsInDataRow(data, column);
+// 扁平化 columns，为了过滤搜索配置项
+const flatColumnsFn = (columns: TableColumn[], flatArr: TableColumn[] = []) => {
+  columns.forEach(col => {
+    if (col.children?.length) flatArr.push(...flatColumnsFn(col.children));
+    flatArr.push(col);
+  });
+  return flatArr.filter(item => !item.children?.length);
 };
 
-// 表格数据的每一个 row 配置 _options 相关字典信息（如果配置了 options）
-const initOptionsInDataRow = async (data: Recordable[] = [], column: TableColumn) => {
-  if (column.children) for (const child of column.children) await initOptionsInDataRow(data, child);
+// 在表格的数据的每一个 row 配置 _options 相关字典信息（如果配置了 options）
+const initOptionsInData = async (data: Recordable[], columns: TableColumn[]) => {
+  for (const column of columns) {
+    const { prop = "", isFilterOptions = true, optionField, transformOption, optionsProp } = column;
 
-  const { prop = "", isFilterOptions = true, optionField, transformOption, optionsProp } = column;
+    const options = unref(optionsMap.value.get(optionsProp || prop));
+    // 如果字段有配置枚举信息，则存放到 _options[col.prop] 里
+    if (options && toValue(isFilterOptions)) {
+      data.map(row => {
+        const option = transformOption
+          ? transformOption(getProp(row, prop), options, row)
+          : filterOptions(getProp(row, prop), options, optionField);
 
-  const options = unref(optionsMap.value.get(optionsProp || prop));
-  // 如果字段有配置枚举信息，则存放到 _options[col.prop] 里
-  if (options && toValue(isFilterOptions)) {
-    data.map(row => {
-      const option = transformOption
-        ? transformOption(getProp(row, prop), options, row)
-        : filterOptions(getProp(row, prop), options, optionField);
+        const formatLabel = filterOptionsValue(option, optionField?.label ?? "label");
 
-      const formatLabel = filterOptionsValue(option, optionField?.label ?? "label");
+        if (!row._options) row._options = {};
+        if (!row._option) row._option = {};
+        if (!row._label) row._label = {};
 
-      if (!row._options) row._options = {};
-      if (!row._option) row._option = {};
-      if (!row._label) row._label = {};
-
-      row._options[prop] = options;
-      row._option[prop] = option;
-      row._label[prop] = formatLabel;
-      return row;
-    });
+        row._options[prop] = options;
+        row._option[prop] = option;
+        row._label[prop] = formatLabel;
+        return row;
+      });
+    }
   }
 };
 
@@ -153,9 +156,10 @@ watch(
 
     // 防抖：防止初始化时连续执行
     timer = setTimeout(async () => {
+      const flatColumns = flatColumnsFn(newValue);
       // 异步但有序执行
-      for (const column of newValue) await initOptionsMap(column);
-      initOptionsInData(props.data);
+      for (const column of flatColumns) await initOptionsMap(column);
+      initOptionsInData(props.data, flatColumns);
     }, 10);
   },
   { deep: true, flush: "post" }
@@ -445,10 +449,9 @@ defineExpose(expose);
 <template>
   <el-table
     ref="elTableInstance"
-    highlight-current-row
-    scrollbar-always-on
+    show-overflow-tooltip
     v-bind="$attrs"
-    :header-cell-style="{ 'background-color': ns.cssVar('gray-200'), ...headerCellStyle }"
+    :header-cell-style="{ backgroundColor: ns.cssVar('gray-200'), ...headerCellStyle }"
     :data="filterTableData ? filterTableData : tableData"
     :row-key
     :class="ns.b()"

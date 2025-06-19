@@ -105,7 +105,7 @@
 }
 
 /* 自定义 card 卡片样式 */
-.card {
+.tk-card {
   padding: 20px;
   overflow-x: hidden;
   background-color: var(--#{$admin-namespace}-main-bg-color);

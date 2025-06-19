@@ -8,6 +8,7 @@ export type { UseSelectState } from "./src/composables/use-selection";
 
 export * from "./src/helper";
 export * from "./src/composables/use-table";
+export { proTableOptionsMapKey } from "./src/types";
 
 export const ProTable = useInstall(index);
 export const ProTableMain = useInstall(tableMain);

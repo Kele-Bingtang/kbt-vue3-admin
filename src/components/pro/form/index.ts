@@ -6,6 +6,7 @@ export type { FormSetProps } from "./src/composables/use-form-api";
 
 export * from "./src/helper";
 export * from "./src/composables/use-form";
+export { proFormOptionsMapKey } from "./src/types";
 
 export const ProForm = useInstall(index);
 

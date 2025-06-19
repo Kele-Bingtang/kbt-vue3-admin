@@ -5,9 +5,10 @@ import { ElConfigProvider } from "element-plus";
 import { createVNode, getCurrentInstance, nextTick, ref, render } from "vue";
 import { useNamespace } from "@/composables";
 import { useLayoutStore } from "@/stores";
-import { isEmpty, isObject, isString } from "@/utils";
+import { isString } from "@/utils";
 import ProForm from "../index.vue";
 import type { RenderTypes } from "@/components/pro/form-item";
+import { filterEmpty } from "../helper";
 
 type ProFormPropsWithModel = ProFormProps & { modelValue?: Recordable };
 
@@ -33,7 +34,7 @@ export const useProForm = () => {
     elFormInstance.value = elForm;
   };
 
-  const getPropForm = async () => {
+  const getProForm = async () => {
     await nextTick();
     const form = proFormInstance.value;
     if (!form) console.error("The form is not registered. Please use the register method to register");
@@ -49,7 +50,7 @@ export const useProForm = () => {
      * @param props ProForm 组件的 props
      */
     setProps: async (props: ProFormPropsWithModel = {}) => {
-      const form = await getPropForm();
+      const form = await getProForm();
       form?.setProps(props);
 
       if (props.modelValue) form?.setValues(props.modelValue);
@@ -61,7 +62,7 @@ export const useProForm = () => {
      * @param model 需要设置的数据
      */
     setValues: async (model: Recordable) => {
-      const form = await getPropForm();
+      const form = await getProForm();
       form?.setValues(model);
     },
 
@@ -71,7 +72,7 @@ export const useProForm = () => {
      * @param columnProps 需要设置的 columnProps
      */
     setColumn: async (columnProps: FormSetProps[]) => {
-      const form = await getPropForm();
+      const form = await getProForm();
       form?.setColumn(columnProps);
     },
 
@@ -86,7 +87,7 @@ export const useProForm = () => {
       propOrIndex?: FormColumn["prop"] | number,
       position: "before" | "after" = "after"
     ) => {
-      const form = await getPropForm();
+      const form = await getProForm();
       form?.addColumn(column, propOrIndex, position);
     },
 
@@ -96,7 +97,7 @@ export const useProForm = () => {
      * @param field 删除哪个数据
      */
     delColumn: async (prop: FormColumn["prop"]) => {
-      const form = await getPropForm();
+      const form = await getProForm();
       form?.delColumn(prop);
     },
 
@@ -105,21 +106,13 @@ export const useProForm = () => {
      *
      * @returns form model
      */
-    getFormModel: async <T = Recordable>(filterEmptyVal = true): Promise<T> => {
-      const form = await getPropForm();
-      const model = form?.model || {};
+    getFormModel: async <T extends Recordable>(filterEmptyVal = true): Promise<T> => {
+      const form = await getProForm();
+      const model = (form?.model || {}) as T;
 
-      if (filterEmptyVal) {
-        // 使用 reduce 过滤空值，并返回一个新对象
-        return Object.keys(model).reduce((prev: Recordable, next) => {
-          const value = model[next];
-          if (isEmpty(value)) {
-            if (isObject(value)) prev[next] = value;
-            else prev[next] = value;
-          }
-          return prev;
-        }, {}) as T;
-      } else return model as T;
+      if (filterEmptyVal) return filterEmpty<T>(model);
+
+      return model;
     },
     /**
      * 提交表单
@@ -127,14 +120,14 @@ export const useProForm = () => {
      * @returns submit 结果：true | false
      */
     submitForm: async () => {
-      const form = await getPropForm();
+      const form = await getProForm();
       return form?.submitForm();
     },
     /**
      * 重置表单
      */
     resetForm: async () => {
-      const form = await getPropForm();
+      const form = await getProForm();
       return form?.resetForm();
     },
     /**
@@ -143,7 +136,7 @@ export const useProForm = () => {
      * @returns ElForm instance
      */
     getElFormInstance: async () => {
-      await getPropForm();
+      await getProForm();
       return elFormInstance.value;
     },
     /**
@@ -152,7 +145,7 @@ export const useProForm = () => {
      * @returns ProForm instance
      */
     getProFormInstance: async () => {
-      await getPropForm();
+      await getProForm();
       return proFormInstance.value;
     },
     /**
@@ -162,7 +155,7 @@ export const useProForm = () => {
      * @returns formItem instance
      */
     getElFormItemInstance: async (prop: string) => {
-      const form = await getPropForm();
+      const form = await getProForm();
       return form?.getElFormItemInstance(prop);
     },
     /**
@@ -172,7 +165,7 @@ export const useProForm = () => {
      * @returns ElForm instance
      */
     getElInstance: async (prop: string) => {
-      const form = await getPropForm();
+      const form = await getProForm();
       return form?.getElInstance(prop);
     },
   };

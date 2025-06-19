@@ -449,10 +449,12 @@ export namespace ProTableHeadNamespace {
       stripe?: boolean; // 是否开启斑马纹，默认 false
       headerBackground?: boolean; // 是否开启表头背景色，默认 true
       highlightCurrentRow?: boolean; // 是否开启单击高亮当前行，默认 true
+      showHeader?: boolean; // 是否开启显示表头，默认 true
       disabledBorder?: boolean; // 是否开启禁用边框选择，默认 false
       disabledStripe?: boolean; // 是否开启禁用斑马纹选择，默认 false
       disabledHeaderBackground?: boolean; // 是否开启禁用表格高亮选择，默认 false
       disabledHighlightCurrentRow?: boolean; // 是否开启禁用单击高亮当前行选择，默认 false
+      disabledShowHeader?: boolean; // 是否开启禁用单显示表头选择，默认 false
     };
     /**
      * 表格是否选中数据，head-left 插槽需要
@@ -469,6 +471,10 @@ export namespace ProTableHeadNamespace {
   }
 
   export interface Emits {
+    /**
+     * 刷新按钮点击事件
+     */
+    refresh: [];
     /**
      * 密度选择事件
      */
@@ -524,8 +530,6 @@ export namespace ProTableMainNamespace {
     pageScope?: boolean | Environment | `${Environment}`;
     /**
      * 分页组件 props
-     *
-     * @param false
      */
     paginationProps?: MaybeRef<Partial<PaginationProps>>;
     /**
@@ -534,6 +538,8 @@ export namespace ProTableMainNamespace {
     radioProps?: MaybeRef<Partial<RadioProps>>;
     /**
      * 过滤规则，可以指定客户端（前端）过滤还是服务端（后端）过滤，当为 true 时，默认为客户端（前端）过滤
+     *
+     * @default false
      */
     filterScope?: boolean | Environment | `${Environment}`;
     /**
@@ -580,10 +586,7 @@ export namespace ProTableMainNamespace {
  * ProTable 组件的类型命名空间
  */
 export namespace ProTableNamespace {
-  export interface Props
-    extends ProTableMainNamespace.Props,
-      ProTableHeadNamespace.Props,
-      Partial<Omit<TableProps<any>, "data" | "size" | "rowKey">> {
+  export interface Props extends ProTableMainNamespace.Props, ProTableHeadNamespace.Props {
     /**
      * 列配置项
      *
@@ -606,6 +609,10 @@ export namespace ProTableNamespace {
      * 默认请求参数（请求一定会携带）
      */
     defaultRequestParams?: MaybeRef<Recordable>;
+    /**
+     * 请求参数
+     */
+    requestParams?: MaybeRef<Recordable>;
     /**
      * 初始化请求参数（重置时恢复为初始化参数）
      */
@@ -678,6 +685,20 @@ export namespace ProTableNamespace {
      * ElTable 的 stripe
      */
     stripe?: TableProps<Recordable>["stripe"];
+    /**
+     * ElTable 的 showHeader
+     */
+    showHeader?: TableProps<Recordable>["showHeader"];
+    /**
+     * 是否显示表头背景
+     *
+     * @default true
+     */
+    headerBackground?: boolean;
+    /**
+     * ElTable 的 highlightCurrentRow
+     */
+    highlightCurrentRow?: TableProps<Recordable>["highlightCurrentRow"];
     /**
      * ElTable 的 props
      */
@@ -815,3 +836,8 @@ export type ProTableMainInstance = InstanceType<typeof ProTableMain>;
  * ProTableHead 组件实例
  */
 export type ProTableHeadInstance = InstanceType<typeof ProTableHead>;
+
+/**
+ * provide optionsMap
+ */
+export const proTableOptionsMapKey: InjectionKey<Ref<Map<string, MaybeRef<ElOption[]>>>> = Symbol("proTableOptionsMap");

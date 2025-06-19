@@ -1,6 +1,11 @@
 import type { ColProps, FormInstance, FormItemProp, FormProps, FormValidateCallback, RowProps } from "element-plus";
 import type { InjectionKey, Ref } from "vue";
-import type { FormItemColumnProps, BaseValueType, ProFormItemEmits } from "@/components/pro/form-item/src/types";
+import type {
+  FormItemColumnProps,
+  BaseValueType,
+  ProFormItemEmits,
+  ElOption,
+} from "@/components/pro/form-item/src/types";
 import type ProForm from "./index.vue";
 
 export type ElFormProps = Partial<FormProps>;
@@ -165,6 +170,6 @@ export interface FormColumn extends FormItemColumnProps {
 export type ProFormInstance = InstanceType<typeof ProForm>;
 
 /**
- * provide 类型
+ * provide optionsMap
  */
-export const optionsMapKey: InjectionKey<Ref<Map<string, Recordable[]>>> = Symbol("optionsMap");
+export const proFormOptionsMapKey: InjectionKey<Ref<Map<string, MaybeRef<ElOption[]>>>> = Symbol("optionsMap");

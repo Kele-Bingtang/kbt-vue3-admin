@@ -12,9 +12,10 @@ import type {
   TableRow,
 } from "./types";
 import { defaultPageInfo } from "@/components/pro/pagination";
+import { filterEmpty } from "@/components/pro/form";
 import { useNamespace } from "@/composables";
 import { useTableApi, useTableState, type UseSelectState } from "./composables";
-import { Environment, TableSizeEnum, filterEmpty } from "./helper";
+import { Environment, TableSizeEnum } from "./helper";
 import TableMain from "./table-main.vue";
 import TableHead from "./table-head.vue";
 
@@ -27,6 +28,7 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   data: () => [],
   requestApi: undefined,
   defaultRequestParams: () => ({}),
+  requestParams: () => ({}),
   initRequestParams: () => ({}),
   requestImmediate: true,
   beforeSearch: undefined,
@@ -39,6 +41,9 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   headerCellStyle: () => ({}),
   border: false,
   stripe: false,
+  headerBackground: true,
+  highlightCurrentRow: true,
+  showHeader: true,
 
   // TableHead 组件的 props（透传下去）
   toolButton: () => ["size", "export", "columnSetting", "baseSetting"],
@@ -124,8 +129,9 @@ const finalTableData = computed(() => {
 const baseSetting = reactive({
   border: finalProps.value.border,
   stripe: finalProps.value.stripe,
-  headerBackground: true,
-  highlightCurrentRow: true,
+  showHeader: finalProps.value.showHeader,
+  headerBackground: finalProps.value.headerBackground,
+  highlightCurrentRow: finalProps.value.highlightCurrentRow,
   ...finalProps.value.baseSetting,
 });
 
@@ -144,13 +150,11 @@ const finalSizeStyle = computed(() => {
 });
 
 const tableMainProps = computed(() => {
+  console.log(finalSizeStyle.value.headerCellStyle);
   // 过滤掉为 undefined 的配置项
   return filterEmpty({
     ...finalProps.value,
-    ...finalSizeStyle.value,
-    ...baseSetting,
     // 去掉 TableHead 的配置项，确保所有的非 TableHead 的 props 都透传到 ElTable
-    headerBackground: undefined,
     initRequestParams: undefined,
     defaultRequestParams: undefined,
     requestImmediate: undefined,
@@ -171,6 +175,7 @@ const tableMainProps = computed(() => {
   });
 });
 
+watchEffect(() => (searchParams.value = finalProps.value.requestParams));
 watchEffect(() => (searchInitParams.value = finalProps.value.initRequestParams));
 watchEffect(() => (baseSetting.border = finalProps.value.border));
 watchEffect(() => (baseSetting.stripe = finalProps.value.stripe));
@@ -184,6 +189,11 @@ onMounted(() => {
 
 const handleSelectionChange = (useSelectReturn: UnwrapRef<UseSelectState>, index?: number) => {
   emits("selectionChange", useSelectReturn, index);
+};
+
+const handleRefresh = () => {
+  getTableList();
+  emits("refresh");
 };
 
 const handleSizeChange = (size: TableSizeEnum, style: SizeStyle) => {
@@ -271,7 +281,7 @@ defineExpose(expose);
 </script>
 
 <template>
-  <div :class="[ns.b(), { card }]">
+  <div :class="[ns.b(), { 'tk-card': card }]">
     <!-- 表格头部 -->
     <TableHead
       v-if="!hideHead"
@@ -290,6 +300,7 @@ defineExpose(expose);
       :is-selected="tableMainInstance?.isSelected"
       :selected-list="tableMainInstance?.selectedList"
       :selected-list-ids="tableMainInstance?.selectedListIds"
+      @refresh="handleRefresh"
       @size-change="handleSizeChange"
     >
       <template v-for="slot in Object.keys($slots)" #[slot]="scope">
@@ -300,7 +311,7 @@ defineExpose(expose);
     <!-- 表格主体 -->
     <TableMain
       ref="tableMainInstance"
-      v-bind="{ ...tableMainProps, ...$attrs }"
+      v-bind="{ ...$attrs, ...tableMainProps, ...finalSizeStyle, ...baseSetting }"
       :data="finalTableData"
       :page-info
       :size="tableSize"

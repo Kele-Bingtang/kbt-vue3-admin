@@ -1,0 +1,9 @@
+@use "@/styles/mixins/bem" as *;
+@use "@/styles/mixins/namespace" as *;
+
+@include b(pro-page) {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  height: 100%;
+}

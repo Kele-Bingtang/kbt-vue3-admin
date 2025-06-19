@@ -20,7 +20,7 @@ import type {
   TimePickerDefaultProps,
   ElTooltipProps,
 } from "element-plus";
-import type { VNode, ComputedRef, ExtractPropTypes } from "vue";
+import type { VNode, ExtractPropTypes } from "vue";
 import type ProFormItem from "./index.vue";
 import type { TreeProps as CustomTreeProps } from "./components/tree.vue";
 import type { TreeProps } from "element-plus/es/components/tree-v2/src/types";
@@ -201,10 +201,9 @@ export interface FormItemColumnProps {
    * 字典数据
    */
   options?:
-    | ElOption[]
-    | ((model: Recordable, optionsMap: Map<string, Recordable>) => ElOption[] | Promise<ElOption[]> | Promise<unknown>)
-    | ComputedRef<ElOption[]>
-    | Promise<ElOption[]>;
+    | MaybeRef<ElOption[]>
+    | Promise<ElOption[]>
+    | ((model: Recordable, optionsMap: Map<string, Recordable>) => ElOption[] | Promise<ElOption[]> | Promise<unknown>);
   /**
    * 字典指定 label && value && children 的 key 值
    *

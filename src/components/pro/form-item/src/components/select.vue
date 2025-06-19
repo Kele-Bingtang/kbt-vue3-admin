@@ -17,7 +17,7 @@ defineProps<{
         v-for="option in col.options"
         :key="option[optionField.value]"
         :label="option[optionField.label]"
-        :value="option[optionField.value]"
+        :value="option[optionField.value] ?? ''"
         :disabled="option[optionField.disabled!]"
       />
     </el-option-group>
@@ -25,7 +25,7 @@ defineProps<{
     <el-option
       v-else
       :label="col[optionField.label]"
-      :value="col[optionField.value]"
+      :value="col[optionField.value] ?? ''"
       :disabled="col[optionField.disabled!]"
     />
   </template>

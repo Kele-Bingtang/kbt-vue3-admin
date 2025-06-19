@@ -8,17 +8,20 @@ export * from "./core/use-drawer";
 
 export * from "./pro/grid";
 export * from "./pro/image-viewer";
-// export * from "./pro/pro-form";
 export * from "./pro/form";
 export * from "./pro/form-item";
-export * from "./pro/pagination";
-export * from "./pro/table";
 export * from "./pro/page";
-// export * from "./pro/pro-table";
-export * from "./pro/pro-search";
+export * from "./pro/pagination";
+export * from "./pro/search";
+export * from "./pro/table";
 export * from "./pro/tree-filter";
-export * from "./pro/pro-steps";
-export * from "./pro/pro-transfer";
+
+// export * from "./pro/v1/pro-form";
+// export * from "./pro/v1/pro-table";
+// export * from "./pro/v1/pro-search";
+
+export * from "./pro/v1/pro-steps";
+export * from "./pro/v1/pro-transfer";
 
 export * from "./pro/form";
 

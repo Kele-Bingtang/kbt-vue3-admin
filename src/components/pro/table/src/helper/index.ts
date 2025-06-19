@@ -159,14 +159,3 @@ export const filterData = (data: Recordable[], model: Recordable, filterRule: Re
     });
   });
 };
-
-/**
- * 过滤对象中为空值的属性
- * @param obj 需要处理的对象
- */
-export const filterEmpty = <T extends Recordable>(obj: T) => {
-  return Object.entries(obj).reduce((acc, [key, value]) => {
-    if (!isEmpty(value)) acc[key as keyof T] = value;
-    return acc;
-  }, {} as Partial<T>);
-};

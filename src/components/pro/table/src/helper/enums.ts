@@ -17,6 +17,7 @@ export enum TableSizeEnum {
 
 // 表格工具栏按钮
 export enum ToolButtonEnum {
+  Refresh = "refresh",
   Size = "size",
   Export = "export",
   ColumnSetting = "columnSetting",

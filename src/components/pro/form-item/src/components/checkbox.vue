@@ -23,6 +23,6 @@ const checkboxComponent = computed(() =>
     :key="option[optionField.value]"
     :disabled="option[optionField.disabled]"
     :label="option[optionField.label]"
-    :value="option[optionField.value]"
+    :value="option[optionField.value] ?? ''"
   />
 </template>

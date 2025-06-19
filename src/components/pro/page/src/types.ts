@@ -34,7 +34,7 @@ export interface ProPageProps extends ProTableNamespace.Props {
   /**
    * 初始化时是否显示搜索模块
    */
-  initShowSearch?: boolean;
+  initShowSearch?: MaybeRefOrGetter<boolean>;
 }
 
 export interface ProPageEmits extends Omit<ProTableNamespace.Emits, "register">, Omit<ProSearchEmits, "register"> {

@@ -1,11 +1,13 @@
 <script setup lang="ts">
 import type { ProTableHeadNamespace, SizeStyle, TableColumn } from "./types";
 import { ElTooltip, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElPopover, ElCheckbox } from "element-plus";
-import { Coin, Operation, Download, Setting } from "@element-plus/icons-vue";
+import { Coin, Operation, Download, Setting, Refresh } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { TableColumnTypeEnum, TableSizeEnum, ToolButtonEnum } from "./helper";
 import { exportExcel } from "./plugins/table-head-export";
 import TableHeadColumnSetting from "./plugins/table-head-column-setting.vue";
+
+import "./styles/table-head.scss";
 
 defineOptions({ name: "TableHead" });
 
@@ -90,6 +92,10 @@ const showToolButton = (key: ToolButtonEnum) => {
   return toolButton === true || toolButton.includes(key);
 };
 
+const handleRefresh = () => {
+  emits("refresh");
+};
+
 /**
  * 表格密度修改
  */
@@ -160,6 +166,14 @@ defineExpose(expose);
       <slot name="head-right">
         <slot name="head-right-before"></slot>
 
+        <el-tooltip v-if="showToolButton(ToolButtonEnum.Refresh)" content="刷新" v-bind="tooltipProps">
+          <el-button
+            :disabled="disabledToolButton.includes(ToolButtonEnum.Refresh)"
+            :icon="Refresh"
+            @click="handleRefresh"
+          />
+        </el-tooltip>
+
         <el-tooltip v-if="showToolButton(ToolButtonEnum.Size)" content="密度" v-bind="tooltipProps">
           <el-dropdown @command="handleSizeCommand">
             <el-button :disabled="disabledToolButton.includes(ToolButtonEnum.Size)" :icon="Coin" />
@@ -213,6 +227,9 @@ defineExpose(expose);
             <el-checkbox v-model="baseSetting.stripe" :value="true" :disabled="baseSetting.disabledStripe">
               斑马纹
             </el-checkbox>
+            <el-checkbox v-model="baseSetting.showHeader" :value="true" :disabled="baseSetting.disabledShowHeader">
+              表头
+            </el-checkbox>
             <el-checkbox
               v-model="baseSetting.headerBackground"
               :value="true"
@@ -242,7 +259,3 @@ defineExpose(expose);
     />
   </div>
 </template>
-
-<style lang="scss" scoped>
-@use "./styles/table-head";
-</style>

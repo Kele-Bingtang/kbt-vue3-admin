@@ -21,6 +21,6 @@ const radioComponent = computed(() => (props.el === ComponentNameEnum.EL_RADIO_B
     :key="option[optionField.value]"
     :disabled="option[optionField.disabled]"
     :label="option[optionField.label]"
-    :value="option[optionField.value]"
+    :value="option[optionField.value] ?? ''"
   />
 </template>

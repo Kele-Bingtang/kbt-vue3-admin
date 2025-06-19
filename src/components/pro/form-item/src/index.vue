@@ -189,7 +189,7 @@ defineExpose(expose);
       <!-- 自定义 label 插槽 -->
       <slot :name="`${prop}-label`" v-bind="slotParams">
         <!-- 自定义 label（h、JSX）渲染 -->
-        <component v-if="!!renderLabel" :is="renderLabel(label, model, slotParams)" />
+        <component v-if="renderLabel" :is="renderLabel(label, model, slotParams)" />
         <span v-else-if="label">{{ label }}</span>
       </slot>
 
@@ -210,7 +210,7 @@ defineExpose(expose);
       <!-- 自定义表单组件插槽 -->
       <slot :name="`${prop}-el`" v-bind="slotParams">
         <!-- 自定义表单组件（h、JSX）渲染-->
-        <component v-if="!!renderEl" :is="renderEl(model, slotParams)" />
+        <component v-if="renderEl" :is="renderEl(model, slotParams)" />
 
         <Tree
           v-else-if="formEl === ComponentNameEnum.EL_TREE"
@@ -236,7 +236,7 @@ defineExpose(expose);
         />
 
         <component
-          v-if="childComponentMap[formEl]"
+          v-else-if="childComponentMap[formEl]"
           :is="componentMap[formEl]"
           ref="elInstance"
           v-model="elModel"
