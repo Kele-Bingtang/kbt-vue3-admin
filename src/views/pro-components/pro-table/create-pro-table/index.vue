@@ -16,8 +16,8 @@ const RenderProTable = (_: any, context: Record<string, any>) => {
 };
 
 onMounted(() => {
-  // 函数式动态渲染组件到 proTableRef 元素
-  createTable("proTableRef", { pageScope: "client", columns: columns, requestApi: getTicketList }, tableSlots);
+  // 函数式动态渲染组件到 proTableInstance 元素
+  createTable("proTableInstance", { pageScope: "client", columns: columns, requestApi: getTicketList }, tableSlots);
 });
 
 const tableSlots = {
@@ -132,7 +132,7 @@ const columns: TableColumn[] = reactive([
     </el-card>
 
     <el-card shadow="never" header="createTable 函数式动态渲染组件到指定元素">
-      <div ref="proTableRef"></div>
+      <div ref="proTableInstance"></div>
     </el-card>
   </el-space>
 </template>

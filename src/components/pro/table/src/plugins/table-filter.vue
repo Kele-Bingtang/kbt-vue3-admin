@@ -61,7 +61,7 @@ const handleReset = () => {
 </script>
 
 <template>
-  <ElPopover
+  <el-popover
     :width="popoverProps?.width || 230"
     :trigger="popoverProps?.trigger || 'click'"
     v-bind="popoverProps"
@@ -90,15 +90,15 @@ const handleReset = () => {
 
       <slot name="filter-button" v-bind="{ handleFilter, handleClear, handleReset }">
         <div :class="ns.e('buttons')">
-          <ElButton @click="handleReset">{{ resetText }}</ElButton>
+          <el-button @click="handleReset">{{ resetText }}</el-button>
           <div>
-            <ElButton @click="handleClear">{{ clearText }}</ElButton>
-            <ElButton @click="handleFilter">{{ filterText }}</ElButton>
+            <el-button @click="handleClear">{{ clearText }}</el-button>
+            <el-button @click="handleFilter">{{ filterText }}</el-button>
           </div>
         </div>
       </slot>
     </div>
-  </ElPopover>
+  </el-popover>
 </template>
 
 <style lang="scss">

@@ -104,7 +104,7 @@ export const useProTable = () => {
     /**
      * 更新表格分页信息，从而更新表格数据
      */
-    pagination: async (paging: Partial<PageInfo>) => {
+    changePagination: async (paging: Partial<PageInfo>) => {
       const table = await getTable();
       return table?.handlePagination(paging);
     },
@@ -190,10 +190,10 @@ export const useProTable = () => {
      */
     createTableComponent: (
       proTableProps?: ProTableNamespace.Props & Partial<ProTableNamespace.Emits>,
-      context: Record<string, any> = {}
+      context: Recordable = {}
     ) => {
       const { attrs, slots } = context;
-      const instance = createVNode(ProTable, { ...attrs, ...proTableProps, onRegister: register }, { ...slots });
+      const instance = createVNode(ProTable, { ...attrs, ...proTableProps }, { ...slots });
       return instance;
     },
 
@@ -216,11 +216,13 @@ export const useProTable = () => {
       if (isString(el)) {
         const rootEl = currentInstance?.refs[el as string] as HTMLElement;
         rootEl && render(rootInstance, rootEl);
-      } else return render(rootInstance, toValue(el));
+      } else render(rootInstance, toValue(el));
+
+      return returnValue;
     },
   };
 
-  return {
+  const returnValue = {
     tableRegister: register,
     proTableInstanceState: {
       proTableInstance: proTableInstance.value,
@@ -231,4 +233,6 @@ export const useProTable = () => {
     tableMethods: methods,
     createMethods,
   };
+
+  return returnValue;
 };

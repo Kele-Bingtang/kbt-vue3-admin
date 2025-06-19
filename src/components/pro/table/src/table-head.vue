@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { ProTableHeadNamespace, SizeStyle, TableColumn } from "./types";
+import { ElTooltip, ElDropdown, ElDropdownMenu, ElDropdownItem, ElButton, ElPopover, ElCheckbox } from "element-plus";
 import { Coin, Operation, Download, Setting } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";
 import { TableColumnTypeEnum, TableSizeEnum, ToolButtonEnum } from "./helper";
@@ -20,6 +21,9 @@ const props = withDefaults(defineProps<ProTableHeadNamespace.Props>(), {
   sizeStyle: () => ({}),
   columnSetting: () => ({}),
   baseSetting: () => ({}),
+  isSelected: undefined,
+  selectedList: undefined,
+  selectedListIds: undefined,
 });
 
 const emits = defineEmits<ProTableHeadNamespace.Emits>();
@@ -66,7 +70,7 @@ const settingColumns = computed(() => {
     .filter(column => !hasSpecialColumn(column))
     .map(column => {
       column.hide ??= false;
-      column.filterProps = { ...column.filterProps };
+      column.filterProps ??= {};
       return column;
     });
 });
@@ -194,7 +198,7 @@ defineExpose(expose);
           />
         </el-tooltip>
 
-        <ElPopover placement="bottom" trigger="click">
+        <el-popover placement="bottom" trigger="click">
           <template #reference>
             <div>
               <el-tooltip v-if="showToolButton(ToolButtonEnum.BaseSetting)" content="基础配置" v-bind="tooltipProps">
@@ -203,28 +207,28 @@ defineExpose(expose);
             </div>
           </template>
           <div>
-            <ElCheckbox v-model="baseSetting.border" :value="true" :disabled="baseSetting.disabledBorder">
+            <el-checkbox v-model="baseSetting.border" :value="true" :disabled="baseSetting.disabledBorder">
               边框
-            </ElCheckbox>
-            <ElCheckbox v-model="baseSetting.stripe" :value="true" :disabled="baseSetting.disabledStripe">
+            </el-checkbox>
+            <el-checkbox v-model="baseSetting.stripe" :value="true" :disabled="baseSetting.disabledStripe">
               斑马纹
-            </ElCheckbox>
-            <ElCheckbox
+            </el-checkbox>
+            <el-checkbox
               v-model="baseSetting.headerBackground"
               :value="true"
               :disabled="baseSetting.disabledHeaderBackground"
             >
               表头背景
-            </ElCheckbox>
-            <ElCheckbox
+            </el-checkbox>
+            <el-checkbox
               v-model="baseSetting.highlightCurrentRow"
               :value="true"
               :disabled="baseSetting.disabledHighlightCurrentRow"
             >
               单击行高亮
-            </ElCheckbox>
+            </el-checkbox>
           </div>
-        </ElPopover>
+        </el-popover>
 
         <slot name="head-right-after"></slot>
       </slot>

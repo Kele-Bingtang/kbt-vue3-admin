@@ -14,7 +14,7 @@ import type {
 import { defaultPageInfo } from "@/components/pro/pagination";
 import { useNamespace } from "@/composables";
 import { useTableApi, useTableState, type UseSelectState } from "./composables";
-import { Environment, TableSizeEnum } from "./helper";
+import { Environment, TableSizeEnum, filterEmpty } from "./helper";
 import TableMain from "./table-main.vue";
 import TableHead from "./table-head.vue";
 
@@ -37,8 +37,8 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   rowStyle: () => ({}),
   cellStyle: () => ({}),
   headerCellStyle: () => ({}),
-  border: undefined,
-  stripe: undefined,
+  border: false,
+  stripe: false,
 
   // TableHead 组件的 props（透传下去）
   toolButton: () => ["size", "export", "columnSetting", "baseSetting"],
@@ -50,6 +50,9 @@ const props = withDefaults(defineProps<ProTableNamespace.Props>(), {
   sizeStyle: () => ({}),
   columnSetting: () => ({}),
   baseSetting: () => ({}),
+  isSelected: undefined,
+  selectedList: undefined,
+  selectedListIds: undefined,
 
   // TableMain 组件的 props（透传下去）
   operationProp: "operation",
@@ -74,14 +77,6 @@ const tableMainInstance = useTemplateRef<ProTableMainInstance>("tableMainInstanc
 const tableSize = ref<TableSizeEnum>((props.size as TableSizeEnum) || TableSizeEnum.Default);
 // 表格密度样式
 const currentSizeStyle = ref<SizeStyle>();
-// 表格全局设置
-const baseSetting = reactive({
-  border: props.border ?? false,
-  stripe: props.stripe ?? false,
-  headerBackground: true,
-  highlightCurrentRow: true,
-  ...props.baseSetting,
-});
 
 // 最终的 props
 const finalProps = computed(() => {
@@ -125,6 +120,15 @@ const finalTableData = computed(() => {
   return tableData.value;
 });
 
+// 表格全局设置
+const baseSetting = reactive({
+  border: finalProps.value.border,
+  stripe: finalProps.value.stripe,
+  headerBackground: true,
+  highlightCurrentRow: true,
+  ...finalProps.value.baseSetting,
+});
+
 // 最终的 sizeStyle，即将 ProTable 内置的 sizeStyle 和传入的 sizeStyle 合并
 const finalSizeStyle = computed(() => {
   const { rowStyle, cellStyle, headerCellStyle } = finalProps.value;
@@ -139,7 +143,37 @@ const finalSizeStyle = computed(() => {
   };
 });
 
+const tableMainProps = computed(() => {
+  // 过滤掉为 undefined 的配置项
+  return filterEmpty({
+    ...finalProps.value,
+    ...finalSizeStyle.value,
+    ...baseSetting,
+    // 去掉 TableHead 的配置项，确保所有的非 TableHead 的 props 都透传到 ElTable
+    headerBackground: undefined,
+    initRequestParams: undefined,
+    defaultRequestParams: undefined,
+    requestImmediate: undefined,
+    hideHead: undefined,
+    card: undefined,
+    toolButton: undefined,
+    disabledToolButton: undefined,
+    size: undefined,
+    title: undefined,
+    exportProps: undefined,
+    tooltipProps: undefined,
+    sizeStyle: undefined,
+    columnSetting: undefined,
+    baseSetting: undefined,
+    isSelected: undefined,
+    selectedList: undefined,
+    selectedListIds: undefined,
+  });
+});
+
 watchEffect(() => (searchInitParams.value = finalProps.value.initRequestParams));
+watchEffect(() => (baseSetting.border = finalProps.value.border));
+watchEffect(() => (baseSetting.stripe = finalProps.value.stripe));
 
 onMounted(() => {
   // 初始化请求
@@ -252,7 +286,7 @@ defineExpose(expose);
       :tooltip-props="finalProps.tooltipProps"
       :size-style="finalProps.sizeStyle"
       :column-setting="finalProps.columnSetting"
-      :base-setting="finalProps.baseSetting"
+      :base-setting
       :is-selected="tableMainInstance?.isSelected"
       :selected-list="tableMainInstance?.selectedList"
       :selected-list-ids="tableMainInstance?.selectedListIds"
@@ -266,20 +300,10 @@ defineExpose(expose);
     <!-- 表格主体 -->
     <TableMain
       ref="tableMainInstance"
-      v-bind="{ ...baseSetting, headerBackground: undefined, ...$attrs, ...finalSizeStyle }"
-      :columns="finalProps.columns"
+      v-bind="{ ...tableMainProps, ...$attrs }"
       :data="finalTableData"
-      :operation-prop="finalProps.operationProp"
-      :operation-props="finalProps.operationProps"
-      :page-info="finalProps.pageInfo"
-      :page-scope="finalProps.pageScope"
-      :pagination-props="finalProps.paginationProps"
-      :radio-props="finalProps.radioProps"
-      :filter-scope="finalProps.filterScope"
-      :editable="finalProps.editable"
-      :row-key="finalProps.rowKey"
+      :page-info
       :size="tableSize"
-      :empty-text="finalProps.emptyText"
       @button-click="handleButtonClick"
       @confirm="handleConfirm"
       @cancel="handleCancel"

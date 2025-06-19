@@ -1,18 +1,19 @@
 <script setup lang="ts">
 import type { Component } from "vue";
 import type { FormValidationResult, TableInstance } from "element-plus";
-import { getObjectKeys, type ProFormInstance } from "@/components/pro/form";
+import type { ProFormInstance } from "@/components/pro/form";
 import type { ElOption, FormItemColumnProps } from "@/components/pro/form-item";
 import type { OperationNamespace, ProTableMainNamespace, TableScope, TableColumn, TableRow } from "./types";
-import { ElRadio, ElTableColumn } from "element-plus";
+import { ElTable, ElRadio, ElTableColumn } from "element-plus";
 import { useNamespace } from "@/composables";
+import { isEmpty, isFunction } from "@/utils";
 import Pagination, { defaultPageInfo } from "@/components/pro/pagination";
+import { getObjectKeys } from "@/components/pro/form";
 import { formatValue, getProp, filterOptions, filterOptionsValue, setProp } from "@/components/pro/form-item";
 import TableColumnData from "./table-column/table-column-data.vue";
 import TableColumnOperation from "./table-column/table-column-operation.vue";
 import TableColumnDragSort from "./table-column/table-column-drag-sort.vue";
 import { useSelection } from "./composables";
-import { isFunction } from "@/utils";
 import { TableColumnTypeEnum, filterData, initModel, isServer } from "./helper";
 
 defineOptions({ name: "TableMain" });
@@ -88,6 +89,8 @@ watch(tableData, () => (filterTableData.value = undefined));
  * 初始化枚举字典数据
  */
 const initOptionsMap = async (column: TableColumn) => {
+  if (column.children) return column.children.forEach(async child => await initOptionsMap(child));
+
   const { options, prop = "" } = column;
   if (!options) return;
 
@@ -105,36 +108,37 @@ const initOptionsMap = async (column: TableColumn) => {
   optionsMap.value.set(prop, (value as any)?.data || value);
 };
 
-// 每一个 column 配置 _options 字典信息（如果配置了 options）
-const initOptionsInData = (data: Recordable[]) => {
-  let newData = [...data];
+// 在表格的数据里配置 _options 相关字典信息（如果配置了 options）
+const initOptionsInData = async (data: Recordable[]) => {
+  for (const column of visibleColumns.value) await initOptionsInDataRow(data, column);
+};
 
-  // 如果 columns 发生改变，则重新初始化 _options
-  visibleColumns.value.forEach(async column => {
-    const { prop = "", isFilterOptions = true, optionField, transformOption, optionsProp } = column;
+// 表格数据的每一个 row 配置 _options 相关字典信息（如果配置了 options）
+const initOptionsInDataRow = async (data: Recordable[] = [], column: TableColumn) => {
+  if (column.children) for (const child of column.children) await initOptionsInDataRow(data, child);
 
-    const options = unref(optionsMap.value.get(optionsProp || prop));
-    // 如果字段有配置枚举信息，则存放到 _options[col.prop] 里
-    if (options && toValue(isFilterOptions)) {
-      newData = newData?.map(row => {
-        const option = transformOption
-          ? transformOption(getProp(row, prop), options, row)
-          : filterOptions(getProp(row, prop), options, optionField);
+  const { prop = "", isFilterOptions = true, optionField, transformOption, optionsProp } = column;
 
-        const formatLabel = filterOptionsValue(option, optionField?.label ?? "label");
+  const options = unref(optionsMap.value.get(optionsProp || prop));
+  // 如果字段有配置枚举信息，则存放到 _options[col.prop] 里
+  if (options && toValue(isFilterOptions)) {
+    data.map(row => {
+      const option = transformOption
+        ? transformOption(getProp(row, prop), options, row)
+        : filterOptions(getProp(row, prop), options, optionField);
 
-        if (!row._options) row._options = {};
-        if (!row._option) row._option = {};
-        if (!row._label) row._label = {};
+      const formatLabel = filterOptionsValue(option, optionField?.label ?? "label");
 
-        row._options[prop] = options;
-        row._option[prop] = option;
-        row._label[prop] = formatLabel;
-        return row;
-      });
-    }
-  });
-  return newData;
+      if (!row._options) row._options = {};
+      if (!row._option) row._option = {};
+      if (!row._label) row._label = {};
+
+      row._options[prop] = options;
+      row._option[prop] = option;
+      row._label[prop] = formatLabel;
+      return row;
+    });
+  }
 };
 
 let timer: ReturnType<typeof setTimeout> | null = null;
@@ -501,7 +505,7 @@ defineExpose(expose);
 
         <!-- 操作列 -->
         <TableColumnOperation
-          v-if="column.prop === operationProp || (operationProps && index === columns.length - 1)"
+          v-if="column.prop === operationProp || (!isEmpty(operationProps) && index === columns.length - 1)"
           v-bind="getOperationColumn(column, index)"
           :align="column.align || 'center'"
           :prop="operationProp"

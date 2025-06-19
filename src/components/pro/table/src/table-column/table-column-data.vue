@@ -3,7 +3,7 @@ import type { TableColumnCtx } from "element-plus";
 import type { TableScope, TableColumn, TableColumnDataNamespace, TableRow } from "../types";
 import type { ProFormInstance } from "@/components/pro/form";
 import type { ModelBaseValueType } from "@/components/pro/form-item";
-import { ElMessage, ElTableColumn } from "element-plus";
+import { ElMessage, ElTableColumn, ElTooltip, ElIcon } from "element-plus";
 import { QuestionFilled } from "@element-plus/icons-vue";
 import { getProp } from "@/components/pro/form-item";
 import { isBoolean } from "@/utils";
@@ -39,11 +39,22 @@ const formatTableColumn = (column: TableColumn) => {
   column.disabledSortable = toValue(column.disabledSortable);
   column.isFilterOptions = toValue(column.isFilterOptions);
 
-  return column as unknown as TableColumnCtx<any>;
+  // 使用解构并排除 children 属性
+  // eslint-disable-next-line no-unused-vars
+  const { children, ...rest } = toRaw(column);
+
+  return rest as unknown as TableColumnCtx<any>;
 };
 
 const formatValue = (row: TableRow, column: TableColumn) => {
   return formatCellValue(getProp(row._label?.[column.prop!] ?? row, column.prop!));
+};
+
+const toValueColumn = (column: Partial<TableColumn>) => {
+  return {
+    width: toValue(column.width),
+    label: toValue(column.label),
+  };
 };
 
 // 获取 ProFormItem 的实例
@@ -151,6 +162,9 @@ const handleChange = (model: unknown, scope: Recordable, column: TableColumn) =>
   } as TableScope);
 };
 
+const handleChildRegisterProFormInstance = (index: number, prop: string, instance: ProFormInstance | null) => {
+  emits("registerProFormInstance", index, prop, instance);
+};
 /**
  * 表单值发生改变事件（多级表头调用当前组件 handleChange 事件）
  */
@@ -161,7 +175,7 @@ const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: Tab
 
 <template>
   <el-table-column
-    v-bind="formatTableColumn(column)"
+    v-bind="{ ...$attrs, ...formatTableColumn(column) }"
     :class-name="`${ns.b()}${' ' + ns.is('cell-edit', useEdit)}${column.className ? ' ' + column.className : ''}`"
   >
     <!-- 表头插槽 - 表头内容 -->
@@ -170,7 +184,7 @@ const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: Tab
 
       <!-- 自定义表头 | 自定义插槽 -->
       <component v-if="column.headerRender" :is="column.headerRender(scope)" />
-      <slot v-else :name="`${lastProp(column.prop!)}-header`" v-bind="scope">{{ scope.column.label }}</slot>
+      <slot v-else :name="`${lastProp(column.prop!)}-header`" v-bind="scope">{{ column.label }}</slot>
 
       <el-tooltip v-if="column.tooltip" placement="top" effect="dark" v-bind="column.tooltip">
         <!-- ElToolTip 默认插槽 -->
@@ -215,7 +229,14 @@ const handleFormChange = (model: unknown, props: TableColumn["prop"], scope: Tab
           v-for="child in column.children"
           :key="child.prop"
           :column="child"
+          v-bind="toValueColumn(column)"
+          :align="column.align || 'center'"
+          :editable
+          @register-pro-form-instance="handleChildRegisterProFormInstance"
           @form-change="handleFormChange"
+          @filter="handleFilter"
+          @filter-clear="handleFilterClear"
+          @filter-reset="handleFilterReset"
         />
       </template>
 

@@ -25,7 +25,7 @@ const columns: TableColumn<ResUserList>[] = [
     label: "性别",
     width: 120,
     sortable: true,
-    enum: genderType,
+    options: genderType,
   },
   { prop: "idCard", label: "身份证号" },
   { prop: "email", label: "邮箱" },
@@ -36,7 +36,7 @@ const columns: TableColumn<ResUserList>[] = [
     width: 120,
     sortable: true,
     tag: true,
-    enum: userStatus,
+    options: userStatus,
   },
   { prop: "createTime", label: "创建时间", width: 180 },
   { prop: "operation", label: "操作", width: 330, fixed: "right" },
@@ -121,6 +121,7 @@ const downloadFile = async () => {
   .table-box {
     // 这里减去的是 treeFilter 组件宽度
     width: calc(100% - 230px);
+    margin-left: 10px;
   }
 }
 </style>

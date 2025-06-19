@@ -101,7 +101,7 @@ export type FilterRule =
   | "notBetween"
   | "in"
   | "notIn"
-  | ((model: Record<string, any>, row: any, key: string) => boolean) // 自定义函数查询，返回 boolean：true 符合条件，false 不符合条件
+  | ((model: Recordable, row: any, key: string) => boolean) // 自定义函数查询，返回 boolean：true 符合条件，false 不符合条件
   | undefined;
 
 export interface TableFilterProps {
@@ -455,15 +455,15 @@ export namespace ProTableHeadNamespace {
       disabledHighlightCurrentRow?: boolean; // 是否开启禁用单击高亮当前行选择，默认 false
     };
     /**
-     * 表格是否选中数据
+     * 表格是否选中数据，head-left 插槽需要
      */
     isSelected?: boolean;
     /**
-     * 表格选中数据列表
+     * 表格选中数据列表，head-left 插槽需要
      */
     selectedList?: Recordable[];
     /**
-     * 表格选中数据列表 id
+     * 表格选中数据列表 id，head-left 插槽需要
      */
     selectedListIds?: string[];
   }
@@ -580,7 +580,10 @@ export namespace ProTableMainNamespace {
  * ProTable 组件的类型命名空间
  */
 export namespace ProTableNamespace {
-  export interface Props extends ProTableMainNamespace.Props, ProTableHeadNamespace.Props {
+  export interface Props
+    extends ProTableMainNamespace.Props,
+      ProTableHeadNamespace.Props,
+      Partial<Omit<TableProps<any>, "data" | "size" | "rowKey">> {
     /**
      * 列配置项
      *

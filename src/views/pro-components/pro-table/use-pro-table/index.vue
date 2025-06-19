@@ -4,7 +4,7 @@ import { tableData } from "@/mock/pro-table";
 import { ElButton, ElMessage } from "element-plus";
 
 const { tableRegister, tableMethods } = useProTable();
-const { setProps, setColumn, getElTableExpose, addColumn, delColumn, clearSelection, pagination } = tableMethods;
+const { setProps, setColumn, getElTableExpose, addColumn, delColumn, clearSelection, changePagination } = tableMethods;
 
 const getTicketList = () => {
   return new Promise(resolve => {
@@ -20,7 +20,7 @@ const showSelections = (show: boolean) => {
   setColumn([
     {
       prop: "selection",
-      field: "isShow",
+      field: "hide",
       value: show,
     },
   ]);
@@ -47,7 +47,7 @@ const showExpandedRows = (show: boolean) => {
   setColumn([
     {
       prop: "expand",
-      field: "isShow",
+      field: "hide",
       value: show,
     },
   ]);
@@ -197,14 +197,14 @@ const columns = reactive<TableColumn<ResUserList>[]>([
       <el-space wrap>
         <el-button @click="showTableButton(false)">隐藏表格头部按钮</el-button>
         <el-button @click="showTableButton(true)">显示表格头部按钮</el-button>
-        <el-button @click="showSelections(false)">隐藏多选</el-button>
-        <el-button @click="showSelections(true)">显示多选</el-button>
+        <el-button @click="showSelections(true)">隐藏多选</el-button>
+        <el-button @click="showSelections(false)">显示多选</el-button>
         <el-button @click="showPagination(false)">隐藏分页</el-button>
         <el-button @click="showPagination(true)">显示分页</el-button>
-        <el-button @click="pagination({ pageNum: 2 })">切换到第二个页</el-button>
+        <el-button @click="changePagination({ pageNum: 2 })">切换到第二个页</el-button>
         <el-button @click="changeUsername">修改用户姓名</el-button>
-        <el-button @click="showExpandedRows(false)">隐藏展开行</el-button>
-        <el-button @click="showExpandedRows(true)">显示展开行</el-button>
+        <el-button @click="showExpandedRows(true)">隐藏展开行</el-button>
+        <el-button @click="showExpandedRows(false)">显示展开行</el-button>
         <el-button @click="selectAllNone">全选/全不选</el-button>
         <el-button @click="clearSelection">清空选择</el-button>
         <el-button @click="delOrAddAction">删除/添加操作列</el-button>

@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { TableInstance } from "element-plus";
+import { ElTableColumn, ElIcon } from "element-plus";
 import Sortable from "sortablejs";
 import { DCaret } from "@element-plus/icons-vue";
 import { useNamespace } from "@/composables";

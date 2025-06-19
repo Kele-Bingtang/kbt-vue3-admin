@@ -1,8 +1,7 @@
 @use "@/styles/mixins/bem" as *;
 @use "@/styles/mixins/namespace" as *;
 
-@include e(tree-filter) {
-  box-sizing: border-box;
+@include b(tree-filter) {
   width: 220px;
   height: 100%;
   padding: 18px;

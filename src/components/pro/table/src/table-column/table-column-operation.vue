@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { OperationNamespace, TableRow } from "../types";
+import { ElTableColumn, ElDropdown, ElDropdownMenu, ElDropdownItem, ElIcon } from "element-plus";
 import { ArrowDownBold } from "@element-plus/icons-vue";
 import { isFunction } from "@/utils";
 import { hyphenToCamelCase } from "@/components/pro/form-item";
@@ -162,7 +163,7 @@ const handleCancel = (buttonRaw: OperationNamespace.ButtonRaw, scope: Recordable
 
 <template>
   <el-table-column
-    v-bind="{ ...props, buttons: undefined }"
+    v-bind="{ ...$attrs, ...props, buttons: undefined }"
     :fixed
     :label="labelValue"
     :width="widthValue"

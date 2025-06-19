@@ -34,12 +34,12 @@ const columns: TableColumn<ResUserList>[] = [
         prop: "gender",
         label: "性别",
         width: 100,
-        enum: genderType,
+        options: genderType,
       },
       {
         prop: "details",
         label: "详细资料",
-        _children: [
+        children: [
           { prop: "idCard", label: "身份证号" },
           { prop: "email", label: "邮箱" },
           { prop: "address", label: "居住地址" },
@@ -50,8 +50,7 @@ const columns: TableColumn<ResUserList>[] = [
   {
     prop: "status",
     label: "用户状态",
-    tag: true,
-    enum: userStatus,
+    options: userStatus,
   },
   { prop: "createTime", label: "创建时间", width: 200 },
   { prop: "operation", label: "操作", fixed: "right", width: 230 },
